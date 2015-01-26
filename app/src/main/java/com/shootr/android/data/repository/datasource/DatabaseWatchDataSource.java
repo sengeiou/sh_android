@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource;
 
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.manager.WatchManager;
+import java.util.List;
 import javax.inject.Inject;
 
 public class DatabaseWatchDataSource implements WatchDataSource {
@@ -23,5 +24,9 @@ public class DatabaseWatchDataSource implements WatchDataSource {
 
     @Override public WatchEntity getWatching(Long userId) {
         return watchManager.getWatching(userId);
+    }
+
+    @Override public List<WatchEntity> getEntitiesNotSynchronized() {
+        return watchManager.getWatchesNotSynchronized();
     }
 }

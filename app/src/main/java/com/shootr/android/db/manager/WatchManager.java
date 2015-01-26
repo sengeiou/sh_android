@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.domain.utils.TimeUtils;
+import com.squareup.phrase.Phrase;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -253,5 +255,26 @@ public class WatchManager extends AbstractManager{
         }
         queryResult.close();
         return watchEntity;
+    }
+
+    public List<WatchEntity> getWatchesNotSynchronized() {
+        String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
+          .put("field", WatchTable.CSYS_SYNCHRONIZED)
+          .put("n", Synchronized.SYNC_NEW)
+          .put("u", Synchronized.SYNC_UPDATED)
+          .format().toString();
+        Cursor queryResult =
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereClause, null, null, null, null);
+
+        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
+                resultWatches.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultWatches;
     }
 }
