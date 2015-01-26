@@ -83,12 +83,12 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.hideContent();
     }
 
-
-
+    @Subscribe
     @Override public void onCommunicationError(CommunicationErrorEvent event) {
         eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
+    @Subscribe
     @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
