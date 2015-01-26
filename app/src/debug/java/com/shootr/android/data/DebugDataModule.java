@@ -20,6 +20,9 @@ import com.shootr.android.ui.debug.NetworkProxy;
 import javax.inject.Singleton;
 
 @Module(
+  injects = {
+    SyncBroadcastReceiver.class
+  },
   includes = DebugApiModule.class,
   complete = false,
   library = true,
@@ -91,5 +94,4 @@ public class DebugDataModule {
       DebugNotificationManager notificationManager) {
         return notificationManager;
     }
-
 }
