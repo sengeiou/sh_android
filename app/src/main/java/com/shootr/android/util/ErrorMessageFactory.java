@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
-import com.shootr.android.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrError;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
