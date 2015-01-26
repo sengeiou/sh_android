@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.interactor.EventsSearchInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -21,15 +22,17 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     //region Dependencies
     private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
+    private final EventsSearchInteractor eventsSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
 
     @Inject public EventsListPresenter(Bus bus, EventsListInteractor eventsListInteractor,
-      EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;
+        this.eventsSearchInteractor = eventsSearchInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -56,6 +59,18 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         this.showEventListInView(resultList);
     }
 
+    public void search(String queryText) {
+        eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
+            @Override public void onLoaded(EventSearchResultList results) {
+                onSearchResults(results);
+            }
+        });
+    }
+
+    private void onSearchResults(EventSearchResultList eventSearchResultList) {
+        showEventListInView(eventSearchResultList);
+    }
+
     private void setViewCurrentVisibleEvent(EventSearchResultList resultList) {
         Event currentVisibleEvent = resultList.getCurrentVisibleEvent();
         if (currentVisibleEvent != null) {
@@ -75,6 +90,7 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     private void renderViewEventsList(List<EventSearchResult> events) {
         List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
         eventsListView.showContent();
+        eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);
     }
 
