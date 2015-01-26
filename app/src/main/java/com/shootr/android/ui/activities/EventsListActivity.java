@@ -28,6 +28,7 @@ import javax.inject.Inject;
 public class EventsListActivity extends BaseSignedInActivity implements EventsListView {
 
     public static final String KEY_EVENT_ID = "event";
+    private static final String KEY_SEARCH_QUERY = "search";
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
@@ -39,6 +40,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     private EventsListAdapter adapter;
     private SearchView searchView;
+    private String restoredQuery;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         setupActionbar();
         initializeViews();
 
-        initializePresenter();
+        initializePresenter(savedInstanceState);
     }
 
     private void setupActionbar() {
@@ -73,7 +75,14 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         });
     }
 
-    private void initializePresenter() {
+    private void initializePresenter(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            restoredQuery = savedInstanceState.getString(KEY_SEARCH_QUERY);
+            if (restoredQuery != null) {
+                presenter.initialize(this, restoredQuery);
+                return;
+            }
+        }
         presenter.initialize(this);
     }
 
@@ -103,6 +112,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
                 return false;
             }
         });
+
+        if (restoredQuery != null) {
+            searchView.setIconified(false);
+            searchView.setQuery(restoredQuery, true);
+        }
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -123,6 +137,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @Override protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
     }
     //endregion
 

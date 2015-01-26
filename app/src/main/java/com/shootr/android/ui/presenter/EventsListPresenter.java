@@ -46,6 +46,11 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         this.loadDefaultEventList();
     }
 
+    public void initialize(EventsListView eventsListView, String initialQuery) {
+        this.eventsListView = eventsListView;
+        this.search(initialQuery);
+    }
+
     public void selectEvent(EventModel event) {
         eventsListView.closeScrenWithEventResult(event.getIdEvent());
     }
