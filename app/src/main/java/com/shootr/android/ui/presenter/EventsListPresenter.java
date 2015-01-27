@@ -1,6 +1,10 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
+import com.shootr.android.domain.interactor.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -21,15 +25,17 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     //region Dependencies
     private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
+    private final EventsSearchInteractor eventsSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
 
     @Inject public EventsListPresenter(Bus bus, EventsListInteractor eventsListInteractor,
-      EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;
+        this.eventsSearchInteractor = eventsSearchInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -38,6 +44,11 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     public void initialize(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
         this.loadDefaultEventList();
+    }
+
+    public void initialize(EventsListView eventsListView, String initialQuery) {
+        this.eventsListView = eventsListView;
+        this.search(initialQuery);
     }
 
     public void selectEvent(EventModel event) {
@@ -54,6 +65,24 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.hideLoading();
         this.setViewCurrentVisibleEvent(resultList);
         this.showEventListInView(resultList);
+    }
+
+    public void search(String queryText) {
+        eventsListView.hideKeyboard();
+        eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
+            @Override public void onLoaded(EventSearchResultList results) {
+                onSearchResults(results);
+            }
+        },
+        new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
+    }
+
+    private void onSearchResults(EventSearchResultList eventSearchResultList) {
+        showEventListInView(eventSearchResultList);
     }
 
     private void setViewCurrentVisibleEvent(EventSearchResultList resultList) {
@@ -75,12 +104,25 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     private void renderViewEventsList(List<EventSearchResult> events) {
         List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
         eventsListView.showContent();
+        eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);
     }
 
     private void showViewEmpty() {
         eventsListView.showEmpty();
         eventsListView.hideContent();
+    }
+
+
+    private void showViewError(ShootrException error) {
+        String errorMessage;
+        if (error instanceof ShootrValidationException) {
+            String errorCode = ((ShootrValidationException) error).getErrorCode();
+            errorMessage = errorMessageFactory.getMessageForCode(errorCode);
+        } else {
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        eventsListView.showError(errorMessage);
     }
 
     @Subscribe

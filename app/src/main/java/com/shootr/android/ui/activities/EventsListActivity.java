@@ -1,13 +1,16 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 public class EventsListActivity extends BaseSignedInActivity implements EventsListView {
 
     public static final String KEY_EVENT_ID = "event";
+    private static final String KEY_SEARCH_QUERY = "search";
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
@@ -37,6 +41,8 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @Inject PicassoWrapper picasso;
 
     private EventsListAdapter adapter;
+    private SearchView searchView;
+    private String restoredQuery;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +53,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         setupActionbar();
         initializeViews();
 
-        initializePresenter();
+        initializePresenter(savedInstanceState);
     }
 
     private void setupActionbar() {
@@ -71,14 +77,48 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         });
     }
 
-    private void initializePresenter() {
+    private void initializePresenter(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            restoredQuery = savedInstanceState.getString(KEY_SEARCH_QUERY);
+            if (restoredQuery != null) {
+                presenter.initialize(this, restoredQuery);
+                return;
+            }
+        }
         presenter.initialize(this);
     }
 
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.events_list, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        searchView = (SearchView) searchItem.getActionView();
+        setupSearchView();
         return true;
+    }
+
+    private void setupSearchView() {
+        searchView.setQueryHint(getString(R.string.activity_search_team_hint));
+
+        SearchView.SearchAutoComplete searchAutoComplete =
+          (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white_disabled));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override public boolean onQueryTextSubmit(String queryText) {
+                presenter.search(queryText);
+                return true;
+            }
+
+            @Override public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        if (restoredQuery != null) {
+            searchView.setIconified(false);
+            searchView.setQuery(restoredQuery, true);
+        }
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -99,6 +139,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @Override protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
     }
     //endregion
 
@@ -124,6 +169,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         resultIntent.putExtra(KEY_EVENT_ID, idEvent);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     @Override public void showEmpty() {

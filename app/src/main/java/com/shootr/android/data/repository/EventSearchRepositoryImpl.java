@@ -5,17 +5,13 @@ import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.EventSearchEntityMapper;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.EventResultModel;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +34,21 @@ public class EventSearchRepositoryImpl implements EventSearchRepository {
         this.eventSearchEntityMapper = eventSearchEntityMapper;
     }
 
-    @Override public void getDefaultEvents(EventResultListCallback callback) {
+    @Override public List<EventSearchResult> getDefaultEvents() {
+        return loadEvents(null);
+    }
+
+    @Override public List<EventSearchResult> getEvents(String query) {
+        return loadEvents(query);
+    }
+
+    private List<EventSearchResult> loadEvents(String query) {
         try {
             Map<Long, Integer> eventsWatchesCounts = getWatchersCountByEvents();
-            List<EventSearchEntity> eventSearchEntities = shootrService.getEventSearch(null, eventsWatchesCounts);
-            List<EventSearchResult> eventSearchResults = eventSearchEntityMapper.transform(eventSearchEntities);
-
-            callback.onLoaded(eventSearchResults);
+            List<EventSearchEntity> eventSearchEntities = shootrService.getEventSearch(query, eventsWatchesCounts);
+            return eventSearchEntityMapper.transform(eventSearchEntities);
         } catch (SQLException | IOException e) {
-            callback.onError(e);
+            throw new RepositoryException(e);
         }
     }
 

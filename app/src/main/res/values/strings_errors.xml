@@ -23,4 +23,5 @@
 
     <!-- Profile: Bio -->
     <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
+    <string name="error_message_search_too_short">3 or more characters required</string>
 </resources>

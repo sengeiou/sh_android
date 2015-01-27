@@ -1,6 +1,6 @@
 package com.shootr.android.task.validation.profile;
 
-import com.shootr.android.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidator;
 import com.shootr.android.ui.model.UserModel;

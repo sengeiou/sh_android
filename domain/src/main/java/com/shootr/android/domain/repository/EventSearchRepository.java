@@ -5,10 +5,7 @@ import java.util.List;
 
 public interface EventSearchRepository {
 
-    void getDefaultEvents(EventResultListCallback callback);
+    List<EventSearchResult> getDefaultEvents();
 
-    interface EventResultListCallback extends ErrorCallback {
-
-        void onLoaded(List<EventSearchResult> events);
-    }
+    List<EventSearchResult> getEvents(String query);
 }

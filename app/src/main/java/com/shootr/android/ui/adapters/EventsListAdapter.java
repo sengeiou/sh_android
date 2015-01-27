@@ -36,6 +36,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     }
 
     public void setEvents(List<EventResultModel> events) {
+        notifyItemRangeRemoved(0, this.events.size());
         this.events = events;
         notifyItemRangeInserted(0, events.size());
     }

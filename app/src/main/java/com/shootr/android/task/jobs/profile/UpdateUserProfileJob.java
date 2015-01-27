@@ -7,7 +7,7 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;

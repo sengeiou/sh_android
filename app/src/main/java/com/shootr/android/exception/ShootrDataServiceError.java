@@ -1,5 +1,7 @@
 package com.shootr.android.exception;
 
+import com.shootr.android.domain.exception.ShootrError;
+
 public class ShootrDataServiceError implements ShootrError {
 
     private String errorCode;

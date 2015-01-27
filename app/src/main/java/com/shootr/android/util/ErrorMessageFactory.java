@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
-import com.shootr.android.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrError;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -38,6 +38,7 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG, R.string.error_message_website_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_SHOT_TEXT_DUPLICATED, R.string.new_shot_repeated);
+        codeResourceMap.put(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT, R.string.error_message_search_too_short);
     }
 
     public String getMessageForError(ShootrError shootrError) {
@@ -46,6 +47,10 @@ public class ErrorMessageFactory {
 
     public String getMessageForCode(String errorCode) {
         return context.getString(getResourceStringForCode(errorCode));
+    }
+
+    public String getUnknownErrorMessage() {
+        return context.getString(R.string.error_message_unknown);
     }
 
     public String getCommunicationErrorMessage() {
