@@ -5,6 +5,7 @@ import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.utils.TimeUtils;
+import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -56,8 +57,9 @@ public class WatchEntityMapper {
           watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);
         watchEntity.setVisible(watch.isVisible());
 
-        watchEntity.setCsysBirth(timeUtils.getCurrentDate());
-        watchEntity.setCsysModified(timeUtils.getCurrentDate());
+        Date currentDate = timeUtils.getCurrentDate();
+        watchEntity.setCsysBirth(currentDate);
+        watchEntity.setCsysModified(currentDate);
         watchEntity.setCsysRevision(0);
         watchEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return watchEntity;

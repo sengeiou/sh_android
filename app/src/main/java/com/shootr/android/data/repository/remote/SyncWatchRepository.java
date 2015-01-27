@@ -8,7 +8,6 @@ import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.RemoteDataSource;
 import com.shootr.android.data.repository.datasource.WatchDataSource;
-import com.shootr.android.data.repository.sync.SyncDispatcher;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
@@ -85,11 +84,11 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private void queueUpload(WatchEntity watchEntity, ServerCommunicationException reason) {
         Timber.w(reason, "Watch upload queued: idUser %d, idEvent %d", watchEntity.getIdUser(),
           watchEntity.getIdEvent());
-        putEntityForSynchronization(watchEntity);
+        prepareEntityForSynchronization(watchEntity);
         syncTrigger.notifyNeedsSync(this);
     }
 
-    private void putEntityForSynchronization(WatchEntity watchEntity) {
+    private void prepareEntityForSynchronization(WatchEntity watchEntity) {
         if (!isReadyForSync(watchEntity)) {
             watchEntity.setCsysSynchronized(Synchronized.SYNC_UPDATED);
         }
@@ -97,7 +96,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     private boolean isReadyForSync(WatchEntity watchEntity) {
-        return Synchronized.SYNC_UPDATED.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_NEW.equals(watchEntity.getCsysSynchronized());
+        return Synchronized.SYNC_UPDATED.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_NEW.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_DELETED.equals(watchEntity.getCsysSynchronized());
     }
 
     @Override public void dispatchSync() {
