@@ -54,12 +54,14 @@ public class SelectEventInteractor implements Interactor {
         Watch currentWatching = localWatchRepository.getCurrentWatching();
         if (currentWatching != null) {
             Event eventWatching = eventRepository.getEventById(currentWatching.getIdEvent());
-            boolean isEventLapsed = eventWatching.getEndDate().before(timeUtils.getCurrentDate());
-            if (isEventLapsed) {
-                currentWatching.setWatching(false);
-                currentWatching.setNotificaticationsEnabled(false);
-                localWatchRepository.putWatch(currentWatching);
-                remoteWatchRepository.putWatch(currentWatching);
+            if (eventWatching != null) {
+                boolean isEventLapsed = eventWatching.getEndDate().before(timeUtils.getCurrentDate());
+                if (isEventLapsed) {
+                    currentWatching.setWatching(false);
+                    currentWatching.setNotificaticationsEnabled(false);
+                    localWatchRepository.putWatch(currentWatching);
+                    remoteWatchRepository.putWatch(currentWatching);
+                }
             }
         }
     }

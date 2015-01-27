@@ -10,6 +10,9 @@ public class EventEntityMapper {
     }
 
     public Event transform(EventEntity eventEntity) {
+        if (eventEntity == null) {
+            return null;
+        }
         Event event = new Event();
         event.setId(eventEntity.getIdEvent());
         event.setTitle(eventEntity.getTitle());
