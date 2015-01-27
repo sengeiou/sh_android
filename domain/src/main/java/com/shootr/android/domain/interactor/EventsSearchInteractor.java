@@ -41,9 +41,14 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
+        removeInvalidCharactersFromQuery();
         if (validateSearchQuery()) {
             performSearch();
         }
+    }
+
+    private void removeInvalidCharactersFromQuery() {
+        query = query.replace("%", "").trim();
     }
 
     private boolean validateSearchQuery() {
