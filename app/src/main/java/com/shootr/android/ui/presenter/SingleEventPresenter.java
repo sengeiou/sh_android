@@ -75,7 +75,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromSelectEvent(Long idEventSelected) {
-        if (!idEventSelected.equals(eventModel.getIdEvent())) {
+        if (!isCurrentEventWatch(idEventSelected)) {
             this.showViewLoading();
             selectEventInteractor.selectEvent(idEventSelected);
         }
@@ -94,7 +94,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe
     public void onWatchingUpdated(Watch currentUserWatch) {
-        if (isCurrentEventWatch(currentUserWatch)) {
+        if (isCurrentEventWatch(currentUserWatch.getIdEvent())) {
             this.renderCurrentUserWatching(currentUserWatch);
         } else {
             //TODO usar el mismo evento de bus para cosas distintas es un TRUÑO. Cada vez el bus es peor opción.
@@ -220,11 +220,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    private boolean isCurrentEventWatch(Watch currentUserWatch) {
+    private boolean isCurrentEventWatch(Long idEvent) {
         if (eventModel == null) {
             return false;
         } else {
-            return currentUserWatch.getIdEvent().equals(eventModel.getIdEvent());
+            return idEvent.equals(eventModel.getIdEvent());
         }
     }
     
