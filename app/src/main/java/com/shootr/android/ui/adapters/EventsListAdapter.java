@@ -13,6 +13,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     private List<EventResultModel> events;
     private Long currentVisibleEvent;
+
+    private OnEventClickListener onEventClickListener;
 
     public EventsListAdapter(PicassoWrapper picasso, Resources resources) {
         this.picasso = picasso;
@@ -81,7 +84,11 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         this.currentVisibleEvent = eventId;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
+        this.onEventClickListener = onEventClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @InjectView(R.id.event_picture) ImageView picture;
         @InjectView(R.id.event_title) TextView title;
@@ -91,6 +98,17 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    EventResultModel eventSelected = events.get(ViewHolder.this.getPosition());
+                    onEventClickListener.onEventClick(eventSelected.getEventModel());
+                }
+            });
         }
+    }
+
+    public interface OnEventClickListener {
+
+        void onEventClick(EventModel event);
     }
 }

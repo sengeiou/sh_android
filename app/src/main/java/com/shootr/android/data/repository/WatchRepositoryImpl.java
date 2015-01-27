@@ -16,11 +16,13 @@ import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 
+@Deprecated
 public class WatchRepositoryImpl implements WatchRepository {
 
     private final ShootrService shootrService;
@@ -31,7 +33,8 @@ public class WatchRepositoryImpl implements WatchRepository {
     private final SessionRepository sessionRepository;
 
     @Inject public WatchRepositoryImpl(ShootrService shootrService, NetworkConnection networkConnection,
-      WatchManager watchManager, FollowManager followManager, WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
+      WatchManager watchManager, FollowManager followManager, WatchEntityMapper watchEntityMapper,
+      SessionRepository sessionRepository) {
         this.shootrService = shootrService;
         this.networkConnection = networkConnection;
         this.watchManager = watchManager;
@@ -53,6 +56,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         }
     }
 
+    @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
     @Override public Watch getCurrentWatching(ErrorCallback callback) {
         WatchEntity watching = watchManager.getWatching(sessionRepository.getCurrentUserId());
         if (watching == null) {
@@ -63,6 +70,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         } else {
             return null;
         }
+    }
+
+    @Override public Watch getCurrentWatching() {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 
     @Override public Integer getAllWatchesCount() {
@@ -111,6 +122,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         sendWatchToServer(finalWatchEntity, callback, watch.getUser());
     }
 
+    @Override public Watch putWatch(Watch watch) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
     private void sendWatchToServer(WatchEntity finalWatchEntity, WatchCallback callback, @Deprecated User user) {
         if (networkConnection.isConnected()) {
             try {
@@ -130,7 +145,10 @@ public class WatchRepositoryImpl implements WatchRepository {
             currentWatchEntity.setNotification(watch.isNotificaticationsEnabled() ? 1 : 0);
             currentWatchEntity.setStatus(watch.isWatching() ? 1L : 2L);
             currentWatchEntity.setPlace(watch.getUserStatus());
+            currentWatchEntity.setVisible(watch.isVisible());
             currentWatchEntity.setCsysSynchronized(Synchronized.SYNC_UPDATED);
+            currentWatchEntity.setCsysModified(new Date());
+            currentWatchEntity.setCsysRevision(currentWatchEntity.getCsysRevision() + 1);
         } else {
             currentWatchEntity = watchEntityMapper.transform(watch);
         }

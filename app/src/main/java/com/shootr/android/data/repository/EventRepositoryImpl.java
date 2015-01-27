@@ -9,6 +9,7 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class EventRepositoryImpl implements EventRepository {
 
@@ -25,6 +26,7 @@ public class EventRepositoryImpl implements EventRepository {
         this.eventEntityMapper = eventEntityMapper;
     }
 
+    //TODO huele a que este método corresponde a WatchRepository devolviendo un Watch
     @Override public Event getVisibleEvent() {
         WatchEntity watchVisibleByUser = watchManager.getWatchVisibleByUser(sessionRepository.getCurrentUserId());
         if (watchVisibleByUser == null) {
@@ -32,6 +34,15 @@ public class EventRepositoryImpl implements EventRepository {
         }
 
         Long idEvent = watchVisibleByUser.getIdEvent();
+        EventEntity eventEntity = eventManager.getEventById(idEvent);
+        if (eventEntity == null) {
+            Timber.e("There is a visible event watch, and the event is not in database");
+            return null;
+        }
+        return eventEntityMapper.transform(eventEntity);
+    }
+
+    @Override public Event getEventById(Long idEvent) {
         EventEntity eventEntity = eventManager.getEventById(idEvent);
         return eventEntityMapper.transform(eventEntity);
     }

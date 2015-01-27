@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
@@ -23,6 +25,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class EventsListActivity extends BaseSignedInActivity implements EventsListView {
+
+    public static final String KEY_EVENT_ID = "event";
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
@@ -56,8 +60,15 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
+
         adapter = new EventsListAdapter(picasso, getResources());
         eventsList.setAdapter(adapter);
+
+        adapter.setOnEventClickListener(new EventsListAdapter.OnEventClickListener() {
+            @Override public void onEventClick(EventModel event) {
+                presenter.selectEvent(event);
+            }
+        });
     }
 
     private void initializePresenter() {
@@ -106,6 +117,13 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     @Override public void hideContent() {
         eventsList.setVisibility(View.GONE);
+    }
+
+    @Override public void closeScrenWithEventResult(Long idEvent) {
+        Intent resultIntent = getIntent();
+        resultIntent.putExtra(KEY_EVENT_ID, idEvent);
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
     @Override public void showEmpty() {

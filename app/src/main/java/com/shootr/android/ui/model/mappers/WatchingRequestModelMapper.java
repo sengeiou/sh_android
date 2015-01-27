@@ -5,7 +5,7 @@ import com.shootr.android.R;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.WatchingRequestModel;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
@@ -37,6 +38,10 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     public void initialize(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
         this.loadDefaultEventList();
+    }
+
+    public void selectEvent(EventModel event) {
+        eventsListView.closeScrenWithEventResult(event.getIdEvent());
     }
 
     private void loadDefaultEventList() {
@@ -78,12 +83,12 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.hideContent();
     }
 
-
-
+    @Subscribe
     @Override public void onCommunicationError(CommunicationErrorEvent event) {
         eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
+    @Subscribe
     @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }

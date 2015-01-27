@@ -77,6 +77,13 @@ public class WatchersView extends LinearLayout{
         bindCurrentUserData(currentUserViewHolder, currentUserWatching);
     }
 
+    public void clearWatchers() {
+        //TODO improve efficiency. Shouln't be deleting and creating everything each time.
+        watchersHoldersMap.clear();
+        currentUserViewHolder = null;
+        this.removeAllViews();
+    }
+
     public void setWatchers(List<UserWatchingModel> watchers) {
         for (UserWatchingModel watcher : watchers) {
             putWatcher(watcher);

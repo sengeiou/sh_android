@@ -4,7 +4,7 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;

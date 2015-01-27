@@ -34,7 +34,7 @@ import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.SecurityUtils;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -450,8 +450,10 @@ public class ShootrDataService implements ShootrService {
             return null;
         }
         WatchEntity watchReceived = null;
-        if(ops.length>0){
-            watchReceived = watchMapper.fromDto(ops[0].getData()[0]);
+        if(ops.length>0) {
+            if (ops[0].getMetadata().getItems() > 0) {
+                watchReceived = watchMapper.fromDto(ops[0].getData()[0]);
+            }
         }
         return watchReceived;
     }

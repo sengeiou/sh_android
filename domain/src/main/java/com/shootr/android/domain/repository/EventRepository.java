@@ -6,4 +6,5 @@ public interface EventRepository {
 
     Event getVisibleEvent();
 
+    Event getEventById(Long idEvent);
 }

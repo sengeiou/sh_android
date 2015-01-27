@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
 import com.shootr.android.R;
+import com.shootr.android.domain.utils.TimeUtils;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;
@@ -12,19 +13,18 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
-public class TimeUtils {
+public class AndroidTimeUtils implements TimeUtils {
 
-    @Inject public TimeUtils() {
+    @Inject public AndroidTimeUtils() {
     }
 
     private long currentOffset = 0L;
 
-    public long getCurrentTime() {
+    @Override public long getCurrentTime() {
         return getSystemCurrentTime()+ currentOffset;
     }
 
-    public void setCurrentTime(long timeMilliseconds) {
+    @Override public void setCurrentTime(long timeMilliseconds) {
         currentOffset = timeMilliseconds - getSystemCurrentTime();
     }
 
@@ -97,7 +97,7 @@ public class TimeUtils {
         return System.currentTimeMillis() - daysInMillis;
     }
 
-    public Date getCurrentDate() {
+    @Override public Date getCurrentDate() {
         return new Date(getCurrentTime());
     }
 }

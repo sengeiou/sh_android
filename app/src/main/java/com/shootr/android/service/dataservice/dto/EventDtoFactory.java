@@ -1,6 +1,5 @@
 package com.shootr.android.service.dataservice.dto;
 
-import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -12,7 +11,7 @@ import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,10 +173,13 @@ public class EventDtoFactory {
     }
 
     public GenericDto getWatchVisible(Long currentUserId) {
-        FilterDto watchFollowingFilter =
-          and(WatchTable.ID_USER).isEqualTo(currentUserId)
-          .and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
-          .and(WatchTable.STATUS).isNotEqualTo(null)
+        FilterDto watchFollowingFilter = and(WatchTable.ID_USER).isEqualTo(currentUserId)
+          .and(WatchTable.VISIBLE)
+          .isEqualTo(WatchEntity.VISIBLE)
+          .and(WatchTable.STATUS)
+          .isNotEqualTo(null)
+          .and(WatchTable.NOTIFICATION)
+          .isNotEqualTo(null)
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(

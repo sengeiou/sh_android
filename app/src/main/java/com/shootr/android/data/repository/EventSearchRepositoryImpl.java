@@ -45,7 +45,6 @@ public class EventSearchRepositoryImpl implements EventSearchRepository {
             List<EventSearchResult> eventSearchResults = eventSearchEntityMapper.transform(eventSearchEntities);
 
             callback.onLoaded(eventSearchResults);
-
         } catch (SQLException | IOException e) {
             callback.onError(e);
         }
@@ -57,16 +56,17 @@ public class EventSearchRepositoryImpl implements EventSearchRepository {
         List<Long> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
         followingAndCurrentUserIds.add(currentUserId);
 
-        List<WatchEntity> watches =
-          watchManager.getWatchesNotEndedFromUsers(followingAndCurrentUserIds);
+        List<WatchEntity> watches = watchManager.getWatchesNotEndedFromUsers(followingAndCurrentUserIds);
 
         Map<Long, Integer> eventsWatchesCounts = new HashMap<>();
         for (WatchEntity watch : watches) {
-            Integer currentCount = eventsWatchesCounts.get(watch.getIdEvent());
-            if (currentCount != null) {
-                eventsWatchesCounts.put(watch.getIdEvent(), currentCount + 1);
-            } else {
-                eventsWatchesCounts.put(watch.getIdEvent(), 1);
+            if (watch.getStatus().equals(1L)) {
+                Integer currentCount = eventsWatchesCounts.get(watch.getIdEvent());
+                if (currentCount != null) {
+                    eventsWatchesCounts.put(watch.getIdEvent(), currentCount + 1);
+                } else {
+                    eventsWatchesCounts.put(watch.getIdEvent(), 1);
+                }
             }
         }
         return eventsWatchesCounts;

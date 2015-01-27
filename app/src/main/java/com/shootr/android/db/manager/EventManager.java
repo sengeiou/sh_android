@@ -9,7 +9,7 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
 
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

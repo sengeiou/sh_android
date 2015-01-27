@@ -10,6 +10,11 @@
             android:label="Log Viewer">
         </activity>
 
+        <receiver android:name=".data.SyncBroadcastReceiver">
+            <intent-filter >
+                <action android:name="com.shootr.android.ACTION_SYNC" />
+            </intent-filter>
+          </receiver>
     </application>
 
 </manifest>

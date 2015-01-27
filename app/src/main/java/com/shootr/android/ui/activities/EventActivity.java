@@ -31,6 +31,7 @@ import javax.inject.Inject;
 
 public class EventActivity extends BaseSignedInActivity implements SingleEventView {
 
+    private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
 
     @InjectView(R.id.event_watchig_switch) SwitchBar watchingSwitch;
@@ -128,7 +129,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
           ActivityOptionsCompat.makeScaleUpAnimation(titleContainer, titleContainer.getLeft(), 0,
             titleContainer.getWidth(), titleContainer.getBottom()).toBundle();
         Intent intent = new Intent(this, EventsListActivity.class);
-        ActivityCompat.startActivity(this, intent, animationBundle);
+        ActivityCompat.startActivityForResult(this, intent, REQUEST_SELECT_EVENT, animationBundle);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,6 +161,9 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
             String statusText = data.getStringExtra(EditInfoActivity.KEY_STATUS);
             presenter.resultFromEdit(statusText);
+        }else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
+            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            presenter.resultFromSelectEvent(idEventSelected);
         }
     }
 
@@ -187,6 +191,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {
+        watchersList.clearWatchers();
         watchersList.setWatchers(watchers);
     }
 

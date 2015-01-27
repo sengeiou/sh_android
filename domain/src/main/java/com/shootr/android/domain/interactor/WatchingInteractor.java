@@ -55,6 +55,7 @@ public class WatchingInteractor implements Interactor {
         watch.setIdEvent(idEvent);
         watch.setWatching(isWatching);
         watch.setUserStatus(userStatus);
+        watch.setVisible(true); //TODO what if watching is activated from a not visible event? OMG!
         watch.setNotificaticationsEnabled(notificationsEnabled());
 
         watchRepository.putWatch(watch, callback);
@@ -65,7 +66,15 @@ public class WatchingInteractor implements Interactor {
         if (currentWatching != null) {
             currentWatching.setWatching(false);
             currentWatching.setNotificaticationsEnabled(false);
-            watchRepository.putWatch(currentWatching, callback);
+            watchRepository.putWatch(currentWatching, new WatchRepository.WatchCallback() {
+                @Override public void onLoaded(Watch watch) {
+                    /* no-op */
+                }
+
+                @Override public void onError(Throwable error) {
+                    interactorHandler.sendError(error);
+                }
+            });
         }
     }
 
