@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -167,6 +169,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         resultIntent.putExtra(KEY_EVENT_ID, idEvent);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     @Override public void showEmpty() {

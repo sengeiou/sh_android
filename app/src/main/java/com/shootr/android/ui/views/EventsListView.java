@@ -14,4 +14,6 @@ public interface EventsListView extends LoadDataView {
     void hideContent();
 
     void closeScrenWithEventResult(Long idEvent);
+
+    void hideKeyboard();
 }

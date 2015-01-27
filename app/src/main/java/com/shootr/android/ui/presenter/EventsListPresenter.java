@@ -68,6 +68,7 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     }
 
     public void search(String queryText) {
+        eventsListView.hideKeyboard();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
