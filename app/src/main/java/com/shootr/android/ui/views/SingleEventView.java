@@ -10,6 +10,8 @@ public interface SingleEventView extends LoadDataView{
 
     void setEventDate(String date);
 
+    void setEventPicture(String picture);
+
     void setWatchers(List<UserWatchingModel> watchers);
 
     void setWatchersCount(int watchersCount);
@@ -29,4 +31,6 @@ public interface SingleEventView extends LoadDataView{
     void navigateToEdit(EventModel eventModel, UserWatchingModel currentUserWatchingModel);
 
     void showContent();
+
+    void showDetail();
 }

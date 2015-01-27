@@ -145,15 +145,19 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             this.showViewEmpty();
         } else {
             this.hideViewEmpty();
-            this.renderEvent(eventInfo.getEvent());
+            this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
-
             watchersCount = eventInfo.getWatchersCount();
             this.renderWatchersCount(watchersCount);
-            this.showViewContent();
+            this.showViewDetail();
         }
         this.hideViewLoading();
+    }
+
+    private void showViewDetail() {
+        singleEventView.showContent();
+        singleEventView.showDetail();
     }
 
     private void updateWatchersCount(boolean isWatching) {
@@ -183,10 +187,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setNotificationsEnabled(currentUserWatchingModel.isNotificationsEnabled());
     }
 
-    private void renderEvent(Event event) {
+    private void renderEventInfo(Event event) {
         eventModel = eventModelMapper.transform(event);
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
+        singleEventView.setEventPicture(eventModel.getPicture());
     }
 
     private void renderWatchersCount(int watchersCount) {
@@ -198,11 +203,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    //region view methods
-    private void showViewContent() {
-        singleEventView.showContent();
-    }
-
     private void showViewLoading() {
         singleEventView.showLoading();
     }
@@ -212,6 +212,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void showViewEmpty() {
+        singleEventView.showContent();
         singleEventView.showEmpty();
     }
 

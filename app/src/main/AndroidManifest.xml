@@ -101,6 +101,7 @@
 
         <activity
           android:name=".ui.activities.EventActivity"
+          android:theme="@style/ShootrTheme.TranslucentToolbar"
           android:label="@string/activity_info_title">
 
             <meta-data
