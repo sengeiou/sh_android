@@ -38,7 +38,7 @@ import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
-import com.shootr.android.ui.presenter.WatchingRequestPresenter;
+import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.BitmapImageResizer;
@@ -157,7 +157,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ShotDetailPresenter.class,
 
-    WatchingRequestPresenter.class,
+    WatchNumberPresenter.class,
 
     PeoplePresenter.class,
 

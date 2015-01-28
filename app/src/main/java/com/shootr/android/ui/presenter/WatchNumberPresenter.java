@@ -23,7 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class WatchingRequestPresenter implements Presenter{
+public class WatchNumberPresenter implements Presenter{
 
     private final JobManager jobManager;
     private final Bus bus;
@@ -34,7 +34,7 @@ public class WatchingRequestPresenter implements Presenter{
     private WatchingRequestModel currentRequest;
     private Integer peopleWatchingCount;
 
-    @Inject public WatchingRequestPresenter(JobManager jobManager, Bus bus) {
+    @Inject public WatchNumberPresenter(JobManager jobManager, Bus bus) {
         this.jobManager = jobManager;
         this.bus = bus;
     }
