@@ -78,6 +78,7 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
     private int lastHeaderHeightPixels;
     private MenuItem addPhotoMenuItem;
     private boolean showPictureButton;
+    private float headerMaxElevation;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +96,8 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
 
     private void initializeViews() {
         ButterKnife.inject(this);
+        headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
+
         watchingSwitch.getSwitch().setOnBeforeCheckedChangeListener(new ToggleSwitch.OnBeforeCheckedChangeListener() {
             @Override public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
                 presenter.sendWatching(checked);
@@ -191,6 +194,26 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         editFab.setTranslationY(newTop + lastHeaderHeightPixels - editFabHeightPixels / 2);
 
         photo.setTranslationY(scrollY * 0.5f);
+
+        float gapFillProgress = 1;
+        if (lastPictureHeightPixels != 0) {
+            gapFillProgress = scrollProgress();
+        }
+
+        ViewCompat.setElevation(titleContainer, gapFillProgress * headerMaxElevation);
+    }
+
+    private float scrollProgress() {
+        float max = lastPictureHeightPixels;
+        float current = scrollView.getScrollY();
+        float progress = current / max;
+
+        if (progress > 1) {
+            progress = 1;
+        }else if (progress < 0) {
+            progress = 0;
+        }
+        return progress;
     }
 
     private void recomputePhotoAndScrollingMetrics() {
