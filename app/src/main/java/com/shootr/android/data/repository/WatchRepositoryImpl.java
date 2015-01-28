@@ -15,7 +15,6 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +59,14 @@ public class WatchRepositoryImpl implements WatchRepository {
         throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 
+    @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
+    @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
     @Override public Watch getCurrentWatching(ErrorCallback callback) {
         WatchEntity watching = watchManager.getWatching(sessionRepository.getCurrentUserId());
         if (watching == null) {
@@ -76,16 +83,8 @@ public class WatchRepositoryImpl implements WatchRepository {
         throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 
-    @Override public Integer getAllWatchesCount() {
-        try {
-            List<Long> following = followManager.getUserFollowingIds(sessionRepository.getCurrentUserId());
-            following.add(sessionRepository.getCurrentUserId());
-            List<WatchEntity> allWatches = watchManager.getWatchesNotEndedFromUsers(following);
-
-            return countEvents(allWatches);
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+    @Override public Watch getCurrentVisibleWatch() {
+        return null;
     }
 
     private Integer countEvents(List<WatchEntity> allWatches) {

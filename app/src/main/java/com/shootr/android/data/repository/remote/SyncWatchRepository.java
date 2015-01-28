@@ -49,6 +49,14 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         return watchEntityMapper.transform(watchEntity, user);
     }
 
+    @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
+        throw new RuntimeException("Method not implemented yet!");
+    }
+
+    @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
+        throw new RuntimeException("Method not implemented yet!");
+    }
+
     @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {
         throw new RuntimeException(
           "Method not implemented. It is in the interface for compatibility with old repository implementations");
@@ -75,9 +83,10 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Override public Integer getAllWatchesCount() {
+    @Override public Watch getCurrentVisibleWatch() {
         throw new RuntimeException("Method not implemented yet!");
     }
+
     //endregion
 
     //region Synchronization
