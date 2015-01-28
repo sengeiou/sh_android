@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
@@ -7,6 +7,8 @@ import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import java.util.ArrayList;

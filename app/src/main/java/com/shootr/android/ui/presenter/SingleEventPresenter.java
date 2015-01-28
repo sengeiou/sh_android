@@ -4,11 +4,11 @@ import android.support.annotation.Nullable;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
-import com.shootr.android.domain.interactor.EventsCountInteractor;
-import com.shootr.android.domain.interactor.NotificationInteractor;
-import com.shootr.android.domain.interactor.SelectEventInteractor;
-import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.WatchingInteractor;
+import com.shootr.android.domain.interactor.event.EventNotificationInteractor;
+import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -29,8 +29,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
-    private final NotificationInteractor notificationInteractor;
-    private final EventsCountInteractor eventsCountInteractor;
+    private final EventNotificationInteractor eventNotificationInteractor;
+    private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
     private final SelectEventInteractor selectEventInteractor;
 
     private final EventModelMapper eventModelMapper;
@@ -44,14 +44,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private int watchersCount;
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor,
-      EventsCountInteractor eventsCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      WatchingInteractor watchingInteractor, EventNotificationInteractor eventNotificationInteractor,
+      EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
-        this.notificationInteractor = notificationInteractor;
-        this.eventsCountInteractor = eventsCountInteractor;
+        this.eventNotificationInteractor = eventNotificationInteractor;
+        this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
         this.selectEventInteractor = selectEventInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
@@ -109,7 +109,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void toggleNotifications() {
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
-        notificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
+        eventNotificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
         //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
@@ -123,7 +123,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void loadEventsCount() {
-        eventsCountInteractor.obtainEventsCount();
+        eventsWatchedCountInteractor.obtainEventsCount();
     }
 
     @Subscribe public void onEventsCountLoaded(Integer count) {

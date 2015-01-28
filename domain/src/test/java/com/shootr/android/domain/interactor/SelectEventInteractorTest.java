@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;

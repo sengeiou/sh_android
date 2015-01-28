@@ -2,11 +2,10 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
-import com.shootr.android.domain.interactor.GetPeopleInteractor;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.util.ErrorMessageFactory;

@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
 import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,14 +1,16 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.event;
 
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.WatchRepository;
 import javax.inject.Inject;
 
-public class EventsCountInteractor implements Interactor {
+public class EventsWatchedCountInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final WatchRepository watchRepository;
 
-    @Inject public EventsCountInteractor(InteractorHandler interactorHandler, WatchRepository watchRepository) {
+    @Inject public EventsWatchedCountInteractor(InteractorHandler interactorHandler, WatchRepository watchRepository) {
         this.interactorHandler = interactorHandler;
         this.watchRepository = watchRepository;
     }

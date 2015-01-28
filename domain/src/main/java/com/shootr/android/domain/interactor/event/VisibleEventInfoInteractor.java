@@ -1,6 +1,8 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import javax.inject.Inject;
 

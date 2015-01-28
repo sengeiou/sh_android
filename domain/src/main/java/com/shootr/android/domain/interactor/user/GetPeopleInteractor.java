@@ -1,7 +1,9 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.Collections;
 import java.util.Comparator;
