@@ -19,6 +19,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.EventModel;
@@ -62,6 +63,8 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
+    @InjectView(R.id.event_edit) FloatingActionButton editFab;
+
     @Inject SingleEventPresenter presenter;
     @Inject PicassoWrapper picasso;
 
@@ -72,6 +75,9 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
     private Toast currentToast;
     private boolean hasPicture;
     private int lastPictureHeightPixels;
+    private int lastHeaderHeightPixels;
+    private MenuItem addPhotoMenuItem;
+    private boolean showPictureButton;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +150,10 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         }
     }
 
+    private void updateAddPhotoIcon() {
+        addPhotoMenuItem.setVisible(showPictureButton);
+    }
+
     private void setupEventsIcon(MenuItem eventsMenuItem) {
         LayerDrawable icon = (LayerDrawable) eventsMenuItem.getIcon();
         eventsBadgeDrawable = new BadgeDrawable(this);
@@ -177,6 +187,9 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         float newTop = Math.max(lastPictureHeightPixels, scrollY);
         titleContainer.setTranslationY(newTop);
 
+        int editFabHeightPixels = editFab.getHeight();
+        editFab.setTranslationY(newTop + lastHeaderHeightPixels - editFabHeightPixels / 2);
+
         photo.setTranslationY(scrollY * 0.5f);
     }
 
@@ -184,7 +197,8 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         lastPictureHeightPixels = calculatePictureHeight();
         setPictureHeight(lastPictureHeightPixels);
 
-        int detailContainerTopMargin = titleContainer.getHeight() + lastPictureHeightPixels;
+        lastHeaderHeightPixels = titleContainer.getHeight();
+        int detailContainerTopMargin = lastHeaderHeightPixels + lastPictureHeightPixels;
         setContentTopMargin(detailContainerTopMargin);
 
         onScrollChanged(0, 0);
@@ -225,6 +239,9 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
 
         MenuItem eventsMenuItem = menu.findItem(R.id.menu_events);
         setupEventsIcon(eventsMenuItem);
+
+        addPhotoMenuItem = menu.findItem(R.id.menu_photo_add);
+        updateAddPhotoIcon();
         return true;
     }
 
@@ -349,6 +366,28 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
 
     @Override public void showDetail() {
         contentDetail.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showEditEventButton() {
+        editFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEditEventButton() {
+        editFab.setVisibility(View.INVISIBLE);
+    }
+
+    @Override public void showEditPictureButton() {
+        showPictureButton = true;
+        if (addPhotoMenuItem != null) {
+            updateAddPhotoIcon();
+        }
+    }
+
+    @Override public void hideEditPictureButton() {
+        showPictureButton = false;
+        if (addPhotoMenuItem != null) {
+            updateAddPhotoIcon();
+        }
     }
 
     @Override public void showEmpty() {

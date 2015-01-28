@@ -122,8 +122,8 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="@dimen/keyline_2"
               android:layout_marginRight="@dimen/keyline_1"
-              android:drawableRight="@drawable/spinner_material"
               android:drawablePadding="4dp"
+              android:drawableRight="@drawable/spinner_material"
               android:text="@string/event_title_default"
               android:textColor="@color/white"
               android:textSize="18sp"
@@ -142,6 +142,21 @@
               tools:text="MIÉ. 18:30"
               tools:visibility="visible" />
         </com.shootr.android.ui.widgets.ForegroundLinearLayout>
+
+        <!-- Edit FAB -->
+        <com.melnykov.fab.FloatingActionButton
+          android:id="@+id/event_edit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="@dimen/keyline_1_minus_8dp"
+          android:src="@drawable/ic_fab_mini_edit_white"
+          android:visibility="invisible"
+          app:fab_colorNormal="@color/primary_dark"
+          app:fab_colorPressed="@color/primary_dark"
+          app:fab_colorRipple="@color/primary_disabled"
+          app:fab_type="mini"
+          tools:visibility="visible" />
+
     </FrameLayout>
 
 </com.shootr.android.ui.widgets.ObservableScrollView>
