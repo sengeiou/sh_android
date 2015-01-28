@@ -40,8 +40,6 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
 
     private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
-    private static final String TRANSITION_NAME_PHOTO = "photo";
-    //private static final float PHOTO_ASPECT_RATIO = 1.7777777f;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
@@ -122,14 +120,11 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
             scrollViewViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override public void onGlobalLayout() {
                     recomputePhotoAndScrollingMetrics();
-                    //TODO remove on destroy or something
                 }
             });
         }
 
         scrollChild.setVisibility(View.INVISIBLE);
-
-        ViewCompat.setTransitionName(photo, TRANSITION_NAME_PHOTO);
     }
 
     private void setupActionbar() {
@@ -184,28 +179,39 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         startActivity(intent);
     }
 
+    //region Scroll updates
     @Override public void onScrollChanged(int deltaX, int deltaY) {
-        int scrollY = scrollView.getScrollY();
+        int verticalScrollPosition = scrollView.getScrollY();
 
-        float newTop = Math.max(lastPictureHeightPixels, scrollY);
-        titleContainer.setTranslationY(newTop);
+        setTitleContainerPosition(verticalScrollPosition);
+
+        setPictureParallaxPosition(verticalScrollPosition);
+
+        setTitleContainerElevation(verticalScrollPosition);
+    }
+
+    private void setPictureParallaxPosition(int verticalScrollPosition) {
+        photo.setTranslationY(verticalScrollPosition * 0.5f);
+    }
+
+    private void setTitleContainerPosition(int verticalScrollPosition) {
+        float newTitleTop = Math.max(lastPictureHeightPixels, verticalScrollPosition);
+        titleContainer.setTranslationY(newTitleTop);
 
         int editFabHeightPixels = editFab.getHeight();
-        editFab.setTranslationY(newTop + lastHeaderHeightPixels - editFabHeightPixels / 2);
+        editFab.setTranslationY(newTitleTop + lastHeaderHeightPixels - editFabHeightPixels / 2);
+    }
 
-        photo.setTranslationY(scrollY * 0.5f);
-
+    private void setTitleContainerElevation(int verticalScrollPosition) {
         float gapFillProgress = 1;
         if (lastPictureHeightPixels != 0) {
-            gapFillProgress = scrollProgress();
+            gapFillProgress = scrollProgress(verticalScrollPosition);
         }
-
         ViewCompat.setElevation(titleContainer, gapFillProgress * headerMaxElevation);
     }
 
-    private float scrollProgress() {
+    private float scrollProgress(float current) {
         float max = lastPictureHeightPixels;
-        float current = scrollView.getScrollY();
         float progress = current / max;
 
         if (progress > 1) {
@@ -215,19 +221,20 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         }
         return progress;
     }
+    //endregion
 
+    //region Views positions
     private void recomputePhotoAndScrollingMetrics() {
         lastPictureHeightPixels = calculatePictureHeight();
-        setPictureHeight(lastPictureHeightPixels);
-
         lastHeaderHeightPixels = titleContainer.getHeight();
-        int detailContainerTopMargin = lastHeaderHeightPixels + lastPictureHeightPixels;
-        setContentTopMargin(detailContainerTopMargin);
 
+        setPictureHeight(lastPictureHeightPixels);
+        setContentTopMargin();
         onScrollChanged(0, 0);
     }
 
-    private void setContentTopMargin(int detailContainerTopMargin) {
+    private void setContentTopMargin() {
+        int detailContainerTopMargin = lastHeaderHeightPixels + lastPictureHeightPixels;
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) contentContainer.getLayoutParams();
         if (mlp.topMargin != detailContainerTopMargin) {
             mlp.topMargin = detailContainerTopMargin;
@@ -251,6 +258,7 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
             photoContainer.setLayoutParams(lp);
         }
     }
+    //endregion
 
     //region Activity Methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
