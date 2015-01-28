@@ -41,6 +41,10 @@ public class UserRepositoryImpl implements UserRepository{
         callback.onLoaded(remoteUsers);
     }
 
+    @Override public List<User> getPeople() {
+        throw new RuntimeException("Method not implemented in legacy repository!");
+    }
+
     private List<User> peopleFromDatabase() {
         try {
             List<Long> usersFollowingIds = followManager.getUserFollowingIds(sessionRepository.getCurrentUserId());
