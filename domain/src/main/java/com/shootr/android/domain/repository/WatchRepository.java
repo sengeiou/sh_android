@@ -12,10 +12,13 @@ public interface WatchRepository {
         void onLoaded(Watch watch);
 
     }
+
     @Deprecated
     Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback);
 
     Watch getWatchForUserAndEvent(User user, Long idEvent);
+
+    List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent);
 
     List<Watch> getWatchesFromUsers(List<Long> userIds);
 
@@ -28,4 +31,6 @@ public interface WatchRepository {
     Watch getCurrentWatching(ErrorCallback callback);
 
     Watch getCurrentWatching();
+
+    Watch getCurrentVisibleWatch();
 }
