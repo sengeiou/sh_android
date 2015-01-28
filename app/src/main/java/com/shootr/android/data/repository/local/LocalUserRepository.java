@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.local;
 
+import com.shootr.android.data.repository.UserRepositoryImpl;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.List;
@@ -7,7 +8,10 @@ import javax.inject.Inject;
 
 public class LocalUserRepository implements UserRepository {
 
-    @Inject public LocalUserRepository() {
+    private final UserRepositoryImpl oldUserRepository;
+
+    @Inject public LocalUserRepository(UserRepositoryImpl oldUserRepository) {
+        this.oldUserRepository = oldUserRepository;
     }
 
     @Override public void getPeople(UserListCallback callback) {
@@ -15,7 +19,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<User> getPeople() {
-        throw new RuntimeException("Method not implemented yet!");
+        return oldUserRepository.getPeople();
     }
 
     @Override public boolean isFollower(Long userId) {

@@ -13,7 +13,9 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -21,15 +23,17 @@ import timber.log.Timber;
 public class SyncWatchRepository implements WatchRepository, SyncableRepository {
 
     //region Dependencies
+    private final SessionRepository sessionRepository;
     private final WatchDataSource localWatchDataSource;
     private final WatchDataSource remoteWatchDataSource;
     private final WatchEntityMapper watchEntityMapper;
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncWatchRepository(@LocalDataSource WatchDataSource localWatchDataSource,
-      @RemoteDataSource WatchDataSource remoteWatchDataSource, WatchEntityMapper watchEntityMapper,
-      SyncTrigger syncTrigger, SyncableWatchEntityFactory syncableWatchEntityFactory) {
+    @Inject public SyncWatchRepository(SessionRepository sessionRepository, @LocalDataSource WatchDataSource localWatchDataSource,
+      @RemoteDataSource WatchDataSource remoteWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
+      SyncableWatchEntityFactory syncableWatchEntityFactory) {
+        this.sessionRepository = sessionRepository;
         this.localWatchDataSource = localWatchDataSource;
         this.remoteWatchDataSource = remoteWatchDataSource;
         this.watchEntityMapper = watchEntityMapper;
@@ -50,7 +54,10 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
-        throw new RuntimeException("Method not implemented yet!");
+        //TODO Mock!!!
+        WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, users.get(0).getIdUser());
+        Watch watch = watchEntityMapper.transform(watchEntity, users.get(0));
+        return Arrays.asList(watch, watch);
     }
 
     @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
@@ -84,7 +91,15 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public Watch getCurrentVisibleWatch() {
-        throw new RuntimeException("Method not implemented yet!");
+        //TODO mock!!!
+        Watch watch = new Watch();
+        watch.setWatching(true);
+        watch.setUser(sessionRepository.getCurrentUser());
+        watch.setIdEvent(305596L);
+        watch.setVisible(true);
+        watch.setNotificaticationsEnabled(true);
+        watch.setUserStatus("Mock watch");
+        return watch;
     }
 
     //endregion

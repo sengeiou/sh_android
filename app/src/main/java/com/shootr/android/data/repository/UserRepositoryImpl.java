@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
+@Deprecated
 public class UserRepositoryImpl implements UserRepository{
 
     private final UserManager userManager;
@@ -42,7 +43,7 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override public List<User> getPeople() {
-        throw new RuntimeException("Method not implemented in legacy repository!");
+        return peopleFromDatabase();
     }
 
     private List<User> peopleFromDatabase() {
