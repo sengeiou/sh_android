@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventNotificationInteractor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
@@ -123,10 +125,18 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void loadEventsCount() {
-        eventsWatchedCountInteractor.obtainEventsCount();
+        eventsWatchedCountInteractor.obtainEventsCount(new EventsWatchedCountInteractor.Callback() {
+            @Override public void onLoaded(Integer count) {
+                onEventsCountLoaded(count);
+            }
+        }, new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO handle error
+            }
+        });
     }
 
-    @Subscribe public void onEventsCountLoaded(Integer count) {
+    public void onEventsCountLoaded(Integer count) {
         renderEventsCount(count);
     }
 
@@ -136,10 +146,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void getEventInfo() {
-        eventInfoInteractor.obtainEventInfo();
+        eventInfoInteractor.obtainEventInfo(new VisibleEventInfoInteractor.Callback() {
+            @Override public void onLoaded(EventInfo eventInfo) {
+                onEventInfoLoaded(eventInfo);
+            }
+        });
     }
 
-    @Subscribe
     public void onEventInfoLoaded(EventInfo eventInfo) {
         if (eventInfo.getEvent() == null) {
             this.showViewEmpty();
