@@ -1,78 +1,56 @@
 package com.shootr.android.ui.presenter;
 
-import android.os.Handler;
-import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
+import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
-import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
-import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
-import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
-import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
-public class WatchNumberPresenter implements Presenter{
+public class WatchNumberPresenter implements Presenter {
 
-    private final JobManager jobManager;
     private final Bus bus;
+    private final WatchNumberInteractor watchNumberInteractor;
 
     private WatchingRequestView watchingRequestView;
-    private ObjectGraph objectGraph;
-    private WatchingRequestStack watchingRequestsPendingStack;
-    private WatchingRequestModel currentRequest;
     private Integer peopleWatchingCount;
 
-    @Inject public WatchNumberPresenter(JobManager jobManager, Bus bus) {
-        this.jobManager = jobManager;
+    @Inject public WatchNumberPresenter(Bus bus, WatchNumberInteractor watchNumberInteractor) {
         this.bus = bus;
+        this.watchNumberInteractor = watchNumberInteractor;
     }
 
-    public void initialize(WatchingRequestView watchingRequestView, ObjectGraph objectGraph) {
+    public void initialize(WatchingRequestView watchingRequestView) {
         this.watchingRequestView = watchingRequestView;
-        this.objectGraph = objectGraph;
         this.retrieveData();
     }
 
     private void retrieveData() {
-        GetWatchingInfoJob getWatchingInfoJob = objectGraph.get(GetWatchingInfoJob.class);
-        getWatchingInfoJob.init(true);
-        jobManager.addJobInBackground(getWatchingInfoJob);
+        watchNumberInteractor.loadWatchNumber(new EventsWatchedCountInteractor.Callback() {
+            @Override public void onLoaded(Integer count) {
+                onNumberReceived(count);
+            }
+        }, new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO error handling
+            }
+        });
     }
 
-    @Subscribe public void onRequestWatchByPush(RequestWatchByPushEvent event){
+    //TODO...
+    @Subscribe public void onRequestWatchByPush(RequestWatchByPushEvent event) {
         retrieveData();
     }
 
-    @Subscribe
-    public void onInfoDataRefreshed(WatchingInfoResult event) {
-        startUpdateNotificationBadge();
-        /* deactivated for now */
-        //startRetrievingWatchingRequests();
-    }
-
-    private void startUpdateNotificationBadge() {
-        GetWatchingPeopleNumberJob job = objectGraph.get(GetWatchingPeopleNumberJob.class);
-        jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void onNumberReceived(WatchingPeopleNumberEvent event) {
-        this.peopleWatchingCount = event.getResult();
+    public void onNumberReceived(Integer count) {
+        peopleWatchingCount = count;
         watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
     }
-
 
     public void menuCreated() {
         if (peopleWatchingCount != null) {
@@ -80,101 +58,12 @@ public class WatchNumberPresenter implements Presenter{
         }
     }
 
-    private void startRetrievingWatchingRequests() {
-        GetWatchingRequestsPendingJob getWatchingRequestsPendingJob =
-          objectGraph.get(GetWatchingRequestsPendingJob.class);
-        jobManager.addJobInBackground(getWatchingRequestsPendingJob);
-    }
-
-    @Subscribe
-    public void onWatchingRequestsPendingReceived(WatchingRequestPendingEvent event) {
-        List<WatchingRequestModel> watchingRequests = event.getResult();
-        if (watchingRequests != null && !watchingRequests.isEmpty()) {
-            watchingRequestsPendingStack = new WatchingRequestStack(watchingRequests);
-            showNextWatchingRequest();
-        }
-    }
-
-    private void showNextWatchingRequest() {
-        if (watchingRequestsPendingStack.hasMore()) {
-            this.currentRequest = watchingRequestsPendingStack.next();
-            watchingRequestView.showWatchingRequest(currentRequest);
-        } else {
-            Timber.d("No more requests ;)");
-        }
-    }
-
-    private void hideCurrentWatchingRequest() {
-        watchingRequestView.hideWatchingRequest();
-    }
-
-    private void hideCurrentRequestAndShowNext() {
-        hideCurrentWatchingRequest();
-        new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
-                if (watchingRequestsPendingStack != null) {
-                    showNextWatchingRequest();
-                }
-            }
-        }, 1000);
-    }
-
-    public void answerCurrentWatchingRequestPositive() {
-        answerCurrentRequestAndShowNext(WatchEntity.STATUS_WATCHING);
-    }
-
-    public void answerCurrentWatchingRequestNegative() {
-        answerCurrentRequestAndShowNext(WatchEntity.STATUS_REJECT);
-    }
-
-    private void answerCurrentRequestAndShowNext(Long status) {
-        Long eventId = currentRequest.getEventId();
-        watchingRequestsPendingStack.remove(currentRequest);
-        currentRequest = null;
-
-        sendWatchingStatus(status, eventId);
-        hideCurrentRequestAndShowNext();
-    }
-
-    private void sendWatchingStatus(Long status, Long eventId) {
-        SetWatchingInfoOfflineJob jobOffline = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        jobOffline.init(eventId, status, null);
-        jobManager.addJobInBackground(jobOffline);
-        SetWatchingInfoOnlineJob jobOnline = objectGraph.get(SetWatchingInfoOnlineJob.class);
-        jobManager.addJobInBackground(jobOnline);
-    }
-
     @Override public void resume() {
         bus.register(this);
-        retrieveData();
+        retrieveData(); //TODO sí?
     }
 
     @Override public void pause() {
         bus.unregister(this);
-    }
-
-    private class WatchingRequestStack {
-
-        private List<WatchingRequestModel> watchingRequestModels;
-
-        private WatchingRequestStack(List<WatchingRequestModel> watchingRequestModels) {
-            this.watchingRequestModels = watchingRequestModels;
-        }
-
-        public void setElements(Collection<WatchingRequestModel> elements) {
-            watchingRequestModels = new ArrayList<>(elements);
-        }
-
-        public WatchingRequestModel next() {
-            return watchingRequestModels.get(0);
-        }
-
-        public void remove(WatchingRequestModel currentRequest) {
-            watchingRequestModels.remove(currentRequest);
-        }
-
-        public boolean hasMore() {
-            return !watchingRequestModels.isEmpty();
-        }
     }
 }
