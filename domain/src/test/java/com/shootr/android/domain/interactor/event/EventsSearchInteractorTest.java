@@ -1,6 +1,8 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;

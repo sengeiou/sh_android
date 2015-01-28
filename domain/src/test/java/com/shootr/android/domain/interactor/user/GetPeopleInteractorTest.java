@@ -1,8 +1,10 @@
-package com.shootr.android.domain.interactor;
+package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
 import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
