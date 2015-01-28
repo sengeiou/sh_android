@@ -19,7 +19,7 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final UserRepository userRepository;
+    private final UserRepository localUserRepository;
     private final WatchRepository remoteWatchRepository;
     private final WatchRepository localWatchRepository;
     private final EventRepository remoteEventRepository;
@@ -27,12 +27,12 @@ public class VisibleEventInfoInteractor implements Interactor {
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @LocalRepository UserRepository userRepository,
+      PostExecutionThread postExecutionThread, @LocalRepository UserRepository localUserRepository,
       @RemoteRepository WatchRepository remoteWatchRepository, @LocalRepository WatchRepository localWatchRepository,
       @RemoteRepository EventRepository remoteEventRepository, @LocalRepository EventRepository localEventRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.userRepository = userRepository;
+        this.localUserRepository = localUserRepository;
         this.remoteWatchRepository = remoteWatchRepository;
         this.localWatchRepository = localWatchRepository;
         this.remoteEventRepository = remoteEventRepository;
@@ -63,7 +63,7 @@ public class VisibleEventInfoInteractor implements Interactor {
         Watch currentVisibleWatch = watchRepository.getCurrentVisibleWatch();
         Event visibleEvent = eventRepository.getEventById(currentVisibleWatch.getIdEvent());
 
-        List<User> people = userRepository.getPeople();
+        List<User> people = localUserRepository.getPeople();
         List<Watch> watchesFromPeople = watchRepository.getWatchesFromUsersAndEvent(people, visibleEvent.getId());
 
         return buildEventInfo(visibleEvent, currentVisibleWatch, watchesFromPeople);

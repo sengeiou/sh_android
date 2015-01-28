@@ -98,7 +98,12 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         watch.setIdEvent(305596L);
         watch.setVisible(true);
         watch.setNotificaticationsEnabled(true);
-        watch.setUserStatus("Mock watch");
+        watch.setUserStatus("Mock watch online");
+        try {
+            Thread.sleep(900);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return watch;
     }
 

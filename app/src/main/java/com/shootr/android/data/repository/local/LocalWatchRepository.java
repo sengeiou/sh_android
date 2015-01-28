@@ -10,6 +10,7 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -42,7 +43,10 @@ public class LocalWatchRepository implements WatchRepository {
     }
 
     @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
-        throw new RuntimeException("Method not implemented yet!");
+        //TODO Mock!!!
+        WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, users.get(0).getIdUser());
+        Watch watch = watchEntityMapper.transform(watchEntity, users.get(0));
+        return Arrays.asList(watch, watch, watch);
     }
 
     @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
@@ -71,6 +75,14 @@ public class LocalWatchRepository implements WatchRepository {
     }
 
     @Override public Watch getCurrentVisibleWatch() {
-        throw new RuntimeException("Method not implemented yet!");
+        //TODO mock!!!
+        Watch watch = new Watch();
+        watch.setWatching(true);
+        watch.setUser(sessionRepository.getCurrentUser());
+        watch.setIdEvent(305596L);
+        watch.setVisible(true);
+        watch.setNotificaticationsEnabled(true);
+        watch.setUserStatus("Mock watch");
+        return watch;
     }
 }
