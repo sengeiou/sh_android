@@ -61,7 +61,8 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
-        throw new RuntimeException("Method not implemented yet!");
+        //TODO Mock!!
+        return Arrays.asList(getCurrentVisibleWatch());
     }
 
     @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {

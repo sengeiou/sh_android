@@ -25,19 +25,19 @@ public class EventsWatchedCountInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final WatchRepository watchRepository;
-    private final UserRepository userRepository;
+    private final WatchRepository remoteWatchRepository;
+    private final UserRepository localUserRepository;
     private Callback callback;
     private InteractorErrorCallback interactorErrorCallback;
 
     @Inject public EventsWatchedCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @RemoteRepository WatchRepository watchRepository,
-      @LocalRepository UserRepository userRepository) {
+      SessionRepository sessionRepository, @RemoteRepository WatchRepository remoteWatchRepository,
+      @LocalRepository UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.watchRepository = watchRepository;
-        this.userRepository = userRepository;
+        this.remoteWatchRepository = remoteWatchRepository;
+        this.localUserRepository = localUserRepository;
     }
 
     public void obtainEventsCount(Callback callback, InteractorErrorCallback interactorErrorCallback) {
@@ -55,11 +55,11 @@ public class EventsWatchedCountInteractor implements Interactor {
     }
 
     private List<Watch> getWatchesFromUsers(List<Long> peopleFollowingIds) {
-        return watchRepository.getWatchesFromUsers(peopleFollowingIds);
+        return remoteWatchRepository.getWatchesFromUsers(peopleFollowingIds);
     }
 
     private List<Long> getPeopleFollowingIds() {
-        List<User> peopleFollowing = userRepository.getPeople();
+        List<User> peopleFollowing = localUserRepository.getPeople();
         return idsFromUsers(peopleFollowing);
     }
 
