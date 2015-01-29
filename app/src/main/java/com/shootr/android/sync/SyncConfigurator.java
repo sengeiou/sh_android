@@ -54,7 +54,7 @@ public class SyncConfigurator {
     private void addPeriodicSyncs() {
         // Recommend a schedule for automatic synchronization. The system may modify this based
         // on other scheduled syncs and network utilization.
-        addSyncInfoCleaner();
+        //addSyncInfoCleaner();
     }
 
     private void addSyncInfoCleaner(){

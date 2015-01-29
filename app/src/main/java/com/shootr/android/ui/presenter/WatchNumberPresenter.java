@@ -5,11 +5,9 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
-import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import dagger.ObjectGraph;
 import javax.inject.Inject;
 
 public class WatchNumberPresenter implements Presenter {

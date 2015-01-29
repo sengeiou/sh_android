@@ -19,17 +19,12 @@ import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -74,7 +69,6 @@ import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
@@ -126,8 +120,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
-    RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
-    SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
+    RetrieveOldShotsTimeLineJob.class,
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
 
@@ -242,10 +235,6 @@ public class DataModule {
 
     @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
         return new NotificationBuilderFactory();
-    }
-
-    @Provides @Singleton InfoListBuilderFactory provideInfoListBuilderFactory(){
-        return new InfoListBuilderFactory();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
