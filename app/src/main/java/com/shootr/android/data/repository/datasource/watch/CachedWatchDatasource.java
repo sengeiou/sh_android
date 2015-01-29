@@ -60,7 +60,7 @@ public class CachedWatchDatasource implements WatchDataSource {
             Timber.i("Cache hit: getWatching");
             return localWatchDataSource.getWatching(userId);
         } else {
-            Timber.i("Cache hit: getWatching");
+            Timber.i("Cache miss: getWatching");
             return null;
         }
     }
@@ -70,7 +70,7 @@ public class CachedWatchDatasource implements WatchDataSource {
             Timber.i("Cache hit: getWatching");
             return localWatchDataSource.getVisible(userId);
         } else {
-            Timber.i("Cache hit: getWatching");
+            Timber.i("Cache miss: getWatching");
             return null;
         }
     }
