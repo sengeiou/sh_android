@@ -61,10 +61,11 @@ public class EventsWatchedCountInteractorTest {
         assertThat(countFromWatches).isEqualTo(3);
     }
 
+    //TODO and... what if I AM watching an event?
     @Test
     public void eventCountIsZeroWhenNoFollowing() throws Exception {
-        when(userRepository.getPeople()).thenReturn(Collections.<User>emptyList());
-        when(watchRepository.getWatchesFromUsers(anyListOf(Long.class))).thenReturn(Collections.<Watch>emptyList());
+        when(userRepository.getPeople()).thenReturn(new ArrayList<User>());
+        when(watchRepository.getWatchesFromUsers(anyListOf(User.class))).thenReturn(new ArrayList<Watch>());
         interactor.obtainEventsCount(callback, errorCallback);
 
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
@@ -75,7 +76,7 @@ public class EventsWatchedCountInteractorTest {
 
     @Test
     public void eventCountIsOneWhenImNotWachingAndOneFollowingIsWatchingSomethingElse() throws Exception {
-        when(watchRepository.getWatchesFromUsers(anyListOf(Long.class))).thenReturn(meNotWatchingAndOtherWatching());
+        when(watchRepository.getWatchesFromUsers(anyListOf(User.class))).thenReturn(meNotWatchingAndOtherWatching());
         interactor.obtainEventsCount(callback, errorCallback);
 
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);

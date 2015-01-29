@@ -117,9 +117,8 @@ public class SelectEventInteractorTest {
 
     //region Setup
     private void setupNewWatchDoesntExist() {
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID),
-          any(ErrorCallback.class))).thenReturn(null);
-        when(remoteWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID), any(ErrorCallback.class)))
+        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID))).thenReturn(null);
+        when(remoteWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID)))
           .thenReturn(null);
     }
 
@@ -129,8 +128,7 @@ public class SelectEventInteractorTest {
     }
 
     private void setupOldVisibleEventInLocal() {
-        when(eventRepository.getVisibleEvent()).thenReturn(oldVisibleEvent());
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(OLD_EVENT_ID))).thenReturn(oldVisibleEventWatch());
+        when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(oldVisibleEventWatch());
     }
 
     private void setupWatchingLapsedEvent() {

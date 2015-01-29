@@ -5,6 +5,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.WatchRepository;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,6 +20,7 @@ public class EventsSearchInteractorTest {
     @Mock private EventSearchRepository eventSearchRepository;
     @Mock private EventRepository eventRepository;
     @Mock private PostExecutionThread postExecutionThread;
+    @Mock private WatchRepository localWatchRepository;
 
     @Before
     public void setUp() throws Exception {
