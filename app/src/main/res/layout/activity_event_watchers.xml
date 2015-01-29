@@ -148,7 +148,7 @@
           android:id="@+id/event_edit"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/keyline_1_minus_8dp"
+          android:layout_marginLeft="@dimen/keyline_1"
           android:src="@drawable/ic_fab_mini_edit_white"
           android:visibility="invisible"
           app:fab_colorNormal="@color/primary_dark"
