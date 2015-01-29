@@ -49,7 +49,7 @@ public interface ShootrService {
 
     public EventEntity getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException;
 
-    public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long idCurrentUser) throws IOException;
+    public List<WatchEntity> getWatchesFromUsersAndMe(List<Long> followingIds, Long idCurrentUser) throws IOException;
 
     public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException;
 

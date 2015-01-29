@@ -42,7 +42,7 @@ public class LocalWatchRepository implements WatchRepository {
         return watchEntityMapper.transform(watchEntity, user);
     }
 
-    @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
+    @Override public List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
         //TODO Mock!!!
         WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, users.get(0).getIdUser());
         Watch watch = watchEntityMapper.transform(watchEntity, users.get(0));

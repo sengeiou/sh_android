@@ -59,7 +59,7 @@ public class WatchRepositoryImpl implements WatchRepository {
         throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 
-    @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
+    @Override public List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
         throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 

@@ -70,7 +70,7 @@ public class WatchNumberInteractor implements Interactor{
     }
 
     protected List<Watch> getWatches(Long eventId, List<User> users) {
-        return watchRepository.getWatchesFromUsersAndEvent(users, eventId);
+        return watchRepository.getWatchesForUsersAndEvent(users, eventId);
     }
 
     protected Integer countIsWatching(List<Watch> watches) {

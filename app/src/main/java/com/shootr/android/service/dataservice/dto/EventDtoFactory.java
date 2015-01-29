@@ -66,13 +66,14 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEXT_EVENT_WHERE_MY_TEAM_PLAYS, op);
     }
 
-    @Deprecated
-    public GenericDto getWatchFromUsers(List<Long> userIds, Long idCurrentUser){
+    public GenericDto getWatchFromUsersAndMe(List<Long> userIds, Long idCurrentUser){
         FilterDto watchFollowingFilter =
-          or(and(DatabaseContract.WatchTable.STATUS).isEqualTo(1)
-          .and(
-            or(DatabaseContract.WatchTable.ID_USER).isIn(userIds)
-           )).or(WatchTable.ID_USER).isEqualTo(idCurrentUser)
+          or(
+            and(DatabaseContract.WatchTable.STATUS).isEqualTo(WatchEntity.STATUS_WATCHING)
+            .and(or(DatabaseContract.WatchTable.ID_USER).isIn(userIds))
+          )
+          .or(WatchTable.ID_USER).isEqualTo(idCurrentUser)
+            //TODO filtrar por visible y notificaciones? Si van inclusives
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(

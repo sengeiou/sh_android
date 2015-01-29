@@ -18,7 +18,7 @@ public interface WatchRepository {
 
     Watch getWatchForUserAndEvent(User user, Long idEvent);
 
-    List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent);
+    List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent);
 
     List<Watch> getWatchesFromUsers(List<Long> userIds);
 

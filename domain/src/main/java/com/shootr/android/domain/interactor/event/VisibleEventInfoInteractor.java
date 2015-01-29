@@ -64,7 +64,7 @@ public class VisibleEventInfoInteractor implements Interactor {
         Event visibleEvent = eventRepository.getEventById(currentVisibleWatch.getIdEvent());
 
         List<User> people = localUserRepository.getPeople();
-        List<Watch> watchesFromPeople = watchRepository.getWatchesFromUsersAndEvent(people, visibleEvent.getId());
+        List<Watch> watchesFromPeople = watchRepository.getWatchesForUsersAndEvent(people, visibleEvent.getId());
 
         return buildEventInfo(visibleEvent, currentVisibleWatch, watchesFromPeople);
     }

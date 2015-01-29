@@ -1,20 +1,23 @@
 package com.shootr.android.data.repository.remote;
 
+import android.support.v4.util.LongSparseArray;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
-import com.shootr.android.data.repository.sync.SyncTrigger;
-import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
+import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.RemoteDataSource;
 import com.shootr.android.data.repository.datasource.WatchDataSource;
+import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
+import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,16 +29,18 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private final SessionRepository sessionRepository;
     private final WatchDataSource localWatchDataSource;
     private final WatchDataSource remoteWatchDataSource;
+    private final WatchDataSource cachedWatchDataSource;
     private final WatchEntityMapper watchEntityMapper;
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
 
     @Inject public SyncWatchRepository(SessionRepository sessionRepository, @LocalDataSource WatchDataSource localWatchDataSource,
-      @RemoteDataSource WatchDataSource remoteWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
+      @RemoteDataSource WatchDataSource remoteWatchDataSource, @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
       SyncableWatchEntityFactory syncableWatchEntityFactory) {
         this.sessionRepository = sessionRepository;
         this.localWatchDataSource = localWatchDataSource;
         this.remoteWatchDataSource = remoteWatchDataSource;
+        this.cachedWatchDataSource = cachedWatchDataSource;
         this.watchEntityMapper = watchEntityMapper;
         this.syncTrigger = syncTrigger;
         this.syncableWatchEntityFactory = syncableWatchEntityFactory;
@@ -53,11 +58,14 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         return watchEntityMapper.transform(watchEntity, user);
     }
 
-    @Override public List<Watch> getWatchesFromUsersAndEvent(List<User> users, Long idEvent) {
-        //TODO Mock!!!
-        WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, users.get(0).getIdUser());
-        Watch watch = watchEntityMapper.transform(watchEntity, users.get(0));
-        return Arrays.asList(watch, watch);
+    @Override public List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
+        List<WatchEntity> cachedWatches = cachedWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent);
+        if (cachedWatches != null) {
+            return entitiesToDomain(cachedWatches, users);
+        } else {
+            syncWatchesAndEvents(users);
+        }
+        return entitiesToDomain(localWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent), users);
     }
 
     @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
@@ -110,6 +118,19 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
 
     //endregion
 
+    private synchronized void syncWatchesAndEvents(List<User> users) {
+        syncTrigger.triggerSync();
+        List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(ids(users));
+        checkEventsExist(remoteWatches);
+        localWatchDataSource.deleteAllWatchesNotPending();
+        localWatchDataSource.putWatches(remoteWatches);
+        cachedWatchDataSource.putWatches(remoteWatches);
+    }
+
+    private void checkEventsExist(List<WatchEntity> watches) {
+        //TODO Check!!! How? We'll see...
+    }
+
     //region Synchronization
     private void queueUpload(WatchEntity watchEntity, ServerCommunicationException reason) {
         Timber.w(reason, "Watch upload queued: idUser %d, idEvent %d", watchEntity.getIdUser(),
@@ -139,4 +160,31 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         }
     }
     //endregion
+
+    private List<Long> ids(List<User> users) {
+        List<Long> ids = new ArrayList<>();
+        for (User user : users) {
+            ids.add(user.getIdUser());
+        }
+        return ids;
+    }
+
+    private List<Watch> entitiesToDomain(List<WatchEntity> watchEntities, List<User> users) {
+        LongSparseArray<User> usersSparseArray = userListToSparseArray(users);
+        List<Watch> watches = new ArrayList<>(watchEntities.size());
+        for (WatchEntity watchEntity : watchEntities) {
+            User user = usersSparseArray.get(watchEntity.getIdUser());
+            //TODO check null
+            watches.add(watchEntityMapper.transform(watchEntity, user));
+        }
+        return watches;
+    }
+
+    private LongSparseArray<User> userListToSparseArray(List<User> users) {
+        LongSparseArray<User> sparseArray = new LongSparseArray<>(users.size());
+        for (User user : users) {
+            sparseArray.put(user.getIdUser(), user);
+        }
+        return sparseArray;
+    }
 }

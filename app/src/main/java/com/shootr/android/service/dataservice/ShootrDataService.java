@@ -352,10 +352,9 @@ public class ShootrDataService implements ShootrService {
     }
 
 
-    @Deprecated
-    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long idUser) throws IOException {
+    @Override public List<WatchEntity> getWatchesFromUsersAndMe(List<Long> usersIds, Long idUser) throws IOException {
         List<WatchEntity> watchesReceived = new ArrayList<>();
-        GenericDto requestDto = eventDtoFactory.getWatchFromUsers(usersIds, idUser);
+        GenericDto requestDto = eventDtoFactory.getWatchFromUsersAndMe(usersIds, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){

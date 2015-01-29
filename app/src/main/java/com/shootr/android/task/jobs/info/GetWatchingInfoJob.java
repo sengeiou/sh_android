@@ -142,8 +142,8 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
             if (useOnlineData) {
-            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), sessionRepository
-              .getCurrentUserId());
+            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsersAndMe(getIdsFromMyFollowingAndMe(),
+              sessionRepository.getCurrentUserId());
             if (newWatchesFromServer != null) {
                 watches = newWatchesFromServer;
                 replaceWatchesInDatabase(newWatchesFromServer);
