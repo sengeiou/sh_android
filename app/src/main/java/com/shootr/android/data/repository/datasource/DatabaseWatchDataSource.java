@@ -35,6 +35,10 @@ public class DatabaseWatchDataSource implements WatchDataSource {
         return watchManager.getWatching(userId);
     }
 
+    @Override public WatchEntity getVisible(Long userId) {
+        return watchManager.getWatchVisibleByUser(userId);
+    }
+
     @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
         return watchManager.getWatchesByEventForUsers(users, idEvent);
     }

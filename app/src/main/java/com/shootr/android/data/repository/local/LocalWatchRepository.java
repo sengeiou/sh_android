@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.local;
 
+import android.support.v4.util.LongSparseArray;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
@@ -10,6 +11,7 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -43,10 +45,8 @@ public class LocalWatchRepository implements WatchRepository {
     }
 
     @Override public List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
-        //TODO Mock!!!
-        WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, users.get(0).getIdUser());
-        Watch watch = watchEntityMapper.transform(watchEntity, users.get(0));
-        return Arrays.asList(watch, watch, watch);
+        List<WatchEntity> watchEntities = localWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent);
+        return entitiesToDomain(watchEntities, users);
     }
 
     @Override public List<Watch> getWatchesFromUsers(List<User> userIds) {
@@ -75,14 +75,35 @@ public class LocalWatchRepository implements WatchRepository {
     }
 
     @Override public Watch getCurrentVisibleWatch() {
-        //TODO mock!!!
-        Watch watch = new Watch();
-        watch.setWatching(true);
-        watch.setUser(sessionRepository.getCurrentUser());
-        watch.setIdEvent(305596L);
-        watch.setVisible(true);
-        watch.setNotificaticationsEnabled(true);
-        watch.setUserStatus("Mock watch");
-        return watch;
+        WatchEntity watchEntity = localWatchDataSource.getVisible(sessionRepository.getCurrentUserId());
+        return watchEntityMapper.transform(watchEntity, sessionRepository.getCurrentUser());
+    }
+
+    private List<Long> ids(List<User> users) {
+        List<Long> ids = new ArrayList<>();
+        for (User user : users) {
+            ids.add(user.getIdUser());
+        }
+        return ids;
+    }
+
+    private List<Watch> entitiesToDomain(List<WatchEntity> watchEntities, List<User> users) {
+        LongSparseArray<User> usersSparseArray = userListToSparseArray(users);
+        List<Watch> watches = new ArrayList<>(watchEntities.size());
+        for (WatchEntity watchEntity : watchEntities) {
+            User user = usersSparseArray.get(watchEntity.getIdUser());
+            if (user != null) {
+                watches.add(watchEntityMapper.transform(watchEntity, user));
+            }
+        }
+        return watches;
+    }
+
+    private LongSparseArray<User> userListToSparseArray(List<User> users) {
+        LongSparseArray<User> sparseArray = new LongSparseArray<>(users.size());
+        for (User user : users) {
+            sparseArray.put(user.getIdUser(), user);
+        }
+        return sparseArray;
     }
 }

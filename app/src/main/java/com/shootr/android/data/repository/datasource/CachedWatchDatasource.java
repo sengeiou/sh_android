@@ -65,6 +65,16 @@ public class CachedWatchDatasource implements WatchDataSource {
         }
     }
 
+    @Override public WatchEntity getVisible(Long userId) {
+        if (isValid()) {
+            Timber.i("Cache hit: getWatching");
+            return localWatchDataSource.getVisible(userId);
+        } else {
+            Timber.i("Cache hit: getWatching");
+            return null;
+        }
+    }
+
     @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
         if (isValid()) {
             Timber.i("Cache hit: getWatchesForUsersAndEvent");

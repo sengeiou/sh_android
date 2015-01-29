@@ -111,13 +111,14 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public synchronized Watch getCurrentVisibleWatch() {
-        //TODO nooOOO!OOO!O!O!O!O!O!O!!!!!!!! Tienes que devolver el visible, no el watching
-        WatchEntity cachedVisible = cachedWatchDataSource.getWatching(sessionRepository.getCurrentUserId());
+        long currentUserId = sessionRepository.getCurrentUserId();
+        WatchEntity cachedVisible = cachedWatchDataSource.getVisible(currentUserId);
+        User currentUser = sessionRepository.getCurrentUser();
         if (cachedVisible != null) {
-            return watchEntityMapper.transform(cachedVisible, sessionRepository.getCurrentUser());
+            return watchEntityMapper.transform(cachedVisible, currentUser);
         } else {
             updateAllWatchesFromRemote();
-            return watchEntityMapper.transform(localWatchDataSource.getWatching(sessionRepository.getCurrentUserId()), sessionRepository.getCurrentUser());
+            return watchEntityMapper.transform(localWatchDataSource.getVisible(currentUserId), currentUser);
         }
     }
     //endregion

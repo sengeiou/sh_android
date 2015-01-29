@@ -46,6 +46,14 @@ public class ServerWatchDataSource implements WatchDataSource {
         throw new RuntimeException("Method not implemented in service: getWatching by idUser with status=1");
     }
 
+    @Override public WatchEntity getVisible(Long userId) {
+        try {
+            return service.getVisibleWatch(userId);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
         try {
             return service.getWatchesFromUsersByEvent(idEvent, users);
