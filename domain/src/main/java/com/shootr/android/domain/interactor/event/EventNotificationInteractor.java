@@ -32,11 +32,7 @@ public class EventNotificationInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
-        Watch currentWatch = watchRepository.getWatchForUserAndEvent(currentUser, idEvent, new ErrorCallback() {
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-        });
+        Watch currentWatch = watchRepository.getWatchForUserAndEvent(currentUser, idEvent);
         currentWatch.setNotificaticationsEnabled(enableNotifications);
 
         watchRepository.putWatch(currentWatch, new WatchRepository.WatchCallback() {

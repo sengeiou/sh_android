@@ -51,11 +51,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
     //endregion
 
-    //region Data access methods
-    @Deprecated @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
-        return getWatchForUserAndEvent(user, idEvent);
-    }
-
+    @Deprecated //?
     @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
         WatchEntity watchEntity = remoteWatchDataSource.getWatch(idEvent, user.getIdUser());
         //TODO update local
@@ -164,6 +160,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
     //endregion
 
+    //region Utils
     private List<Long> ids(List<User> users) {
         List<Long> ids = new ArrayList<>();
         for (User user : users) {
@@ -191,4 +188,5 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         }
         return sparseArray;
     }
+    //endregion
 }

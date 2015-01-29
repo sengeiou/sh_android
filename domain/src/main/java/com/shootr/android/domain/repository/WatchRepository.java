@@ -13,9 +13,6 @@ public interface WatchRepository {
 
     }
 
-    @Deprecated
-    Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback);
-
     Watch getWatchForUserAndEvent(User user, Long idEvent);
 
     List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent);

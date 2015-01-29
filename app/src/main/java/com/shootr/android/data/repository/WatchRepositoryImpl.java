@@ -42,19 +42,6 @@ public class WatchRepositoryImpl implements WatchRepository {
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
-        WatchEntity watchEntity = watchManager.getWatchByKeys(user.getIdUser(), idEvent);
-        if (watchEntity == null) {
-            watchEntity = getWatchEntityByKeysFromServer(user, idEvent, callback);
-        }
-
-        if (watchEntity != null) {
-            return watchEntityMapper.transform(watchEntity, user);
-        } else {
-            return null;
-        }
-    }
-
     @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
         throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }

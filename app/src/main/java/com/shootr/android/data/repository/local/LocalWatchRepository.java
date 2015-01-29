@@ -31,10 +31,6 @@ public class LocalWatchRepository implements WatchRepository {
         this.syncableWatchEntityFactory = syncableWatchEntityFactory;
     }
 
-    @Deprecated @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
-        return getWatchForUserAndEvent(user, idEvent);
-    }
-
     @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
         WatchEntity watchEntity = localWatchDataSource.getWatch(idEvent, user.getIdUser());
         if (watchEntity == null) {
@@ -78,6 +74,7 @@ public class LocalWatchRepository implements WatchRepository {
         return watchEntityMapper.transform(watchEntity, sessionRepository.getCurrentUser());
     }
 
+    //region Utils
     private List<Long> ids(List<User> users) {
         List<Long> ids = new ArrayList<>();
         for (User user : users) {
@@ -105,4 +102,5 @@ public class LocalWatchRepository implements WatchRepository {
         }
         return sparseArray;
     }
+    //endregion
 }
