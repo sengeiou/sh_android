@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import org.junit.Before;
@@ -26,7 +25,7 @@ public class EventsSearchInteractorTest {
         MockitoAnnotations.initMocks(this);
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new EventsSearchInteractor(interactorHandler, eventSearchRepository, eventRepository,
-          postExecutionThread);
+          localWatchRepository, postExecutionThread);
     }
 
 }

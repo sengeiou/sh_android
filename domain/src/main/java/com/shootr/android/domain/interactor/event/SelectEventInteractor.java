@@ -45,9 +45,9 @@ public class SelectEventInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         stopWatchingLapsedEvent();
 
-        Event oldVisibleEvent = eventRepository.getVisibleEvent();
-        if (oldVisibleEvent == null || (!oldVisibleEvent.getId().equals(idEvent))) {
-            hideOldVisibleEvent();
+        Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
+        if (oldVisibleEventWatch == null || (!oldVisibleEventWatch.getIdEvent().equals(idEvent))) {
+            hideOldVisibleEvent(oldVisibleEventWatch);
             setNewVisibleEvent();
         }
     }
@@ -82,13 +82,7 @@ public class SelectEventInteractor implements Interactor {
         interactorHandler.sendUiMessage(selectedEventWatch);
     }
 
-    private void hideOldVisibleEvent() {
-        Event oldVisibleEvent = eventRepository.getVisibleEvent();
-        if (oldVisibleEvent == null) {
-            return;
-        }
-        Watch oldVisibleEventWatch =
-          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), oldVisibleEvent.getId());
+    private void hideOldVisibleEvent(Watch oldVisibleEventWatch) {
         oldVisibleEventWatch.setVisible(false);
 
         localWatchRepository.putWatch(oldVisibleEventWatch);

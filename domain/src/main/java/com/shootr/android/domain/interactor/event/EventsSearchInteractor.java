@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -11,6 +12,8 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.LocalRepository;
+import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,7 +23,8 @@ public class EventsSearchInteractor implements Interactor {
     public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
     private final EventSearchRepository eventSearchRepository;
-    private final EventRepository eventRepository;
+    private final EventRepository localEventRepository;
+    private final WatchRepository localWatchRepository;
     private final PostExecutionThread postExecutionThread;
 
     private String query;
@@ -28,10 +32,12 @@ public class EventsSearchInteractor implements Interactor {
     private InteractorErrorCallback errorCallback;
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler,
-      EventSearchRepository eventSearchRepository, EventRepository eventRepository, PostExecutionThread postExecutionThread) {
+      EventSearchRepository eventSearchRepository, @LocalRepository EventRepository localEventRepository,
+      @LocalRepository WatchRepository localWatchRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.eventSearchRepository = eventSearchRepository;
-        this.eventRepository = eventRepository;
+        this.localEventRepository = localEventRepository;
+        this.localWatchRepository = localWatchRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -67,10 +73,17 @@ public class EventsSearchInteractor implements Interactor {
 
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
 
-        Event visibleEvent = eventRepository.getVisibleEvent();
-        eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
+        setCurrentVisibleEventIfAny(eventSearchResultList);
 
         notifySearchResultsSuccessful(eventSearchResultList);
+    }
+
+    private void setCurrentVisibleEventIfAny(EventSearchResultList eventSearchResultList) {
+        Watch currentVisibleWatch = localWatchRepository.getCurrentVisibleWatch();
+        if (currentVisibleWatch != null) {
+            Event visibleEvent = localEventRepository.getEventById(currentVisibleWatch.getIdEvent());
+            eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
+        }
     }
 
     private List<EventSearchResult> filterEventsNotMatchingQuery(List<EventSearchResult> events) {

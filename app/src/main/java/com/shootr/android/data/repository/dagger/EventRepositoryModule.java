@@ -1,9 +1,7 @@
 package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.local.LocalEventRepository;
-import com.shootr.android.data.repository.local.LocalUserRepository;
 import com.shootr.android.data.repository.remote.SyncEventRepository;
-import com.shootr.android.data.repository.remote.SyncUserRepository;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.LocalRepository;
 import com.shootr.android.domain.repository.RemoteRepository;
