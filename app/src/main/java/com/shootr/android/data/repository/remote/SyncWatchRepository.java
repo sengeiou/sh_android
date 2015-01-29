@@ -60,7 +60,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         return watchEntityMapper.transform(watchEntity, user);
     }
 
-    @Override public List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
+    @Override public synchronized List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
         List<WatchEntity> cachedWatches = cachedWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent);
         if (cachedWatches != null) {
             return entitiesToDomain(cachedWatches, users);
@@ -70,7 +70,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         return entitiesToDomain(localWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent), users);
     }
 
-    @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
+    @Override public synchronized List<Watch> getWatchesFromUsers(List<Long> userIds) {
         //TODO Mock!!
         return Arrays.asList(getCurrentVisibleWatch());
     }
@@ -92,16 +92,16 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         return watchEntityMapper.transform(currentOrNewWatchEntity, watch.getUser());
     }
 
-    @Override public Watch getCurrentWatching(ErrorCallback callback) {
+    @Override public synchronized Watch getCurrentWatching(ErrorCallback callback) {
         throw new RuntimeException(
           "Method not implemented. It is in the interface for compatibility with old repository implementations");
     }
 
-    @Override public Watch getCurrentWatching() {
+    @Override public synchronized Watch getCurrentWatching() {
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Override public Watch getCurrentVisibleWatch() {
+    @Override public synchronized Watch getCurrentVisibleWatch() {
         //TODO mock!!!
         Watch watch = new Watch();
         watch.setWatching(true);
