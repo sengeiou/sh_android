@@ -24,16 +24,16 @@ public class WatchNumberInteractor implements Interactor{
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final UserRepository userRepository;
-    private final WatchRepository watchRepository;
+    private final UserRepository localUserRepository;
+    private final WatchRepository remoteWatchRepository;
 
     @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @LocalRepository UserRepository userRepository, @RemoteRepository WatchRepository watchRepository) {
+      SessionRepository sessionRepository, @LocalRepository UserRepository localUserRepository, @RemoteRepository WatchRepository remoteWatchRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.userRepository = userRepository;
-        this.watchRepository = watchRepository;
+        this.localUserRepository = localUserRepository;
+        this.remoteWatchRepository = remoteWatchRepository;
     }
 
     public void loadWatchNumber(EventsWatchedCountInteractor.Callback callback, InteractorErrorCallback errorCallback) {
@@ -59,18 +59,18 @@ public class WatchNumberInteractor implements Interactor{
     }
 
     protected Long getCurrentVisibleEventId() {
-        Watch currentWatching = watchRepository.getCurrentVisibleWatch();
+        Watch currentWatching = remoteWatchRepository.getCurrentVisibleWatch();
         return currentWatching.getIdEvent();
     }
 
     protected List<User> getPeopleAndMe() {
-        List<User> people = userRepository.getPeople();
+        List<User> people = localUserRepository.getPeople();
         people.add(sessionRepository.getCurrentUser());
         return people;
     }
 
     protected List<Watch> getWatches(Long eventId, List<User> users) {
-        return watchRepository.getWatchesForUsersAndEvent(users, eventId);
+        return remoteWatchRepository.getWatchesForUsersAndEvent(users, eventId);
     }
 
     protected Integer countIsWatching(List<Watch> watches) {

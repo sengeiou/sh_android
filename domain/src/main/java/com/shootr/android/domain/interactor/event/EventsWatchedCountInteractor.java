@@ -47,20 +47,19 @@ public class EventsWatchedCountInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        List<Long> peopleFollowingIds = getPeopleFollowingIds();
-        peopleFollowingIds.add(sessionRepository.getCurrentUserId());
-        List<Watch> watchesFromPeople = getWatchesFromUsers(peopleFollowingIds);
+        List<User> peopleFollowing = getPeopleFollowing();
+        peopleFollowing.add(sessionRepository.getCurrentUser());
+        List<Watch> watchesFromPeople = getWatchesFromUsers(peopleFollowing);
         Integer eventsCount = countDifferentEventsInWatches(watchesFromPeople);
         notifyOnLoaded(eventsCount);
     }
 
-    private List<Watch> getWatchesFromUsers(List<Long> peopleFollowingIds) {
+    private List<Watch> getWatchesFromUsers(List<User> peopleFollowingIds) {
         return remoteWatchRepository.getWatchesFromUsers(peopleFollowingIds);
     }
 
-    private List<Long> getPeopleFollowingIds() {
-        List<User> peopleFollowing = localUserRepository.getPeople();
-        return idsFromUsers(peopleFollowing);
+    private List<User> getPeopleFollowing() {
+        return localUserRepository.getPeople();
     }
 
     protected Integer countDifferentEventsInWatches(List<Watch> watches) {

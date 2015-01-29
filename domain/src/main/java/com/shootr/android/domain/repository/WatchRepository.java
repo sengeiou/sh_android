@@ -20,7 +20,7 @@ public interface WatchRepository {
 
     List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent);
 
-    List<Watch> getWatchesFromUsers(List<Long> userIds);
+    List<Watch> getWatchesFromUsers(List<User> userIds);
 
     @Deprecated
     void putWatch(Watch watch, WatchCallback callback);

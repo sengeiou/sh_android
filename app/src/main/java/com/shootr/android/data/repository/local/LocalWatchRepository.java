@@ -49,7 +49,7 @@ public class LocalWatchRepository implements WatchRepository {
         return Arrays.asList(watch, watch, watch);
     }
 
-    @Override public List<Watch> getWatchesFromUsers(List<Long> userIds) {
+    @Override public List<Watch> getWatchesFromUsers(List<User> userIds) {
         throw new RuntimeException("Method not implemented yet!");
     }
 

@@ -36,8 +36,7 @@ public class DatabaseWatchDataSource implements WatchDataSource {
     }
 
     @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
-        //TODO user list is ignored in the manager. Should it? I will usually want everything. What if I dont?
-        return watchManager.getWatchesByEvent(idEvent);
+        return watchManager.getWatchesByEventForUsers(users, idEvent);
     }
 
     @Override public List<WatchEntity> getWatchesFromUsers(List<Long> users) {

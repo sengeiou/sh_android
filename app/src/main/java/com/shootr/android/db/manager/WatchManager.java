@@ -298,4 +298,33 @@ public class WatchManager extends AbstractManager{
         queryResult.close();
         return resultWatches;
     }
+
+    public List<WatchEntity> getWatchesByEventForUsers(List<Long> users, Long idEvent) {
+        String whereClause = Phrase.from("{event_col} = '{id_event}' and {user_col} in ({list})")
+          .put("event_col", WatchTable.ID_EVENT)
+          .put("user_col", WatchTable.ID_USER)
+          .put("id_event", String.valueOf(idEvent))
+          .put("list", createListPlaceholders(users.size()))
+          .format().toString();
+
+        String[] whereArguments = new String[users.size()];
+        for (int i = 0; i < users.size(); i++) {
+            whereArguments[i] = String.valueOf(users.get(i));
+        }
+        Cursor queryResult =
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereClause, whereArguments, null, null,
+            null);
+
+        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
+                resultWatches.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultWatches;
+
+    }
 }

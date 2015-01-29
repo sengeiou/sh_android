@@ -15,19 +15,19 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.LocalRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class SyncWatchRepository implements WatchRepository, SyncableRepository {
 
     //region Dependencies
+    private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
     private final WatchDataSource localWatchDataSource;
     private final WatchDataSource remoteWatchDataSource;
@@ -36,9 +36,11 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncWatchRepository(SessionRepository sessionRepository, @LocalDataSource WatchDataSource localWatchDataSource,
-      @RemoteDataSource WatchDataSource remoteWatchDataSource, @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
+    @Inject public SyncWatchRepository(@LocalRepository UserRepository localUserRepository, SessionRepository sessionRepository,
+      @LocalDataSource WatchDataSource localWatchDataSource, @RemoteDataSource WatchDataSource remoteWatchDataSource,
+      @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
       SyncableWatchEntityFactory syncableWatchEntityFactory) {
+        this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.localWatchDataSource = localWatchDataSource;
         this.remoteWatchDataSource = remoteWatchDataSource;
@@ -61,18 +63,25 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public synchronized List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent) {
-        List<WatchEntity> cachedWatches = cachedWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent);
+        List<Long> userIds = ids(users);
+        List<WatchEntity> cachedWatches = cachedWatchDataSource.getWatchesForUsersAndEvent(userIds, idEvent);
         if (cachedWatches != null) {
             return entitiesToDomain(cachedWatches, users);
         } else {
-            syncWatchesAndEvents(users);
+            updateAllWatchesFromRemote();
+            return entitiesToDomain(localWatchDataSource.getWatchesForUsersAndEvent(userIds, idEvent), users);
         }
-        return entitiesToDomain(localWatchDataSource.getWatchesForUsersAndEvent(ids(users), idEvent), users);
     }
 
-    @Override public synchronized List<Watch> getWatchesFromUsers(List<Long> userIds) {
-        //TODO Mock!!
-        return Arrays.asList(getCurrentVisibleWatch());
+    @Override public synchronized List<Watch> getWatchesFromUsers(List<User> users) {
+        List<Long> userIds = ids(users);
+        List<WatchEntity> cachedWatches = cachedWatchDataSource.getWatchesFromUsers(userIds);
+        if (cachedWatches != null) {
+            return entitiesToDomain(cachedWatches, users);
+        } else {
+            updateAllWatchesFromRemote();
+            return entitiesToDomain(localWatchDataSource.getWatchesFromUsers(userIds), users);
+        }
     }
 
     @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {
@@ -102,22 +111,22 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     @Override public synchronized Watch getCurrentVisibleWatch() {
-        //TODO mock!!!
-        Watch watch = new Watch();
-        watch.setWatching(true);
-        watch.setUser(sessionRepository.getCurrentUser());
-        watch.setIdEvent(305596L);
-        watch.setVisible(true);
-        watch.setNotificaticationsEnabled(true);
-        watch.setUserStatus("Mock watch online");
-        return watch;
+        //TODO nooOOO!OOO!O!O!O!O!O!O!!!!!!!! Tienes que devolver el visible, no el watching
+        WatchEntity cachedVisible = cachedWatchDataSource.getWatching(sessionRepository.getCurrentUserId());
+        if (cachedVisible != null) {
+            return watchEntityMapper.transform(cachedVisible, sessionRepository.getCurrentUser());
+        } else {
+            updateAllWatchesFromRemote();
+            return watchEntityMapper.transform(localWatchDataSource.getWatching(sessionRepository.getCurrentUserId()), sessionRepository.getCurrentUser());
+        }
     }
-
     //endregion
 
-    private synchronized void syncWatchesAndEvents(List<User> users) {
+    private synchronized void updateAllWatchesFromRemote() {
         syncTrigger.triggerSync();
-        List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(ids(users));
+        List<Long> users = ids(localUserRepository.getPeople());
+        users.add(sessionRepository.getCurrentUserId());
+        List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(users);
         //Warning: Events might not exist
         localWatchDataSource.deleteAllWatchesNotPending();
         localWatchDataSource.putWatches(remoteWatches);
@@ -167,8 +176,9 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         List<Watch> watches = new ArrayList<>(watchEntities.size());
         for (WatchEntity watchEntity : watchEntities) {
             User user = usersSparseArray.get(watchEntity.getIdUser());
-            //TODO check null
-            watches.add(watchEntityMapper.transform(watchEntity, user));
+            if (user != null) {
+                watches.add(watchEntityMapper.transform(watchEntity, user));
+            }
         }
         return watches;
     }
