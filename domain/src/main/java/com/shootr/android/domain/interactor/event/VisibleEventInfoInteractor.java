@@ -51,17 +51,24 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected void obtainLocalEventInfo() {
         EventInfo eventInfo = getEventInfo(localWatchRepository, localEventRepository);
-        notifyLoaded(eventInfo);
+        if (eventInfo != null) {
+            notifyLoaded(eventInfo);
+        }
     }
 
     protected void obtainRemoteEventInfo() {
         EventInfo eventInfo = getEventInfo(remoteWatchRepository, remoteEventRepository);
-        notifyLoaded(eventInfo);
+        if (eventInfo != null) {
+            notifyLoaded(eventInfo);
+        }
     }
 
     protected EventInfo getEventInfo(WatchRepository watchRepository, EventRepository eventRepository) {
         Watch currentVisibleWatch = watchRepository.getCurrentVisibleWatch();
         Event visibleEvent = eventRepository.getEventById(currentVisibleWatch.getIdEvent());
+        if (visibleEvent == null) {
+            return null;
+        }
 
         List<User> people = localUserRepository.getPeople();
         List<Watch> watchesFromPeople = watchRepository.getWatchesForUsersAndEvent(people, visibleEvent.getId());

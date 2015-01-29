@@ -19,7 +19,9 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -108,11 +110,6 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         watch.setVisible(true);
         watch.setNotificaticationsEnabled(true);
         watch.setUserStatus("Mock watch online");
-        try {
-            Thread.sleep(900);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return watch;
     }
 
@@ -121,14 +118,10 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private synchronized void syncWatchesAndEvents(List<User> users) {
         syncTrigger.triggerSync();
         List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(ids(users));
-        checkEventsExist(remoteWatches);
+        //Warning: Events might not exist
         localWatchDataSource.deleteAllWatchesNotPending();
         localWatchDataSource.putWatches(remoteWatches);
         cachedWatchDataSource.putWatches(remoteWatches);
-    }
-
-    private void checkEventsExist(List<WatchEntity> watches) {
-        //TODO Check!!! How? We'll see...
     }
 
     //region Synchronization
