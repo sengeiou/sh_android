@@ -51,6 +51,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
     //endregion
 
+    //region Data access methods
     @Deprecated //?
     @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
         WatchEntity watchEntity = remoteWatchDataSource.getWatch(idEvent, user.getIdUser());
@@ -89,6 +90,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         WatchEntity currentOrNewWatchEntity = syncableWatchEntityFactory.currentOrNewEntity(watch);
         try {
             WatchEntity remoteWatchEntity = remoteWatchDataSource.putWatch(currentOrNewWatchEntity);
+            markEntitySynchronized(remoteWatchEntity);
             localWatchDataSource.putWatch(remoteWatchEntity);
             return watchEntityMapper.transform(remoteWatchEntity, watch.getUser());
         } catch (ServerCommunicationException e) {
@@ -125,6 +127,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         users.add(sessionRepository.getCurrentUserId());
         List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(users);
         //Warning: Events might not exist
+        markEntitiesSynchronized(remoteWatches);
         localWatchDataSource.deleteAllWatchesNotPending();
         localWatchDataSource.putWatches(remoteWatches);
         cachedWatchDataSource.putWatches(remoteWatches);
@@ -187,6 +190,16 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
             sparseArray.put(user.getIdUser(), user);
         }
         return sparseArray;
+    }
+
+    private void markEntitiesSynchronized(List<WatchEntity> entities) {
+        for (WatchEntity entity : entities) {
+            markEntitySynchronized(entity);
+        }
+    }
+
+    private void markEntitySynchronized(WatchEntity entity) {
+        entity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
     }
     //endregion
 }
