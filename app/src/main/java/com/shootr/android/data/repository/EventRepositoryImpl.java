@@ -7,8 +7,10 @@ import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.List;
 import javax.inject.Inject;
 
+@Deprecated
 public class EventRepositoryImpl implements EventRepository {
 
     private final WatchManager watchManager;
@@ -27,5 +29,9 @@ public class EventRepositoryImpl implements EventRepository {
     @Override public Event getEventById(Long idEvent) {
         EventEntity eventEntity = eventManager.getEventById(idEvent);
         return eventEntityMapper.transform(eventEntity);
+    }
+
+    @Override public List<Event> getEventsByIds(List<Long> eventIds) {
+        throw new RuntimeException("Method not implemented here.");
     }
 }

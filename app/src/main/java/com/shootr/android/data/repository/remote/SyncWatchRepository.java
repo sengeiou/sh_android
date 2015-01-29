@@ -15,12 +15,16 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.LocalRepository;
+import com.shootr.android.domain.repository.RemoteRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -28,6 +32,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
 
     //region Dependencies
     private final UserRepository localUserRepository;
+    private final EventRepository remoteEventRepository;
     private final SessionRepository sessionRepository;
     private final WatchDataSource localWatchDataSource;
     private final WatchDataSource remoteWatchDataSource;
@@ -36,11 +41,13 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncWatchRepository(@LocalRepository UserRepository localUserRepository, SessionRepository sessionRepository,
+    @Inject public SyncWatchRepository(@LocalRepository UserRepository localUserRepository,
+      @RemoteRepository EventRepository remoteEventRepository, SessionRepository sessionRepository,
       @LocalDataSource WatchDataSource localWatchDataSource, @RemoteDataSource WatchDataSource remoteWatchDataSource,
-      @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper, SyncTrigger syncTrigger,
-      SyncableWatchEntityFactory syncableWatchEntityFactory) {
+      @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper,
+      SyncTrigger syncTrigger, SyncableWatchEntityFactory syncableWatchEntityFactory) {
         this.localUserRepository = localUserRepository;
+        this.remoteEventRepository = remoteEventRepository;
         this.sessionRepository = sessionRepository;
         this.localWatchDataSource = localWatchDataSource;
         this.remoteWatchDataSource = remoteWatchDataSource;
@@ -126,11 +133,24 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         List<Long> users = ids(localUserRepository.getPeople());
         users.add(sessionRepository.getCurrentUserId());
         List<WatchEntity> remoteWatches = remoteWatchDataSource.getWatchesFromUsers(users);
-        //Warning: Events might not exist
+        ensureEventsExist(eventIds(remoteWatches));
         markEntitiesSynchronized(remoteWatches);
         localWatchDataSource.deleteAllWatchesNotPending();
         localWatchDataSource.putWatches(remoteWatches);
         cachedWatchDataSource.putWatches(remoteWatches);
+    }
+
+    private void ensureEventsExist(List<Long> eventIds) {
+        // Little decoupling violation. This function depends on the EventRepository storing the events when get is called
+        remoteEventRepository.getEventsByIds(eventIds);
+    }
+
+    private List<Long> eventIds(List<WatchEntity> watchEntities) {
+        Set<Long> ids = new HashSet<>();
+        for (WatchEntity watchEntity : watchEntities) {
+            ids.add(watchEntity.getIdEvent());
+        }
+        return new ArrayList<>(ids);
     }
 
     //region Synchronization
@@ -149,7 +169,8 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     }
 
     private boolean isReadyForSync(WatchEntity watchEntity) {
-        return Synchronized.SYNC_UPDATED.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_NEW.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_DELETED.equals(watchEntity.getCsysSynchronized());
+        return Synchronized.SYNC_UPDATED.equals(watchEntity.getCsysSynchronized()) || Synchronized.SYNC_NEW.equals(
+          watchEntity.getCsysSynchronized()) || Synchronized.SYNC_DELETED.equals(watchEntity.getCsysSynchronized());
     }
 
     @Override public void dispatchSync() {
@@ -158,7 +179,8 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
             WatchEntity synchedEntity = remoteWatchDataSource.putWatch(watchEntity);
             synchedEntity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
             localWatchDataSource.putWatch(synchedEntity);
-            Timber.d("Synchronized Watch entity: idEvent=%d; idUser=%d", watchEntity.getIdEvent(), watchEntity.getIdUser());
+            Timber.d("Synchronized Watch entity: idEvent=%d; idUser=%d", watchEntity.getIdEvent(),
+              watchEntity.getIdUser());
         }
     }
     //endregion

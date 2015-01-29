@@ -7,6 +7,7 @@ import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.util.List;
 import javax.inject.Inject;
 
 public class LocalEventRepository implements EventRepository {
@@ -22,5 +23,10 @@ public class LocalEventRepository implements EventRepository {
     @Override public Event getEventById(Long idEvent) {
         EventEntity eventEntity = localEventDataSource.getEventById(idEvent);
         return eventEntityMapper.transform(eventEntity);
+    }
+
+    @Override public List<Event> getEventsByIds(List<Long> eventIds) {
+        List<EventEntity> eventEntities = localEventDataSource.getEventsByIds(eventIds);
+        return eventEntityMapper.transform(eventEntities);
     }
 }

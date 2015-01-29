@@ -42,6 +42,29 @@ public class EventManager extends AbstractManager{
         return eventEntity;
     }
 
+    public List<EventEntity> getEventsByIds(List<Long> eventIds) {
+        String whereSelection = DatabaseContract.EventTable.ID_EVENT
+          + " IN (" + createListPlaceholders(eventIds.size())+")";
+        String[] whereArguments = new String[eventIds.size()];
+        for (int i = 0; i < eventIds.size(); i++) {
+            whereArguments[i] = String.valueOf(eventIds.get(i));
+        }
+
+        Cursor queryResult =
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+
+        List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                EventEntity eventEntity = eventEntityMapper.fromCursor(queryResult);
+                resultEvents.add(eventEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultEvents;
+    }
+
     public void saveEvent(EventEntity eventEntity) {
         ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
         if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {

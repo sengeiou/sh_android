@@ -9,6 +9,7 @@ import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
+import java.util.List;
 import javax.inject.Inject;
 
 public class SyncEventRepository implements EventRepository, SyncableRepository {
@@ -32,6 +33,19 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
             return eventEntityMapper.transform(eventEntity);
         } else {
             return null;
+        }
+    }
+
+    @Override public List<Event> getEventsByIds(List<Long> eventIds) {
+        List<EventEntity> remoteEvents = remoteEventDataSource.getEventsByIds(eventIds);
+        markEntitiesAsSynchronized(remoteEvents);
+        localEventDataSource.putEvents(remoteEvents);
+        return eventEntityMapper.transform(remoteEvents);
+    }
+
+    private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {
+        for (EventEntity event : remoteEvents) {
+            event.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
         }
     }
 
