@@ -5,14 +5,13 @@ import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
-import com.shootr.android.data.repository.datasource.WatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 

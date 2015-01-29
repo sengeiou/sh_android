@@ -1,9 +1,7 @@
-package com.shootr.android.data.repository.datasource;
+package com.shootr.android.data.repository.datasource.watch;
 
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.domain.User;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 

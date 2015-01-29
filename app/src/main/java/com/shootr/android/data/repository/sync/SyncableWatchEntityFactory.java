@@ -4,7 +4,7 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
-import com.shootr.android.data.repository.datasource.WatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.domain.Watch;
 import java.util.Date;
 import javax.inject.Inject;

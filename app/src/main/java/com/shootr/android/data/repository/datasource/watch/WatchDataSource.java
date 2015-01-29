@@ -1,6 +1,7 @@
-package com.shootr.android.data.repository.datasource;
+package com.shootr.android.data.repository.datasource.watch;
 
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.data.repository.datasource.SyncableDataSource;
 import java.util.List;
 
 public interface WatchDataSource extends SyncableDataSource<WatchEntity> {

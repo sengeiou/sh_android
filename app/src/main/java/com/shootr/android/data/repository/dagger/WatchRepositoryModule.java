@@ -1,12 +1,12 @@
 package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.datasource.CachedDataSource;
-import com.shootr.android.data.repository.datasource.CachedWatchDatasource;
-import com.shootr.android.data.repository.datasource.DatabaseWatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.CachedWatchDatasource;
+import com.shootr.android.data.repository.datasource.watch.DatabaseWatchDataSource;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.RemoteDataSource;
-import com.shootr.android.data.repository.datasource.ServerWatchDataSource;
-import com.shootr.android.data.repository.datasource.WatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.ServerWatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.data.repository.local.LocalWatchRepository;
 import com.shootr.android.data.repository.remote.SyncWatchRepository;
 import com.shootr.android.domain.repository.LocalRepository;

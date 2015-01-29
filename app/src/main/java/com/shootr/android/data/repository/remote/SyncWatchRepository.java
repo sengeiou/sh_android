@@ -7,7 +7,7 @@ import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.RemoteDataSource;
-import com.shootr.android.data.repository.datasource.WatchDataSource;
+import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
