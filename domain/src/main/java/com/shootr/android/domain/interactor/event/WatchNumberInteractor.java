@@ -44,6 +44,9 @@ public class WatchNumberInteractor implements Interactor{
 
     @Override public void execute() throws Throwable {
         Long currentVisibleEventId = getCurrentVisibleEventId();
+        if (currentVisibleEventId == null) {
+            return;
+        }
         List<User> peopleAndMe = getPeopleAndMe();
         List<Watch> watchesForVisibleEvent = getWatches(currentVisibleEventId, peopleAndMe);
         Integer countIsWatching = countIsWatching(watchesForVisibleEvent);
@@ -60,6 +63,9 @@ public class WatchNumberInteractor implements Interactor{
 
     protected Long getCurrentVisibleEventId() {
         Watch currentWatching = remoteWatchRepository.getCurrentVisibleWatch();
+        if (currentWatching == null) {
+            return null;
+        }
         return currentWatching.getIdEvent();
     }
 

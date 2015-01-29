@@ -53,6 +53,8 @@ public class VisibleEventInfoInteractor implements Interactor {
         EventInfo eventInfo = getEventInfo(localWatchRepository, localEventRepository);
         if (eventInfo != null) {
             notifyLoaded(eventInfo);
+        } else {
+            notifyLoaded(noEvent());
         }
     }
 
@@ -60,11 +62,16 @@ public class VisibleEventInfoInteractor implements Interactor {
         EventInfo eventInfo = getEventInfo(remoteWatchRepository, remoteEventRepository);
         if (eventInfo != null) {
             notifyLoaded(eventInfo);
+        } else {
+            notifyLoaded(noEvent());
         }
     }
 
     protected EventInfo getEventInfo(WatchRepository watchRepository, EventRepository eventRepository) {
         Watch currentVisibleWatch = watchRepository.getCurrentVisibleWatch();
+        if (currentVisibleWatch == null) {
+            return null;
+        }
         Event visibleEvent = eventRepository.getEventById(currentVisibleWatch.getIdEvent());
         if (visibleEvent == null) {
             return null;
@@ -82,6 +89,10 @@ public class VisibleEventInfoInteractor implements Interactor {
           .currentUserWatch(visibleEventWatch)
           .watchers(followingWatches)
           .build();
+    }
+
+    private EventInfo noEvent() {
+        return new EventInfo();
     }
 
     private void notifyLoaded(final EventInfo eventInfo) {
