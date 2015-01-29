@@ -1,4 +1,4 @@
-package com.shootr.android.data;
+package com.shootr.android.data.repository;
 
 import com.shootr.android.data.prefs.CurrentUserId;
 import com.shootr.android.data.prefs.LongPreference;

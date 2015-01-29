@@ -31,11 +31,6 @@ public abstract class AbstractManager {
         return dbHelper.getReadableDatabase();
     }
 
-    public  void deleteDatabase(Context context) {
-        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
-        Timber.d("Database deleted");
-    }
-
     public  boolean isTableEmpty( String entity) {
         boolean res = true;
         String raw_query = "SELECT * FROM "+ entity;
@@ -46,15 +41,6 @@ public abstract class AbstractManager {
         c.close();
 
         return res;
-    }
-
-    /**
-     * Retrieve row's number for table we need
-     * */
-
-    public  long numberOfRows( String table){
-        long numRows = DatabaseUtils.queryNumEntries(getReadableDatabase(), table);
-        return numRows;
     }
 
     public long insertOrUpdateSyncTable(TableSync tableSync){
@@ -69,37 +55,6 @@ public abstract class AbstractManager {
         contentValues.put(DatabaseContract.TablesSync.MAX_TIMESTAMP, tableSync.getMaxTimestamp());
         return getWritableDatabase().insertWithOnConflict(DatabaseContract.TablesSync.TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);
-    }
-
-    public int getNumMaxOfRowsByEntity(String entity){
-        int numRows = 0;
-
-        String[] column = new String[]{DatabaseContract.TablesSync.MAX_ROWS};
-        String[] stringArgs = new String[]{entity};
-        String args = DatabaseContract.TablesSync.ENTITY+"=?";
-        Cursor c = getReadableDatabase().query(DatabaseContract.TablesSync.TABLE, column, args, stringArgs, null, null,
-          null, null);
-        if(c.getCount()>0){
-            c.moveToFirst();
-            numRows = c.getInt(0);
-        }
-        c.close();
-        return numRows;
-    }
-
-
-
-    public int deleteRows(long number){
-        String sql = "SELECT min(idShot) as idShot FROM (SELECT "+ DatabaseContract.ShotTable.ID_SHOT +" FROM "+ DatabaseContract.ShotTable.TABLE+" order by "+ DatabaseContract.ShotTable.ID_SHOT+" DESC LIMIT 10)";
-        int idShot = 0;
-        Cursor c = getReadableDatabase().rawQuery(sql, null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            idShot = c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT));
-        }
-        c.close();
-        return getWritableDatabase().delete(DatabaseContract.ShotTable.TABLE,
-          DatabaseContract.ShotTable.ID_SHOT + "<" + idShot, null);
     }
 
     public  Long getFirstModifiedDate(String entity){

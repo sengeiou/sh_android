@@ -23,10 +23,8 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsN
 
 public class EventDtoFactory {
 
-    private static final String ALIAS_GET_NEXT_EVENT_WHERE_MY_TEAM_PLAYS = "GET_NEXT_NEXT_WHERE_MY_TEAM_PLAYS";
     private static final String ALIAS_GET_WATCH_OF_MY_FOLLOWING = "GET_MY_FOLLOWING_WATCHES";
     private static final String ALIAS_GET_EVENTS_FROM_WATCH_FOLLOWING = "GET_EVENTS_FROM_WATCH_FOLLOWING";
-    private static final String ALIAS_GET_TEAMS_BY_TEAM_IDS = "GET_TEAMS_BY_TEAM_IDS";
     private static final String ALIAS_SET_WATCH_STATUS = "SET_WATCH_STATUS";
     private static final String ALIAS_GET_WATCH_BY_KEYS = "GET_WATCH_BY_KEYS";
     private static final String ALIAS_GET_EVENT_BY_ID_EVENT = "GET_EVENT_BY_ID_EVENT";
@@ -35,35 +33,14 @@ public class EventDtoFactory {
     private UtilityDtoFactory utilityDtoFactory;
     private EventEntityMapper eventEntityMapper;
     private WatchMapper watchMapper;
-    private TeamMapper teamMapper;
     private TimeUtils timeUtils;
 
     @Inject public EventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper,
-      WatchMapper watchMapper, TeamMapper teamMapper, TimeUtils timeUtils){
+      WatchMapper watchMapper, TimeUtils timeUtils){
         this.utilityDtoFactory = utilityDtoFactory;
         this.eventEntityMapper = eventEntityMapper;
-        this.teamMapper = teamMapper;
         this.watchMapper = watchMapper;
         this.timeUtils = timeUtils;
-    }
-
-    public GenericDto getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam){
-        FilterDto eventFilter = and(orIsNotDeleted(),
-          or(DatabaseContract.EventTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
-            or(DatabaseContract.EventTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
-          or(DatabaseContract.EventTable.BEGIN_DATE).isNotEqualTo(null),
-          or(DatabaseContract.EventTable.END_DATE).greaterThan(timeUtils.getCurrentDate()))
-           .build();
-
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
-          DatabaseContract.EventTable.TABLE).includeDeleted(
-          true).items(1).filter(eventFilter).build();
-        OperationDto op = new OperationDto.Builder()
-          .metadata(md)
-          .putData(eventEntityMapper.toDto(null))
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEXT_EVENT_WHERE_MY_TEAM_PLAYS, op);
     }
 
     public GenericDto getWatchFromUsersAndMe(List<Long> userIds, Long idCurrentUser){
@@ -120,8 +97,7 @@ public class EventDtoFactory {
     }
 
     public GenericDto getEventsNotEndedByIds(List<Long> eventsIds){
-        FilterDto eventsWatchFollowingFilter = and(
-          orIsNotDeleted(),
+        FilterDto eventsWatchFollowingFilter = and(orIsNotDeleted(),
           or(DatabaseContract.EventTable.ID_EVENT).isIn(eventsIds),
           or(DatabaseContract.EventTable.END_DATE).greaterThan(timeUtils.getCurrentDate()),
           or(DatabaseContract.EventTable.BEGIN_DATE).isNotEqualTo(null))
@@ -137,18 +113,6 @@ public class EventDtoFactory {
         OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENTS_FROM_WATCH_FOLLOWING, op);
-    }
-
-    public GenericDto getTeamsFromTeamIds(List<Long> teamIds){
-        FilterDto teamsFilter = and(orIsNotDeleted(),or(DatabaseContract.TeamTable.ID_TEAM).isIn(teamIds)).build();
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.TeamTable.TABLE)
-          .includeDeleted(false)
-          .filter(teamsFilter)
-          .items(1000)
-          .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(teamMapper.toDto(null)).build();
-       return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_TEAMS_BY_TEAM_IDS, op);
     }
 
     public GenericDto getWatchByKeys(Long idUser, Long idEvent) {

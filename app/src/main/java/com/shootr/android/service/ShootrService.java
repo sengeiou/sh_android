@@ -28,8 +28,6 @@ public interface ShootrService {
 
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
-    public ShotEntity postNewShot(Long idUser, String comment, Long idEvent) throws IOException;
-
     ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent) throws IOException;
 
     public UserEntity getUserByIdUser(Long idUser) throws IOException;
@@ -47,8 +45,6 @@ public interface ShootrService {
 
     public FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    public EventEntity getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException;
-
     public List<WatchEntity> getWatchesFromUsersAndMe(List<Long> followingIds, Long idCurrentUser) throws IOException;
 
     public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException;
@@ -62,8 +58,6 @@ public interface ShootrService {
     public WatchEntity getWatchStatus(Long idUser, Long idEvent) throws IOException;
 
     public EventEntity getEventById(Long idEvent) throws IOException;
-
-    public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException;
 
     public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
 

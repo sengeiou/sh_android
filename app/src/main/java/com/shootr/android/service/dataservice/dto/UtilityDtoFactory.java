@@ -27,15 +27,4 @@ public class UtilityDtoFactory {
 
         return generic;
     }
-
-    public FilterDto[] getTimeFilterDto(Long lastModifiedDate) {
-        return new FilterDto[]{
-                new FilterDto(Constants.NEXUS_OR,
-                        new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, DatabaseContract.SyncColumns.CSYS_DELETED, lastModifiedDate),
-                                new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, DatabaseContract.SyncColumns.CSYS_MODIFIED, lastModifiedDate)
-                        },
-                        null)
-        };
-    }
 }

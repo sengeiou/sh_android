@@ -85,10 +85,6 @@ public class WatchManager extends AbstractManager{
         }
     }
 
-    public void deleteAllWatches() {
-        getWritableDatabase().execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE);
-    }
-
     public void insertInSync(){
         insertInTableSync(WatchTable.TABLE,7,1000,0);
     }
@@ -172,73 +168,6 @@ public class WatchManager extends AbstractManager{
         }
         queryResult.close();
         return  watchEntity;
-    }
-
-
-    /**
-     * Check if it exists any data for send to server. This method It is called before request datas
-     *
-     * **/
-    public List<WatchEntity> getEntitiesNotSynchronizedWithServer(){
-        List<WatchEntity> watchesToUpdate = new ArrayList<>();
-        String args = WatchTable.CSYS_SYNCHRONIZED+"='N' OR "+WatchTable.CSYS_SYNCHRONIZED+"= 'D' OR "+WatchTable.CSYS_SYNCHRONIZED+"='U'";
-        Cursor c = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION,args,null,null,null,null);
-        if(c.getCount()>0){
-            c.moveToFirst();
-            do{
-                watchesToUpdate.add(watchMapper.fromCursor(c));
-            }while(c.moveToNext());
-        }
-        c.close();
-        return watchesToUpdate;
-    }
-
-    public List<WatchEntity> getWatchesWhereUserNot(Long currentUserId) {
-        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_EVENT
-          +" NOT IN( SELECT "+WatchTable.ID_EVENT
-          +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
-
-        Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
-        List<WatchEntity> resultWatches = new ArrayList<>();
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
-                resultWatches.add(watchEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultWatches;
-    }
-
-    public WatchEntity getWatchByEventAndUser(Long eventId, Long userId) {
-        String whereSelection = WatchTable.ID_EVENT + " = ? AND " + WatchTable.ID_USER + " = ? AND "+WatchTable.STATUS+" IS NOT ?";
-        String[] whereArguments = new String[]{String.valueOf(eventId), String.valueOf(userId), String.valueOf(WatchEntity.STATUS_DEFAULT)};
-
-        Cursor queryResult =
-                getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
-
-        WatchEntity watchEntity = null;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            watchEntity = watchMapper.fromCursor(queryResult);
-        }
-        queryResult.close();
-        return watchEntity;
-    }
-
-    public Integer getPeopleWatchingInInfo() {
-        String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+ DatabaseContract.EventTable.TABLE+" m WHERE m."+ DatabaseContract.EventTable.ID_EVENT
-          +"=w."+WatchTable.ID_EVENT
-          +" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
-        Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
-        Integer number = -1;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            number = queryResult.getInt(queryResult.getColumnIndex("NUMBER"));
-        }
-        queryResult.close();
-       return number;
     }
 
     public WatchEntity getWatchVisibleByUser(Long userId) {

@@ -9,23 +9,20 @@ public class DatabaseContract {
     }
 
     public static interface SyncColumns extends BaseColumns {
+
         static final String CSYS_BIRTH = "birth";
         static final String CSYS_MODIFIED = "modified";
         static final String CSYS_DELETED = "deleted";
         static final String CSYS_REVISION = "revision";
         static final String CSYS_SYNCHRONIZED = "synchronized";
-
-        public static final String SYNC_ID_NEW = "N";
-        public static final String SYNC_ID_UPDATED = "U";
-        public static final String SYNC_ID_SYNCHRONIZED = "S";
-        public static final String SYNC_ID_DELETED = "D";
     }
 
-
     public static final class TablesSync implements SyncColumns {
-        private TablesSync(){
+
+        private TablesSync() {
 
         }
+
         public static final String TABLE = "TablesSync";
 
         public static final String ORDER = "idOrder";
@@ -38,20 +35,13 @@ public class DatabaseContract {
         public static final String DIRECTION = "direction";
 
         public static final String[] PROJECTION = {
-                ORDER,
-                ENTITY,
-                FREQUENCY,
-                MAX_ROWS,
-                MIN_ROWS,
-                MAX_TIMESTAMP,
-                MIN_TIMESTAMP,
-                DIRECTION
+          ORDER, ENTITY, FREQUENCY, MAX_ROWS, MIN_ROWS, MAX_TIMESTAMP, MIN_TIMESTAMP, DIRECTION
         };
     }
 
     public static final class UserTable implements SyncColumns {
 
-        private UserTable(){
+        private UserTable() {
 
         }
 
@@ -77,33 +67,18 @@ public class DatabaseContract {
         public static final String EMAIL_NORMALIZED = "emailNormalized";
 
         public static final String[] PROJECTION = {
-                ID,
-                FAVORITE_TEAM_ID,
-                FAVORITE_TEAM_NAME,
-                SESSION_TOKEN,
-                USER_NAME,
-                EMAIL,
-                NAME,
-                PHOTO,
-                NUM_FOLLOWERS,
-                NUM_FOLLOWINGS,
-                POINTS,
-                WEBSITE,
-                BIO,
-                RANK,
-                CSYS_BIRTH,
-                CSYS_MODIFIED,
-                CSYS_DELETED,
-                CSYS_REVISION,
-                CSYS_SYNCHRONIZED
+          ID, FAVORITE_TEAM_ID, FAVORITE_TEAM_NAME, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          CSYS_SYNCHRONIZED
         };
     }
 
     public static final class ShotTable implements SyncColumns {
 
-        private ShotTable(){
+        private ShotTable() {
 
         }
+
         public static final String TABLE = "Shot";
 
         public static final String ID_SHOT = "idShot";
@@ -114,43 +89,32 @@ public class DatabaseContract {
         public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
-                ID_SHOT,
-                ID_USER,
-                COMMENT,
-                IMAGE,
-                ID_EVENT,
-                TYPE,
-                CSYS_BIRTH,
-                CSYS_MODIFIED,
-                CSYS_DELETED,
-                CSYS_REVISION,
-                CSYS_SYNCHRONIZED
+          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, TYPE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          CSYS_SYNCHRONIZED
         };
     }
 
     public static final class FollowTable implements SyncColumns {
-        private FollowTable(){
+
+        private FollowTable() {
 
         }
+
         public static final String TABLE = "Follow";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
 
         public static final String[] PROJECTION = {
-                ID_USER,
-                ID_FOLLOWED_USER,
-                CSYS_BIRTH,
-                CSYS_MODIFIED,
-                CSYS_DELETED,
-                CSYS_REVISION,
-                CSYS_SYNCHRONIZED
+          ID_USER, ID_FOLLOWED_USER, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 
-    public static final class DeviceTable implements SyncColumns{
-        private DeviceTable(){
+    public static final class DeviceTable implements SyncColumns {
+
+        private DeviceTable() {
 
         }
+
         public static final String TABLE = "Device";
         public static final String ID_DEVICE = "idDevice";
         public static final String ID_USER = "idUser";
@@ -161,52 +125,37 @@ public class DatabaseContract {
         public static final String PLATFORM = "platform";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE,
-          ID_USER,
-          TOKEN,
-          UNIQUE_DEVICE_ID,
-          MODEL,
-          PLATFORM,
-          OS_VERSION,
-          CSYS_BIRTH,
-          CSYS_MODIFIED,
-          CSYS_DELETED,
-          CSYS_REVISION,
-          CSYS_SYNCHRONIZED
-        } ;
-    }
-
-    public static final class TeamTable implements SyncColumns{
-        private TeamTable(){
-
-        }
-        public static final String TABLE = "Team";
-        public static final String ID_TEAM = "idTeam";
-        public static final String POPULARITY = "popularity";
-        public static final String CLUB_NAME="clubName";
-        public static final String OFFICIAL_NAME="officialName";
-        public static final String SHORT_NAME="shortName";
-        public static final String TLA_NAME="tlaName";
-
-        public static final String[] PROJECTION = {
-          ID_TEAM,
-          POPULARITY,
-          CLUB_NAME,
-          OFFICIAL_NAME,
-          SHORT_NAME,
-          TLA_NAME,
-          CSYS_BIRTH,
-          CSYS_MODIFIED,
-          CSYS_DELETED,
-          CSYS_REVISION,
-          CSYS_SYNCHRONIZED
+          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, MODEL, PLATFORM, OS_VERSION, CSYS_BIRTH, CSYS_MODIFIED,
+          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 
-    public static final class EventTable implements SyncColumns{
-        private EventTable(){
+    public static final class TeamTable implements SyncColumns {
+
+        private TeamTable() {
 
         }
+
+        public static final String TABLE = "Team";
+        public static final String ID_TEAM = "idTeam";
+        public static final String POPULARITY = "popularity";
+        public static final String CLUB_NAME = "clubName";
+        public static final String OFFICIAL_NAME = "officialName";
+        public static final String SHORT_NAME = "shortName";
+        public static final String TLA_NAME = "tlaName";
+
+        public static final String[] PROJECTION = {
+          ID_TEAM, POPULARITY, CLUB_NAME, OFFICIAL_NAME, SHORT_NAME, TLA_NAME, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
+          CSYS_REVISION, CSYS_SYNCHRONIZED
+        };
+    }
+
+    public static final class EventTable implements SyncColumns {
+
+        private EventTable() {
+
+        }
+
         public static final String TABLE = "Event";
         public static final String ID_EVENT = "idEvent";
         public static final String BEGIN_DATE = "beginDate";
@@ -217,23 +166,17 @@ public class DatabaseContract {
         public static final String PHOTO = "photo";
 
         public static final String[] PROJECTION = {
-          ID_EVENT, BEGIN_DATE, END_DATE,
-          ID_LOCAL_TEAM,
-          ID_VISITOR_TEAM,
-          TITLE,
-          PHOTO,
-          CSYS_BIRTH,
-          CSYS_MODIFIED,
-          CSYS_DELETED,
-          CSYS_REVISION,
-          CSYS_SYNCHRONIZED
+          ID_EVENT, BEGIN_DATE, END_DATE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, CSYS_BIRTH, CSYS_MODIFIED,
+          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 
-    public static final class WatchTable implements  SyncColumns{
-        private WatchTable(){
-            
+    public static final class WatchTable implements SyncColumns {
+
+        private WatchTable() {
+
         }
+
         public static final String TABLE = "Watch";
         public static final String ID_USER = "idUser";
         public static final String ID_EVENT = "idEvent";
@@ -243,18 +186,8 @@ public class DatabaseContract {
         public static final String NOTIFICATION = "notification";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_EVENT,
-          STATUS,
-          PLACE,
-          VISIBLE,
-          NOTIFICATION,
-          CSYS_BIRTH,
-          CSYS_MODIFIED,
-          CSYS_DELETED,
-          CSYS_REVISION,
-          CSYS_SYNCHRONIZED
+          ID_USER, ID_EVENT, STATUS, PLACE, VISIBLE, NOTIFICATION, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
+          CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
-
-
 }

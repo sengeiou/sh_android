@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.data.repository.SessionRepositoryImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -52,17 +53,14 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.manager.AbstractManager;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.gcm.GCMIntentService;
 import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.sync.ShootrSyncAdapter;
-import com.shootr.android.sync.InfoCleaner;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
@@ -243,10 +241,6 @@ public class DataModule {
 
     @Provides @Singleton SessionRepository provideSessionManager(SessionRepositoryImpl sessionManager) {
         return sessionManager;
-    }
-
-    @Provides @Singleton InfoCleaner provideInfoCleaner(EventManager eventManager, WatchManager watchManager) {
-        return new InfoCleaner(eventManager, watchManager);
     }
 
     @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {

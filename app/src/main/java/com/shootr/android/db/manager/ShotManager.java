@@ -281,22 +281,4 @@ public class ShotManager extends  AbstractManager{
         }
         return null;
     }
-
-
-    public boolean removeOldShots(SQLiteDatabase db){
-        boolean res = true;
-        long number;
-        int maxNumRows = getNumMaxOfRowsByEntity(SHOT_TABLE);
-        long currentNumRows = numberOfRows(SHOT_TABLE);
-        if(maxNumRows<currentNumRows){
-            //We have to delete the older ones
-            number = currentNumRows-maxNumRows;
-            int resRemoved = deleteRows(number);
-            Timber.e("Borrar los más antiguos. Borrados: %d",resRemoved);
-        }else{
-            Timber.e("El numero de filas en la tabla Shot es menor que el número máximo");
-        }
-        return res;
-    }
-
 }
