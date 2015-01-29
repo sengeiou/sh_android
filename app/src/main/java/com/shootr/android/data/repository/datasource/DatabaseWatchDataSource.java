@@ -2,6 +2,8 @@ package com.shootr.android.data.repository.datasource;
 
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.manager.WatchManager;
+import com.shootr.android.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -22,8 +24,29 @@ public class DatabaseWatchDataSource implements WatchDataSource {
         return watchEntity;
     }
 
+    @Override public List<WatchEntity> putWatches(List<WatchEntity> watchEntities) {
+        for (WatchEntity remoteWatch : watchEntities) {
+            this.putWatch(remoteWatch);
+        }
+        return watchEntities;
+    }
+
     @Override public WatchEntity getWatching(Long userId) {
         return watchManager.getWatching(userId);
+    }
+
+    @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
+        //TODO user list is ignored in the manager. Should it? I will usually want everything. What if I dont?
+        return watchManager.getWatchesByEvent(idEvent);
+    }
+
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> users) {
+        return watchManager.getWatchesNotEndedFromUsers(users);
+    }
+
+    @Override public void deleteAllWatchesNotPending() {
+        List<WatchEntity> watchesSynchronized = watchManager.getWatchesSynchronized();
+        watchManager.deleteWatches(watchesSynchronized);
     }
 
     @Override public List<WatchEntity> getEntitiesNotSynchronized() {

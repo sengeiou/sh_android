@@ -277,4 +277,25 @@ public class WatchManager extends AbstractManager{
         queryResult.close();
         return resultWatches;
     }
+
+    public List<WatchEntity> getWatchesSynchronized() {
+        String whereClause = Phrase.from("{field} = '{s}' or {field} is null")
+          .put("field", WatchTable.CSYS_SYNCHRONIZED)
+          .put("s", Synchronized.SYNC_SYNCHRONIZED)
+          .format().toString();
+
+        Cursor queryResult =
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereClause, null, null, null, null);
+
+        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
+                resultWatches.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultWatches;
+    }
 }

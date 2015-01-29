@@ -1,5 +1,7 @@
 package com.shootr.android.data.repository.dagger;
 
+import com.shootr.android.data.repository.datasource.CachedDataSource;
+import com.shootr.android.data.repository.datasource.CachedWatchDatasource;
 import com.shootr.android.data.repository.datasource.DatabaseWatchDataSource;
 import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.RemoteDataSource;
@@ -40,5 +42,9 @@ public class WatchRepositoryModule {
     @Provides @Singleton @RemoteDataSource WatchDataSource provideRemoteDataSource(
       ServerWatchDataSource watchDataSource) {
         return watchDataSource;
+    }
+
+    @Provides @Singleton @CachedDataSource WatchDataSource provideCachedDataSource(CachedWatchDatasource watchDatasource) {
+        return watchDatasource;
     }
 }
