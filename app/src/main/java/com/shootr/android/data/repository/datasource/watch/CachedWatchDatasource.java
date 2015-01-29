@@ -47,50 +47,50 @@ public class CachedWatchDatasource implements WatchDataSource {
 
     @Override public WatchEntity getWatch(Long idEvent, Long idUser) {
         if (isValid()) {
-            Timber.i("Cache hit: getWatch");
+            Timber.d("Cache hit: getWatch");
             return localWatchDataSource.getWatch(idEvent, idUser);
         } else {
-            Timber.i("Cache miss: getWatch");
+            Timber.d("Cache miss: getWatch");
             return null;
         }
     }
 
     @Override public WatchEntity getWatching(Long userId) {
         if (isValid()) {
-            Timber.i("Cache hit: getWatching");
+            Timber.d("Cache hit: getWatching");
             return localWatchDataSource.getWatching(userId);
         } else {
-            Timber.i("Cache miss: getWatching");
+            Timber.d("Cache miss: getWatching");
             return null;
         }
     }
 
     @Override public WatchEntity getVisible(Long userId) {
         if (isValid()) {
-            Timber.i("Cache hit: getWatching");
+            Timber.d("Cache hit: getWatching");
             return localWatchDataSource.getVisible(userId);
         } else {
-            Timber.i("Cache miss: getWatching");
+            Timber.d("Cache miss: getWatching");
             return null;
         }
     }
 
     @Override public List<WatchEntity> getWatchesForUsersAndEvent(List<Long> users, Long idEvent) {
         if (isValid()) {
-            Timber.i("Cache hit: getWatchesForUsersAndEvent");
+            Timber.d("Cache hit: getWatchesForUsersAndEvent");
             return localWatchDataSource.getWatchesForUsersAndEvent(users, idEvent);
         } else {
-            Timber.i("Cache miss: getWatchesForUsersAndEvent");
+            Timber.d("Cache miss: getWatchesForUsersAndEvent");
             return null;
         }
     }
 
     @Override public List<WatchEntity> getWatchesFromUsers(List<Long> users) {
         if (isValid()) {
-            Timber.i("Cache hit: getWatchesFromUsers");
+            Timber.d("Cache hit: getWatchesFromUsers");
             return localWatchDataSource.getWatchesFromUsers(users);
         } else {
-            Timber.i("Cache miss: getWatchesFromUsers");
+            Timber.d("Cache miss: getWatchesFromUsers");
             return null;
         }
     }
@@ -101,10 +101,10 @@ public class CachedWatchDatasource implements WatchDataSource {
 
     @Override public List<WatchEntity> getEntitiesNotSynchronized() {
         if (isValid()) {
-            Timber.i("Cache hit: getEntitiesNotSynchronized");
+            Timber.d("Cache hit: getEntitiesNotSynchronized");
             return localWatchDataSource.getEntitiesNotSynchronized();
         } else {
-            Timber.i("Cache miss: getEntitiesNotSynchronized");
+            Timber.d("Cache miss: getEntitiesNotSynchronized");
             return null;
         }
     }
