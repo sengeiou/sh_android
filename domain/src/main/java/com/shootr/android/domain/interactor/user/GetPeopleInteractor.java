@@ -4,6 +4,8 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,11 +15,14 @@ import javax.inject.Inject;
 public class GetPeopleInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository userRepository;
+    private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
 
-    @Inject public GetPeopleInteractor(InteractorHandler interactorHandler, UserRepository userRepository) {
+    @Inject public GetPeopleInteractor(InteractorHandler interactorHandler, @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
-        this.userRepository = userRepository;
+        this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
     }
 
     public void obtainPeople() {
@@ -25,12 +30,14 @@ public class GetPeopleInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        userRepository.getPeople(new UserRepository.UserListCallback() {
-            @Override public void onLoaded(List<User> userList) {
-                userList = reorderPeopleByUsername(userList);
-                interactorHandler.sendUiMessage(new UserList(userList));
-            }
-        });
+        obtainPeopleFromRepository(localUserRepository);
+        obtainPeopleFromRepository(remoteUserRepository);
+    }
+
+    private void obtainPeopleFromRepository(UserRepository userRepository) {
+        List<User> userList = userRepository.getPeople();
+        userList = reorderPeopleByUsername(userList);
+        interactorHandler.sendUiMessage(new UserList(userList));
     }
 
     private List<User> reorderPeopleByUsername(List<User> userList) {

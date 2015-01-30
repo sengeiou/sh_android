@@ -5,7 +5,6 @@ import com.shootr.android.domain.UserList;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +37,7 @@ public class GetPeopleInteractorTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, userRepository);
+        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, userRepository, localUserRepository);
     }
 
     @Test

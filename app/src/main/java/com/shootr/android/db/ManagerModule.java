@@ -3,7 +3,6 @@ package com.shootr.android.db;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.repository.EventInfoRepositoryImpl;
 import com.shootr.android.data.repository.EventSearchRepositoryImpl;
-import com.shootr.android.data.repository.UserRepositoryImpl;
 import com.shootr.android.data.repository.WatchRepositoryImpl;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
@@ -16,7 +15,6 @@ import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import dagger.Module;
@@ -42,10 +40,6 @@ public class ManagerModule {
 
     @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
         return new DeviceManager(openHelper, deviceMapper);
-    }
-
-    @Provides @Singleton UserRepository provideUserRepository(UserRepositoryImpl userRepository) {
-        return userRepository;
     }
 
     @Provides @Singleton EventInfoRepository provideEventInfoRepository(EventInfoRepositoryImpl eventInfoRepository) {

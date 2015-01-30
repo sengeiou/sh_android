@@ -10,9 +10,6 @@ public interface UserRepository {
         void onLoaded(List<User> userList);
     }
 
-    @Deprecated
-    void getPeople(UserListCallback callback);
-
     List<User> getPeople();
 
     boolean isFollower(Long userId);
