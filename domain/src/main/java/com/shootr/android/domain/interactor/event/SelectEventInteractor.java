@@ -16,7 +16,7 @@ public class SelectEventInteractor implements Interactor {
 
     //region Dependencies
     private final InteractorHandler interactorHandler;
-    private final EventRepository eventRepository;
+    private final EventRepository localEventRepository;
     private final WatchRepository localWatchRepository;
     private final WatchRepository remoteWatchRepository;
     private final SessionRepository sessionRepository;
@@ -24,11 +24,11 @@ public class SelectEventInteractor implements Interactor {
 
     private Long idEvent;
 
-    @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, EventRepository eventRepository,
+    @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, @Local EventRepository localEventRepository,
       @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
-        this.eventRepository = eventRepository;
+        this.localEventRepository = localEventRepository;
         this.localWatchRepository = localWatchRepository;
         this.remoteWatchRepository = remoteWatchRepository;
         this.sessionRepository = sessionRepository;
@@ -56,7 +56,7 @@ public class SelectEventInteractor implements Interactor {
     private void stopWatchingLapsedEvent() {
         Watch currentWatching = localWatchRepository.getCurrentWatching();
         if (currentWatching != null) {
-            Event eventWatching = eventRepository.getEventById(currentWatching.getIdEvent());
+            Event eventWatching = localEventRepository.getEventById(currentWatching.getIdEvent());
             if (eventWatching != null) {
                 boolean isEventLapsed = eventWatching.getEndDate().before(timeUtils.getCurrentDate());
                 if (isEventLapsed) {
