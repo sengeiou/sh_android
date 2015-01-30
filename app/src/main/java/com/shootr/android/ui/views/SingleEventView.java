@@ -37,8 +37,4 @@ public interface SingleEventView extends LoadDataView{
     void showEditEventButton();
 
     void hideEditEventButton();
-
-    void showEditPictureButton();
-
-    void hideEditPictureButton();
 }
