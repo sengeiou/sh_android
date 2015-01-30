@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -27,14 +28,14 @@ public class ProfileEditPresenter implements Presenter {
 
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
-    private final Bus bus;
+    private final @Main Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
 
     private UserModel currentUserModel;
     private Long changedTeamId;
 
-    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, Bus bus,
+    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;

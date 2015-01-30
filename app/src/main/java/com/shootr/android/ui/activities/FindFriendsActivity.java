@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.util.PicassoWrapper;
@@ -59,7 +60,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
 
     private SearchView searchView;
 

@@ -1,6 +1,8 @@
 package com.shootr.android.ui.presenter;
 
 import android.support.annotation.Nullable;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
@@ -11,7 +13,6 @@ import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.event.WatchingInteractor;
-import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -28,7 +29,7 @@ import javax.inject.Inject;
 public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
-    private final Bus bus;
+    private final @Main Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
     private final EventNotificationInteractor eventNotificationInteractor;
@@ -45,7 +46,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
     private int watchersCount;
 
-    @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
+    @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       WatchingInteractor watchingInteractor, EventNotificationInteractor eventNotificationInteractor,
       EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
@@ -119,7 +120,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     @Subscribe
-    public void onNewWatchDetected(RequestWatchByPushEvent event) {
+    public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         loadEventInfo();
         loadEventsCount();
     }

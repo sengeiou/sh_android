@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -32,7 +33,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private Long userId;
     private UserEntityModelMapper userVOMapper;
 
-    @Inject public GetUserInfoJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil1,
+    @Inject public GetUserInfoJob(Application application, @Main Bus bus, ShootrService service, NetworkUtil networkUtil1,
       UserManager userManager, FollowManager followManager, SessionRepository sessionRepository, UserEntityModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;

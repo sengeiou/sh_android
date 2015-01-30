@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.loginregister;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.data.entity.UserEntity;
@@ -25,7 +26,7 @@ public class LoginUserJob extends ShootrBaseJob<LoginResultEvent> {
     ShootrService service;
     UserManager userManager;
 
-    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, ShootrService service,
+    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, @Main Bus bus, ShootrService service,
       UserManager userManager) {
         super(new Params(PRIORITY), context, bus, networkUtil);
         this.service = service;

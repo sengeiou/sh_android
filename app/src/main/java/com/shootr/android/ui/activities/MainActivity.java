@@ -21,6 +21,7 @@ import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.prefs.BooleanPreference;
@@ -51,7 +52,7 @@ public class MainActivity extends BaseSignedInActivity {
     public static final int DRAWER_POSITION_TIMELINE = 0;
     public static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
 
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;

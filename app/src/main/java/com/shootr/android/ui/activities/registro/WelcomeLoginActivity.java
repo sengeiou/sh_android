@@ -19,6 +19,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.WelcomePagerAdapter;
@@ -54,7 +55,7 @@ public class WelcomeLoginActivity extends BaseActivity {
     private Context mContext = this;
     private WelcomePagerAdapter mAdapter;
 //    private UiLifecycleHelper uiHelper;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
    /* private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {

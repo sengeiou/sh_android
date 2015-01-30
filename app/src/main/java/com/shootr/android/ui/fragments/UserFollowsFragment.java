@@ -20,6 +20,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -55,7 +56,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     private static final String ARGUMENT_USER_ID = "userId";
 
     @Inject PicassoWrapper picasso;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject JobManager jobManager;
     @Inject NetworkUtil networkUtil;
     @Inject SessionRepository sessionRepository;

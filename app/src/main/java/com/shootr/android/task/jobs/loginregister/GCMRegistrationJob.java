@@ -11,6 +11,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.constant.Constants;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.prefs.GCMAppVersion;
 import com.shootr.android.data.prefs.GCMRegistrationId;
@@ -42,7 +43,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     private SessionRepository sessionRepository;
     private DeviceManager deviceManager;
 
-    @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
+    @Inject protected GCMRegistrationJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
       @GCMAppVersion IntPreference registeredAppVersion, ShootrService service, DeviceManager deviceManager,
       SessionRepository sessionRepository) {

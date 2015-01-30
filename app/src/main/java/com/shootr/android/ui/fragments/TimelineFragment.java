@@ -24,6 +24,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -69,7 +70,7 @@ public class TimelineFragment extends BaseFragment
     public static final Long WATCH_STATUS_WATCHING = 1L;
 
     @Inject PicassoWrapper picasso;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject AndroidTimeUtils timeUtils;
     @Inject JobManager jobManager;
     @Inject WatchNumberPresenter watchNumberPresenter;

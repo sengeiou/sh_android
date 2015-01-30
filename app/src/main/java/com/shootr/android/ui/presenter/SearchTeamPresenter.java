@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.SearchTeamResultEvent;
@@ -20,12 +21,12 @@ public class SearchTeamPresenter implements Presenter, CommunicationPresenter {
     private SearchTeamView searchTeamView;
     private ObjectGraph objectGraph;
 
-    private final Bus bus;
+    private final @Main Bus bus;
     private final JobManager jobManager;
     private String currentTeamName;
     private boolean isSearchInterfaceReady;
 
-    @Inject public SearchTeamPresenter(Bus bus, JobManager jobManager) {
+    @Inject public SearchTeamPresenter(@Main Bus bus, JobManager jobManager) {
         this.bus = bus;
         this.jobManager = jobManager;
     }

@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UploadShotImageEvent;
@@ -23,7 +24,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private static final int MAX_LENGTH = 140;
 
-    private final Bus bus;
+    private final @Main Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
 
@@ -34,7 +35,7 @@ public class PostNewShotPresenter implements Presenter {
     private String uploadedImageUrl;
     private String currentTextWritten;
 
-    @Inject public PostNewShotPresenter(Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
+    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.jobManager = jobManager;

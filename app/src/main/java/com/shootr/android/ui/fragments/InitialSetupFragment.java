@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
@@ -23,7 +24,7 @@ import timber.log.Timber;
 public class InitialSetupFragment extends BaseFragment {
 
     @Inject JobManager jobManager;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

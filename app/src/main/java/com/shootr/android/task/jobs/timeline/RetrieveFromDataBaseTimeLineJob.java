@@ -2,6 +2,7 @@ package com.shootr.android.task.jobs.timeline;
 
 import android.app.Application;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
@@ -19,7 +20,7 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
     private ShotManager shotManager;
     private SessionRepository sessionRepository;
 
-    @Inject public RetrieveFromDataBaseTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
+    @Inject public RetrieveFromDataBaseTimeLineJob(Application context, @Main Bus bus, ShootrService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SessionRepository sessionRepository) {
         super(context, bus, networkUtil, followManager, sessionRepository);
         this.shotManager = shotManager;

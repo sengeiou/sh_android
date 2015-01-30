@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.BusPublisher;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.UserManager;
@@ -11,9 +12,9 @@ import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
-import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
+import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -22,7 +23,6 @@ import com.shootr.android.ui.model.mappers.EventEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
-import com.squareup.otto.Bus;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
@@ -45,7 +45,7 @@ public class GCMIntentService extends IntentService {
     @Inject UserEntityWatchingModelMapper userWatchingModelMapper;
     @Inject UserEntityModelMapper userModelMapper;
     @Inject EventEntityModelMapper eventEntityModelMapper;
-    @Inject Bus bus;
+    @Inject BusPublisher busPublisher;
 
     public GCMIntentService() {
         super("GCM Service");
@@ -145,7 +145,7 @@ public class GCMIntentService extends IntentService {
         userManager.saveUser(userEntity);
         watchManager.createUpdateWatch(watchEntity);
 
-        bus.post(new RequestWatchByPushEvent());
+        busPublisher.post(new WatchUpdateRequest.Event());
     }
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {

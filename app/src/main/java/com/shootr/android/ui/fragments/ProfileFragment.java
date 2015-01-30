@@ -28,6 +28,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
@@ -94,7 +95,7 @@ public class ProfileFragment extends BaseFragment {
 
     @InjectView(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject AndroidTimeUtils timeUtils;

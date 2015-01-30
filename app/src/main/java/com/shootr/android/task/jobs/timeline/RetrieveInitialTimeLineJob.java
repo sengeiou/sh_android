@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.timeline;
 import android.app.Application;
 
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 
@@ -23,7 +24,7 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
     private ShootrService service;
     private SessionRepository sessionRepository;
 
-    @Inject public RetrieveInitialTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
+    @Inject public RetrieveInitialTimeLineJob(Application context, @Main Bus bus, ShootrService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SessionRepository sessionRepository) {
         super(context, bus, networkUtil, followManager, sessionRepository);
         this.shotManager = shotManager;

@@ -5,6 +5,7 @@ import android.os.Looper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.DeadEvent;
 import com.squareup.otto.Subscribe;
+import com.squareup.otto.ThreadEnforcer;
 import timber.log.Timber;
 
 public class AndroidBus extends Bus {
@@ -12,6 +13,7 @@ public class AndroidBus extends Bus {
     private final Handler mainThread = new Handler(Looper.getMainLooper());
 
     public AndroidBus() {
+        super(ThreadEnforcer.MAIN);
         this.register(this);
     }
 

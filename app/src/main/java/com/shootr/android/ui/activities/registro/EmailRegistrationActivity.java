@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -35,7 +36,7 @@ public class EmailRegistrationActivity extends BaseActivity {
 
     private List<String> emailAccounts;
 
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
