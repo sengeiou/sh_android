@@ -1,6 +1,8 @@
 package com.shootr.android.data.repository.remote;
 
 import android.support.v4.util.LongSparseArray;
+import com.shootr.android.data.bus.Default;
+import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
@@ -19,6 +21,8 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +30,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SyncWatchRepository implements WatchRepository, SyncableRepository {
+public class SyncWatchRepository implements WatchRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     //region Dependencies
     private final UserRepository localUserRepository;
@@ -38,12 +42,13 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private final WatchEntityMapper watchEntityMapper;
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
+    private final Bus bus;
 
     @Inject public SyncWatchRepository(@Local UserRepository localUserRepository,
       @Remote EventRepository remoteEventRepository, SessionRepository sessionRepository,
       @Local WatchDataSource localWatchDataSource, @Remote WatchDataSource remoteWatchDataSource,
       @Cached WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper,
-      SyncTrigger syncTrigger, SyncableWatchEntityFactory syncableWatchEntityFactory) {
+      SyncTrigger syncTrigger, SyncableWatchEntityFactory syncableWatchEntityFactory, @Default Bus bus) {
         this.localUserRepository = localUserRepository;
         this.remoteEventRepository = remoteEventRepository;
         this.sessionRepository = sessionRepository;
@@ -53,6 +58,8 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         this.watchEntityMapper = watchEntityMapper;
         this.syncTrigger = syncTrigger;
         this.syncableWatchEntityFactory = syncableWatchEntityFactory;
+        this.bus = bus;
+        this.bus.register(this);
     }
     //endregion
 
@@ -222,4 +229,9 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
         entity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
     }
     //endregion
+
+    @Subscribe
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+        updateAllWatchesFromRemote();
+    }
 }
