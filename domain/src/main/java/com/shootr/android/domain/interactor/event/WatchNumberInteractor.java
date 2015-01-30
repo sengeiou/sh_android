@@ -5,8 +5,8 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -28,7 +28,7 @@ public class WatchNumberInteractor implements Interactor{
     private final WatchRepository remoteWatchRepository;
 
     @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @LocalRepository UserRepository localUserRepository, @RemoteRepository WatchRepository remoteWatchRepository) {
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository, @Remote WatchRepository remoteWatchRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;

@@ -3,9 +3,9 @@ package com.shootr.android.data.repository.sync;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.repository.Local;
 import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,7 +16,7 @@ public class SyncableWatchEntityFactory extends SyncableEntityFactory<Watch, Wat
     private WatchEntityMapper watchEntityMapper;
     private WatchDataSource localWatchDataSource;
 
-    @Inject public SyncableWatchEntityFactory(WatchEntityMapper watchEntityMapper, @LocalDataSource WatchDataSource localWatchDataSource) {
+    @Inject public SyncableWatchEntityFactory(WatchEntityMapper watchEntityMapper, @Local WatchDataSource localWatchDataSource) {
         this.watchEntityMapper = watchEntityMapper;
         this.localWatchDataSource = localWatchDataSource;
     }

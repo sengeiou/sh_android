@@ -1,12 +1,13 @@
 package com.shootr.android.data.repository.datasource.watch;
 
 import com.shootr.android.data.entity.WatchEntity;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
+import com.shootr.android.data.repository.datasource.CachedDataSource;
+import com.shootr.android.domain.repository.Local;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class CachedWatchDatasource implements WatchDataSource {
+public class CachedWatchDatasource implements WatchDataSource, CachedDataSource {
 
     private static final long EXPIRATION_TIME_MILLIS = 20 * 1000;
 
@@ -14,11 +15,11 @@ public class CachedWatchDatasource implements WatchDataSource {
     boolean wasValidLastCheck = false;
     long lastCacheUpdateTime;
 
-    @Inject public CachedWatchDatasource(@LocalDataSource WatchDataSource localWatchDataSource) {
+    @Inject public CachedWatchDatasource(@Local WatchDataSource localWatchDataSource) {
         this.localWatchDataSource = localWatchDataSource;
     }
 
-    private boolean isValid() {
+    @Override public boolean isValid() {
         boolean isValidNow = wasValidLastCheck && !hasExpired();
         if (!isValidNow) {
             wasValidLastCheck = false;
@@ -26,11 +27,16 @@ public class CachedWatchDatasource implements WatchDataSource {
         return isValidNow;
     }
 
-    public boolean hasExpired() {
+    @Override public void invalidate() {
+        wasValidLastCheck = false;
+    }
+
+
+    protected boolean hasExpired() {
         return System.currentTimeMillis() > lastCacheUpdateTime + EXPIRATION_TIME_MILLIS;
     }
 
-    public void resetCachedUpdateTime() {
+    protected void resetCachedUpdateTime() {
         lastCacheUpdateTime = System.currentTimeMillis();
         wasValidLastCheck = true;
     }

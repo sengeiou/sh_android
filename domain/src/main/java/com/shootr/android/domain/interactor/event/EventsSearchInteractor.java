@@ -12,7 +12,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
-import com.shootr.android.domain.repository.LocalRepository;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,8 @@ public class EventsSearchInteractor implements Interactor {
     private InteractorErrorCallback errorCallback;
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler,
-      EventSearchRepository eventSearchRepository, @LocalRepository EventRepository localEventRepository,
-      @LocalRepository WatchRepository localWatchRepository, PostExecutionThread postExecutionThread) {
+      EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
+      @Local WatchRepository localWatchRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.eventSearchRepository = eventSearchRepository;
         this.localEventRepository = localEventRepository;

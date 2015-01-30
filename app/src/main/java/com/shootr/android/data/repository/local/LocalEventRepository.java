@@ -2,11 +2,10 @@ package com.shootr.android.data.repository.local;
 
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.Local;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -15,7 +14,7 @@ public class LocalEventRepository implements EventRepository {
     private final EventDataSource localEventDataSource;
     private final EventEntityMapper eventEntityMapper;
 
-    @Inject public LocalEventRepository(@LocalDataSource EventDataSource localEventDataSource, EventEntityMapper eventEntityMapper) {
+    @Inject public LocalEventRepository(@Local EventDataSource localEventDataSource, EventEntityMapper eventEntityMapper) {
         this.localEventDataSource = localEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
     }

@@ -1,11 +1,8 @@
 package com.shootr.android.data.repository.datasource;
 
-import java.lang.annotation.Retention;
-import javax.inject.Qualifier;
+public interface CachedDataSource {
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    boolean isValid();
 
-@Qualifier @Retention(RUNTIME)
-public @interface CachedDataSource {
-
+    void invalidate();
 }

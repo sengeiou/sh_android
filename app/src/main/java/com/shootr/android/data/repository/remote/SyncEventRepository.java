@@ -3,12 +3,12 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
-import com.shootr.android.data.repository.datasource.RemoteDataSource;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -19,7 +19,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     private final EventDataSource remoteEventDataSource;
 
     @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper,
-      @LocalDataSource EventDataSource localEventDataSource, @RemoteDataSource EventDataSource remoteEventDataSource) {
+      @Local EventDataSource localEventDataSource, @Remote EventDataSource remoteEventDataSource) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;

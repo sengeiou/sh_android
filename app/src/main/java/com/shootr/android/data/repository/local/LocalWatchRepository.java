@@ -3,12 +3,12 @@ package com.shootr.android.data.repository.local;
 import android.support.v4.util.LongSparseArray;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
-import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
 import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
+import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class LocalWatchRepository implements WatchRepository {
     private final SessionRepository sessionRepository;
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
 
-    @Inject public LocalWatchRepository(@LocalDataSource WatchDataSource localWatchDataSource,
+    @Inject public LocalWatchRepository(@Local WatchDataSource localWatchDataSource,
       WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository,
       SyncableWatchEntityFactory syncableWatchEntityFactory) {
         this.localWatchDataSource = localWatchDataSource;

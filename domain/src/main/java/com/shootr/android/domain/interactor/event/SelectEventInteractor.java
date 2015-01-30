@@ -4,10 +4,9 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -26,7 +25,7 @@ public class SelectEventInteractor implements Interactor {
     private Long idEvent;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, EventRepository eventRepository,
-      @LocalRepository WatchRepository localWatchRepository, @RemoteRepository WatchRepository remoteWatchRepository,
+      @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.eventRepository = eventRepository;

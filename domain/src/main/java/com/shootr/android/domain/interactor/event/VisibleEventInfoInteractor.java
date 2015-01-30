@@ -8,8 +8,8 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.List;
@@ -27,9 +27,9 @@ public class VisibleEventInfoInteractor implements Interactor {
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @LocalRepository UserRepository localUserRepository,
-      @RemoteRepository WatchRepository remoteWatchRepository, @LocalRepository WatchRepository localWatchRepository,
-      @RemoteRepository EventRepository remoteEventRepository, @LocalRepository EventRepository localEventRepository) {
+      PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
+      @Remote WatchRepository remoteWatchRepository, @Local WatchRepository localWatchRepository,
+      @Remote EventRepository remoteEventRepository, @Local EventRepository localEventRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;

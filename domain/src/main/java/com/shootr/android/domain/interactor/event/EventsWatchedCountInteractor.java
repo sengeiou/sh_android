@@ -6,8 +6,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -31,8 +31,8 @@ public class EventsWatchedCountInteractor implements Interactor {
     private InteractorErrorCallback interactorErrorCallback;
 
     @Inject public EventsWatchedCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @RemoteRepository WatchRepository remoteWatchRepository,
-      @LocalRepository UserRepository localUserRepository) {
+      SessionRepository sessionRepository, @Remote WatchRepository remoteWatchRepository,
+      @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;

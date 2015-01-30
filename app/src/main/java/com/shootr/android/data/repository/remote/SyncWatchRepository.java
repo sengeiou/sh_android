@@ -4,9 +4,7 @@ import android.support.v4.util.LongSparseArray;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
-import com.shootr.android.data.repository.datasource.CachedDataSource;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
-import com.shootr.android.data.repository.datasource.RemoteDataSource;
+import com.shootr.android.data.repository.datasource.Cached;
 import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
@@ -16,8 +14,8 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -41,10 +39,10 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository 
     private final SyncableWatchEntityFactory syncableWatchEntityFactory;
     private final SyncTrigger syncTrigger;
 
-    @Inject public SyncWatchRepository(@LocalRepository UserRepository localUserRepository,
-      @RemoteRepository EventRepository remoteEventRepository, SessionRepository sessionRepository,
-      @LocalDataSource WatchDataSource localWatchDataSource, @RemoteDataSource WatchDataSource remoteWatchDataSource,
-      @CachedDataSource WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper,
+    @Inject public SyncWatchRepository(@Local UserRepository localUserRepository,
+      @Remote EventRepository remoteEventRepository, SessionRepository sessionRepository,
+      @Local WatchDataSource localWatchDataSource, @Remote WatchDataSource remoteWatchDataSource,
+      @Cached WatchDataSource cachedWatchDataSource, WatchEntityMapper watchEntityMapper,
       SyncTrigger syncTrigger, SyncableWatchEntityFactory syncableWatchEntityFactory) {
         this.localUserRepository = localUserRepository;
         this.remoteEventRepository = remoteEventRepository;

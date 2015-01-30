@@ -8,7 +8,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
-import com.shootr.android.domain.repository.LocalRepository;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,8 +21,8 @@ public class EventsListInteractor implements Interactor {
     private final WatchRepository localWatchRepository;
 
     @Inject public EventsListInteractor(InteractorHandler interactorHandler,
-      EventSearchRepository eventSearchRepository, @LocalRepository EventRepository localEventRepository,
-      @LocalRepository WatchRepository localWatchRepository) {
+      EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
+      @Local WatchRepository localWatchRepository) {
         this.interactorHandler = interactorHandler;
         this.eventSearchRepository = eventSearchRepository;
         this.localEventRepository = localEventRepository;

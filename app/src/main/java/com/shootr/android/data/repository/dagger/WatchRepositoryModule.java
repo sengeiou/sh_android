@@ -1,16 +1,14 @@
 package com.shootr.android.data.repository.dagger;
 
-import com.shootr.android.data.repository.datasource.CachedDataSource;
+import com.shootr.android.data.repository.datasource.Cached;
 import com.shootr.android.data.repository.datasource.watch.CachedWatchDatasource;
 import com.shootr.android.data.repository.datasource.watch.DatabaseWatchDataSource;
-import com.shootr.android.data.repository.datasource.LocalDataSource;
-import com.shootr.android.data.repository.datasource.RemoteDataSource;
 import com.shootr.android.data.repository.datasource.watch.ServerWatchDataSource;
 import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.data.repository.local.LocalWatchRepository;
 import com.shootr.android.data.repository.remote.SyncWatchRepository;
-import com.shootr.android.domain.repository.LocalRepository;
-import com.shootr.android.domain.repository.RemoteRepository;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.WatchRepository;
 import dagger.Module;
 import dagger.Provides;
@@ -24,27 +22,27 @@ import javax.inject.Singleton;
   library = true)
 public class WatchRepositoryModule {
 
-    @Provides @Singleton @LocalRepository WatchRepository provideLocalWatchRepository(
+    @Provides @Singleton @Local WatchRepository provideLocalWatchRepository(
       LocalWatchRepository watchRepository) {
         return watchRepository;
     }
 
-    @Provides @Singleton @RemoteRepository WatchRepository provideRemoteWatchRepository(
+    @Provides @Singleton @Remote WatchRepository provideRemoteWatchRepository(
       SyncWatchRepository watchRepository) {
         return watchRepository;
     }
 
-    @Provides @Singleton @LocalDataSource WatchDataSource provideLocalDataSource(
+    @Provides @Singleton @Local WatchDataSource provideLocalDataSource(
       DatabaseWatchDataSource watchDataSource) {
         return watchDataSource;
     }
 
-    @Provides @Singleton @RemoteDataSource WatchDataSource provideRemoteDataSource(
+    @Provides @Singleton @Remote WatchDataSource provideRemoteDataSource(
       ServerWatchDataSource watchDataSource) {
         return watchDataSource;
     }
 
-    @Provides @Singleton @CachedDataSource WatchDataSource provideCachedDataSource(CachedWatchDatasource watchDatasource) {
+    @Provides @Singleton @Cached WatchDataSource provideCachedDataSource(CachedWatchDatasource watchDatasource) {
         return watchDatasource;
     }
 }

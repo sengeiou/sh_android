@@ -1,4 +1,4 @@
-package com.shootr.android.data.repository.datasource;
+package com.shootr.android.domain.repository;
 
 import java.lang.annotation.Retention;
 import javax.inject.Qualifier;
@@ -6,6 +6,6 @@ import javax.inject.Qualifier;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Qualifier @Retention(RUNTIME)
-public @interface LocalDataSource {
+public @interface Remote {
 
 }
