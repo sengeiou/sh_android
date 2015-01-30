@@ -1,4 +1,4 @@
-package com.shootr.android.task;
+package com.shootr.android.data.bus;
 
 import android.os.Handler;
 import android.os.Looper;

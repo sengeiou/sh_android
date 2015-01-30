@@ -1,4 +1,4 @@
-package com.shootr.android.task;
+package com.shootr.android.data.bus;
 
 import com.squareup.otto.Bus;
 import dagger.Module;

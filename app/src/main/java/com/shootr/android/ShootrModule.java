@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.DataModule;
-import com.shootr.android.task.BusModule;
+import com.shootr.android.data.bus.BusModule;
 import com.shootr.android.ui.UiModule;
 import javax.inject.Singleton;
 
