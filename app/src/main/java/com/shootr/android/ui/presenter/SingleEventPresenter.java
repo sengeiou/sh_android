@@ -194,7 +194,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setEventPicture(eventModel.getPicture());
         //TODO only if I'm author, else hide
         singleEventView.showEditEventButton();
-        singleEventView.showEditPictureButton();
     }
 
     private void renderWatchersCount(int watchersCount) {
