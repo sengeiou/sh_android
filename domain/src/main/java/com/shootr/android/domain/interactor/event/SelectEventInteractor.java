@@ -45,8 +45,10 @@ public class SelectEventInteractor implements Interactor {
         stopWatchingLapsedEvent();
 
         Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (oldVisibleEventWatch == null || (!oldVisibleEventWatch.getIdEvent().equals(idEvent))) {
+        if (oldVisibleEventWatch != null) {
             hideOldVisibleEvent(oldVisibleEventWatch);
+        }
+        if (oldVisibleEventWatch == null || (!oldVisibleEventWatch.getIdEvent().equals(idEvent))) {
             setNewVisibleEvent();
         }
     }
