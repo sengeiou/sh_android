@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -29,7 +30,7 @@ public class RemoveProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final TimeUtils timeUtils;
     private final UserEntityMapper userEntityMapper;
 
-    @Inject public RemoveProfilePhotoJob(Application application, Bus bus, NetworkUtil networkUtil,
+    @Inject public RemoveProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       ShootrService shootrService, UserManager userManager, SessionRepository sessionRepository, UserEntityModelMapper userModelMapper, TimeUtils timeUtils,
       UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);

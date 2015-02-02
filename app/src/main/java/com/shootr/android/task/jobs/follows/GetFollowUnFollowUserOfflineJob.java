@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.squareup.otto.Bus;
@@ -35,7 +36,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     private int followUnfollowType;
 
     @Inject
-    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager,
+    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, @Main Bus bus, UserManager userManager, FollowManager followManager,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;

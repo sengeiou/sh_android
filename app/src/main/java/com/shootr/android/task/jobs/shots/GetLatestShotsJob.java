@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.shots;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.data.entity.ShotEntity;
@@ -33,7 +34,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     private Long idUser;
     private UserEntity user;
 
-    @Inject public GetLatestShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
+    @Inject public GetLatestShotsJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService service,
       ShotManager shotManager, UserManager userManager, ShotModelMapper shotModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;

@@ -1,14 +1,14 @@
 package com.shootr.android.interactor;
 
 import com.shootr.android.domain.executor.PostExecutionThread;
-import com.shootr.android.domain.interactor.EventsCountInteractor;
-import com.shootr.android.domain.interactor.EventsListInteractor;
-import com.shootr.android.domain.interactor.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.GetPeopleInteractor;
+import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
+import com.shootr.android.domain.interactor.event.EventsListInteractor;
+import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.interactor.SelectEventInteractor;
-import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.WatchingInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @Module(
   injects = {
     JobInteractorHandler.class, GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
-    EventsCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class, EventsSearchInteractor.class,
+    EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class, EventsSearchInteractor.class,
   },
   complete = false)
 public class InteractorModule {

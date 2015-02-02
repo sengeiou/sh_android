@@ -5,6 +5,7 @@ import android.content.Context;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -20,7 +21,7 @@ public abstract class ShootrBaseJob<T> extends Job {
     private Bus bus;
     private NetworkUtil networkUtil;
 
-    protected ShootrBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
+    protected ShootrBaseJob(Params params, Application application, @Main Bus bus, NetworkUtil networkUtil) {
         super(params);
         this.application = application;
         this.bus = bus;

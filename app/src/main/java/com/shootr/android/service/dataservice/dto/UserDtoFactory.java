@@ -205,12 +205,6 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_USERS, od);
     }
 
-    public Map<String,Object>[] getDataForFollow(){
-        Map<String,Object>[] array = new HashMap[1];
-        array[0] = followMapper.toDto(null);
-        return array;
-    }
-
     public GenericDto saveUserDto(UserEntity userEntity) {
         MetadataDto md = new MetadataDto.Builder()
           .operation(ServiceConstants.OPERATION_UPDATE_CREATE)

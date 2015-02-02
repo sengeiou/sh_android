@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.shots;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.ShootrServerException;
@@ -28,7 +29,7 @@ public class UploadShotImageJob extends ShootrBaseJob<UploadShotImageEvent> {
 
     private File photoFile;
 
-    @Inject public UploadShotImageJob(Application application, Bus bus, NetworkUtil networkUtil,
+    @Inject public UploadShotImageJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       PhotoService photoService, ImageResizer imageResizer) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.photoService = photoService;

@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -32,7 +33,7 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     private SessionRepository sessionRepository;
 
     @Inject
-    public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, UserManager userManager,
+    public SearchPeopleLocalJob(Application app, @Main Bus bus, NetworkUtil networkUtil, UserManager userManager,
       FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.userManager = userManager;

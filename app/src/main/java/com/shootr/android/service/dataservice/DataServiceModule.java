@@ -42,6 +42,6 @@ public class DataServiceModule {
     }
     @Provides @Singleton EventDtoFactory provideEventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper, WatchMapper watchMapper, TeamMapper teamMapper,
       TimeUtils timeUtils){
-        return  new EventDtoFactory(utilityDtoFactory, eventEntityMapper, watchMapper, teamMapper, timeUtils);
+        return  new EventDtoFactory(utilityDtoFactory, eventEntityMapper, watchMapper, timeUtils);
     }
 }

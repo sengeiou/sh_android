@@ -39,6 +39,10 @@ public class EventInfo {
         this.event = event;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
 
         private EventInfo eventInfo;

@@ -2,36 +2,39 @@ package com.shootr.android.task.jobs.timeline;
 
 import android.app.Application;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.gcm.event.RequestWatchByPushEvent;
-import com.squareup.otto.Bus;
-
+import com.shootr.android.data.bus.BusPublisher;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.bus.WatchUpdateRequest;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.ui.model.ShotModel;
+import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
 
 public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEvent>{
 
     private final Bus bus;
+    private final BusPublisher busPublisher;
     private ShotManager shotManager;
     private ShootrService service;
 
-    @Inject public RetrieveNewShotsTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      ShotManager shotManager, FollowManager followManager, SessionRepository sessionRepository) {
+    @Inject public RetrieveNewShotsTimeLineJob(Application context, @Main Bus bus, ShootrService service, NetworkUtil networkUtil,
+      ShotManager shotManager, FollowManager followManager, SessionRepository sessionRepository,
+      BusPublisher busPublisher) {
         super(context, bus, networkUtil, followManager, sessionRepository);
         this.bus = bus;
         this.shotManager = shotManager;
         this.service = service;
+        this.busPublisher = busPublisher;
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -57,7 +60,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
     private void detectNotWatchingAndNotify(List<ShotEntity> newShots) {
         for (ShotEntity newShot : newShots) {
             if (newShot.getType() == ShotEntity.TYPE_WATCH_NEGATIVE) {
-                bus.post(new RequestWatchByPushEvent());
+                busPublisher.post(new WatchUpdateRequest.Event());
                 break;
             }
         }

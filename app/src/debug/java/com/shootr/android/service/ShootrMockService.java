@@ -15,149 +15,128 @@ import javax.inject.Inject;
 
 public class ShootrMockService implements ShootrService {
 
+    private final ShootrService shootrService;
     private long delay;
     private int variancePercentage;
     private int errorPercentage;
 
-    @Inject public ShootrMockService() {
+    @Inject public ShootrMockService(ShootrService shootrService) {
         //TODO inicializar y usar valores de mockeo mediante preferencias
         //TODO mirar la implementación de AndroidMockValue persistance https://github.com/square/retrofit/blob/master/retrofit-mock/src/main/java/retrofit/android/AndroidMockValuePersistence.java
+        this.shootrService = shootrService;
     }
 
-    @Override
-    public UserEntity login(String id, String password) {
-        if (id.equals("rafa.vazsan@gmail.com") || id.equals("sloydev")) {
-            UserEntity mockUser = new UserEntity();
-            mockUser.setIdUser(1L);
-            mockUser.setName("Rafa");
-            mockUser.setSessionToken("Nnananananananana");
-            mockUser.setEmail("rafa.vazsan@gmail.com");
-            mockUser.setUserName("rafavazsan");
-            mockUser.setFavoriteTeamId(1l);
-            mockUser.setFavoriteTeamName("Sevilla FC");
-            mockUser.setPhoto("http://example.com");
-            return mockUser;
-        }
-        return null;
+    @Override public UserEntity login(String id, String password) throws IOException {
+        return shootrService.login(id, password);
     }
 
     @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
-        return null;
+        return shootrService.getFollowers(idUserFollowed, lastModifiedDate);
     }
 
     @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
-        return null;
+        return shootrService.getFollowing(idUser, lastModifiedDate);
     }
 
     @Override public ShotEntity getShotById(Long idShot) throws IOException {
-        return null;
+        return shootrService.getShotById(idShot);
     }
 
     @Override public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
-        return null;
+        return shootrService.getNewShots(followingUserIds, newestShotDate);
     }
 
-    @Override public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
-        return null;
+    @Override public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate)
+      throws IOException {
+        return shootrService.getOlderShots(followingUserIds, oldestShotDate);
     }
 
-    @Override public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
-        return null;
+    @Override public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate)
+      throws IOException {
+        return shootrService.getShotsByUserIdList(followingUserIds, lastModifiedDate);
     }
 
-    @Override public ShotEntity postNewShot(Long idUser, String comment, Long idEvent) throws IOException {
-        return null;
+    @Override public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent)
+      throws IOException {
+        return shootrService.postNewShotWithImage(idUser, comment, imageUrl, idEvent);
     }
 
-    @Override public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent) throws IOException {
-        return null;
-    }
-
-    @Override
-    public UserEntity getUserByIdUser(Long idUser) throws IOException {
-        return null;
+    @Override public UserEntity getUserByIdUser(Long idUser) throws IOException {
+        return shootrService.getUserByIdUser(idUser);
     }
 
     @Override public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
       int pageOffset) throws IOException {
-        return null;
+        return shootrService.searchUsersByNameOrNickNamePaginated(searchQuery, pageOffset);
     }
 
     @Override public FollowEntity getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws IOException {
-        return null;
+        return shootrService.getFollowByIdUserFollowed(currentUserId, idUser);
     }
 
     @Override public DeviceEntity updateDevice(DeviceEntity device) throws IOException {
-        return null;
+        return shootrService.updateDevice(device);
     }
 
     @Override public DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
-        return null;
+        return shootrService.getDeviceByUniqueId(uniqueDeviceId);
     }
 
     @Override public FollowEntity followUser(FollowEntity follow) throws IOException {
-        return null;
+        return shootrService.followUser(follow);
     }
 
     @Override public FollowEntity unfollowUser(FollowEntity follow) throws IOException {
-        return null;
+        return shootrService.unfollowUser(follow);
     }
 
-    @Override public EventEntity getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam)
+    @Override public List<WatchEntity> getWatchesFromUsersAndMe(List<Long> followingIds, Long idCurrentUser)
       throws IOException {
-        return null;
-    }
-
-    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long idCurrentUser)
-      throws IOException {
-        return null;
+        return shootrService.getWatchesFromUsersAndMe(followingIds, idCurrentUser);
     }
 
     @Override public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException {
-        return null;
+        return shootrService.getWatchesFromUsersByEvent(idEvent, userIds);
     }
 
     @Override public WatchEntity getVisibleWatch(Long currentUserId) throws IOException {
-        return null;
+        return shootrService.getVisibleWatch(currentUserId);
     }
 
     @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {
-        return null;
+        return shootrService.getEventsByIds(eventIds);
     }
 
     @Override public WatchEntity setWatchStatus(WatchEntity watch) throws IOException {
-        return null;
+        return shootrService.setWatchStatus(watch);
     }
 
     @Override public WatchEntity getWatchStatus(Long idUser, Long idEvent) throws IOException {
-        return null;
+        return shootrService.getWatchStatus(idUser, idEvent);
     }
 
     @Override public EventEntity getEventById(Long idEvent) throws IOException {
-        return null;
-    }
-
-    @Override public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException {
-        return null;
+        return shootrService.getEventById(idEvent);
     }
 
     @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
-        return null;
+        return shootrService.getLatestsShotsFromIdUser(idUser, latestShotNumber);
     }
 
     @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
-        return null;
+        return shootrService.saveUserProfile(userEntity);
     }
 
-    @Override public List<TeamEntity> searchTeams(String queryText) {
-        return null;
+    @Override public List<TeamEntity> searchTeams(String queryText) throws IOException {
+        return shootrService.searchTeams(queryText);
     }
 
     @Override public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
       throws IOException {
-        return null;
+        return shootrService.getEventSearch(query, eventsWatchesCounts);
     }
 
+    //region Settings
     public long getDelay() {
         return delay;
     }
@@ -181,4 +160,5 @@ public class ShootrMockService implements ShootrService {
     public void setErrorPercentage(int errorPercentage) {
         this.errorPercentage = errorPercentage;
     }
+    //endregion
 }

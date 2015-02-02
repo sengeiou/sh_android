@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.shots;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -34,7 +35,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     private String imageUrl;
     private final List<FieldValidationError> fieldValidationErrors;
 
-    @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
+    @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, @Main Bus bus, ShootrService service,
       SessionRepository sessionRepository, ShotManager shotManager, WatchManager watchManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;

@@ -14,14 +14,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
 
 public class TeamDtoFactory {
 
-    static final int NUMBER_OF_DAYS_AGO = 7;
-
-    public static final Integer GET_FOLLOWERS = 0;
-    public static final Integer GET_FOLLOWING = 1;
-
-    public static final int FOLLOW_TYPE = 0;
-    public static final int UNFOLLOW_TYPE = 1;
-
     private static final String ALIAS_SEARCH_TEAMS = " SEARCH_TEAM";
     private static final int TEAM_SEARCH_LIMIT = 50;
 

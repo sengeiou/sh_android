@@ -1,12 +1,12 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
-import com.shootr.android.domain.interactor.GetPeopleInteractor;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -17,14 +17,14 @@ import javax.inject.Inject;
 
 public class PeoplePresenter implements Presenter, CommunicationPresenter {
 
-    private final Bus bus;
+    private final @Main Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final GetPeopleInteractor getPeopleInteractor;
     private final UserModelMapper userModelMapper;
 
     private PeopleView peopleView;
 
-    @Inject public PeoplePresenter(Bus bus, ErrorMessageFactory errorMessageFactory,
+    @Inject public PeoplePresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       GetPeopleInteractor getPeopleInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;

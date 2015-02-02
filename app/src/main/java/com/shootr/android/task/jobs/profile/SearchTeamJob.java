@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.SearchTeamResultEvent;
@@ -23,7 +24,7 @@ public class SearchTeamJob extends ShootrBaseJob<SearchTeamResultEvent> {
 
     private String queryText;
 
-    @Inject protected SearchTeamJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
+    @Inject protected SearchTeamJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService service,
       TeamModelMapper teamModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;

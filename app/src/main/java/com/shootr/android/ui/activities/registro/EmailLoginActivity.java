@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
 import com.squareup.otto.Bus;
@@ -45,7 +46,7 @@ public class EmailLoginActivity extends BaseActivity {
     private static final int BUTTON_LOADING = 1;
 
     @Inject JobManager jobManager;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject @Deprecated UserEntityMapper userEntityMapper;
 
     @Inject SessionRepository sessionRepository;

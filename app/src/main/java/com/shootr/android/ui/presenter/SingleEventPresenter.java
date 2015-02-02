@@ -1,15 +1,18 @@
 package com.shootr.android.ui.presenter;
 
 import android.support.annotation.Nullable;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
-import com.shootr.android.domain.interactor.EventsCountInteractor;
-import com.shootr.android.domain.interactor.NotificationInteractor;
-import com.shootr.android.domain.interactor.SelectEventInteractor;
-import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.WatchingInteractor;
-import com.shootr.android.gcm.event.RequestWatchByPushEvent;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.EventNotificationInteractor;
+import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -26,11 +29,11 @@ import javax.inject.Inject;
 public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
-    private final Bus bus;
+    private final @Main Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
-    private final NotificationInteractor notificationInteractor;
-    private final EventsCountInteractor eventsCountInteractor;
+    private final EventNotificationInteractor eventNotificationInteractor;
+    private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
     private final SelectEventInteractor selectEventInteractor;
 
     private final EventModelMapper eventModelMapper;
@@ -43,15 +46,15 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
     private int watchersCount;
 
-    @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor,
-      EventsCountInteractor eventsCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+    @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
+      WatchingInteractor watchingInteractor, EventNotificationInteractor eventNotificationInteractor,
+      EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
-        this.notificationInteractor = notificationInteractor;
-        this.eventsCountInteractor = eventsCountInteractor;
+        this.eventNotificationInteractor = eventNotificationInteractor;
+        this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
         this.selectEventInteractor = selectEventInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
@@ -71,36 +74,32 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromEdit(@Nullable String statusText) {
-        watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
+        updateWatch(currentUserWatchingModel.isWatching(), statusText);
     }
 
     public void resultFromSelectEvent(Long idEventSelected) {
         if (!isCurrentEventWatch(idEventSelected)) {
             this.showViewLoading();
-            selectEventInteractor.selectEvent(idEventSelected);
+            selectEventInteractor.selectEvent(idEventSelected, new SelectEventInteractor.Callback() {
+                @Override public void onLoaded(Watch watch) {
+                    onEventChanged();
+                }
+            });
         }
     }
 
     public void sendWatching(boolean isWatching) {
-        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), currentUserWatchingModel.getPlace());
-
-        //TODO probably better to receive the new Watch from the Interactor
-        this.updateWatchersCount(isWatching);
-        //currentUserWatchingModel.setWatching(isWatching);
-        singleEventView.setCurrentUserWatching(currentUserWatchingModel);
-        singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO this is bussines logic
+        updateWatch(isWatching, currentUserWatchingModel.getPlace());
     }
 
-    @Subscribe
-    public void onWatchingUpdated(Watch currentUserWatch) {
-        if (isCurrentEventWatch(currentUserWatch.getIdEvent())) {
-            this.renderCurrentUserWatching(currentUserWatch);
-        } else {
-            //TODO usar el mismo evento de bus para cosas distintas es un TRUÑO. Cada vez el bus es peor opción.
-            this.onEventChanged();
-            //TODO it's triggered twice (local and server). That ain't good.
-        }
+    private void updateWatch(boolean isWatching, String statusText) {
+        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), statusText,
+          new WatchingInteractor.Callback() {
+              @Override public void onLoaded(Watch watchUpdated) {
+                  updateWatchersCount(watchUpdated.isWatching());
+                  renderCurrentUserWatching(watchUpdated);
+              }
+          });
     }
 
     private void onEventChanged() {
@@ -109,7 +108,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void toggleNotifications() {
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
-        notificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
+        eventNotificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
         //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
@@ -117,16 +116,24 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     @Subscribe
-    public void onNewWatchDetected(RequestWatchByPushEvent event) {
+    public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         loadEventInfo();
         loadEventsCount();
     }
 
     private void loadEventsCount() {
-        eventsCountInteractor.obtainEventsCount();
+        eventsWatchedCountInteractor.obtainEventsCount(new EventsWatchedCountInteractor.Callback() {
+            @Override public void onLoaded(Integer count) {
+                onEventsCountLoaded(count);
+            }
+        }, new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                //TODO handle error
+            }
+        });
     }
 
-    @Subscribe public void onEventsCountLoaded(Integer count) {
+    public void onEventsCountLoaded(Integer count) {
         renderEventsCount(count);
     }
 
@@ -136,10 +143,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void getEventInfo() {
-        eventInfoInteractor.obtainEventInfo();
+        eventInfoInteractor.obtainEventInfo(new VisibleEventInfoInteractor.Callback() {
+            @Override public void onLoaded(EventInfo eventInfo) {
+                onEventInfoLoaded(eventInfo);
+            }
+        });
     }
 
-    @Subscribe
     public void onEventInfoLoaded(EventInfo eventInfo) {
         if (eventInfo.getEvent() == null) {
             this.showViewEmpty();

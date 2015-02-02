@@ -2,6 +2,8 @@ package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.domain.Event;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class EventEntityMapper {
@@ -22,4 +24,11 @@ public class EventEntityMapper {
         return event;
     }
 
+    public List<Event> transform(List<EventEntity> eventEntities) {
+        List<Event> events = new ArrayList<>(eventEntities.size());
+        for (EventEntity eventEntity : eventEntities) {
+            events.add(transform(eventEntity));
+        }
+        return events;
+    }
 }

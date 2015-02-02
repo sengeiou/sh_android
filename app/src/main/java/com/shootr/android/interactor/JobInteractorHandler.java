@@ -1,6 +1,7 @@
 package com.shootr.android.interactor;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.task.NetworkConnection;
@@ -14,7 +15,7 @@ public class JobInteractorHandler implements InteractorHandler, JobWrapper.Error
     private final JobManager jobManager;
 
 
-    @Inject public JobInteractorHandler(Bus bus, NetworkConnection networkConnection, JobManager jobManager) {
+    @Inject public JobInteractorHandler(@Main Bus bus, NetworkConnection networkConnection, JobManager jobManager) {
         this.bus = bus;
         this.networkConnection = networkConnection;
         this.jobManager = jobManager;

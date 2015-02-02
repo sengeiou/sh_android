@@ -24,13 +24,15 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
-import com.shootr.android.ui.presenter.WatchingRequestPresenter;
+import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -68,11 +70,12 @@ public class TimelineFragment extends BaseFragment
     public static final Long WATCH_STATUS_WATCHING = 1L;
 
     @Inject PicassoWrapper picasso;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
     @Inject AndroidTimeUtils timeUtils;
     @Inject JobManager jobManager;
-    @Inject WatchingRequestPresenter watchingRequestPresenter;
+    @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject SessionRepository sessionRepository;
+    @Inject WatchNumberInteractor watchNumberInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -160,7 +163,7 @@ public class TimelineFragment extends BaseFragment
         bus.register(this);
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
-        watchingRequestPresenter.resume();
+        watchNumberPresenter.resume();
     }
 
     @Override
@@ -168,7 +171,7 @@ public class TimelineFragment extends BaseFragment
         super.onPause();
         bus.unregister(this);
         stopPollingShots();
-        watchingRequestPresenter.pause();
+        watchNumberPresenter.pause();
     }
 
     @Subscribe
@@ -231,29 +234,7 @@ public class TimelineFragment extends BaseFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loadInitialTimeline();
-        watchingRequestPresenter.initialize(this, ((BaseActivity) getActivity()).getObjectGraph());
-    }
-
-    @Override public void showWatchingRequest(WatchingRequestModel watchingRequestModel) {
-        if (watchingRequestModel != null) {
-            watchingRequestContainerView.setVisibility(View.VISIBLE);
-            watchingRequestTitleView.setText(watchingRequestModel.getTitle());
-            watchingRequestSubtitleView.setText(watchingRequestModel.getSubtitle());
-        }
-    }
-
-    @Override public void hideWatchingRequest() {
-        watchingRequestContainerView.setVisibility(View.GONE);
-    }
-
-    @OnClick(R.id.timeline_watching_action_yes)
-    public void onWatchRequestAnswerPositive() {
-        watchingRequestPresenter.answerCurrentWatchingRequestPositive();
-    }
-
-    @OnClick(R.id.timeline_watching_action_ignore)
-    public void onWatchRequestAnswerNegative() {
-        watchingRequestPresenter.answerCurrentWatchingRequestNegative();
+        watchNumberPresenter.initialize(this);
     }
 
     @Override
@@ -273,7 +254,7 @@ public class TimelineFragment extends BaseFragment
         setBadgeIcon(getActivity(), icon, 0);
         menuItem.setIcon(icon);
         menuItem.getIcon();
-        watchingRequestPresenter.menuCreated();
+        watchNumberPresenter.menuCreated();
     }
 
     @Override

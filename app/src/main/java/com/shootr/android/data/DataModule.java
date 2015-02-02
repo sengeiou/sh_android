@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.data.repository.SessionRepositoryImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -19,17 +20,12 @@ import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -38,7 +34,7 @@ import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
-import com.shootr.android.ui.presenter.WatchingRequestPresenter;
+import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.BitmapImageResizer;
@@ -57,24 +53,20 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.manager.AbstractManager;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.gcm.GCMIntentService;
 import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.sync.ShootrSyncAdapter;
-import com.shootr.android.sync.InfoCleaner;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
@@ -126,8 +118,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
-    RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
-    SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
+    RetrieveOldShotsTimeLineJob.class,
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
 
@@ -157,7 +148,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ShotDetailPresenter.class,
 
-    WatchingRequestPresenter.class,
+    WatchNumberPresenter.class,
 
     PeoplePresenter.class,
 
@@ -244,20 +235,12 @@ public class DataModule {
         return new NotificationBuilderFactory();
     }
 
-    @Provides @Singleton InfoListBuilderFactory provideInfoListBuilderFactory(){
-        return new InfoListBuilderFactory();
-    }
-
     @Provides LogTreeFactory provideLogTreeFactory() {
         return new LogTreeFactoryImpl();
     }
 
     @Provides @Singleton SessionRepository provideSessionManager(SessionRepositoryImpl sessionManager) {
         return sessionManager;
-    }
-
-    @Provides @Singleton InfoCleaner provideInfoCleaner(EventManager eventManager, WatchManager watchManager) {
-        return new InfoCleaner(eventManager, watchManager);
     }
 
     @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.bus.Main;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -30,7 +31,7 @@ public class FacebookRegistroActivity extends BaseActivity {
     private static final String KEY_AVATAR = "avatar";
 
     @Inject JobManager jobManager;
-    @Inject Bus bus;
+    @Inject @Main Bus bus;
 
     @InjectView(R.id.facebook_login_email) TextView mEmailText;
     @InjectView(R.id.facebook_login_username) EditText mUsernameText;

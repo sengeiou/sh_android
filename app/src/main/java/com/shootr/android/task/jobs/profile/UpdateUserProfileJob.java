@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
@@ -43,7 +44,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private UserModel updatedUserModel;
     private final List<FieldValidationError> fieldValidationErrors;
 
-    @Inject public UpdateUserProfileJob(Application application, Bus bus, NetworkUtil networkUtil,
+    @Inject public UpdateUserProfileJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       ShootrService service, SessionRepository sessionRepository, UserManager userManager, TimeUtils timeUtils,
       UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);

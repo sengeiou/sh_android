@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -34,7 +35,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     private SessionRepository sessionRepository;
 
     @Inject
-    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
+    public GetFollowingsJob(Application application, NetworkUtil networkUtil, @Main Bus bus, ShootrService service,
       UserManager userManager, FollowManager followManager, SessionRepository sessionRepository) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;

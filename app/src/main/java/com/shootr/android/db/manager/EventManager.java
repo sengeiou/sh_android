@@ -65,29 +65,6 @@ public class EventManager extends AbstractManager{
         return resultEvents;
     }
 
-    public EventEntity getNextEventFromTeam(Long favoriteTeamId) {
-        String whereSelection =
-          "("+ DatabaseContract.EventTable.ID_LOCAL_TEAM + "= ? OR " + DatabaseContract.EventTable.ID_VISITOR_TEAM + "= ?) AND "+ DatabaseContract.EventTable.END_DATE
-            +">"+timeUtils.getCurrentTime();
-        String[] whereArguments = new String[] { String.valueOf(favoriteTeamId), String.valueOf(favoriteTeamId) };
-        Cursor queryResult = getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null,
-          DatabaseContract.EventTable.BEGIN_DATE, "1");
-
-        EventEntity eventEntity = null;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            eventEntity = eventEntityMapper.fromCursor(queryResult);
-        }
-        queryResult.close();
-        return eventEntity;
-    }
-
-    public void saveEvents(List<EventEntity> eventEntities){
-        for(EventEntity eventEntity : eventEntities){
-            saveEvent(eventEntity);
-        }
-    }
-
     public void saveEvent(EventEntity eventEntity) {
         ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
         if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {
@@ -135,9 +112,5 @@ public class EventManager extends AbstractManager{
         }
         queryResult.close();
         return resultEvents;
-    }
-
-    public void deleteAllEvents() {
-        getWritableDatabase().execSQL("DELETE FROM "+ DatabaseContract.EventTable.TABLE);
     }
 }

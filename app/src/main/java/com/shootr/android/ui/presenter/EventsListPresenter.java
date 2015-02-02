@@ -1,9 +1,10 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
-import com.shootr.android.domain.interactor.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -11,7 +12,7 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
-import com.shootr.android.domain.interactor.EventsListInteractor;
+import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
 public class EventsListPresenter implements Presenter, CommunicationPresenter{
 
     //region Dependencies
-    private final Bus bus;
+    private final @Main Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;
@@ -31,7 +32,7 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
 
     private EventsListView eventsListView;
 
-    @Inject public EventsListPresenter(Bus bus, EventsListInteractor eventsListInteractor,
+    @Inject public EventsListPresenter(@Main Bus bus, EventsListInteractor eventsListInteractor,
       EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;

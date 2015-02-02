@@ -19,7 +19,6 @@ public class ShootrSyncAdapter extends AbstractThreadedSyncAdapter {
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject JobManager jobManager;
     @Inject UserManager userManager;
-    @Inject InfoCleaner infoCleaner;
 
     /**
      * Compatibility with versions previous to 3.0
@@ -48,16 +47,7 @@ public class ShootrSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
-
         Timber.e("Entra en onPerformSync");
-
-        try {
-            synchronized (this) {
-                infoCleaner.clean();
-            }
-        } catch (IllegalStateException e) {
-            Timber.e("Exception onPerformSync", e.getMessage(),e);
-        }
     }
 
 }
