@@ -39,13 +39,14 @@ public class DebugDataModule {
     private static final boolean DEFAULT_SEEN_DEBUG_DRAWER = false; // Show debug drawer first time.
     private static final boolean DEFAULT_NETWORK_ENABLED = true;
     private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
+    public static final boolean DEFAULT_DEBUG_MODE = false;
 
     @Provides @Singleton @ApiEndpoint StringPreference provideEndpointPreference(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_endpoint", ApiEndpoints.TEST.url);
     }
 
-    @Provides @Singleton @IsMockMode boolean provideIsMockMode(@ApiEndpoint StringPreference selectedEndpoint) {
-        return ApiEndpoints.isMockMode(selectedEndpoint.get());
+    @Provides @Singleton @DebugMode BooleanPreference provideDebugMode(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "debug_network_debug_mode", DEFAULT_DEBUG_MODE);
     }
 
     @Provides @Singleton @NetworkProxy StringPreference provideNetworkProxy(SharedPreferences preferences) {

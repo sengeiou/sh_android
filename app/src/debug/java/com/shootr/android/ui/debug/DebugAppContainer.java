@@ -28,6 +28,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.MockServiceAdapter;
 import com.squareup.okhttp.OkHttpClient;
@@ -90,6 +91,7 @@ public class DebugAppContainer implements AppContainer {
     private final Picasso picasso;
     private final StringPreference networkEndpoint;
     private final BooleanPreference networkEnabled;
+    private final BooleanPreference debugMode;
     private final StringPreference networkProxy;
     private final IntPreference animationSpeed;
     private final BooleanPreference picassoDebugging;
@@ -107,15 +109,16 @@ public class DebugAppContainer implements AppContainer {
 
     @Inject
     public DebugAppContainer(OkHttpClient client, Picasso picasso, @ApiEndpoint StringPreference networkEndpoint,
-      @NetworkEnabled BooleanPreference networkEnabled, @NetworkProxy StringPreference networkProxy,
-      @AnimationSpeed IntPreference animationSpeed, @PicassoDebugging BooleanPreference picassoDebugging,
-      @ScalpelEnabled BooleanPreference scalpelEnabled,
+      @NetworkEnabled BooleanPreference networkEnabled, @DebugMode BooleanPreference debugMode,
+      @NetworkProxy StringPreference networkProxy, @AnimationSpeed IntPreference animationSpeed,
+      @PicassoDebugging BooleanPreference picassoDebugging, @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @InitialSetupCompleted BooleanPreference initialSetupCompleted, @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled, MockServiceAdapter mockServiceAdapter,
       Application app) {
         this.client = client;
         this.picasso = picasso;
+        this.debugMode = debugMode;
         this.networkProxy = networkProxy;
         this.networkEnabled = networkEnabled;
         this.networkEndpoint = networkEndpoint;
@@ -140,12 +143,12 @@ public class DebugAppContainer implements AppContainer {
 
     @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
     @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
-    @InjectView(R.id.debug_ui_pixel_grid) Switch networkEnabledView;
+    @InjectView(R.id.debug_network_debugmode) Switch debugModeView;
+    @InjectView(R.id.debug_network_enabled) Switch networkEnabledView;
     @InjectView(R.id.debug_network_delay) Spinner networkDelayView;
     @InjectView(R.id.debug_network_variance) Spinner networkVarianceView;
     @InjectView(R.id.debug_network_error) Spinner networkErrorView;
     @InjectView(R.id.debug_network_proxy) Spinner networkProxyView;
-    @InjectView(R.id.debug_network_logging) Spinner networkLoggingView;
 
     @InjectView(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
@@ -218,6 +221,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void setupNetworkSection() {
+        //region Endpoint
         final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
         final EnumAdapter<ApiEndpoints> endpointAdapter = new EnumAdapter<>(drawerContext, ApiEndpoints.class);
         endpointView.setAdapter(endpointAdapter);
@@ -242,7 +246,21 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        //endregion
 
+        //region Debug mode
+        boolean debugModeValue = debugMode.get();
+        debugModeView.setChecked(debugModeValue);
+        debugModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Timber.d("Setting Debug Mode to " + isChecked);
+                debugMode.set(isChecked);
+                relaunch();
+            }
+        });
+        //endregion
+
+        //region Network enabled
         boolean networkEnabledValue = networkEnabled.get();
         networkEnabledView.setChecked(networkEnabledValue);
         networkEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -251,7 +269,9 @@ public class DebugAppContainer implements AppContainer {
                 networkEnabled.set(isChecked);
             }
         });
+        //endregion
 
+        //region Delay
         final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
         networkDelayView.setAdapter(delayAdapter);
         networkDelayView.setSelection(NetworkDelayAdapter.getPositionForValue(mockServiceAdapter.getDelay()));
@@ -270,7 +290,9 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        //endregion
 
+        //region Variance
         final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
         networkVarianceView.setAdapter(varianceAdapter);
         networkVarianceView.setSelection(
@@ -290,7 +312,9 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        //endregion
 
+        //region Error
         final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
         networkErrorView.setAdapter(errorAdapter);
         networkErrorView.setSelection(NetworkErrorAdapter.getPositionForValue(mockServiceAdapter.getErrorPercentage()));
@@ -309,7 +333,9 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        //endregion
 
+        //region Proxy
         int currentProxyPosition = client.getProxy() != null ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
         final ProxyAdapter proxyAdapter = new ProxyAdapter(activity, networkProxy);
         networkProxyView.setAdapter(proxyAdapter);
@@ -333,40 +359,21 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        //endregion
 
         // Only show the endpoint editor when a custom endpoint is in use.
         endpointEditView.setVisibility(currentEndpoint == ApiEndpoints.CUSTOM ? VISIBLE : GONE);
 
-        if (currentEndpoint == ApiEndpoints.MOCK_MODE) {
+        if (debugMode.get()) {
             // Disable network proxy if we are in mock mode.
             networkProxyView.setEnabled(false);
-            networkLoggingView.setEnabled(false);
         } else {
             // Disable network controls if we are not in mock mode.
+            networkEnabledView.setEnabled(false);
             networkDelayView.setEnabled(false);
             networkVarianceView.setEnabled(false);
             networkErrorView.setEnabled(false);
         }
-
-        // We use the JSON rest adapter as the source of truth for the log level.
-    /*final EnumAdapter<LogLevel> loggingAdapter = new EnumAdapter<>(activity, LogLevel.class);
-    networkLoggingView.setAdapter(loggingAdapter);
-    networkLoggingView.setSelection(restAdapter.getLogLevel().ordinal());
-    networkLoggingView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        LogLevel selected = loggingAdapter.getItem(position);
-        if (selected != restAdapter.getLogLevel()) {
-          Timber.d("Setting logging level to %s", selected);
-          restAdapter.setLogLevel(selected);
-        } else {
-          Timber.d("Ignoring re-selection of logging level " + selected);
-        }
-      }
-
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });*/
     }
 
     @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {

@@ -106,6 +106,18 @@
     <TextView
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
+        android:text="Debug Mode"
+        />
+
+    <Switch
+        android:id="@+id/debug_network_debugmode"
+        style="@style/Widget.U2020.DebugDrawer.RowWidget"
+        android:layout_gravity="start|center_vertical"
+        />
+
+    <TextView
+        style="@style/Widget.U2020.DebugDrawer.RowTitle"
+        android:layout_gravity="start|end|center_vertical"
         android:text="Net. Enabled"
         />
 
@@ -157,19 +169,6 @@
     <Spinner
         android:id="@+id/debug_network_proxy"
         android:layout_gravity="start|end|center_vertical"
-        />
-
-    <TextView
-        style="@style/Widget.U2020.DebugDrawer.RowTitle"
-        android:layout_gravity="start|end|center_vertical"
-        android:text="Logging"
-        android:visibility="gone"
-        />
-
-    <Spinner
-        android:id="@+id/debug_network_logging"
-        android:layout_gravity="start|end|center_vertical"
-        android:visibility="gone"
         />
 
     <!-- NOTIFICATIONS SECTION -->

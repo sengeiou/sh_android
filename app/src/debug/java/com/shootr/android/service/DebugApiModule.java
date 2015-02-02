@@ -1,9 +1,10 @@
 package com.shootr.android.service;
 
+import com.shootr.android.data.DebugMode;
+import com.shootr.android.data.prefs.BooleanPreference;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.ApiEndpoint;
-import com.shootr.android.data.IsMockMode;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.service.dataservice.ShootrDataService;
 
@@ -24,8 +25,9 @@ public class DebugApiModule {
         return new MockServiceAdapter();
     }
 
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, MockServiceAdapter mockServiceAdapter, @IsMockMode boolean isMockMode) {
-        if (isMockMode) {
+    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, MockServiceAdapter mockServiceAdapter, @DebugMode
+    BooleanPreference debugMode) {
+        if (debugMode.get()) {
             return mockServiceAdapter.create(shootrDataService);
         } else {
             return shootrDataService;
