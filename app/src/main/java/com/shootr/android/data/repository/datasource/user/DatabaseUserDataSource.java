@@ -29,6 +29,16 @@ public class DatabaseUserDataSource implements UserDataSource {
         }
     }
 
+    @Override public UserEntity putUser(UserEntity userEntity) {
+        userManager.saveUser(userEntity);
+        return userEntity;
+    }
+
+    @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
+        userManager.saveUsers(userEntities);
+        return userEntities;
+    }
+
     @Override public boolean isFollower(Long from, Long who) {
         FollowEntity follow = followManager.getFollowByUserIds(who, from);
         return follow != null;

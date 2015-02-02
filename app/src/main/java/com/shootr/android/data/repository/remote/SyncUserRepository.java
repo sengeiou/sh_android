@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.remote;
 
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
@@ -31,7 +32,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
 
     @Override public List<User> getPeople() {
         List<UserEntity> remotePeopleEntities = remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
-        //TODO store in local
+        markSynchronized(remotePeopleEntities);
+        localUserDataSource.putUsers(remotePeopleEntities);
         return transformUserEntitiesForPeople(remotePeopleEntities);
     }
 
@@ -56,5 +58,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
             userList.add(user);
         }
         return userList;
+    }
+
+    private void markSynchronized(List<UserEntity> peopleEntities) {
+        for (UserEntity userEntity : peopleEntities) {
+            userEntity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
+        }
     }
 }

@@ -7,6 +7,10 @@ public interface UserDataSource {
 
     List<UserEntity> getFollowing(Long userId);
 
+    UserEntity putUser(UserEntity userEntity);
+
+    List<UserEntity> putUsers(List<UserEntity> userEntities);
+
     boolean isFollower(Long from, Long who);
 
     boolean isFollowing(Long who, Long to);
