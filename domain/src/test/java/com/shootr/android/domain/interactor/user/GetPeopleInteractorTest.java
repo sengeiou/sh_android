@@ -21,11 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class GetPeopleInteractorTest {
 
@@ -37,27 +39,7 @@ public class GetPeopleInteractorTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, userRepository, localUserRepository);
-    }
-
-    @Test
-    public void resultSentToUiWhenDataAvailable() throws Exception {
-        setupHandlerRealExecution();
-        setupRepositoryReturnsUserList();
-
-        getPeopleInteractor.obtainPeople();
-
-        verify(interactorHandler, times(1)).sendUiMessage(anyObject());
-    }
-
-    @Test
-    public void resultSentTwiceWhenRepositoryReturnsTwice() throws Exception {
-        setupHandlerRealExecution();
-        setupRepositoryReturnsUserListTwice();
-
-        getPeopleInteractor.obtainPeople();
-
-        verify(interactorHandler, times(2)).sendUiMessage(anyObject());
+        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, userRepository, userRepository);
     }
 
     @Test
@@ -68,22 +50,9 @@ public class GetPeopleInteractorTest {
         getPeopleInteractor.obtainPeople();
 
         ArgumentCaptor<UserList> argumentCaptor = ArgumentCaptor.forClass(UserList.class);
-        verify(interactorHandler).sendUiMessage(argumentCaptor.capture());
+        verify(interactorHandler, atLeastOnce()).sendUiMessage(argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue().getUsers()).isSortedAccordingTo(new TestUsernameComparator());
-    }
-
-    @Test
-    public void exceptionThrownWhenRepositoryFails() throws Exception {
-        try {
-            setupHandlerRealExecution();
-            doThrow(new RepositoryException(null)).when(userRepository)
-              .getPeople(any(UserRepository.UserListCallback.class));
-            getPeopleInteractor.obtainPeople();
-            fail("Should throw RepositoryException");
-        } catch (RuntimeException e) {
-            assertThat(e).hasCauseInstanceOf(RepositoryException.class);
-        }
     }
 
     private void setupHandlerRealExecution() {
@@ -91,24 +60,7 @@ public class GetPeopleInteractorTest {
     }
 
     private void setupRepositoryReturnsUserList() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((UserRepository.UserListCallback) invocation.getArguments()[0]).onLoaded(mockUserList());
-                return null;
-            }
-        }).when(userRepository).getPeople(any(UserRepository.UserListCallback.class));
-    }
-
-    private void setupRepositoryReturnsUserListTwice() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                UserRepository.UserListCallback callback =
-                  (UserRepository.UserListCallback) invocation.getArguments()[0];
-                callback.onLoaded(mockUserList());
-                callback.onLoaded(mockUserList());
-                return null;
-            }
-        }).when(userRepository).getPeople(any(UserRepository.UserListCallback.class));
+        when(userRepository.getPeople()).thenReturn(mockUserList());
     }
 
     private List<User> mockUserList() {

@@ -3,6 +3,8 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
@@ -44,12 +46,15 @@ public class SelectEventInteractorTest {
     @Mock WatchRepository remoteWatchRepository;
     @Mock TimeUtils timeUtils;
     @Mock SessionRepository sessionRepository;
+    @Mock SelectEventInteractor.Callback dummyCallback;
 
     private SelectEventInteractor interactor;
+    private PostExecutionThread postExecutionThread;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        postExecutionThread = new TestPostExecutionThread();
         when(timeUtils.getCurrentDate()).thenReturn(DATE_NOW);
         when(timeUtils.getCurrentTime()).thenReturn(DATE_NOW.getTime());
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
@@ -63,7 +68,7 @@ public class SelectEventInteractorTest {
     public void oldEventNotVisibleAnymore() throws Exception {
         setupOldVisibleEventInLocal();
 
-        interactor.selectEvent(NEW_EVENT_ID);
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
         verifyOldWatchSavedNotVisibleInRepo(localWatchRepository);
         verifyOldWatchSavedNotVisibleInRepo(remoteWatchRepository);
@@ -73,7 +78,7 @@ public class SelectEventInteractorTest {
     public void newEventVisibleWhenWatchExistInLocal() throws Exception {
         setupExistingWatchNotVisibleInLocal();
 
-        interactor.selectEvent(NEW_EVENT_ID);
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
         verifyExistingWatchSavedVisibleInRepoWithExistingStatus(localWatchRepository);
         verifyExistingWatchSavedVisibleInRepoWithExistingStatus(remoteWatchRepository);
@@ -83,7 +88,7 @@ public class SelectEventInteractorTest {
     public void newEventWatchCreatedIfNotExists() throws Exception {
         setupNewWatchDoesntExist();
 
-        interactor.selectEvent(NEW_EVENT_ID);
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
         verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(localWatchRepository);
         verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(remoteWatchRepository);
@@ -98,7 +103,7 @@ public class SelectEventInteractorTest {
     public void oldWatchingEventSetToNotWatchingIfLapsed() throws Exception {
         setupWatchingLapsedEvent();
 
-        interactor.selectEvent(NEW_EVENT_ID);
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
         verifyLapsedEventSavedNotWatchingInRepo(localWatchRepository);
         verifyLapsedEventSavedNotWatchingInRepo(remoteWatchRepository);
@@ -108,7 +113,7 @@ public class SelectEventInteractorTest {
     public void selectingCurrentEventDoesntNotifyUi() throws Exception {
         setupOldVisibleEventInLocal();
 
-        interactor.selectEvent(OLD_EVENT_ID);
+        interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
         verify(interactorHandler, never()).sendUiMessage(anyObject());
     }
