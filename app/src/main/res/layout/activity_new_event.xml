@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+    <com.shootr.android.ui.widgets.FloatLabelLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="16dp"
+      app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+
+        <EditText
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="Title"
+          android:imeOptions="actionNext"
+          android:inputType="text|textCapWords|textNoSuggestions"
+          android:lines="1"
+          android:nextFocusDown="@+id/profile_edit_username"
+          android:singleLine="true"
+          tools:text="My New Event" />
+    </com.shootr.android.ui.widgets.FloatLabelLayout>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:paddingLeft="4dp"
+      android:layout_marginTop="16dp"
+      android:text="Starts"
+      android:textAppearance="@style/TextAppearance.FloatLabel" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/keyline_1"
+      android:layout_marginRight="@dimen/keyline_1"
+      android:orientation="horizontal">
+
+        <TextView
+          style="@style/Widget.AppCompat.EditText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:layout_weight="1"
+          android:background="@drawable/edit_text_selectable"
+          android:drawableRight="@drawable/spinner_arrow"
+          android:focusable="false"
+          android:text="Fri, Oct 10 2014" />
+
+        <TextView
+          style="@style/Widget.AppCompat.EditText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/edit_text_selectable"
+          android:drawableRight="@drawable/spinner_arrow"
+          android:focusable="false"
+          android:text="4:30 PM">
+
+        </TextView>
+    </LinearLayout>
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:paddingLeft="4dp"
+      android:layout_marginTop="16dp"
+      android:text="Ends before"
+      android:textAppearance="@style/TextAppearance.FloatLabel" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/keyline_1"
+      android:layout_marginRight="@dimen/keyline_1"
+      android:orientation="horizontal">
+
+        <TextView
+          style="@style/Widget.AppCompat.EditText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:layout_weight="1"
+          android:background="@drawable/edit_text_selectable"
+          android:drawableRight="@drawable/spinner_arrow"
+          android:focusable="false"
+          android:text="6 hours" />
+    </LinearLayout>
+</LinearLayout>

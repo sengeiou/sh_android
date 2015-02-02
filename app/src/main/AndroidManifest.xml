@@ -158,6 +158,15 @@
               android:value="com.shootr.android.ui.activities.EventActivity" />
           </activity>
 
+        <activity
+          android:name="com.shootr.android.ui.activities.NewEventActivity"
+          android:label="@string/activity_new_event_title"
+          android:theme="@style/ShootrTheme" >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="com.shootr.android.ui.activities.EventsListActivity" />
+          </activity>
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"

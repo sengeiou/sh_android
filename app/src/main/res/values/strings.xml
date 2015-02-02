@@ -163,6 +163,7 @@
     <string name="events_list_empty">No results.</string>
     <string name="add_photo">Add Photo</string>
     <string name="edit_event">Edit Event</string>
+    <string name="activity_new_event_title">New Event</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

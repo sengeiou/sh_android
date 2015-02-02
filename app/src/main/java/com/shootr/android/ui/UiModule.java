@@ -5,6 +5,7 @@ import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.MainActivity;
+import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -46,6 +47,7 @@ import javax.inject.Singleton;
                 PeopleFragment.class,
                 WatchersView.class,
                 EventsListActivity.class,
+                NewEventActivity.class,
         },
         complete = false
 )
