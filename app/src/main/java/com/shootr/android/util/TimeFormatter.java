@@ -14,6 +14,8 @@ public class TimeFormatter {
     DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
     DateTimeFormatter detailedFormater = DateTimeFormat.forPattern("EEEE dd MMMM HH:mm");
 
+    DateTimeFormatter absoluteTimeFormater = DateTimeFormat.forPattern("HH:mm");
+
     @Inject public TimeFormatter() {
 
     }
@@ -79,4 +81,7 @@ public class TimeFormatter {
         return Days.daysBetween(DateTime.now(), targetDate).getDays();
     }
 
+    public String getAbsoluteTime(long targetTimestamp) {
+        return absoluteTimeFormater.print(targetTimestamp);
+    }
 }
