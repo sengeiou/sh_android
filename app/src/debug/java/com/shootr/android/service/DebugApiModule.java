@@ -20,13 +20,13 @@ public class DebugApiModule {
         return Endpoints.newFixedEndpoint(apiEndpoint.get());
     }
 
-    @Provides @Singleton ShootrMockService provideMockShootrService(ShootrDataService shootrDataService) {
-        return new ShootrMockService(shootrDataService);
+    @Provides @Singleton MockServiceAdapter provideMockServiceAdapter() {
+        return new MockServiceAdapter();
     }
 
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, @IsMockMode boolean isMockMode) {
+    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, MockServiceAdapter mockServiceAdapter, @IsMockMode boolean isMockMode) {
         if (isMockMode) {
-            return new ShootrMockService(shootrDataService);
+            return mockServiceAdapter.create(shootrDataService);
         } else {
             return shootrDataService;
         }
