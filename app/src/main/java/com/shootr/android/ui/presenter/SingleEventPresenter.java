@@ -74,36 +74,32 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromEdit(@Nullable String statusText) {
-        watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
+        updateWatch(currentUserWatchingModel.isWatching(), statusText);
     }
 
     public void resultFromSelectEvent(Long idEventSelected) {
         if (!isCurrentEventWatch(idEventSelected)) {
             this.showViewLoading();
-            selectEventInteractor.selectEvent(idEventSelected);
+            selectEventInteractor.selectEvent(idEventSelected, new SelectEventInteractor.Callback() {
+                @Override public void onLoaded(Watch watch) {
+                    onEventChanged();
+                }
+            });
         }
     }
 
     public void sendWatching(boolean isWatching) {
-        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), currentUserWatchingModel.getPlace());
-
-        //TODO probably better to receive the new Watch from the Interactor
-        this.updateWatchersCount(isWatching);
-        //currentUserWatchingModel.setWatching(isWatching);
-        singleEventView.setCurrentUserWatching(currentUserWatchingModel);
-        singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO this is bussines logic
+        updateWatch(isWatching, currentUserWatchingModel.getPlace());
     }
 
-    @Subscribe
-    public void onWatchingUpdated(Watch currentUserWatch) {
-        if (isCurrentEventWatch(currentUserWatch.getIdEvent())) {
-            this.renderCurrentUserWatching(currentUserWatch);
-        } else {
-            //TODO usar el mismo evento de bus para cosas distintas es un TRUÑO. Cada vez el bus es peor opción.
-            this.onEventChanged();
-            //TODO it's triggered twice (local and server). That ain't good.
-        }
+    private void updateWatch(boolean isWatching, String statusText) {
+        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), statusText,
+          new WatchingInteractor.Callback() {
+              @Override public void onLoaded(Watch watchUpdated) {
+                  updateWatchersCount(watchUpdated.isWatching());
+                  renderCurrentUserWatching(watchUpdated);
+              }
+          });
     }
 
     private void onEventChanged() {

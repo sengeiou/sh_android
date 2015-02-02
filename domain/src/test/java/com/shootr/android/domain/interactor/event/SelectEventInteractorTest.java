@@ -5,8 +5,6 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -57,7 +55,7 @@ public class SelectEventInteractorTest {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor =
-          new SelectEventInteractor(interactorHandler, eventRepository, localWatchRepository, remoteWatchRepository,
+          new SelectEventInteractor(interactorHandler, postExecutionThread, eventRepository, localWatchRepository, remoteWatchRepository,
             sessionRepository, timeUtils);
     }
 

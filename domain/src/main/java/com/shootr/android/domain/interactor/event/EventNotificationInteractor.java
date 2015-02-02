@@ -4,7 +4,8 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import javax.inject.Inject;
@@ -12,15 +13,17 @@ import javax.inject.Inject;
 public class EventNotificationInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final WatchRepository watchRepository;
+    private final WatchRepository localWatchRepository;
+    private final WatchRepository remoteWatchRepository;
     private final SessionRepository sessionRepository;
     private boolean enableNotifications;
     private Long idEvent;
 
-    @Inject public EventNotificationInteractor(InteractorHandler interactorHandler, WatchRepository watchRepository,
-      SessionRepository sessionRepository) {
+    @Inject public EventNotificationInteractor(InteractorHandler interactorHandler, @Local WatchRepository localWatchRepository,
+      @Remote WatchRepository remoteWatchRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
-        this.watchRepository = watchRepository;
+        this.localWatchRepository = localWatchRepository;
+        this.remoteWatchRepository = remoteWatchRepository;
         this.sessionRepository = sessionRepository;
     }
 
@@ -32,17 +35,10 @@ public class EventNotificationInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
-        Watch currentWatch = watchRepository.getWatchForUserAndEvent(currentUser, idEvent);
+        Watch currentWatch = localWatchRepository.getWatchForUserAndEvent(currentUser, idEvent);
         currentWatch.setNotificaticationsEnabled(enableNotifications);
 
-        watchRepository.putWatch(currentWatch, new WatchRepository.WatchCallback() {
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-
-            @Override public void onLoaded(Watch watch) {
-                /* no-op */
-            }
-        });
+        localWatchRepository.putWatch(currentWatch);
+        remoteWatchRepository.putWatch(currentWatch);
     }
 }

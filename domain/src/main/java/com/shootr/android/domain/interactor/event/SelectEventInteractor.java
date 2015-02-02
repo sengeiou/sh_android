@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
@@ -16,6 +17,7 @@ public class SelectEventInteractor implements Interactor {
 
     //region Dependencies
     private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
     private final EventRepository localEventRepository;
     private final WatchRepository localWatchRepository;
     private final WatchRepository remoteWatchRepository;
@@ -23,11 +25,14 @@ public class SelectEventInteractor implements Interactor {
     private final TimeUtils timeUtils;
 
     private Long idEvent;
+    private Callback callback;
 
-    @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, @Local EventRepository localEventRepository,
+    @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
       @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
+        this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
         this.localWatchRepository = localWatchRepository;
         this.remoteWatchRepository = remoteWatchRepository;
@@ -36,8 +41,9 @@ public class SelectEventInteractor implements Interactor {
     }
     //endregion
 
-    public void selectEvent(Long idEvent) {
+    public void selectEvent(Long idEvent, Callback callback) {
         this.idEvent = idEvent;
+        this.callback = callback;
         interactorHandler.execute(this);
     }
 
@@ -78,9 +84,8 @@ public class SelectEventInteractor implements Interactor {
         selectedEventWatch.setVisible(true);
 
         localWatchRepository.putWatch(selectedEventWatch);
+        notifyLoaded(selectedEventWatch);
         remoteWatchRepository.putWatch(selectedEventWatch);
-
-        interactorHandler.sendUiMessage(selectedEventWatch);
     }
 
     private void hideOldVisibleEvent(Watch oldVisibleEventWatch) {
@@ -100,5 +105,19 @@ public class SelectEventInteractor implements Interactor {
         newWatch.setVisible(false);
         newWatch.setUserStatus("Watching"); //TODO localize
         return newWatch;
+    }
+
+    private void notifyLoaded(final Watch watch) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                callback.onLoaded(watch);
+            }
+        });
+    }
+
+    public interface Callback {
+
+        void onLoaded(Watch watch);
+
     }
 }
