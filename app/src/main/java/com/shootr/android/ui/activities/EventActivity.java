@@ -44,6 +44,8 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
 
+    @InjectView(R.id.event_loading) View loadingView;
+
     @InjectView(R.id.event_photo) ImageView photo;
     @InjectView(R.id.event_photo_container) View photoContainer;
 
@@ -389,6 +391,10 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         recomputePhotoAndScrollingMetrics();
     }
 
+    @Override public void hideContent() {
+        scrollChild.setVisibility(View.INVISIBLE);
+    }
+
     @Override public void showDetail() {
         contentDetail.setVisibility(View.VISIBLE);
     }
@@ -417,14 +423,11 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
     }
 
     @Override public void showLoading() {
-        //contentLoading.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoading() {
-        //contentLoading.setVisibility(View.GONE);
-        //if (titleContainer.getVisibility() != View.VISIBLE) {
-        //    titleContainer.setVisibility(View.VISIBLE);
-        //}
+        loadingView.setVisibility(View.GONE);
     }
 
     @Override public void showError(String message) {

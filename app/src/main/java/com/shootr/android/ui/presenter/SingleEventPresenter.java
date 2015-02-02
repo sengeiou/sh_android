@@ -117,8 +117,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe
     public void onNewWatchDetected(WatchUpdateRequest.Event event) {
-        loadEventInfo();
-        loadEventsCount();
+        this.getEventInfo();
+        this.loadEventsCount();
     }
 
     private void loadEventsCount() {
@@ -215,7 +215,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
+    //region View methods
     private void showViewLoading() {
+        singleEventView.hideContent();
         singleEventView.showLoading();
     }
 
