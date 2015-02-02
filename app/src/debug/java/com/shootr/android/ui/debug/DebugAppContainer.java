@@ -83,8 +83,8 @@ import static butterknife.ButterKnife.findById;
  */
 @Singleton
 public class DebugAppContainer implements AppContainer {
-    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
+    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
     private final OkHttpClient client;
     private final Picasso picasso;
@@ -104,20 +104,16 @@ public class DebugAppContainer implements AppContainer {
 
     Activity activity;
     Context drawerContext;
+
     @Inject
-    public DebugAppContainer(OkHttpClient client, Picasso picasso,
-                             @ApiEndpoint StringPreference networkEndpoint,
-                             @NetworkEnabled BooleanPreference networkEnabled,
-                             @NetworkProxy StringPreference networkProxy,
-                             @AnimationSpeed IntPreference animationSpeed,
-                             @PicassoDebugging BooleanPreference picassoDebugging,
-                             @ScalpelEnabled BooleanPreference scalpelEnabled,
-                             @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
-                             @InitialSetupCompleted BooleanPreference initialSetupCompleted,
-                             @CustomEndpoint StringPreference customEndpoint,
-                             @NotificationsEnabled BooleanPreference notificationsEnabled,
-                             MockServiceAdapter mockServiceAdapter,
-                             Application app) {
+    public DebugAppContainer(OkHttpClient client, Picasso picasso, @ApiEndpoint StringPreference networkEndpoint,
+      @NetworkEnabled BooleanPreference networkEnabled, @NetworkProxy StringPreference networkProxy,
+      @AnimationSpeed IntPreference animationSpeed, @PicassoDebugging BooleanPreference picassoDebugging,
+      @ScalpelEnabled BooleanPreference scalpelEnabled,
+      @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
+      @InitialSetupCompleted BooleanPreference initialSetupCompleted, @CustomEndpoint StringPreference customEndpoint,
+      @NotificationsEnabled BooleanPreference notificationsEnabled, MockServiceAdapter mockServiceAdapter,
+      Application app) {
         this.client = client;
         this.picasso = picasso;
         this.networkProxy = networkProxy;
@@ -137,7 +133,7 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.debug_content) ViewGroup content;
 
-//    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
+    //    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
 
     @InjectView(R.id.debug_contextual_title) View contextualTitleView;
     @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
@@ -222,32 +218,30 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void setupNetworkSection() {
+        final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
+        final EnumAdapter<ApiEndpoints> endpointAdapter = new EnumAdapter<>(drawerContext, ApiEndpoints.class);
+        endpointView.setAdapter(endpointAdapter);
+        endpointView.setSelection(currentEndpoint.ordinal());
+        endpointView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                ApiEndpoints selected = endpointAdapter.getItem(position);
+                if (selected != currentEndpoint) {
+                    if (selected == ApiEndpoints.CUSTOM) {
+                        Timber.d("Custom network endpoint selected. Prompting for URL.");
 
-    final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
-    final EnumAdapter<ApiEndpoints> endpointAdapter =
-        new EnumAdapter<>(drawerContext, ApiEndpoints.class);
-    endpointView.setAdapter(endpointAdapter);
-    endpointView.setSelection(currentEndpoint.ordinal());
-    endpointView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        ApiEndpoints selected = endpointAdapter.getItem(position);
-        if (selected != currentEndpoint) {
-          if (selected == ApiEndpoints.CUSTOM) {
-            Timber.d("Custom network endpoint selected. Prompting for URL.");
+                        showCustomEndpointDialog(currentEndpoint.ordinal(), customEndpoint.get());
+                    } else {
+                        setEndpointAndRelaunch(selected.url);
+                    }
+                } else {
+                    Timber.d("Ignoring re-selection of network endpoint %s", selected);
+                }
+            }
 
-            showCustomEndpointDialog(currentEndpoint.ordinal(), customEndpoint.get());
-          } else {
-            setEndpointAndRelaunch(selected.url);
-          }
-        } else {
-          Timber.d("Ignoring re-selection of network endpoint %s", selected);
-        }
-      }
-
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         boolean networkEnabledValue = networkEnabled.get();
         networkEnabledView.setChecked(networkEnabledValue);
@@ -258,105 +252,103 @@ public class DebugAppContainer implements AppContainer {
             }
         });
 
-    final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
-    networkDelayView.setAdapter(delayAdapter);
-    networkDelayView.setSelection(
-        NetworkDelayAdapter.getPositionForValue(mockServiceAdapter.getDelay()));
-    networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        long selected = delayAdapter.getItem(position);
-        if (selected != mockServiceAdapter.getDelay()) {
-          Timber.d("Setting network delay to %sms", selected);
-          mockServiceAdapter.setDelay((int) selected);
-        } else {
-          Timber.d("Ignoring re-selection of network delay %sms", selected);
-        }
-      }
-
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });
-
-    final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
-    networkVarianceView.setAdapter(varianceAdapter);
-    networkVarianceView.setSelection(
-      NetworkVarianceAdapter.getPositionForValue(mockServiceAdapter.getVariancePercentage()));
-    networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            int selected = varianceAdapter.getItem(position);
-            if (selected != mockServiceAdapter.getVariancePercentage()) {
-                Timber.d("Setting network variance to %s%%", selected);
-                mockServiceAdapter.setVariancePercentage(selected);
-            } else {
-                Timber.d("Ignoring re-selection of network variance %s%%", selected);
+        final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
+        networkDelayView.setAdapter(delayAdapter);
+        networkDelayView.setSelection(NetworkDelayAdapter.getPositionForValue(mockServiceAdapter.getDelay()));
+        networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                long selected = delayAdapter.getItem(position);
+                if (selected != mockServiceAdapter.getDelay()) {
+                    Timber.d("Setting network delay to %sms", selected);
+                    mockServiceAdapter.setDelay((int) selected);
+                } else {
+                    Timber.d("Ignoring re-selection of network delay %sms", selected);
+                }
             }
-        }
 
-        @Override public void onNothingSelected(AdapterView<?> adapterView) {
-        }
-    });
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
-    final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
-    networkErrorView.setAdapter(errorAdapter);
-    networkErrorView.setSelection(
-            NetworkErrorAdapter.getPositionForValue(mockServiceAdapter.getErrorPercentage()));
-    networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        int selected = errorAdapter.getItem(position);
-        if (selected != mockServiceAdapter.getErrorPercentage()) {
-          Timber.d("Setting network error to %s%%", selected);
-          mockServiceAdapter.setErrorPercentage(selected);
+        final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
+        networkVarianceView.setAdapter(varianceAdapter);
+        networkVarianceView.setSelection(
+          NetworkVarianceAdapter.getPositionForValue(mockServiceAdapter.getVariancePercentage()));
+        networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int selected = varianceAdapter.getItem(position);
+                if (selected != mockServiceAdapter.getVariancePercentage()) {
+                    Timber.d("Setting network variance to %s%%", selected);
+                    mockServiceAdapter.setVariancePercentage(selected);
+                } else {
+                    Timber.d("Ignoring re-selection of network variance %s%%", selected);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
+        networkErrorView.setAdapter(errorAdapter);
+        networkErrorView.setSelection(NetworkErrorAdapter.getPositionForValue(mockServiceAdapter.getErrorPercentage()));
+        networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int selected = errorAdapter.getItem(position);
+                if (selected != mockServiceAdapter.getErrorPercentage()) {
+                    Timber.d("Setting network error to %s%%", selected);
+                    mockServiceAdapter.setErrorPercentage(selected);
+                } else {
+                    Timber.d("Ignoring re-selection of network error %s%%", selected);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        int currentProxyPosition = client.getProxy() != null ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
+        final ProxyAdapter proxyAdapter = new ProxyAdapter(activity, networkProxy);
+        networkProxyView.setAdapter(proxyAdapter);
+        networkProxyView.setSelection(currentProxyPosition);
+        networkProxyView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if (position == ProxyAdapter.NONE) {
+                    Timber.d("Disabling network proxy");
+                    //networkProxy.delete();
+                    client.setProxy(null);
+                } else if (networkProxy.isSet() && position == ProxyAdapter.PROXY) {
+                    setProxy(networkProxy.get());
+                    Timber.d("Setting previous proxy %s", networkProxy.get());
+                } else {
+                    Timber.d("New network proxy selected. Prompting for host.");
+                    showNewNetworkProxyDialog(proxyAdapter);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        // Only show the endpoint editor when a custom endpoint is in use.
+        endpointEditView.setVisibility(currentEndpoint == ApiEndpoints.CUSTOM ? VISIBLE : GONE);
+
+        if (currentEndpoint == ApiEndpoints.MOCK_MODE) {
+            // Disable network proxy if we are in mock mode.
+            networkProxyView.setEnabled(false);
+            networkLoggingView.setEnabled(false);
         } else {
-          Timber.d("Ignoring re-selection of network error %s%%", selected);
+            // Disable network controls if we are not in mock mode.
+            networkDelayView.setEnabled(false);
+            networkVarianceView.setEnabled(false);
+            networkErrorView.setEnabled(false);
         }
-      }
 
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });
-
-    int currentProxyPosition = client.getProxy()!=null ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
-    final ProxyAdapter proxyAdapter = new ProxyAdapter(activity, networkProxy);
-    networkProxyView.setAdapter(proxyAdapter);
-    networkProxyView.setSelection(currentProxyPosition);
-    networkProxyView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        if (position == ProxyAdapter.NONE) {
-          Timber.d("Disabling network proxy");
-          //networkProxy.delete();
-          client.setProxy(null);
-        } else if (networkProxy.isSet() && position == ProxyAdapter.PROXY) {
-            setProxy(networkProxy.get());
-          Timber.d("Setting previous proxy %s", networkProxy.get());
-        } else {
-          Timber.d("New network proxy selected. Prompting for host.");
-          showNewNetworkProxyDialog(proxyAdapter);
-        }
-      }
-
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });
-
-    // Only show the endpoint editor when a custom endpoint is in use.
-    endpointEditView.setVisibility(currentEndpoint == ApiEndpoints.CUSTOM ? VISIBLE : GONE);
-
-    if (currentEndpoint == ApiEndpoints.MOCK_MODE) {
-      // Disable network proxy if we are in mock mode.
-      networkProxyView.setEnabled(false);
-      networkLoggingView.setEnabled(false);
-    } else {
-      // Disable network controls if we are not in mock mode.
-      networkDelayView.setEnabled(false);
-      networkVarianceView.setEnabled(false);
-      networkErrorView.setEnabled(false);
-    }
-
-    // We use the JSON rest adapter as the source of truth for the log level.
+        // We use the JSON rest adapter as the source of truth for the log level.
     /*final EnumAdapter<LogLevel> loggingAdapter = new EnumAdapter<>(activity, LogLevel.class);
     networkLoggingView.setAdapter(loggingAdapter);
     networkLoggingView.setSelection(restAdapter.getLogLevel().ordinal());
@@ -377,11 +369,11 @@ public class DebugAppContainer implements AppContainer {
     });*/
     }
 
-  @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
-//    Timber.d("Prompting to edit custom endpoint URL.");
-    // Pass in the currently selected position since we are merely editing.
-    showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
-  }
+    @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
+        //    Timber.d("Prompting to edit custom endpoint URL.");
+        // Pass in the currently selected position since we are merely editing.
+        showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
+    }
 
     private void setupNotificationsSection() {
         boolean showNotifications = notificationsEnabled.get();
@@ -393,34 +385,34 @@ public class DebugAppContainer implements AppContainer {
             }
         });
     }
-    private void setupUserInterfaceSection() {
-    final AnimationSpeedAdapter speedAdapter = new AnimationSpeedAdapter(activity);
-    uiAnimationSpeedView.setAdapter(speedAdapter);
-    final int animationSpeedValue = animationSpeed.get();
-    uiAnimationSpeedView.setSelection(
-        AnimationSpeedAdapter.getPositionForValue(animationSpeedValue));
-    uiAnimationSpeedView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        int selected = speedAdapter.getItem(position);
-        if (selected != animationSpeed.get()) {
-          Timber.d("Setting animation speed to %sx", selected);
-          animationSpeed.set(selected);
-          applyAnimationSpeed(selected);
-        } else {
-          Timber.d("Ignoring re-selection of animation speed %sx", selected);
-        }
-      }
 
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
-    });
-    // Ensure the animation speed value is always applied across app restarts.
-    content.post(new Runnable() {
-      @Override public void run() {
-        applyAnimationSpeed(animationSpeedValue);
-      }
-    });
+    private void setupUserInterfaceSection() {
+        final AnimationSpeedAdapter speedAdapter = new AnimationSpeedAdapter(activity);
+        uiAnimationSpeedView.setAdapter(speedAdapter);
+        final int animationSpeedValue = animationSpeed.get();
+        uiAnimationSpeedView.setSelection(AnimationSpeedAdapter.getPositionForValue(animationSpeedValue));
+        uiAnimationSpeedView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int selected = speedAdapter.getItem(position);
+                if (selected != animationSpeed.get()) {
+                    Timber.d("Setting animation speed to %sx", selected);
+                    animationSpeed.set(selected);
+                    applyAnimationSpeed(selected);
+                } else {
+                    Timber.d("Ignoring re-selection of animation speed %sx", selected);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        // Ensure the animation speed value is always applied across app restarts.
+        content.post(new Runnable() {
+            @Override public void run() {
+                applyAnimationSpeed(animationSpeedValue);
+            }
+        });
 
    /* boolean gridEnabled = pixelGridEnabled.get();
     madgeFrameLayout.setOverlayEnabled(gridEnabled);
@@ -512,7 +504,8 @@ public class DebugAppContainer implements AppContainer {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//"+BuildConfig.APPLICATION_ID+"//databases//"+ ShootrDbOpenHelper.DATABASE_NAME;
+                String currentDBPath =
+                  "//data//" + BuildConfig.APPLICATION_ID + "//databases//" + ShootrDbOpenHelper.DATABASE_NAME;
                 String backupDBPath = ShootrDbOpenHelper.DATABASE_NAME;
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, backupDBPath);
@@ -524,7 +517,7 @@ public class DebugAppContainer implements AppContainer {
                     src.close();
                     dst.close();
                 }
-                Timber.i("Database copied to "+backupDB.getAbsolutePath());
+                Timber.i("Database copied to " + backupDB.getAbsolutePath());
             }
         } catch (Exception e) {
             Timber.e(e, "Error while copying database to sdcard");
@@ -596,7 +589,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private static String getSizeString(long bytes) {
-        String[] units = new String[]{"B", "KB", "MB", "GB"};
+        String[] units = new String[] { "B", "KB", "MB", "GB" };
         int unit = 0;
         while (bytes >= 1024) {
             bytes /= 1024;
@@ -605,85 +598,85 @@ public class DebugAppContainer implements AppContainer {
         return bytes + units[unit];
     }
 
-  private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
-    final int originalSelection = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
+    private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
+        final int originalSelection = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
 
-    View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_proxy, null);
-    final EditText host = findById(view, R.id.debug_drawer_network_proxy_host);
+        View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_proxy, null);
+        final EditText host = findById(view, R.id.debug_drawer_network_proxy_host);
 
-    new AlertDialog.Builder(activity) //
-        .setTitle("Set Network Proxy")
-        .setView(view)
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int i) {
-            networkProxyView.setSelection(originalSelection);
-            dialog.cancel();
-          }
-        })
-        .setPositiveButton("Use", new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int i) {
-            String theHost = host.getText().toString();
-            if (!TextUtils.isEmpty(theHost)) {
-                if (setProxy(theHost)) {
-                    proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
-                    networkProxy.set(theHost); // Persist across restarts.
-                    networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
-                } else {
-                    Toast.makeText(activity, "Wrong proxy format", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-              networkProxyView.setSelection(originalSelection);
-            }
-          }
-        })
-        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-          @Override public void onCancel(DialogInterface dialogInterface) {
-            networkProxyView.setSelection(originalSelection);
-          }
-        })
-        .show();
-  }
+        new AlertDialog.Builder(activity) //
+          .setTitle("Set Network Proxy")
+          .setView(view)
+          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int i) {
+                  networkProxyView.setSelection(originalSelection);
+                  dialog.cancel();
+              }
+          })
+          .setPositiveButton("Use", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int i) {
+                  String theHost = host.getText().toString();
+                  if (!TextUtils.isEmpty(theHost)) {
+                      if (setProxy(theHost)) {
+                          proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
+                          networkProxy.set(theHost); // Persist across restarts.
+                          networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
+                      } else {
+                          Toast.makeText(activity, "Wrong proxy format", Toast.LENGTH_SHORT).show();
+                      }
+                  } else {
+                      networkProxyView.setSelection(originalSelection);
+                  }
+              }
+          })
+          .setOnCancelListener(new DialogInterface.OnCancelListener() {
+              @Override public void onCancel(DialogInterface dialogInterface) {
+                  networkProxyView.setSelection(originalSelection);
+              }
+          })
+          .show();
+    }
 
-  private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
-    View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_endpoint, null);
-    final EditText url = findById(view, R.id.debug_drawer_network_endpoint_url);
-    url.setText(defaultUrl);
-    url.setSelection(url.length());
+    private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
+        View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_endpoint, null);
+        final EditText url = findById(view, R.id.debug_drawer_network_endpoint_url);
+        url.setText(defaultUrl);
+        url.setSelection(url.length());
 
-    new AlertDialog.Builder(activity) //
-        .setTitle("Set Network Endpoint")
-        .setView(view)
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int i) {
-            endpointView.setSelection(originalSelection);
-            dialog.cancel();
-          }
-        })
-        .setPositiveButton("Use", new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int i) {
-            String theUrl = url.getText().toString();
-            if (!TextUtils.isEmpty(theUrl)) {
-              customEndpoint.set(theUrl);
-              setEndpointAndRelaunch(theUrl);
-            } else {
-              endpointView.setSelection(originalSelection);
-            }
-          }
-        })
-        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-          @Override public void onCancel(DialogInterface dialogInterface) {
-            endpointView.setSelection(originalSelection);
-          }
-        })
-        .show();
-  }
+        new AlertDialog.Builder(activity) //
+          .setTitle("Set Network Endpoint")
+          .setView(view)
+          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int i) {
+                  endpointView.setSelection(originalSelection);
+                  dialog.cancel();
+              }
+          })
+          .setPositiveButton("Use", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int i) {
+                  String theUrl = url.getText().toString();
+                  if (!TextUtils.isEmpty(theUrl)) {
+                      customEndpoint.set(theUrl);
+                      setEndpointAndRelaunch(theUrl);
+                  } else {
+                      endpointView.setSelection(originalSelection);
+                  }
+              }
+          })
+          .setOnCancelListener(new DialogInterface.OnCancelListener() {
+              @Override public void onCancel(DialogInterface dialogInterface) {
+                  endpointView.setSelection(originalSelection);
+              }
+          })
+          .show();
+    }
 
-  private void setEndpointAndRelaunch(String endpoint) {
-//    Timber.d("Setting network endpoint to %s", endpoint);
-    networkEndpoint.set(endpoint);
+    private void setEndpointAndRelaunch(String endpoint) {
+        //    Timber.d("Setting network endpoint to %s", endpoint);
+        networkEndpoint.set(endpoint);
 
-      relaunch();
-  }
+        relaunch();
+    }
 
     private boolean setProxy(String theHost) {
         try {
