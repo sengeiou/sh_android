@@ -60,12 +60,25 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/edit_text_selectable"
+          android:drawablePadding="4dp"
           android:drawableRight="@drawable/spinner_arrow"
           android:focusable="false"
           android:text="4:30 PM">
 
         </TextView>
     </LinearLayout>
+
+    <TextView
+      android:id="@+id/new_event_start_date_timezone"
+      style="@style/Widget.AppCompat.EditText"
+      android:layout_width="match_parent"
+      android:layout_marginRight="16dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/keyline_1"
+      android:background="@drawable/edit_text_selectable"
+      android:drawableRight="@drawable/spinner_arrow"
+      android:focusable="false"
+      android:text="Europe/Madrid" />
 
     <TextView
       android:layout_width="wrap_content"
