@@ -21,14 +21,14 @@ public class DebugApiModule {
         return Endpoints.newFixedEndpoint(apiEndpoint.get());
     }
 
-    @Provides @Singleton MockServiceAdapter provideMockServiceAdapter() {
-        return new MockServiceAdapter();
+    @Provides @Singleton DebugServiceAdapter provideMockServiceAdapter() {
+        return new DebugServiceAdapter();
     }
 
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, MockServiceAdapter mockServiceAdapter, @DebugMode
+    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, DebugServiceAdapter debugServiceAdapter, @DebugMode
     BooleanPreference debugMode) {
         if (debugMode.get()) {
-            return mockServiceAdapter.create(shootrDataService);
+            return debugServiceAdapter.create(shootrDataService);
         } else {
             return shootrDataService;
         }

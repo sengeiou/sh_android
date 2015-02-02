@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class MockServiceAdapter {
+public class DebugServiceAdapter {
 
     private static final int DEFAULT_DELAY_MS = 2000; // Network calls will take 2 seconds.
     private static final int DEFAULT_VARIANCE_PCT = 40; // Network delay varies by ±40%.

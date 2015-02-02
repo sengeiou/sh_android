@@ -30,7 +30,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
-import com.shootr.android.service.MockServiceAdapter;
+import com.shootr.android.service.DebugServiceAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -101,7 +101,7 @@ public class DebugAppContainer implements AppContainer {
     private BooleanPreference initialSetupCompleted;
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
-    private final MockServiceAdapter mockServiceAdapter;
+    private final DebugServiceAdapter debugServiceAdapter;
     private final Application app;
 
     Activity activity;
@@ -114,7 +114,7 @@ public class DebugAppContainer implements AppContainer {
       @PicassoDebugging BooleanPreference picassoDebugging, @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @InitialSetupCompleted BooleanPreference initialSetupCompleted, @CustomEndpoint StringPreference customEndpoint,
-      @NotificationsEnabled BooleanPreference notificationsEnabled, MockServiceAdapter mockServiceAdapter,
+      @NotificationsEnabled BooleanPreference notificationsEnabled, DebugServiceAdapter debugServiceAdapter,
       Application app) {
         this.client = client;
         this.picasso = picasso;
@@ -129,7 +129,7 @@ public class DebugAppContainer implements AppContainer {
         this.initialSetupCompleted = initialSetupCompleted;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
-        this.mockServiceAdapter = mockServiceAdapter;
+        this.debugServiceAdapter = debugServiceAdapter;
         this.app = app;
     }
 
@@ -274,14 +274,14 @@ public class DebugAppContainer implements AppContainer {
         //region Delay
         final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
         networkDelayView.setAdapter(delayAdapter);
-        networkDelayView.setSelection(NetworkDelayAdapter.getPositionForValue(mockServiceAdapter.getDelay()));
+        networkDelayView.setSelection(NetworkDelayAdapter.getPositionForValue(debugServiceAdapter.getDelay()));
         networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 long selected = delayAdapter.getItem(position);
-                if (selected != mockServiceAdapter.getDelay()) {
+                if (selected != debugServiceAdapter.getDelay()) {
                     Timber.d("Setting network delay to %sms", selected);
-                    mockServiceAdapter.setDelay((int) selected);
+                    debugServiceAdapter.setDelay((int) selected);
                 } else {
                     Timber.d("Ignoring re-selection of network delay %sms", selected);
                 }
@@ -296,14 +296,14 @@ public class DebugAppContainer implements AppContainer {
         final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
         networkVarianceView.setAdapter(varianceAdapter);
         networkVarianceView.setSelection(
-          NetworkVarianceAdapter.getPositionForValue(mockServiceAdapter.getVariancePercentage()));
+          NetworkVarianceAdapter.getPositionForValue(debugServiceAdapter.getVariancePercentage()));
         networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 int selected = varianceAdapter.getItem(position);
-                if (selected != mockServiceAdapter.getVariancePercentage()) {
+                if (selected != debugServiceAdapter.getVariancePercentage()) {
                     Timber.d("Setting network variance to %s%%", selected);
-                    mockServiceAdapter.setVariancePercentage(selected);
+                    debugServiceAdapter.setVariancePercentage(selected);
                 } else {
                     Timber.d("Ignoring re-selection of network variance %s%%", selected);
                 }
@@ -317,14 +317,14 @@ public class DebugAppContainer implements AppContainer {
         //region Error
         final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
         networkErrorView.setAdapter(errorAdapter);
-        networkErrorView.setSelection(NetworkErrorAdapter.getPositionForValue(mockServiceAdapter.getErrorPercentage()));
+        networkErrorView.setSelection(NetworkErrorAdapter.getPositionForValue(debugServiceAdapter.getErrorPercentage()));
         networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 int selected = errorAdapter.getItem(position);
-                if (selected != mockServiceAdapter.getErrorPercentage()) {
+                if (selected != debugServiceAdapter.getErrorPercentage()) {
                     Timber.d("Setting network error to %s%%", selected);
-                    mockServiceAdapter.setErrorPercentage(selected);
+                    debugServiceAdapter.setErrorPercentage(selected);
                 } else {
                     Timber.d("Ignoring re-selection of network error %s%%", selected);
                 }
