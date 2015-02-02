@@ -98,7 +98,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     }
 
     private void setupSearchView() {
-        searchView.setQueryHint(getString(R.string.activity_search_team_hint));
+        searchView.setQueryHint(getString(R.string.menu_search_events));
 
         SearchView.SearchAutoComplete searchAutoComplete =
           (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
