@@ -9,6 +9,9 @@ import org.joda.time.base.AbstractDateTime;
 
 public class NewEventPresenter implements Presenter {
 
+    private static final long TIME_30_MINUTES_MILLIS = 30 * 60 * 1000;
+    private static final long TIME_1_DAY_MILLIS = 24 * 60 * 60 * 1000;
+    private static final long TIME_6_HOURS_MILLIS = 6 * 60 * 60 * 1000;
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
 
@@ -48,7 +51,6 @@ public class NewEventPresenter implements Presenter {
     @Override public void pause() {
 
     }
-
 
     public void startDateSelected(int year, int month, int day) {
         selectedDateTime.setYear(year);

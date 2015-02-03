@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -23,6 +24,9 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
+    @InjectView(R.id.new_event_end_date) TextView endDateView;
+
+    private PopupMenu endDatePopupMenu;
 
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,15 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     private void initializeViews() {
         ButterKnife.inject(this);
+        endDatePopupMenu = new PopupMenu(this, endDateView);
+        endDatePopupMenu.inflate(R.menu.new_event_end_date);
+        endDatePopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override public boolean onMenuItemClick(MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                presenter.endDateItemSelected(itemId, menuItem.getTitle().toString());
+                return true;
+            }
+        });
     }
 
     private void setupActionbar() {
@@ -70,6 +83,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         timePickerDialog.show(getSupportFragmentManager(), "timepicker");
     }
 
+    @OnClick(R.id.new_event_end_date)
+    public void onEndDateClick() {
+        endDatePopupMenu.show();
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -79,7 +97,6 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         }
     }
 
-
     //region View Methods
     @Override public void setStartDate(String dateText) {
         startDateView.setText(dateText);
@@ -88,5 +105,15 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Override public void setStartTime(String timeText) {
         startTimeView.setText(timeText);
     }
+
+    @Override public void setEndDate(String timeText) {
+        endDateView.setText(timeText);
+    }
+
+    @Override public void pickCustomDateTime() {
+        //TODO open dialog activity
+    }
     //endregion
+
+
 }
