@@ -2,14 +2,15 @@ package com.shootr.android.ui.widgets;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import java.util.Calendar;
+import org.joda.time.DateTime;
 
 public class DatePickerBuilder {
 
-    private Calendar calendar;
+    private DateTime dateTime;
     private DateListener listener;
 
     public DatePickerBuilder() {
-        calendar = Calendar.getInstance();
+        dateTime = DateTime.now();
     }
 
     public static DatePickerBuilder builder() {
@@ -21,9 +22,14 @@ public class DatePickerBuilder {
         return this;
     }
 
+    public DatePickerBuilder initial(long timestamp) {
+        dateTime = new DateTime(timestamp);
+        return this;
+    }
+
     public DatePickerDialog build() {
-        return DatePickerDialog.newInstance(createOnDateSetListenerAdapter(), calendar.get(Calendar.YEAR),
-          calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
+        return DatePickerDialog.newInstance(createOnDateSetListenerAdapter(), dateTime.getYear(),
+          dateTime.getMonthOfYear()-1, dateTime.getDayOfMonth(), false);
     }
 
     private DatePickerDialog.OnDateSetListener createOnDateSetListenerAdapter() {

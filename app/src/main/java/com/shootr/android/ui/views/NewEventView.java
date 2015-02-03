@@ -8,5 +8,5 @@ public interface NewEventView {
 
     void setEndDate(String timeText);
 
-    void pickCustomDateTime();
+    void pickCustomDateTime(long initialTimestamp);
 }

@@ -167,6 +167,11 @@
               android:value="com.shootr.android.ui.activities.EventsListActivity" />
           </activity>
 
+        <activity
+          android:name=".ui.activities.DateTimePickerDialogActivity"
+          android:theme="@style/ShootrTheme.NoActionBar.Floating">
+        </activity>
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"

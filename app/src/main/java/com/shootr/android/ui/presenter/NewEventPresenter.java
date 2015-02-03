@@ -1,40 +1,61 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.R;
+import com.shootr.android.ui.model.EndDate;
+import com.shootr.android.ui.model.FixedEndDate;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.TimeFormatter;
+import java.util.List;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
 import org.joda.time.base.AbstractDateTime;
 
 public class NewEventPresenter implements Presenter {
 
-    private static final long TIME_30_MINUTES_MILLIS = 30 * 60 * 1000;
-    private static final long TIME_1_DAY_MILLIS = 24 * 60 * 60 * 1000;
-    private static final long TIME_6_HOURS_MILLIS = 6 * 60 * 60 * 1000;
+    private static final int DEFAULT_END_DATETIME_ID = R.id.end_date_6_hours;
+
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
 
     private NewEventView newEventView;
-    private MutableDateTime selectedDateTime;
+    private List<EndDate> suggestedEndDates;
+
+    private MutableDateTime selectedStartDateTime;
+    private EndDate selectedEndDate;
 
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter) {
         this.dateFormatter = dateFormatter;
         this.timeFormatter = timeFormatter;
     }
 
-    public void initialize(NewEventView newEventView) {
+    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates) {
         this.newEventView = newEventView;
-        this.setStartDateTimeCurrent();
+        this.suggestedEndDates = suggestedEndDates;
+        this.setDefaultStartDateTime();
+        this.setDefaultEndDateTime();
     }
 
-    private void setStartDateTimeCurrent() {
+    private void setDefaultEndDateTime() {
+        setEndDateTime(defaultEndDateTime());
+    }
+
+    private void setEndDateTime(EndDate endDate) {
+        selectedEndDate = endDate;
+        newEventView.setEndDate(endDate.getTitle());
+    }
+
+    private EndDate defaultEndDateTime() {
+        return endDateFromItemId(DEFAULT_END_DATETIME_ID);
+    }
+
+    private void setDefaultStartDateTime() {
         MutableDateTime currentDateTime = new MutableDateTime();
         setStartDateTime(currentDateTime);
     }
 
     private void setStartDateTime(MutableDateTime dateTime) {
-        selectedDateTime = dateTime;
+        selectedStartDateTime = dateTime;
         this.setViewStartDateTime(dateTime);
     }
 
@@ -42,6 +63,43 @@ public class NewEventPresenter implements Presenter {
         long selectedDateTimeMillis = dateTime.getMillis();
         newEventView.setStartDate(dateFormatter.getAbsoluteDate(selectedDateTimeMillis));
         newEventView.setStartTime(timeFormatter.getAbsoluteTime(selectedDateTimeMillis));
+    }
+
+    public void startDateSelected(int year, int month, int day) {
+        selectedStartDateTime.setYear(year);
+        selectedStartDateTime.setMonthOfYear(month);
+        selectedStartDateTime.setDayOfMonth(day);
+        this.setViewStartDateTime(selectedStartDateTime);
+    }
+
+    public void startTimeSelected(int hour, int minutes) {
+        selectedStartDateTime.setHourOfDay(hour);
+        selectedStartDateTime.setMinuteOfHour(minutes);
+        this.setViewStartDateTime(selectedStartDateTime);
+    }
+
+    public void endDateItemSelected(int selectedItemId) {
+        if (selectedItemId == R.id.end_date_custom) {
+            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
+        } else {
+            EndDate endDate = endDateFromItemId(selectedItemId);
+            setEndDateTime(endDate);
+        }
+    }
+
+    public void customEndDateSelected(long selectedTimestamp) {
+        FixedEndDate endDate =
+          new FixedEndDate(selectedTimestamp, R.id.end_date_custom, timeFormatter, dateFormatter);
+        setEndDateTime(endDate);
+    }
+
+    private EndDate endDateFromItemId(int itemId) {
+        for (EndDate endDate : suggestedEndDates) {
+            if (endDate.getMenuItemId() == itemId) {
+                return endDate;
+            }
+        }
+        return null;
     }
 
     @Override public void resume() {
@@ -52,16 +110,4 @@ public class NewEventPresenter implements Presenter {
 
     }
 
-    public void startDateSelected(int year, int month, int day) {
-        selectedDateTime.setYear(year);
-        selectedDateTime.setMonthOfYear(month);
-        selectedDateTime.setDayOfMonth(day);
-        this.setViewStartDateTime(selectedDateTime);
-    }
-
-    public void startTimeSelected(int hour, int minutes) {
-        selectedDateTime.setHourOfDay(hour);
-        selectedDateTime.setMinuteOfHour(minutes);
-        this.setViewStartDateTime(selectedDateTime);
-    }
 }

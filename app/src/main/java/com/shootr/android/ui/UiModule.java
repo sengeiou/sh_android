@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -48,6 +49,7 @@ import javax.inject.Singleton;
                 WatchersView.class,
                 EventsListActivity.class,
                 NewEventActivity.class,
+                DateTimePickerDialogActivity.class,
         },
         complete = false
 )

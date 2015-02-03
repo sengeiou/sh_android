@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 
 public class TimePickerBuilder {
 
-    private final DateTime dateTime;
+    private DateTime dateTime;
     private TimeListener listener;
 
     public static TimePickerBuilder builder() {
@@ -19,6 +19,11 @@ public class TimePickerBuilder {
 
     public TimePickerBuilder listener(TimeListener listener) {
         this.listener = listener;
+        return this;
+    }
+
+    public TimePickerBuilder initial(long timestamp) {
+        dateTime = new DateTime(timestamp);
         return this;
     }
 
