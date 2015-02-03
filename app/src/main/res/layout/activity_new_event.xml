@@ -68,6 +68,16 @@
         </TextView>
     </LinearLayout>
 
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:layout_marginTop="16dp"
+      android:paddingLeft="4dp"
+      android:text="Timezone"
+      android:textAppearance="@style/TextAppearance.FloatLabel" />
+
     <TextView
       android:id="@+id/new_event_start_date_timezone"
       style="@style/Widget.AppCompat.EditText"
