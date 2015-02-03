@@ -7,6 +7,7 @@ import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -63,7 +64,8 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     private void setupActionbar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
     }
 
     private void initializePresenter() {
