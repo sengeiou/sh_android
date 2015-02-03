@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -105,9 +106,18 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         endDatePopupMenu.show();
     }
 
+    //region Activity methods
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.new_event, menu);
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.menu_done) {
+            //presenter.done();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -123,6 +133,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
             }
         }
     }
+    //endregion
 
     //region View Methods
     @Override public void setStartDate(String dateText) {
