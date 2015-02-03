@@ -17,10 +17,12 @@ public class EventEntityMapper {
         }
         Event event = new Event();
         event.setId(eventEntity.getIdEvent());
+        event.setAuthorId(eventEntity.getIdUser());
         event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
         event.setEndDate(eventEntity.getEndDate());
         event.setPicture(eventEntity.getPhoto());
+        event.setTimezone(eventEntity.getTimezone());
         return event;
     }
 

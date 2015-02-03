@@ -158,15 +158,17 @@ public class DatabaseContract {
 
         public static final String TABLE = "Event";
         public static final String ID_EVENT = "idEvent";
+        public static final String ID_USER = "idUser";
         public static final String BEGIN_DATE = "beginDate";
         public static final String END_DATE = "endDate";
+        public static final String TIMEZONE = "timeZone";
         public static final String ID_LOCAL_TEAM = "idLocalTeam";
         public static final String ID_VISITOR_TEAM = "idVisitorTeam";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
 
         public static final String[] PROJECTION = {
-          ID_EVENT, BEGIN_DATE, END_DATE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, CSYS_BIRTH, CSYS_MODIFIED,
+          ID_EVENT, ID_USER, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
