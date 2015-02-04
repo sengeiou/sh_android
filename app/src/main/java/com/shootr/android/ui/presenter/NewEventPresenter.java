@@ -118,7 +118,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void eventCreated(Event event) {
-        newEventView.closeScreenWithResult();
+        newEventView.closeScreenWithResult(event.getId());
     }
 
     //endregion

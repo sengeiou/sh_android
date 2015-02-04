@@ -205,8 +205,8 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         endDateErrorView.setText(errorMessage);
     }
 
-    @Override public void closeScreenWithResult() {
-        setResult(RESULT_OK);
+    @Override public void closeScreenWithResult(Long eventId) {
+        setResult(RESULT_OK, new Intent().putExtra(EventsListActivity.KEY_EVENT_ID, eventId));
         finish();
     }
 

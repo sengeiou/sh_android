@@ -59,7 +59,6 @@ public class NewEventInteractor implements Interactor{
         if (validateEvent(event)) {
             try {
                 Event savedEvent = sendEventToServer(event);
-                //TODO change visible
                 notifyLoaded(savedEvent);
             } catch (ShootrException e) {
                 notifyError(e);
