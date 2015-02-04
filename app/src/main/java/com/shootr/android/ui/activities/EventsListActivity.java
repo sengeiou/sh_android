@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.EventsListAdapter;
@@ -86,6 +87,11 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
             }
         }
         presenter.initialize(this);
+    }
+
+    @OnClick(R.id.events_add_event)
+    public void onAddEvent() {
+        startActivity(new Intent(this, NewEventActivity.class));
     }
 
     //region Activity methods

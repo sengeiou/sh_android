@@ -1,10 +1,12 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.MainActivity;
+import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -46,6 +48,8 @@ import javax.inject.Singleton;
                 PeopleFragment.class,
                 WatchersView.class,
                 EventsListActivity.class,
+                NewEventActivity.class,
+                DateTimePickerDialogActivity.class,
         },
         complete = false
 )

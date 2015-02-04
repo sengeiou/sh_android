@@ -11,7 +11,7 @@
 
     <!-- Timeline -->
     <dimen name="new_shot_height">48dp</dimen>
-    <dimen name="card_radius">4dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
 
     <!-- Profile -->
     <dimen name="profile_avatar_size">120dp</dimen>
