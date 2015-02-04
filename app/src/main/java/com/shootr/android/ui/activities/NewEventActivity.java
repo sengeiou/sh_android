@@ -205,6 +205,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         endDateErrorView.setText(errorMessage);
     }
 
+    @Override public void closeScreenWithResult() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
     @Override public void showLoading() {
 
     }

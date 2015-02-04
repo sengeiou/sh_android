@@ -101,7 +101,7 @@ public class NewEventPresenter implements Presenter {
         newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp,
           new NewEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
-                  Timber.i("Wiii, evento cargado: %s", event.getTitle());
+                  eventCreated(event);
               }
           }, new Interactor.InteractorErrorCallback() {
               @Override public void onError(ShootrException error) {
@@ -109,10 +109,16 @@ public class NewEventPresenter implements Presenter {
                       DomainValidationException validationException = (DomainValidationException) error;
                       List<FieldValidationError> errors = validationException.getErrors();
                       showValidationErrors(errors);
+                  } else {
+                      //TODO more error type handling
+                      showViewError(errorMessageFactory.getUnknownErrorMessage());
                   }
-                  Timber.w("Wooo, error: %s", error.getClass().getSimpleName());
               }
           });
+    }
+
+    private void eventCreated(Event event) {
+        newEventView.closeScreenWithResult();
     }
 
     //endregion

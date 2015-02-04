@@ -19,4 +19,6 @@ public interface NewEventView extends DataTransferView{
     void showStartDateError(String errorMessage);
 
     void showEndDateError(String errorMessage);
+
+    void closeScreenWithResult();
 }

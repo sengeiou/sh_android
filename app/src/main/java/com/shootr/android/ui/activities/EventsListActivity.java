@@ -32,6 +32,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     public static final String KEY_EVENT_ID = "event";
     private static final String KEY_SEARCH_QUERY = "search";
+    public static final int REQUEST_NEW_EVENT = 1;
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
@@ -91,7 +92,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     @OnClick(R.id.events_add_event)
     public void onAddEvent() {
-        startActivity(new Intent(this, NewEventActivity.class));
+        startActivityForResult(new Intent(this, NewEventActivity.class), REQUEST_NEW_EVENT);
     }
 
     //region Activity methods
@@ -151,6 +152,15 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         super.onSaveInstanceState(outState);
         outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
     }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_EVENT && resultCode == RESULT_OK) {
+            //TODO mmm, is this logic? And why isn't it in the presenter?!
+            finish();
+        }
+    }
+
     //endregion
 
     //region View methods
