@@ -27,10 +27,10 @@
 
     <!-- Event -->
     <string name="error_message_event_title_too_short">3 or more characters required</string>
-    <string name="error_message_event_title_too_long">Title must not have more than 50 characters</string>
-    <string name="error_message_event_start_date_too_late">$Start date can\'t be more than one year ahead</string>
-    <string name="error_message_event_end_date_too_late" >$Event can\'t last for more than one year</string>
-    <string name="error_message_event_end_date_before_start" >$Event can\'t finish before it starts</string>
-    <string name="error_message_event_end_date_before_now" >$Date can\'t be in the past</string>
+    <string name="error_message_event_title_too_long">Must not have more than 50 characters</string>
+    <string name="error_message_event_start_date_too_late">Can\'t start more than a year ahead</string>
+    <string name="error_message_event_end_date_too_late">The event can\'t last more than a year</string>
+    <string name="error_message_event_end_date_before_start">Ending date can\'t be earlier than starting date</string>
+    <string name="error_message_event_end_date_before_now">New events can\'t be already ended</string>
 
 </resources>
