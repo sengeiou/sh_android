@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -33,6 +34,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Inject NewEventPresenter presenter;
 
+    @InjectView(R.id.new_event_title) EditText titleView;
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
     @InjectView(R.id.new_event_end_date) TextView endDateView;
@@ -119,7 +121,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
             finish();
             return true;
         } else if (item.getItemId() == R.id.menu_done) {
-            //presenter.done();
+            presenter.done();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -154,6 +156,10 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         Intent dateTimePickerIntent = new Intent(this, DateTimePickerDialogActivity.class);
         dateTimePickerIntent.putExtra(DateTimePickerDialogActivity.KEY_TIMESTAMP, initialTimestamp);
         startActivityForResult(dateTimePickerIntent, 1);
+    }
+
+    @Override public String getEventTitle() {
+        return titleView.getText().toString();
     }
     //endregion
 }

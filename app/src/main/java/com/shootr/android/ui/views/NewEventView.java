@@ -9,4 +9,6 @@ public interface NewEventView {
     void setEndDate(String timeText);
 
     void pickCustomDateTime(long initialTimestamp);
+
+    String getEventTitle();
 }

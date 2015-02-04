@@ -20,6 +20,7 @@
       app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
         <EditText
+          android:id="@+id/new_event_title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:hint="Title"

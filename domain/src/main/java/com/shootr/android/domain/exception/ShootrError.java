@@ -26,6 +26,13 @@ public interface ShootrError {
     public static final String ERROR_CODE_TEAM_ID_INVALID = "U015";
     public static final String ERROR_CODE_SHOT_TEXT_DUPLICATED = "CS002";
 
+    public static final String ERROR_CODE_EVENT_TITLE_TOO_SHORT = "E002";
+    public static final String ERROR_CODE_EVENT_TITLE_TOO_LONG = "E003";
+    public static final String ERROR_CODE_EVENT_START_DATE_TOO_LATE = "E011";
+    public static final String ERROR_CODE_EVENT_END_DATE_TOO_LATE = "E010";
+    public static final String ERROR_CODE_EVENT_END_DATE_BEFORE_START = "E012";
+    public static final String ERROR_CODE_EVENT_END_DATE_BEFORE_NOW = "E013";
+
     public String getErrorCode();
 
     String getMessage();

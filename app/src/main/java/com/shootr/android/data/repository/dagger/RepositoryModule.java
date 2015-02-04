@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 
 @Module(
   includes = {
-    WatchRepositoryModule.class, UserRepositoryModule.class, EventRepositoryModule.class,
+    WatchRepositoryModule.class, UserRepositoryModule.class, EventRepositoryModule.class, TimezoneRepositoryModule.class,
   },
   complete = false,
   library = true
