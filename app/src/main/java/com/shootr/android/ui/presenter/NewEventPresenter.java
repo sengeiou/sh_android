@@ -2,13 +2,18 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.R;
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.NewEventInteractor;
+import com.shootr.android.domain.validation.EventValidator;
+import com.shootr.android.domain.validation.FieldValidationError;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EndDate;
 import com.shootr.android.ui.model.FixedEndDate;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.TimeFormatter;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,6 +28,7 @@ public class NewEventPresenter implements Presenter {
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
     private final NewEventInteractor newEventInteractor;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private NewEventView newEventView;
     private List<EndDate> suggestedEndDates;
@@ -31,10 +37,11 @@ public class NewEventPresenter implements Presenter {
     private EndDate selectedEndDate;
 
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
-      NewEventInteractor newEventInteractor) {
+      NewEventInteractor newEventInteractor, ErrorMessageFactory errorMessageFactory) {
         this.dateFormatter = dateFormatter;
         this.timeFormatter = timeFormatter;
         this.newEventInteractor = newEventInteractor;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     //region Initialization
@@ -98,9 +105,51 @@ public class NewEventPresenter implements Presenter {
               }
           }, new Interactor.InteractorErrorCallback() {
               @Override public void onError(ShootrException error) {
+                  if (error instanceof DomainValidationException) {
+                      DomainValidationException validationException = (DomainValidationException) error;
+                      List<FieldValidationError> errors = validationException.getErrors();
+                      showValidationErrors(errors);
+                  }
                   Timber.w("Wooo, error: %s", error.getClass().getSimpleName());
               }
           });
+    }
+
+    //endregion
+    private void showValidationErrors(List<FieldValidationError> errors) {
+        for (FieldValidationError validationError : errors) {
+            String errorMessage = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
+            switch (validationError.getField()) {
+                case EventValidator.FIELD_TITLE:
+                    showViewTitleError(errorMessage);
+                    break;
+                case EventValidator.FIELD_START_DATE:
+                    showViewStartDateError(errorMessage);
+                    break;
+                case EventValidator.FIELD_END_DATE:
+                    showViewEndDateError(errorMessage);
+                    break;
+                default:
+                    showViewError(errorMessage);
+            }
+        }
+    }
+
+    //region Errors
+    private void showViewTitleError(String errorMessage) {
+        newEventView.showTitleError(errorMessage);
+    }
+
+    private void showViewStartDateError(String errorMessage) {
+        newEventView.showStartDateError(errorMessage);
+    }
+
+    private void showViewEndDateError(String errorMessage) {
+        newEventView.showEndDateError(errorMessage);
+    }
+
+    private void showViewError(String errorMessage) {
+        newEventView.showError(errorMessage);
     }
     //endregion
 

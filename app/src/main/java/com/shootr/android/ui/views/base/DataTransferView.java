@@ -1,4 +1,4 @@
-package com.shootr.android.ui.views;
+package com.shootr.android.ui.views.base;
 
 public interface DataTransferView {
 

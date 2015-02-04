@@ -39,6 +39,12 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_SHOT_TEXT_DUPLICATED, R.string.new_shot_repeated);
         codeResourceMap.put(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT, R.string.error_message_search_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT, R.string.error_message_event_title_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG, R.string.error_message_event_title_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_START_DATE_TOO_LATE, R.string.error_message_event_start_date_too_late);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_TOO_LATE, R.string.error_message_event_end_date_too_late);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START, R.string.error_message_event_end_date_before_start);
+        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW, R.string.error_message_event_end_date_before_now);
     }
 
     public String getMessageForError(ShootrError shootrError) {

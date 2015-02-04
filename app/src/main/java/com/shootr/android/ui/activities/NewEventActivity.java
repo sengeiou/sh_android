@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -38,6 +40,9 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
     @InjectView(R.id.new_event_end_date) TextView endDateView;
+    @InjectView(R.id.new_event_title_error) TextView titleErrorView;
+    @InjectView(R.id.new_event_start_date_error) TextView startDateErrorView;
+    @InjectView(R.id.new_event_end_date_error) TextView endDateErrorView;
 
     private PopupMenu endDatePopupMenu;
 
@@ -59,6 +64,17 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
                 int itemId = menuItem.getItemId();
                 presenter.endDateItemSelected(itemId);
                 return true;
+            }
+        });
+        titleView.addTextChangedListener(new TextWatcher() {
+            @Override public void afterTextChanged(Editable s) {
+                resetTitleError();
+            }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
     }
@@ -84,6 +100,18 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         return endDates;
     }
     //endregion
+
+    private void resetTitleError() {
+        titleErrorView.setError(null);
+    }
+
+    private void resetStartDateError() {
+        startDateErrorView.setText(null);
+    }
+
+    private void resetEndDateError() {
+        endDateErrorView.setText(null);
+    }
 
     @OnClick(R.id.new_event_start_date)
     public void onStartDateClick() {
@@ -141,14 +169,17 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     //region View Methods
     @Override public void setStartDate(String dateText) {
+        resetStartDateError();
         startDateView.setText(dateText);
     }
 
     @Override public void setStartTime(String timeText) {
+        resetStartDateError();
         startTimeView.setText(timeText);
     }
 
     @Override public void setEndDate(String timeText) {
+        resetEndDateError();
         endDateView.setText(timeText);
     }
 
@@ -160,6 +191,30 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Override public String getEventTitle() {
         return titleView.getText().toString();
+    }
+
+    @Override public void showTitleError(String errorMessage) {
+        titleErrorView.setText(errorMessage);
+    }
+
+    @Override public void showStartDateError(String errorMessage) {
+        startDateErrorView.setText(errorMessage);
+    }
+
+    @Override public void showEndDateError(String errorMessage) {
+        endDateErrorView.setText(errorMessage);
+    }
+
+    @Override public void showLoading() {
+
+    }
+
+    @Override public void hideLoading() {
+
+    }
+
+    @Override public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
     //endregion
 }

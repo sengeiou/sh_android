@@ -1,5 +1,6 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.views.base.DataTransferView;
 import java.io.File;
 
 public interface PostNewShotView extends DataTransferView {

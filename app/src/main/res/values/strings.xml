@@ -53,7 +53,7 @@
     <string name="follower_list_empty">No followers</string>
     <string name="no_more_shots">No more shots</string>
     <string name="new_shoot_action">Shoot</string>
-    <string name="new_shot_repeated">Whoops! You already shot that.</string>
+    <string name="new_shot_repeated">Whoops! You already shot that</string>
     <string name="profile_following">Following</string>
     <string name="profile_follow">Follow</string>
     <string name="profile_edit_profile">Edit Profile</string>

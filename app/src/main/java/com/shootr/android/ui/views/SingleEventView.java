@@ -2,9 +2,10 @@ package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface SingleEventView extends LoadDataView{
+public interface SingleEventView extends LoadDataView {
 
     void setEventTitle(String title);
 
