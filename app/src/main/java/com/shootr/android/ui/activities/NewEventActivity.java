@@ -218,11 +218,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
 
     @Override public void showLoading() {
-
+        doneMenuItem.setActionView(R.layout.item_list_loading);
     }
 
     @Override public void hideLoading() {
-
+        doneMenuItem.setActionView(null);
     }
 
     @Override public void showError(String message) {

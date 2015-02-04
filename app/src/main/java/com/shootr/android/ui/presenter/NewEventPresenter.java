@@ -100,16 +100,19 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void done() {
+        newEventView.showLoading();
         long startTimestamp = selectedStartDateTime.getMillis();
         long endTimestamp = selectedEndDate.getDateTime(startTimestamp);
         String title = filterTitle(newEventView.getEventTitle());
         newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp,
           new NewEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
+                  newEventView.hideLoading();
                   eventCreated(event);
               }
           }, new Interactor.InteractorErrorCallback() {
               @Override public void onError(ShootrException error) {
+                  newEventView.hideLoading();
                   if (error instanceof DomainValidationException) {
                       DomainValidationException validationException = (DomainValidationException) error;
                       List<FieldValidationError> errors = validationException.getErrors();
