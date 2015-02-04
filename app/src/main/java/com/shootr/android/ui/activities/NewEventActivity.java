@@ -45,6 +45,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @InjectView(R.id.new_event_end_date_error) TextView endDateErrorView;
 
     private PopupMenu endDatePopupMenu;
+    private MenuItem doneMenuItem;
 
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         });
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
+                presenter.titleTextChanged(s.toString());
                 resetTitleError();
             }
 
@@ -141,6 +143,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_event, menu);
+        doneMenuItem = menu.findItem(R.id.menu_done);
         return true;
     }
 
@@ -208,6 +211,10 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Override public void closeScreenWithResult(Long eventId) {
         setResult(RESULT_OK, new Intent().putExtra(EventsListActivity.KEY_EVENT_ID, eventId));
         finish();
+    }
+
+    @Override public void doneButtonEnabled(boolean enable) {
+        doneMenuItem.setEnabled(enable);
     }
 
     @Override public void showLoading() {

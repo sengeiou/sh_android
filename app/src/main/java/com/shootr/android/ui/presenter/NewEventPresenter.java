@@ -67,6 +67,11 @@ public class NewEventPresenter implements Presenter {
     //endregion
 
     //region Interaction methods
+    public void titleTextChanged(String title) {
+        boolean canCreateEvent = !(filterTitle(title).length() < 3);
+        newEventView.doneButtonEnabled(canCreateEvent);
+    }
+
     public void startDateSelected(int year, int month, int day) {
         selectedStartDateTime.setYear(year);
         selectedStartDateTime.setMonthOfYear(month);
@@ -123,6 +128,8 @@ public class NewEventPresenter implements Presenter {
     }
 
     //endregion
+
+    //region Errors
     private void showValidationErrors(List<FieldValidationError> errors) {
         for (FieldValidationError validationError : errors) {
             String errorMessage = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
@@ -142,7 +149,6 @@ public class NewEventPresenter implements Presenter {
         }
     }
 
-    //region Errors
     private void showViewTitleError(String errorMessage) {
         newEventView.showTitleError(errorMessage);
     }

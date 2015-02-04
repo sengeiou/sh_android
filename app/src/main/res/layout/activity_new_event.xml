@@ -27,6 +27,7 @@
           android:imeOptions="actionDone"
           android:inputType="text|textCapWords|textNoSuggestions"
           android:lines="1"
+          android:maxLength="50"
           android:nextFocusDown="@+id/profile_edit_username"
           android:singleLine="true"
           tools:text="My New Event" />
