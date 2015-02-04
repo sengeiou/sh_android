@@ -111,6 +111,7 @@ public class NewEventPresenter implements Presenter {
                       showValidationErrors(errors);
                   } else {
                       //TODO more error type handling
+                      Timber.e(error, "Unhandled error creating event.");
                       showViewError(errorMessageFactory.getUnknownErrorMessage());
                   }
               }

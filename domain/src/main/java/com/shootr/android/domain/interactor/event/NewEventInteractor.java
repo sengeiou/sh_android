@@ -2,7 +2,9 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DomainValidationException;
+import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -16,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class NewEventInteractor implements Interactor{
+public class NewEventInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -31,7 +33,8 @@ public class NewEventInteractor implements Interactor{
     private InteractorErrorCallback errorCallback;
 
     @Inject public NewEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, TimezoneRepository timezoneRepository, @Remote EventRepository remoteEventRepository) {
+      SessionRepository sessionRepository, TimezoneRepository timezoneRepository,
+      @Remote EventRepository remoteEventRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
@@ -39,7 +42,8 @@ public class NewEventInteractor implements Interactor{
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void createNewEvent(String title, long startDate, long endDate, Callback callback, InteractorErrorCallback errorCallback) {
+    public void createNewEvent(String title, long startDate, long endDate, Callback callback,
+      InteractorErrorCallback errorCallback) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -61,7 +65,7 @@ public class NewEventInteractor implements Interactor{
                 Event savedEvent = sendEventToServer(event);
                 notifyLoaded(savedEvent);
             } catch (ShootrException e) {
-                notifyError(e);
+                handleServerError(e);
             }
         }
     }
@@ -70,14 +74,7 @@ public class NewEventInteractor implements Interactor{
         return remoteEventRepository.putEvent(event);
     }
 
-    private void notifyLoaded(final Event event) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(event);
-            }
-        });
-    }
-
+    //region Validation
     private boolean validateEvent(Event event) {
         List<FieldValidationError> validationErrors = new EventValidator().validate(event);
         if (validationErrors.isEmpty()) {
@@ -88,19 +85,62 @@ public class NewEventInteractor implements Interactor{
         }
     }
 
+    private void handleServerError(ShootrException e) {
+        if (e.getCause() instanceof ShootrServerException) {
+            ShootrServerException serverException = (ShootrServerException) e.getCause();
+            String errorCode = serverException.getShootrError().getErrorCode();
+            FieldValidationError validationError = validationErrorFromCode(errorCode);
+            if (validationError != null) {
+                notifyError(new DomainValidationException(validationError));
+                return;
+            }
+        }
+        notifyError(e);
+    }
+
+    private FieldValidationError validationErrorFromCode(String errorCode) {
+        int field = fieldFromErrorCode(errorCode);
+        if (field != 0) {
+            return new FieldValidationError(errorCode, field);
+        } else {
+            return null;
+        }
+    }
+
+    private int fieldFromErrorCode(String errorCode) {
+        switch (errorCode) {
+            case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT:
+            case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG:
+                return EventValidator.FIELD_TITLE;
+            case ShootrError.ERROR_CODE_EVENT_START_DATE_TOO_LATE:
+                return EventValidator.FIELD_START_DATE;
+            case ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW:
+            case ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START:
+            case ShootrError.ERROR_CODE_EVENT_END_DATE_TOO_LATE:
+                return EventValidator.FIELD_END_DATE;
+        }
+        return 0;
+    }
+    //endregion
+
+    private void notifyLoaded(final Event event) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                callback.onLoaded(event);
+            }
+        });
+    }
+
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
             }
         });
-
     }
 
     public interface Callback {
 
         void onLoaded(Event event);
-
     }
-
 }
