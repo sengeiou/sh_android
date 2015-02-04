@@ -6,7 +6,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.PhotoService;
-import com.shootr.android.service.ShootrServerException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.task.events.profile.UploadShotImageEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationError;

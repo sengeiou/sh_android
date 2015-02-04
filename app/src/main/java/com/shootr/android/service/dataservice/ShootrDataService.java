@@ -21,7 +21,7 @@ import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.ShootrServerException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;

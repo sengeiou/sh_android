@@ -5,7 +5,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.ShootrPhotoUploadError;
-import com.shootr.android.service.ShootrServerException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;

@@ -45,7 +45,7 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.exception.ShootrError;
-import com.shootr.android.service.ShootrServerException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
