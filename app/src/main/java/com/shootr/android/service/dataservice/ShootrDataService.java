@@ -385,6 +385,21 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
+    @Override public EventEntity saveEvent(EventEntity eventEntity) throws IOException {
+        GenericDto requestDto = eventDtoFactory.saveEvent(eventEntity);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        EventEntity eventsReceived = null;
+        if (ops.length > 0) {
+            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+        }
+        return eventsReceived;
+    }
+
     @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {
         List<EventEntity> eventsReceived = new ArrayList<>();
         GenericDto requestDto = eventDtoFactory.getEventsNotEndedByIds(eventIds);

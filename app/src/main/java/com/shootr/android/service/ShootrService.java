@@ -51,6 +51,8 @@ public interface ShootrService {
 
     public WatchEntity getVisibleWatch(Long currentUserId) throws IOException;
 
+    public EventEntity saveEvent(EventEntity eventEntity) throws IOException;
+
     public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
 
     public WatchEntity setWatchStatus(WatchEntity watch) throws IOException;

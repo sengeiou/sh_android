@@ -1,6 +1,7 @@
 package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.Event;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +33,19 @@ public class EventEntityMapper {
             events.add(transform(eventEntity));
         }
         return events;
+    }
+
+    public EventEntity transform(Event event) {
+        EventEntity eventEntity = new EventEntity();
+        eventEntity.setIdEvent(event.getId());
+        eventEntity.setIdUser(event.getAuthorId());
+        eventEntity.setTitle(event.getTitle());
+        eventEntity.setBeginDate(event.getStartDate());
+        eventEntity.setEndDate(event.getEndDate());
+        eventEntity.setPhoto(event.getPicture());
+        eventEntity.setTimezone(event.getTimezone());
+
+        eventEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
+        return eventEntity;
     }
 }
