@@ -21,6 +21,8 @@ public class EventModelMapper {
         eventModel.setPicture(event.getPicture());
         long startDateMilliseconds = event.getStartDate().getTime();
         eventModel.setDatetime(timeFormatter.eventResultDateText(startDateMilliseconds));
+        eventModel.setStartDate(startDateMilliseconds);
+        eventModel.setEndDate(event.getEndDate().getTime());
         return eventModel;
     }
 

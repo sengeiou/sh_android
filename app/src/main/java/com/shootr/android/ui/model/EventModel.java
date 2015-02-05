@@ -9,6 +9,8 @@ public class EventModel {
     private String datetime;
     private String title;
     private String picture;
+    private long startDate;
+    private long endDate;
 
     public Long getIdEvent() {
         return idEvent;
@@ -73,5 +75,21 @@ public class EventModel {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public long getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(long endDate) {
+        this.endDate = endDate;
+    }
+
+    public long getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(long startDate) {
+        this.startDate = startDate;
     }
 }

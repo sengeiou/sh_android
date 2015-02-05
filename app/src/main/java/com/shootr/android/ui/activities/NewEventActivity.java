@@ -54,7 +54,9 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         setContainerContent(R.layout.activity_new_event);
         initializeViews();
         setupActionbar();
-        initializePresenter();
+
+        long idEventToEdit = getIntent().getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+        initializePresenter(idEventToEdit);
     }
 
     private void initializeViews() {
@@ -89,8 +91,8 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
     }
 
-    private void initializePresenter() {
-        presenter.initialize(this, suggestedEndDates());
+    private void initializePresenter(long idEventToEdit) {
+        presenter.initialize(this, suggestedEndDates(), idEventToEdit);
     }
 
     private List<EndDate> suggestedEndDates() {
@@ -104,18 +106,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
     //endregion
 
-    private void resetTitleError() {
-        titleErrorView.setError(null);
-    }
-
-    private void resetStartDateError() {
-        startDateErrorView.setText(null);
-    }
-
-    private void resetEndDateError() {
-        endDateErrorView.setText(null);
-    }
-
+    //region Listeners
     @OnClick(R.id.new_event_start_date)
     public void onStartDateClick() {
         DatePickerDialog datePickerDialog = DatePickerBuilder.builder().listener(new DatePickerBuilder.DateListener() {
@@ -140,6 +131,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     public void onEndDateClick() {
         endDatePopupMenu.show();
     }
+    //endregion
 
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -193,6 +185,10 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         startActivityForResult(dateTimePickerIntent, 1);
     }
 
+    @Override public void setEventTitle(String title) {
+        titleView.setText(title);
+    }
+
     @Override public String getEventTitle() {
         return titleView.getText().toString();
     }
@@ -215,7 +211,9 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
 
     @Override public void doneButtonEnabled(boolean enable) {
-        doneMenuItem.setEnabled(enable);
+        if (doneMenuItem != null) {
+            doneMenuItem.setEnabled(enable);
+        }
     }
 
     @Override public void hideKeyboard() {
@@ -233,6 +231,18 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Override public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void resetTitleError() {
+        titleErrorView.setError(null);
+    }
+
+    private void resetStartDateError() {
+        startDateErrorView.setText(null);
+    }
+
+    private void resetEndDateError() {
+        endDateErrorView.setText(null);
     }
     //endregion
 }

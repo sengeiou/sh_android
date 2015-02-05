@@ -6,11 +6,14 @@ import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.GetEventInteractor;
 import com.shootr.android.domain.interactor.event.NewEventInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.EndDate;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.FixedEndDate;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -28,6 +31,8 @@ public class NewEventPresenter implements Presenter {
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
     private final NewEventInteractor newEventInteractor;
+    private final GetEventInteractor getEventInteractor;
+    private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private NewEventView newEventView;
@@ -35,21 +40,51 @@ public class NewEventPresenter implements Presenter {
 
     private MutableDateTime selectedStartDateTime;
     private EndDate selectedEndDate;
+    private String preloadedTitle;
+    private long preloadedStartDate;
+    private EndDate preloadedEndDate;
 
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
-      NewEventInteractor newEventInteractor, ErrorMessageFactory errorMessageFactory) {
+      NewEventInteractor newEventInteractor, GetEventInteractor getEventInteractor, EventModelMapper eventModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.dateFormatter = dateFormatter;
         this.timeFormatter = timeFormatter;
         this.newEventInteractor = newEventInteractor;
+        this.getEventInteractor = getEventInteractor;
+        this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
 
     //region Initialization
-    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates) {
+    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, long optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
-        this.setDefaultStartDateTime();
-        this.setDefaultEndDateTime();
+        if (optionalIdEventToEdit == 0L) {
+            this.setDefaultStartDateTime();
+            this.setDefaultEndDateTime();
+        } else {
+            this.preloadEventToEdit(optionalIdEventToEdit);
+        }
+    }
+
+    private void preloadEventToEdit(long optionalIdEventToEdit) {
+        getEventInteractor.loadEvent(optionalIdEventToEdit, new GetEventInteractor.Callback() {
+            @Override public void onLoaded(Event event) {
+                setDefaultEventInfo(eventModelMapper.transform(event));
+            }
+        });
+    }
+
+    private void setDefaultEventInfo(EventModel eventModel) {
+        preloadedTitle = eventModel.getTitle();
+        newEventView.setEventTitle(preloadedTitle);
+
+        preloadedStartDate = eventModel.getStartDate();
+        newEventView.setStartDate(dateFormatter.getAbsoluteDate(preloadedStartDate));
+        newEventView.setStartTime(timeFormatter.getAbsoluteTime(preloadedStartDate));
+
+        preloadedEndDate = endDateFromTimestamp(eventModel.getEndDate(), preloadedStartDate);
+        newEventView.setEndDate(preloadedEndDate.getTitle());
     }
 
     private void setDefaultStartDateTime() {
@@ -61,7 +96,7 @@ public class NewEventPresenter implements Presenter {
     private void roundDateUp(MutableDateTime currentDateTime) {
         if (currentDateTime.getMinuteOfHour()!=0) {
             currentDateTime.setMinuteOfHour(0);
-            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay()+1);
+            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay() + 1);
         }
     }
 
@@ -117,8 +152,7 @@ public class NewEventPresenter implements Presenter {
         long startTimestamp = selectedStartDateTime.getMillis();
         long endTimestamp = selectedEndDate.getDateTime(startTimestamp);
         String title = filterTitle(newEventView.getEventTitle());
-        newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp,
-          new NewEventInteractor.Callback() {
+        newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp, new NewEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
                   eventCreated(event);
               }
@@ -218,6 +252,15 @@ public class NewEventPresenter implements Presenter {
             }
         }
         return null;
+    }
+
+    private EndDate endDateFromTimestamp(long endDateTime, long startDateTime) {
+        for (EndDate endDate : suggestedEndDates) {
+            if (endDate.getDateTime(startDateTime) == endDateTime) {
+                return endDate;
+            }
+        }
+        return new FixedEndDate(endDateTime, R.id.end_date_custom, timeFormatter, dateFormatter);
     }
 
     @Override public void resume() {
