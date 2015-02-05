@@ -3,12 +3,12 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.R;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DomainValidationException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.NewEventInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EndDate;
 import com.shootr.android.ui.model.FixedEndDate;
 import com.shootr.android.ui.views.NewEventView;
@@ -102,33 +102,46 @@ public class NewEventPresenter implements Presenter {
     public void done() {
         newEventView.hideKeyboard();
         newEventView.showLoading();
+        this.createEvent();
+    }
+
+    private void createEvent() {
         long startTimestamp = selectedStartDateTime.getMillis();
         long endTimestamp = selectedEndDate.getDateTime(startTimestamp);
         String title = filterTitle(newEventView.getEventTitle());
         newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp,
           new NewEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
-                  newEventView.hideLoading();
                   eventCreated(event);
               }
           }, new Interactor.InteractorErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  newEventView.hideLoading();
-                  if (error instanceof DomainValidationException) {
-                      DomainValidationException validationException = (DomainValidationException) error;
-                      List<FieldValidationError> errors = validationException.getErrors();
-                      showValidationErrors(errors);
-                  } else {
-                      //TODO more error type handling
-                      Timber.e(error, "Unhandled error creating event.");
-                      showViewError(errorMessageFactory.getUnknownErrorMessage());
-                  }
+                  eventCreationError(error);
               }
           });
     }
 
     private void eventCreated(Event event) {
         newEventView.closeScreenWithResult(event.getId());
+    }
+
+    private void eventCreationError(ShootrException error) {
+        newEventView.hideLoading();
+        if (error instanceof DomainValidationException) {
+            DomainValidationException validationException = (DomainValidationException) error;
+            List<FieldValidationError> errors = validationException.getErrors();
+            showValidationErrors(errors);
+        }else if (error instanceof ServerCommunicationException) {
+            onCommunicationError();
+        } else {
+            //TODO more error type handling
+            Timber.e(error, "Unhandled error creating event.");
+            showViewError(errorMessageFactory.getUnknownErrorMessage());
+        }
+    }
+
+    private void onCommunicationError() {
+        showViewError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     //endregion
