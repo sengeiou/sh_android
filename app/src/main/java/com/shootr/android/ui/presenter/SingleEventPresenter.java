@@ -213,8 +213,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
         singleEventView.setEventPicture(eventModel.getPicture());
-        //TODO only if I'm author, else hide
-        singleEventView.showEditEventButton();
+        if (eventModel.amIAuthor()) {
+            singleEventView.showEditEventButton();
+        } else {
+            singleEventView.hideEditEventButton();
+        }
     }
 
     private void renderWatchersCount(int watchersCount) {

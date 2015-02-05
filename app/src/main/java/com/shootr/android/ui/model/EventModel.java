@@ -11,6 +11,7 @@ public class EventModel {
     private String picture;
     private long startDate;
     private long endDate;
+    private boolean amIAuthor;
 
     public Long getIdEvent() {
         return idEvent;
@@ -91,5 +92,13 @@ public class EventModel {
 
     public void setStartDate(long startDate) {
         this.startDate = startDate;
+    }
+
+    public boolean amIAuthor() {
+        return amIAuthor;
+    }
+
+    public void setAmIAuthor(boolean amIAuthor) {
+        this.amIAuthor = amIAuthor;
     }
 }

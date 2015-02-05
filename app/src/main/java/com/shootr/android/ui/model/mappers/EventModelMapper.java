@@ -1,6 +1,7 @@
 package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.util.EventTimeFormatter;
 import com.shootr.android.util.TimeFormatter;
@@ -9,9 +10,11 @@ import javax.inject.Inject;
 public class EventModelMapper {
 
     private final EventTimeFormatter timeFormatter;
+    private final SessionRepository sessionRepository;
 
-    @Inject public EventModelMapper(EventTimeFormatter timeFormatter) {
+    @Inject public EventModelMapper(EventTimeFormatter timeFormatter, SessionRepository sessionRepository) {
         this.timeFormatter = timeFormatter;
+        this.sessionRepository = sessionRepository;
     }
 
     public EventModel transform(Event event) {
@@ -23,6 +26,7 @@ public class EventModelMapper {
         eventModel.setDatetime(timeFormatter.eventResultDateText(startDateMilliseconds));
         eventModel.setStartDate(startDateMilliseconds);
         eventModel.setEndDate(event.getEndDate().getTime());
+        eventModel.setAmIAuthor(event.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         return eventModel;
     }
 
