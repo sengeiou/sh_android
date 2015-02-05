@@ -48,6 +48,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
     @InjectView(R.id.event_loading) View loadingView;
 
     @InjectView(R.id.event_photo) ImageView photo;
+    @InjectView(R.id.event_photo_edit_indicator) ImageView photoEditIndicator;
     @InjectView(R.id.event_photo_container) View photoContainer;
 
     @InjectView(R.id.event_title_container) View titleContainer;
@@ -165,6 +166,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
     public void onTitleClick() {
         //TODO extract logic
         navigateToSelectEvent();
+    }
+
+    @OnClick(R.id.event_photo_container)
+    public void onPhotoClick() {
+        Toast.makeText(this, "Edit photo", Toast.LENGTH_SHORT).show();
     }
 
     private void navigateToSelectEvent() {
@@ -345,6 +351,24 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
         } else {
             hasPicture = false;
         }
+    }
+
+    @Override public void showEditPicture(String picture) {
+        hasPicture = true;
+        if (picture == null) {
+            photo.setImageDrawable(null);
+            photoEditIndicator.setVisibility(View.VISIBLE);
+        }
+        recomputePhotoAndScrollingMetrics();
+        photoContainer.setClickable(true);
+        photoContainer.setFocusable(true);
+    }
+
+    @Override public void hideEditPicture() {
+        photoEditIndicator.setVisibility(View.GONE);
+        recomputePhotoAndScrollingMetrics();
+        photoContainer.setClickable(false);
+        photoContainer.setFocusable(false);
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {
