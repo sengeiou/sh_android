@@ -1,15 +1,25 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.R;
+import com.shootr.android.domain.Event;
+import com.shootr.android.domain.exception.DomainValidationException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.NewEventInteractor;
+import com.shootr.android.domain.validation.EventValidator;
+import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.EndDate;
 import com.shootr.android.ui.model.FixedEndDate;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.TimeFormatter;
 import java.util.List;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
 import org.joda.time.base.AbstractDateTime;
+import timber.log.Timber;
 
 public class NewEventPresenter implements Presenter {
 
@@ -17,6 +27,8 @@ public class NewEventPresenter implements Presenter {
 
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
+    private final NewEventInteractor newEventInteractor;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private NewEventView newEventView;
     private List<EndDate> suggestedEndDates;
@@ -24,11 +36,15 @@ public class NewEventPresenter implements Presenter {
     private MutableDateTime selectedStartDateTime;
     private EndDate selectedEndDate;
 
-    @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter) {
+    @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
+      NewEventInteractor newEventInteractor, ErrorMessageFactory errorMessageFactory) {
         this.dateFormatter = dateFormatter;
         this.timeFormatter = timeFormatter;
+        this.newEventInteractor = newEventInteractor;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
+    //region Initialization
     public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates) {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
@@ -36,33 +52,32 @@ public class NewEventPresenter implements Presenter {
         this.setDefaultEndDateTime();
     }
 
-    private void setDefaultEndDateTime() {
-        setEndDateTime(defaultEndDateTime());
+    private void setDefaultStartDateTime() {
+        MutableDateTime currentDateTime = new MutableDateTime();
+        roundDateUp(currentDateTime);
+        setStartDateTime(currentDateTime);
     }
 
-    private void setEndDateTime(EndDate endDate) {
-        selectedEndDate = endDate;
-        newEventView.setEndDate(endDate.getTitle());
+    private void roundDateUp(MutableDateTime currentDateTime) {
+        if (currentDateTime.getMinuteOfHour()!=0) {
+            currentDateTime.setMinuteOfHour(0);
+            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay()+1);
+        }
+    }
+
+    private void setDefaultEndDateTime() {
+        setEndDateTime(defaultEndDateTime());
     }
 
     private EndDate defaultEndDateTime() {
         return endDateFromItemId(DEFAULT_END_DATETIME_ID);
     }
+    //endregion
 
-    private void setDefaultStartDateTime() {
-        MutableDateTime currentDateTime = new MutableDateTime();
-        setStartDateTime(currentDateTime);
-    }
-
-    private void setStartDateTime(MutableDateTime dateTime) {
-        selectedStartDateTime = dateTime;
-        this.setViewStartDateTime(dateTime);
-    }
-
-    private void setViewStartDateTime(AbstractDateTime dateTime) {
-        long selectedDateTimeMillis = dateTime.getMillis();
-        newEventView.setStartDate(dateFormatter.getAbsoluteDate(selectedDateTimeMillis));
-        newEventView.setStartTime(timeFormatter.getAbsoluteTime(selectedDateTimeMillis));
+    //region Interaction methods
+    public void titleTextChanged(String title) {
+        boolean canCreateEvent = !(filterTitle(title).length() < 3);
+        newEventView.doneButtonEnabled(canCreateEvent);
     }
 
     public void startDateSelected(int year, int month, int day) {
@@ -88,9 +103,112 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void customEndDateSelected(long selectedTimestamp) {
-        FixedEndDate endDate =
-          new FixedEndDate(selectedTimestamp, R.id.end_date_custom, timeFormatter, dateFormatter);
+        FixedEndDate endDate = new FixedEndDate(selectedTimestamp, R.id.end_date_custom, timeFormatter, dateFormatter);
         setEndDateTime(endDate);
+    }
+
+    public void done() {
+        newEventView.hideKeyboard();
+        newEventView.showLoading();
+        this.createEvent();
+    }
+
+    private void createEvent() {
+        long startTimestamp = selectedStartDateTime.getMillis();
+        long endTimestamp = selectedEndDate.getDateTime(startTimestamp);
+        String title = filterTitle(newEventView.getEventTitle());
+        newEventInteractor.createNewEvent(title, startTimestamp, endTimestamp,
+          new NewEventInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  eventCreated(event);
+              }
+          }, new Interactor.InteractorErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventCreationError(error);
+              }
+          });
+    }
+
+    private void eventCreated(Event event) {
+        newEventView.closeScreenWithResult(event.getId());
+    }
+
+    private void eventCreationError(ShootrException error) {
+        newEventView.hideLoading();
+        if (error instanceof DomainValidationException) {
+            DomainValidationException validationException = (DomainValidationException) error;
+            List<FieldValidationError> errors = validationException.getErrors();
+            showValidationErrors(errors);
+        }else if (error instanceof ServerCommunicationException) {
+            onCommunicationError();
+        } else {
+            //TODO more error type handling
+            Timber.e(error, "Unhandled error creating event.");
+            showViewError(errorMessageFactory.getUnknownErrorMessage());
+        }
+    }
+
+    private void onCommunicationError() {
+        showViewError(errorMessageFactory.getCommunicationErrorMessage());
+    }
+
+    //endregion
+
+    //region Errors
+    private void showValidationErrors(List<FieldValidationError> errors) {
+        for (FieldValidationError validationError : errors) {
+            String errorMessage = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
+            switch (validationError.getField()) {
+                case EventValidator.FIELD_TITLE:
+                    showViewTitleError(errorMessage);
+                    break;
+                case EventValidator.FIELD_START_DATE:
+                    showViewStartDateError(errorMessage);
+                    break;
+                case EventValidator.FIELD_END_DATE:
+                    showViewEndDateError(errorMessage);
+                    break;
+                default:
+                    showViewError(errorMessage);
+            }
+        }
+    }
+
+    private void showViewTitleError(String errorMessage) {
+        newEventView.showTitleError(errorMessage);
+    }
+
+    private void showViewStartDateError(String errorMessage) {
+        newEventView.showStartDateError(errorMessage);
+    }
+
+    private void showViewEndDateError(String errorMessage) {
+        newEventView.showEndDateError(errorMessage);
+    }
+
+    private void showViewError(String errorMessage) {
+        newEventView.showError(errorMessage);
+    }
+    //endregion
+
+    private String filterTitle(String title) {
+        return title.trim();
+    }
+
+    private void setStartDateTime(MutableDateTime dateTime) {
+        selectedStartDateTime = dateTime;
+        this.setViewStartDateTime(dateTime);
+    }
+
+    private void setEndDateTime(EndDate endDate) {
+        selectedEndDate = endDate;
+        newEventView.setEndDate(endDate.getTitle());
+    }
+
+    private void setViewStartDateTime(AbstractDateTime dateTime) {
+        long selectedDateTimeMillis = dateTime.getMillis();
+        newEventView.setStartDate(dateFormatter.getAbsoluteDate(selectedDateTimeMillis));
+        newEventView.setStartTime(timeFormatter.getAbsoluteTime(selectedDateTimeMillis));
     }
 
     private EndDate endDateFromItemId(int itemId) {
@@ -109,5 +227,4 @@ public class NewEventPresenter implements Presenter {
     @Override public void pause() {
 
     }
-
 }

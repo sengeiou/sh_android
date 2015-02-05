@@ -5,6 +5,8 @@ import java.util.Date;
 public class EventEntity extends Synchronized implements Comparable<EventEntity> {
 
     private Long idEvent;
+    private Long idUser;
+    private String timezone;
     private Date beginDate;
     private Date endDate;
     private Long idLocalTeam;
@@ -101,5 +103,21 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 }

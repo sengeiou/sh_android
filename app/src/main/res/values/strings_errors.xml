@@ -24,4 +24,13 @@
     <!-- Profile: Bio -->
     <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
     <string name="error_message_search_too_short">3 or more characters required</string>
+
+    <!-- Event -->
+    <string name="error_message_event_title_too_short">3 or more characters required</string>
+    <string name="error_message_event_title_too_long">Must not have more than 50 characters</string>
+    <string name="error_message_event_start_date_too_late">Can\'t start more than a year ahead</string>
+    <string name="error_message_event_end_date_too_late">The event can\'t last more than a year</string>
+    <string name="error_message_event_end_date_before_start">Ending date can\'t be earlier than starting date</string>
+    <string name="error_message_event_end_date_before_now">New events can\'t be already ended</string>
+
 </resources>

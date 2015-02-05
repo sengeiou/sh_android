@@ -1,6 +1,5 @@
-package com.shootr.android.service;
+package com.shootr.android.domain.exception;
 
-import com.shootr.android.domain.exception.ShootrError;
 import java.io.IOException;
 
 public class ShootrServerException  extends IOException{

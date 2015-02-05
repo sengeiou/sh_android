@@ -32,7 +32,11 @@ public class ServiceEventDataSource implements EventDataSource {
     }
 
     @Override public EventEntity putEvent(EventEntity eventEntity) {
-        throw new RuntimeException("Method not implemented yet!");
+        try {
+            return service.saveEvent(eventEntity);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public List<EventEntity> putEvents(List<EventEntity> events) {

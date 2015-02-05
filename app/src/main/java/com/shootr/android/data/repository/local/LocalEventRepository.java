@@ -28,4 +28,10 @@ public class LocalEventRepository implements EventRepository {
         List<EventEntity> eventEntities = localEventDataSource.getEventsByIds(eventIds);
         return eventEntityMapper.transform(eventEntities);
     }
+
+    @Override public Event putEvent(Event event) {
+        EventEntity eventEntity = eventEntityMapper.transform(event);
+        localEventDataSource.putEvent(eventEntity);
+        return event;
+    }
 }

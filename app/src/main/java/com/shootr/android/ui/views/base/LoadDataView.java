@@ -1,6 +1,4 @@
-package com.shootr.android.ui.views;
-
-import com.shootr.android.ui.views.DataTransferView;
+package com.shootr.android.ui.views.base;
 
 public interface LoadDataView extends DataTransferView {
 

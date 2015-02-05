@@ -5,8 +5,10 @@ import java.util.Date;
 public class Event {
 
     private Long id;
+    private Long authorId;
     private String title;
     private String picture;
+    private String timezone;
     private Date startDate;
     private Date endDate;
 
@@ -51,5 +53,21 @@ public class Event {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

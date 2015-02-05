@@ -28,7 +28,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     @Override public Event getEventById(Long idEvent) {
         EventEntity eventEntity = remoteEventDataSource.getEventById(idEvent);
         if (eventEntity != null) {
-            eventEntity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
+            markEntityAsSynchronized(eventEntity);
             localEventDataSource.putEvent(eventEntity);
             return eventEntityMapper.transform(eventEntity);
         } else {
@@ -43,10 +43,22 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         return eventEntityMapper.transform(remoteEvents);
     }
 
+    @Override public Event putEvent(Event event) {
+        EventEntity newEventEntity = eventEntityMapper.transform(event);
+        EventEntity remoteEventEntity = remoteEventDataSource.putEvent(newEventEntity);
+        markEntityAsSynchronized(remoteEventEntity);
+        localEventDataSource.putEvent(remoteEventEntity);
+        return eventEntityMapper.transform(remoteEventEntity);
+    }
+
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {
         for (EventEntity event : remoteEvents) {
-            event.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
+            markEntityAsSynchronized(event);
         }
+    }
+
+    private void markEntityAsSynchronized(EventEntity event) {
+        event.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
     }
 
     @Override public void dispatchSync() {

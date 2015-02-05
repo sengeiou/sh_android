@@ -21,7 +21,7 @@ import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.ShootrServerException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
@@ -383,6 +383,21 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return null;
+    }
+
+    @Override public EventEntity saveEvent(EventEntity eventEntity) throws IOException {
+        GenericDto requestDto = eventDtoFactory.saveEvent(eventEntity);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        EventEntity eventsReceived = null;
+        if (ops.length > 0) {
+            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+        }
+        return eventsReceived;
     }
 
     @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {

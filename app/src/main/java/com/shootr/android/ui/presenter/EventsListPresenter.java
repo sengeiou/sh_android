@@ -82,6 +82,10 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         });
     }
 
+    public void eventCreated(long eventId) {
+        eventsListView.closeScrenWithEventResult(eventId);
+    }
+
     private void onSearchResults(EventSearchResultList eventSearchResultList) {
         showEventListInView(eventSearchResultList);
     }
@@ -113,7 +117,6 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.showEmpty();
         eventsListView.hideContent();
     }
-
 
     private void showViewError(ShootrException error) {
         String errorMessage;

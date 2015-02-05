@@ -9,4 +9,6 @@ public interface EventRepository {
     Event getEventById(Long idEvent);
 
     List<Event> getEventsByIds(List<Long> eventIds);
+
+    Event putEvent(Event event);
 }
