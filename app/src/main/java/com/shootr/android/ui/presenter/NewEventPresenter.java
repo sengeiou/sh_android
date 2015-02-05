@@ -27,6 +27,7 @@ import timber.log.Timber;
 public class NewEventPresenter implements Presenter {
 
     private static final int DEFAULT_END_DATETIME_ID = R.id.end_date_6_hours;
+    public static final int MINIMUM_TITLE_LENGTH = 3;
 
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
@@ -44,6 +45,7 @@ public class NewEventPresenter implements Presenter {
     private long preloadedStartDate;
     private EndDate preloadedEndDate;
     private Long preloadedEventId;
+    private String currentTitle;
 
     //region Initialization
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
@@ -112,6 +114,7 @@ public class NewEventPresenter implements Presenter {
 
     //region Interaction methods
     public void titleTextChanged(String title) {
+        currentTitle = filterTitle(title);
         this.updateDoneButtonStatus();
     }
 
@@ -279,8 +282,13 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void updateDoneButtonStatus() {
-        boolean canSendEvent = hasChangedTitle() || hasChangedStartDate() || hasChangedEndDate();
+        boolean canSendEvent =
+          isValidTitle() && (hasChangedTitle() || hasChangedStartDate() || hasChangedEndDate());
         newEventView.doneButtonEnabled(canSendEvent);
+    }
+
+    private boolean isValidTitle() {
+        return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
     }
 
     private boolean hasChangedStartDate() {
@@ -288,8 +296,9 @@ public class NewEventPresenter implements Presenter {
     }
 
     private boolean hasChangedEndDate() {
-        return preloadedEndDate == null || selectedEndDate.getDateTime(selectedStartDateTime.getMillis()) != preloadedEndDate
-          .getDateTime(preloadedStartDate);
+        return preloadedEndDate == null
+          || selectedEndDate.getDateTime(selectedStartDateTime.getMillis()) != preloadedEndDate.getDateTime(
+          preloadedStartDate);
     }
 
     private boolean hasChangedTitle() {
