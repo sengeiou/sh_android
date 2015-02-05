@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -215,6 +216,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Override public void doneButtonEnabled(boolean enable) {
         doneMenuItem.setEnabled(enable);
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(titleView.getWindowToken(), 0);
     }
 
     @Override public void showLoading() {

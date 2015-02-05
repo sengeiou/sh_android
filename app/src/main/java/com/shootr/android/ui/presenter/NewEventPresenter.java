@@ -100,6 +100,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void done() {
+        newEventView.hideKeyboard();
         newEventView.showLoading();
         long startTimestamp = selectedStartDateTime.getMillis();
         long endTimestamp = selectedEndDate.getDateTime(startTimestamp);

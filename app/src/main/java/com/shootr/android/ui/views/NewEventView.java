@@ -23,4 +23,6 @@ public interface NewEventView extends DataTransferView{
     void closeScreenWithResult(Long eventId);
 
     void doneButtonEnabled(boolean enable);
+
+    void hideKeyboard();
 }
