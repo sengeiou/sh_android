@@ -52,14 +52,14 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_new_event);
-        initializeViews();
-        setupActionbar();
-
         long idEventToEdit = getIntent().getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+
+        initializeViews(idEventToEdit);
+        setupActionbar(idEventToEdit);
         initializePresenter(idEventToEdit);
     }
 
-    private void initializeViews() {
+    private void initializeViews(long idEventToEdit) {
         ButterKnife.inject(this);
         endDatePopupMenu = new PopupMenu(this, endDateView);
         endDatePopupMenu.inflate(R.menu.new_event_end_date);
@@ -84,11 +84,15 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         });
     }
 
-    private void setupActionbar() {
+    private void setupActionbar(long idEventToEdit) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
+
+        if (idEventToEdit > 0) {
+            actionBar.setTitle(R.string.activity_edit_event_title);
+        }
     }
 
     private void initializePresenter(long idEventToEdit) {
