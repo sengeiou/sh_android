@@ -54,7 +54,15 @@ public class NewEventPresenter implements Presenter {
 
     private void setDefaultStartDateTime() {
         MutableDateTime currentDateTime = new MutableDateTime();
+        roundDateUp(currentDateTime);
         setStartDateTime(currentDateTime);
+    }
+
+    private void roundDateUp(MutableDateTime currentDateTime) {
+        if (currentDateTime.getMinuteOfHour()!=0) {
+            currentDateTime.setMinuteOfHour(0);
+            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay()+1);
+        }
     }
 
     private void setDefaultEndDateTime() {
