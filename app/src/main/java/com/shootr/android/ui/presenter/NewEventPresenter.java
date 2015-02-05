@@ -47,8 +47,8 @@ public class NewEventPresenter implements Presenter {
 
     //region Initialization
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
-      CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor, EventModelMapper eventModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
+      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.dateFormatter = dateFormatter;
         this.timeFormatter = timeFormatter;
         this.createEventInteractor = createEventInteractor;
@@ -95,7 +95,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void roundDateUp(MutableDateTime currentDateTime) {
-        if (currentDateTime.getMinuteOfHour()!=0) {
+        if (currentDateTime.getMinuteOfHour() != 0) {
             currentDateTime.setMinuteOfHour(0);
             currentDateTime.setHourOfDay(currentDateTime.getHourOfDay() + 1);
         }
@@ -112,21 +112,20 @@ public class NewEventPresenter implements Presenter {
 
     //region Interaction methods
     public void titleTextChanged(String title) {
-        boolean canCreateEvent = !(filterTitle(title).length() < 3);
-        newEventView.doneButtonEnabled(canCreateEvent);
+        this.updateDoneButtonStatus();
     }
 
     public void startDateSelected(int year, int month, int day) {
         selectedStartDateTime.setYear(year);
         selectedStartDateTime.setMonthOfYear(month);
         selectedStartDateTime.setDayOfMonth(day);
-        this.setViewStartDateTime(selectedStartDateTime);
+        setStartDateTime(selectedStartDateTime);
     }
 
     public void startTimeSelected(int hour, int minutes) {
         selectedStartDateTime.setHourOfDay(hour);
         selectedStartDateTime.setMinuteOfHour(minutes);
-        this.setViewStartDateTime(selectedStartDateTime);
+        setStartDateTime(selectedStartDateTime);
     }
 
     public void endDateItemSelected(int selectedItemId) {
@@ -134,13 +133,13 @@ public class NewEventPresenter implements Presenter {
             newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         } else {
             EndDate endDate = endDateFromItemId(selectedItemId);
-            setEndDateTime(endDate);
+            this.setEndDateTime(endDate);
         }
     }
 
     public void customEndDateSelected(long selectedTimestamp) {
         FixedEndDate endDate = new FixedEndDate(selectedTimestamp, R.id.end_date_custom, timeFormatter, dateFormatter);
-        setEndDateTime(endDate);
+        this.setEndDateTime(endDate);
     }
 
     public void done() {
@@ -171,10 +170,10 @@ public class NewEventPresenter implements Presenter {
                   eventCreated(event);
               }
           }, new Interactor.InteractorErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                eventCreationError(error);
-            }
-        });
+              @Override public void onError(ShootrException error) {
+                  eventCreationError(error);
+              }
+          });
     }
 
     private void eventCreated(Event event) {
@@ -187,7 +186,7 @@ public class NewEventPresenter implements Presenter {
             DomainValidationException validationException = (DomainValidationException) error;
             List<FieldValidationError> errors = validationException.getErrors();
             showValidationErrors(errors);
-        }else if (error instanceof ServerCommunicationException) {
+        } else if (error instanceof ServerCommunicationException) {
             onCommunicationError();
         } else {
             //TODO more error type handling
@@ -199,7 +198,6 @@ public class NewEventPresenter implements Presenter {
     private void onCommunicationError() {
         showViewError(errorMessageFactory.getCommunicationErrorMessage());
     }
-
     //endregion
 
     //region Errors
@@ -247,11 +245,13 @@ public class NewEventPresenter implements Presenter {
     private void setStartDateTime(MutableDateTime dateTime) {
         selectedStartDateTime = dateTime;
         this.setViewStartDateTime(dateTime);
+        this.updateDoneButtonStatus();
     }
 
     private void setEndDateTime(EndDate endDate) {
         selectedEndDate = endDate;
         newEventView.setEndDate(endDate.getTitle());
+        this.updateDoneButtonStatus();
     }
 
     private void setViewStartDateTime(AbstractDateTime dateTime) {
@@ -276,6 +276,24 @@ public class NewEventPresenter implements Presenter {
             }
         }
         return new FixedEndDate(endDateTime, R.id.end_date_custom, timeFormatter, dateFormatter);
+    }
+
+    private void updateDoneButtonStatus() {
+        boolean canSendEvent = hasChangedTitle() || hasChangedStartDate() || hasChangedEndDate();
+        newEventView.doneButtonEnabled(canSendEvent);
+    }
+
+    private boolean hasChangedStartDate() {
+        return selectedStartDateTime != null && selectedStartDateTime.getMillis() != preloadedStartDate;
+    }
+
+    private boolean hasChangedEndDate() {
+        return preloadedEndDate == null || selectedEndDate.getDateTime(selectedStartDateTime.getMillis()) != preloadedEndDate
+          .getDateTime(preloadedStartDate);
+    }
+
+    private boolean hasChangedTitle() {
+        return !newEventView.getEventTitle().equals(preloadedTitle);
     }
     //endregion
 
