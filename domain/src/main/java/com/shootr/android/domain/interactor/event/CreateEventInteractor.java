@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class NewEventInteractor implements Interactor {
+public class CreateEventInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -26,13 +26,14 @@ public class NewEventInteractor implements Interactor {
     private final TimezoneRepository timezoneRepository;
     private final EventRepository remoteEventRepository;
 
+    private Long idEvent;
     private String title;
     private long startDate;
     private long endDate;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
 
-    @Inject public NewEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, TimezoneRepository timezoneRepository,
       @Remote EventRepository remoteEventRepository) {
         this.interactorHandler = interactorHandler;
@@ -42,8 +43,9 @@ public class NewEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void createNewEvent(String title, long startDate, long endDate, Callback callback,
+    public void sendEvent(Long idEvent, String title, long startDate, long endDate, Callback callback,
       InteractorErrorCallback errorCallback) {
+        this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -53,12 +55,7 @@ public class NewEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        Event event = new Event();
-        event.setTitle(title);
-        event.setAuthorId(sessionRepository.getCurrentUserId());
-        event.setStartDate(new Date(startDate));
-        event.setEndDate(new Date(endDate));
-        event.setTimezone(timezoneRepository.getCurrentTimezone().getID());
+        Event event = eventFromParameters();
 
         if (validateEvent(event)) {
             try {
@@ -68,6 +65,17 @@ public class NewEventInteractor implements Interactor {
                 handleServerError(e);
             }
         }
+    }
+
+    private Event eventFromParameters() {
+        Event event = new Event();
+        event.setId(idEvent);
+        event.setTitle(title);
+        event.setAuthorId(sessionRepository.getCurrentUserId());
+        event.setStartDate(new Date(startDate));
+        event.setEndDate(new Date(endDate));
+        event.setTimezone(timezoneRepository.getCurrentTimezone().getID());
+        return event;
     }
 
     private Event sendEventToServer(Event event) {
