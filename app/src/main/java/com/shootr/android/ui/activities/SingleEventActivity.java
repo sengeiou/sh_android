@@ -35,7 +35,7 @@ import com.squareup.picasso.Callback;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventActivity extends BaseNoToolbarActivity implements SingleEventView, ObservableScrollView.Callbacks {
+public class SingleEventActivity extends BaseNoToolbarActivity implements SingleEventView, ObservableScrollView.Callbacks {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;

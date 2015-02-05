@@ -100,7 +100,7 @@
         </activity>
 
         <activity
-          android:name=".ui.activities.EventActivity"
+          android:name=".ui.activities.SingleEventActivity"
           android:theme="@style/ShootrTheme.TranslucentToolbar"
           android:label="@string/activity_info_title">
 
@@ -155,7 +155,7 @@
           android:theme="@style/ShootrTheme" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.EventActivity" />
+              android:value=".ui.activities.SingleEventActivity" />
           </activity>
 
         <activity
