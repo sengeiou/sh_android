@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.shootr.android.R;
 
-
 /**
  * Layout which an {@link android.widget.EditText} to show a floating label when the hint is hidden
  * due to the user inputting text.
@@ -58,19 +57,16 @@ public final class FloatLabelLayout extends FrameLayout {
     public FloatLabelLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        final TypedArray a = context
-                .obtainStyledAttributes(attrs, R.styleable.FloatLabelLayout);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatLabelLayout);
 
-        final int sidePadding = a.getDimensionPixelSize(
-                R.styleable.FloatLabelLayout_floatLabelSidePadding,
-                dipsToPix(DEFAULT_PADDING_LEFT_RIGHT_DP));
+        final int sidePadding = a.getDimensionPixelSize(R.styleable.FloatLabelLayout_floatLabelSidePadding,
+          dipsToPix(DEFAULT_PADDING_LEFT_RIGHT_DP));
         mLabel = new TextView(context);
         mLabel.setPadding(sidePadding, 0, sidePadding, 0);
         mLabel.setVisibility(INVISIBLE);
 
         mLabel.setTextAppearance(context,
-                a.getResourceId(R.styleable.FloatLabelLayout_floatLabelTextAppearance,
-                        android.R.style.TextAppearance_Small));
+          a.getResourceId(R.styleable.FloatLabelLayout_floatLabelTextAppearance, android.R.style.TextAppearance_Small));
 
         addView(mLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -129,7 +125,6 @@ public final class FloatLabelLayout extends FrameLayout {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 /* no-op */
             }
-
         });
 
         // Add focus listener to the EditText so that we can notify the label that it is activated.
@@ -161,40 +156,42 @@ public final class FloatLabelLayout extends FrameLayout {
     /**
      * Show the label using an animation
      */
-    private void showLabel() {
-        mLabel.setVisibility(View.VISIBLE);
-        mLabel.setAlpha(0f);
-        mLabel.setTranslationY(mLabel.getHeight());
-        mLabel.animate()
-                .alpha(1f)
-                .translationY(0f)
-                .setDuration(ANIMATION_DURATION)
-                .setListener(null).start();
+    public void showLabel() {
+        if (mLabel.getVisibility() != VISIBLE) {
+            mLabel.setVisibility(View.VISIBLE);
+            mLabel.setAlpha(0f);
+            mLabel.setTranslationY(mLabel.getHeight());
+            mLabel.animate().alpha(1f).translationY(0f).setDuration(ANIMATION_DURATION).setListener(null).start();
+        }
+    }
+
+    public void showLabelWithoutAnimation() {
+        mLabel.setVisibility(VISIBLE);
     }
 
     /**
      * Hide the label using an animation
      */
-    private void hideLabel() {
+    public void hideLabel() {
         mLabel.setAlpha(1f);
         mLabel.setTranslationY(0f);
         mLabel.animate()
-                .alpha(0f)
-                .translationY(mLabel.getHeight())
-                .setDuration(ANIMATION_DURATION)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mLabel.setVisibility(View.GONE);
-                    }
-                }).start();
+          .alpha(0f)
+          .translationY(mLabel.getHeight())
+          .setDuration(ANIMATION_DURATION)
+          .setListener(new AnimatorListenerAdapter() {
+              @Override
+              public void onAnimationEnd(Animator animation) {
+                  mLabel.setVisibility(View.GONE);
+              }
+          })
+          .start();
     }
 
     /**
      * Helper method to convert dips to pixels.
      */
     private int dipsToPix(float dps) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dps,
-                getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dps, getResources().getDisplayMetrics());
     }
 }

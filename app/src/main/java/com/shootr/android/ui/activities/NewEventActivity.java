@@ -23,6 +23,7 @@ import com.shootr.android.ui.model.RelativeEndDate;
 import com.shootr.android.ui.presenter.NewEventPresenter;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.ui.widgets.DatePickerBuilder;
+import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Inject NewEventPresenter presenter;
 
     @InjectView(R.id.new_event_title) EditText titleView;
+    @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
     @InjectView(R.id.new_event_end_date) TextView endDateView;
@@ -190,6 +192,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
 
     @Override public void setEventTitle(String title) {
+        titleLabelView.showLabelWithoutAnimation();
         titleView.setText(title);
     }
 

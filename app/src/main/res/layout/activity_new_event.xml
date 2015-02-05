@@ -12,6 +12,7 @@
       android:background="#d9d9d9" />
 
     <com.shootr.android.ui.widgets.FloatLabelLayout
+      android:id="@+id/new_event_title_label"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="16dp"
