@@ -8,6 +8,7 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.EventNotificationInteractor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
@@ -23,6 +24,7 @@ import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -35,6 +37,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final EventNotificationInteractor eventNotificationInteractor;
     private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
     private final SelectEventInteractor selectEventInteractor;
+    private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
 
     private final EventModelMapper eventModelMapper;
     private final UserWatchingModelMapper userWatchingModelMapper;
@@ -48,14 +51,16 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       WatchingInteractor watchingInteractor, EventNotificationInteractor eventNotificationInteractor,
-      EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor,
+      ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper,
+      UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
         this.eventNotificationInteractor = eventNotificationInteractor;
         this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
         this.selectEventInteractor = selectEventInteractor;
+        this.changeEventPhotoInteractor = changeEventPhotoInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -123,6 +128,24 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     //endregion
 
+    public void photoSelected(File photoFile) {
+        singleEventView.showLoadingPictureUpload();
+        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
+          new ChangeEventPhotoInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  renderEventInfo(event);
+                  singleEventView.hideLoadingPictureUpload();
+                  singleEventView.showEditPicture(event.getPicture());
+              }
+          }, new Interactor.InteractorErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  singleEventView.showEditPicture(eventModel.getPicture());
+                  singleEventView.hideLoadingPictureUpload();
+                  showImageUploadError();
+              }
+          });
+    }
+
     public void toggleNotifications() {
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
         eventNotificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
@@ -185,7 +208,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void updateWatchersCount(boolean isWatching) {
-        watchersCount = isWatching ? watchersCount+1 : watchersCount-1;
+        watchersCount = isWatching ? watchersCount + 1 : watchersCount - 1;
         renderWatchersCount(watchersCount);
     }
     //endregion
@@ -267,7 +290,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             return idEvent.equals(eventModel.getIdEvent());
         }
     }
-    
+
     @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         singleEventView.showError(communicationErrorMessage);
@@ -276,6 +299,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         singleEventView.showError(connectionNotAvailableMessage);
+    }
+
+    private void showImageUploadError() {
+        singleEventView.showError(errorMessageFactory.getImageUploadErrorMessage());
     }
 
     @Override public void resume() {

@@ -27,8 +27,8 @@
             <FrameLayout
               android:id="@+id/event_photo_container"
               android:layout_width="match_parent"
-              android:foreground="?selectableItemBackground"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:foreground="?selectableItemBackground">
 
                 <ImageView
                   android:id="@+id/event_photo"
@@ -43,9 +43,18 @@
                   android:id="@+id/event_photo_edit_indicator"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:visibility="gone"
                   android:layout_gravity="center"
-                  android:src="@drawable/ic_camera_white_48" />
+                  android:src="@drawable/ic_camera_white_48"
+                  android:visibility="gone"
+                  tools:visibility="visible" />
+
+                <ProgressBar
+                  android:id="@+id/event_photo_edit_loading"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:visibility="gone"
+                  tools:visibility="visible" />
             </FrameLayout>
 
             <FrameLayout

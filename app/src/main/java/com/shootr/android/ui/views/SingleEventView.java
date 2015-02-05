@@ -17,6 +17,10 @@ public interface SingleEventView extends LoadDataView {
 
     void hideEditPicture();
 
+    void showLoadingPictureUpload();
+
+    void hideLoadingPictureUpload();
+
     void setWatchers(List<UserWatchingModel> watchers);
 
     void setWatchersCount(int watchersCount);

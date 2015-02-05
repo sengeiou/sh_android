@@ -6,11 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import java.io.ByteArrayOutputStream;
+import com.shootr.android.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import javax.inject.Inject;
 import timber.log.Timber;
 
