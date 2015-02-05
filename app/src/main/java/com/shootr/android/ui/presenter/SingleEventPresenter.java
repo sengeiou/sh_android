@@ -68,7 +68,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.loadEventsCount();
     }
 
-    //region interaction methods
+    //region Edit status
     public void editStatus() {
         singleEventView.navigateToEditStatus(eventModel, currentUserWatchingModel);
     }
@@ -76,7 +76,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     public void resultFromEditStatus(@Nullable String statusText) {
         updateWatch(currentUserWatchingModel.isWatching(), statusText);
     }
+    //endregion
 
+    //region Select event
     public void resultFromSelectEvent(Long idEventSelected) {
         if (!isCurrentEventWatch(idEventSelected)) {
             this.showViewLoading();
@@ -88,19 +90,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         }
     }
 
+    private void onEventChanged() {
+        this.loadEventInfo();
+    }
+    //endregion
+
     public void sendWatching(boolean isWatching) {
         updateWatch(isWatching, currentUserWatchingModel.getPlace());
-    }
-
-    public void editEvent() {
-        Long idEvent = eventModel.getIdEvent();
-        singleEventView.navigateToEditEvent(idEvent);
-    }
-
-    public void resultFromEditEvent(Long idEventEdited) {
-        if (idEventEdited.equals(eventModel.getIdEvent())) {
-            loadEventInfo();
-        }
     }
 
     private void updateWatch(boolean isWatching, String statusText) {
@@ -113,9 +109,19 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
           });
     }
 
-    private void onEventChanged() {
-        this.loadEventInfo();
+    //region Edit event
+    public void editEvent() {
+        Long idEvent = eventModel.getIdEvent();
+        singleEventView.navigateToEditEvent(idEvent);
     }
+
+    public void resultFromEditEvent(Long idEventEdited) {
+        if (idEventEdited.equals(eventModel.getIdEvent())) {
+            loadEventInfo();
+        }
+    }
+
+    //endregion
 
     public void toggleNotifications() {
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
@@ -126,12 +132,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.showNotificationsAlert(enableNotifications);
     }
 
-    @Subscribe
-    public void onNewWatchDetected(WatchUpdateRequest.Event event) {
-        this.getEventInfo();
-        this.loadEventsCount();
-    }
-
+    //region Events count
     private void loadEventsCount() {
         eventsWatchedCountInteractor.obtainEventsCount(new EventsWatchedCountInteractor.Callback() {
             @Override public void onLoaded(Integer count) {
@@ -147,7 +148,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     public void onEventsCountLoaded(Integer count) {
         renderEventsCount(count);
     }
+    //endregion
 
+    //region Event info
     public void loadEventInfo() {
         this.showViewLoading();
         this.getEventInfo();
@@ -185,6 +188,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         watchersCount = isWatching ? watchersCount+1 : watchersCount-1;
         renderWatchersCount(watchersCount);
     }
+    //endregion
 
     private void showNotificationsAlert(boolean enableNotifications) {
         if (enableNotifications) {
@@ -193,7 +197,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             singleEventView.alertNotificationsDisabled();
         }
     }
-    //endregion
+
+    @Subscribe
+    public void onNewWatchDetected(WatchUpdateRequest.Event event) {
+        this.getEventInfo();
+        this.loadEventsCount();
+    }
 
     //region renders
     private void renderWatchersList(List<Watch> watchers) {
