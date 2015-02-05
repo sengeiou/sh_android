@@ -38,7 +38,7 @@ import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.BitmapImageResizer;
-import com.shootr.android.util.ImageResizer;
+import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;

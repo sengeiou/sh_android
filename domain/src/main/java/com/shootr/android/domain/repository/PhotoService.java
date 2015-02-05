@@ -1,8 +1,6 @@
-package com.shootr.android.service;
+package com.shootr.android.domain.repository;
 
-import android.graphics.Bitmap;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import org.json.JSONException;
 
