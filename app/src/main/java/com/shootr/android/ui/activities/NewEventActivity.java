@@ -23,6 +23,7 @@ import com.shootr.android.ui.model.RelativeEndDate;
 import com.shootr.android.ui.presenter.NewEventPresenter;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.ui.widgets.DatePickerBuilder;
+import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Inject NewEventPresenter presenter;
 
     @InjectView(R.id.new_event_title) EditText titleView;
+    @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
     @InjectView(R.id.new_event_end_date) TextView endDateView;
@@ -52,12 +54,14 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_new_event);
-        initializeViews();
-        setupActionbar();
-        initializePresenter();
+        long idEventToEdit = getIntent().getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+
+        initializeViews(idEventToEdit);
+        setupActionbar(idEventToEdit);
+        initializePresenter(idEventToEdit);
     }
 
-    private void initializeViews() {
+    private void initializeViews(long idEventToEdit) {
         ButterKnife.inject(this);
         endDatePopupMenu = new PopupMenu(this, endDateView);
         endDatePopupMenu.inflate(R.menu.new_event_end_date);
@@ -82,15 +86,19 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         });
     }
 
-    private void setupActionbar() {
+    private void setupActionbar(long idEventToEdit) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
+
+        if (idEventToEdit > 0) {
+            actionBar.setTitle(R.string.activity_edit_event_title);
+        }
     }
 
-    private void initializePresenter() {
-        presenter.initialize(this, suggestedEndDates());
+    private void initializePresenter(long idEventToEdit) {
+        presenter.initialize(this, suggestedEndDates(), idEventToEdit);
     }
 
     private List<EndDate> suggestedEndDates() {
@@ -104,18 +112,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
     //endregion
 
-    private void resetTitleError() {
-        titleErrorView.setError(null);
-    }
-
-    private void resetStartDateError() {
-        startDateErrorView.setText(null);
-    }
-
-    private void resetEndDateError() {
-        endDateErrorView.setText(null);
-    }
-
+    //region Listeners
     @OnClick(R.id.new_event_start_date)
     public void onStartDateClick() {
         DatePickerDialog datePickerDialog = DatePickerBuilder.builder().listener(new DatePickerBuilder.DateListener() {
@@ -140,6 +137,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     public void onEndDateClick() {
         endDatePopupMenu.show();
     }
+    //endregion
 
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -193,6 +191,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         startActivityForResult(dateTimePickerIntent, 1);
     }
 
+    @Override public void setEventTitle(String title) {
+        titleLabelView.showLabelWithoutAnimation();
+        titleView.setText(title);
+    }
+
     @Override public String getEventTitle() {
         return titleView.getText().toString();
     }
@@ -215,7 +218,9 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     }
 
     @Override public void doneButtonEnabled(boolean enable) {
-        doneMenuItem.setEnabled(enable);
+        if (doneMenuItem != null) {
+            doneMenuItem.setEnabled(enable);
+        }
     }
 
     @Override public void hideKeyboard() {
@@ -233,6 +238,18 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Override public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void resetTitleError() {
+        titleErrorView.setError(null);
+    }
+
+    private void resetStartDateError() {
+        startDateErrorView.setText(null);
+    }
+
+    private void resetEndDateError() {
+        endDateErrorView.setText(null);
     }
     //endregion
 }

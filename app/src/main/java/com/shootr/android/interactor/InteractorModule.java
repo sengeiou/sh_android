@@ -1,10 +1,11 @@
 package com.shootr.android.interactor;
 
 import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.interactor.event.CreateEventInteractor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.event.NewEventInteractor;
+import com.shootr.android.domain.interactor.event.GetEventInteractor;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
@@ -18,7 +19,7 @@ import javax.inject.Singleton;
   injects = {
     JobInteractorHandler.class, GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
     EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class, EventsSearchInteractor.class,
-    NewEventInteractor.class,
+    CreateEventInteractor.class, GetEventInteractor.class,
   },
   complete = false)
 public class InteractorModule {

@@ -12,6 +12,8 @@ public interface NewEventView extends DataTransferView{
 
     void pickCustomDateTime(long initialTimestamp);
 
+    void setEventTitle(String title);
+
     String getEventTitle();
 
     void showTitleError(String errorMessage);

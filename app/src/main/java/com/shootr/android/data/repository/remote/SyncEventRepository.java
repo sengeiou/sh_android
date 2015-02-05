@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
@@ -17,12 +18,14 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     private final EventEntityMapper eventEntityMapper;
     private final EventDataSource localEventDataSource;
     private final EventDataSource remoteEventDataSource;
+    private final SyncableEventEntityFactory syncableEventEntityFactory;
 
-    @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper,
-      @Local EventDataSource localEventDataSource, @Remote EventDataSource remoteEventDataSource) {
+    @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper, @Local EventDataSource localEventDataSource,
+      @Remote EventDataSource remoteEventDataSource, SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
+        this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
     @Override public Event getEventById(Long idEvent) {
@@ -44,8 +47,8 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     @Override public Event putEvent(Event event) {
-        EventEntity newEventEntity = eventEntityMapper.transform(event);
-        EventEntity remoteEventEntity = remoteEventDataSource.putEvent(newEventEntity);
+        EventEntity currentOrNewEntity = syncableEventEntityFactory.currentOrNewEntity(event);
+        EventEntity remoteEventEntity = remoteEventDataSource.putEvent(currentOrNewEntity);
         markEntityAsSynchronized(remoteEventEntity);
         localEventDataSource.putEvent(remoteEventEntity);
         return eventEntityMapper.transform(remoteEventEntity);

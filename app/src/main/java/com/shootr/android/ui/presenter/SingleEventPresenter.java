@@ -69,11 +69,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     //region interaction methods
-    public void edit() {
-        singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
+    public void editStatus() {
+        singleEventView.navigateToEditStatus(eventModel, currentUserWatchingModel);
     }
 
-    public void resultFromEdit(@Nullable String statusText) {
+    public void resultFromEditStatus(@Nullable String statusText) {
         updateWatch(currentUserWatchingModel.isWatching(), statusText);
     }
 
@@ -90,6 +90,17 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void sendWatching(boolean isWatching) {
         updateWatch(isWatching, currentUserWatchingModel.getPlace());
+    }
+
+    public void editEvent() {
+        Long idEvent = eventModel.getIdEvent();
+        singleEventView.navigateToEditEvent(idEvent);
+    }
+
+    public void resultFromEditEvent(Long idEventEdited) {
+        if (idEventEdited.equals(eventModel.getIdEvent())) {
+            loadEventInfo();
+        }
     }
 
     private void updateWatch(boolean isWatching, String statusText) {
@@ -202,8 +213,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
         singleEventView.setEventPicture(eventModel.getPicture());
-        //TODO only if I'm author, else hide
-        singleEventView.showEditEventButton();
+        if (eventModel.amIAuthor()) {
+            singleEventView.showEditEventButton();
+        } else {
+            singleEventView.hideEditEventButton();
+        }
     }
 
     private void renderWatchersCount(int watchersCount) {

@@ -35,10 +35,11 @@ import com.squareup.picasso.Callback;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventActivity extends BaseNoToolbarActivity implements SingleEventView, ObservableScrollView.Callbacks {
+public class SingleEventActivity extends BaseNoToolbarActivity implements SingleEventView, ObservableScrollView.Callbacks {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
+    private static final int REQUEST_EDIT_EVENT = 3;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
@@ -108,7 +109,7 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         });
         watchersList.setOnEditListener(new WatchersView.OnEditListener() {
             @Override public void onEdit() {
-                presenter.edit();
+                presenter.editStatus();
             }
         });
         currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
@@ -279,6 +280,9 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         } else if (item.getItemId() == R.id.menu_events) {
             navigateToSelectEvent();
             return true;
+        }else if (item.getItemId() == R.id.menu_edit) {
+            presenter.editEvent();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -288,10 +292,14 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
             String statusText = data.getStringExtra(EditInfoActivity.KEY_STATUS);
-            presenter.resultFromEdit(statusText);
+            presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
             presenter.resultFromSelectEvent(idEventSelected);
+        }else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
+            Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            presenter.resultFromEditEvent(idEventEdited);
+
         }
     }
 
@@ -379,9 +387,14 @@ public class EventActivity extends BaseNoToolbarActivity implements SingleEventV
         currentToast.show();
     }
 
-    @Override public void navigateToEdit(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
+    @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
         Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
+    }
+
+    @Override public void navigateToEditEvent(Long idEvent) {
+        Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(EventsListActivity.KEY_EVENT_ID, idEvent);
+        startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
     }
 
     @Override public void showContent() {
