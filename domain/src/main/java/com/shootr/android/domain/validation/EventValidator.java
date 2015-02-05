@@ -66,12 +66,12 @@ public class EventValidator {
 
     //region End date
     private void validateEndDate(Event event) {
-        validateEndDateBeforeNow(event);
+        validateEndDateAfterNow(event);
         validateEndDateAfterStartDate(event);
         validateEndDateNotMoreThanOneYearAferStartDate(event);
     }
 
-    private void validateEndDateBeforeNow(Event event) {
+    private void validateEndDateAfterNow(Event event) {
         if (event.getEndDate().before(new Date())) {
             fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW, FIELD_END_DATE));
         }
