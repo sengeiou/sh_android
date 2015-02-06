@@ -1,5 +1,6 @@
 package com.shootr.android.service.dataservice;
 
+import android.app.Application;
 import com.shootr.android.domain.utils.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
@@ -25,8 +26,8 @@ import javax.inject.Singleton;
 )
 public class DataServiceModule {
 
-    @Provides @Singleton UtilityDtoFactory utilityDtoFactory() {
-        return new UtilityDtoFactory();
+    @Provides @Singleton UtilityDtoFactory utilityDtoFactory(Application application) {
+        return new UtilityDtoFactory(application);
     }
 
     @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
