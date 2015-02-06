@@ -35,6 +35,7 @@ import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.SecurityUtils;
 import com.shootr.android.domain.utils.TimeUtils;
+import com.shootr.android.util.VersionUpdater;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -54,32 +55,34 @@ public class ShootrDataService implements ShootrService {
     public static final long DEFAULT_LIMIT = 10L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
 
-    private OkHttpClient client;
-    private Endpoint endpoint;
-    private ObjectMapper mapper;
+    private final OkHttpClient client;
+    private final Endpoint endpoint;
+    private final ObjectMapper mapper;
 
-    private UserDtoFactory userDtoFactory;
-    private TimelineDtoFactory timelineDtoFactory;
-    private ShotDtoFactory shotDtoFactory;
-    private EventDtoFactory eventDtoFactory;
-    private DeviceDtoFactory deviceDtoFactory;
-    private TeamDtoFactory teamDtoFactory;
+    private final UserDtoFactory userDtoFactory;
+    private final TimelineDtoFactory timelineDtoFactory;
+    private final ShotDtoFactory shotDtoFactory;
+    private final EventDtoFactory eventDtoFactory;
+    private final DeviceDtoFactory deviceDtoFactory;
+    private final TeamDtoFactory teamDtoFactory;
 
-    private UserMapper userMapper;
-    private FollowMapper followMapper;
-    private ShotMapper shotMapper;
-    private EventEntityMapper eventEntityMapper;
-    private DeviceMapper deviceMapper;
-    private WatchMapper watchMapper;
-    private TeamMapper teamMapper;
-    private TimeUtils timeUtils;
+    private final UserMapper userMapper;
+    private final FollowMapper followMapper;
+    private final ShotMapper shotMapper;
+    private final EventEntityMapper eventEntityMapper;
+    private final DeviceMapper deviceMapper;
+    private final WatchMapper watchMapper;
+    private final TeamMapper teamMapper;
+    private final TimeUtils timeUtils;
+
+    private final VersionUpdater versionUpdater;
 
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
       TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
       EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, EventEntityMapper eventEntityMapper,
-      TeamMapper teamMapper, TimeUtils timeUtils) {
+      TeamMapper teamMapper, TimeUtils timeUtils, VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -98,6 +101,7 @@ public class ShootrDataService implements ShootrService {
         this.teamMapper = teamMapper;
 
         this.timeUtils = timeUtils;
+        this.versionUpdater = versionUpdater;
     }
 
     @Override
@@ -573,8 +577,10 @@ public class ShootrDataService implements ShootrService {
                 boolean isHookException = ServerException.G025.equals(statusCode);
                 if (isHookException && statusSubcode != null) {
                     ShootrError shootrError = new ShootrDataServiceError(statusSubcode, statusMessage);
-                    ShootrServerException hookException = new ShootrServerException (shootrError);
-                    throw hookException;
+                    if (shootrError.getErrorCode().equals(ShootrError.ERROR_CODE_UPDATE_REQUIRED)) {
+                        versionUpdater.notifyUpdateRequired();
+                    }
+                    throw new ShootrServerException(shootrError);
                 }
 
                 ServerException serverException = new ServerException(statusCode, statusMessage);

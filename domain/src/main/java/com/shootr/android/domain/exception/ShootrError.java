@@ -4,6 +4,8 @@ public interface ShootrError {
 
     public static final String OK = "OK";
 
+    public static final String ERROR_CODE_UPDATE_REQUIRED = "REQ002";
+
     public static final String ERROR_CODE_UNKNOWN_ERROR = "SHTR_00000";
     public static final String ERROR_CODE_INVALID_IMAGE = "SHTR_10001";
     public static final String ERROR_CODE_INVALID_SESSION_TOKEN = "SHTR_10002";
