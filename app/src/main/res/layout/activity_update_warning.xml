@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:padding="29dp">
+
+    <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1">
+
+        <ImageView
+          android:layout_width="150dp"
+          android:layout_height="150dp"
+          android:layout_gravity="bottom"
+          android:src="@drawable/ic_launcher" />
+    </FrameLayout>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="56dp"
+      android:layout_weight="2"
+      android:gravity="top|center_horizontal"
+      android:maxWidth="360dp"
+      android:text="@string/update_warning_message"
+      android:textSize="18sp" />
+
+    <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+
+      android:visibility="gone">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?selectableItemBackground"
+          android:clickable="true"
+          android:fontFamily="sans-serif-medium"
+          android:padding="8dp"
+          android:text="Update now"
+          android:textAllCaps="true"
+          android:textColor="@color/primary" />
+    </FrameLayout>
+</LinearLayout>
