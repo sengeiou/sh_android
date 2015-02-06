@@ -1,15 +1,19 @@
 package com.shootr.android.service.dataservice.dto;
 
+import android.app.Application;
 import com.shootr.android.constant.Constants;
-import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.service.dataservice.generic.FilterDto;
-import com.shootr.android.service.dataservice.generic.FilterItemDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
+import com.shootr.android.util.VersionUtils;
 
 public class UtilityDtoFactory {
 
+    private final long currentVersion;
+
+    public UtilityDtoFactory(Application application) {
+        currentVersion = VersionUtils.getVersionCode(application);
+    }
 
     public GenericDto getGenericDtoFromOperation(String alias, OperationDto op) {
         return getGenericDtoFromOperations(alias, new OperationDto[]{op});
@@ -22,7 +26,7 @@ public class UtilityDtoFactory {
         generic.setStatusMessage(null);
 
         //TODO Builder, injected or something else
-        generic.setRequestor(new RequestorDto(null, null, Constants.ANDROID_PLATFORM, 0L, System.currentTimeMillis()));
+        generic.setRequestor(new RequestorDto(null, null, Constants.ANDROID_PLATFORM, currentVersion, System.currentTimeMillis()));
         generic.setAlias(alias);
 
         return generic;

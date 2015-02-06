@@ -45,6 +45,7 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_TOO_LATE, R.string.error_message_event_end_date_too_late);
         codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START, R.string.error_message_event_end_date_before_start);
         codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW, R.string.error_message_event_end_date_before_now);
+        codeResourceMap.put(ShootrError.ERROR_CODE_UPDATE_REQUIRED, R.string.error_message_update_required);
     }
 
     public String getMessageForError(ShootrError shootrError) {

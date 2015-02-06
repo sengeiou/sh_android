@@ -33,5 +33,6 @@
     <string name="error_message_event_end_date_before_start">Ending date can\'t be earlier than starting date</string>
     <string name="error_message_event_end_date_before_now">New events can\'t be already ended</string>
     <string name="error_image_upload">Error trying to upload image</string>
+    <string name="error_message_update_required">Current version too old</string>
 
 </resources>

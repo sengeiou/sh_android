@@ -169,6 +169,7 @@
     <string name="end_date_1_day">1 day</string>
     <string name="end_date_pick">Custom…</string>
     <string name="activity_edit_event_title">Edit event</string>
+    <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

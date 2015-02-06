@@ -172,6 +172,10 @@
           android:theme="@style/ShootrTheme.NoActionBar.Floating">
         </activity>
 
+        <activity android:name=".ui.activities.UpdateWarningActivity"
+          android:launchMode="singleTask"
+            />
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"

@@ -34,6 +34,11 @@ repositories {
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
+def versionMajor = 0
+def versionMinor = 0
+def versionRevision = 300
+def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
@@ -44,12 +49,13 @@ android {
         targetSdkVersion 21
 
 
-        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
-        versionName "0.1."+versionCode+"-SNAPSHOT"
+        versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
+        versionName versionMajor + "." + versionMinor + "." + versionRevision + "-SNAPSHOT"
+        versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
         project.ext.set("archivesBaseName", "Shootr-" + versionName);
 
         resConfigs "es", "en"
-        resConfigs "hdpi","xhdpi","xxhdpi"
+        resConfigs "hdpi", "xhdpi", "xxhdpi"
 
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
@@ -69,8 +75,8 @@ android {
         exclude 'LICENSE.txt'
     }
 
-    signingConfigs{
-        release{
+    signingConfigs {
+        release {
             storeFile file('../certs/release.keystore')
             //TODO use real release keystore
             storePassword "android"
@@ -78,7 +84,7 @@ android {
             keyPassword "android"
         }
 
-        debug{
+        debug {
             storeFile file('../certs/debug.keystore')
         }
     }
@@ -156,17 +162,16 @@ dependencies {
 
     //TODO Should be androidTestCompile, but doesn't work, probably due to a bug in Gradle/AS: http://stackoverflow.com/questions/22246183/android-studio-doesnt-recognize-espresso-classes
     provided 'com.jakewharton.espresso:espresso:1.1-r3'
-    androidTestCompile ('com.jakewharton.espresso:espresso:1.1-r3')
-      {
-          exclude group: 'com.squareup.dagger'
-          //exclude group: 'org.hamcrest', module: 'hamcrest-core'
-          //exclude group: 'org.hamcrest', module: 'hamcrest-library'
-          //exclude group: 'org.hamcrest', module: 'hamcrest-integration'
-          exclude group: 'com.google.guava'
-          exclude group: 'javax.inject'
-          exclude group: 'javax.annotation'
-          //exclude group: 'com.google.code.findbugs'
-      }
+    androidTestCompile('com.jakewharton.espresso:espresso:1.1-r3') {
+        exclude group: 'com.squareup.dagger'
+        //exclude group: 'org.hamcrest', module: 'hamcrest-core'
+        //exclude group: 'org.hamcrest', module: 'hamcrest-library'
+        //exclude group: 'org.hamcrest', module: 'hamcrest-integration'
+        exclude group: 'com.google.guava'
+        exclude group: 'javax.inject'
+        exclude group: 'javax.annotation'
+        //exclude group: 'com.google.code.findbugs'
+    }
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.0'
     compile 'com.crashlytics.android:crashlytics:1.+'
 }
@@ -174,7 +179,8 @@ dependencies {
 sonarRunner {
     sonarProperties {
         property "sonar.host.url", "http://sonar.fav24.net"
-        property "sonar.jdbc.url", "jdbc:mysql://gm-ci-environment.cttjtyko7rpp.eu-west-1.rds.amazonaws.com:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
+        property "sonar.jdbc.url",
+          "jdbc:mysql://gm-ci-environment.cttjtyko7rpp.eu-west-1.rds.amazonaws.com:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
         property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
         property "sonar.jdbc.username", "sonar"
         property "sonar.jdbc.password", "sonar"
