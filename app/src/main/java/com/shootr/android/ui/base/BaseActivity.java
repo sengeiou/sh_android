@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.bus.UpdateWarning;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
+import com.shootr.android.util.VersionUpdater;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ public class BaseActivity extends ActionBarActivity {
 
     @Inject AppContainer appContainer;
     @Inject @Main Bus bus;
+    @Inject VersionUpdater versionUpdater;
 
     private ViewGroup container;
 
@@ -42,6 +44,8 @@ public class BaseActivity extends ActionBarActivity {
                 openUpdateWarning();
             }
         };
+        bus.register(updateWarningReceiver);
+        versionUpdater.checkVersionCompatible();
     }
 
     /**

@@ -33,4 +33,9 @@ public class PreferenceModule {
     @Provides @Singleton @SessionToken StringPreference provideSessionToken(SharedPreferences preferences) {
         return new StringPreference(preferences, "session_token", null);
     }
+
+    @Provides @Singleton @LastVersionNotCompatible LongPreference provideLastVersionNotCompatible(
+      SharedPreferences preferences) {
+        return new LongPreference(preferences, "not_compatible_version", -1L);
+    }
 }
