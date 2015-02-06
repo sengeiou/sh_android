@@ -67,6 +67,10 @@ public class ErrorMessageFactory {
         return context.getString(R.string.connection_lost);
     }
 
+    public String getImageUploadErrorMessage() {
+        return context.getString(R.string.error_image_upload);
+    }
+
     @StringRes public Integer getResourceStringForCode(String errorCode) {
         Integer errorStringResource = codeResourceMap.get(errorCode);
         if (errorStringResource == null || errorStringResource <= 0) {

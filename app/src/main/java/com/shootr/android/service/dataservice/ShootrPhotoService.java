@@ -3,7 +3,7 @@ package com.shootr.android.service.dataservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.exception.ShootrError;
-import com.shootr.android.service.PhotoService;
+import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.ShootrPhotoUploadError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.squareup.okhttp.Headers;
@@ -29,6 +29,9 @@ public class ShootrPhotoService implements PhotoService {
     public static final String ENDPOINT_UPLOAD_PHOTO_SHOT =
       "http://tst.shootermessenger.com/shootr-services/rest/upload/img/shot";
 
+    public static final String ENDPOINT_UPLOAD_EVENT_IMAGE =
+      "http://tst.shootermessenger.com/shootr-services/rest/upload/img/event";
+
     private OkHttpClient client;
     private SessionRepository sessionRepository;
     private ObjectMapper objectMapper;
@@ -39,7 +42,7 @@ public class ShootrPhotoService implements PhotoService {
         this.objectMapper = objectMapper;
     }
 
-    @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException, JSONException {
+    @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
         Timber.d("Uploading photo with file path %s", photoFile.getAbsolutePath());
         RequestBody body = buildRequestBody(photoFile);
 
@@ -55,6 +58,13 @@ public class ShootrPhotoService implements PhotoService {
         return parseShotImageResponse(response);
     }
 
+    @Override public String uploadEventImageAndGetUrl(File imageFile, Long idEvent) throws IOException {
+        Timber.d("Uploading image with file path %s", imageFile.getAbsolutePath());
+        RequestBody body = buildEventRequestBody(imageFile, idEvent);
+        Response response = executeEventImageRequest(body);
+        return parseEventImageResponse(response);
+    }
+
     private RequestBody buildRequestBody(File photoFile) {
         return new MultipartBuilder().type(MultipartBuilder.FORM)
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
@@ -66,7 +76,18 @@ public class ShootrPhotoService implements PhotoService {
           .build();
     }
 
-
+    private RequestBody buildEventRequestBody(File photoFile, Long idEvent) {
+        return new MultipartBuilder().type(MultipartBuilder.FORM)
+          .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
+            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionRepository.getCurrentUserId())))
+          .addPart(Headers.of("Content-Disposition", "form-data; name=\"idEvent\""),
+            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idEvent)))
+          .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
+            RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getSessionToken()))
+          .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
+            RequestBody.create(MediaType.parse("image/jpeg"), photoFile))
+          .build();
+    }
 
     private Response executeProfileRequest(RequestBody body) throws IOException {
         return executeRequest(body, ENDPOINT_UPLOAD_PHOTO_PROFILE);
@@ -74,6 +95,12 @@ public class ShootrPhotoService implements PhotoService {
 
     private Response executeShotImageRequest(RequestBody body) throws IOException {
         return executeRequest(body, ENDPOINT_UPLOAD_PHOTO_SHOT);
+    }
+
+
+
+    private Response executeEventImageRequest(RequestBody body) throws IOException {
+        return executeRequest(body, ENDPOINT_UPLOAD_EVENT_IMAGE);
     }
 
     private Response executeRequest(RequestBody body, String endpoint) throws IOException {
@@ -107,8 +134,19 @@ public class ShootrPhotoService implements PhotoService {
         }
     }
 
+    private String parseEventImageResponse(Response response) throws IOException {
+        try {
+            JSONObject responseJson = getJsonFromResponse(response);
+            return readJsonFromEventImage(responseJson);
+        } catch (JSONException e) {
+            ShootrError
+              jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
+            throw new ShootrServerException(jsonError);
+        }
+    }
+
     private String readJsonFromProfilePhoto(JSONObject jsonObject) throws JSONException, IOException {
-        String profileThumbnailImageUrl = getThumbnailUrlFromJson(jsonObject);
+        String profileThumbnailImageUrl = getProfileThumbnailUrlFromJson(jsonObject);
 
         boolean imageUploadedSuccessfully = profileThumbnailImageUrl != null && !profileThumbnailImageUrl.isEmpty();
         if (imageUploadedSuccessfully) {
@@ -119,9 +157,21 @@ public class ShootrPhotoService implements PhotoService {
         }
     }
 
-
     private String readJsonFromShotImage(JSONObject jsonObject) throws IOException, JSONException {
-        String imageUrl = getImageUrlFromJson(jsonObject);
+        String imageUrl = getShotImageUrlFromJson(jsonObject);
+
+        boolean imageUploadedSuccessfully = imageUrl != null && !imageUrl.isEmpty();
+        if (imageUploadedSuccessfully) {
+            Timber.d("Image uploaded to url: %s", imageUrl);
+            return imageUrl;
+        } else {
+            return throwParsedError(jsonObject);
+        }
+    }
+
+
+    private String readJsonFromEventImage(JSONObject jsonObject) throws IOException, JSONException {
+        String imageUrl = getEventImageUrlFromJson(jsonObject);
 
         boolean imageUploadedSuccessfully = imageUrl != null && !imageUrl.isEmpty();
         if (imageUploadedSuccessfully) {
@@ -141,12 +191,16 @@ public class ShootrPhotoService implements PhotoService {
         throw shootrServerException;
     }
 
-    private String getThumbnailUrlFromJson(JSONObject responseJson) {
+    private String getProfileThumbnailUrlFromJson(JSONObject responseJson) {
         return responseJson.optString("profileThumbnailImageUrl");
     }
 
-    private String getImageUrlFromJson(JSONObject responseJson) {
+    private String getShotImageUrlFromJson(JSONObject responseJson) {
         return responseJson.optString("shotImageUrl");
+    }
+
+    private String getEventImageUrlFromJson(JSONObject responseJson) {
+        return responseJson.optString("eventImageUrl");
     }
 
     private JSONObject getJsonFromResponse(Response response) throws IOException, JSONException {

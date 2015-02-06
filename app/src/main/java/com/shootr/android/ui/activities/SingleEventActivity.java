@@ -1,8 +1,12 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -14,11 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.EventModel;
@@ -30,16 +36,23 @@ import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.ToggleSwitch;
 import com.shootr.android.ui.widgets.WatchersView;
+import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Callback;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
-public class SingleEventActivity extends BaseNoToolbarActivity implements SingleEventView, ObservableScrollView.Callbacks {
+public class SingleEventActivity extends BaseNoToolbarActivity
+  implements SingleEventView, ObservableScrollView.Callbacks {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
     private static final int REQUEST_EDIT_EVENT = 3;
+    private static final int REQUEST_CHOOSE_PHOTO = 4;
+    private static final int REQUEST_TAKE_PHOTO = 5;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
@@ -48,6 +61,8 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
     @InjectView(R.id.event_loading) View loadingView;
 
     @InjectView(R.id.event_photo) ImageView photo;
+    @InjectView(R.id.event_photo_edit_indicator) ImageView photoEditIndicator;
+    @InjectView(R.id.event_photo_edit_loading) ProgressBar photoLoadingIndicator;
     @InjectView(R.id.event_photo_container) View photoContainer;
 
     @InjectView(R.id.event_title_container) View titleContainer;
@@ -167,6 +182,55 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
         navigateToSelectEvent();
     }
 
+    //region Edit photo
+    @OnClick(R.id.event_photo_container)
+    public void onPhotoClick() {
+        new BottomSheet.Builder(this).title(R.string.change_photo)
+          .sheet(R.menu.profile_photo_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+          REQUEST_CHOOSE_PHOTO);
+    }
+
+    private void takePhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File pictureTemporaryFile = getCameraPhotoFile();
+        if (!pictureTemporaryFile.exists()) {
+            try {
+                pictureTemporaryFile.getParentFile().mkdirs();
+                pictureTemporaryFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                //TODO cancelar operación y avisar al usuario
+            }
+        }
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    private File getCameraPhotoFile() {
+        return new File(getExternalFilesDir("tmp"), "eventUpload.jpg");
+    }
+    //endregion
+
     private void navigateToSelectEvent() {
         Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(titleContainer, titleContainer.getLeft(), 0,
           titleContainer.getWidth(), titleContainer.getBottom()).toBundle();
@@ -213,7 +277,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
 
         if (progress > 1) {
             progress = 1;
-        }else if (progress < 0) {
+        } else if (progress < 0) {
             progress = 0;
         }
         return progress;
@@ -280,7 +344,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
         } else if (item.getItemId() == R.id.menu_events) {
             navigateToSelectEvent();
             return true;
-        }else if (item.getItemId() == R.id.menu_edit) {
+        } else if (item.getItemId() == R.id.menu_edit) {
             presenter.editEvent();
             return true;
         } else {
@@ -296,10 +360,16 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
         } else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
             presenter.resultFromSelectEvent(idEventSelected);
-        }else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
             presenter.resultFromEditEvent(idEventEdited);
-
+        } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+            presenter.photoSelected(photoFile);
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            File photoFile = getCameraPhotoFile();
+            presenter.photoSelected(photoFile);
         }
     }
 
@@ -345,6 +415,35 @@ public class SingleEventActivity extends BaseNoToolbarActivity implements Single
         } else {
             hasPicture = false;
         }
+    }
+
+    @Override public void showEditPicture(String picture) {
+        hasPicture = true;
+        if (picture == null) {
+            photo.setImageDrawable(null);
+            photoEditIndicator.setVisibility(View.VISIBLE);
+        } else {
+            photoEditIndicator.setVisibility(View.GONE);
+        }
+        recomputePhotoAndScrollingMetrics();
+        photoContainer.setClickable(true);
+        photoContainer.setFocusable(true);
+    }
+
+    @Override public void hideEditPicture() {
+        photoEditIndicator.setVisibility(View.GONE);
+        recomputePhotoAndScrollingMetrics();
+        photoContainer.setClickable(false);
+        photoContainer.setFocusable(false);
+    }
+
+    @Override public void showLoadingPictureUpload() {
+        photoLoadingIndicator.setVisibility(View.VISIBLE);
+        photoEditIndicator.setVisibility(View.GONE);
+    }
+
+    @Override public void hideLoadingPictureUpload() {
+        photoLoadingIndicator.setVisibility(View.GONE);
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {

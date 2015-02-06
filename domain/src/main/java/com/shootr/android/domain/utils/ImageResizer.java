@@ -1,4 +1,4 @@
-package com.shootr.android.util;
+package com.shootr.android.domain.utils;
 
 import java.io.File;
 import java.io.IOException;

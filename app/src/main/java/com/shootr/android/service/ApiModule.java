@@ -1,6 +1,7 @@
 package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
 import dagger.Module;
 import dagger.Provides;
