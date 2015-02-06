@@ -24,7 +24,7 @@ import javax.inject.Inject;
 public class EventsListPresenter implements Presenter, CommunicationPresenter{
 
     //region Dependencies
-    private final @Main Bus bus;
+    private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;

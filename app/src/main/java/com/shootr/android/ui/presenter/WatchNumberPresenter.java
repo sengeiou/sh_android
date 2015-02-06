@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 public class WatchNumberPresenter implements Presenter {
 
-    private final @Main Bus bus;
+    private final Bus bus;
     private final WatchNumberInteractor watchNumberInteractor;
 
     private WatchingRequestView watchingRequestView;

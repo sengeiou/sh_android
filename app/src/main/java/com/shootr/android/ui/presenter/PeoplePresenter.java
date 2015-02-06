@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 public class PeoplePresenter implements Presenter, CommunicationPresenter {
 
-    private final @Main Bus bus;
+    private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final GetPeopleInteractor getPeopleInteractor;
     private final UserModelMapper userModelMapper;

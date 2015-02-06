@@ -21,7 +21,7 @@ public class SearchTeamPresenter implements Presenter, CommunicationPresenter {
     private SearchTeamView searchTeamView;
     private ObjectGraph objectGraph;
 
-    private final @Main Bus bus;
+    private final Bus bus;
     private final JobManager jobManager;
     private String currentTeamName;
     private boolean isSearchInterfaceReady;

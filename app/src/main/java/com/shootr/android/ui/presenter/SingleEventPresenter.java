@@ -31,7 +31,7 @@ import javax.inject.Inject;
 public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
-    private final @Main Bus bus;
+    private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
     private final EventNotificationInteractor eventNotificationInteractor;

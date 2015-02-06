@@ -21,7 +21,7 @@ public abstract class ShootrBaseJob<T> extends Job {
     private Bus bus;
     private NetworkUtil networkUtil;
 
-    protected ShootrBaseJob(Params params, Application application, @Main Bus bus, NetworkUtil networkUtil) {
+    protected ShootrBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
         super(params);
         this.application = application;
         this.bus = bus;

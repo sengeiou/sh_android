@@ -24,7 +24,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private static final int MAX_LENGTH = 140;
 
-    private final @Main Bus bus;
+    private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
 

@@ -28,7 +28,7 @@ public class ProfileEditPresenter implements Presenter {
 
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
-    private final @Main Bus bus;
+    private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
 
