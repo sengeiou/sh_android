@@ -185,7 +185,7 @@ public class DatabaseContract {
         public static final String TABLE = "Watch";
         public static final String ID_USER = "idUser";
         public static final String ID_EVENT = "idEvent";
-        public static final String PLACE = "place";
+        public static final String PLACE = "status";
         public static final String VISIBLE = "visible";
 
         public static final String[] PROJECTION = {

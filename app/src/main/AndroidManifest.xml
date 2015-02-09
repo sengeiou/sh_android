@@ -110,7 +110,7 @@
         </activity>
 
         <activity
-          android:name=".ui.activities.EditInfoActivity"
+          android:name=".ui.activities.EditStatusActivity"
           android:theme="@style/ShootrTheme.Closable"
           android:windowSoftInputMode="stateVisible"></activity>
 

@@ -142,7 +142,7 @@ public class WatchersView extends LinearLayout{
     private void bindWatcherData(WatcherViewHolder viewHolder, UserWatchingModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUserName());
-        viewHolder.watchingText.setText(userWatching.getPlace());
+        viewHolder.watchingText.setText(userWatching.getStatus());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
         }
@@ -158,7 +158,7 @@ public class WatchersView extends LinearLayout{
         UserWatchingModel watch1 = new UserWatchingModel();
         watch1.setIdUser(1L);
         watch1.setUserName("Username");
-        watch1.setPlace("Watching");
+        watch1.setStatus("Watching");
 
         userWatchingMocks.add(watch1);
         userWatchingMocks.add(watch1);

@@ -26,7 +26,7 @@ public class WatchEntityMapper {
         Watch watch = new Watch();
         watch.setUser(user);
         watch.setIdEvent(watchEntity.getIdEvent());
-        watch.setUserStatus(watchEntity.getPlace());
+        watch.setUserStatus(watchEntity.getStatus());
         watch.setVisible(watchEntity.isVisible());
         return watch;
     }
@@ -49,7 +49,7 @@ public class WatchEntityMapper {
         WatchEntity watchEntity = new WatchEntity();
         watchEntity.setIdUser(watch.getUser().getIdUser());
         watchEntity.setIdEvent(watch.getIdEvent());
-        watchEntity.setPlace(watch.getUserStatus());
+        watchEntity.setStatus(watch.getUserStatus());
         watchEntity.setVisible(watch.isVisible());
 
         Date currentDate = timeUtils.getCurrentDate();

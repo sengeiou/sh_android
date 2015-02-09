@@ -8,7 +8,6 @@ public class EditInfoPresenter {
     private EditInfoView editInfoView;
     private String eventTitle;
     private String statusText;
-    private boolean watching;
 
     @Inject public EditInfoPresenter() {
     }
@@ -20,63 +19,63 @@ public class EditInfoPresenter {
         this.updateViewWithInfo();
     }
 
-    public void placeTextChanged() {
+    public void statusTextChanged() {
         this.updateSendButtonStatus();
     }
 
     public void sendNewStatus() {
-        String placeText = getPlaceText();
-        closeScreenWithResult(placeText);
+        String statusText = getStatusText();
+        closeScreenWithResult(statusText);
     }
 
     private void closeScreenWithResult(String statusText) {
         this.editInfoView.closeScreenWithResult(statusText);
     }
 
-    private void updatePlaceInputStatus() {
-        this.editInfoView.setFocusOnPlace();
+    private void updateStatusInputStatus() {
+        this.editInfoView.setFocusOnStatus();
     }
 
     private void updateSendButtonStatus() {
         editInfoView.setSendButonEnabled(hasChangedInfo());
     }
 
-    private String getPlaceText() {
-        String placeText = this.editInfoView.getPlaceText();
-        if (placeText != null) {
-            placeText = filterPlaceText(placeText);
+    private String getStatusText() {
+        String statusText = this.editInfoView.getStatusText();
+        if (statusText != null) {
+            statusText = filterStatusText(statusText);
         }
-        return placeText;
+        return statusText;
     }
 
-    private String filterPlaceText(String placeText) {
+    private String filterStatusText(String statusText) {
         //TODO can't be more than [60] characters (business logic)
-        placeText = placeText.trim();
-        placeText = placeText.replace("\n", "");
-        if (placeText.isEmpty()) {
-            placeText = null;
+        statusText = statusText.trim();
+        statusText = statusText.replace("\n", "");
+        if (statusText.isEmpty()) {
+            statusText = null;
         }
-        return placeText;
+        return statusText;
     }
 
     private void updateViewWithInfo() {
         this.editInfoView.setTitle(eventTitle);
-        this.editInfoView.setPlaceText(statusText);
-        this.updatePlaceInputStatus();
+        this.editInfoView.setStatusText(statusText);
+        this.updateStatusInputStatus();
         this.editInfoView.setMenuShoot();
     }
 
     private boolean hasChangedInfo() {
-        return placeTextHasChanged();
+        return statusTextHasChanged();
     }
 
-    private boolean placeTextHasChanged() {
-        String newPlaceText = getPlaceText();
-        String currentPlaceText = statusText;
-        if (currentPlaceText == null) {
-            return newPlaceText != null;
+    private boolean statusTextHasChanged() {
+        String newStatusText = getStatusText();
+        String currentStatusText = statusText;
+        if (currentStatusText == null) {
+            return newStatusText != null;
         } else {
-            return !currentPlaceText.equals(newPlaceText);
+            return !currentStatusText.equals(newStatusText);
         }
     }
 }

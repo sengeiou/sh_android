@@ -33,7 +33,6 @@ import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
-import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -332,7 +331,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
-            String statusText = data.getStringExtra(EditInfoActivity.KEY_STATUS);
+            String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
@@ -443,7 +442,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
-        Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
+        Intent intent = EditStatusActivity.getIntent(this, eventModel, currentUserWatchingModel);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 

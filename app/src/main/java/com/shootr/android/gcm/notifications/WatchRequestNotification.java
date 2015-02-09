@@ -93,8 +93,8 @@ public class WatchRequestNotification extends CommonNotification {
     }
 
     public String getWatchingMessage() {
-        if (userWatchingModel.getPlace() != null) {
-            return String.format(formatWatchingPlace, eventModel.getTitle(), userWatchingModel.getPlace());
+        if (userWatchingModel.getStatus() != null) {
+            return String.format(formatWatchingPlace, eventModel.getTitle(), userWatchingModel.getStatus());
         } else {
             return String.format(formatWatching, eventModel.getTitle());
         }

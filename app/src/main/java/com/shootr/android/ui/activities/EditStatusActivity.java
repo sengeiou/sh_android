@@ -22,12 +22,12 @@ import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
 import javax.inject.Inject;
 
-public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
+public class EditStatusActivity extends BaseSignedInActivity implements EditInfoView{
 
     public static final String KEY_STATUS = "status";
     private static final String KEY_TITLE = "title";
 
-    @InjectView(R.id.edit_info_place) EditText place;
+    @InjectView(R.id.edit_info_status) EditText statusText;
 
     @Inject EditInfoPresenter editInfoPresenter;
 
@@ -36,9 +36,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
         String title = eventModel.getTitle();
-        String status = watchingModel.getPlace();
+        String status = watchingModel.getStatus();
 
-        Intent intent = new Intent(context, EditInfoActivity.class);
+        Intent intent = new Intent(context, EditStatusActivity.class);
         intent.putExtra(KEY_TITLE, title);
         intent.putExtra(KEY_STATUS, status);
         return intent;
@@ -67,15 +67,14 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
                 return null;
             }
         };
-        place.setFilters(new InputFilter[]{
-          newlineFilter,
-          new InputFilter.LengthFilter(60)
+        statusText.setFilters(new InputFilter[] {
+          newlineFilter, new InputFilter.LengthFilter(60)
         });
 
         // Not done by ButterKnife so it's not called when the presenter sets the text
-        place.addTextChangedListener(new TextWatcher() {
+        statusText.addTextChangedListener(new TextWatcher() {
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                editInfoPresenter.placeTextChanged();
+                editInfoPresenter.statusTextChanged();
             }
 
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -147,8 +146,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         finish();
     }
 
-    @Override public String getPlaceText() {
-        return this.place.getText().toString();
+    @Override public String getStatusText() {
+        return this.statusText.getText().toString();
     }
 
     @Override public void setMenuShoot() {
@@ -166,14 +165,14 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     }
 
-    @Override public void setPlaceText(String place) {
-        this.place.setText(place);
+    @Override public void setStatusText(String status) {
+        this.statusText.setText(status);
     }
 
-    @Override public void setFocusOnPlace() {
-        place.requestFocus();
-        place.setSelection(place.getText().length());
+    @Override public void setFocusOnStatus() {
+        statusText.requestFocus();
+        statusText.setSelection(statusText.getText().length());
         InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_IMPLICIT, 0);
+        inputMethodManager.toggleSoftInputFromWindow(statusText.getApplicationWindowToken(), InputMethodManager.SHOW_IMPLICIT, 0);
     }
 }

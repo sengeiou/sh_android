@@ -6,13 +6,13 @@ public interface EditInfoView {
 
     void setTitle(String title);
 
-    void setPlaceText(String place);
+    void setStatusText(String place);
 
-    void setFocusOnPlace();
+    void setFocusOnStatus();
 
     void closeScreenWithResult(String stautsText);
 
-    String getPlaceText();
+    String getStatusText();
 
     void setMenuShoot();
 
