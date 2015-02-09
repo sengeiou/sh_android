@@ -11,6 +11,8 @@ public class EventValidator {
     public static final int TITLE_MINIMUN_LENGTH = 3;
     public static final int TITLE_MAXIMUN_LENGTH = 50;
     public static final int TAG_MAXIMUM_LENGTH = 8;
+    public static final String EMOJI_RANGE_REGEX = "[^\\u1f300-\\u1f64f]";
+    public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
 
     private static final long ONE_YEAR_MILLIS = 365 * 24 * 60 * 60 * 1000;
 
@@ -38,14 +40,19 @@ public class EventValidator {
     }
 
     private void validateTitleTooShort(Event event) {
-        if (event.getTitle() == null || event.getTitle().length() < TITLE_MINIMUN_LENGTH) {
+        String title = event.getTitle();
+        if (title == null || alphanumericLength(title) < TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT, FIELD_TITLE));
         }
     }
 
+    private int alphanumericLength(String title) {
+        return title.replaceAll(ALPHANUMERIC_REGEX, "").length();
+    }
+
     private void validateTitleTooLong(Event event) {
-        if (event.getTitle() != null && event.getTitle().length() > TITLE_MAXIMUN_LENGTH) {
+        if (event.getTitle() != null && alphanumericLength(event.getTitle()) > TITLE_MAXIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG, FIELD_TITLE));
         }
