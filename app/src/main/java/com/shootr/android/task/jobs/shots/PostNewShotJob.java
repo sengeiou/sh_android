@@ -82,6 +82,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
             if (event != null) {
                 shotTemplate.setIdEvent(event.getIdEvent());
                 shotTemplate.setEventTag(event.getTag());
+                shotTemplate.setEventTitle(event.getTitle());
             }
         }
     }
