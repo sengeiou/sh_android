@@ -8,8 +8,9 @@ import java.util.List;
 
 public class EventValidator {
 
-    private static final int TITLE_MINIMUN_LENGTH = 3;
-    private static final int TITLE_MAXIMUN_LENGTH = 50;
+    public static final int TITLE_MINIMUN_LENGTH = 3;
+    public static final int TITLE_MAXIMUN_LENGTH = 50;
+    public static final int TAG_MAXIMUM_LENGTH = 8;
 
     private static final long ONE_YEAR_MILLIS = 365 * 24 * 60 * 60 * 1000;
 
