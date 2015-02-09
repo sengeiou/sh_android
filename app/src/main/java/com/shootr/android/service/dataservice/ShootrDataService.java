@@ -223,9 +223,8 @@ public class ShootrDataService implements ShootrService {
         return shots;
     }
 
-    @Override
-    public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent) throws IOException {
-        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment, imageUrl, idEvent);
+    @Override public ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException {
+        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(shotTemplate);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
