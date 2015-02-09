@@ -135,10 +135,6 @@ public class EditStatusActivity extends BaseSignedInActivity implements EditInfo
         }
     }
 
-    @Override public void setTitle(String title) {
-        getSupportActionBar().setTitle(title);
-    }
-
     @Override public void closeScreenWithResult(String stautsText) {
         Intent resultIntent = getIntent();
         resultIntent.putExtra(KEY_STATUS, stautsText);
@@ -155,14 +151,6 @@ public class EditStatusActivity extends BaseSignedInActivity implements EditInfo
         if (sendMenuItem != null) {
             sendMenuItem.setIcon(sendMenuIcon);
         }
-    }
-
-    @Override public void setMenuDone() {
-        sendMenuIcon = R.drawable.ic_action_done;
-        if (sendMenuItem != null) {
-            sendMenuItem.setIcon(sendMenuIcon);
-        }
-
     }
 
     @Override public void setStatusText(String status) {

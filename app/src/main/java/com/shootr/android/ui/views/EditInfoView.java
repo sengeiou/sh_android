@@ -4,8 +4,6 @@ public interface EditInfoView {
 
     void setSendButonEnabled(boolean enabled);
 
-    void setTitle(String title);
-
     void setStatusText(String place);
 
     void setFocusOnStatus();
@@ -15,6 +13,4 @@ public interface EditInfoView {
     String getStatusText();
 
     void setMenuShoot();
-
-    void setMenuDone();
 }

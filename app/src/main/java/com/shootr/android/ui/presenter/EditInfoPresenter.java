@@ -59,7 +59,6 @@ public class EditInfoPresenter {
     }
 
     private void updateViewWithInfo() {
-        this.editInfoView.setTitle(eventTitle);
         this.editInfoView.setStatusText(statusText);
         this.updateStatusInputStatus();
         this.editInfoView.setMenuShoot();
