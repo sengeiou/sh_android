@@ -30,6 +30,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private PostNewShotView postNewShotView;
     private ObjectGraph objectGraph;
+    private String placeholder;
     private File selectedImageFile;
     private String shotCommentToSend;
     private String uploadedImageUrl;
@@ -42,8 +43,16 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     public void initialize(PostNewShotView postNewShotView, ObjectGraph objectGraph) {
+        initialize(postNewShotView, objectGraph, null);
+    }
+
+    public void initialize(PostNewShotView postNewShotView, ObjectGraph objectGraph, String placeholder) {
         this.postNewShotView = postNewShotView;
         this.objectGraph = objectGraph;
+        this.placeholder = placeholder;
+        if (placeholder != null) {
+            postNewShotView.setPlaceholder(placeholder);
+        }
     }
 
     public void textChanged(String currentText) {

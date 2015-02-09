@@ -45,6 +45,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     public static final String EXTRA_DEFAULT_INPUT_MODE = "input";
     public static final int INPUT_CAMERA = 1;
     public static final int INPUT_GALLERY = 2;
+    public static final String KEY_PLACEHOLDER = "placeholder";
 
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
@@ -74,16 +75,17 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         setContentView(R.layout.activity_new_shot);
         ButterKnife.inject(this);
 
-        initializePresenter();
+        String optinalPlaceholder = getIntent().getStringExtra(KEY_PLACEHOLDER);
+        initializePresenter(optinalPlaceholder);
         initializeViews();
         setTextReceivedFromIntent();
         openDefaultInputIfAny();
         clearDefaultInput();
     }
 
-    private void initializePresenter() {
+    private void initializePresenter(String optinalPlaceholder) {
         presenter = getObjectGraph().get(PostNewShotPresenter.class);
-        presenter.initialize(this, getObjectGraph());
+        presenter.initialize(this, getObjectGraph(), optinalPlaceholder);
     }
 
     private void initializeViews() {
@@ -275,6 +277,10 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
           REQUEST_CHOOSE_PHOTO);
+    }
+
+    @Override public void setPlaceholder(String placeholder) {
+        editTextView.setHint(placeholder);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

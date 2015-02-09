@@ -94,6 +94,7 @@ public class TimelineFragment extends BaseFragment
     private boolean moreShots = true;
     private boolean shouldPoll;
     private BadgeDrawable badgeDrawable;
+    private String newShotPlaceholder;
 
 
      /* ---- Lifecycle methods ---- */
@@ -181,8 +182,8 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showEventTitleInPlaceholder(String eventTitle) {
-        eventTitle = filterAndTrimEventTitle(eventTitle);
-        newShotTextView.setText(eventTitle);
+        newShotPlaceholder = filterAndTrimEventTitle(eventTitle);
+        newShotTextView.setText(newShotPlaceholder);
     }
 
     private String filterAndTrimEventTitle(String eventTitle) {
@@ -309,20 +310,25 @@ public class TimelineFragment extends BaseFragment
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
+        startNewShotActivityWithPlaceholder(intent);
     }
 
     @OnClick(R.id.timeline_new_image_camera)
     public void startNewShotFromCamera() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_CAMERA);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
+        startNewShotActivityWithPlaceholder(intent);
     }
 
     @OnClick(R.id.timeline_new_image_gallery)
     public void startNewShotFromGallery() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_GALLERY);
+        startNewShotActivityWithPlaceholder(intent);
+    }
+
+    private void startNewShotActivityWithPlaceholder(Intent intent) {
+        intent.putExtra(PostNewShotActivity.KEY_PLACEHOLDER, newShotPlaceholder);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
     }
 
