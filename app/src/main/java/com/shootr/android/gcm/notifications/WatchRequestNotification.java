@@ -28,7 +28,6 @@ public class WatchRequestNotification extends CommonNotification {
 
     private final String formatWatching;
     private final String formatWatchingPlace;
-    @Deprecated private final String formatNotWatching;
 
     public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
       PicassoWrapper picasso, UserWatchingModel userWatchingModel, EventModel eventModel) {
@@ -39,7 +38,6 @@ public class WatchRequestNotification extends CommonNotification {
 
         formatWatching = context.getString(R.string.notification_watch_watching);
         formatWatchingPlace = context.getString(R.string.notification_watch_watching_place);
-        formatNotWatching = context.getString(R.string.notification_watch_not_watching);
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
@@ -91,11 +89,7 @@ public class WatchRequestNotification extends CommonNotification {
     }
 
     public String getMessage() {
-        if (userWatchingModel.isWatching()) {
-            return getWatchingMessage();
-        } else {
-            return getNotWatchingMessage();
-        }
+        return getWatchingMessage();
     }
 
     public String getWatchingMessage() {
@@ -105,10 +99,4 @@ public class WatchRequestNotification extends CommonNotification {
             return String.format(formatWatching, eventModel.getTitle());
         }
     }
-
-    private String getNotWatchingMessage() {
-        return String.format(formatNotWatching, eventModel.getTitle());
-    }
-
-
 }

@@ -85,34 +85,6 @@
                   android:visibility="invisible"
                   tools:visibility="visible">
 
-                    <!-- switch -->
-                    <FrameLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
-
-                        <ImageView
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_gravity="center_vertical"
-                          android:layout_marginLeft="16dp"
-                          android:src="@drawable/ic_watching_24" />
-
-                        <com.shootr.android.ui.widgets.SwitchBar
-                          android:id="@+id/event_content_detail_switch"
-                          android:layout_width="match_parent"
-                          android:layout_height="?actionBarSize"
-                          android:background="?selectableItemBackground"
-                          android:paddingLeft="56dp"
-                          app:switchBarText="@string/watching_switch" />
-
-                        <View
-                          android:layout_width="match_parent"
-                          android:layout_height="1dp"
-                          android:layout_gravity="bottom"
-                          android:layout_marginLeft="74dp"
-                          android:background="?dividerHorizontal" />
-                    </FrameLayout>
-
                     <!-- watchers -->
                     <TextView
                       android:id="@+id/event_content_detail_watchers_number"

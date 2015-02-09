@@ -9,7 +9,7 @@ public class UserWatchingModel implements Serializable {
     private String userName;
     private String photo;
 
-    private boolean watching;
+    private boolean visible;
     private String place;
     private boolean hasStatusMessage;
 
@@ -45,12 +45,12 @@ public class UserWatchingModel implements Serializable {
         this.photo = photo;
     }
 
-    public boolean isWatching() {
-        return watching;
+    public boolean isVisible() {
+        return visible;
     }
 
-    public void setWatching(boolean watching) {
-        this.watching = watching;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     @Override

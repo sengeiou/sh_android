@@ -26,7 +26,6 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     public static final String KEY_STATUS = "status";
     private static final String KEY_TITLE = "title";
-    private static final String KEY_WATCHING = "watching";
 
     @InjectView(R.id.edit_info_place) EditText place;
 
@@ -38,12 +37,10 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
         String title = eventModel.getTitle();
         String status = watchingModel.getPlace();
-        boolean watching = watchingModel.isWatching();
 
         Intent intent = new Intent(context, EditInfoActivity.class);
         intent.putExtra(KEY_TITLE, title);
         intent.putExtra(KEY_STATUS, status);
-        intent.putExtra(KEY_WATCHING, watching);
         return intent;
     }
 
@@ -94,8 +91,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     private void initializePresenter(Bundle initialInfoBundle) {
         String eventTitle = initialInfoBundle.getString(KEY_TITLE);
         String statusText = initialInfoBundle.getString(KEY_STATUS);
-        boolean watching = initialInfoBundle.getBoolean(KEY_WATCHING);
-        editInfoPresenter.initialize(this, eventTitle, statusText, watching);
+        editInfoPresenter.initialize(this, eventTitle, statusText);
     }
 
     private void sendNewStatus() {

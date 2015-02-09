@@ -32,7 +32,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     //region Dependencies
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
-    private final WatchingInteractor watchingInteractor;
+    private final WatchingInteractor watchingStatusInteractor;
     private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
     private final SelectEventInteractor selectEventInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
@@ -45,15 +45,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private UserWatchingModel currentUserWatchingModel;
     private EventModel eventModel;
-    private int watchersCount;
 
     @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingInteractor, EventsWatchedCountInteractor eventsWatchedCountInteractor,
+      WatchingInteractor watchingStatusInteractor, EventsWatchedCountInteractor eventsWatchedCountInteractor,
       SelectEventInteractor selectEventInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
       EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
-        this.watchingInteractor = watchingInteractor;
+        this.watchingStatusInteractor = watchingStatusInteractor;
         this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
         this.selectEventInteractor = selectEventInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
@@ -75,7 +74,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromEditStatus(@Nullable String statusText) {
-        updateWatch(statusText);
+        updateWatchStatus(statusText);
     }
     //endregion
 
@@ -96,13 +95,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    public void sendWatching() {
-        updateWatch(currentUserWatchingModel.getPlace());
-    }
-
-    private void updateWatch(String statusText) {
-        watchingInteractor.sendWatching(eventModel.getIdEvent(), statusText,
-          new WatchingInteractor.Callback() {
+    private void updateWatchStatus(String statusText) {
+        watchingStatusInteractor.sendWatching(eventModel.getIdEvent(), statusText, new WatchingInteractor.Callback() {
               @Override public void onLoaded(Watch watchUpdated) {
                   renderCurrentUserWatching(watchUpdated);
               }
@@ -181,8 +175,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
-            watchersCount = eventInfo.getWatchersCount();
-            this.renderWatchersCount(watchersCount);
+            this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
         }
         this.hideViewLoading();
@@ -209,7 +202,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private void renderCurrentUserWatching(Watch currentUserWatch) {
         currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
-        singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
     }
 
     private void renderEventInfo(Event event) {

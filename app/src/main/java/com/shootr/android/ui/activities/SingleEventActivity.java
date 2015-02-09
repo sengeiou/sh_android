@@ -34,7 +34,6 @@ import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.SwitchBar;
-import com.shootr.android.ui.widgets.ToggleSwitch;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -74,7 +73,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_empty) View contentEmpty;
     @InjectView(R.id.event_content_detail) View contentDetail;
 
-    @InjectView(R.id.event_content_detail_switch) SwitchBar watchingSwitch;
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
@@ -108,13 +106,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     private void initializeViews() {
         ButterKnife.inject(this);
         headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
-
-        watchingSwitch.getSwitch().setOnBeforeCheckedChangeListener(new ToggleSwitch.OnBeforeCheckedChangeListener() {
-            @Override public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
-                presenter.sendWatching();
-                return false;
-            }
-        });
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
             @Override public void onProfile(Long idUser) {
                 navigateToUserProfile(idUser);
@@ -449,10 +440,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
-    }
-
-    @Override public void setIsWatching(boolean watching) {
-        watchingSwitch.setCheckedInternal(watching);
     }
 
     @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {

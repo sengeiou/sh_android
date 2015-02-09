@@ -16,6 +16,7 @@ public class UserWatchingModelMapper {
         UserWatchingModel model = new UserWatchingModel();
         model.setPlace(userStatus(watch));
         model.setHasStatusMessage(watch.getUserStatus()!=null);
+        model.setVisible(watch.isVisible());
 
         User user = watch.getUser();
         model.setIdUser(user.getIdUser());

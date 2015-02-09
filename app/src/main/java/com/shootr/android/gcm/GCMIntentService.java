@@ -5,24 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.BusPublisher;
+import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.db.manager.EventManager;
-import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.db.manager.EventManager;
+import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventEntityModelMapper;
-import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
+import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
@@ -125,10 +125,7 @@ public class GCMIntentService extends IntentService {
         EventEntity eventEntity = service.getEventById(idEvent);
         UserEntity userFromNotification = userManager.getUserByIdUser(idUser);
 
-        boolean isWatching = true;
-
-        UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, isWatching,
-          place);
+        UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, place);
         EventModel eventModel = eventEntityModelMapper.toEventModel(eventEntity);
 
         notificationManager.sendWatchRequestNotification(userWatchingModel, eventModel);

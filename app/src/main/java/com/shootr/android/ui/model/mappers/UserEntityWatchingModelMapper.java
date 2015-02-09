@@ -8,15 +8,14 @@ import com.shootr.android.ui.model.UserWatchingModel;
 public class UserEntityWatchingModelMapper {
 
 
-    public UserEntityWatchingModelMapper(Context context) {
+    public UserEntityWatchingModelMapper() {
     }
 
-    public UserWatchingModel toUserWatchingModel(UserEntity user, boolean isWatching, String place) {
+    public UserWatchingModel toUserWatchingModel(UserEntity user, String place) {
         UserWatchingModel userModel = new UserWatchingModel();
         userModel.setIdUser(user.getIdUser());
         userModel.setFavoriteTeamId(user.getFavoriteTeamId());
         userModel.setPhoto(user.getPhoto());
-        userModel.setWatching(isWatching);
         userModel.setPlace(place);
         userModel.setUserName(user.getUserName());
         return userModel;
