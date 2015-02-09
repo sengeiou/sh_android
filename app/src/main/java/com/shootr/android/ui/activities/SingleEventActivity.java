@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -55,6 +56,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
+    @InjectView(R.id.event_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @InjectView(R.id.event_loading) View loadingView;
 
@@ -118,6 +120,13 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         scrollView.addCallbacks(this);
 
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
+          R.color.refresh_4);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                presenter.refreshInfo();
+            }
+        });
         final ViewTreeObserver scrollViewViewTreeObserver = scrollView.getViewTreeObserver();
         if (scrollViewViewTreeObserver.isAlive()) {
             scrollViewViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -491,9 +500,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
         loadingView.setVisibility(View.GONE);
     }
 
