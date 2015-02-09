@@ -91,7 +91,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContainerContent(R.layout.activity_event_watchers);
+        setContainerContent(R.layout.activity_event_page);
         initializeViews();
         setupActionbar();
 
