@@ -65,28 +65,19 @@ public class TimelineFragment extends BaseFragment
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-    public static final Long WATCH_STATUS_IGNORE = 2L;
-    public static final Long WATCH_STATUS_WATCHING = 1L;
 
     @Inject PicassoWrapper picasso;
     @Inject @Main Bus bus;
     @Inject AndroidTimeUtils timeUtils;
     @Inject JobManager jobManager;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject SessionRepository sessionRepository;
-    @Inject WatchNumberInteractor watchNumberInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.timeline_watching_container) View watchingRequestContainerView;
-    @InjectView(R.id.timeline_watching_title) TextView watchingRequestTitleView;
-    @InjectView(R.id.timeline_watching_subtitle) TextView watchingRequestSubtitleView;
-    @InjectView(R.id.timeline_watching_action_ignore) View watchingRequestActionIgnoreView;
 
-    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
     private View footerView;
     private ProgressBar footerProgress;
 
