@@ -60,7 +60,9 @@
               android:layout_marginLeft="8dp"
               android:layout_toLeftOf="@+id/timeline_new_image_gallery"
               android:background="@drawable/textfield_multiline_default_holo_light"
+              android:ellipsize="end"
               android:fontFamily="sans-serif-light"
+              android:maxLines="1"
               android:text="@string/activity_timeline_new_text"
               android:textColor="@color/gray_60"
               android:textSize="16sp" />
