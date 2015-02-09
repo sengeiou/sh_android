@@ -62,7 +62,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     }
 
     private Long idEventAssociated() {
-        WatchEntity watching = watchManager.getWatching(sessionRepository.getCurrentUserId());
+        WatchEntity watching = watchManager.getWatchVisibleByUser(sessionRepository.getCurrentUserId());
         if (watching != null) {
             return watching.getIdEvent();
         } else {
