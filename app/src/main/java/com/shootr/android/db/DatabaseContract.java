@@ -86,10 +86,11 @@ public class DatabaseContract {
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_EVENT = "idEvent";
+        public static final String EVENT_TAG = "eventTag";
         public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, TYPE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, TYPE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }
@@ -166,9 +167,10 @@ public class DatabaseContract {
         public static final String ID_VISITOR_TEAM = "idVisitorTeam";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
+        public static final String TAG = "tag";
 
         public static final String[] PROJECTION = {
-          ID_EVENT, ID_USER, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, CSYS_BIRTH, CSYS_MODIFIED,
+          ID_EVENT, ID_USER, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }

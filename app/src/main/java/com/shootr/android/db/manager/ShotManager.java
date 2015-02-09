@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
-import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -18,13 +18,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShotManager extends  AbstractManager{
 
-    @Inject ShotMapper shotMapper;
+    @Inject ShotEntityMapper shotEntityMapper;
     @Inject UserMapper userMapper;
     @Inject ShotModelMapper shotVOMapper;
 
@@ -33,9 +32,9 @@ public class ShotManager extends  AbstractManager{
     private static final String CSYS_BIRTH = DatabaseContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
-    public ShotManager(SQLiteOpenHelper openHelper, ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
+    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
         super(openHelper);
-        this.shotMapper = shotMapper;
+        this.shotEntityMapper = shotEntityMapper;
         this.userMapper = userMapper;
         this.shotVOMapper = shotVOMapper;
     }
@@ -44,7 +43,7 @@ public class ShotManager extends  AbstractManager{
      * Insert a Shot
      */
     public void saveShot(ShotEntity shot) throws SQLException {
-        ContentValues contentValues = shotMapper.toContentValues(shot);
+        ContentValues contentValues = shotEntityMapper.toContentValues(shot);
         if (contentValues.getAsLong(CSYS_DELETED) != null) {
             deleteShot(shot);
         } else {
@@ -72,6 +71,7 @@ public class ShotManager extends  AbstractManager{
           + ShotTable.COMMENT+","
           + ShotTable.IMAGE+","
           + ShotTable.ID_EVENT + ","
+          + ShotTable.EVENT_TAG + ","
           + ShotTable.TYPE
           + ",b."
           + UserTable.NAME
@@ -145,7 +145,7 @@ public class ShotManager extends  AbstractManager{
         cursor.moveToFirst();
         do {
 
-            ShotEntity shot = shotMapper.fromCursor(cursor);
+            ShotEntity shot = shotEntityMapper.fromCursor(cursor);
             ShotModelMapper shotModelMapper = new ShotModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
             ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
@@ -174,7 +174,7 @@ public class ShotManager extends  AbstractManager{
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             do {
-                shotEntity = shotMapper.fromCursor(queryResult);
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
                 latestShots.add(shotEntity);
             } while (queryResult.moveToNext());
         }
@@ -188,6 +188,7 @@ public class ShotManager extends  AbstractManager{
                 + ShotTable.COMMENT+ ","
                 + ShotTable.IMAGE + ","
                 + ShotTable.ID_EVENT + ","
+                + ShotTable.EVENT_TAG + ","
                 + ShotTable.TYPE+
                 ",b."+UserTable.FAVORITE_TEAM_ID+
                 ",b."+UserTable.FAVORITE_TEAM_NAME+
@@ -217,7 +218,7 @@ public class ShotManager extends  AbstractManager{
         cursor.moveToFirst();
         do {
 
-            ShotEntity shot = shotMapper.fromCursor(cursor);
+            ShotEntity shot = shotEntityMapper.fromCursor(cursor);
 
             ShotModelMapper shotModelMapper = new ShotModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
@@ -240,7 +241,7 @@ public class ShotManager extends  AbstractManager{
         long res;
         Collections.reverse(shotList);
         for (ShotEntity shot : shotList) {
-            ContentValues contentValues = shotMapper.toContentValues(shot);
+            ContentValues contentValues = shotEntityMapper.toContentValues(shot);
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 res = deleteShot(shot);
             } else {
@@ -275,7 +276,7 @@ public class ShotManager extends  AbstractManager{
           new String[] { String.valueOf(userId) }, null, null, CSYS_BIRTH + " DESC", "1");
         if (c.getCount() > 0) {
             c.moveToFirst();
-            ShotEntity lastShot = shotMapper.fromCursor(c);
+            ShotEntity lastShot = shotEntityMapper.fromCursor(c);
             c.close();
             return lastShot;
         }

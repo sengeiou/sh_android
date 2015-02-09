@@ -6,7 +6,7 @@ import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
-import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
@@ -68,7 +68,7 @@ public class ShootrDataService implements ShootrService {
 
     private final UserMapper userMapper;
     private final FollowMapper followMapper;
-    private final ShotMapper shotMapper;
+    private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
     private final WatchMapper watchMapper;
@@ -80,7 +80,7 @@ public class ShootrDataService implements ShootrService {
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
+      TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
       EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, EventEntityMapper eventEntityMapper,
       TeamMapper teamMapper, TimeUtils timeUtils, VersionUpdater versionUpdater) {
         this.client = client;
@@ -94,7 +94,7 @@ public class ShootrDataService implements ShootrService {
         this.deviceDtoFactory = deviceDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
-        this.shotMapper = shotMapper;
+        this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
         this.eventEntityMapper = eventEntityMapper;
         this.watchMapper = watchMapper;
@@ -162,7 +162,7 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
         }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object> data = ops[0].getData()[0];
-            return shotMapper.fromDto(data);
+            return shotEntityMapper.fromDto(data);
         }
         return null;
     }
@@ -179,7 +179,7 @@ public class ShootrDataService implements ShootrService {
         }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotMapper.fromDto(aData);
+                ShotEntity shot = shotEntityMapper.fromDto(aData);
                 newerShots.add(shot);
             }
         }
@@ -198,7 +198,7 @@ public class ShootrDataService implements ShootrService {
         }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotMapper.fromDto(aData);
+                ShotEntity shot = shotEntityMapper.fromDto(aData);
                 olderShots.add(shot);
             }
         }
@@ -216,7 +216,7 @@ public class ShootrDataService implements ShootrService {
         }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotMapper.fromDto(aData);
+                ShotEntity shot = shotEntityMapper.fromDto(aData);
                 shots.add(shot);
             }
         }
@@ -232,7 +232,7 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
         }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object> dataItem = ops[0].getData()[0];
-            return shotMapper.fromDto(dataItem);
+            return shotEntityMapper.fromDto(dataItem);
         }
         return null;
     }
@@ -482,7 +482,7 @@ public class ShootrDataService implements ShootrService {
             Long items = md.getItems();
             for(int i = 0; i< items; i++){
                 Map<String,Object> dataItem = ops[0].getData()[i];
-                shotEntities.add(shotMapper.fromDto(dataItem));
+                shotEntities.add(shotEntityMapper.fromDto(dataItem));
             }
         }
         return shotEntities;

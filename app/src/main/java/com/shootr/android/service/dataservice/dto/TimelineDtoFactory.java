@@ -2,7 +2,7 @@ package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract.ShotTable;
-import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -22,11 +22,11 @@ public class TimelineDtoFactory {
     public static final String ALIAS_GET_OLDER_SHOTS = "GET_OLDER_SHOTS";
 
     private UtilityDtoFactory utilityDtoFactory;
-    ShotMapper shotMapper;
+    ShotEntityMapper shotEntityMapper;
 
-    @Inject public TimelineDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
+    @Inject public TimelineDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotEntityMapper shotEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
-        this.shotMapper = shotMapper;
+        this.shotEntityMapper = shotEntityMapper;
     }
 
     public GenericDto getAllShotsOperationDto(List<Long> usersIds, Long limit) {
@@ -47,7 +47,7 @@ public class TimelineDtoFactory {
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(shotMapper.toDto(null))
+                .putData(shotEntityMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, op);
@@ -73,7 +73,7 @@ public class TimelineDtoFactory {
         // Build the operation
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(shotMapper.toDto(null))
+                .putData(shotEntityMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEWER_SHOTS, op);
@@ -94,7 +94,7 @@ public class TimelineDtoFactory {
 
         OperationDto op = new Builder()
                 .metadata(md)
-                .putData(shotMapper.toDto(null))
+                .putData(shotEntityMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_OLDER_SHOTS, op);

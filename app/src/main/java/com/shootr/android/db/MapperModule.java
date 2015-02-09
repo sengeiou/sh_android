@@ -1,6 +1,7 @@
 package com.shootr.android.db;
 
 import android.app.Application;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.TeamModelMapper;
@@ -12,7 +13,6 @@ import dagger.Provides;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
-import com.shootr.android.db.mappers.ShotMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
@@ -46,8 +46,8 @@ public class MapperModule {
         return new DeviceMapper();
     }
 
-    @Provides ShotMapper provideShotMapper() {
-        return new ShotMapper();
+    @Provides ShotEntityMapper provideShotMapper() {
+        return new ShotEntityMapper();
     }
 
     @Provides UserEntityModelMapper provideUserVOMapper() {

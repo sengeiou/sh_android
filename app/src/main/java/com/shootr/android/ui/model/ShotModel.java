@@ -14,6 +14,7 @@ public class ShotModel implements Serializable{
     private Long idUser;
     private String userName;
     private String photo;
+    private String tag;
     private Integer type;
 
     public Long getIdShot() {
@@ -78,5 +79,13 @@ public class ShotModel implements Serializable{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
