@@ -81,8 +81,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Inject SingleEventPresenter presenter;
     @Inject PicassoWrapper picasso;
 
-    private MenuItem notificationMenuItem;
-    private int notificationIcon;
     private BadgeDrawable eventsBadgeDrawable;
     private int eventsCount;
     private Toast currentToast;
@@ -148,11 +146,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-    }
-
-    private void updateNotificationIcon() {
-        notificationMenuItem.setIcon(notificationIcon);
-        notificationMenuItem.setVisible(true);
     }
 
     private void updateEventsIconBadge() {
@@ -324,10 +317,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     //region Activity Methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
-        notificationMenuItem = menu.findItem(R.id.menu_notifications);
-        if (notificationIcon != 0) {
-            updateNotificationIcon();
-        }
 
         MenuItem eventsMenuItem = menu.findItem(R.id.menu_events);
         setupEventsIcon(eventsMenuItem);
@@ -338,10 +327,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_notifications) {
-            presenter.toggleNotifications();
-            return true;
-        } else if (item.getItemId() == R.id.menu_events) {
+        if (item.getItemId() == R.id.menu_events) {
             navigateToSelectEvent();
             return true;
         } else if (item.getItemId() == R.id.menu_edit) {
@@ -467,23 +453,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void setIsWatching(boolean watching) {
         watchingSwitch.setCheckedInternal(watching);
-    }
-
-    @Override public void setNotificationsEnabled(boolean enabled) {
-        notificationIcon = enabled ? R.drawable.ic_action_notifications_on : R.drawable.ic_action_notifications_none;
-        if (notificationMenuItem != null) {
-            updateNotificationIcon();
-        }
-    }
-
-    @Override public void alertNotificationsEnabled() {
-        currentToast.setText(R.string.notifications_enabled);
-        currentToast.show();
-    }
-
-    @Override public void alertNotificationsDisabled() {
-        currentToast.setText(R.string.notifications_disabled);
-        currentToast.show();
     }
 
     @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {

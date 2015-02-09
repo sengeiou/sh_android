@@ -141,14 +141,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
           });
     }
 
-    public void toggleNotifications() {
-        //TODO borrar
-        boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
-        currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
-        singleEventView.setNotificationsEnabled(enableNotifications);
-        this.showNotificationsAlert(enableNotifications);
-    }
-
     //region Events count
     private void loadEventsCount() {
         eventsWatchedCountInteractor.obtainEventsCount(new EventsWatchedCountInteractor.Callback() {
@@ -202,14 +194,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    private void showNotificationsAlert(boolean enableNotifications) {
-        if (enableNotifications) {
-            singleEventView.alertNotificationsEnabled();
-        } else {
-            singleEventView.alertNotificationsDisabled();
-        }
-    }
-
     @Subscribe
     public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         this.getEventInfo();
@@ -226,7 +210,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isNotificationsEnabled());
     }
 
     private void renderEventInfo(Event event) {
