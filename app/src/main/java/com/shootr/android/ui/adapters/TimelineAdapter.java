@@ -112,7 +112,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     vh.text.setVisibility(View.GONE);
                 }
 
-                if (item.getTag() != null) {
+                if (item.getEventTag() != null) {
                     addShotLabel(vh, item);
                 }
 
@@ -138,7 +138,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     private void addShotLabel(ViewHolder vh, ShotModel shotModel) {
-        String tag = shotModel.getTag();
+        String tag = shotModel.getEventTag();
         CharSequence currentText = vh.text.getText();
 
         SpannableStringBuilder spanBuilder = new SpannableStringBuilder(currentText);

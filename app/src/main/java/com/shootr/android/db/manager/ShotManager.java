@@ -72,6 +72,7 @@ public class ShotManager extends  AbstractManager{
           + ShotTable.IMAGE+","
           + ShotTable.ID_EVENT + ","
           + ShotTable.EVENT_TAG + ","
+          + ShotTable.EVENT_TITLE+ ","
           + ShotTable.TYPE
           + ",b."
           + UserTable.NAME
@@ -189,6 +190,7 @@ public class ShotManager extends  AbstractManager{
                 + ShotTable.IMAGE + ","
                 + ShotTable.ID_EVENT + ","
                 + ShotTable.EVENT_TAG + ","
+                + ShotTable.EVENT_TITLE+ ","
                 + ShotTable.TYPE+
                 ",b."+UserTable.FAVORITE_TEAM_ID+
                 ",b."+UserTable.FAVORITE_TEAM_NAME+

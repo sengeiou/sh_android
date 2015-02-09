@@ -17,6 +17,7 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
         shot.setEventTag(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TAG)));
+        shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
         shot.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         shot.setType(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
         setSynchronizedfromCursor(c, shot);
@@ -30,6 +31,7 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.COMMENT, shot.getComment());
         cv.put(DatabaseContract.ShotTable.IMAGE, shot.getImage());
         cv.put(DatabaseContract.ShotTable.EVENT_TAG, shot.getEventTag());
+        cv.put(DatabaseContract.ShotTable.EVENT_TITLE, shot.getEventTitle());
         cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
         setSynchronizedtoContentValues(shot,cv);
@@ -43,6 +45,7 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
         shot.setEventTag((String) dto.get(DatabaseContract.ShotTable.EVENT_TAG));
+        shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
         Number idEvent = (Number) dto.get(DatabaseContract.ShotTable.ID_EVENT);
         if (idEvent != null) {
             shot.setIdEvent(idEvent.longValue());
@@ -62,6 +65,7 @@ public class ShotEntityMapper extends GenericMapper {
         dto.put(DatabaseContract.ShotTable.COMMENT, shot == null ? null : shot.getComment());
         dto.put(DatabaseContract.ShotTable.IMAGE, shot == null ? null : shot.getImage());
         dto.put(DatabaseContract.ShotTable.EVENT_TAG, shot == null ? null : shot.getEventTag());
+        dto.put(DatabaseContract.ShotTable.EVENT_TITLE, shot == null ? null : shot.getEventTitle());
         dto.put(DatabaseContract.ShotTable.ID_EVENT, shot == null ? null : shot.getIdEvent());
         dto.put(DatabaseContract.ShotTable.TYPE, shot == null ? null : shot.getType());
         setSynchronizedtoDto(shot,dto);

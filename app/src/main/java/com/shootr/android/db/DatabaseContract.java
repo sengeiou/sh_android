@@ -87,10 +87,11 @@ public class DatabaseContract {
         public static final String IMAGE = "image";
         public static final String ID_EVENT = "idEvent";
         public static final String EVENT_TAG = "eventTag";
+        public static final String EVENT_TITLE = "eventTitle";
         public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, TYPE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }

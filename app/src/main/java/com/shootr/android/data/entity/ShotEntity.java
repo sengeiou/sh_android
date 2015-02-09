@@ -12,6 +12,7 @@ public class ShotEntity extends Synchronized{
     private String image;
     private Long idEvent;
     private String eventTag;
+    private String eventTitle;
     private Integer type;
 
     private UserEntity mUserObject;
@@ -78,5 +79,13 @@ public class ShotEntity extends Synchronized{
 
     public void setEventTag(String eventTag) {
         this.eventTag = eventTag;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 }
