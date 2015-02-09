@@ -28,6 +28,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.ui.activities.SingleEventActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
@@ -187,11 +188,16 @@ public class TimelineFragment extends BaseFragment
     }
 
     private String filterAndTrimEventTitle(String eventTitle) {
+        eventTitle = filterTitleEmojis(eventTitle);
         if (eventTitle.length() > PLACEHOLDER_MAX_LENGHT) {
             eventTitle = eventTitle.substring(0, PLACEHOLDER_MAX_LENGHT);
             eventTitle += "...";
         }
         return eventTitle;
+    }
+
+    private String filterTitleEmojis(String eventTitle) {
+        return eventTitle.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
     }
 
     @Subscribe
