@@ -3,8 +3,8 @@ package com.shootr.android.data.entity;
 public class ShotEntity extends Synchronized{
 
     public static final int TYPE_COMMENT = 0;
-    public static final int TYPE_WATCH = 1;
-    public static final int TYPE_WATCH_NEGATIVE = 2;
+    public static final int TYPE_TRIGGER_SYNC = 1;
+    public static final int TYPE_TRIGGER_SYNC_NOT_SHOW = 2;
 
     private Long idShot;
     private Long idUser;
