@@ -182,13 +182,11 @@ public class DatabaseContract {
         public static final String TABLE = "Watch";
         public static final String ID_USER = "idUser";
         public static final String ID_EVENT = "idEvent";
-        public static final String STATUS = "status";
         public static final String PLACE = "place";
         public static final String VISIBLE = "visible";
-        public static final String NOTIFICATION = "notification";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_EVENT, STATUS, PLACE, VISIBLE, NOTIFICATION, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
+          ID_USER, ID_EVENT, PLACE, VISIBLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
           CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }

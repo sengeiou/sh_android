@@ -48,30 +48,12 @@ public class SelectEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        stopWatchingLapsedEvent();
-
         Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
         if (oldVisibleEventWatch != null) {
             hideOldVisibleEvent(oldVisibleEventWatch);
         }
         if (oldVisibleEventWatch == null || (!oldVisibleEventWatch.getIdEvent().equals(idEvent))) {
             setNewVisibleEvent();
-        }
-    }
-
-    private void stopWatchingLapsedEvent() {
-        Watch currentWatching = localWatchRepository.getCurrentWatching();
-        if (currentWatching != null) {
-            Event eventWatching = localEventRepository.getEventById(currentWatching.getIdEvent());
-            if (eventWatching != null) {
-                boolean isEventLapsed = eventWatching.getEndDate().before(timeUtils.getCurrentDate());
-                if (isEventLapsed) {
-                    currentWatching.setWatching(false);
-                    currentWatching.setNotificaticationsEnabled(false);
-                    localWatchRepository.putWatch(currentWatching);
-                    remoteWatchRepository.putWatch(currentWatching);
-                }
-            }
         }
     }
 
@@ -100,8 +82,6 @@ public class SelectEventInteractor implements Interactor {
         Watch newWatch = new Watch();
         newWatch.setIdEvent(idEvent);
         newWatch.setUser(sessionRepository.getCurrentUser());
-        newWatch.setNotificaticationsEnabled(false);
-        newWatch.setWatching(false);
         newWatch.setVisible(false);
         newWatch.setUserStatus("Watching"); //TODO localize
         return newWatch;

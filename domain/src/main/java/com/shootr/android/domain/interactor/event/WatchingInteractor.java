@@ -19,7 +19,6 @@ public class WatchingInteractor implements Interactor {
     private final WatchRepository remoteWatchRepository;
     private final SessionRepository sessionRepository;
 
-    private boolean isWatching;
     private Long idEvent;
     private String userStatus;
     private Callback callback;
@@ -33,8 +32,7 @@ public class WatchingInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void sendWatching(boolean isWatching, Long idEvent, String userStatus, Callback callback) {
-        this.isWatching = isWatching;
+    public void sendWatching(Long idEvent, String userStatus, Callback callback) {
         this.idEvent = idEvent;
         this.userStatus = userStatus;
         this.callback = callback;
@@ -42,9 +40,6 @@ public class WatchingInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        if (isWatching) {
-            removeOldWatch();
-        }
         setNewWatch();
     }
 
@@ -54,28 +49,12 @@ public class WatchingInteractor implements Interactor {
         Watch watch = new Watch();
         watch.setUser(currentUser);
         watch.setIdEvent(idEvent);
-        watch.setWatching(isWatching);
         watch.setUserStatus(userStatus);
         watch.setVisible(true); //TODO what if watching is activated from a not visible event? OMG!
-        watch.setNotificaticationsEnabled(notificationsEnabled());
 
         localWatchRepository.putWatch(watch);
         notifyLoaded(watch);
         remoteWatchRepository.putWatch(watch);
-    }
-
-    private void removeOldWatch() {
-        Watch currentWatching = localWatchRepository.getCurrentWatching();
-        if (currentWatching != null) {
-            currentWatching.setWatching(false);
-            currentWatching.setNotificaticationsEnabled(false);
-            localWatchRepository.putWatch(currentWatching);
-            remoteWatchRepository.putWatch(currentWatching);
-        }
-    }
-
-    private boolean notificationsEnabled() {
-        return isWatching;
     }
 
     private void notifyLoaded(final Watch watch) {

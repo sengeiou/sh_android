@@ -12,7 +12,7 @@ public class EventInfo {
 
     public int getWatchersCount() {
         int watchers = this.watchers.size();
-        return currentUserWatch.isWatching() ? watchers + 1 : watchers;
+        return watchers + 1;
     }
 
     public Watch getCurrentUserWatch() {

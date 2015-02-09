@@ -54,7 +54,6 @@ public class GCMIntentService extends IntentService {
     private static final String ID_USER = "idUser";
     private static final String ID_SHOT = "idShot";
     private static final String ID_EVENT = "idEvent";
-    private static final String STATUS = "status";
     private static final String PLACE = "place";
 
     @Override public void onCreate() {
@@ -118,7 +117,6 @@ public class GCMIntentService extends IntentService {
     private void receivedWatchRequest(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong(ID_USER);
         Long idEvent = parameters.getLong(ID_EVENT);
-        Long status = parameters.getLong(STATUS);
         String place = parameters.optString(PLACE);
         if ("null".equals(place) || place.isEmpty()) {
             place = null;
@@ -127,7 +125,7 @@ public class GCMIntentService extends IntentService {
         EventEntity eventEntity = service.getEventById(idEvent);
         UserEntity userFromNotification = userManager.getUserByIdUser(idUser);
 
-        boolean isWatching = WatchEntity.STATUS_WATCHING.equals(status);
+        boolean isWatching = true;
 
         UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, isWatching,
           place);

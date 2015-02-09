@@ -113,7 +113,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
         watchingSwitch.getSwitch().setOnBeforeCheckedChangeListener(new ToggleSwitch.OnBeforeCheckedChangeListener() {
             @Override public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
-                presenter.sendWatching(checked);
+                presenter.sendWatching();
                 return false;
             }
         });

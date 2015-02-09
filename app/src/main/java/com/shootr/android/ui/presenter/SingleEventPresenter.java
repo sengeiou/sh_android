@@ -9,7 +9,6 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.EventNotificationInteractor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
@@ -34,7 +33,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
-    private final EventNotificationInteractor eventNotificationInteractor;
     private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
     private final SelectEventInteractor selectEventInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
@@ -50,14 +48,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private int watchersCount;
 
     @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingInteractor, EventNotificationInteractor eventNotificationInteractor,
-      EventsWatchedCountInteractor eventsWatchedCountInteractor, SelectEventInteractor selectEventInteractor,
-      ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper,
-      UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
+      WatchingInteractor watchingInteractor, EventsWatchedCountInteractor eventsWatchedCountInteractor,
+      SelectEventInteractor selectEventInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
+      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
-        this.eventNotificationInteractor = eventNotificationInteractor;
         this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
         this.selectEventInteractor = selectEventInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
@@ -79,7 +75,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromEditStatus(@Nullable String statusText) {
-        updateWatch(currentUserWatchingModel.isWatching(), statusText);
+        updateWatch(statusText);
     }
     //endregion
 
@@ -100,15 +96,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    public void sendWatching(boolean isWatching) {
-        updateWatch(isWatching, currentUserWatchingModel.getPlace());
+    public void sendWatching() {
+        updateWatch(currentUserWatchingModel.getPlace());
     }
 
-    private void updateWatch(boolean isWatching, String statusText) {
-        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), statusText,
+    private void updateWatch(String statusText) {
+        watchingInteractor.sendWatching(eventModel.getIdEvent(), statusText,
           new WatchingInteractor.Callback() {
               @Override public void onLoaded(Watch watchUpdated) {
-                  updateWatchersCount(watchUpdated.isWatching());
                   renderCurrentUserWatching(watchUpdated);
               }
           });
@@ -147,9 +142,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void toggleNotifications() {
+        //TODO borrar
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
-        eventNotificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
-        //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
         this.showNotificationsAlert(enableNotifications);
@@ -205,11 +199,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private void showViewDetail() {
         singleEventView.showContent();
         singleEventView.showDetail();
-    }
-
-    private void updateWatchersCount(boolean isWatching) {
-        watchersCount = isWatching ? watchersCount + 1 : watchersCount - 1;
-        renderWatchersCount(watchersCount);
     }
     //endregion
 

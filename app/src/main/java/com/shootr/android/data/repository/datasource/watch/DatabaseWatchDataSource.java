@@ -29,10 +29,6 @@ public class DatabaseWatchDataSource implements WatchDataSource {
         return watchEntities;
     }
 
-    @Override public WatchEntity getWatching(Long userId) {
-        return watchManager.getWatching(userId);
-    }
-
     @Override public WatchEntity getVisible(Long userId) {
         return watchManager.getWatchVisibleByUser(userId);
     }

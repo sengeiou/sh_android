@@ -62,7 +62,7 @@ public class EventSearchRepositoryImpl implements EventSearchRepository {
 
         Map<Long, Integer> eventsWatchesCounts = new HashMap<>();
         for (WatchEntity watch : watches) {
-            if (watch.getStatus().equals(1L)) {
+            if (watch.isVisible()) {
                 Integer currentCount = eventsWatchesCounts.get(watch.getIdEvent());
                 if (currentCount != null) {
                     eventsWatchesCounts.put(watch.getIdEvent(), currentCount + 1);

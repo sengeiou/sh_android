@@ -27,9 +27,7 @@ public class WatchEntityMapper {
         watch.setUser(user);
         watch.setIdEvent(watchEntity.getIdEvent());
         watch.setUserStatus(watchEntity.getPlace());
-        watch.setWatching(WatchEntity.STATUS_WATCHING.equals(watchEntity.getStatus()));
-        watch.setNotificaticationsEnabled(Integer.valueOf(1).equals(watchEntity.getNotification()));
-        watch.setVisible(watchEntity.getVisible());
+        watch.setVisible(watchEntity.isVisible());
         return watch;
     }
 
@@ -52,9 +50,6 @@ public class WatchEntityMapper {
         watchEntity.setIdUser(watch.getUser().getIdUser());
         watchEntity.setIdEvent(watch.getIdEvent());
         watchEntity.setPlace(watch.getUserStatus());
-        watchEntity.setStatus(watch.isWatching() ? WatchEntity.STATUS_WATCHING : WatchEntity.STATUS_REJECT);
-        watchEntity.setNotification(
-          watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);
         watchEntity.setVisible(watch.isVisible());
 
         Date currentDate = timeUtils.getCurrentDate();
