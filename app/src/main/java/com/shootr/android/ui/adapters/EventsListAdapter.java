@@ -74,7 +74,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     }
 
     private String getWatchersText(int watchers) {
-        return resources.getQuantityString(R.plurals.event_watchers, watchers, watchers);
+        return String.valueOf(watchers);
     }
 
     @Override public int getItemCount() {

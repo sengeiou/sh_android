@@ -6,11 +6,9 @@
   android:clickable="true"
   android:foreground="?selectableItemBackground">
 
-    <LinearLayout
+    <RelativeLayout
       android:layout_width="match_parent"
-      android:paddingBottom="1dp"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      android:layout_height="wrap_content">
 
         <ImageView
           android:id="@+id/event_picture"
@@ -22,9 +20,12 @@
           tools:background="#660000cc" />
 
         <LinearLayout
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
           android:layout_gravity="center_vertical"
+          android:layout_toLeftOf="@+id/event_watchers"
+          android:layout_toRightOf="@+id/event_picture"
           android:orientation="vertical">
 
             <TextView
@@ -32,40 +33,43 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:ellipsize="end"
+
               android:maxLines="2"
               android:paddingRight="16dp"
               android:textColor="@color/gray_10"
               android:textSize="16sp"
               tools:text="Titulo Dos líneas" />
 
-            <LinearLayout
+            <TextView
+              android:id="@+id/event_date"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:orientation="horizontal">
-
-                <TextView
-                  android:id="@+id/event_date"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:textColor="@color/gray_30"
-                  android:textSize="12sp"
-                  tools:text="Today, 7pm" />
-
-                <TextView
-                  android:id="@+id/event_watchers"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="6dp"
-                  android:textColor="@color/gray_60"
-                  android:textSize="12sp"
-                  tools:text="— 2 Watchers" />
-            </LinearLayout>
+              android:textColor="@color/gray_30"
+              android:textSize="12sp"
+              tools:text="Today, 7pm" />
         </LinearLayout>
-    </LinearLayout>
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_gravity="bottom"
-      android:background="?dividerHorizontal" />
+        <TextView
+          android:id="@+id/event_watchers"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="6dp"
+          android:layout_marginRight="16dp"
+          android:background="@drawable/bg_round_grey"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="12sp"
+          android:textStyle="bold"
+          tools:text="2" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_below="@+id/event_picture"
+          android:layout_gravity="bottom"
+          android:background="?dividerHorizontal" />
+    </RelativeLayout>
 </FrameLayout>
+
