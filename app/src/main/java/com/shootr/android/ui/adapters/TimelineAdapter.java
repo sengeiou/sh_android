@@ -113,7 +113,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 if (item.getEventTag() != null) {
-                    addShotLabel(vh, item);
+                    addShotTag(vh, item);
                 }
 
                 long timestamp = item.getCsysBirth().getTime();
@@ -137,7 +137,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         }
     }
 
-    private void addShotLabel(ViewHolder vh, ShotModel shotModel) {
+    private void addShotTag(ViewHolder vh, ShotModel shotModel) {
         String tag = shotModel.getEventTag();
         CharSequence currentText = vh.text.getText();
 

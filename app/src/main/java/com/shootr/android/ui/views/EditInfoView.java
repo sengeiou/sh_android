@@ -4,7 +4,7 @@ public interface EditInfoView {
 
     void setSendButonEnabled(boolean enabled);
 
-    void setStatusText(String place);
+    void setStatusText(String status);
 
     void setFocusOnStatus();
 

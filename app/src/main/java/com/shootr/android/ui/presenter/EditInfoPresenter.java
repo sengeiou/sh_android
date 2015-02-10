@@ -6,15 +6,13 @@ import javax.inject.Inject;
 public class EditInfoPresenter {
 
     private EditInfoView editInfoView;
-    private String eventTitle;
     private String statusText;
 
     @Inject public EditInfoPresenter() {
     }
 
-    public void initialize(EditInfoView editInfoView, String eventTitle, String statusText) {
+    public void initialize(EditInfoView editInfoView, String statusText) {
         this.editInfoView = editInfoView;
-        this.eventTitle = eventTitle;
         this.statusText = statusText;
         this.updateViewWithInfo();
     }

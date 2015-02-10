@@ -120,7 +120,7 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_WATCH = "CREATE TABLE IF NOT EXISTS "+ WatchTable.TABLE+" ("
             + WatchTable.ID_EVENT + " INT NOT NULL,"
             + WatchTable.ID_USER+ " INT NOT NULL,"
-            + WatchTable.PLACE+" TEXT NULL,"
+            + WatchTable.STATUS +" TEXT NULL,"
             + WatchTable.VISIBLE+" INT NOT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
