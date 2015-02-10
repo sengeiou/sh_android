@@ -14,12 +14,14 @@ public class DebugServiceAdapter {
     private static final int DEFAULT_VARIANCE_PCT = 40; // Network delay varies by ±40%.
     private static final int DEFAULT_ERROR_PCT = 3; // 3% of network calls will fail.
     private static final int ERROR_DELAY_FACTOR = 3; // Network errors will be scaled by this value.
+    public static final boolean DEFAULT_CONNECTED = true;
 
     private ShootrService service;
 
     private int delay = DEFAULT_DELAY_MS;
     private int variancePercentage = DEFAULT_VARIANCE_PCT;
     private int errorPercentage = DEFAULT_ERROR_PCT;
+    private boolean connected = DEFAULT_CONNECTED;
 
     private Random random = new Random();
 
@@ -53,6 +55,14 @@ public class DebugServiceAdapter {
     public void setErrorPercentage(int errorPercentage) {
         this.errorPercentage = errorPercentage;
     }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
     //endregion
 
     private class MockInvocationHandler implements InvocationHandler {
@@ -61,6 +71,10 @@ public class DebugServiceAdapter {
             // If the method is a method from Object then defer to normal invocation.
             if (method.getDeclaringClass() == Object.class) {
                 return method.invoke(this, args);
+            }
+
+            if (!isConnected()) {
+                throw new IOException("Debug: not connected");
             }
 
             if (calculateIsFailure()) {

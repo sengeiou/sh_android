@@ -267,6 +267,7 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting Network Enabled to " + isChecked);
                 networkEnabled.set(isChecked);
+                debugServiceAdapter.setConnected(isChecked);
             }
         });
         //endregion
