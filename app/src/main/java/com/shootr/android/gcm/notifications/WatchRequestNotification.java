@@ -27,7 +27,7 @@ public class WatchRequestNotification extends CommonNotification {
     private Bitmap largeIcon;
 
     private final String formatWatching;
-    private final String formatWatchingPlace;
+    private final String formatWatchingStatus;
 
     public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
       PicassoWrapper picasso, UserWatchingModel userWatchingModel, EventModel eventModel) {
@@ -37,7 +37,7 @@ public class WatchRequestNotification extends CommonNotification {
         this.picasso = picasso;
 
         formatWatching = context.getString(R.string.notification_watch_watching);
-        formatWatchingPlace = context.getString(R.string.notification_watch_watching_place);
+        formatWatchingStatus = context.getString(R.string.notification_watch_watching_status);
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
@@ -94,7 +94,7 @@ public class WatchRequestNotification extends CommonNotification {
 
     public String getWatchingMessage() {
         if (userWatchingModel.getStatus() != null) {
-            return String.format(formatWatchingPlace, eventModel.getTitle(), userWatchingModel.getStatus());
+            return String.format(formatWatchingStatus, userWatchingModel.getStatus());
         } else {
             return String.format(formatWatching, eventModel.getTitle());
         }

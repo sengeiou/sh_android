@@ -54,7 +54,7 @@ public class GCMIntentService extends IntentService {
     private static final String ID_USER = "idUser";
     private static final String ID_SHOT = "idShot";
     private static final String ID_EVENT = "idEvent";
-    private static final String PLACE = "place";
+    private static final String STATUS = "status";
 
     @Override public void onCreate() {
         super.onCreate();
@@ -117,7 +117,7 @@ public class GCMIntentService extends IntentService {
     private void receivedWatchRequest(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong(ID_USER);
         Long idEvent = parameters.getLong(ID_EVENT);
-        String place = parameters.optString(PLACE);
+        String place = parameters.optString(STATUS);
         if ("null".equals(place) || place.isEmpty()) {
             place = null;
         }

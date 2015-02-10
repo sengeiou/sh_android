@@ -90,7 +90,7 @@
     <string name="notification_shot_multiple_title">%d new shots</string>
     <string name="notification_follow_title">%s is now following you!</string>
     <string name="notification_watch_watching">Watching %s</string>
-    <string name="notification_watch_watching_place">%1$s: %2$s</string>
+    <string name="notification_watch_watching_status">Status: %s</string>
 
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find people</string>
