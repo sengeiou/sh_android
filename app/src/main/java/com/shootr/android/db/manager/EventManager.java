@@ -65,6 +65,18 @@ public class EventManager extends AbstractManager{
         return resultEvents;
     }
 
+    public void saveEvents(List<EventEntity> eventEntities) {
+        SQLiteDatabase database = getWritableDatabase();
+        for (EventEntity eventEntity : eventEntities) {
+            ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
+            if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {
+                deleteEvent(eventEntity);
+            } else {
+                database.insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        }
+    }
+
     public void saveEvent(EventEntity eventEntity) {
         ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
         if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {

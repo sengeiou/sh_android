@@ -27,9 +27,7 @@ public class DatabaseEventDataSource implements EventDataSource {
     }
 
     @Override public List<EventEntity> putEvents(List<EventEntity> events) {
-        for (EventEntity event : events) {
-            putEvent(event);
-        }
+        eventManager.saveEvents(events);
         return events;
     }
 }
