@@ -28,7 +28,7 @@ public interface ShootrService {
 
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
-    ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent) throws IOException;
+    ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
     public UserEntity getUserByIdUser(Long idUser) throws IOException;
 

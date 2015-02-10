@@ -24,6 +24,7 @@ public class EventEntityMapper {
         event.setEndDate(eventEntity.getEndDate());
         event.setPicture(eventEntity.getPhoto());
         event.setTimezone(eventEntity.getTimezone());
+        event.setTag(eventEntity.getTag());
         return event;
     }
 
@@ -44,6 +45,7 @@ public class EventEntityMapper {
         eventEntity.setEndDate(event.getEndDate());
         eventEntity.setPhoto(event.getPicture());
         eventEntity.setTimezone(event.getTimezone());
+        eventEntity.setTag(event.getTag());
 
         eventEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return eventEntity;

@@ -3,7 +3,7 @@ package com.shootr.android.service.dataservice.dto;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
-import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -21,11 +21,11 @@ public class ShotDtoFactory {
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
 
     private UtilityDtoFactory utilityDtoFactory;
-    ShotMapper shotMapper;
+    ShotEntityMapper shotEntityMapper;
 
-    @Inject public ShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
+    @Inject public ShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotEntityMapper shotEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
-        this.shotMapper = shotMapper;
+        this.shotEntityMapper = shotEntityMapper;
 
     }
 
@@ -38,39 +38,22 @@ public class ShotDtoFactory {
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(shotMapper.toDto(null))
+                .putData(shotEntityMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOT, op);
     }
 
-    public GenericDto getNewShotOperationDto(Long idUser, String comment, String imageUrl, Long idEvent) {
-        if (idUser == null) {
-            throw new IllegalArgumentException("idUser must not be null");
-        }
-        if (idUser <= 0) {
-            throw new IllegalArgumentException("idUser must be a positive number");
-        }
-
-        if (comment != null && comment.trim().length() == 0) {
-            throw new IllegalArgumentException("comment cannot be empty");
-        }
-
+    public GenericDto getNewShotOperationDto(ShotEntity shotTemplate) {
         MetadataDto md = new MetadataDto.Builder()
                 .operation(ServiceConstants.OPERATION_CREATE)
                 .entity(DatabaseContract.ShotTable.TABLE)
                 .putKey(DatabaseContract.ShotTable.ID_SHOT, null)
                 .build();
 
-        ShotEntity shotTemplate = new ShotEntity();
-        shotTemplate.setComment(comment);
-        shotTemplate.setIdUser(idUser);
-        shotTemplate.setImage(imageUrl);
-        shotTemplate.setIdEvent(idEvent);
-
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(shotMapper.toDto(shotTemplate))
+                .putData(shotEntityMapper.toDto(shotTemplate))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_NEW_SHOT, op);
@@ -90,7 +73,7 @@ public class ShotDtoFactory {
           .entity(ShotTable.TABLE)
           .filter(shotsFilter).items(latestShotNumber).build();
 
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(shotMapper.toDto(null)).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(shotEntityMapper.toDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
     }

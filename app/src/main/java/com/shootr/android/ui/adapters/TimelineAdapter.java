@@ -1,6 +1,10 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.R;
-import com.shootr.android.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +27,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
     private AndroidTimeUtils timeUtils;
+    private int tagColor;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
       View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
@@ -32,6 +37,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.imageClickListener = imageClickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
+        tagColor = context.getResources().getColor(R.color.tag_color);
     }
 
     @Override
@@ -106,6 +112,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     vh.text.setVisibility(View.GONE);
                 }
 
+                if (item.getEventTag() != null) {
+                    addShotLabel(vh, item);
+                }
+
                 long timestamp = item.getCsysBirth().getTime();
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
 
@@ -125,6 +135,21 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             default:
                 break;
         }
+    }
+
+    private void addShotLabel(ViewHolder vh, ShotModel shotModel) {
+        String tag = shotModel.getEventTag();
+        CharSequence currentText = vh.text.getText();
+
+        SpannableStringBuilder spanBuilder = new SpannableStringBuilder(currentText);
+        ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
+
+        SpannableString tagSpan = new SpannableString(tag);
+        tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spanBuilder.append(" ");
+        spanBuilder.append(tagSpan);
+        vh.text.setText(spanBuilder);
     }
 
     public void addShotsBelow(List<ShotModel> newShots) {

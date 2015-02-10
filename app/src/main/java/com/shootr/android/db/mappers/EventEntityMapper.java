@@ -22,6 +22,7 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.TITLE, eventEntity.getTitle());
         contentValues.put(DatabaseContract.EventTable.PHOTO, eventEntity.getPhoto());
         contentValues.put(DatabaseContract.EventTable.TIMEZONE, eventEntity.getTimezone());
+        contentValues.put(DatabaseContract.EventTable.TAG, eventEntity.getTag());
         setSynchronizedtoContentValues(eventEntity,contentValues);
         return contentValues;
     }
@@ -48,6 +49,8 @@ public class EventEntityMapper extends GenericMapper{
           : (String) dto.get(DatabaseContract.EventTable.PHOTO));
         eventEntity.setTimezone((String) dto.get(DatabaseContract.EventTable.TIMEZONE) == null ? null
           : (String) dto.get(DatabaseContract.EventTable.TIMEZONE));
+        eventEntity.setTag((String) dto.get(DatabaseContract.EventTable.TAG) == null ? null
+          : (String) dto.get(DatabaseContract.EventTable.TAG));
         eventEntity.setBeginDate(dto.get(DatabaseContract.EventTable.BEGIN_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
         eventEntity.setEndDate(dto.get(DatabaseContract.EventTable.END_DATE) == null ? null
@@ -66,6 +69,7 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
         dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         dto.put(DatabaseContract.EventTable.TIMEZONE, eventEntity == null ? null : eventEntity.getTimezone());
+        dto.put(DatabaseContract.EventTable.TAG, eventEntity == null ? null : eventEntity.getTag());
         setSynchronizedtoDto(eventEntity, dto);
         return dto;
     }
@@ -79,6 +83,7 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TITLE)));
         eventEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.EventTable.PHOTO)));
         eventEntity.setTimezone(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TIMEZONE)));
+        eventEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TAG)));
         Long date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.BEGIN_DATE));
         eventEntity.setBeginDate(date != 0L ? new Date(date) : null);
         date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.END_DATE));

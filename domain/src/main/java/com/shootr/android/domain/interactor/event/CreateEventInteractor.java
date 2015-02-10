@@ -75,7 +75,39 @@ public class CreateEventInteractor implements Interactor {
         event.setStartDate(new Date(startDate));
         event.setEndDate(new Date(endDate));
         event.setTimezone(timezoneRepository.getCurrentTimezone().getID());
+        event.setTag(makeTag(title));
         return event;
+    }
+
+    private String makeTag(String title) {
+        String filteredTitle = filterTitle(title);
+        String camelCaseTitle = toCamelCase(filteredTitle);
+        if (camelCaseTitle.length() > EventValidator.TAG_MAXIMUM_LENGTH) {
+            return camelCaseTitle.substring(0, EventValidator.TAG_MAXIMUM_LENGTH);
+        } else {
+            return camelCaseTitle;
+        }
+    }
+
+    private String filterTitle(String title) {
+        return title.replaceAll("[^A-Za-z0-9 ]", "");
+    }
+
+    private String toCamelCase(String text) {
+        String[] words = text.split(" ");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String word : words) {
+            stringBuilder.append(toProperCase(word));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String toProperCase(String word) {
+        if (word.length() > 0) {
+            return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+        } else {
+            return word;
+        }
     }
 
     private Event sendEventToServer(Event event) {

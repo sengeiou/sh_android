@@ -38,4 +38,6 @@ public interface PostNewShotView extends DataTransferView {
     void takePhotoFromCamera();
 
     void choosePhotoFromGallery();
+
+    void setPlaceholder(String placeholder);
 }

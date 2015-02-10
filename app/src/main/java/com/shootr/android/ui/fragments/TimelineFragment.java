@@ -25,8 +25,10 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
-import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.ui.activities.SingleEventActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
@@ -65,28 +67,22 @@ public class TimelineFragment extends BaseFragment
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-    public static final Long WATCH_STATUS_IGNORE = 2L;
-    public static final Long WATCH_STATUS_WATCHING = 1L;
+    public static final int PLACEHOLDER_MAX_LENGHT = 25;
 
     @Inject PicassoWrapper picasso;
     @Inject @Main Bus bus;
     @Inject AndroidTimeUtils timeUtils;
     @Inject JobManager jobManager;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject SessionRepository sessionRepository;
-    @Inject WatchNumberInteractor watchNumberInteractor;
+    @Inject VisibleEventInfoInteractor visibleEventInfoInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
+    @InjectView(R.id.timeline_new_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.timeline_watching_container) View watchingRequestContainerView;
-    @InjectView(R.id.timeline_watching_title) TextView watchingRequestTitleView;
-    @InjectView(R.id.timeline_watching_subtitle) TextView watchingRequestSubtitleView;
-    @InjectView(R.id.timeline_watching_action_ignore) View watchingRequestActionIgnoreView;
 
-    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
     private View footerView;
     private ProgressBar footerProgress;
 
@@ -99,6 +95,7 @@ public class TimelineFragment extends BaseFragment
     private boolean moreShots = true;
     private boolean shouldPoll;
     private BadgeDrawable badgeDrawable;
+    private String newShotPlaceholder;
 
 
      /* ---- Lifecycle methods ---- */
@@ -163,6 +160,7 @@ public class TimelineFragment extends BaseFragment
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         watchNumberPresenter.resume();
+        loadEventPlaceholder();
     }
 
     @Override
@@ -171,6 +169,35 @@ public class TimelineFragment extends BaseFragment
         bus.unregister(this);
         stopPollingShots();
         watchNumberPresenter.pause();
+    }
+
+    private void loadEventPlaceholder() {
+        visibleEventInfoInteractor.obtainEventInfo(new VisibleEventInfoInteractor.Callback() {
+            @Override public void onLoaded(EventInfo eventInfo) {
+                Event event = eventInfo.getEvent();
+                if (event != null) {
+                    showEventTitleInPlaceholder(event.getTitle());
+                }
+            }
+        });
+    }
+
+    private void showEventTitleInPlaceholder(String eventTitle) {
+        newShotPlaceholder = filterAndTrimEventTitle(eventTitle);
+        newShotTextView.setText(newShotPlaceholder);
+    }
+
+    private String filterAndTrimEventTitle(String eventTitle) {
+        eventTitle = filterTitleEmojis(eventTitle);
+        if (eventTitle.length() > PLACEHOLDER_MAX_LENGHT) {
+            eventTitle = eventTitle.substring(0, PLACEHOLDER_MAX_LENGHT);
+            eventTitle += "...";
+        }
+        return eventTitle;
+    }
+
+    private String filterTitleEmojis(String eventTitle) {
+        return eventTitle.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
     }
 
     @Subscribe
@@ -289,20 +316,25 @@ public class TimelineFragment extends BaseFragment
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
+        startNewShotActivityWithPlaceholder(intent);
     }
 
     @OnClick(R.id.timeline_new_image_camera)
     public void startNewShotFromCamera() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_CAMERA);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
+        startNewShotActivityWithPlaceholder(intent);
     }
 
     @OnClick(R.id.timeline_new_image_gallery)
     public void startNewShotFromGallery() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_GALLERY);
+        startNewShotActivityWithPlaceholder(intent);
+    }
+
+    private void startNewShotActivityWithPlaceholder(Intent intent) {
+        intent.putExtra(PostNewShotActivity.KEY_PLACEHOLDER, newShotPlaceholder);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
     }
 

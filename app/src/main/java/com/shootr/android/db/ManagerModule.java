@@ -9,7 +9,7 @@ import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
@@ -32,8 +32,8 @@ public class ManagerModule {
         return new FollowManager(openHelper, followMapper);
     }
 
-    @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper, ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper) {
-        return new ShotManager(openHelper, shotMapper, userMapper, shotVOMapper);
+    @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotModelMapper shotVOMapper) {
+        return new ShotManager(openHelper, shotEntityMapper, userMapper, shotVOMapper);
     }
 
     @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {

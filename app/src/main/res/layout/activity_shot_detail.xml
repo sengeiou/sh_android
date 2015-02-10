@@ -14,6 +14,7 @@
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:paddingBottom="16dp"
           android:paddingLeft="16dp"
           android:paddingRight="16dp">
 
@@ -54,13 +55,21 @@
             </LinearLayout>
         </RelativeLayout>
 
+        <TextView
+          android:id="@+id/shot_event_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="@dimen/keyline_1"
+          android:visibility="gone"
+          tools:text="Event Title"
+          tools:visibility="visible" />
+
         <com.shootr.android.ui.widgets.ClickableTextView
           android:id="@+id/shot_text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:paddingLeft="16dp"
           android:paddingRight="16dp"
-          android:paddingTop="16dp"
           android:textColor="@color/material_black"
           android:textColorLink="@color/links"
           android:textSize="16sp"

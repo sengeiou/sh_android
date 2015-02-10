@@ -9,6 +9,7 @@ public class EventModel {
     private String datetime;
     private String title;
     private String picture;
+    private String tag;
     private long startDate;
     private long endDate;
     private boolean amIAuthor;
@@ -100,5 +101,13 @@ public class EventModel {
 
     public void setAmIAuthor(boolean amIAuthor) {
         this.amIAuthor = amIAuthor;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

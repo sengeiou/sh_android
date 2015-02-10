@@ -30,6 +30,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
     @InjectView(R.id.shot_timestamp) TextView timestamp;
     @InjectView(R.id.shot_text) ClickableTextView shotText;
     @InjectView(R.id.shot_image) ImageView shotImage;
+    @InjectView(R.id.shot_event_title) TextView eventTitle;
 
     @Inject PicassoWrapper picasso;
     @Inject TimeFormatter timeFormatter;
@@ -90,12 +91,23 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         } else {
             shotText.setVisibility(View.GONE);
         }
+        showEventTitle(shotModel);
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
         String imageUrl = shotModel.getImage();
         if (imageUrl != null) {
             picasso.loadTimelineImage(imageUrl).into(shotImage);
         } else {
             shotImage.setVisibility(View.GONE);
+        }
+    }
+
+    private void showEventTitle(ShotModel shotModel) {
+        String title = shotModel.getEventTitle();
+        if (title != null) {
+            eventTitle.setText(shotModel.getEventTitle());
+            eventTitle.setVisibility(View.VISIBLE);
+        } else {
+            eventTitle.setVisibility(View.GONE);
         }
     }
 

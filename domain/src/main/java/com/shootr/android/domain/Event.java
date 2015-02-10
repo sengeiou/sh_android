@@ -9,6 +9,7 @@ public class Event {
     private String title;
     private String picture;
     private String timezone;
+    private String tag;
     private Date startDate;
     private Date endDate;
 
@@ -69,5 +70,13 @@ public class Event {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
