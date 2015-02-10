@@ -10,7 +10,7 @@ public class UserWatchingModel implements Serializable {
     private String photo;
 
     private boolean visible;
-    private String place;
+    private String status;
     private boolean hasStatusMessage;
 
     public Long getIdUser() {
@@ -73,12 +73,12 @@ public class UserWatchingModel implements Serializable {
         return idUser.hashCode();
     }
 
-    public String getPlace() {
-        return place;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public boolean hasStatusMessage() {

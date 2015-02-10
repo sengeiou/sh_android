@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?><!-- info -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <ProgressBar
+      android:id="@+id/event_loading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/event_swipe_refresh"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="visible">
+
+        <com.shootr.android.ui.widgets.ObservableScrollView
+          android:id="@+id/scroll"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:fillViewport="true"
+          android:overScrollMode="never">
+
+            <FrameLayout
+              android:id="@+id/scroll_child"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+                <!-- Photo -->
+                <FrameLayout
+                  android:id="@+id/event_photo_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:foreground="?selectableItemBackground">
+
+                    <ImageView
+                      android:id="@+id/event_photo"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/primary_dark"
+                      android:clickable="false"
+                      android:scaleType="centerCrop"
+                      tools:layout_height="200dp" />
+
+                    <ImageView
+                      android:id="@+id/event_photo_edit_indicator"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center"
+                      android:src="@drawable/ic_camera_white_48"
+                      android:visibility="gone"
+                      tools:visibility="visible" />
+
+                    <ProgressBar
+                      android:id="@+id/event_photo_edit_loading"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center"
+                      android:visibility="gone"
+                      tools:visibility="visible" />
+                </FrameLayout>
+
+                <FrameLayout
+                  android:id="@+id/event_content_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+                    <!-- emtpy -->
+                    <TextView
+                      android:id="@+id/event_content_empty"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:padding="16dp"
+                      android:text="@string/single_event_empty"
+                      android:textColor="@color/gray_50"
+                      android:textSize="20sp"
+                      android:visibility="gone"
+                      tools:visibility="visible" />
+
+                    <!-- content -->
+                    <LinearLayout
+                      android:id="@+id/event_content_detail"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:visibility="invisible"
+                      tools:visibility="visible">
+
+                        <!-- watchers -->
+                        <TextView
+                          android:id="@+id/event_content_detail_watchers_number"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="16dp"
+                          android:layout_marginTop="8dp"
+                          android:paddingBottom="4dp"
+                          android:paddingTop="8dp"
+                          android:textColor="@color/gray_50"
+                          android:textStyle="bold"
+                          tools:text="3 watchers" />
+
+                        <com.shootr.android.ui.widgets.WatchersView
+                          android:id="@+id/event_content_detail_watchers_list"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
+                <com.shootr.android.ui.widgets.ForegroundLinearLayout
+                  android:id="@+id/event_title_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/background_primary_selectable"
+                  android:clickable="true"
+                  android:orientation="vertical"
+                  android:paddingBottom="16dp">
+
+                    <include layout="@layout/toolbar_actionbar" />
+
+                    <TextView
+                      android:id="@+id/event_title"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/keyline_2"
+                      android:layout_marginRight="@dimen/keyline_1"
+                      android:drawablePadding="4dp"
+                      android:drawableRight="@drawable/spinner_material"
+                      android:text="@string/event_title_default"
+                      android:textColor="@color/white"
+                      android:textSize="18sp"
+                      android:textStyle="bold"
+                      tools:text="Sevilla-Betis 18:30 - Sánchez Pizjuán, Nervión" />
+
+                    <TextView
+                      android:id="@+id/event_date"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="@dimen/keyline_2"
+                      android:layout_marginRight="@dimen/keyline_1"
+                      android:textColor="@color/primary_disabled"
+                      android:textSize="16sp"
+                      android:visibility="invisible"
+                      tools:text="MIÉ. 18:30"
+                      tools:visibility="visible" />
+                </com.shootr.android.ui.widgets.ForegroundLinearLayout>
+            </FrameLayout>
+
+        </com.shootr.android.ui.widgets.ObservableScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

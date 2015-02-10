@@ -154,6 +154,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     //region Event info
+    public void refreshInfo() {
+        this.getEventInfo();
+    }
+
     public void loadEventInfo() {
         this.showViewLoading();
         this.getEventInfo();

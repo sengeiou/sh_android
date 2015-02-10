@@ -1,11 +1,16 @@
 package com.shootr.android.data.repository.dagger;
 
+import com.shootr.android.data.repository.datasource.Cached;
+import com.shootr.android.data.repository.datasource.event.CachedEventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.DatabaseEventDataSource;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceEventDataSource;
+import com.shootr.android.data.repository.datasource.event.ServiceEventSearchDataSource;
 import com.shootr.android.data.repository.local.LocalEventRepository;
 import com.shootr.android.data.repository.remote.SyncEventRepository;
 import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import dagger.Module;
@@ -38,5 +43,15 @@ public class EventRepositoryModule {
     @Provides @Singleton @Remote EventDataSource provideRemoteEventDataSource(
       ServiceEventDataSource eventDataSource) {
         return eventDataSource;
+    }
+
+    @Provides @Singleton @Remote EventSearchDataSource provideRemoteEventSearchDataSource(
+      ServiceEventSearchDataSource serviceEventSearchDataSource) {
+        return serviceEventSearchDataSource;
+    }
+
+    @Provides @Singleton @Cached EventSearchDataSource provideCachedEventSearchDataSource(
+      CachedEventSearchDataSource serviceEventSearchDataSource) {
+        return serviceEventSearchDataSource;
     }
 }

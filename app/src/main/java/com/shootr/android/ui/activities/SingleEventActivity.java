@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -33,7 +34,6 @@ import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
-import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -56,6 +56,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
+    @InjectView(R.id.event_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @InjectView(R.id.event_loading) View loadingView;
 
@@ -92,7 +93,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContainerContent(R.layout.activity_event_watchers);
+        setContainerContent(R.layout.activity_event_page);
         initializeViews();
         setupActionbar();
 
@@ -119,6 +120,13 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         scrollView.addCallbacks(this);
 
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
+          R.color.refresh_4);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                presenter.refreshInfo();
+            }
+        });
         final ViewTreeObserver scrollViewViewTreeObserver = scrollView.getViewTreeObserver();
         if (scrollViewViewTreeObserver.isAlive()) {
             scrollViewViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -332,7 +340,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
-            String statusText = data.getStringExtra(EditInfoActivity.KEY_STATUS);
+            String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
@@ -443,7 +451,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
-        Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
+        Intent intent = EditStatusActivity.getIntent(this, eventModel, currentUserWatchingModel);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
@@ -492,9 +500,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
         loadingView.setVisibility(View.GONE);
     }
 

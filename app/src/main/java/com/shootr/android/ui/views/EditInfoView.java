@@ -4,17 +4,13 @@ public interface EditInfoView {
 
     void setSendButonEnabled(boolean enabled);
 
-    void setTitle(String title);
+    void setStatusText(String place);
 
-    void setPlaceText(String place);
-
-    void setFocusOnPlace();
+    void setFocusOnStatus();
 
     void closeScreenWithResult(String stautsText);
 
-    String getPlaceText();
+    String getStatusText();
 
     void setMenuShoot();
-
-    void setMenuDone();
 }

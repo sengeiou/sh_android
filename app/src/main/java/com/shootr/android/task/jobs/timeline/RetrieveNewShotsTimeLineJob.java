@@ -44,7 +44,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
         Long lastModifiedDate = shotManager.getLastModifiedDate(DatabaseContract.ShotTable.TABLE);
         if(!getFollowingIds().isEmpty()) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
-            detectNotWatchingAndNotify(newShots);
+            detectSyncTrigger(newShots);
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
         }
@@ -57,9 +57,9 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
      * Nota: No me gusta nada de nada hacer esto así ¬¬
      * @author Rafa
      */
-    private void detectNotWatchingAndNotify(List<ShotEntity> newShots) {
+    private void detectSyncTrigger(List<ShotEntity> newShots) {
         for (ShotEntity newShot : newShots) {
-            if (newShot.getType() == ShotEntity.TYPE_WATCH_NEGATIVE) {
+            if (newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC || newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
                 busPublisher.post(new WatchUpdateRequest.Event());
                 break;
             }

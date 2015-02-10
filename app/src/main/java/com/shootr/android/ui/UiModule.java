@@ -1,7 +1,7 @@
 package com.shootr.android.ui;
 
 import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
-import com.shootr.android.ui.activities.EditInfoActivity;
+import com.shootr.android.ui.activities.EditStatusActivity;
 import com.shootr.android.ui.activities.SingleEventActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -40,7 +40,7 @@ import javax.inject.Singleton;
                 UserFollowsContainerActivity.class,
                 FindFriendsActivity.class,
                 SingleEventActivity.class,
-                EditInfoActivity.class,
+                EditStatusActivity.class,
                 ProfileEditActivity.class,
                 SearchTeamActivity.class,
                 ShotDetailActivity.class,

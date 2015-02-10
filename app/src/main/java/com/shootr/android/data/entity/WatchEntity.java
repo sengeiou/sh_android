@@ -7,7 +7,7 @@ public class WatchEntity extends Synchronized{
 
     private Long idEvent;
     private Long idUser;
-    private String place;
+    private String status;
     private Boolean visible;
 
     public Long getIdEvent() {
@@ -26,12 +26,12 @@ public class WatchEntity extends Synchronized{
         this.idUser = idUser;
     }
 
-    public String getPlace() {
-        return place;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Boolean isVisible() {

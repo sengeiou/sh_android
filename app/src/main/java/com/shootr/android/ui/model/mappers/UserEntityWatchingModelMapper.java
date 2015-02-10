@@ -1,6 +1,5 @@
 package com.shootr.android.ui.model.mappers;
 
-import android.content.Context;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.UserWatchingModel;
 
@@ -16,7 +15,7 @@ public class UserEntityWatchingModelMapper {
         userModel.setIdUser(user.getIdUser());
         userModel.setFavoriteTeamId(user.getFavoriteTeamId());
         userModel.setPhoto(user.getPhoto());
-        userModel.setPlace(place);
+        userModel.setStatus(place);
         userModel.setUserName(user.getUserName());
         return userModel;
     }
