@@ -35,7 +35,6 @@ public class SelectEventInteractorTest {
     private static final Long OLD_EVENT_ID = 1L;
     private static final Long NEW_EVENT_ID = 2L;
     private static final Long IRRELEVANT_USER_ID = 1L;
-    private static final Long LAPSED_EVENT_ID = 3L;
     private static final String EXISTING_STATUS = "status";
     private static final Date DATE_NOW = new Date();
     private static final Date DATE_BEFORE = new Date(DATE_NOW.getTime() - 1);
@@ -100,16 +99,6 @@ public class SelectEventInteractorTest {
     }
 
     @Test
-    public void oldWatchingEventSetToNotWatchingIfLapsed() throws Exception {
-        setupWatchingLapsedEvent();
-
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
-
-        verifyLapsedEventSavedNotWatchingInRepo(localWatchRepository);
-        verifyLapsedEventSavedNotWatchingInRepo(remoteWatchRepository);
-    }
-
-    @Test
     public void selectingCurrentEventDoesntNotifyUi() throws Exception {
         setupOldVisibleEventInLocal();
 
@@ -134,10 +123,6 @@ public class SelectEventInteractorTest {
         when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(oldVisibleEventWatch());
     }
 
-    private void setupWatchingLapsedEvent() {
-        when(localWatchRepository.getCurrentWatching()).thenReturn(lapsedEventWatchingWatch());
-        when(eventRepository.getEventById(eq(LAPSED_EVENT_ID))).thenReturn(lapsedEvent());
-    }
     //endregion
 
     //region Asserts
@@ -182,16 +167,6 @@ public class SelectEventInteractorTest {
         assertThat(newEventWatch.isVisible()).isTrue();
         assertThat(newEventWatch.getUserStatus()).isNotEmpty();
     }
-
-    private void verifyLapsedEventSavedNotWatchingInRepo(WatchRepository watchRepository) {
-        ArgumentCaptor<Watch> watchArgumentCaptor = ArgumentCaptor.forClass(Watch.class);
-        verify(watchRepository, atLeastOnce()).putWatch(watchArgumentCaptor.capture());
-
-        Watch lapsedWatch = watchArgumentCaptor.getAllValues().get(0);
-        assertThat(lapsedWatch.getIdEvent()).isEqualTo(LAPSED_EVENT_ID);
-        assertThat(lapsedWatch.isWatching()).isFalse();
-        assertThat(lapsedWatch.isNotificaticationsEnabled()).isFalse();
-    }
     //endregion
 
     //region Stub data
@@ -220,28 +195,6 @@ public class SelectEventInteractorTest {
         watch.setVisible(true);
         watch.setIdEvent(OLD_EVENT_ID);
         return watch;
-    }
-
-    private Event oldVisibleEvent() {
-        Event event = new Event();
-        event.setId(OLD_EVENT_ID);
-        return event;
-    }
-
-    private Watch lapsedEventWatchingWatch() {
-        Watch watch = new Watch();
-        watch.setIdEvent(LAPSED_EVENT_ID);
-        watch.setUser(currentUser());
-        watch.setWatching(true);
-        watch.setNotificaticationsEnabled(true);
-        return watch;
-    }
-
-    private Event lapsedEvent() {
-        Event event = new Event();
-        event.setId(LAPSED_EVENT_ID);
-        event.setEndDate(DATE_BEFORE);
-        return event;
     }
     //endregion
 }

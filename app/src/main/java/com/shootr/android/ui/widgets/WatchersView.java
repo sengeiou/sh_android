@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserWatchingModel;
@@ -101,12 +100,21 @@ public class WatchersView extends LinearLayout{
         }
         bindWatcherData(viewHolder, userWatching);
     }
+
+    public void setOnProfileClickListener(OnProfileClickListener profileClickListener) {
+        this.profileClickListener = profileClickListener;
+    }
+
+    public void setOnEditListener(OnEditListener onEditListener) {
+        this.onEditListener = onEditListener;
+    }
     //endregion
 
+    //region Private methods
     private void bindCurrentUserData(WatcherViewHolder viewHolder, UserWatchingModel currentUserWatching) {
         bindWatcherData(viewHolder, currentUserWatching);
 
-        boolean currenUserItemEnabled = !currentUserWatching.isWatching();
+        boolean currenUserItemEnabled = currentUserWatching.isVisible();
         setCurrentUserEnabledStatus(viewHolder, currenUserItemEnabled);
 
         viewHolder.editButton.setVisibility(VISIBLE);
@@ -121,13 +129,13 @@ public class WatchersView extends LinearLayout{
 
     private void setCurrentUserEnabledStatus(WatcherViewHolder viewHolder, boolean currenUserItemEnabled) {
         if (currenUserItemEnabled) {
-            viewHolder.name.setAlpha(0.5f);
-            viewHolder.watchingText.setAlpha(0.5f);
-            viewHolder.avatar.setAlpha(0.5f);
-        } else {
             viewHolder.name.setAlpha(1f);
             viewHolder.watchingText.setAlpha(1f);
             viewHolder.avatar.setAlpha(1f);
+        } else {
+            viewHolder.name.setAlpha(0.5f);
+            viewHolder.watchingText.setAlpha(0.5f);
+            viewHolder.avatar.setAlpha(0.5f);
         }
     }
 
@@ -160,14 +168,7 @@ public class WatchersView extends LinearLayout{
         setWatchers(userWatchingMocks);
         setCurrentUserWatching(watch1);
     }
-
-    public void setOnProfileClickListener(OnProfileClickListener profileClickListener) {
-        this.profileClickListener = profileClickListener;
-    }
-
-    public void setOnEditListener(OnEditListener onEditListener) {
-        this.onEditListener = onEditListener;
-    }
+    //endregion
 
     class WatcherViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 

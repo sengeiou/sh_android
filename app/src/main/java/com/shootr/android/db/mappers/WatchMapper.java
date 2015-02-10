@@ -13,10 +13,8 @@ public class WatchMapper extends GenericMapper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(WatchTable.ID_EVENT, watchEntity.getIdEvent());
         contentValues.put(WatchTable.ID_USER, watchEntity.getIdUser());
-        contentValues.put(WatchTable.STATUS, watchEntity.getStatus());
         contentValues.put(WatchTable.PLACE, watchEntity.getPlace());
-        contentValues.put(WatchTable.VISIBLE, watchEntity.getVisible() ? 1 : 0);
-        contentValues.put(WatchTable.NOTIFICATION, watchEntity.getNotification());
+        contentValues.put(WatchTable.VISIBLE, watchEntity.isVisible() ? 1 : 0);
         setSynchronizedtoContentValues(watchEntity, contentValues);
         return contentValues;
     }
@@ -26,11 +24,8 @@ public class WatchMapper extends GenericMapper {
         watch.setIdEvent(
           dto.get(WatchTable.ID_EVENT) == null ? null : ((Number) dto.get(WatchTable.ID_EVENT)).longValue());
         watch.setIdUser(dto.get(WatchTable.ID_USER) == null ? null : ((Number) dto.get(WatchTable.ID_USER)).longValue());
-        watch.setStatus(dto.get(WatchTable.STATUS) == null ? null : ((Number) dto.get(WatchTable.STATUS)).longValue());
         watch.setPlace((String) dto.get(WatchTable.PLACE));
         watch.setVisible(dto.get(WatchTable.VISIBLE) == null ? null : dto.get(WatchTable.VISIBLE).equals(1));
-        watch.setNotification(
-          dto.get(WatchTable.NOTIFICATION) == null ? null : ((Number) dto.get(WatchTable.NOTIFICATION)).intValue());
         setSynchronizedfromDto(dto, watch);
         return watch;
     }
@@ -39,10 +34,8 @@ public class WatchMapper extends GenericMapper {
         Map<String, Object> dto = new HashMap<>();
         dto.put(WatchTable.ID_EVENT, watch == null ? null : watch.getIdEvent());
         dto.put(WatchTable.ID_USER, watch == null ? null : watch.getIdUser());
-        dto.put(WatchTable.STATUS, watch == null ? null : watch.getStatus());
         dto.put(WatchTable.PLACE, watch == null ? null : watch.getPlace());
-        dto.put(WatchTable.VISIBLE, watch == null ? null : watch.getVisible() ? 1 : 0);
-        dto.put(WatchTable.NOTIFICATION, watch == null ? null : watch.getNotification());
+        dto.put(WatchTable.VISIBLE, watch == null ? null : watch.isVisible() ? 1 : 0);
         setSynchronizedtoDto(watch, dto);
         return dto;
     }
@@ -51,10 +44,8 @@ public class WatchMapper extends GenericMapper {
         WatchEntity watch = new WatchEntity();
         watch.setIdEvent(c.getLong(c.getColumnIndex(WatchTable.ID_EVENT)));
         watch.setIdUser(c.getLong(c.getColumnIndex(WatchTable.ID_USER)));
-        watch.setStatus(c.getLong(c.getColumnIndex(WatchTable.STATUS)));
         watch.setPlace(c.getString(c.getColumnIndex(WatchTable.PLACE)));
         watch.setVisible(c.getLong(c.getColumnIndex(WatchTable.VISIBLE)) == 1);
-        watch.setNotification(c.getInt(c.getColumnIndex(WatchTable.NOTIFICATION)));
         setSynchronizedfromCursor(c, watch);
         return watch;
     }

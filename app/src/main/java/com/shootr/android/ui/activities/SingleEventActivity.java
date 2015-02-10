@@ -34,7 +34,6 @@ import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.SwitchBar;
-import com.shootr.android.ui.widgets.ToggleSwitch;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -74,15 +73,12 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_empty) View contentEmpty;
     @InjectView(R.id.event_content_detail) View contentDetail;
 
-    @InjectView(R.id.event_content_detail_switch) SwitchBar watchingSwitch;
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
     @Inject SingleEventPresenter presenter;
     @Inject PicassoWrapper picasso;
 
-    private MenuItem notificationMenuItem;
-    private int notificationIcon;
     private BadgeDrawable eventsBadgeDrawable;
     private int eventsCount;
     private Toast currentToast;
@@ -110,13 +106,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     private void initializeViews() {
         ButterKnife.inject(this);
         headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
-
-        watchingSwitch.getSwitch().setOnBeforeCheckedChangeListener(new ToggleSwitch.OnBeforeCheckedChangeListener() {
-            @Override public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
-                presenter.sendWatching(checked);
-                return false;
-            }
-        });
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
             @Override public void onProfile(Long idUser) {
                 navigateToUserProfile(idUser);
@@ -148,11 +137,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-    }
-
-    private void updateNotificationIcon() {
-        notificationMenuItem.setIcon(notificationIcon);
-        notificationMenuItem.setVisible(true);
     }
 
     private void updateEventsIconBadge() {
@@ -324,10 +308,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     //region Activity Methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
-        notificationMenuItem = menu.findItem(R.id.menu_notifications);
-        if (notificationIcon != 0) {
-            updateNotificationIcon();
-        }
 
         MenuItem eventsMenuItem = menu.findItem(R.id.menu_events);
         setupEventsIcon(eventsMenuItem);
@@ -338,10 +318,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_notifications) {
-            presenter.toggleNotifications();
-            return true;
-        } else if (item.getItemId() == R.id.menu_events) {
+        if (item.getItemId() == R.id.menu_events) {
             navigateToSelectEvent();
             return true;
         } else if (item.getItemId() == R.id.menu_edit) {
@@ -463,27 +440,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
-    }
-
-    @Override public void setIsWatching(boolean watching) {
-        watchingSwitch.setCheckedInternal(watching);
-    }
-
-    @Override public void setNotificationsEnabled(boolean enabled) {
-        notificationIcon = enabled ? R.drawable.ic_action_notifications_on : R.drawable.ic_action_notifications_none;
-        if (notificationMenuItem != null) {
-            updateNotificationIcon();
-        }
-    }
-
-    @Override public void alertNotificationsEnabled() {
-        currentToast.setText(R.string.notifications_enabled);
-        currentToast.show();
-    }
-
-    @Override public void alertNotificationsDisabled() {
-        currentToast.setText(R.string.notifications_disabled);
-        currentToast.show();
     }
 
     @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {

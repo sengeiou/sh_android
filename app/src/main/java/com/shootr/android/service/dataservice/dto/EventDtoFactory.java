@@ -48,11 +48,10 @@ public class EventDtoFactory {
     public GenericDto getWatchFromUsersAndMe(List<Long> userIds, Long idCurrentUser){
         FilterDto watchFollowingFilter =
           or(
-            and(DatabaseContract.WatchTable.STATUS).isEqualTo(WatchEntity.STATUS_WATCHING)
+            and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
             .and(or(DatabaseContract.WatchTable.ID_USER).isIn(userIds))
           )
           .or(WatchTable.ID_USER).isEqualTo(idCurrentUser)
-            //TODO filtrar por visible y notificaciones? Si van inclusives
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
@@ -66,9 +65,9 @@ public class EventDtoFactory {
         if (userIds == null || userIds.isEmpty()) {
             throw new IllegalArgumentException("userIds cannot be null nor empty");
         }
-        FilterDto watchFollowingFilter = and(WatchTable.ID_EVENT).isEqualTo(idEvent)
-          .and(WatchTable.STATUS)
-          .isEqualTo(WatchEntity.STATUS_WATCHING)
+        FilterDto watchFollowingFilter =
+          and(WatchTable.ID_EVENT).isEqualTo(idEvent)
+          .and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
           .and(or(WatchTable.ID_USER).isIn(userIds))
           .build();
 
@@ -152,12 +151,7 @@ public class EventDtoFactory {
 
     public GenericDto getWatchVisible(Long currentUserId) {
         FilterDto watchFollowingFilter = and(WatchTable.ID_USER).isEqualTo(currentUserId)
-          .and(WatchTable.VISIBLE)
-          .isEqualTo(WatchEntity.VISIBLE)
-          .and(WatchTable.STATUS)
-          .isNotEqualTo(null)
-          .and(WatchTable.NOTIFICATION)
-          .isNotEqualTo(null)
+          .and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(

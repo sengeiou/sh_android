@@ -13,11 +13,4 @@
       android:icon="@drawable/ic_action_event_badge"
       android:title="@string/menu_events"
       app:showAsAction="ifRoom" />
-
-    <item
-      android:id="@+id/menu_notifications"
-      android:icon="@drawable/ic_action_notifications_none"
-      android:title="@string/menu_notifications"
-      android:visible="false"
-      app:showAsAction="always" />
 </menu>

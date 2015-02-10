@@ -7,7 +7,6 @@ import com.shootr.android.data.repository.datasource.watch.WatchDataSource;
 import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
-import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -48,25 +47,10 @@ public class LocalWatchRepository implements WatchRepository {
         throw new RuntimeException("Method not implemented yet!");
     }
 
-    @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {
-        throw new RuntimeException(
-          "Method not implemented. It's in the interface for compatibility with old repositories.");
-    }
-
     @Override public Watch putWatch(Watch watch) {
         WatchEntity currentOrNewWatchEntity = syncableWatchEntityFactory.currentOrNewEntity(watch);
         WatchEntity storedWatchEntity = localWatchDataSource.putWatch(currentOrNewWatchEntity);
         return watchEntityMapper.transform(storedWatchEntity, watch.getUser());
-    }
-
-    @Override public Watch getCurrentWatching(ErrorCallback callback) {
-        throw new RuntimeException(
-          "Method not implemented. It's in the interface for compatibility with old repositories.");
-    }
-
-    @Override public Watch getCurrentWatching() {
-        WatchEntity watchEntity = localWatchDataSource.getWatching(sessionRepository.getCurrentUserId());
-        return watchEntityMapper.transform(watchEntity, sessionRepository.getCurrentUser());
     }
 
     @Override public Watch getCurrentVisibleWatch() {

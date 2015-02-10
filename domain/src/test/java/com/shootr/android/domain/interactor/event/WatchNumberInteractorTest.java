@@ -56,7 +56,7 @@ public class WatchNumberInteractorTest {
 
     @Test
     public void testCountOnlyIncludesIsWatching() throws Exception {
-        Integer oneCount = interactor.countIsWatching(watchingAndNotWatching());
+        Integer oneCount = interactor.countIsVisible(watchingAndNotWatching());
         assertThat(oneCount).isEqualTo(1);
     }
 
@@ -69,7 +69,7 @@ public class WatchNumberInteractorTest {
 
     private Watch newWatchNotWatching(Long idEvent, Long idUser) {
         Watch watch = newWatch(idEvent, idUser);
-        watch.setWatching(false);
+        watch.setVisible(false);
         return watch;
     }
 
@@ -77,7 +77,7 @@ public class WatchNumberInteractorTest {
         Watch watch = new Watch();
         watch.setIdEvent(idEvent);
         watch.setUser(newUser(idUser));
-        watch.setWatching(true);
+        watch.setVisible(true);
         return watch;
     }
 

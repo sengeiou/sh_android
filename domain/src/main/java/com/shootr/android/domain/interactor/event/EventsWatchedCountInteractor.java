@@ -65,7 +65,7 @@ public class EventsWatchedCountInteractor implements Interactor {
     protected Integer countDifferentEventsInWatches(List<Watch> watches) {
         Set<Long> eventIdsSet = new HashSet<>();
         for (Watch watch : watches) {
-            if (watch.isWatching()) {
+            if (watch.isVisible()) {
                 eventIdsSet.add(watch.getIdEvent());
             }
         }

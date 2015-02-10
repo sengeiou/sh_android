@@ -6,28 +6,13 @@ import java.util.List;
 
 public interface WatchRepository {
 
-    @Deprecated
-    interface WatchCallback extends ErrorCallback{
-
-        void onLoaded(Watch watch);
-
-    }
-
     Watch getWatchForUserAndEvent(User user, Long idEvent);
 
     List<Watch> getWatchesForUsersAndEvent(List<User> users, Long idEvent);
 
     List<Watch> getWatchesFromUsers(List<User> userIds);
 
-    @Deprecated
-    void putWatch(Watch watch, WatchCallback callback);
-
     Watch putWatch(Watch watch);
-
-    @Deprecated
-    Watch getCurrentWatching(ErrorCallback callback);
-
-    Watch getCurrentWatching();
 
     Watch getCurrentVisibleWatch();
 }

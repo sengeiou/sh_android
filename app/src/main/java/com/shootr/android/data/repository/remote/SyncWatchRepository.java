@@ -14,7 +14,6 @@ import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -93,11 +92,6 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository,
         }
     }
 
-    @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {
-        throw new RuntimeException(
-          "Method not implemented. It is in the interface for compatibility with old repository implementations");
-    }
-
     @Override public Watch putWatch(Watch watch) {
         WatchEntity currentOrNewWatchEntity = syncableWatchEntityFactory.currentOrNewEntity(watch);
         try {
@@ -109,15 +103,6 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository,
             queueUpload(currentOrNewWatchEntity, e);
         }
         return watchEntityMapper.transform(currentOrNewWatchEntity, watch.getUser());
-    }
-
-    @Override public synchronized Watch getCurrentWatching(ErrorCallback callback) {
-        throw new RuntimeException(
-          "Method not implemented. It is in the interface for compatibility with old repository implementations");
-    }
-
-    @Override public synchronized Watch getCurrentWatching() {
-        throw new RuntimeException("Method not implemented yet!");
     }
 
     @Override public synchronized Watch getCurrentVisibleWatch() {

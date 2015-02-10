@@ -98,7 +98,7 @@ public class WatchManager extends AbstractManager{
 
     public List<WatchEntity> getWatchesFromEvents(List<Long> eventIds) {
         String whereSelection = WatchTable.ID_EVENT
-          + " IN (" + createListPlaceholders(eventIds.size())+") AND "+WatchTable.STATUS+"=1";
+          + " IN (" + createListPlaceholders(eventIds.size())+") AND "+WatchTable.VISIBLE+"=1";
         String[] whereArguments = new String[eventIds.size()];
         for (int i = 0; i < eventIds.size(); i++) {
             whereArguments[i] = String.valueOf(eventIds.get(i));
@@ -117,39 +117,6 @@ public class WatchManager extends AbstractManager{
         }
         queryResult.close();
         return resultWatches;
-    }
-
-    public List<WatchEntity> getWatchesRejected() {
-        String whereString = WatchTable.STATUS + "=?";
-        String[] whereArguments = new String[]{String.valueOf(WatchEntity.STATUS_REJECT)};
-        Cursor queryResult = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereString, whereArguments, null, null, null);
-
-        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
-                resultWatches.add(watchEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultWatches;
-    }
-
-    public WatchEntity getWatching(Long idUser) {
-        String whereClause = WatchTable.STATUS + "=? AND " + WatchTable.ID_USER + "=?";
-        String[] whereArguments = new String[] { String.valueOf(WatchEntity.STATUS_WATCHING), String.valueOf(idUser) };
-        Cursor queryResult =
-          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereClause, whereArguments, null, null,
-            null);
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
-            queryResult.close();
-            return watchEntity;
-        } else {
-            return null;
-        }
     }
 
     public void createUpdateWatch(WatchEntity watchEntity) {

@@ -2,22 +2,13 @@ package com.shootr.android.data.entity;
 
 public class WatchEntity extends Synchronized{
 
-    public static final Long STATUS_DEFAULT = 0L;
-    public static final Long STATUS_WATCHING = 1L;
-    public static final Long STATUS_REJECT = 2L;
-
     public static final Long VISIBLE = 1L;
     public static final Long NOT_VISIBLE = 0L;
 
-    public static final Integer NOTIFICATION_ON = 1;
-    public static final Integer NOTIFICATION_OFF = 0;
-
     private Long idEvent;
     private Long idUser;
-    private Long status;
     private String place;
     private Boolean visible;
-    private Integer notification;
 
     public Long getIdEvent() {
         return idEvent;
@@ -35,14 +26,6 @@ public class WatchEntity extends Synchronized{
         this.idUser = idUser;
     }
 
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
     public String getPlace() {
         return place;
     }
@@ -51,7 +34,7 @@ public class WatchEntity extends Synchronized{
         this.place = place;
     }
 
-    public Boolean getVisible() {
+    public Boolean isVisible() {
         return visible;
     }
 
@@ -82,13 +65,5 @@ public class WatchEntity extends Synchronized{
         int result = idEvent.hashCode();
         result = 31 * result + idUser.hashCode();
         return result;
-    }
-
-    public Integer getNotification() {
-        return notification;
-    }
-
-    public void setNotification(Integer notification) {
-        this.notification = notification;
     }
 }

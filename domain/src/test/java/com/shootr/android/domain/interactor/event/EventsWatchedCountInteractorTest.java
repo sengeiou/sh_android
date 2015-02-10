@@ -97,7 +97,7 @@ public class EventsWatchedCountInteractorTest {
 
     private Watch newWatchNotWatching(Long idEvent, Long idUser) {
         Watch watch = newWatch(idEvent, idUser);
-        watch.setWatching(false);
+        watch.setVisible(false);
         return watch;
     }
 
@@ -113,7 +113,7 @@ public class EventsWatchedCountInteractorTest {
 
     private Watch newWatch(Long idEvent, Long idUser) {
         Watch watch = new Watch();
-        watch.setWatching(true);
+        watch.setVisible(true);
         watch.setIdEvent(idEvent);
 
         User user = new User();

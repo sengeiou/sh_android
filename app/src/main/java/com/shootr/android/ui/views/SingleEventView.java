@@ -29,14 +29,6 @@ public interface SingleEventView extends LoadDataView {
 
     void setCurrentUserWatching(UserWatchingModel userWatchingModel);
 
-    void setIsWatching(boolean watching);
-
-    void setNotificationsEnabled(boolean enabled);
-
-    void alertNotificationsEnabled();
-
-    void alertNotificationsDisabled();
-
     void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel);
 
     void navigateToEditEvent(Long idEvent);

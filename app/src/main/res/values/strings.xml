@@ -91,8 +91,6 @@
     <string name="notification_follow_title">%s is now following you!</string>
     <string name="notification_watch_watching">Watching %s</string>
     <string name="notification_watch_watching_place">%1$s: %2$s</string>
-    <string name="notification_watch_not_watching">Not Watching %s</string>
-
 
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find people</string>
@@ -156,8 +154,6 @@
     <string name="single_event_empty">Load an event to see who\'s Watching</string>
     <string name="event_title_default">Select Event</string>
     <string name="menu_events">Events</string>
-    <string name="notifications_enabled">Event notifications: On</string>
-    <string name="notifications_disabled">Event notifications: Off</string>
     <string name="activity_event_list_title">Events</string>
     <string name="menu_search_events">Search</string>
     <string name="events_list_empty">No results.</string>

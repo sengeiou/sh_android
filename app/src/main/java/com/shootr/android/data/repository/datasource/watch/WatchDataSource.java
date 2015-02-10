@@ -12,8 +12,6 @@ public interface WatchDataSource extends SyncableDataSource<WatchEntity> {
 
     public WatchEntity getWatch(Long idEvent, Long idUser);
 
-    WatchEntity getWatching(Long userId);
-
     WatchEntity getVisible(Long userId);
 
     List<WatchEntity> getWatchesForUsersAndEvent(List<Long> userIds, Long idEvent);

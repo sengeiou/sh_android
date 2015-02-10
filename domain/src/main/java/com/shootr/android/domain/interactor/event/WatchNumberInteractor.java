@@ -49,7 +49,7 @@ public class WatchNumberInteractor implements Interactor{
         }
         List<User> peopleAndMe = getPeopleAndMe();
         List<Watch> watchesForVisibleEvent = getWatches(currentVisibleEventId, peopleAndMe);
-        Integer countIsWatching = countIsWatching(watchesForVisibleEvent);
+        Integer countIsWatching = countIsVisible(watchesForVisibleEvent);
         notifyLoaded(countIsWatching);
     }
 
@@ -79,10 +79,10 @@ public class WatchNumberInteractor implements Interactor{
         return remoteWatchRepository.getWatchesForUsersAndEvent(users, eventId);
     }
 
-    protected Integer countIsWatching(List<Watch> watches) {
+    protected Integer countIsVisible(List<Watch> watches) {
         int watchingCount = 0;
         for (Watch watch : watches) {
-            if (watch.isWatching()) {
+            if (watch.isVisible()) {
                 watchingCount++;
             }
         }
