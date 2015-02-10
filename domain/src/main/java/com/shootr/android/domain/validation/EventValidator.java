@@ -11,7 +11,7 @@ public class EventValidator {
     public static final int TITLE_MINIMUN_LENGTH = 3;
     public static final int TITLE_MAXIMUN_LENGTH = 50;
     public static final int TAG_MAXIMUM_LENGTH = 8;
-    public static final String EMOJI_RANGE_REGEX = "[^\\u1f300-\\u1f64f]";
+    public static final String EMOJI_RANGE_REGEX = "[\\x{1F300}-\\x{1F64F}\\x{1f680}-\\x{1f6ff}\\x{2600}-\\x{27bf}]";
     public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
 
     private static final long ONE_YEAR_MILLIS = 365 * 24 * 60 * 60 * 1000;
