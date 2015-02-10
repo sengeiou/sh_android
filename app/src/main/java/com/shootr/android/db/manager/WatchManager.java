@@ -229,6 +229,9 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesByEventForUsers(List<Long> users, Long idEvent) {
+        if (users.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         String whereClause = Phrase.from("{event_col} = '{id_event}' and {user_col} in ({list})")
           .put("event_col", WatchTable.ID_EVENT)
           .put("user_col", WatchTable.ID_USER)
