@@ -90,7 +90,7 @@ public class EditStatusActivity extends BaseSignedInActivity implements EditInfo
     private void initializePresenter(Bundle initialInfoBundle) {
         String eventTitle = initialInfoBundle.getString(KEY_TITLE);
         String statusText = initialInfoBundle.getString(KEY_STATUS);
-        editInfoPresenter.initialize(this, eventTitle, statusText);
+        editInfoPresenter.initialize(this, statusText);
     }
 
     private void sendNewStatus() {

@@ -10,12 +10,12 @@ public class UserEntityWatchingModelMapper {
     public UserEntityWatchingModelMapper() {
     }
 
-    public UserWatchingModel toUserWatchingModel(UserEntity user, String place) {
+    public UserWatchingModel toUserWatchingModel(UserEntity user, String status) {
         UserWatchingModel userModel = new UserWatchingModel();
         userModel.setIdUser(user.getIdUser());
         userModel.setFavoriteTeamId(user.getFavoriteTeamId());
         userModel.setPhoto(user.getPhoto());
-        userModel.setStatus(place);
+        userModel.setStatus(status);
         userModel.setUserName(user.getUserName());
         return userModel;
     }
