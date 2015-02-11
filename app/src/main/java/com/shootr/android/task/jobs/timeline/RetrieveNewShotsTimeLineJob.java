@@ -45,11 +45,11 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
         if(!getFollowingIds().isEmpty()) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
             detectSyncTrigger(newShots);
+            newShots = filterShots(newShots);
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
         }
         updatedTimeline = shotManager.retrieveTimelineWithUsers();
-        updatedTimeline = filterShots(updatedTimeline);
         postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }
 

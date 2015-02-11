@@ -33,11 +33,11 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
         return followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
     }
 
-    protected List<ShotModel> filterShots(List<ShotModel> updatedTimeline) {
-        List<ShotModel> filtered = new ArrayList<>();
-        for (ShotModel shotModel : updatedTimeline) {
-            if (shotModel.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
-                filtered.add(shotModel);
+    public static List<ShotEntity> filterShots(List<ShotEntity> updatedTimeline) {
+        List<ShotEntity> filtered = new ArrayList<>();
+        for (ShotEntity shotEntity : updatedTimeline) {
+            if (shotEntity.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
+                filtered.add(shotEntity);
             }
         }
         return filtered;

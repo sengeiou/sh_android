@@ -31,7 +31,6 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
 
         List<ShotModel> localShots = shotManager.retrieveTimelineWithUsers();
         if (localShots != null && !localShots.isEmpty()) {
-            localShots = filterShots(localShots);
             postSuccessfulEvent(new ShotsResultEvent(localShots));
         }
     }

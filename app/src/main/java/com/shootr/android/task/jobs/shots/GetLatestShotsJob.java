@@ -11,6 +11,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.squareup.otto.Bus;
@@ -77,6 +78,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
 
     public List<ShotEntity> getLatestsShotsFromService() throws IOException {
         List<ShotEntity> shotEntities = service.getLatestsShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
+        shotEntities = TimelineJob.filterShots(shotEntities);
         shotManager.saveShots(shotEntities);
         return getLatestShotsFromDatabase();
     }

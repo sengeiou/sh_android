@@ -36,9 +36,9 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
     @Override protected void run() throws SQLException, IOException {
         Long firstModifiedDate = shotManager.getFirstModifiedDate(DatabaseContract.ShotTable.TABLE);
         List<ShotEntity> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
+        olderShots = filterShots(olderShots);
         shotManager.saveShots(olderShots);
         List<ShotModel> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, sessionRepository.getCurrentUserId());
-        olderShotsWithUsers = filterShots(olderShotsWithUsers);
         postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }
 
