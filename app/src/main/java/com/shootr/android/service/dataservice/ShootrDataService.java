@@ -52,7 +52,7 @@ import timber.log.Timber;
 public class ShootrDataService implements ShootrService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    public static final long DEFAULT_LIMIT = 10L;
+    public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
 
     private final OkHttpClient client;
