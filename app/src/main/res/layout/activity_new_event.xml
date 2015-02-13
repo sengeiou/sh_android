@@ -24,7 +24,7 @@
           android:id="@+id/new_event_title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="Title"
+          android:hint="@string/new_event_title_label"
           android:imeOptions="actionDone"
           android:inputType="text|textCapWords|textNoSuggestions"
           android:lines="1"
@@ -52,7 +52,7 @@
       android:layout_marginLeft="16dp"
       android:paddingLeft="4dp"
       android:paddingTop="4dp"
-      android:text="Starts"
+      android:text="@string/new_event_starts_label"
       android:textAppearance="@style/TextAppearance.FloatLabel" />
 
     <LinearLayout
@@ -106,7 +106,7 @@
       android:layout_marginLeft="16dp"
       android:paddingLeft="4dp"
       android:paddingTop="4dp"
-      android:text="Timezone"
+      android:text="@string/new_event_timezone_label"
       android:textAppearance="@style/TextAppearance.FloatLabel"
       tools:visibility="visible" />
 
@@ -130,7 +130,7 @@
       android:layout_marginLeft="16dp"
       android:paddingLeft="4dp"
       android:paddingTop="4dp"
-      android:text="Ends before"
+      android:text="@string/new_event_ends_label"
       android:textAppearance="@style/TextAppearance.FloatLabel" />
 
     <LinearLayout
