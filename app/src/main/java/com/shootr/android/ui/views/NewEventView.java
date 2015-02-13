@@ -10,7 +10,7 @@ public interface NewEventView extends DataTransferView{
 
     void setEndDate(String timeText);
 
-    void pickCustomDateTime(long initialTimestamp);
+    void pickCustomDateTime(long initialTimestamp, String timezone);
 
     void setEventTitle(String title);
 

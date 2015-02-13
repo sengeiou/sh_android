@@ -197,9 +197,10 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         endDateView.setText(timeText);
     }
 
-    @Override public void pickCustomDateTime(long initialTimestamp) {
+    @Override public void pickCustomDateTime(long initialTimestamp, String timezone) {
         Intent dateTimePickerIntent = new Intent(this, DateTimePickerDialogActivity.class);
         dateTimePickerIntent.putExtra(DateTimePickerDialogActivity.KEY_TIMESTAMP, initialTimestamp);
+        dateTimePickerIntent.putExtra(DateTimePickerDialogActivity.KEY_TIMEZONE, timezone);
         startActivityForResult(dateTimePickerIntent, REQUEST_END_DATE);
     }
 

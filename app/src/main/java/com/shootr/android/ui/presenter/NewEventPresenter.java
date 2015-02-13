@@ -149,7 +149,7 @@ public class NewEventPresenter implements Presenter {
 
     public void endDateItemSelected(int selectedItemId) {
         if (selectedItemId == R.id.end_date_custom) {
-            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
+            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()), selectedTimeZone.getID() );
         } else {
             EndDate endDate = endDateFromItemId(selectedItemId);
             this.setEndDateTime(endDate);
