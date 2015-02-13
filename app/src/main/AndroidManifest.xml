@@ -173,6 +173,12 @@
           android:theme="@style/ShootrTheme.NoActionBar.Floating">
         </activity>
 
+        <activity
+          android:name=".ui.activities.TimezonePickerActivity"
+          android:theme="@style/ShootrTheme.Closable"
+          >
+        </activity>
+
         <activity android:name=".ui.activities.UpdateWarningActivity"
           android:launchMode="singleTask"
             />

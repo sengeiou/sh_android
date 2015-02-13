@@ -137,6 +137,11 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     public void onEndDateClick() {
         endDatePopupMenu.show();
     }
+
+    @OnClick(R.id.new_event_start_date_timezone)
+    public void onTimezoneClick() {
+        startActivity(new Intent(this, TimezonePickerActivity.class));
+    }
     //endregion
 
     //region Activity methods
