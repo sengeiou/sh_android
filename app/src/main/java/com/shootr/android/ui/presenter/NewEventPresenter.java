@@ -19,6 +19,7 @@ import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.TimeFormatter;
 import java.util.List;
+import java.util.TimeZone;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
 import org.joda.time.base.AbstractDateTime;
@@ -41,10 +42,12 @@ public class NewEventPresenter implements Presenter {
 
     private MutableDateTime selectedStartDateTime;
     private EndDate selectedEndDate;
+    private TimeZone selectedTimeZone;
     private String preloadedTitle;
     private long preloadedStartDate;
     private EndDate preloadedEndDate;
     private Long preloadedEventId;
+    private String preloadedTimezone;
     private String currentTitle;
 
     //region Initialization
@@ -63,11 +66,16 @@ public class NewEventPresenter implements Presenter {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
         if (optionalIdEventToEdit == 0L) {
+            this.setDefaultTimezone();
             this.setDefaultStartDateTime();
             this.setDefaultEndDateTime();
         } else {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
+    }
+
+    private void setDefaultTimezone() {
+        this.setTimezone(TimeZone.getDefault());
     }
 
     private void preloadEventToEdit(long optionalIdEventToEdit) {
@@ -79,14 +87,22 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void setDefaultEventInfo(EventModel eventModel) {
+        preloadedTimezone = eventModel.getTimezone();
+        if (preloadedTimezone != null) {
+            setTimezone(TimeZone.getTimeZone(preloadedTimezone));
+        } else {
+            setDefaultTimezone();
+        }
+
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
 
-        preloadedStartDate = eventModel.getStartDate();
+        preloadedStartDate = fakeDateFromRealTimezone(eventModel.getStartDate());
         setStartDateTime(new MutableDateTime(preloadedStartDate));
 
-        preloadedEndDate = endDateFromTimestamp(eventModel.getEndDate(), preloadedStartDate);
+        long offsetEndDate = fakeDateFromRealTimezone(eventModel.getEndDate());
+        preloadedEndDate = endDateFromTimestamp(offsetEndDate, preloadedStartDate);
         setEndDateTime(preloadedEndDate);
     }
 
@@ -145,6 +161,11 @@ public class NewEventPresenter implements Presenter {
         this.setEndDateTime(endDate);
     }
 
+    public void timezoneSelected(String selectedTimezoneId) {
+        TimeZone timeZone = TimeZone.getTimeZone(selectedTimezoneId);
+        this.setTimezone(timeZone);
+    }
+
     public void done() {
         newEventView.hideKeyboard();
         newEventView.showLoading();
@@ -164,11 +185,10 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void sendEvent(Long preloadedEventId) {
-        long startTimestamp = selectedStartDateTime.getMillis();
-        long endTimestamp = selectedEndDate.getDateTime(startTimestamp);
+        long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
+        long endTimestamp = realDateFromFakeTimezone(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp, endTimestamp,
-          new CreateEventInteractor.Callback() {
+        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp, endTimestamp, selectedTimeZone.getID(), new CreateEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
                   eventCreated(event);
               }
@@ -177,6 +197,15 @@ public class NewEventPresenter implements Presenter {
                   eventCreationError(error);
               }
           });
+    }
+
+    private int realTimezoneOffset(long date) {
+        TimeZone deviceTimeZone = TimeZone.getDefault();
+        return deviceTimeZone.getOffset(date);
+    }
+
+    private int fakeTimezoneOffset(long date) {
+        return selectedTimeZone.getOffset(date);
     }
 
     private void eventCreated(Event event) {
@@ -240,6 +269,20 @@ public class NewEventPresenter implements Presenter {
     }
     //endregion
 
+    //region Date timezone offsets
+    private long realDateFromFakeTimezone(long fakeDate) {
+        return fakeDate + eventDateOffset(fakeDate);
+    }
+
+    private long fakeDateFromRealTimezone(long realDate) {
+        return realDate - eventDateOffset(realDate);
+    }
+
+    private long eventDateOffset(long eventDate) {
+        return realTimezoneOffset(eventDate) - fakeTimezoneOffset(eventDate);
+    }
+    //endregion
+
     //region Utils
     private String filterTitle(String title) {
         return title.trim();
@@ -255,6 +298,15 @@ public class NewEventPresenter implements Presenter {
         selectedEndDate = endDate;
         newEventView.setEndDate(endDate.getTitle());
         this.updateDoneButtonStatus();
+    }
+
+    private void setTimezone(TimeZone timeZone) {
+        this.selectedTimeZone = timeZone;
+        this.updateViewTimezone();
+    }
+
+    private void updateViewTimezone() {
+        newEventView.setTimeZone(selectedTimeZone.getID());
     }
 
     private void setViewStartDateTime(AbstractDateTime dateTime) {

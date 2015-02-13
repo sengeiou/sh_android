@@ -10,6 +10,7 @@ public class EventModel {
     private String title;
     private String picture;
     private String tag;
+    private String timezone;
     private long startDate;
     private long endDate;
     private boolean amIAuthor;
@@ -109,5 +110,13 @@ public class EventModel {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

@@ -14,6 +14,8 @@ public interface NewEventView extends DataTransferView{
 
     void setEventTitle(String title);
 
+    void setTimeZone(String timezoneName);
+
     String getEventTitle();
 
     void showTitleError(String errorMessage);
