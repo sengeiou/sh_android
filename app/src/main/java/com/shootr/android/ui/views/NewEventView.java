@@ -29,4 +29,6 @@ public interface NewEventView extends DataTransferView{
     void doneButtonEnabled(boolean enable);
 
     void hideKeyboard();
+
+    void navigateToPickTimezone(String currentTimezoneID);
 }

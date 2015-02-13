@@ -161,6 +161,10 @@ public class NewEventPresenter implements Presenter {
         this.setEndDateTime(endDate);
     }
 
+    public void pickTimezone() {
+        newEventView.navigateToPickTimezone(selectedTimeZone.getID());
+    }
+
     public void timezoneSelected(String selectedTimezoneId) {
         TimeZone timeZone = TimeZone.getTimeZone(selectedTimezoneId);
         this.setTimezone(timeZone);

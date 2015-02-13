@@ -144,8 +144,7 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @OnClick(R.id.new_event_start_date_timezone)
     public void onTimezoneClick() {
-        Intent intent = new Intent(this, TimezonePickerActivity.class);
-        startActivityForResult(intent, REQUEST_PICK_TIMEZONE);
+        presenter.pickTimezone();
     }
     //endregion
 
@@ -243,6 +242,12 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(titleView.getWindowToken(), 0);
+    }
+
+    @Override public void navigateToPickTimezone(String currentTimezoneID) {
+        Intent intent = new Intent(this, TimezonePickerActivity.class);
+        intent.putExtra(TimezonePickerActivity.KEY_TIMEZONE, currentTimezoneID);
+        startActivityForResult(intent, REQUEST_PICK_TIMEZONE);
     }
 
     @Override public void showLoading() {

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,7 +24,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -66,7 +64,7 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
     private void initializePresenter() {
         adapter = constructTimezoneAdapter();
         list.setAdapter(adapter);
-        final int defaultIndex = getTimeZoneIndex(adapter, TimeZone.getDefault());
+        final int defaultIndex = getIntentTimeZoneIndex();
         if (defaultIndex >= 0) {
             list.setSelection(defaultIndex);
         }
@@ -104,15 +102,16 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
         return datas;
     }
 
-    public static int getTimeZoneIndex(TimezoneAdapter adapter, TimeZone tz) {
-        final String defaultId = tz.getID();
+    public int getIntentTimeZoneIndex() {
+        String defaultId = getIntent().getStringExtra(KEY_TIMEZONE);
+        if (defaultId == null) {
+            defaultId = TimeZone.getDefault().getID();
+        }
         final int listSize = adapter.getCount();
         for (int i = 0; i < listSize; i++) {
-            // Using HashMap<String, Object> induces unnecessary warning.
             final TimezoneData item = adapter.getItem(i);
             final String id = item.getOlsonId();
             if (defaultId.equals(id)) {
-                // If current timezone is in this list, move focus to it
                 return i;
             }
         }
