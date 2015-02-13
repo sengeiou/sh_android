@@ -15,5 +15,5 @@
 -->
 
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-  android:drawable="@drawable/edit_text_background">
+  android:drawable="@drawable/abc_edit_text_material">
 </inset>
