@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -31,7 +32,7 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContainerContent(android.R.layout.list_content);
+        setContainerContent(R.layout.activity_timezone_picker);
         initializeViews();
         setupActionbar();
         initializeContent();
@@ -45,7 +46,6 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
     }
 
     private void initializeContent() {
@@ -62,6 +62,15 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
         TimezoneItem tz = adapter.getItem(position);
         setResult(RESULT_OK, getIntent().putExtra(KEY_TIMEZONE, tz.getOlsonId()));
         finish();
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private TimezoneAdapter constructTimezoneAdapter() {
@@ -162,7 +171,7 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
         }
 
         @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
-            return inflater.inflate(android.R.layout.simple_list_item_2, container, false);
+            return inflater.inflate(R.layout.item_list_timezone_two_line, container, false);
         }
 
         @Override public void bindView(TimezoneItem item, int position, View view) {
