@@ -149,7 +149,7 @@ public class NewEventPresenter implements Presenter {
 
     public void endDateItemSelected(int selectedItemId) {
         if (selectedItemId == R.id.end_date_custom) {
-            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()), selectedTimeZone.getID() );
+            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()), timezoneDisplayText());
         } else {
             EndDate endDate = endDateFromItemId(selectedItemId);
             this.setEndDateTime(endDate);
@@ -311,7 +311,17 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void updateViewTimezone() {
-        newEventView.setTimeZone(selectedTimeZone.getID());
+        newEventView.setTimeZone(timezoneDisplayText());
+    }
+
+    private String timezoneDisplayText() {
+        long timezoneTime;
+        if (selectedStartDateTime != null) {
+            timezoneTime = selectedStartDateTime.getMillis();
+        } else {
+            timezoneTime = System.currentTimeMillis();
+        }
+        return selectedTimeZone.getID() +" "+ dateFormatter.getGMT(selectedTimeZone, timezoneTime);
     }
 
     private void setViewStartDateTime(AbstractDateTime dateTime) {
