@@ -303,6 +303,7 @@ public class NewEventPresenter implements Presenter {
     private void setTimezone(TimeZone timeZone) {
         this.selectedTimeZone = timeZone;
         this.updateViewTimezone();
+        this.updateDoneButtonStatus();
     }
 
     private void updateViewTimezone() {
@@ -334,9 +335,18 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void updateDoneButtonStatus() {
-        boolean canSendEvent =
-          isValidTitle() && (hasChangedTitle() || hasChangedStartDate() || hasChangedEndDate());
-        newEventView.doneButtonEnabled(canSendEvent);
+        newEventView.doneButtonEnabled(canSendEvent());
+    }
+
+    private boolean canSendEvent() {
+        return isValidTitle() && (hasChangedTitle()
+          || hasChangedStartDate()
+          || hasChangedEndDate()
+          || hasChangedTimezone());
+    }
+
+    private boolean hasChangedTimezone() {
+        return !selectedTimeZone.getID().equals(preloadedTimezone);
     }
 
     private boolean isValidTitle() {
