@@ -69,6 +69,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
     @InjectView(R.id.event_title) TextView titleText;
     @InjectView(R.id.event_date) TextView dateText;
+    @InjectView(R.id.event_author) TextView authorText;
 
     @InjectView(R.id.event_content_container) View contentContainer;
     @InjectView(R.id.event_content_empty) View contentEmpty;
@@ -381,6 +382,10 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         } else {
             dateText.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override public void setEventAuthor(String author) {
+        authorText.setText(author);
     }
 
     @Override public void setEventPicture(String picture) {

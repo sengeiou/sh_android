@@ -213,6 +213,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
         singleEventView.setEventPicture(eventModel.getPicture());
+        singleEventView.setEventAuthor(eventModel.getAuthorUsername());
         if (eventModel.amIAuthor()) {
             singleEventView.showEditEventButton();
             singleEventView.showEditPicture(eventModel.getPicture());

@@ -11,6 +11,8 @@ public interface SingleEventView extends LoadDataView {
 
     void setEventDate(String date);
 
+    void setEventAuthor(String author);
+
     void setEventPicture(String picture);
 
     void showEditPicture(String picture);
