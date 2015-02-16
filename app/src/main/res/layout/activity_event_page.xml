@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- info -->
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -90,6 +90,24 @@
                       android:orientation="vertical"
                       android:visibility="invisible"
                       tools:visibility="visible">
+
+                        <TextView
+                          android:id="@+id/event_author"
+                          style="@style/TextAppearance.AppCompat.Small"
+                          android:layout_width="match_parent"
+                          android:layout_height="48dp"
+                          android:layout_marginLeft="@dimen/keyline_2"
+                          android:background="?selectableItemBackground"
+                          android:clickable="true"
+                          android:fontFamily="sans-serif-medium"
+                          android:gravity="center_vertical"
+                          android:textColor="@color/gray_50"
+                          tools:text="rafa" />
+
+                        <View
+                          android:layout_width="match_parent"
+                          android:layout_height="1dp"
+                          android:background="@color/gray_80" />
 
                         <!-- watchers -->
                         <TextView

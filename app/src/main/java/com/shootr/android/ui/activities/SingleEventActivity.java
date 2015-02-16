@@ -385,7 +385,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setEventAuthor(String author) {
-        authorText.setText(author);
+        authorText.setText("By: "+author);
     }
 
     @Override public void setEventPicture(String picture) {
