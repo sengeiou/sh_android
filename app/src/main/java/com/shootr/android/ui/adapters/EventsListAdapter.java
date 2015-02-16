@@ -71,6 +71,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         int selectedColor = resources.getColor(R.color.primary);
         sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.title.setText(sp);
+        holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_primary, 0);
     }
 
     private String getWatchersText(int watchers) {
