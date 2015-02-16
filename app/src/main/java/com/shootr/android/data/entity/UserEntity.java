@@ -18,6 +18,8 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private Long rank;
     private String website;
     private String bio;
+    private String eventTitle;
+    private Long idEvent;
 
     public UserEntity(){
     }
@@ -163,5 +165,21 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
             // Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
             return this;
         }
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public Long getIdEvent() {
+        return idEvent;
+    }
+
+    public void setIdEvent(Long idEvent) {
+        this.idEvent = idEvent;
     }
 }

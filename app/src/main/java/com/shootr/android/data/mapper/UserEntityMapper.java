@@ -23,6 +23,9 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
+        user.setEventWatchingId(userEntity.getIdEvent());
+        user.setEventWatchingTitle(userEntity.getEventTitle());
+
         user.setMe(userEntity.getIdUser().equals(currentUserId));
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
@@ -44,6 +47,9 @@ public class UserEntityMapper {
         userEntity.setNumFollowers(user.getNumFollowers());
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
+
+        userEntity.setIdEvent(user.getEventWatchingId());
+        userEntity.setEventTitle(user.getEventWatchingTitle());
         
         //TODO synchronized fields
         return userEntity;

@@ -42,14 +42,14 @@ public abstract class GenericMapper {
     }
 
     protected void setSynchronizedfromDto(Map<String, Object> dto, Synchronized s) {
-        Long date =  (Long)dto.get(CSYS_BIRTH);
-        s.setCsysBirth(date != null ? new Date(date) : null);
+        Number date =  (Long)dto.get(CSYS_BIRTH);
+        s.setCsysBirth(date != null ? new Date(date.longValue()) : null);
 
-        date = (Long) dto.get(CSYS_DELETED);
-        s.setCsysDeleted(date != null ? new Date(date) : null);
+        date = (Number) dto.get(CSYS_DELETED);
+        s.setCsysDeleted(date != null ? new Date(date.longValue()) : null);
 
-        date = (Long) dto.get(CSYS_MODIFIED);
-        s.setCsysModified(date != null ? new Date(date) : null);
+        date = (Number) dto.get(CSYS_MODIFIED);
+        s.setCsysModified(date != null ? new Date(date.longValue()) : null);
 
         s.setCsysRevision((Integer) dto.get(CSYS_REVISION));
     }

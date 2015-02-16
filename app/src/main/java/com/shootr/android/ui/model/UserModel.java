@@ -17,6 +17,8 @@ public class UserModel implements Serializable, Cloneable {
     private String bio;
     private int relationship;
     private Long points;
+    private Long eventWatchingId;
+    private String eventWatchingTitle;
 
     public Long getPoints() {
         return points;
@@ -128,5 +130,21 @@ public class UserModel implements Serializable, Cloneable {
           "idUser=" + idUser +
           ", userName='" + userName + '\'' +
           '}';
+    }
+
+    public Long getEventWatchingId() {
+        return eventWatchingId;
+    }
+
+    public void setEventWatchingId(Long eventWatchingId) {
+        this.eventWatchingId = eventWatchingId;
+    }
+
+    public String getEventWatchingTitle() {
+        return eventWatchingTitle;
+    }
+
+    public void setEventWatchingTitle(String eventWatchingTitle) {
+        this.eventWatchingTitle = eventWatchingTitle;
     }
 }
