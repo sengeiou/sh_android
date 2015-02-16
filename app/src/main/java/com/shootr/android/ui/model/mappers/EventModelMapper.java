@@ -29,6 +29,8 @@ public class EventModelMapper {
         eventModel.setEndDate(event.getEndDate().getTime());
         eventModel.setAmIAuthor(event.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         eventModel.setTimezone(event.getTimezone());
+        eventModel.setAuthorId(event.getAuthorId());
+        eventModel.setAuthorUsername(event.getAuthorUsername());
         return eventModel;
     }
 

@@ -4,6 +4,8 @@ package com.shootr.android.ui.model;
 public class EventModel {
 
     private Long idEvent;
+    private Long authorId;
+    private String authorUsername;
     private Long localTeamId;
     private Long visitorTeamId;
     private String datetime;
@@ -118,5 +120,21 @@ public class EventModel {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 }

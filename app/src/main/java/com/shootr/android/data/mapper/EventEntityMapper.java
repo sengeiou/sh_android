@@ -25,6 +25,7 @@ public class EventEntityMapper {
         event.setPicture(eventEntity.getPhoto());
         event.setTimezone(eventEntity.getTimezone());
         event.setTag(eventEntity.getTag());
+        event.setAuthorUsername(eventEntity.getUserName());
         return event;
     }
 
@@ -46,6 +47,7 @@ public class EventEntityMapper {
         eventEntity.setPhoto(event.getPicture());
         eventEntity.setTimezone(event.getTimezone());
         eventEntity.setTag(event.getTag());
+        eventEntity.setUserName(event.getAuthorUsername());
 
         eventEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return eventEntity;

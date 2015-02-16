@@ -6,6 +6,7 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     private Long idEvent;
     private Long idUser;
+    private String userName;
     private String timezone;
     private String tag;
     private Date beginDate;
@@ -128,5 +129,13 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

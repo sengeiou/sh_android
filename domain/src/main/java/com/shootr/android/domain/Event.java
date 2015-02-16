@@ -6,6 +6,7 @@ public class Event {
 
     private Long id;
     private Long authorId;
+    private String authorUsername;
     private String title;
     private String picture;
     private String timezone;
@@ -78,5 +79,13 @@ public class Event {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 }
