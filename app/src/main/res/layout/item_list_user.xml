@@ -13,31 +13,42 @@
       android:layout_height="@dimen/userlist_avatar_size"
       android:src="@drawable/ic_contact_picture_default" />
 
-    <TextView
-      android:id="@+id/user_name"
+    <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
+      android:layout_alignBottom="@+id/user_avatar"
+      android:layout_alignTop="@+id/user_avatar"
       android:layout_marginLeft="16dp"
       android:layout_toRightOf="@+id/user_avatar"
-      android:textSize="14dp"
-      tools:text="Rafa" />
+      android:gravity="center_vertical"
+      android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/user_username"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/user_name"
-      android:layout_below="@+id/user_name"
-      android:textColor="@color/gray_50"
-      android:textSize="14sp"
-      tools:text="rafa" />
+        <TextView
+          android:id="@+id/user_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:textSize="14sp"
+          tools:text="Rafa" />
+
+        <TextView
+          android:id="@+id/user_username"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/gray_50"
+          android:textSize="14sp"
+          android:visibility="gone"
+          tools:text="rafa"
+          android:lines="1"
+          android:ellipsize="end"
+          tools:visibility="visible" />
+
+    </LinearLayout>
 
     <com.shootr.android.ui.widgets.FollowButton
       android:id="@+id/user_follow_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      />
+      android:layout_centerVertical="true" />
 </RelativeLayout>
