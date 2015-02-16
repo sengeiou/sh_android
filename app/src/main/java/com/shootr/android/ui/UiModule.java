@@ -13,6 +13,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.SearchTeamActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.TimezonePickerActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
@@ -51,7 +52,7 @@ import javax.inject.Singleton;
                 EventsListActivity.class,
                 NewEventActivity.class,
                 DateTimePickerDialogActivity.class,
-                UpdateWarningActivity.class,
+                UpdateWarningActivity.class, TimezonePickerActivity.class,
         },
         complete = false
 )

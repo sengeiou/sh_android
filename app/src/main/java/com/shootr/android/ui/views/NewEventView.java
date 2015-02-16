@@ -10,9 +10,11 @@ public interface NewEventView extends DataTransferView{
 
     void setEndDate(String timeText);
 
-    void pickCustomDateTime(long initialTimestamp);
+    void pickCustomDateTime(long initialTimestamp, String timezone);
 
     void setEventTitle(String title);
+
+    void setTimeZone(String timezoneName);
 
     String getEventTitle();
 
@@ -27,4 +29,6 @@ public interface NewEventView extends DataTransferView{
     void doneButtonEnabled(boolean enable);
 
     void hideKeyboard();
+
+    void navigateToPickTimezone(String currentTimezoneID);
 }
