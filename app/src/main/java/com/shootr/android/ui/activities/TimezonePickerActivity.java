@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -29,6 +31,7 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
 
     @InjectView(android.R.id.list) ListView list;
     private TimezoneAdapter adapter;
+    private Toast toast;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,23 @@ public class TimezonePickerActivity extends BaseSignedInActivity {
 
     private void initializeViews() {
         ButterKnife.inject(this);
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int lastFirstVisibleItem = 0;
+            Date now = new Date();
+            @Override public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+              int totalItemCount) {
+                if (adapter != null && firstVisibleItem != lastFirstVisibleItem && firstVisibleItem > 0) {
+                    TimezoneItem item = adapter.getItem(firstVisibleItem);
+                    toast.setText(item.getGTM(now));
+                    toast.show();
+                    lastFirstVisibleItem = firstVisibleItem;
+                }
+            }
+
+            @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+        });
     }
 
     private void setupActionbar() {
