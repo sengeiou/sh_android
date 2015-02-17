@@ -85,6 +85,9 @@ public class ProfileFragment extends BaseFragment {
     @InjectView(R.id.profile_team) TextView teamTextView;
     @InjectView(R.id.profile_avatar) ImageView avatarImageView;
 
+    @InjectView(R.id.profile_watching_container) View watchingContainerView;
+    @InjectView(R.id.profile_watching_title) TextView watchingTitleView;
+
     @InjectView(R.id.profile_marks_followers) TextView followersTextView;
     @InjectView(R.id.profile_marks_following) TextView followingTextView;
 
@@ -399,6 +402,13 @@ public class ProfileFragment extends BaseFragment {
             websiteTextView.setVisibility(View.VISIBLE);
         } else {
             websiteTextView.setVisibility(View.GONE);
+        }
+
+        if (user.getEventWatchingTitle() != null) {
+            watchingTitleView.setText(user.getEventWatchingTitle());
+            watchingContainerView.setVisibility(View.VISIBLE);
+        } else {
+            watchingContainerView.setVisibility(View.GONE);
         }
 
         String photo = user.getPhoto();
