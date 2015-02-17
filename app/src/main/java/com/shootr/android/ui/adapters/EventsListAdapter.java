@@ -60,18 +60,21 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(holder.picture);
-        if (event.getEventModel().getIdEvent().equals(currentVisibleEvent)) {
-            markVisibleEvent(holder);
-        }
+        boolean isSelectedEvent = event.getEventModel().getIdEvent().equals(currentVisibleEvent);
+        markSelectedEvent(holder, isSelectedEvent);
     }
 
-    private void markVisibleEvent(ViewHolder holder) {
-        CharSequence text = holder.title.getText();
-        SpannableStringBuilder sp = new SpannableStringBuilder(text);
-        int selectedColor = resources.getColor(R.color.primary);
-        sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        holder.title.setText(sp);
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_primary, 0);
+    private void markSelectedEvent(ViewHolder holder, boolean isSelectedEvent) {
+        if (isSelectedEvent) {
+            CharSequence text = holder.title.getText();
+            SpannableStringBuilder sp = new SpannableStringBuilder(text);
+            int selectedColor = resources.getColor(R.color.primary);
+            sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.title.setText(sp);
+            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_primary, 0);
+        } else {
+            holder.title.setCompoundDrawables(null, null, null, null);
+        }
     }
 
     private String getWatchersText(int watchers) {
