@@ -11,4 +11,6 @@ public interface EventRepository {
     List<Event> getEventsByIds(List<Long> eventIds);
 
     Event putEvent(Event event);
+
+    Event putEvent(Event event, boolean notify);
 }

@@ -61,7 +61,7 @@ public class CreateEventInteractor implements Interactor {
 
         if (validateEvent(event)) {
             try {
-                Event savedEvent = sendEventToServer(event);
+                Event savedEvent = sendEventToServer(event, true); //TODO parametrize
                 notifyLoaded(savedEvent);
             } catch (ShootrException e) {
                 handleServerError(e);
@@ -74,6 +74,7 @@ public class CreateEventInteractor implements Interactor {
         event.setId(idEvent);
         event.setTitle(title);
         event.setAuthorId(sessionRepository.getCurrentUserId());
+        event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));
         event.setEndDate(new Date(endDate));
         event.setTimezone(timezoneId);
@@ -112,8 +113,8 @@ public class CreateEventInteractor implements Interactor {
         }
     }
 
-    private Event sendEventToServer(Event event) {
-        return remoteEventRepository.putEvent(event);
+    private Event sendEventToServer(Event event, boolean notify) {
+        return remoteEventRepository.putEvent(event, notify);
     }
 
     //region Validation

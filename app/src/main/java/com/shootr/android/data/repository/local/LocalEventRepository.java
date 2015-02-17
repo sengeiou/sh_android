@@ -34,4 +34,8 @@ public class LocalEventRepository implements EventRepository {
         localEventDataSource.putEvent(eventEntity);
         return event;
     }
+
+    @Override public Event putEvent(Event event, boolean notify) {
+        throw new RuntimeException("Notify not allowed in local repository.");
+    }
 }

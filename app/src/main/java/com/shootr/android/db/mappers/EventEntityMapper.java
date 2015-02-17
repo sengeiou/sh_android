@@ -74,6 +74,7 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         dto.put(DatabaseContract.EventTable.TIMEZONE, eventEntity == null ? null : eventEntity.getTimezone());
         dto.put(DatabaseContract.EventTable.TAG, eventEntity == null ? null : eventEntity.getTag());
+        dto.put(DatabaseContract.EventTable.NOTIFY_CREATION, eventEntity == null ? null : eventEntity.getNotifyCreation());
         setSynchronizedtoDto(eventEntity, dto);
         return dto;
     }
