@@ -31,6 +31,7 @@ public class CreateEventInteractor implements Interactor {
     private long startDate;
     private long endDate;
     private String timezoneId;
+    private boolean notifyCreation;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
 
@@ -44,13 +45,14 @@ public class CreateEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId, Callback callback,
-      InteractorErrorCallback errorCallback) {
+    public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId,
+      boolean notifyCreation, Callback callback, InteractorErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.timezoneId = timezoneId;
+        this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -61,7 +63,7 @@ public class CreateEventInteractor implements Interactor {
 
         if (validateEvent(event)) {
             try {
-                Event savedEvent = sendEventToServer(event, true); //TODO parametrize
+                Event savedEvent = sendEventToServer(event, notifyCreation);
                 notifyLoaded(savedEvent);
             } catch (ShootrException e) {
                 handleServerError(e);

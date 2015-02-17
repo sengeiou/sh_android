@@ -40,6 +40,7 @@ public class NewEventPresenter implements Presenter {
     private NewEventView newEventView;
     private List<EndDate> suggestedEndDates;
 
+    private boolean isNewEvent;
     private MutableDateTime selectedStartDateTime;
     private EndDate selectedEndDate;
     private TimeZone selectedTimeZone;
@@ -49,6 +50,7 @@ public class NewEventPresenter implements Presenter {
     private Long preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
+    private boolean notifyCreation;
 
     //region Initialization
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
@@ -65,7 +67,8 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, long optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
-        if (optionalIdEventToEdit == 0L) {
+        isNewEvent = optionalIdEventToEdit == 0L;
+        if (isNewEvent) {
             this.setDefaultTimezone();
             this.setDefaultStartDateTime();
             this.setDefaultEndDateTime();
@@ -172,12 +175,22 @@ public class NewEventPresenter implements Presenter {
 
     public void done() {
         newEventView.hideKeyboard();
-        newEventView.showLoading();
-        if (this.preloadedEventId == null) {
-            this.createEvent();
+        if (isNewEvent) {
+            this.askNotificationConfirmation();
         } else {
+            newEventView.showLoading();
             this.editEvent(preloadedEventId);
         }
+    }
+
+    private void askNotificationConfirmation() {
+        newEventView.showNotificationConfirmation();
+    }
+
+    public void confirmNotify(boolean notify) {
+        notifyCreation = notify;
+        newEventView.showLoading();
+        createEvent();
     }
 
     private void createEvent() {
@@ -192,15 +205,16 @@ public class NewEventPresenter implements Presenter {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         long endTimestamp = realDateFromFakeTimezone(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp, endTimestamp, selectedTimeZone.getID(), new CreateEventInteractor.Callback() {
-              @Override public void onLoaded(Event event) {
-                  eventCreated(event);
-              }
-          }, new Interactor.InteractorErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  eventCreationError(error);
-              }
-          });
+        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp, endTimestamp, selectedTimeZone.getID(), notifyCreation,
+          new CreateEventInteractor.Callback() {
+                @Override public void onLoaded(Event event) {
+                    eventCreated(event);
+                }
+            }, new Interactor.InteractorErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    eventCreationError(error);
+                }
+            });
     }
 
     private int realTimezoneOffset(long date) {
