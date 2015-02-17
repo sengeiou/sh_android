@@ -6,6 +6,7 @@
     <dimen name="keyline_1">16dp</dimen>
     <dimen name="keyline_2">72dp</dimen>
     <dimen name="keyline_1_minus_8dp">8dp</dimen>
+    <dimen name="keyline_2_minus_icon">32dp</dimen>
 
     <dimen name="shot_avatar_size">52dp</dimen>
 

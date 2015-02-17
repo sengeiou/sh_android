@@ -176,6 +176,7 @@
     <string name="event_notification_confirmation_message">Notify your followers about this addition?</string>
     <string name="event_notification_confirmation_yes">Notify</string>
     <string name="event_notification_confirmation_no">No, thanks</string>
+    <string name="profile_watching_label">Watching</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

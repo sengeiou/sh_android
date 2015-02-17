@@ -4,7 +4,6 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="@color/white"
-  android:paddingBottom="16dp"
   tools:showIn="@layout/fragment_profile">
 
     <FrameLayout
@@ -23,21 +22,22 @@
         <ProgressBar
           android:id="@+id/profile_avatar_loading"
           android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:indeterminate="true"
           android:visibility="gone"
-          tools:visibility="gone"
-          android:layout_height="wrap_content" />
+          tools:visibility="gone" />
     </FrameLayout>
 
     <LinearLayout
       android:id="@+id/profile_scores_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginRight="16dp"
       android:layout_below="@+id/profile_bio"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="16dp"
       android:orientation="horizontal">
 
             <TextView
@@ -45,10 +45,10 @@
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:paddingRight="4dp"
-              android:paddingLeft="8dp"
               android:background="?android:selectableItemBackground"
               android:clickable="true"
+              android:paddingLeft="8dp"
+              android:paddingRight="4dp"
               android:text="-"
               tools:text="749" />
 
@@ -74,10 +74,10 @@
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:paddingLeft="8dp"
-              android:paddingRight="4dp"
               android:background="?android:selectableItemBackground"
               android:clickable="true"
+              android:paddingLeft="8dp"
+              android:paddingRight="4dp"
               android:text="-"
               tools:text="23" />
 
@@ -90,38 +90,93 @@
               android:text="@string/profile_marks_followers" />
     </LinearLayout>
 
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_below="@+id/profile_scores_bar"
+      android:background="?dividerHorizontal" />
+
+    <LinearLayout
+      android:id="@+id/profile_watching_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/profile_scores_bar"
+      android:background="?selectableItemBackground"
+      android:clickable="true"
+      android:orientation="horizontal"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:visibility="gone"
+      tools:visibility="visible"
+      android:paddingTop="8dp">
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center_vertical"
+          android:src="@drawable/ic_watching_24" />
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="@dimen/keyline_2_minus_icon"
+          android:gravity="center_vertical"
+          android:orientation="vertical">
+
+            <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:text="@string/profile_watching_label"
+              android:textAppearance="@style/TextAppearance.FloatLabel" />
+
+            <TextView
+              android:id="@+id/profile_watching_title"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:textSize="16sp"
+              tools:text="Barbacoa en casa de tu tía"
+              android:textColor="@color/gray_30" />
+        </LinearLayout>
+
+    </LinearLayout>
+
     <!-- Follow buttons -->
     <com.shootr.android.ui.widgets.FollowButton
       android:id="@+id/profile_follow_button"
       android:layout_width="match_parent"
-      android:layout_marginRight="16dp"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/profile_website"
-      android:layout_marginTop="16dp"
       android:layout_alignLeft="@+id/profile_name"
+      android:layout_below="@+id/profile_website"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="16dp"
       android:clickable="true" />
 
     <TextView
       android:id="@+id/profile_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_toRightOf="@+id/profile_avatar_container"
       android:layout_marginTop="16dp"
-      android:textSize="21sp"
-      android:maxLines="1"
+      android:layout_toRightOf="@+id/profile_avatar_container"
       android:ellipsize="end"
-      android:textStyle="bold"
+      android:maxLines="1"
       android:textColor="@color/material_black"
+      android:textSize="21sp"
+      android:textStyle="bold"
       tools:text="Ignasi de Borbón y todos los Santos" />
 
     <TextView
       android:id="@+id/profile_team"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/profile_name"
       android:layout_alignLeft="@+id/profile_name"
-      android:maxLines="1"
+      android:layout_below="@+id/profile_name"
       android:ellipsize="end"
+      android:maxLines="1"
       android:textColor="@color/gray_40"
       tools:text="Sevilla FC" />
 
@@ -130,8 +185,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_below="@+id/profile_avatar_container"
-      android:layout_marginRight="16dp"
       android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
       android:textColor="@color/gray_40"
       tools:text="Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really." />
 
@@ -143,8 +198,8 @@
       android:layout_below="@+id/profile_team"
       android:background="?android:selectableItemBackground"
       android:clickable="true"
-      android:maxLines="1"
       android:ellipsize="end"
+      android:maxLines="1"
       android:textColor="@color/links"
       tools:text="sevibus.sloydev.com" />
 
