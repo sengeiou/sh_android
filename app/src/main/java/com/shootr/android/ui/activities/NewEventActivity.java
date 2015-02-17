@@ -255,13 +255,13 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
 
     @Override public void showNotificationConfirmation() {
         new AlertDialog.Builder(this)
-          .setMessage("Notify your followers about this addition?")
-          .setPositiveButton("Notify", new DialogInterface.OnClickListener() {
+          .setMessage(getString(R.string.event_notification_confirmation_message))
+          .setPositiveButton(getString(R.string.event_notification_confirmation_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmNotify(true);
               }
           })
-          .setNegativeButton("No, thanks", new DialogInterface.OnClickListener() {
+          .setNegativeButton(getString(R.string.event_notification_confirmation_no), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmNotify(false);
               }

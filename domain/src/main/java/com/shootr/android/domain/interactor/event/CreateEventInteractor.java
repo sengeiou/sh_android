@@ -11,7 +11,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.TimezoneRepository;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.Date;
@@ -23,7 +22,6 @@ public class CreateEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final TimezoneRepository timezoneRepository;
     private final EventRepository remoteEventRepository;
 
     private Long idEvent;
@@ -36,12 +34,10 @@ public class CreateEventInteractor implements Interactor {
     private InteractorErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, TimezoneRepository timezoneRepository,
-      @Remote EventRepository remoteEventRepository) {
+      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.timezoneRepository = timezoneRepository;
         this.remoteEventRepository = remoteEventRepository;
     }
 

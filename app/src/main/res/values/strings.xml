@@ -173,6 +173,9 @@
     <string name="new_event_timezone_label">Time zone</string>
     <string name="new_event_ends_label">Ends before</string>
     <string name="event_subtitle_nothing">Nothing</string>
+    <string name="event_notification_confirmation_message">Notify your followers about this addition?</string>
+    <string name="event_notification_confirmation_yes">Notify</string>
+    <string name="event_notification_confirmation_no">No, thanks</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
