@@ -12,6 +12,8 @@ import android.graphics.drawable.Drawable;
 
 public class BadgeDrawable extends Drawable {
 
+    public static final float STROKE_WIDTH = 6f;
+
     private float mTextSize;
     private Paint mBadgePaint;
     private Paint mBadgePaintBorder;
@@ -33,7 +35,7 @@ public class BadgeDrawable extends Drawable {
         mBadgePaintBorder.setColor(context.getResources().getColor(R.color.primary));
         mBadgePaintBorder.setStyle(Paint.Style.STROKE);
         mBadgePaintBorder.setAntiAlias(true);
-        mBadgePaintBorder.setStrokeWidth(3f);
+        mBadgePaintBorder.setStrokeWidth(STROKE_WIDTH);
 
         mTextPaint = new Paint();
         mTextPaint.setColor(context.getResources().getColor(R.color.primary));

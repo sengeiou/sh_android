@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
       android:id="@+id/ic_event"
-      android:drawable="@drawable/ic_action_event"
+      android:drawable="@drawable/ic_action_watching_white"
       android:top="2dp"
       android:right="2dp"
       />
