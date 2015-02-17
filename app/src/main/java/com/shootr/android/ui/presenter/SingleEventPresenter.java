@@ -191,6 +191,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
+    public void clickAuthor() {
+        singleEventView.navigateToUser(eventModel.getAuthorId());
+    }
+
     @Subscribe
     public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         this.getEventInfo();

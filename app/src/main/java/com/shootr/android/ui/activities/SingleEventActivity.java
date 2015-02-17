@@ -175,6 +175,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         navigateToSelectEvent();
     }
 
+    @OnClick(R.id.event_author)
+    public void onAuthorClick() {
+        presenter.clickAuthor();
+    }
+
     //region Edit photo
     @OnClick(R.id.event_photo_container)
     public void onPhotoClick() {
@@ -463,6 +468,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override public void navigateToEditEvent(Long idEvent) {
         Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(EventsListActivity.KEY_EVENT_ID, idEvent);
         startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
+    }
+
+    @Override public void navigateToUser(Long userId) {
+        Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
+        startActivity(userProfileIntent);
     }
 
     @Override public void showContent() {

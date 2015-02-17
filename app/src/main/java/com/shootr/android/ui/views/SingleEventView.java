@@ -35,6 +35,8 @@ public interface SingleEventView extends LoadDataView {
 
     void navigateToEditEvent(Long idEvent);
 
+    void navigateToUser(Long userId);
+
     void showContent();
 
     void hideContent();
