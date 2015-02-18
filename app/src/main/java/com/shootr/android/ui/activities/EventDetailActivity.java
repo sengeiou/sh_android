@@ -405,6 +405,24 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         }
     }
 
+    @Override public void showViewOrEditPhoto() {
+        new BottomSheet.Builder(this).title("Event photo")
+          .sheet(R.menu.event_photo_open_or_edit)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_open:
+                          presenter.zoomPhoto();
+                          break;
+                      case R.id.menu_photo_edit:
+                          presenter.editPhoto();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
     @Override public void showPhotoPicker() {
         new BottomSheet.Builder(this).title(R.string.change_photo)
           .sheet(R.menu.profile_photo_bottom_sheet)
