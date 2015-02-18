@@ -153,8 +153,8 @@
     <string name="menu_notifications">Notifications</string>
     <string name="single_event_empty">Load an event to see who\'s Watching</string>
     <string name="event_title_default">Select Event</string>
-    <string name="menu_events">Events</string>
-    <string name="activity_event_list_title">Events</string>
+    <string name="menu_events">Watching…</string>
+    <string name="activity_event_list_title">Watching…</string>
     <string name="menu_search_events">Search</string>
     <string name="events_list_empty">No results.</string>
     <string name="add_photo">Add Photo</string>
@@ -172,6 +172,7 @@
     <string name="new_event_starts_label">Starts</string>
     <string name="new_event_timezone_label">Time zone</string>
     <string name="new_event_ends_label">Ends before</string>
+    <string name="event_subtitle_nothing">Not watching</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

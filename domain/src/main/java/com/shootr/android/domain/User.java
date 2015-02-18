@@ -15,6 +15,9 @@ public class User {
     private String bio;
     private Long points;
 
+    private Long eventWatchingId;
+    private String eventWatchingTitle;
+
     private boolean isFollowing;
     private boolean isFollower;
     private boolean isMe;
@@ -154,5 +157,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getEventWatchingId() {
+        return eventWatchingId;
+    }
+
+    public void setEventWatchingId(Long eventWatchingId) {
+        this.eventWatchingId = eventWatchingId;
+    }
+
+    public String getEventWatchingTitle() {
+        return eventWatchingTitle;
+    }
+
+    public void setEventWatchingTitle(String eventWatchingTitle) {
+        this.eventWatchingTitle = eventWatchingTitle;
     }
 }

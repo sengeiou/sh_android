@@ -65,10 +65,12 @@ public class DatabaseContract {
         public static final String NAME_NORMALIZED = "nameNormalized";
         public static final String USER_NAME_NORMALIZED = "userNameNormalized";
         public static final String EMAIL_NORMALIZED = "emailNormalized";
+        public static final String EVENT_ID = "idEvent";
+        public static final String EVENT_TITLE = "eventTitle";
 
         public static final String[] PROJECTION = {
           ID, FAVORITE_TEAM_ID, FAVORITE_TEAM_NAME, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }

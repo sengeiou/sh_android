@@ -66,11 +66,12 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.title.setText(item.getUsername());
-        String teamName = item.getFavoriteTeamName();
-        if (teamName != null) {
-            viewHolder.subtitle.setText(teamName);
+
+        if (showSubtitle(item)) {
+            viewHolder.subtitle.setText(getSubtitle(item));
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.subtitle.setText(R.string.profile_team_name_private);
+            viewHolder.subtitle.setVisibility(View.GONE);
         }
 
         String photo = item.getPhoto();
@@ -101,6 +102,14 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
          }
+    }
+
+    protected boolean showSubtitle(UserModel item) {
+        return false;
+    }
+
+    protected String getSubtitle(UserModel item) {
+        return "";
     }
 
     public void setCallback(FollowUnfollowAdapterCallback callback){

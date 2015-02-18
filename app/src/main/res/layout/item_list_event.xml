@@ -32,12 +32,13 @@
               android:id="@+id/event_title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:drawablePadding="8dp"
               android:ellipsize="end"
-
               android:maxLines="2"
               android:paddingRight="16dp"
               android:textColor="@color/gray_10"
               android:textSize="16sp"
+              tools:drawableRight="@drawable/ic_notifications_on_16_primary"
               tools:text="Titulo Dos líneas" />
 
             <TextView

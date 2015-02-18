@@ -2,6 +2,7 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.data.entity.UserEntity;
 import java.text.Normalizer;
@@ -16,7 +17,7 @@ public class UserMapper extends GenericMapper {
     }
 
     public UserEntity fromCursor(Cursor c) {
-        UserEntity user = getUserByCursor(c);
+        UserEntity user = userEntityWithCommonFieldsFromCursor(c);
         // Fields that might not come from server for all users
         int sessionTokenIndex = c.getColumnIndex(UserTable.SESSION_TOKEN);
         if (sessionTokenIndex >= 0) {
@@ -55,6 +56,8 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
         cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
         cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
+        cv.put(UserTable.EVENT_ID, u.getIdEvent());
+        cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
         setSynchronizedtoContentValues(u, cv);
         return cv;
     }
@@ -62,19 +65,32 @@ public class UserMapper extends GenericMapper {
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
-        user.setFavoriteTeamId(dto.containsKey(UserTable.FAVORITE_TEAM_ID) && dto.get(UserTable.FAVORITE_TEAM_ID)!=null ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue(): null);
-        user.setFavoriteTeamName(dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
-        user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
+        user.setFavoriteTeamId(
+          dto.containsKey(UserTable.FAVORITE_TEAM_ID) && dto.get(UserTable.FAVORITE_TEAM_ID) != null
+            ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue() : null);
+        user.setFavoriteTeamName(
+          dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
+        user.setSessionToken(
+          dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName(dto.containsKey(UserTable.USER_NAME) ? ((String) dto.get(UserTable.USER_NAME)) : null);
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
         user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
-        user.setNumFollowers(dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
-        user.setNumFollowings(dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
+        user.setNumFollowers(
+          dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
+        user.setNumFollowings(
+          dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
         user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
         user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? ((String) dto.get(UserTable.WEBSITE)) : null);
         user.setBio(dto.containsKey(UserTable.BIO) ? ((String) dto.get(UserTable.BIO)) : null);
         user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
+
+        Number eventId = (Number) dto.get(UserTable.EVENT_ID);
+        if (eventId != null) {
+            user.setIdEvent(eventId.longValue());
+        }
+
+        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? ((String) dto.get(UserTable.EVENT_TITLE)) : null);
         setSynchronizedfromDto(dto,user);
         return user;
     }
@@ -82,7 +98,7 @@ public class UserMapper extends GenericMapper {
     //TODO bad smell: nombre de método ofuscado
     public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
-        return getDto(dto,user);
+        return fillDtoWithCommonFields(dto, user);
     }
 
 
@@ -90,11 +106,11 @@ public class UserMapper extends GenericMapper {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
         dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
-        dto = getDto(dto,user);
+        dto = fillDtoWithCommonFields(dto, user);
         return dto;
     }
 
-    public Map<String,Object> getDto(Map<String,Object> dto, UserEntity user){
+    public Map<String,Object> fillDtoWithCommonFields(Map<String, Object> dto, UserEntity user){
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
         dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
@@ -107,14 +123,16 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.BIO, user == null ? null : user.getBio());
         dto.put(UserTable.RANK, user == null ? null : user.getRank());
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        setSynchronizedtoDto(user,dto);
+        dto.put(UserTable.EVENT_ID, user == null ? null : user.getIdEvent());
+        dto.put(UserTable.EVENT_TITLE, user == null ? null : user.getEventTitle());
+        setSynchronizedtoDto(user, dto);
         return dto;
     }
 
 
 
 
-    public UserEntity getUserByCursor(Cursor c){
+    public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
         UserEntity user = new UserEntity();
         user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
         user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
@@ -128,6 +146,8 @@ public class UserMapper extends GenericMapper {
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
+        user.setIdEvent(c.getLong(c.getColumnIndex(UserTable.EVENT_ID)));
+        user.setEventTitle(c.getString(c.getColumnIndex(UserTable.EVENT_TITLE)));
         return user;
     }
 
