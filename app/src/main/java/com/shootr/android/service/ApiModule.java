@@ -3,6 +3,8 @@ package com.shootr.android.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
+import com.sloydev.jsonadapters.JsonAdapter;
+import com.sloydev.jsonadapters.jackson.JacksonAdapter;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.service.dataservice.ShootrDataService;
@@ -34,6 +36,10 @@ public final class ApiModule {
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {
         return new ObjectMapper();
+    }
+
+    @Provides @Singleton JsonAdapter provideJsonAdapter(ObjectMapper objectMapper) {
+        return new JacksonAdapter(objectMapper);
     }
 
     @Provides @Singleton Endpoint provideEndpoint() {
