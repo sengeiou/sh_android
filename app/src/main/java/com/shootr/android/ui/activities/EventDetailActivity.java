@@ -190,21 +190,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     //region Edit photo
     @OnClick(R.id.event_photo_container)
     public void onPhotoClick() {
-        new BottomSheet.Builder(this).title(R.string.change_photo)
-          .sheet(R.menu.profile_photo_bottom_sheet)
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          takePhotoFromCamera();
-                          break;
-                  }
-              }
-          })
-          .show();
+        presenter.photoClick();
     }
 
     private void choosePhotoFromGallery() {
@@ -419,6 +405,24 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         }
     }
 
+    @Override public void showPhotoPicker() {
+        new BottomSheet.Builder(this).title(R.string.change_photo)
+          .sheet(R.menu.profile_photo_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
     @Override public void showEditPicture(String picture) {
         hasPicture = true;
         if (picture == null) {
@@ -428,15 +432,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
             photoEditIndicator.setVisibility(View.GONE);
         }
         recomputePhotoAndScrollingMetrics();
-        photoContainer.setClickable(true);
-        photoContainer.setFocusable(true);
     }
 
     @Override public void hideEditPicture() {
         photoEditIndicator.setVisibility(View.GONE);
         recomputePhotoAndScrollingMetrics();
-        photoContainer.setClickable(false);
-        photoContainer.setFocusable(false);
     }
 
     @Override public void showLoadingPictureUpload() {
@@ -446,6 +446,13 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override public void hideLoadingPictureUpload() {
         photoLoadingIndicator.setVisibility(View.GONE);
+    }
+
+    @Override public void zoomPhoto(String picture) {
+        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(photoContainer, photoContainer.getLeft(), 0,
+          photoContainer.getWidth(), photoContainer.getBottom()).toBundle();
+        Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
+        ActivityCompat.startActivity(this, photoIntent, animationBundle);
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {

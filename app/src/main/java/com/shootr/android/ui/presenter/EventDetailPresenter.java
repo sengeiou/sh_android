@@ -120,6 +120,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //endregion
 
+    private void editPhoto() {
+        eventDetailView.showPhotoPicker();
+    }
+
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
         changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
@@ -136,6 +140,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
                   showImageUploadError();
               }
           });
+    }
+
+    private void zoomPhoto() {
+        eventDetailView.zoomPhoto(eventModel.getPicture());
     }
 
     //region Events count
@@ -196,6 +204,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void clickAuthor() {
         eventDetailView.navigateToUser(eventModel.getAuthorId());
+    }
+
+    public void photoClick() {
+        if (eventModel.amIAuthor()) {
+            this.editPhoto();
+        } else {
+            this.zoomPhoto();
+        }
     }
 
     @Subscribe

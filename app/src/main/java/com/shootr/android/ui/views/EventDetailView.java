@@ -15,6 +15,8 @@ public interface EventDetailView extends LoadDataView {
 
     void setEventPicture(String picture);
 
+    void showPhotoPicker();
+
     void showEditPicture(String picture);
 
     void hideEditPicture();
@@ -22,6 +24,8 @@ public interface EventDetailView extends LoadDataView {
     void showLoadingPictureUpload();
 
     void hideLoadingPictureUpload();
+
+    void zoomPhoto(String picture);
 
     void setWatchers(List<UserWatchingModel> watchers);
 
