@@ -33,6 +33,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -482,6 +483,11 @@ public class ProfileFragment extends BaseFragment {
         }
         linkIntent.setData(Uri.parse(url));
         startActivity(linkIntent);
+    }
+
+    @OnClick(R.id.profile_watching_container)
+    public void onWatchingClick() {
+        startActivity(EventDetailActivity.getIntent(getActivity(), user.getEventWatchingId()));
     }
 
     public void followUser() {

@@ -19,7 +19,7 @@ import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
-import com.shootr.android.ui.views.SingleEventView;
+import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -27,7 +27,7 @@ import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SingleEventPresenter implements Presenter, CommunicationPresenter {
+public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
     private final Bus bus;
@@ -41,15 +41,17 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final UserWatchingModelMapper userWatchingModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private SingleEventView singleEventView;
+    private EventDetailView eventDetailView;
+    private long idEvent;
 
     private UserWatchingModel currentUserWatchingModel;
     private EventModel eventModel;
 
-    @Inject public SingleEventPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
+    @Inject public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       WatchingInteractor watchingStatusInteractor, EventsWatchedCountInteractor eventsWatchedCountInteractor,
       SelectEventInteractor selectEventInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingStatusInteractor = watchingStatusInteractor;
@@ -62,15 +64,16 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    public void initialize(SingleEventView singleEventView) {
-        this.singleEventView = singleEventView;
+    public void initialize(EventDetailView eventDetailView, long idEvent) {
+        this.eventDetailView = eventDetailView;
+        this.idEvent = idEvent;
         this.loadEventInfo();
         this.loadEventsCount();
     }
 
     //region Edit status
     public void editStatus() {
-        singleEventView.navigateToEditStatus(eventModel, currentUserWatchingModel);
+        eventDetailView.navigateToEditStatus(eventModel, currentUserWatchingModel);
     }
 
     public void resultFromEditStatus(@Nullable String statusText) {
@@ -106,7 +109,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     //region Edit event
     public void editEvent() {
         Long idEvent = eventModel.getIdEvent();
-        singleEventView.navigateToEditEvent(idEvent);
+        eventDetailView.navigateToEditEvent(idEvent);
     }
 
     public void resultFromEditEvent(Long idEventEdited) {
@@ -118,18 +121,18 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     public void photoSelected(File photoFile) {
-        singleEventView.showLoadingPictureUpload();
+        eventDetailView.showLoadingPictureUpload();
         changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
           new ChangeEventPhotoInteractor.Callback() {
               @Override public void onLoaded(Event event) {
                   renderEventInfo(event);
-                  singleEventView.hideLoadingPictureUpload();
-                  singleEventView.showEditPicture(event.getPicture());
+                  eventDetailView.hideLoadingPictureUpload();
+                  eventDetailView.showEditPicture(event.getPicture());
               }
           }, new Interactor.InteractorErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  singleEventView.showEditPicture(eventModel.getPicture());
-                  singleEventView.hideLoadingPictureUpload();
+                  eventDetailView.showEditPicture(eventModel.getPicture());
+                  eventDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
               }
           });
@@ -164,7 +167,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void getEventInfo() {
-        eventInfoInteractor.obtainEventInfo(new VisibleEventInfoInteractor.Callback() {
+        eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
             @Override public void onLoaded(EventInfo eventInfo) {
                 onEventInfoLoaded(eventInfo);
             }
@@ -186,13 +189,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void showViewDetail() {
-        singleEventView.showContent();
-        singleEventView.showDetail();
+        eventDetailView.showContent();
+        eventDetailView.showDetail();
     }
     //endregion
 
     public void clickAuthor() {
-        singleEventView.navigateToUser(eventModel.getAuthorId());
+        eventDetailView.navigateToUser(eventModel.getAuthorId());
     }
 
     @Subscribe
@@ -204,55 +207,57 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     //region renders
     private void renderWatchersList(List<Watch> watchers) {
         List<UserWatchingModel> watcherModels = userWatchingModelMapper.transform(watchers);
-        singleEventView.setWatchers(watcherModels);
+        eventDetailView.setWatchers(watcherModels);
     }
 
     private void renderCurrentUserWatching(Watch currentUserWatch) {
-        currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
-        singleEventView.setCurrentUserWatching(currentUserWatchingModel);
+        if (currentUserWatch != null && currentUserWatch.isVisible()) {
+            currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
+            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+        }
     }
 
     private void renderEventInfo(Event event) {
         eventModel = eventModelMapper.transform(event);
-        singleEventView.setEventTitle(eventModel.getTitle());
-        singleEventView.setEventDate(eventModel.getDatetime());
-        singleEventView.setEventPicture(eventModel.getPicture());
-        singleEventView.setEventAuthor(eventModel.getAuthorUsername());
+        eventDetailView.setEventTitle(eventModel.getTitle());
+        eventDetailView.setEventDate(eventModel.getDatetime());
+        eventDetailView.setEventPicture(eventModel.getPicture());
+        eventDetailView.setEventAuthor(eventModel.getAuthorUsername());
         if (eventModel.amIAuthor()) {
-            singleEventView.showEditEventButton();
-            singleEventView.showEditPicture(eventModel.getPicture());
+            eventDetailView.showEditEventButton();
+            eventDetailView.showEditPicture(eventModel.getPicture());
         } else {
-            singleEventView.hideEditEventButton();
-            singleEventView.hideEditPicture();
+            eventDetailView.hideEditEventButton();
+            eventDetailView.hideEditPicture();
         }
     }
 
     private void renderWatchersCount(int watchersCount) {
-        singleEventView.setWatchersCount(watchersCount);
+        eventDetailView.setWatchersCount(watchersCount);
     }
 
     private void renderEventsCount(int eventsCount) {
-        singleEventView.setEventsCount(eventsCount);
+        eventDetailView.setEventsCount(eventsCount);
     }
     //endregion
 
     //region View methods
     private void showViewLoading() {
-        singleEventView.hideContent();
-        singleEventView.showLoading();
+        eventDetailView.hideContent();
+        eventDetailView.showLoading();
     }
 
     private void hideViewLoading() {
-        singleEventView.hideLoading();
+        eventDetailView.hideLoading();
     }
 
     private void showViewEmpty() {
-        singleEventView.showContent();
-        singleEventView.showEmpty();
+        eventDetailView.showContent();
+        eventDetailView.showEmpty();
     }
 
     private void hideViewEmpty() {
-        singleEventView.hideEmpty();
+        eventDetailView.hideEmpty();
     }
     //endregion
 
@@ -266,16 +271,16 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        singleEventView.showError(communicationErrorMessage);
+        eventDetailView.showError(communicationErrorMessage);
     }
 
     @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
-        singleEventView.showError(connectionNotAvailableMessage);
+        eventDetailView.showError(connectionNotAvailableMessage);
     }
 
     private void showImageUploadError() {
-        singleEventView.showError(errorMessageFactory.getImageUploadErrorMessage());
+        eventDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
     }
 
     @Override public void resume() {
