@@ -65,8 +65,6 @@ public class VisibleEventInfoInteractor implements Interactor {
         EventInfo eventInfo = getEventInfo(localWatchRepository, localEventRepository);
         if (eventInfo != null) {
             notifyLoaded(eventInfo);
-        } else {
-            notifyLoaded(noEvent());
         }
     }
 
@@ -82,15 +80,18 @@ public class VisibleEventInfoInteractor implements Interactor {
     protected EventInfo getEventInfo(WatchRepository watchRepository, EventRepository eventRepository) {
         Watch currentVisibleWatch = getEventWatch(watchRepository);
 
-        Event visibleEvent = eventRepository.getEventById(idEvent);
-        if (visibleEvent == null) {
-            return null;
+        if (idEvent > 0) {
+            Event visibleEvent = eventRepository.getEventById(idEvent);
+            if (visibleEvent == null) {
+                return null;
+            }
+
+            List<User> people = localUserRepository.getPeople();
+            List<Watch> watchesFromPeople = watchRepository.getWatchesForUsersAndEvent(people, visibleEvent.getId());
+
+            return buildEventInfo(visibleEvent, currentVisibleWatch, watchesFromPeople);
         }
-
-        List<User> people = localUserRepository.getPeople();
-        List<Watch> watchesFromPeople = watchRepository.getWatchesForUsersAndEvent(people, visibleEvent.getId());
-
-        return buildEventInfo(visibleEvent, currentVisibleWatch, watchesFromPeople);
+        return null;
     }
 
     private Watch getEventWatch(WatchRepository watchRepository) {
