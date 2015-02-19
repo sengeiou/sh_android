@@ -57,6 +57,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         } else {
             holder.watchers.setVisibility(View.GONE);
         }
+        holder.author.setText(event.getEventModel().getAuthorUsername());
+
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(holder.picture);
@@ -97,6 +99,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
         @InjectView(R.id.event_picture) ImageView picture;
         @InjectView(R.id.event_title) TextView title;
+        @InjectView(R.id.event_author) TextView author;
         @InjectView(R.id.event_date) TextView date;
         @InjectView(R.id.event_watchers) TextView watchers;
 

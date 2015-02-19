@@ -105,6 +105,7 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_EVENT = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventTable.TABLE+" ("
             + DatabaseContract.EventTable.ID_EVENT +" INT NOT NULL PRIMARY KEY,"
             + DatabaseContract.EventTable.ID_USER +" INT NOT NULL,"
+            + DatabaseContract.EventTable.USERNAME +" TEXT NOT NULL,"
             + DatabaseContract.EventTable.BEGIN_DATE + " DATETIME NOT NULL,"
             + DatabaseContract.EventTable.END_DATE + " DATETIME NOT NULL,"
             + DatabaseContract.EventTable.ID_LOCAL_TEAM+" INT NULL,"

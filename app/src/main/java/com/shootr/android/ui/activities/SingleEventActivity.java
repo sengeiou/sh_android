@@ -69,6 +69,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
     @InjectView(R.id.event_title) TextView titleText;
     @InjectView(R.id.event_date) TextView dateText;
+    @InjectView(R.id.event_author) TextView authorText;
 
     @InjectView(R.id.event_content_container) View contentContainer;
     @InjectView(R.id.event_content_empty) View contentEmpty;
@@ -172,6 +173,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     public void onTitleClick() {
         //TODO extract logic
         navigateToSelectEvent();
+    }
+
+    @OnClick(R.id.event_author)
+    public void onAuthorClick() {
+        presenter.clickAuthor();
     }
 
     //region Edit photo
@@ -383,6 +389,10 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         }
     }
 
+    @Override public void setEventAuthor(String author) {
+        authorText.setText(author);
+    }
+
     @Override public void setEventPicture(String picture) {
         if (picture != null) {
             hasPicture = true;
@@ -458,6 +468,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @Override public void navigateToEditEvent(Long idEvent) {
         Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(EventsListActivity.KEY_EVENT_ID, idEvent);
         startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
+    }
+
+    @Override public void navigateToUser(Long userId) {
+        Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
+        startActivity(userProfileIntent);
     }
 
     @Override public void showContent() {

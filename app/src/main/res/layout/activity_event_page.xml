@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- info -->
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -90,6 +90,36 @@
                       android:orientation="vertical"
                       android:visibility="invisible"
                       tools:visibility="visible">
+
+                        <FrameLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+                            <ImageView
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_gravity="center_vertical"
+                              android:layout_marginLeft="16dp"
+                              android:src="@drawable/ic_event_author_24_gray50" />
+
+                            <TextView
+                              android:id="@+id/event_author"
+                              android:layout_width="match_parent"
+                              android:layout_height="56dp"
+                              android:paddingLeft="@dimen/keyline_2"
+                              android:background="?selectableItemBackground"
+                              android:clickable="true"
+                              android:textAppearance="@style/TextAppearance.Switch"
+                              android:textColor="?android:attr/textColorPrimary"
+                              android:gravity="center_vertical"
+                              tools:text="rafa" />
+
+                            <View
+                              android:layout_width="match_parent"
+                              android:layout_height="1dp"
+                              android:layout_gravity="bottom"
+                              android:background="?dividerHorizontal" />
+                        </FrameLayout>
 
                         <!-- watchers -->
                         <TextView

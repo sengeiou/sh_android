@@ -1,5 +1,7 @@
 package com.shootr.android.ui.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -249,6 +251,22 @@ public class NewEventActivity extends BaseActivity implements NewEventView {
         Intent intent = new Intent(this, TimezonePickerActivity.class);
         intent.putExtra(TimezonePickerActivity.KEY_TIMEZONE, currentTimezoneID);
         startActivityForResult(intent, REQUEST_PICK_TIMEZONE);
+    }
+
+    @Override public void showNotificationConfirmation() {
+        new AlertDialog.Builder(this)
+          .setMessage(getString(R.string.event_notification_confirmation_message))
+          .setPositiveButton(getString(R.string.event_notification_confirmation_yes), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmNotify(true);
+              }
+          })
+          .setNegativeButton(getString(R.string.event_notification_confirmation_no), new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmNotify(false);
+              }
+          })
+          .create().show();
     }
 
     @Override public void showLoading() {

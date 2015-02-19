@@ -191,6 +191,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
+    public void clickAuthor() {
+        singleEventView.navigateToUser(eventModel.getAuthorId());
+    }
+
     @Subscribe
     public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         this.getEventInfo();
@@ -213,6 +217,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
         singleEventView.setEventPicture(eventModel.getPicture());
+        singleEventView.setEventAuthor(eventModel.getAuthorUsername());
         if (eventModel.amIAuthor()) {
             singleEventView.showEditEventButton();
             singleEventView.showEditPicture(eventModel.getPicture());

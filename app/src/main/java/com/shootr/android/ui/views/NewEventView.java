@@ -31,4 +31,6 @@ public interface NewEventView extends DataTransferView{
     void hideKeyboard();
 
     void navigateToPickTimezone(String currentTimezoneID);
+
+    void showNotificationConfirmation();
 }

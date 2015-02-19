@@ -11,7 +11,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.TimezoneRepository;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.Date;
@@ -23,7 +22,6 @@ public class CreateEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final TimezoneRepository timezoneRepository;
     private final EventRepository remoteEventRepository;
 
     private Long idEvent;
@@ -31,26 +29,26 @@ public class CreateEventInteractor implements Interactor {
     private long startDate;
     private long endDate;
     private String timezoneId;
+    private boolean notifyCreation;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, TimezoneRepository timezoneRepository,
-      @Remote EventRepository remoteEventRepository) {
+      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.timezoneRepository = timezoneRepository;
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId, Callback callback,
-      InteractorErrorCallback errorCallback) {
+    public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId,
+      boolean notifyCreation, Callback callback, InteractorErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.timezoneId = timezoneId;
+        this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -61,7 +59,7 @@ public class CreateEventInteractor implements Interactor {
 
         if (validateEvent(event)) {
             try {
-                Event savedEvent = sendEventToServer(event);
+                Event savedEvent = sendEventToServer(event, notifyCreation);
                 notifyLoaded(savedEvent);
             } catch (ShootrException e) {
                 handleServerError(e);
@@ -74,6 +72,7 @@ public class CreateEventInteractor implements Interactor {
         event.setId(idEvent);
         event.setTitle(title);
         event.setAuthorId(sessionRepository.getCurrentUserId());
+        event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));
         event.setEndDate(new Date(endDate));
         event.setTimezone(timezoneId);
@@ -112,8 +111,8 @@ public class CreateEventInteractor implements Interactor {
         }
     }
 
-    private Event sendEventToServer(Event event) {
-        return remoteEventRepository.putEvent(event);
+    private Event sendEventToServer(Event event, boolean notify) {
+        return remoteEventRepository.putEvent(event, notify);
     }
 
     //region Validation
