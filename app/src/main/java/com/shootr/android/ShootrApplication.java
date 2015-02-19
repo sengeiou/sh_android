@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.Stetho;
 import dagger.ObjectGraph;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.entity.UserEntity;
@@ -25,6 +26,11 @@ public class ShootrApplication extends Application {
         if(!BuildConfig.DEBUG) {
             Crashlytics.start(this);
         }
+        Stetho.initialize(
+          Stetho.newInitializerBuilder(this)
+            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+            .build());
     }
 
     public void plantLoggerTrees() {

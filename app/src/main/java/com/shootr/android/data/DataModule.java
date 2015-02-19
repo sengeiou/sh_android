@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.v4.app.NotificationManagerCompat;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
@@ -279,15 +280,13 @@ public class DataModule {
         OkHttpClient client = new OkHttpClient();
 
         // Install an HTTP cache in the application cache directory.
-        try {
-            File cacheDir = new File(app.getCacheDir(), "http");
-            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-            client.setCache(cache);
-            client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        } catch (IOException e) {
-            Timber.e(e, "Unable to install disk cache.");
-        }
+        File cacheDir = new File(app.getCacheDir(), "http");
+        Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+        client.setCache(cache);
+
+        client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.networkInterceptors().add(new StethoInterceptor());
 
         return client;
     }
