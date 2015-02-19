@@ -36,8 +36,8 @@
       android:layout_below="@+id/profile_bio"
       android:layout_marginLeft="8dp"
       android:layout_marginRight="16dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="16dp"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="32dp"
       android:orientation="horizontal">
 
             <TextView
@@ -151,8 +151,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/profile_name"
-      android:layout_below="@+id/profile_website"
+      android:layout_alignBottom="@id/profile_avatar_container"
       android:layout_marginRight="16dp"
+      android:layout_marginBottom="16dp"
       android:layout_marginTop="16dp"
       android:clickable="true" />
 
@@ -177,6 +178,7 @@
       android:layout_below="@+id/profile_name"
       android:ellipsize="end"
       android:maxLines="1"
+      android:visibility="gone"
       android:textColor="@color/gray_40"
       tools:text="Sevilla FC" />
 
@@ -187,6 +189,7 @@
       android:layout_below="@+id/profile_avatar_container"
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
+      android:layout_marginTop="16dp"
       android:textColor="@color/gray_40"
       tools:text="Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really." />
 
