@@ -8,6 +8,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,19 +25,24 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
@@ -65,6 +72,7 @@ import timber.log.Timber;
 public class TimelineFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView {
 
+    private static final int REQUEST_SELECT_EVENT = 2;
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
     public static final int PLACEHOLDER_MAX_LENGHT = 25;
@@ -75,11 +83,13 @@ public class TimelineFragment extends BaseFragment
     @Inject JobManager jobManager;
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject VisibleEventInfoInteractor visibleEventInfoInteractor;
+    @Inject SelectEventInteractor selectEventInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_new_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.select_event_fab) FloatingActionButton selectEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
 
@@ -246,7 +256,11 @@ public class TimelineFragment extends BaseFragment
                 new ListViewScrollObserver.OnListViewScrollListener() {
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                        /* no-op */
+                        if (delta < -10) {
+                            selectEventFab.hide();
+                        } else if(delta > 10) {
+                            selectEventFab.show();
+                        }
                     }
 
                     @Override
@@ -306,12 +320,31 @@ public class TimelineFragment extends BaseFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_SHOT && resultCode == Activity.RESULT_OK) {
-                Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT);
-                startRefreshing(getActivity());
-            }
+            Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT).show();
+            startRefreshing(getActivity());
+        }else if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
+            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            selectEventInteractor.selectEvent(idEventSelected, new SelectEventInteractor.Callback() {
+                @Override public void onLoaded(Watch watch) {
+                    onEventChanged();
+                }
+            });
+        }
+    }
+
+    private void onEventChanged() {
+        this.loadEventPlaceholder();
+        watchNumberPresenter.initialize(this);
     }
 
     /* --- UI Events --- */
+
+    @OnClick(R.id.select_event_fab)
+    public void selectEvent() {
+        Intent intent = new Intent(getActivity(), EventsListActivity.class);
+        startActivityForResult(intent, REQUEST_SELECT_EVENT);
+    }
+
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {

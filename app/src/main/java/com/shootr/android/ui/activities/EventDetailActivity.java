@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -33,7 +32,6 @@ import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.views.EventDetailView;
-import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
@@ -48,7 +46,6 @@ import timber.log.Timber;
 public class EventDetailActivity extends BaseNoToolbarActivity
   implements EventDetailView, ObservableScrollView.Callbacks {
 
-    private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
     private static final int REQUEST_EDIT_EVENT = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 4;
@@ -84,8 +81,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
 
-    private BadgeDrawable eventsBadgeDrawable;
-    private int eventsCount;
     private boolean hasPicture;
     private int lastPictureHeightPixels;
     private int lastHeaderHeightPixels;
@@ -155,31 +150,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         actionBar.setDisplayShowTitleEnabled(false);
     }
 
-    private void updateEventsIconBadge() {
-        if (eventsBadgeDrawable != null) {
-            eventsBadgeDrawable.setCount(eventsCount);
-        } else {
-            invalidateOptionsMenu();
-        }
-    }
-
     private void updateEditIcon() {
         editMenuItem.setVisible(showEditButton);
-    }
-
-    private void setupEventsIcon(MenuItem eventsMenuItem) {
-        LayerDrawable icon = (LayerDrawable) eventsMenuItem.getIcon();
-        eventsBadgeDrawable = new BadgeDrawable(this);
-        icon.mutate();
-        icon.setDrawableByLayerId(R.id.ic_badge, eventsBadgeDrawable);
-
-        updateEventsIconBadge();
-    }
-
-    @OnClick(R.id.event_title_container)
-    public void onTitleClick() {
-        //TODO extract logic
-        navigateToSelectEvent();
     }
 
     @OnClick(R.id.event_author)
@@ -221,13 +193,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         return new File(getExternalFilesDir("tmp"), "eventUpload.jpg");
     }
     //endregion
-
-    private void navigateToSelectEvent() {
-        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(titleContainer, titleContainer.getLeft(), 0,
-          titleContainer.getWidth(), titleContainer.getBottom()).toBundle();
-        Intent intent = new Intent(this, EventsListActivity.class);
-        ActivityCompat.startActivityForResult(this, intent, REQUEST_SELECT_EVENT, animationBundle);
-    }
 
     private void navigateToUserProfile(Long idUser) {
         Intent intent = ProfileContainerActivity.getIntent(this, idUser);
@@ -316,19 +281,13 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
 
-        MenuItem eventsMenuItem = menu.findItem(R.id.menu_events);
-        setupEventsIcon(eventsMenuItem);
-
         editMenuItem = menu.findItem(R.id.menu_edit);
         updateEditIcon();
         return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_events) {
-            navigateToSelectEvent();
-            return true;
-        } else if (item.getItemId() == R.id.menu_edit) {
+        if (item.getItemId() == R.id.menu_edit) {
             presenter.editEvent();
             return true;
         } else {
@@ -341,9 +300,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
             String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
-        } else if (requestCode == REQUEST_SELECT_EVENT && resultCode == RESULT_OK) {
-            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
-            presenter.resultFromSelectEvent(idEventSelected);
         } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
             presenter.resultFromEditEvent(idEventEdited);
@@ -481,11 +437,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @Override public void setWatchersCount(int watchersCount) {
         watchersNumber.setText(
           getResources().getQuantityString(R.plurals.event_watching_watchers_number, watchersCount, watchersCount));
-    }
-
-    @Override public void setEventsCount(int eventsCount) {
-        this.eventsCount = eventsCount;
-        updateEventsIconBadge();
     }
 
     @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {

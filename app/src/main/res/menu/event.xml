@@ -7,10 +7,4 @@
       android:title="@string/edit_event"
       android:visible="false"
       app:showAsAction="ifRoom" />
-
-    <item
-      android:id="@+id/menu_events"
-      android:icon="@drawable/ic_action_event_badge"
-      android:title="@string/menu_events"
-      app:showAsAction="ifRoom" />
 </menu>

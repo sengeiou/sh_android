@@ -33,8 +33,6 @@ public interface EventDetailView extends LoadDataView {
 
     void setWatchersCount(int watchersCount);
 
-    void setEventsCount(int eventsCount);
-
     void setCurrentUserWatching(UserWatchingModel userWatchingModel);
 
     void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel);

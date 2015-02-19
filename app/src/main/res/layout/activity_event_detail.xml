@@ -143,11 +143,11 @@
                 </FrameLayout>
 
                 <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
-                <com.shootr.android.ui.widgets.ForegroundLinearLayout
+                <LinearLayout
                   android:id="@+id/event_title_container"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:background="@drawable/background_primary_selectable"
+                  android:background="@color/primary"
                   android:clickable="true"
                   android:orientation="vertical"
                   android:paddingBottom="16dp">
@@ -160,8 +160,6 @@
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="@dimen/keyline_2"
                       android:layout_marginRight="@dimen/keyline_1"
-                      android:drawablePadding="4dp"
-                      android:drawableRight="@drawable/spinner_material"
                       android:text="@string/event_title_default"
                       android:textColor="@color/white"
                       android:textSize="18sp"
@@ -179,7 +177,7 @@
                       android:visibility="invisible"
                       tools:text="MIÉ. 18:30"
                       tools:visibility="visible" />
-                </com.shootr.android.ui.widgets.ForegroundLinearLayout>
+                </LinearLayout>
             </FrameLayout>
 
         </com.shootr.android.ui.widgets.ObservableScrollView>

@@ -10,7 +10,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -33,8 +32,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingStatusInteractor;
-    private final EventsWatchedCountInteractor eventsWatchedCountInteractor;
-    private final SelectEventInteractor selectEventInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
 
     private final EventModelMapper eventModelMapper;
@@ -48,15 +45,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
 
     @Inject public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingStatusInteractor, EventsWatchedCountInteractor eventsWatchedCountInteractor,
-      SelectEventInteractor selectEventInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      WatchingInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
+      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingStatusInteractor = watchingStatusInteractor;
-        this.eventsWatchedCountInteractor = eventsWatchedCountInteractor;
-        this.selectEventInteractor = selectEventInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
@@ -68,7 +61,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.eventDetailView = eventDetailView;
         this.idEvent = idEvent;
         this.loadEventInfo();
-        this.loadEventsCount();
     }
 
     //region Edit status
@@ -78,23 +70,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void resultFromEditStatus(@Nullable String statusText) {
         updateWatchStatus(statusText);
-    }
-    //endregion
-
-    //region Select event
-    public void resultFromSelectEvent(Long idEventSelected) {
-        if (!isCurrentEventWatch(idEventSelected)) {
-            this.showViewLoading();
-            selectEventInteractor.selectEvent(idEventSelected, new SelectEventInteractor.Callback() {
-                @Override public void onLoaded(Watch watch) {
-                    onEventChanged();
-                }
-            });
-        }
-    }
-
-    private void onEventChanged() {
-        this.loadEventInfo();
     }
     //endregion
 
@@ -141,24 +116,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
               }
           });
     }
-
-    //region Events count
-    private void loadEventsCount() {
-        eventsWatchedCountInteractor.obtainEventsCount(new EventsWatchedCountInteractor.Callback() {
-            @Override public void onLoaded(Integer count) {
-                onEventsCountLoaded(count);
-            }
-        }, new Interactor.InteractorErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO handle error
-            }
-        });
-    }
-
-    public void onEventsCountLoaded(Integer count) {
-        renderEventsCount(count);
-    }
-    //endregion
 
     //region Event info
     public void refreshInfo() {
@@ -221,7 +178,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     @Subscribe
     public void onNewWatchDetected(WatchUpdateRequest.Event event) {
         this.getEventInfo();
-        this.loadEventsCount();
     }
 
     //region renders
@@ -255,10 +211,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private void renderWatchersCount(int watchersCount) {
         eventDetailView.setWatchersCount(watchersCount);
     }
-
-    private void renderEventsCount(int eventsCount) {
-        eventDetailView.setEventsCount(eventsCount);
-    }
     //endregion
 
     //region View methods
@@ -280,14 +232,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         eventDetailView.hideEmpty();
     }
     //endregion
-
-    private boolean isCurrentEventWatch(Long idEvent) {
-        if (eventModel == null) {
-            return false;
-        } else {
-            return idEvent.equals(eventModel.getIdEvent());
-        }
-    }
 
     @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
