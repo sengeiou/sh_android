@@ -29,6 +29,7 @@ public class NewEventPresenter implements Presenter {
 
     private static final int DEFAULT_END_DATETIME_ID = R.id.end_date_6_hours;
     public static final int MINIMUM_TITLE_LENGTH = 3;
+    private static final long SIX_HOURS_MILLIS = 6 * 60 * 60 * 1000;
 
     private final DateFormatter dateFormatter;
     private final TimeFormatter timeFormatter;
@@ -175,12 +176,23 @@ public class NewEventPresenter implements Presenter {
 
     public void done() {
         newEventView.hideKeyboard();
-        if (isNewEvent) {
+        if (isNewEvent && isInTimeRangeForNotification()) {
             this.askNotificationConfirmation();
         } else {
             newEventView.showLoading();
             this.editEvent(preloadedEventId);
         }
+    }
+
+    private boolean isInTimeRangeForNotification() {
+        long realStartDate = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
+        long currentDate = System.currentTimeMillis();
+        long sixHoursAgo = currentDate - SIX_HOURS_MILLIS;
+        long sixHoursAhead = currentDate + SIX_HOURS_MILLIS;
+        boolean startsBefore6Hours = realStartDate < sixHoursAhead;
+        boolean startedAfter6HoursAgo = realStartDate > sixHoursAgo;
+        return startsBefore6Hours &&  startedAfter6HoursAgo;
+
     }
 
     private void askNotificationConfirmation() {
