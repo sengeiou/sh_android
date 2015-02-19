@@ -175,7 +175,7 @@
     <string name="event_subtitle_nothing">Not watching</string>
     <string name="event_notification_confirmation_message">Notify your followers about this addition?</string>
     <string name="event_notification_confirmation_yes">Notify</string>
-    <string name="event_notification_confirmation_no">No, thanks</string>
+    <string name="event_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
     <string name="menu_photo_change">Change</string>
     <string name="menu_photo_open">Open</string>
