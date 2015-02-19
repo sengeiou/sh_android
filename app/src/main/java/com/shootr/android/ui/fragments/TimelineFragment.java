@@ -30,7 +30,7 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.ui.activities.SingleEventActivity;
+import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
@@ -172,7 +172,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void loadEventPlaceholder() {
-        visibleEventInfoInteractor.obtainEventInfo(new VisibleEventInfoInteractor.Callback() {
+        visibleEventInfoInteractor.obtainVisibleEventInfo(new VisibleEventInfoInteractor.Callback() {
             @Override public void onLoaded(EventInfo eventInfo) {
                 Event event = eventInfo.getEvent();
                 if (event != null) {
@@ -287,7 +287,7 @@ public class TimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                startActivity(new Intent(getActivity(), SingleEventActivity.class));
+                startActivity(new Intent(getActivity(), EventDetailActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

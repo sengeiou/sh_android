@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
@@ -30,8 +31,8 @@ import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
-import com.shootr.android.ui.presenter.SingleEventPresenter;
-import com.shootr.android.ui.views.SingleEventView;
+import com.shootr.android.ui.presenter.EventDetailPresenter;
+import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -44,8 +45,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SingleEventActivity extends BaseNoToolbarActivity
-  implements SingleEventView, ObservableScrollView.Callbacks {
+public class EventDetailActivity extends BaseNoToolbarActivity
+  implements EventDetailView, ObservableScrollView.Callbacks {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     private static final int REQUEST_CODE_EDIT = 1;
@@ -53,6 +54,8 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     private static final int REQUEST_CHOOSE_PHOTO = 4;
     private static final int REQUEST_TAKE_PHOTO = 5;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
+
+    private static final String EXTRA_EVENT_ID = "event";
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
@@ -78,12 +81,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
-    @Inject SingleEventPresenter presenter;
+    @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
 
     private BadgeDrawable eventsBadgeDrawable;
     private int eventsCount;
-    private Toast currentToast;
     private boolean hasPicture;
     private int lastPictureHeightPixels;
     private int lastHeaderHeightPixels;
@@ -91,18 +93,24 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     private boolean showEditButton;
     private float headerMaxElevation;
 
+    public static Intent getIntent(Context context, Long eventId) {
+        Intent intent = new Intent(context, EventDetailActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, eventId);
+        return intent;
+    }
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContainerContent(R.layout.activity_event_page);
+        setContainerContent(R.layout.activity_event_detail);
         initializeViews();
         setupActionbar();
 
-        initializePresenter();
+        long idEvent = getIntent().getLongExtra(EXTRA_EVENT_ID, -1);
+        initializePresenter(idEvent);
     }
 
-    private void initializePresenter() {
-        presenter.initialize(this);
+    private void initializePresenter(long idEvent) {
+        presenter.initialize(this, idEvent);
     }
 
     private void initializeViews() {
@@ -118,7 +126,6 @@ public class SingleEventActivity extends BaseNoToolbarActivity
                 presenter.editStatus();
             }
         });
-        currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         scrollView.addCallbacks(this);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
@@ -183,21 +190,7 @@ public class SingleEventActivity extends BaseNoToolbarActivity
     //region Edit photo
     @OnClick(R.id.event_photo_container)
     public void onPhotoClick() {
-        new BottomSheet.Builder(this).title(R.string.change_photo)
-          .sheet(R.menu.profile_photo_bottom_sheet)
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          takePhotoFromCamera();
-                          break;
-                  }
-              }
-          })
-          .show();
+        presenter.photoClick();
     }
 
     private void choosePhotoFromGallery() {
@@ -412,6 +405,42 @@ public class SingleEventActivity extends BaseNoToolbarActivity
         }
     }
 
+    @Override public void showViewOrEditPhoto() {
+        new BottomSheet.Builder(this).title("Event photo")
+          .sheet(R.menu.event_photo_open_or_edit)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_open:
+                          presenter.zoomPhoto();
+                          break;
+                      case R.id.menu_photo_edit:
+                          presenter.editPhoto();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
+    @Override public void showPhotoPicker() {
+        new BottomSheet.Builder(this).title(R.string.change_photo)
+          .sheet(R.menu.profile_photo_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
     @Override public void showEditPicture(String picture) {
         hasPicture = true;
         if (picture == null) {
@@ -421,15 +450,11 @@ public class SingleEventActivity extends BaseNoToolbarActivity
             photoEditIndicator.setVisibility(View.GONE);
         }
         recomputePhotoAndScrollingMetrics();
-        photoContainer.setClickable(true);
-        photoContainer.setFocusable(true);
     }
 
     @Override public void hideEditPicture() {
         photoEditIndicator.setVisibility(View.GONE);
         recomputePhotoAndScrollingMetrics();
-        photoContainer.setClickable(false);
-        photoContainer.setFocusable(false);
     }
 
     @Override public void showLoadingPictureUpload() {
@@ -439,6 +464,13 @@ public class SingleEventActivity extends BaseNoToolbarActivity
 
     @Override public void hideLoadingPictureUpload() {
         photoLoadingIndicator.setVisibility(View.GONE);
+    }
+
+    @Override public void zoomPhoto(String picture) {
+        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(photoContainer, photoContainer.getLeft(), 0,
+          photoContainer.getWidth(), photoContainer.getBottom()).toBundle();
+        Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
+        ActivityCompat.startActivity(this, photoIntent, animationBundle);
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {

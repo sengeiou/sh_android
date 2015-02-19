@@ -21,6 +21,8 @@ public class UserEntityModelMapper {
         userModel.setPhoto(user.getPhoto());
         userModel.setRelationship(isMe ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(follow));
         userModel.setWebsite(user.getWebsite());
+        userModel.setEventWatchingId(user.getIdEvent());
+        userModel.setEventWatchingTitle(user.getEventTitle());
         return userModel;
     }
 

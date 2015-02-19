@@ -5,7 +5,7 @@ import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface SingleEventView extends LoadDataView {
+public interface EventDetailView extends LoadDataView {
 
     void setEventTitle(String title);
 
@@ -15,6 +15,10 @@ public interface SingleEventView extends LoadDataView {
 
     void setEventPicture(String picture);
 
+    void showViewOrEditPhoto();
+
+    void showPhotoPicker();
+
     void showEditPicture(String picture);
 
     void hideEditPicture();
@@ -22,6 +26,8 @@ public interface SingleEventView extends LoadDataView {
     void showLoadingPictureUpload();
 
     void hideLoadingPictureUpload();
+
+    void zoomPhoto(String picture);
 
     void setWatchers(List<UserWatchingModel> watchers);
 
