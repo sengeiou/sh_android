@@ -177,8 +177,8 @@
     <string name="event_notification_confirmation_yes">Notify</string>
     <string name="event_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
-    <string name="menu_photo_change">Change</string>
-    <string name="menu_photo_open">Open</string>
+    <string name="menu_event_edit_info">Edit event</string>
+    <string name="menu_event_edit_photo">Edit photo</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

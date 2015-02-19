@@ -9,7 +9,6 @@ import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -82,12 +81,17 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     //region Edit event
-    public void editEvent() {
+    public void editEventClick() {
+        eventDetailView.showEditEventPhotoOrInfo();
+
+    }
+
+    public void editEventInfo() {
         Long idEvent = eventModel.getIdEvent();
         eventDetailView.navigateToEditEvent(idEvent);
     }
 
-    public void resultFromEditEvent(Long idEventEdited) {
+    public void resultFromEditEventInfo(Long idEventEdited) {
         if (idEventEdited.equals(eventModel.getIdEvent())) {
             loadEventInfo();
         }
@@ -95,7 +99,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //endregion
 
-    public void editPhoto() {
+    public void editEventPhoto() {
         eventDetailView.showPhotoPicker();
     }
 
@@ -160,12 +164,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void photoClick() {
-        if (eventModel.amIAuthor()) {
-            if (eventModel.getPicture() == null) {
-                editPhoto();
-            } else {
-                eventDetailView.showViewOrEditPhoto();
-            }
+        if (eventModel.amIAuthor() && eventModel.getPicture() == null) {
+                editEventPhoto();
         } else {
             zoomPhoto();
         }

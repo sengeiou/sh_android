@@ -15,7 +15,7 @@ public interface EventDetailView extends LoadDataView {
 
     void setEventPicture(String picture);
 
-    void showViewOrEditPhoto();
+    void showEditEventPhotoOrInfo();
 
     void showPhotoPicker();
 

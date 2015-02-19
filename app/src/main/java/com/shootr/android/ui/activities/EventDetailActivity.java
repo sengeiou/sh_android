@@ -288,7 +288,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_edit) {
-            presenter.editEvent();
+            presenter.editEventClick();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -302,7 +302,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
-            presenter.resultFromEditEvent(idEventEdited);
+            presenter.resultFromEditEventInfo(idEventEdited);
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
@@ -361,17 +361,17 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         }
     }
 
-    @Override public void showViewOrEditPhoto() {
-        new BottomSheet.Builder(this).title("Event photo")
-          .sheet(R.menu.event_photo_open_or_edit)
+    @Override public void showEditEventPhotoOrInfo() {
+        new BottomSheet.Builder(this)
+          .sheet(R.menu.event_edit_photo_or_info)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
-                      case R.id.menu_photo_open:
-                          presenter.zoomPhoto();
+                      case R.id.menu_event_edit_photo:
+                          presenter.editEventPhoto();
                           break;
-                      case R.id.menu_photo_edit:
-                          presenter.editPhoto();
+                      case R.id.menu_event_edit_info:
+                          presenter.editEventInfo();
                           break;
                   }
               }
