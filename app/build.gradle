@@ -160,9 +160,6 @@ dependencies {
 
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
 
-    compile 'com.sloydev:jsonadapters-core:0.1.0'
-    compile 'com.sloydev:jsonadapters-jackson:0.1.0'
-
     compile 'com.facebook.stetho:stetho:1.0.0'
     compile 'com.facebook.stetho:stetho-okhttp:1.0.0'
 

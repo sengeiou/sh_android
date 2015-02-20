@@ -1,5 +1,6 @@
 package com.shootr.android.service.dataservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
@@ -35,7 +36,6 @@ import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.SecurityUtils;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.util.VersionUpdater;
-import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -57,7 +57,7 @@ public class ShootrDataService implements ShootrService {
 
     private final OkHttpClient client;
     private final Endpoint endpoint;
-    private final JsonAdapter jsonAdapter;
+    private final ObjectMapper mapper;
 
     private final UserDtoFactory userDtoFactory;
     private final TimelineDtoFactory timelineDtoFactory;
@@ -78,14 +78,14 @@ public class ShootrDataService implements ShootrService {
     private final VersionUpdater versionUpdater;
 
     @Inject
-    public ShootrDataService(OkHttpClient client, Endpoint endpoint, JsonAdapter jsonAdapter, UserDtoFactory userDtoFactory,
+    public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
       TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
       EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, EventEntityMapper eventEntityMapper,
       TeamMapper teamMapper, TimeUtils timeUtils, VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
-        this.jsonAdapter = jsonAdapter;
+        this.mapper = mapper;
         this.teamDtoFactory = teamDtoFactory;
         this.eventDtoFactory = eventDtoFactory;
         this.userDtoFactory = userDtoFactory;
@@ -539,7 +539,7 @@ public class ShootrDataService implements ShootrService {
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
-        String requestJson = jsonAdapter.toJson(dto);
+        String requestJson = mapper.writeValueAsString(dto);
         Timber.d("Executing request: %s", requestJson);
         RequestBody body = RequestBody.create(JSON, requestJson);
         Request request = new Request.Builder().url(endpoint.getUrl()).post(body).build();
@@ -564,7 +564,7 @@ public class ShootrDataService implements ShootrService {
         if (response.isSuccessful()) {
             String responseBody = response.body().string();
             Timber.d("Response received: %s", responseBody);
-            GenericDto genericDto = jsonAdapter.fromJson(responseBody, GenericDto.class);
+            GenericDto genericDto = mapper.readValue(responseBody, GenericDto.class);
             // Check for Data-Service errors
 
             updateTimeFromServer(genericDto);

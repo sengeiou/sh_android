@@ -1,11 +1,11 @@
 package com.shootr.android.service.dataservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.ShootrPhotoUploadError;
 import com.shootr.android.domain.exception.ShootrServerException;
-import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
@@ -34,12 +34,12 @@ public class ShootrPhotoService implements PhotoService {
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;
-    private JsonAdapter jsonAdapter;
+    private ObjectMapper objectMapper;
 
-    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, JsonAdapter jsonAdapter) {
+    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, ObjectMapper objectMapper) {
         this.client = client;
         this.sessionRepository = sessionRepository;
-        this.jsonAdapter = jsonAdapter;
+        this.objectMapper = objectMapper;
     }
 
     @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
@@ -184,7 +184,7 @@ public class ShootrPhotoService implements PhotoService {
 
     private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
         ShootrPhotoUploadError
-          shootrError = jsonAdapter.fromJson(jsonObject.getString("status"), ShootrPhotoUploadError.class);
+          shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
         Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.getErrorCode(),
           shootrError.getMessage());
