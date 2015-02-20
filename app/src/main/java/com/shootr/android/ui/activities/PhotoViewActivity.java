@@ -11,28 +11,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import java.util.Objects;
+
 import javax.inject.Inject;
-import timber.log.Timber;
+
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoViewActivity extends BaseActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
     private static final String EXTRA_IMAGE_URL = "image";
-    private static final Object previewTag = new Object();
+    private static final Object PREVIEW_TAG = new Object();
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
@@ -105,12 +103,14 @@ public class PhotoViewActivity extends BaseActivity {
             }
 
             @Override public void onBitmapFailed(Drawable errorDrawable) {
+                //TODO handle error
             }
 
             @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                /* no-op */
             }
         };
-        picasso.load(preview).tag(previewTag).into(previewTargetStrongReference);
+        picasso.load(preview).tag(PREVIEW_TAG).into(previewTargetStrongReference);
     }
 
     private void loadBigImage(String imageUrl) {
@@ -123,16 +123,18 @@ public class PhotoViewActivity extends BaseActivity {
             }
 
             @Override public void onBitmapFailed(Drawable errorDrawable) {
+                //TODO handle error
             }
 
             @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                /* no-op */
             }
         };
         picasso.load(imageUrl).into(finalTargetStrongReference);
     }
 
     private void cancelPreviewLoading() {
-        picasso.getPicasso().cancelTag(previewTag);
+        picasso.getPicasso().cancelTag(PREVIEW_TAG);
     }
 
     public void onPhotoClick() {

@@ -12,6 +12,9 @@ import android.provider.MediaStore;
 
 public class FileChooserUtils {
 
+    private FileChooserUtils() {
+    }
+
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
@@ -39,10 +42,7 @@ public class FileChooserUtils {
                 }
 
                 // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
+            } else if (isDownloadsDocument(uri)) { // DownloadsProvider
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri =
                   ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
@@ -71,17 +71,15 @@ public class FileChooserUtils {
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) { // MediaStore (and general)
 
             // Return the remote address
-            if (isGooglePhotosUri(uri)) return uri.getLastPathSegment();
+            if (isGooglePhotosUri(uri)) {
+                return uri.getLastPathSegment();
+            }
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) { // File
             return uri.getPath();
         }
 
@@ -109,11 +107,13 @@ public class FileChooserUtils {
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
+                final int columnIndex = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(columnIndex);
             }
         } finally {
-            if (cursor != null) cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return null;
     }

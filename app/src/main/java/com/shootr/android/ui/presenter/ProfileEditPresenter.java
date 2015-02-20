@@ -10,7 +10,6 @@ import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -33,7 +32,7 @@ public class ProfileEditPresenter implements Presenter {
     private final JobManager jobManager;
 
     private UserModel currentUserModel;
-    private Long changedTeamId;
+    private Long teamIdDidChange;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
@@ -53,7 +52,7 @@ public class ProfileEditPresenter implements Presenter {
 
     private void fillCurrentUserData() {
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        changedTeamId = currentUserModel.getFavoriteTeamId();
+        teamIdDidChange = currentUserModel.getFavoriteTeamId();
         this.profileEditView.renderUserInfo(currentUserModel);
     }
 
@@ -75,7 +74,7 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     public void changeTeam(long teamId, String teamName) {
-        changedTeamId = teamId;
+        teamIdDidChange = teamId;
         profileEditView.setTeam(teamName);
     }
 
@@ -85,7 +84,7 @@ public class ProfileEditPresenter implements Presenter {
         updatedUserModel.setName(cleanName());
         updatedUserModel.setBio(cleanBio());
         updatedUserModel.setWebsite(cleanWebsite());
-        updatedUserModel.setFavoriteTeamId(changedTeamId);
+        updatedUserModel.setFavoriteTeamId(teamIdDidChange);
         updatedUserModel.setFavoriteTeamName(cleanTeam());
         return updatedUserModel;
     }
@@ -141,7 +140,7 @@ public class ProfileEditPresenter implements Presenter {
         if (text != null) {
             text = text.trim();
             if (text.isEmpty()) {
-                text = null;
+                return null;
             }
         }
         return text;

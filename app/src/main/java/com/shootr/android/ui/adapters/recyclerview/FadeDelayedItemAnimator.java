@@ -36,20 +36,20 @@ import java.util.List;
 public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
     private static final boolean DEBUG = false;
 
-    private ArrayList<ViewHolder> mPendingRemovals = new ArrayList<ViewHolder>();
-    private ArrayList<ViewHolder> mPendingAdditions = new ArrayList<ViewHolder>();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<MoveInfo>();
-    private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<ChangeInfo>();
+    private List<ViewHolder> mPendingRemovals = new ArrayList<>();
+    private List<ViewHolder> mPendingAdditions = new ArrayList<>();
+    private List<MoveInfo> mPendingMoves = new ArrayList<>();
+    private List<ChangeInfo> mPendingChanges = new ArrayList<>();
 
-    private ArrayList<ArrayList<ViewHolder>> mAdditionsList =
-            new ArrayList<ArrayList<ViewHolder>>();
-    private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<ArrayList<MoveInfo>>();
-    private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<ArrayList<ChangeInfo>>();
+    private List<List<ViewHolder>> mAdditionsList =
+            new ArrayList<>();
+    private List<List<MoveInfo>> mMovesList = new ArrayList<>();
+    private List<List<ChangeInfo>> mChangesList = new ArrayList<>();
 
-    private ArrayList<ViewHolder> mAddAnimations = new ArrayList<ViewHolder>();
-    private ArrayList<ViewHolder> mMoveAnimations = new ArrayList<ViewHolder>();
-    private ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<ViewHolder>();
-    private ArrayList<ViewHolder> mChangeAnimations = new ArrayList<ViewHolder>();
+    private List<ViewHolder> mAddAnimations = new ArrayList<>();
+    private List<ViewHolder> mMoveAnimations = new ArrayList<>();
+    private List<ViewHolder> mRemoveAnimations = new ArrayList<>();
+    private List<ViewHolder> mChangeAnimations = new ArrayList<>();
 
     private long mDelayFactor = 0L;
     private DecelerateInterpolator interpolator;
@@ -123,7 +123,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         mPendingRemovals.clear();
         // Next, move stuff
         if (movesPending) {
-            final ArrayList<MoveInfo> moves = new ArrayList<MoveInfo>();
+            final List<MoveInfo> moves = new ArrayList<>();
             moves.addAll(mPendingMoves);
             mMovesList.add(moves);
             mPendingMoves.clear();
@@ -147,7 +147,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         }
         // Next, change stuff, to run in parallel with move animations
         if (changesPending) {
-            final ArrayList<ChangeInfo> changes = new ArrayList<ChangeInfo>();
+            final List<ChangeInfo> changes = new ArrayList<>();
             changes.addAll(mPendingChanges);
             mChangesList.add(changes);
             mPendingChanges.clear();
@@ -170,7 +170,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         }
         // Next, add stuff
         if (additionsPending) {
-            final ArrayList<ViewHolder> additions = new ArrayList<ViewHolder>();
+            final List<ViewHolder> additions = new ArrayList<ViewHolder>();
             additions.addAll(mPendingAdditions);
             mAdditionsList.add(additions);
             mPendingAdditions.clear();
@@ -396,10 +396,8 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
     private void endChangeAnimation(List<ChangeInfo> infoList, ViewHolder item) {
         for (int i = infoList.size() - 1; i >= 0; i--) {
             ChangeInfo changeInfo = infoList.get(i);
-            if (endChangeAnimationIfNecessary(changeInfo, item)) {
-                if (changeInfo.oldHolder == null && changeInfo.newHolder == null) {
-                    infoList.remove(changeInfo);
-                }
+            if (endChangeAnimationIfNecessary(changeInfo, item) && changeInfo.oldHolder == null && changeInfo.newHolder == null) {
+                infoList.remove(changeInfo);
             }
         }
     }
@@ -455,14 +453,14 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         }
 
         for (int i = mChangesList.size() - 1; i >= 0; i--) {
-            ArrayList<ChangeInfo> changes = mChangesList.get(i);
+            List<ChangeInfo> changes = mChangesList.get(i);
             endChangeAnimation(changes, item);
             if (changes.isEmpty()) {
                 mChangesList.remove(changes);
             }
         }
         for (int i = mMovesList.size() - 1; i >= 0; i--) {
-            ArrayList<MoveInfo> moves = mMovesList.get(i);
+            List<MoveInfo> moves = mMovesList.get(i);
             for (int j = moves.size() - 1; j >= 0; j--) {
                 MoveInfo moveInfo = moves.get(j);
                 if (moveInfo.holder == item) {
@@ -478,7 +476,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
             }
         }
         for (int i = mAdditionsList.size() - 1; i >= 0; i--) {
-            ArrayList<ViewHolder> additions = mAdditionsList.get(i);
+            List<ViewHolder> additions = mAdditionsList.get(i);
             if (additions.remove(item)) {
                 ViewCompat.setAlpha(view, 1);
                 dispatchAddFinished(item);
@@ -513,7 +511,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean isRunning() {
-        return (!mPendingAdditions.isEmpty() ||
+        return !mPendingAdditions.isEmpty() ||
                 !mPendingChanges.isEmpty() ||
                 !mPendingMoves.isEmpty() ||
                 !mPendingRemovals.isEmpty() ||
@@ -523,7 +521,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
                 !mChangeAnimations.isEmpty() ||
                 !mMovesList.isEmpty() ||
                 !mAdditionsList.isEmpty() ||
-                !mChangesList.isEmpty());
+                !mChangesList.isEmpty();
     }
 
     /**
@@ -573,7 +571,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
 
         int listCount = mMovesList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<MoveInfo> moves = mMovesList.get(i);
+            List<MoveInfo> moves = mMovesList.get(i);
             count = moves.size();
             for (int j = count - 1; j >= 0; j--) {
                 MoveInfo moveInfo = moves.get(j);
@@ -590,7 +588,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         }
         listCount = mAdditionsList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<ViewHolder> additions = mAdditionsList.get(i);
+            List<ViewHolder> additions = mAdditionsList.get(i);
             count = additions.size();
             for (int j = count - 1; j >= 0; j--) {
                 ViewHolder item = additions.get(j);
@@ -605,7 +603,7 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
         }
         listCount = mChangesList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<ChangeInfo> changes = mChangesList.get(i);
+            List<ChangeInfo> changes = mChangesList.get(i);
             count = changes.size();
             for (int j = count - 1; j >= 0; j--) {
                 endChangeAnimationIfNecessary(changes.get(j));
@@ -631,12 +629,12 @@ public class FadeDelayedItemAnimator extends RecyclerView.ItemAnimator {
 
     private static class VpaListenerAdapter implements ViewPropertyAnimatorListener {
         @Override
-        public void onAnimationStart(View view) {}
+        public void onAnimationStart(View view) {/* no-op */}
 
         @Override
-        public void onAnimationEnd(View view) {}
+        public void onAnimationEnd(View view) {/* no-op */}
 
         @Override
-        public void onAnimationCancel(View view) {}
+        public void onAnimationCancel(View view) {/* no-op */}
     };
 }

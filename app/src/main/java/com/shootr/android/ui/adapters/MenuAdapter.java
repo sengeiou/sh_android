@@ -14,19 +14,12 @@ import static butterknife.ButterKnife.findById;
 
 public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
 
-    public static final int TYPE_ITEM = 1;
-    public int mSelectedPosition = -1;
+    private static final int TYPE_ITEM = 1;
     private List<MenuItem> mItems;
 
     public MenuAdapter(Context context, List<MenuItem> items) {
         super(context);
         mItems = items;
-    }
-
-    public void setSelectedPosition(int position) {
-        //TODO Sucks monkeyballs. The ideal thing would be to implement custom checkable views, and check them through the ListView
-        mSelectedPosition = position;
-        this.notifyDataSetChanged();
     }
 
     @Override
@@ -71,15 +64,18 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
     public void bindView(MenuItem listItem, int position, View view) {
         switch (getItemViewType(position)) {
             case TYPE_ITEM:
-                TitleAndIconMenuItem menuItem = (TitleAndIconMenuItem) listItem;
-                TextView itemTitle = findById(view, R.id.drawer_item_text);
-                ImageView itemIcon = findById(view, R.id.drawer_item_icon);
-                itemTitle.setText(menuItem.title);
-                itemIcon.setImageResource(menuItem.icon);
+                bindItem((TitleAndIconMenuItem) listItem, view);
                 break;
             default:
                 break;
         }
+    }
+
+    private void bindItem(TitleAndIconMenuItem listItem, View view) {
+        TextView itemTitle = findById(view, R.id.drawer_item_text);
+        ImageView itemIcon = findById(view, R.id.drawer_item_icon);
+        itemTitle.setText(listItem.title);
+        itemIcon.setImageResource(listItem.icon);
     }
 
     @Override

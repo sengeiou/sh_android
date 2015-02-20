@@ -23,8 +23,8 @@ import java.util.regex.Pattern;
 
 public class ClickableTextView extends TextView {
 
-    private static final String[] allowedSchemas = { "http://", "https://", "rtsp://"};
-    private static final String defaultSchema = allowedSchemas[0];
+    private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://"};
+    private static final String DEFAULT_SCHEMA = ALLOWED_SCHEMAS[0];
 
     private Pattern urlPattern;
     private TouchableUrlSpan alreadyPressedSpan;
@@ -77,13 +77,13 @@ public class ClickableTextView extends TextView {
     private String makeUrl(String url) {
         boolean hasPrefix = false;
 
-        for (int i = 0; i < allowedSchemas.length; i++) {
-            if (url.regionMatches(true, 0, allowedSchemas[i], 0, allowedSchemas[i].length())) {
+        for (int i = 0; i < ALLOWED_SCHEMAS.length; i++) {
+            if (url.regionMatches(true, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
                 hasPrefix = true;
 
                 // Fix capitalization if necessary
-                if (!url.regionMatches(false, 0, allowedSchemas[i], 0, allowedSchemas[i].length())) {
-                    url = allowedSchemas[i] + url.substring(allowedSchemas[i].length());
+                if (!url.regionMatches(false, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
+                    url = ALLOWED_SCHEMAS[i] + url.substring(ALLOWED_SCHEMAS[i].length());
                 }
 
                 break;
@@ -91,7 +91,7 @@ public class ClickableTextView extends TextView {
         }
 
         if (!hasPrefix) {
-            url = defaultSchema + url;
+            url = DEFAULT_SCHEMA + url;
         }
 
         return url;

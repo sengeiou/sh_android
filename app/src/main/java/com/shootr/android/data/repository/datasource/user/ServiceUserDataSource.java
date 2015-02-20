@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class ServiceUserDataSource implements UserDataSource {
 
-    public final ShootrService service;
+    private final ShootrService service;
 
     @Inject public ServiceUserDataSource(ShootrService service) {
         this.service = service;

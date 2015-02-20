@@ -24,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This implementation of {@link android.support.v7.widget.RecyclerView.ItemAnimator} provides basic
@@ -43,16 +44,16 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
         mRecyclerView = recyclerView;
     }
 
-    private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<MoveInfo>();
+    private List<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
+    private List<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
+    private List<MoveInfo> mPendingMoves = new ArrayList<>();
 
-    private ArrayList<RecyclerView.ViewHolder> mAdditions = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<MoveInfo> mMoves = new ArrayList<MoveInfo>();
+    private List<RecyclerView.ViewHolder> mAdditions = new ArrayList<>();
+    private List<MoveInfo> mMoves = new ArrayList<>();
 
-    protected ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<RecyclerView.ViewHolder>();
-    protected ArrayList<RecyclerView.ViewHolder> mMoveAnimations = new ArrayList<RecyclerView.ViewHolder>();
-    protected ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<RecyclerView.ViewHolder>();
+    protected List<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<>();
+    protected List<RecyclerView.ViewHolder> mMoveAnimations = new ArrayList<>();
+    protected List<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<>();
 
     private static class MoveInfo {
 
@@ -237,11 +238,11 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean isRunning() {
-        return (!mMoveAnimations.isEmpty() ||
+        return !mMoveAnimations.isEmpty() ||
           !mRemoveAnimations.isEmpty() ||
           !mAddAnimations.isEmpty() ||
           !mMoves.isEmpty() ||
-          !mAdditions.isEmpty());
+          !mAdditions.isEmpty();
     }
 
     /**
@@ -321,17 +322,19 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
 
         @Override
         public void onAnimationStart(View view) {
+            /* no-op */
         }
 
         @Override
         public void onAnimationEnd(View view) {
+            /* no-op */
         }
 
         @Override
         public void onAnimationCancel(View view) {
+            /* no-op */
         }
     }
 
-    ;
 }
 
