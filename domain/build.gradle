@@ -4,6 +4,9 @@ configurations {
     provided
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
 sourceSets {
     main {
         compileClasspath += configurations.provided
