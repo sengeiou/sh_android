@@ -2,11 +2,14 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UploadShotImageEvent;
 import com.shootr.android.task.events.shots.PostNewShotResultEvent;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
@@ -27,6 +30,7 @@ public class PostNewShotPresenter implements Presenter {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
+    private final PostNewShotInteractor postNewShotInteractor;
 
     private PostNewShotView postNewShotView;
     private ObjectGraph objectGraph;
@@ -36,10 +40,12 @@ public class PostNewShotPresenter implements Presenter {
     private String uploadedImageUrl;
     private String currentTextWritten;
 
-    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
+    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager,
+      PostNewShotInteractor postNewShotInteractor) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.jobManager = jobManager;
+        this.postNewShotInteractor = postNewShotInteractor;
     }
 
     public void initialize(PostNewShotView postNewShotView, ObjectGraph objectGraph) {
@@ -122,9 +128,16 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void startSendingShot() {
-        PostNewShotJob job = objectGraph.get(PostNewShotJob.class);
-        job.init(shotCommentToSend, uploadedImageUrl);
-        jobManager.addJobInBackground(job);
+        postNewShotInteractor.postNewShot(shotCommentToSend, uploadedImageUrl, new PostNewShotInteractor.Callback() {
+            @Override public void onLoaded(Shot published) {
+                postNewShotView.setResultOk();
+                postNewShotView.closeScreen();
+            }
+        }, new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
+        });
     }
 
     private void updateCharCounter(String filteredText) {
@@ -161,22 +174,6 @@ public class PostNewShotPresenter implements Presenter {
             trimmed = trimmed.replace("\n\n\n", "\n\n");
         }
         return trimmed;
-    }
-
-    @Subscribe
-    public void onShotSent(PostNewShotResultEvent event) {
-        postNewShotView.setResultOk();
-        postNewShotView.closeScreen();
-    }
-
-    @Subscribe
-    public void onValidationErrors(FieldValidationErrorEvent event) {
-        this.hideLoading();
-
-        List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
-        FieldValidationError firstError = fieldValidationErrors.get(0);
-        String errorMessage = errorMessageFactory.getMessageForCode(firstError.getErrorCode());
-        postNewShotView.showError(errorMessage);
     }
 
     @Subscribe

@@ -18,8 +18,8 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.WatchRepository;
-import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.Date;
+import javax.inject.Inject;
 
 public class PostNewShotInteractor implements Interactor {
 
@@ -34,7 +34,7 @@ public class PostNewShotInteractor implements Interactor {
     private Callback callback;
     private InteractorErrorCallback errorCallback;
 
-    public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
+    @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Local EventRepository localEventRepository,
       @Local WatchRepository localWatchRepository, @Remote ShotRepository remoteShotRepository) {
         this.postExecutionThread = postExecutionThread;

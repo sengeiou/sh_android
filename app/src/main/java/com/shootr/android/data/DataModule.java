@@ -71,7 +71,6 @@ import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
 import com.shootr.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
@@ -88,7 +87,6 @@ import com.shootr.android.ui.fragments.UserFollowsFragment;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import timber.log.Timber;
@@ -114,8 +112,6 @@ import static android.content.Context.MODE_PRIVATE;
     LoginUserJob.class,
 
     MainActivity.class,
-
-    PostNewShotJob.class,
 
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
