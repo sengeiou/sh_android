@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.support.v4.app.NotificationManagerCompat;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
@@ -57,9 +56,6 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.notifications.gcm.GCMIntentService;
-import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
-import com.shootr.android.notifications.ShootrNotificationManager;
-import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.sync.ShootrSyncAdapter;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -128,8 +124,6 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileFragment.class,
 
     UserManager.class, DeviceManager.class,
-
-    NotificationIntentReceiver.class,
 
     GCMIntentService.class,
 
@@ -217,19 +211,6 @@ public class DataModule {
 
     @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
         return GoogleCloudMessaging.getInstance(application);
-    }
-
-    @Provides @Singleton NotificationManagerCompat provideNotificationManagerCompat(Application application) {
-        return NotificationManagerCompat.from(application);
-
-    }
-
-    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
-        return new ShootrNotificationManager(app, nm, notificationBuilderFactory, picasso);
-    }
-
-    @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
-        return new NotificationBuilderFactory();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {

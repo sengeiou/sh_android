@@ -2,6 +2,7 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.res.Resources;
+import com.shootr.android.notifications.dagger.NotificationModule;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.DataModule;
@@ -14,6 +15,7 @@ import javax.inject.Singleton;
                 UiModule.class,
                 DataModule.class,
                 BusModule.class,
+                NotificationModule.class
         },
         injects = {
                 ShootrApplication.class,
