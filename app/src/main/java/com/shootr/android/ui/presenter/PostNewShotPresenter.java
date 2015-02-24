@@ -129,7 +129,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private void startSendingShot() {
         postNewShotInteractor.postNewShot(shotCommentToSend, uploadedImageUrl, new PostNewShotInteractor.Callback() {
-            @Override public void onLoaded(Shot published) {
+            @Override public void onLoaded() {
                 postNewShotView.setResultOk();
                 postNewShotView.closeScreen();
             }

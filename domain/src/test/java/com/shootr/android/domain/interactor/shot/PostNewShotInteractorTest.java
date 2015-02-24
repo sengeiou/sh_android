@@ -4,7 +4,6 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
-import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -15,8 +14,10 @@ import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import com.shootr.android.domain.service.ShotDispatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -41,7 +42,7 @@ public class PostNewShotInteractorTest {
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
     @Mock WatchRepository localWatchRepository;
-    @Mock ShotRepository remoteShotRepository;
+    @Mock ShotDispatcher shotDispatcher;
 
     private PostNewShotInteractor interactor;
 
@@ -52,18 +53,19 @@ public class PostNewShotInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         interactor =
           new PostNewShotInteractor(postExecutionThread, interactorHandler, sessionRepository, localEventRepository,
-            localWatchRepository, remoteShotRepository);
+            localWatchRepository, shotDispatcher);
     }
 
     @Test
     public void shouldSendShotWithCurrentUserInfo() throws Exception {
         setupCurrentUserSession();
-        setupShotRepositoryReturnsSameShot();
 
-        SpyCallback callback = new SpyCallback();
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, callback, new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
 
-        Shot.ShotUserInfo userInfo = callback.publishedShot.getUserInfo();
+        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        Shot publishedShot = shotArgumentCaptor.getValue();
+        Shot.ShotUserInfo userInfo = publishedShot.getUserInfo();
         assertUserInfoIsFromUser(userInfo, currentUser());
     }
 
@@ -71,12 +73,12 @@ public class PostNewShotInteractorTest {
     public void shouldSendShotWithVisibleEventInfoWhenThereIsVisibleEvent() throws Exception {
         setupCurrentUserSession();
         setupVisibleEvent();
-        setupShotRepositoryReturnsSameShot();
 
-        SpyCallback callback = new SpyCallback();
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, callback, new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
 
-        Shot publishedShot = callback.publishedShot;
+        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertEventInfoIsFromEvent(eventInfo, visibleEvent());
     }
@@ -84,12 +86,12 @@ public class PostNewShotInteractorTest {
     @Test
     public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
         setupCurrentUserSession();
-        setupShotRepositoryReturnsSameShot();
 
-        SpyCallback callback = new SpyCallback();
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, callback, new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
 
-        Shot publishedShot = callback.publishedShot;
+        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertThat(eventInfo).isNull();
     }
@@ -97,22 +99,22 @@ public class PostNewShotInteractorTest {
     @Test
     public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
         setupCurrentUserSession();
-        setupShotRepositoryReturnsSameShot();
 
-        SpyCallback callback = new SpyCallback();
-        interactor.postNewShot(COMMENT_EMPTY, IMAGE_STUB, callback, new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_EMPTY, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
 
-        Shot publishedShot = callback.publishedShot;
+        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        Shot publishedShot = shotArgumentCaptor.getValue();
         assertThat(publishedShot.getComment()).isNull();
     }
 
     @Test
-    public void shouldSendShotThroughRemoteRepository() throws Exception {
+    public void shouldSendShotThroughDispatcher() throws Exception {
         setupCurrentUserSession();
 
         interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
 
-        verify(remoteShotRepository, times(1)).putShot(any(Shot.class));
+        verify(shotDispatcher, times(1)).sendShot(any(Shot.class));
     }
 
 
@@ -139,14 +141,6 @@ public class PostNewShotInteractorTest {
     private void setupVisibleEvent() {
         when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(visibleWatch());
         when(localEventRepository.getEventById(VISIBLE_EVENT_ID)).thenReturn(visibleEvent());
-    }
-
-    private void setupShotRepositoryReturnsSameShot() {
-        when(remoteShotRepository.putShot(any(Shot.class))).thenAnswer(new Answer<Object>() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArguments()[0];
-            }
-        });
     }
     //endregion
 
@@ -175,18 +169,9 @@ public class PostNewShotInteractorTest {
     }
     //endregion
 
-    private class SpyCallback implements PostNewShotInteractor.Callback {
-
-        public Shot publishedShot;
-
-        @Override public void onLoaded(Shot published) {
-            this.publishedShot = published;
-        }
-    }
-
     private class DummyCallback implements PostNewShotInteractor.Callback {
 
-        @Override public void onLoaded(Shot published) {
+        @Override public void onLoaded() {
         }
     }
 
