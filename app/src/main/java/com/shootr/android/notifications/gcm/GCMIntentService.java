@@ -1,4 +1,4 @@
-package com.shootr.android.gcm;
+package com.shootr.android.notifications.gcm;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
-import com.shootr.android.gcm.notifications.ShootrNotificationManager;
+import com.shootr.android.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.ShotModel;

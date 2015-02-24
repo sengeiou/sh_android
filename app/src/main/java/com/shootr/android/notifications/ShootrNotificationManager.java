@@ -1,4 +1,4 @@
-package com.shootr.android.gcm.notifications;
+package com.shootr.android.notifications;
 
 import android.app.Application;
 import android.app.Notification;

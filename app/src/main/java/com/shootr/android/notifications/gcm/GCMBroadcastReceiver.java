@@ -1,4 +1,4 @@
-package com.shootr.android.gcm;
+package com.shootr.android.notifications.gcm;
 
 import android.app.Activity;
 import android.content.ComponentName;

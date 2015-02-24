@@ -1,9 +1,8 @@
-package com.shootr.android.gcm.notifications;
+package com.shootr.android.notifications;
 
 import android.app.Application;
 import android.support.v4.app.NotificationManagerCompat;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.data.NotificationsEnabled;
 import com.shootr.android.data.prefs.BooleanPreference;
 import javax.inject.Inject;

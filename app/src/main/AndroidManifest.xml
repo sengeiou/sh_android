@@ -219,7 +219,7 @@
               android:resource="@xml/syncadapter"/>
         </service>
 
-        <receiver android:name=".gcm.GCMBroadcastReceiver"
+        <receiver android:name=".notifications.gcm.GCMBroadcastReceiver"
           android:exported="true"
           android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -228,7 +228,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".gcm.NotificationIntentReceiver"
+        <receiver android:name=".notifications.gcm.NotificationIntentReceiver"
           >
             <intent-filter>
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
@@ -241,7 +241,7 @@
         </receiver>
 
         <service
-          android:name=".gcm.GCMIntentService"
+          android:name=".notifications.gcm.GCMIntentService"
           android:exported="false" />
         <meta-data android:name="com.crashlytics.ApiKey" android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662"/>
 

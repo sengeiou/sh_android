@@ -1,4 +1,4 @@
-package com.shootr.android.gcm.notifications;
+package com.shootr.android.notifications;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
-import com.shootr.android.gcm.NotificationIntentReceiver;
+import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.model.UserModel;
 

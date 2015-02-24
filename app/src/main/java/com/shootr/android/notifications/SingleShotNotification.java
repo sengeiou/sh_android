@@ -1,4 +1,4 @@
-package com.shootr.android.gcm.notifications;
+package com.shootr.android.notifications;
 
 import android.content.Context;
 import android.graphics.Bitmap;

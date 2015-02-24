@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
-import com.shootr.android.gcm.NotificationIntentReceiver;
-import com.shootr.android.gcm.notifications.CommonNotification;
-import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
+import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
+import com.shootr.android.notifications.CommonNotification;
+import com.shootr.android.notifications.NotificationBuilderFactory;
 
 public class StartEventNotification extends CommonNotification {
 

@@ -1,10 +1,10 @@
-package com.shootr.android.gcm;
+package com.shootr.android.notifications.gcm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.shootr.android.ShootrApplication;
-import com.shootr.android.gcm.notifications.ShootrNotificationManager;
+import com.shootr.android.notifications.ShootrNotificationManager;
 import com.shootr.android.ui.activities.MainActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import javax.inject.Inject;
