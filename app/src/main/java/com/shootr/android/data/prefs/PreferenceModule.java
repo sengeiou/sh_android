@@ -13,6 +13,7 @@ public class PreferenceModule {
 
     public static final int GCM_APP_VERSION_DEFAULT = 0;
     public static final String GCM_REGISTRATION_ID_DEFAULT = "";
+    private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
 
     @Provides @Singleton @InitialSetupCompleted BooleanPreference provideInitialSetupCompleted(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "initial_setup", false);
@@ -37,5 +38,10 @@ public class PreferenceModule {
     @Provides @Singleton @LastVersionNotCompatible LongPreference provideLastVersionNotCompatible(
       SharedPreferences preferences) {
         return new LongPreference(preferences, "not_compatible_version", -1L);
+    }
+
+    @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
+      SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
     }
 }

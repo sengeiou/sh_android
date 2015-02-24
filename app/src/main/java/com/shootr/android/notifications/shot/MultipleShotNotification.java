@@ -1,4 +1,4 @@
-package com.shootr.android.notifications;
+package com.shootr.android.notifications.shot;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import com.shootr.android.R;
+import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.Collections;

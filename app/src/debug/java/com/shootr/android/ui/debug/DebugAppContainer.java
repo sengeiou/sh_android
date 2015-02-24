@@ -42,7 +42,7 @@ import com.shootr.android.data.ApiEndpoint;
 import com.shootr.android.data.ApiEndpoints;
 import com.shootr.android.data.CustomEndpoint;
 import com.shootr.android.data.NetworkEnabled;
-import com.shootr.android.data.NotificationsEnabled;
+import com.shootr.android.data.prefs.NotificationsEnabled;
 import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;

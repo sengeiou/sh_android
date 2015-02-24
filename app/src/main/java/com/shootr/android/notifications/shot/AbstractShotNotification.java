@@ -1,10 +1,12 @@
-package com.shootr.android.notifications;
+package com.shootr.android.notifications.shot;
 
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
+import com.shootr.android.notifications.CommonNotification;
+import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.model.ShotModel;
 
@@ -59,5 +61,9 @@ public abstract class AbstractShotNotification extends CommonNotification {
 
     private String getImageAndTextContent(ShotModel shot) {
         return String.format(imageAndTextPattern, shot.getComment());
+    }
+
+    @Override public int getId() {
+        return ShotNotificationManager.SHOT_NOTIFICATION_ID;
     }
 }

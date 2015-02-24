@@ -11,8 +11,6 @@ import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.TrackingCursorFactory;
-import com.shootr.android.notifications.ShootrNotificationManager;
-import com.shootr.android.notifications.DebugNotificationManager;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.service.DebugApiModule;
 import com.shootr.android.ui.debug.NetworkProxy;
@@ -57,11 +55,6 @@ public class DebugDataModule {
         return new BooleanPreference(preferences, "debug_network_enabled", DEFAULT_NETWORK_ENABLED);
     }
 
-    @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
-      SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "debug_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
-    }
-
     @Provides @Singleton @AnimationSpeed IntPreference provideAnimationSpeed(SharedPreferences preferences) {
         return new IntPreference(preferences, "debug_animation_speed", DEFAULT_ANIMATION_SPEED);
     }
@@ -89,10 +82,5 @@ public class DebugDataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application) {
         return new ShootrDbOpenHelper(application.getApplicationContext(), new TrackingCursorFactory());
-    }
-
-    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(
-      DebugNotificationManager notificationManager) {
-        return notificationManager;
     }
 }

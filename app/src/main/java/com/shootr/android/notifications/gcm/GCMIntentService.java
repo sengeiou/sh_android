@@ -13,7 +13,9 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
-import com.shootr.android.notifications.ShootrNotificationManager;
+import com.shootr.android.notifications.follow.FollowNotificationManager;
+import com.shootr.android.notifications.shot.ShotNotificationManager;
+import com.shootr.android.notifications.watch.WatchRequestNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.ShotModel;
@@ -33,10 +35,11 @@ public class GCMIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
     private static final int PUSH_TYPE_FOLLOW = 2;
-    private static final int PUSH_TYPE_START_EVENT = 3;
     private static final int PUSH_TYPE_WATCH_REQUEST = 4;
 
-    @Inject ShootrNotificationManager notificationManager;
+    @Inject ShotNotificationManager shotNotificationManager;
+    @Inject FollowNotificationManager followNotificationManager;
+    @Inject WatchRequestNotificationManager watchRequestNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject ShotModelMapper shotModelMapper;
@@ -76,9 +79,6 @@ public class GCMIntentService extends IntentService {
                 case PUSH_TYPE_FOLLOW:
                     receivedFollow(parameters);
                     break;
-                case PUSH_TYPE_START_EVENT:
-                    receivedStartEvent(parameters);
-                    break;
                 case PUSH_TYPE_WATCH_REQUEST:
                     receivedWatchRequest(parameters);
                     break;
@@ -87,18 +87,9 @@ public class GCMIntentService extends IntentService {
             }
         } catch (JSONException e) {
             Timber.e(e, "Error parsing notification parameters");
-            notificationManager.sendErrorNotification(e.getMessage());
         } catch (Exception e) {
             Timber.e(e, "Error creating notification");
-            notificationManager.sendErrorNotification(e.getMessage());
         }
-    }
-
-    private void receivedStartEvent(JSONObject parameters) throws JSONException, IOException {
-        Long idEvent = parameters.getLong(ID_EVENT);
-        EventEntity eventEntity = service.getEventById(idEvent);
-        String text = eventEntity.getTitle();
-        notificationManager.sendEventStartedNotification(text);
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
@@ -108,7 +99,7 @@ public class GCMIntentService extends IntentService {
         UserEntity user = userManager.getUserByIdUser(idUser);
         if (shot != null && user != null) {
             ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
-            notificationManager.sendNewShotNotification(shotModel);
+            shotNotificationManager.sendNewShotNotification(shotModel);
         } else {
             Timber.e("Shot or User null received, can't show notifications :(");
         }
@@ -128,7 +119,7 @@ public class GCMIntentService extends IntentService {
         UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, place);
         EventModel eventModel = eventEntityModelMapper.toEventModel(eventEntity);
 
-        notificationManager.sendWatchRequestNotification(userWatchingModel, eventModel);
+        watchRequestNotificationManager.sendWatchRequestNotification(userWatchingModel, eventModel);
 
         retrieveAndStoreNewWatch(userFromNotification, eventEntity);
     }
@@ -147,7 +138,7 @@ public class GCMIntentService extends IntentService {
         Long idUser = parameters.getLong("idUser");
         UserEntity user = service.getUserByIdUser(idUser);
         UserModel userModel = userModelMapper.toUserModel(user, null, false);
-        notificationManager.sendNewFollowerNotification(userModel);
+        followNotificationManager.sendNewFollowerNotification(userModel);
     }
 
     private void receivedUnknown(JSONObject parameters) {
