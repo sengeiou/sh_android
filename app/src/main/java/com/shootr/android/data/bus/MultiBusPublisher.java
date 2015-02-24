@@ -1,8 +1,9 @@
 package com.shootr.android.data.bus;
 
+import com.shootr.android.domain.bus.BusPublisher;
 import com.squareup.otto.Bus;
 
-public class MultiBusPublisher implements BusPublisher{
+public class MultiBusPublisher implements BusPublisher {
 
     private final Bus[] buses;
 

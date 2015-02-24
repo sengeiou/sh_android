@@ -13,6 +13,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.event.WatchingInteractor;
+import com.shootr.android.domain.service.ShotDispatcher;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -34,4 +35,5 @@ public class InteractorModule {
     @Provides @Singleton PostExecutionThread providePostExecutionThread() {
         return new UIThread();
     }
+
 }

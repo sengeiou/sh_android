@@ -1,4 +1,4 @@
-package com.shootr.android.data.bus;
+package com.shootr.android.domain.bus;
 
 public interface WatchUpdateRequest {
 
