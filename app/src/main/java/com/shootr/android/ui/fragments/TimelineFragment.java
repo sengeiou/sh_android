@@ -320,7 +320,6 @@ public class TimelineFragment extends BaseFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_SHOT && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT).show();
             startRefreshing(getActivity());
         }else if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
