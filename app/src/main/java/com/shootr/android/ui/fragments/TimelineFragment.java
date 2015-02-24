@@ -31,6 +31,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.validation.EventValidator;
@@ -70,7 +71,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView {
+        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView, ShotSent.Receiver {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     public static final int REQUEST_NEW_SHOT = 1;
@@ -521,6 +522,11 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Received %d old shots", olderShotsSize);
             adapter.addShotsBelow(shots);
         }
+    }
+
+    @Subscribe
+    @Override public void onShotSent(ShotSent.Event event) {
+        startRefreshing(getActivity());
     }
 
     @Subscribe
