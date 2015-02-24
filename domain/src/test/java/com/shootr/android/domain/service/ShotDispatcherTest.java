@@ -26,6 +26,7 @@ public class ShotDispatcherTest {
     private static final Long QUEUED_ID = 1L;
 
     @Mock BusPublisher busPublisher;
+    @Mock ShotQueueListener shotQueueListener;
     @Spy ShotRepository shotRepository = new StubShotRepository();
     @Spy ShotQueueRepository shotQueueRepository = new StubShotQueueRepository();
 
@@ -34,7 +35,7 @@ public class ShotDispatcherTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotDispatcher = new ShotDispatcher(shotRepository, shotQueueRepository, busPublisher);
+        shotDispatcher = new ShotDispatcher(shotRepository, shotQueueRepository, busPublisher, shotQueueListener);
     }
 
     @Test
@@ -73,7 +74,7 @@ public class ShotDispatcherTest {
     }
 
     @Test
-    public void shouldNotifyToBusWhenShotSent() throws Exception {
+    public void shouldPostToBusWhenShotSent() throws Exception {
         shotDispatcher.sendShot(shot());
 
         ArgumentCaptor<ShotSent.Event> eventArgumentCaptor = ArgumentCaptor.forClass(ShotSent.Event.class);
@@ -81,6 +82,27 @@ public class ShotDispatcherTest {
         ShotSent.Event event = eventArgumentCaptor.getValue();
 
         assertThat(event.getShot()).isNotNull();
+    }
+
+    @Test
+    public void shouldNotifyListenerOnlyOnceWhenSendingShot() throws Exception {
+        shotDispatcher.sendShot(shot());
+        verify(shotQueueListener, times(1)).onSendingShot(any(QueuedShot.class));
+    }
+
+    @Test
+    public void shouldNotifyListenerWhenShotSent() throws Exception {
+        shotDispatcher.sendShot(shot());
+        verify(shotQueueListener, times(1)).onShotSent(any(QueuedShot.class));
+    }
+
+    @Test
+    public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
+        when(shotRepository.putShot(any(Shot.class))).thenThrow(new RepositoryException(null));
+
+        shotDispatcher.sendShot(shot());
+
+        verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class));
     }
 
     class StubShotQueueRepository implements ShotQueueRepository {

@@ -2,8 +2,10 @@ package com.shootr.android.notifications.dagger;
 
 import android.app.Application;
 import android.support.v4.app.NotificationManagerCompat;
+import com.shootr.android.domain.service.ShotQueueListener;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.ShootrNotificationManager;
+import com.shootr.android.notifications.ShotQueueNotificationListener;
 import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.android.util.PicassoWrapper;
 import dagger.Module;
@@ -33,5 +35,9 @@ public class NotificationModule {
         return new NotificationBuilderFactory();
     }
 
+    @Provides @Singleton ShotQueueListener providesShotQueueListener(
+      ShotQueueNotificationListener shotQueueNotificationListener) {
+        return shotQueueNotificationListener;
+    }
 
 }

@@ -15,15 +15,17 @@ public class ShotDispatcher {
     private final ShotRepository remoteShotRepository;
     private final ShotQueueRepository shotQueueRepository;
     private final BusPublisher busPublisher;
+    private final ShotQueueListener shotQueueListener;
 
     private boolean isDispatching;
     private Queue<QueuedShot> shotDispatchingQueue;
 
     @Inject public ShotDispatcher(@Remote ShotRepository remoteShotRepository, ShotQueueRepository shotQueueRepository,
-      BusPublisher busPublisher) {
+      BusPublisher busPublisher, ShotQueueListener shotQueueListener) {
         this.remoteShotRepository = remoteShotRepository;
         this.shotQueueRepository = shotQueueRepository;
         this.busPublisher = busPublisher;
+        this.shotQueueListener = shotQueueListener;
         shotDispatchingQueue = new LinkedList<>();
         init();
     }
@@ -62,23 +64,30 @@ public class ShotDispatcher {
 
     private void sendShotToServer(QueuedShot queuedShot) {
         try {
+            notifySendingShot(queuedShot);
             Shot shotSent = remoteShotRepository.putShot(queuedShot.getShot());
+            queuedShot.setShot(shotSent);
+            notifyShotSent(queuedShot);
             clearShotFromQueue(queuedShot);
-            notifyShotSent(shotSent);
         } catch (Exception e) {
-            shotSendingFailed(queuedShot);
+            notifyShotSendingFailed(queuedShot);
         }
         dispatchNextItem();
     }
 
-    private void notifyShotSent(Shot shotSent) {
-        busPublisher.post(new ShotSent.Event(shotSent));
+    private void notifySendingShot(QueuedShot queuedShot) {
+        shotQueueListener.onSendingShot(queuedShot);
     }
 
-    private void shotSendingFailed(QueuedShot queuedShot) {
+    private void notifyShotSent(QueuedShot queuedShot) {
+        busPublisher.post(new ShotSent.Event(queuedShot.getShot()));
+        shotQueueListener.onShotSent(queuedShot);
+    }
+
+    private void notifyShotSendingFailed(QueuedShot queuedShot) {
         queuedShot.setFailed(true);
         shotQueueRepository.put(queuedShot);
-
+        shotQueueListener.onShotFailed(queuedShot);
     }
 
     private void clearShotFromQueue(QueuedShot queuedShot) {
