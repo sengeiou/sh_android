@@ -1,7 +1,6 @@
 package com.shootr.android.db;
 
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.android.data.repository.EventInfoRepositoryImpl;
 import com.shootr.android.data.repository.EventSearchRepositoryImpl;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
@@ -11,7 +10,6 @@ import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -38,10 +36,6 @@ public class ManagerModule {
 
     @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
         return new DeviceManager(openHelper, deviceMapper);
-    }
-
-    @Provides @Singleton EventInfoRepository provideEventInfoRepository(EventInfoRepositoryImpl eventInfoRepository) {
-        return eventInfoRepository;
     }
 
     @Provides @Singleton EventSearchRepository provideEventSearchRepository(EventSearchRepositoryImpl eventSearchRepository) {
