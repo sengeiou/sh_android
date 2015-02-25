@@ -5,7 +5,11 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.service.shot.ShootrShotService;
+import com.shootr.android.domain.utils.ImageResizer;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,10 +28,12 @@ public class ShotDispatcherTest {
 
     private static final String COMMENT_STUB = "comment";
     private static final Long QUEUED_ID = 1L;
+    private static final File IMAGE_FILE_STUB = new File(".");
+    private static final File IMAGE_FILE_NULL = null;
 
     @Mock BusPublisher busPublisher;
     @Mock ShotQueueListener shotQueueListener;
-    @Spy ShotRepository shotRepository = new StubShotRepository();
+    @Mock ShootrShotService shootrShotService;
     @Spy ShotQueueRepository shotQueueRepository = new StubShotQueueRepository();
 
     private ShotDispatcher shotDispatcher;
@@ -35,37 +41,36 @@ public class ShotDispatcherTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotDispatcher = new ShotDispatcher(shotRepository, shotQueueRepository, busPublisher, shotQueueListener);
+        shotDispatcher = new ShotDispatcher(shotQueueRepository, shootrShotService, busPublisher, shotQueueListener);
     }
 
     @Test
     public void shouldPutOneShotInRepositoryWhenOneShotSent() throws Exception {
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        verify(shotRepository, times(1)).putShot(any(Shot.class));
+        verify(shootrShotService, times(1)).sendShot(any(Shot.class));
     }
 
     @Test
-    public void shouldPutTwoShotsInRepositoryWhenTwoShotsSent() throws Exception {
-        shotDispatcher.sendShot(shot());
-        shotDispatcher.sendShot(shot());
+    public void shouldSendTwoShotsThroughServiceWhenTwoShotsSentSequentially() throws Exception {
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        verify(shotRepository, times(2)).putShot(any(Shot.class));
+        verify(shootrShotService, times(2)).sendShot(any(Shot.class));
     }
 
     @Test
     public void shouldRemoveFromQueueWhenShotSent() throws Exception {
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         verify(shotQueueRepository, times(1)).remove(any(QueuedShot.class));
-
     }
 
     @Test
     public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
-        when(shotRepository.putShot(any(Shot.class))).thenThrow(new RepositoryException(null));
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException(null));
 
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<QueuedShot> queuedShotCaptor = ArgumentCaptor.forClass(QueuedShot.class);
         verify(shotQueueRepository, atLeastOnce()).put(queuedShotCaptor.capture());
@@ -74,8 +79,10 @@ public class ShotDispatcherTest {
     }
 
     @Test
-    public void shouldPostToBusWhenShotSent() throws Exception {
-        shotDispatcher.sendShot(shot());
+    public void shouldPostANotNullToBusWhenShotSent() throws Exception {
+        when(shootrShotService.sendShot(any(Shot.class))).thenReturn(shot());
+
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<ShotSent.Event> eventArgumentCaptor = ArgumentCaptor.forClass(ShotSent.Event.class);
         verify(busPublisher, times(1)).post(eventArgumentCaptor.capture());
@@ -86,21 +93,21 @@ public class ShotDispatcherTest {
 
     @Test
     public void shouldNotifyListenerOnlyOnceWhenSendingShot() throws Exception {
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onSendingShot(any(QueuedShot.class));
     }
 
     @Test
     public void shouldNotifyListenerWhenShotSent() throws Exception {
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
         verify(shotQueueListener, times(1)).onShotSent(any(QueuedShot.class));
     }
 
     @Test
     public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
-        when(shotRepository.putShot(any(Shot.class))).thenThrow(new RepositoryException(null));
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException(null));
 
-        shotDispatcher.sendShot(shot());
+        shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class));
     }
@@ -114,13 +121,6 @@ public class ShotDispatcherTest {
 
         @Override public void remove(QueuedShot queuedShot) {
 
-        }
-    }
-
-    class StubShotRepository implements ShotRepository {
-
-        @Override public Shot putShot(Shot shot) {
-            return shot;
         }
     }
 

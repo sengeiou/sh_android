@@ -1,10 +1,13 @@
 package com.shootr.android.domain;
 
+import java.io.File;
+
 public class QueuedShot {
 
     private Long idQueue;
     private Shot shot;
     private boolean failed;
+    private File imageFile;
 
     public QueuedShot(Shot shot) {
         this.shot = shot;
@@ -32,6 +35,14 @@ public class QueuedShot {
 
     public void setFailed(boolean failed) {
         this.failed = failed;
+    }
+
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(File imageFile) {
+        this.imageFile = imageFile;
     }
 
     @Override

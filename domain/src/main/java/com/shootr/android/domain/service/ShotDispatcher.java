@@ -4,8 +4,11 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.service.shot.ShootrShotService;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 import javax.inject.Inject;
@@ -14,18 +17,18 @@ import javax.inject.Singleton;
 @Singleton
 public class ShotDispatcher {
 
-    private final ShotRepository remoteShotRepository;
     private final ShotQueueRepository shotQueueRepository;
+    private final ShootrShotService shootrShotService ;
     private final BusPublisher busPublisher;
     private final ShotQueueListener shotQueueListener;
 
     private boolean isDispatching;
     private final Queue<QueuedShot> shotDispatchingQueue;
 
-    @Inject public ShotDispatcher(@Remote ShotRepository remoteShotRepository, ShotQueueRepository shotQueueRepository,
+    @Inject public ShotDispatcher(ShotQueueRepository shotQueueRepository, ShootrShotService shootrShotService,
       BusPublisher busPublisher, ShotQueueListener shotQueueListener) {
-        this.remoteShotRepository = remoteShotRepository;
         this.shotQueueRepository = shotQueueRepository;
+        this.shootrShotService = shootrShotService;
         this.busPublisher = busPublisher;
         this.shotQueueListener = shotQueueListener;
         shotDispatchingQueue = new LinkedList<>();
@@ -36,25 +39,33 @@ public class ShotDispatcher {
 
     }
 
-    public void sendShot(Shot shot) {
+    public void sendShot(Shot shot, File shotImage) {
         if (shot == null) {
             throw new IllegalArgumentException("Can't send a null shot. You crazy person.");
         }
-        addToQueueAndDispatch(shot);
+        QueuedShot queuedShot = queuedFrom(shot, shotImage);
+        addToQueueAndDispatch(queuedShot);
     }
 
-    private void addToQueueAndDispatch(Shot shot) {
+    private void addToQueueAndDispatch(QueuedShot queuedShot) {
         synchronized (shotDispatchingQueue) {
-            QueuedShot queuedShot = putShotIntoPersistenQueue(shot);
+            putShotIntoPersistenQueue(queuedShot);
             shotDispatchingQueue.add(queuedShot);
             notifyShotQueued(queuedShot);
         }
         startDispatching();
     }
 
-    private QueuedShot putShotIntoPersistenQueue(Shot shot) {
+    private QueuedShot putShotIntoPersistenQueue(QueuedShot shot) {
+        return shotQueueRepository.put(shot);
+    }
+
+    private QueuedShot queuedFrom(Shot shot, File shotImage) {
         QueuedShot queuedShot = new QueuedShot(shot);
-        return shotQueueRepository.put(queuedShot);
+        if (shotImage != null) {
+            queuedShot.setImageFile(shotImage);
+        }
+        return queuedShot;
     }
 
     private void startDispatching() {
@@ -75,12 +86,20 @@ public class ShotDispatcher {
     private void sendShotToServer(QueuedShot queuedShot) {
         try {
             notifySendingShot(queuedShot);
-            Shot shotSent = remoteShotRepository.putShot(queuedShot.getShot());
+            fillImageUrlFromQueuedShot(queuedShot);
+            Shot shotSent = shootrShotService.sendShot(queuedShot.getShot());
             queuedShot.setShot(shotSent);
             notifyShotSent(queuedShot);
             clearShotFromQueue(queuedShot);
         } catch (Exception e) {
             notifyShotSendingFailed(queuedShot);
+        }
+    }
+
+    private void fillImageUrlFromQueuedShot(QueuedShot queuedShot) {
+        if (queuedShot.getShot().getImage() == null && queuedShot.getImageFile() != null) {
+            String imageUrl = shootrShotService.uploadShotImage(queuedShot.getImageFile());
+            queuedShot.getShot().setImage(imageUrl);
         }
     }
 

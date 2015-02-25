@@ -24,7 +24,6 @@ import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.presenter.EventsListPresenter;
@@ -112,7 +111,7 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class,
     UploadProfilePhotoJob.class,
-    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
+    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
 

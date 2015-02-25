@@ -1,5 +1,6 @@
 package com.shootr.android.interactor;
 
+import com.shootr.android.domain.dagger.ServiceModule;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.CreateEventInteractor;
@@ -18,13 +19,15 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
+  includes = { ServiceModule.class },
   injects = {
     GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
     EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class,
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class,
   },
-  complete = false)
+  complete = false
+)
 public class InteractorModule {
 
     @Provides @Singleton InteractorHandler provideInteractorHandler(InteractorExecutor jobInteractorHandler) {
@@ -34,5 +37,4 @@ public class InteractorModule {
     @Provides @Singleton PostExecutionThread providePostExecutionThread() {
         return new UIThread();
     }
-
 }

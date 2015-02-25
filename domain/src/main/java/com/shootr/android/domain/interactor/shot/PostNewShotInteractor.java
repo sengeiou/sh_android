@@ -12,11 +12,11 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.domain.service.ShotDispatcher;
+import com.shootr.android.domain.service.shot.ShootrShotService;
+import java.io.File;
 import java.util.Date;
 import javax.inject.Inject;
 
@@ -29,9 +29,10 @@ public class PostNewShotInteractor implements Interactor {
     private final WatchRepository localWatchRepository;
     private final ShotDispatcher shotDispatcher;
     private String comment;
-    private String imageUrl;
+    private File imageFile;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
+    private String imageUrl;
 
     @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Local EventRepository localEventRepository,
@@ -44,9 +45,9 @@ public class PostNewShotInteractor implements Interactor {
         this.shotDispatcher = shotDispatcher;
     }
 
-    public void postNewShot(String comment, String imageUrl, Callback callback, InteractorErrorCallback errorCallback) {
+    public void postNewShot(String comment, File image, Callback callback, InteractorErrorCallback errorCallback) {
         this.comment = comment;
-        this.imageUrl = imageUrl;
+        this.imageFile = image;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -55,8 +56,7 @@ public class PostNewShotInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         Shot shotToPublish = createShotFromParameters();
         try {
-            validateShot(shotToPublish);
-            notifyLoaded();
+            notifyReadyToSend();
             sendShotToServer(shotToPublish);
         } catch (DomainValidationException validationError) {
             notifyError(validationError);
@@ -64,11 +64,7 @@ public class PostNewShotInteractor implements Interactor {
     }
 
     private void sendShotToServer(Shot shot) throws ServerCommunicationException {
-        shotDispatcher.sendShot(shot);
-    }
-
-    private void validateShot(Shot shotToPublish) throws DomainValidationException {
-        //TODO add mandatory validation
+        shotDispatcher.sendShot(shot, imageFile);
     }
 
     private Shot createShotFromParameters() {
@@ -124,7 +120,7 @@ public class PostNewShotInteractor implements Interactor {
         }
     }
 
-    private void notifyLoaded() {
+    private void notifyReadyToSend() {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded();

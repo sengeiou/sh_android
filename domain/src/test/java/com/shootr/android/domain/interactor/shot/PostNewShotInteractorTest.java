@@ -12,16 +12,14 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.domain.service.ShotDispatcher;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -35,7 +33,8 @@ public class PostNewShotInteractorTest {
     private static final Long VISIBLE_EVENT_ID = 1L;
     private static final String COMMENT_EMPTY = "";
     private static final String COMMENT_STUB = "comment";
-    private static final String IMAGE_STUB = "http://image.jpg";
+    private static final File IMAGE_NULL = null;
+    private static final File IMAGE_STUB = new File(".");
     private static final String EVENT_TITLE_STUB = "title";
     private static final String EVENT_TAG_STUB = "tag";
 
@@ -60,10 +59,10 @@ public class PostNewShotInteractorTest {
     public void shouldSendShotWithCurrentUserInfo() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotUserInfo userInfo = publishedShot.getUserInfo();
         assertUserInfoIsFromUser(userInfo, currentUser());
@@ -74,10 +73,10 @@ public class PostNewShotInteractorTest {
         setupCurrentUserSession();
         setupVisibleEvent();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertEventInfoIsFromEvent(eventInfo, visibleEvent());
@@ -87,10 +86,10 @@ public class PostNewShotInteractorTest {
     public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertThat(eventInfo).isNull();
@@ -100,10 +99,10 @@ public class PostNewShotInteractorTest {
     public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_EMPTY, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_EMPTY, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture());
+        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         assertThat(publishedShot.getComment()).isNull();
     }
@@ -112,9 +111,9 @@ public class PostNewShotInteractorTest {
     public void shouldSendShotThroughDispatcher() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_STUB, new DummyCallback(), new DummyErrorCallback());
+        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
-        verify(shotDispatcher, times(1)).sendShot(any(Shot.class));
+        verify(shotDispatcher, times(1)).sendShot(any(Shot.class), any(File.class));
     }
 
 
