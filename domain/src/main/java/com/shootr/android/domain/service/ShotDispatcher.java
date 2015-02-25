@@ -92,7 +92,7 @@ public class ShotDispatcher {
             notifyShotSent(queuedShot);
             clearShotFromQueue(queuedShot);
         } catch (Exception e) {
-            notifyShotSendingFailed(queuedShot);
+            notifyShotSendingFailed(queuedShot, e);
         }
     }
 
@@ -116,10 +116,11 @@ public class ShotDispatcher {
         shotQueueListener.onShotSent(queuedShot);
     }
 
-    private void notifyShotSendingFailed(QueuedShot queuedShot) {
+    private void notifyShotSendingFailed(QueuedShot queuedShot, Exception e) {
         queuedShot.setFailed(true);
-        shotQueueListener.onShotFailed(queuedShot);
+        shotQueueListener.onShotFailed(queuedShot, e);
         shotQueueRepository.put(queuedShot);
+
     }
 
     private void clearShotFromQueue(QueuedShot queuedShot) {

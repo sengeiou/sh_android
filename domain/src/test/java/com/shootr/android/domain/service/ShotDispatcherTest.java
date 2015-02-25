@@ -5,10 +5,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.RepositoryException;
-import com.shootr.android.domain.repository.PhotoService;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.service.shot.ShootrShotService;
-import com.shootr.android.domain.utils.ImageResizer;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +106,7 @@ public class ShotDispatcherTest {
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
-        verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class));
+        verify(shotQueueListener, times(1)).onShotFailed(any(QueuedShot.class), any(Exception.class));
     }
 
     class StubShotQueueRepository implements ShotQueueRepository {

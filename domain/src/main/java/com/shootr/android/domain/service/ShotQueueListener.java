@@ -8,7 +8,7 @@ public interface ShotQueueListener {
 
     void onShotSent(QueuedShot shot);
 
-    void onShotFailed(QueuedShot shot);
+    void onShotFailed(QueuedShot shot, Exception e);
 
     void onQueueShot(QueuedShot queuedShot);
 }
