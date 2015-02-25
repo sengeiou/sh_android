@@ -10,4 +10,5 @@ public interface ShotQueueListener {
 
     void onShotFailed(QueuedShot shot);
 
+    void onQueueShot(QueuedShot queuedShot);
 }

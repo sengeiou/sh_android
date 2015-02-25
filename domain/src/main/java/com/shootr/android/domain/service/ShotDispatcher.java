@@ -47,6 +47,7 @@ public class ShotDispatcher {
         synchronized (shotDispatchingQueue) {
             QueuedShot queuedShot = putShotIntoPersistenQueue(shot);
             shotDispatchingQueue.add(queuedShot);
+            notifyShotQueued(queuedShot);
         }
         startDispatching();
     }
@@ -81,6 +82,10 @@ public class ShotDispatcher {
         } catch (Exception e) {
             notifyShotSendingFailed(queuedShot);
         }
+    }
+
+    private void notifyShotQueued(QueuedShot queuedShot) {
+        shotQueueListener.onQueueShot(queuedShot);
     }
 
     private void notifySendingShot(QueuedShot queuedShot) {
