@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class ShotQueueNotificationManager {
 
-    public static final int NOTIFICATION_ID_PREFIX = 3000;
+    private static final String NOTIFICATION_TAG = "shotqueue";
 
     private final Context context;
     private final NotificationBuilderFactory notificationBuilderFactory;
@@ -25,10 +25,10 @@ public class ShotQueueNotificationManager {
     public void showSendingShotNotification(QueuedShot shot) {
         ShotQueueSendingNotification notification =
           new ShotQueueSendingNotification(context, notificationBuilderFactory, shot);
-        androidNotificationManager.notify(notification);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
 
     public void hideSendingShotNotification(QueuedShot shot) {
-        androidNotificationManager.removeNotification((int) (NOTIFICATION_ID_PREFIX + (shot.getIdQueue() % 999)));
+        androidNotificationManager.removeNotification(NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
 }

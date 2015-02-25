@@ -18,19 +18,16 @@ public class AndroidNotificationManager {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    public int notify(CommonNotification notification) {
+    public void notify(CommonNotification notification, String tag, int id) {
         if (notificationsEnabled.get()) {
             Notification androidNotification = notification.build();
-            int notificationId = notification.getId();
-            notificationManager.notify(notificationId, androidNotification);
-            return notificationId;
+            notificationManager.notify(tag, id, androidNotification);
         } else {
             Timber.d("Notification not shown. They are disabled.");
-            return -1;
         }
     }
 
-    public void removeNotification(int notificationId) {
-        notificationManager.cancel(notificationId);
+    public void removeNotification(String tag, int notificationId) {
+        notificationManager.cancel(tag, notificationId);
     }
 }

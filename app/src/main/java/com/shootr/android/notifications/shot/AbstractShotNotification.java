@@ -62,8 +62,4 @@ public abstract class AbstractShotNotification extends CommonNotification {
     private String getImageAndTextContent(ShotModel shot) {
         return String.format(imageAndTextPattern, shot.getComment());
     }
-
-    @Override public int getId() {
-        return ShotNotificationManager.SHOT_NOTIFICATION_ID;
-    }
 }

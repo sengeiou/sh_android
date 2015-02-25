@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 public class FollowNotificationManager {
 
-    public static final int NOTIFICATION_FOLLOW_PREFIX = 1000;
+    private static final String NOTIFICATION_TAG = "follow";
     private final Context context;
     private final AndroidNotificationManager androidNotificationManager;
     private final NotificationBuilderFactory notificationBuilderFactory;
@@ -24,8 +24,8 @@ public class FollowNotificationManager {
         this.picasso = picasso;
     }
 
-
     public void sendNewFollowerNotification(UserModel user) {
-        androidNotificationManager.notify(new FollowerNotification(context, notificationBuilderFactory, user));
+        FollowerNotification notification = new FollowerNotification(context, notificationBuilderFactory, user);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, user.getIdUser().intValue());
     }
 }

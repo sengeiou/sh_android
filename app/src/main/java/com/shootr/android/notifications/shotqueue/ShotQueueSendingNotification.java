@@ -31,8 +31,4 @@ public class ShotQueueSendingNotification extends CommonNotification {
     @Override public Bitmap getWearBackground() {
         return null;
     }
-
-    @Override public int getId() {
-        return (int) (ShotQueueNotificationManager.NOTIFICATION_ID_PREFIX + (shot.getIdQueue() % 999));
-    }
 }

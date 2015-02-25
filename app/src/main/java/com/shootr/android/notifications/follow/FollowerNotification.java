@@ -41,10 +41,6 @@ public class FollowerNotification extends CommonNotification {
         return BitmapFactory.decodeResource(getResources(), R.drawable.drawer_background);
     }
 
-    @Override public int getId() {
-        return (int) (FollowNotificationManager.NOTIFICATION_FOLLOW_PREFIX + (user.getIdUser() % 999));
-    }
-
     protected PendingIntent getOpenProfileNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PROFILE);
         intent.putExtra(ProfileContainerActivity.EXTRA_USER,user.getIdUser());

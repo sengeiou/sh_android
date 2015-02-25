@@ -65,6 +65,4 @@ public abstract class CommonNotification {
     public abstract Bitmap getLargeIcon();
 
     public abstract Bitmap getWearBackground();
-
-    public abstract int getId();
 }

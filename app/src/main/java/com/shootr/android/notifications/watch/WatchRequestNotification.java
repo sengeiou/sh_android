@@ -11,7 +11,6 @@ import com.shootr.android.R;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
-import com.shootr.android.notifications.watch.WatchRequestNotificationManager;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
@@ -80,10 +79,6 @@ public class WatchRequestNotification extends CommonNotification {
     @Override
     public Bitmap getWearBackground() {
         return getUserPhoto(userWatchingModel.getPhoto());
-    }
-
-    @Override public int getId() {
-        return (int) (WatchRequestNotificationManager.NOTIFICATION_WATCH_REQUEST_PREFIX + (userWatchingModel.getIdUser() % 999));
     }
 
     private Bitmap getDefaultPhoto() {

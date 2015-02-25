@@ -14,6 +14,7 @@ import javax.inject.Inject;
 public class ShotNotificationManager {
 
     public static final int SHOT_NOTIFICATION_ID = 1;
+    private static final String NOTIFICATION_TAG = "shot";
 
     private final Context context;
     private final List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
@@ -38,7 +39,7 @@ public class ShotNotificationManager {
         } else {
             notification = buildSingleShotNotification(shot);
         }
-        androidNotificationManager.notify(notification);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, SHOT_NOTIFICATION_ID);
     }
 
 
@@ -51,7 +52,7 @@ public class ShotNotificationManager {
     }
 
     public void clearShotNotifications() {
-        androidNotificationManager.removeNotification(SHOT_NOTIFICATION_ID);
+        androidNotificationManager.removeNotification(NOTIFICATION_TAG, SHOT_NOTIFICATION_ID);
         shotsCurrentlyNotified.clear();
     }
 
