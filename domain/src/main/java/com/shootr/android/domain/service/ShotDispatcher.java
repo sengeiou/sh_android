@@ -9,7 +9,9 @@ import com.shootr.android.domain.repository.ShotRepository;
 import java.util.LinkedList;
 import java.util.Queue;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ShotDispatcher {
 
     private final ShotRepository remoteShotRepository;
@@ -18,7 +20,7 @@ public class ShotDispatcher {
     private final ShotQueueListener shotQueueListener;
 
     private boolean isDispatching;
-    private Queue<QueuedShot> shotDispatchingQueue;
+    private final Queue<QueuedShot> shotDispatchingQueue;
 
     @Inject public ShotDispatcher(@Remote ShotRepository remoteShotRepository, ShotQueueRepository shotQueueRepository,
       BusPublisher busPublisher, ShotQueueListener shotQueueListener) {
@@ -42,9 +44,11 @@ public class ShotDispatcher {
     }
 
     private void addToQueueAndDispatch(Shot shot) {
-        QueuedShot queuedShot = putShotIntoPersistenQueue(shot);
-        shotDispatchingQueue.add(queuedShot);
-        dispatchNextItem();
+        synchronized (shotDispatchingQueue) {
+            QueuedShot queuedShot = putShotIntoPersistenQueue(shot);
+            shotDispatchingQueue.add(queuedShot);
+        }
+        startDispatching();
     }
 
     private QueuedShot putShotIntoPersistenQueue(Shot shot) {
@@ -52,13 +56,18 @@ public class ShotDispatcher {
         return shotQueueRepository.put(queuedShot);
     }
 
-    private void dispatchNextItem() {
+    private void startDispatching() {
         if (!isDispatching) {
             isDispatching = true;
-            sendShotToServer(shotDispatchingQueue.poll());
-            if (shotDispatchingQueue.peek() == null) {
-                isDispatching = false;
-            }
+            dispatchNextItem();
+            isDispatching = false;
+        }
+    }
+
+    private void dispatchNextItem() {
+        sendShotToServer(shotDispatchingQueue.poll());
+        if (shotDispatchingQueue.peek() != null) {
+            dispatchNextItem();
         }
     }
 
@@ -72,7 +81,6 @@ public class ShotDispatcher {
         } catch (Exception e) {
             notifyShotSendingFailed(queuedShot);
         }
-        dispatchNextItem();
     }
 
     private void notifySendingShot(QueuedShot queuedShot) {
@@ -86,8 +94,8 @@ public class ShotDispatcher {
 
     private void notifyShotSendingFailed(QueuedShot queuedShot) {
         queuedShot.setFailed(true);
-        shotQueueRepository.put(queuedShot);
         shotQueueListener.onShotFailed(queuedShot);
+        shotQueueRepository.put(queuedShot);
     }
 
     private void clearShotFromQueue(QueuedShot queuedShot) {
