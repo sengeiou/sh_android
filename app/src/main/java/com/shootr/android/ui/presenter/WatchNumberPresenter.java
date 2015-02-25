@@ -59,7 +59,6 @@ public class WatchNumberPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
-        retrieveData(); //TODO sí?
     }
 
     @Override public void pause() {

@@ -171,7 +171,6 @@ public class TimelineFragment extends BaseFragment
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         watchNumberPresenter.resume();
-        loadEventPlaceholder();
     }
 
     @Override
@@ -335,6 +334,7 @@ public class TimelineFragment extends BaseFragment
     private void onEventChanged() {
         this.loadEventPlaceholder();
         watchNumberPresenter.initialize(this);
+        loadEventPlaceholder();
     }
 
     /* --- UI Events --- */
