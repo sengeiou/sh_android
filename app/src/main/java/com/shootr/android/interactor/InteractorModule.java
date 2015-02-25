@@ -13,14 +13,13 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.event.WatchingInteractor;
-import com.shootr.android.domain.service.ShotDispatcher;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
   injects = {
-    JobInteractorHandler.class, GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
+    GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
     EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class,
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class,
@@ -28,7 +27,7 @@ import javax.inject.Singleton;
   complete = false)
 public class InteractorModule {
 
-    @Provides @Singleton InteractorHandler provideInteractorHandler(JobInteractorHandler jobInteractorHandler) {
+    @Provides @Singleton InteractorHandler provideInteractorHandler(InteractorExecutor jobInteractorHandler) {
         return jobInteractorHandler;
     }
 
