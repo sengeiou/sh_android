@@ -4,9 +4,6 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
-import com.shootr.android.domain.repository.PhotoService;
-import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.LinkedList;
@@ -18,7 +15,7 @@ import javax.inject.Singleton;
 public class ShotDispatcher {
 
     private final ShotQueueRepository shotQueueRepository;
-    private final ShootrShotService shootrShotService ;
+    private final ShootrShotService shootrShotService;
     private final BusPublisher busPublisher;
     private final ShotQueueListener shotQueueListener;
 
@@ -71,15 +68,15 @@ public class ShotDispatcher {
     private void startDispatching() {
         if (!isDispatching) {
             isDispatching = true;
-            dispatchNextItem();
+            dispatchNextItems();
             isDispatching = false;
         }
     }
 
-    private void dispatchNextItem() {
+    private void dispatchNextItems() {
         sendShotToServer(shotDispatchingQueue.poll());
         if (shotDispatchingQueue.peek() != null) {
-            dispatchNextItem();
+            dispatchNextItems();
         }
     }
 
@@ -120,7 +117,6 @@ public class ShotDispatcher {
         queuedShot.setFailed(true);
         shotQueueListener.onShotFailed(queuedShot, e);
         shotQueueRepository.put(queuedShot);
-
     }
 
     private void clearShotFromQueue(QueuedShot queuedShot) {
