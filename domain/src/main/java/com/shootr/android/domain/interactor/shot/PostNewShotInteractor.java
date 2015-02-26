@@ -14,8 +14,8 @@ import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
-import com.shootr.android.domain.service.ShotDispatcher;
-import com.shootr.android.domain.service.shot.ShootrShotService;
+import com.shootr.android.domain.service.ShotSender;
+import com.shootr.android.domain.service.dagger.Background;
 import java.io.File;
 import java.util.Date;
 import javax.inject.Inject;
@@ -27,22 +27,22 @@ public class PostNewShotInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
     private final WatchRepository localWatchRepository;
-    private final ShotDispatcher shotDispatcher;
+    private final ShotSender shotSender;
     private String comment;
     private File imageFile;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
-    private String imageUrl;
 
     @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Local EventRepository localEventRepository,
-      @Local WatchRepository localWatchRepository, ShotDispatcher shotDispatcher) {
+      @Local WatchRepository localWatchRepository, @Background
+    ShotSender shotSender) {
         this.postExecutionThread = postExecutionThread;
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localWatchRepository = localWatchRepository;
-        this.shotDispatcher = shotDispatcher;
+        this.shotSender = shotSender;
     }
 
     public void postNewShot(String comment, File image, Callback callback, InteractorErrorCallback errorCallback) {
@@ -64,13 +64,12 @@ public class PostNewShotInteractor implements Interactor {
     }
 
     private void sendShotToServer(Shot shot) throws ServerCommunicationException {
-        shotDispatcher.sendShot(shot, imageFile);
+        shotSender.sendShot(shot, imageFile);
     }
 
     private Shot createShotFromParameters() {
         Shot shot = new Shot();
         shot.setComment(filterComment(comment));
-        shot.setImage(imageUrl);
         shot.setPublishDate(new Date());
         fillShotContextualInfo(shot);
         return shot;

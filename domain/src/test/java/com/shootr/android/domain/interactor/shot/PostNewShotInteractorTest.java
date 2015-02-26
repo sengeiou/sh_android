@@ -13,7 +13,7 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
-import com.shootr.android.domain.service.ShotDispatcher;
+import com.shootr.android.domain.service.ShotSender;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class PostNewShotInteractorTest {
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
     @Mock WatchRepository localWatchRepository;
-    @Mock ShotDispatcher shotDispatcher;
+    @Mock ShotSender shotSender;
 
     private PostNewShotInteractor interactor;
 
@@ -52,7 +52,7 @@ public class PostNewShotInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         interactor =
           new PostNewShotInteractor(postExecutionThread, interactorHandler, sessionRepository, localEventRepository,
-            localWatchRepository, shotDispatcher);
+            localWatchRepository, shotSender);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class PostNewShotInteractorTest {
         interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
+        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotUserInfo userInfo = publishedShot.getUserInfo();
         assertUserInfoIsFromUser(userInfo, currentUser());
@@ -76,7 +76,7 @@ public class PostNewShotInteractorTest {
         interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
+        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertEventInfoIsFromEvent(eventInfo, visibleEvent());
@@ -89,7 +89,7 @@ public class PostNewShotInteractorTest {
         interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
+        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertThat(eventInfo).isNull();
@@ -102,7 +102,7 @@ public class PostNewShotInteractorTest {
         interactor.postNewShot(COMMENT_EMPTY, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotDispatcher).sendShot(shotArgumentCaptor.capture(), any(File.class));
+        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         assertThat(publishedShot.getComment()).isNull();
     }
@@ -113,7 +113,7 @@ public class PostNewShotInteractorTest {
 
         interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
-        verify(shotDispatcher, times(1)).sendShot(any(Shot.class), any(File.class));
+        verify(shotSender, times(1)).sendShot(any(Shot.class), any(File.class));
     }
 
 

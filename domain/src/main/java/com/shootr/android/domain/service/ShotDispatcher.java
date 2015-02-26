@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ShotDispatcher {
+public class ShotDispatcher implements ShotSender {
 
     private final ShotQueueRepository shotQueueRepository;
     private final ShootrShotService shootrShotService;
@@ -36,7 +36,7 @@ public class ShotDispatcher {
 
     }
 
-    public void sendShot(Shot shot, File shotImage) {
+    @Override public void sendShot(Shot shot, File shotImage) {
         if (shot == null) {
             throw new IllegalArgumentException("Can't send a null shot. You crazy person.");
         }

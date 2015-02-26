@@ -184,6 +184,7 @@
           android:launchMode="singleTask"
             />
 
+        <service android:name=".data.background.ShotDispatcherBackgroundService" />
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"
