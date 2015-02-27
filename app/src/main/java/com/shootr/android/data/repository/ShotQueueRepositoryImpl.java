@@ -1,5 +1,8 @@
 package com.shootr.android.data.repository;
 
+import com.shootr.android.data.entity.ShotQueueEntity;
+import com.shootr.android.data.mapper.ShotQueueEntityMapper;
+import com.shootr.android.db.manager.ShotQueueManager;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.service.ShotQueueRepository;
 import java.util.ArrayList;
@@ -8,19 +11,24 @@ import javax.inject.Inject;
 
 public class ShotQueueRepositoryImpl implements ShotQueueRepository {
 
-    private List<QueuedShot> queuedShots = new ArrayList<>();
-    private long idSequence = 1L;
+    private final ShotQueueManager shotQueueManager;
+    private final ShotQueueEntityMapper mapper;
 
-    @Inject public ShotQueueRepositoryImpl() {
+    @Inject public ShotQueueRepositoryImpl(ShotQueueManager shotQueueManager, ShotQueueEntityMapper mapper) {
+        this.shotQueueManager = shotQueueManager;
+        this.mapper = mapper;
     }
 
     @Override public QueuedShot put(QueuedShot queuedShot) {
-        queuedShot.setIdQueue(idSequence++);
-        queuedShots.add(queuedShot);
-        return queuedShot;
+        ShotQueueEntity savedEntity = shotQueueManager.saveShotQueue(mapper.transform(queuedShot));
+        return mapper.transform(savedEntity);
     }
 
     @Override public void remove(QueuedShot queuedShot) {
-        queuedShots.remove(queuedShot);
+        shotQueueManager.deleteShotQueue(mapper.transform(queuedShot));
+    }
+
+    @Override public List<QueuedShot> getPendingShotQueue() {
+        return mapper.transform(shotQueueManager.retrievePendingShotQueue());
     }
 }

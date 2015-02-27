@@ -7,7 +7,9 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -28,12 +30,21 @@ public class ShotDispatcher implements ShotSender {
         this.shootrShotService = shootrShotService;
         this.busPublisher = busPublisher;
         this.shotQueueListener = shotQueueListener;
-        shotDispatchingQueue = new LinkedList<>();
+        shotDispatchingQueue = new LinkedBlockingQueue<>();
         init();
     }
 
     public void init() {
 
+    }
+
+    public void restartQueue() {
+        List<QueuedShot> pendingShotQueue = shotQueueRepository.getPendingShotQueue();
+        for (QueuedShot queuedShot : pendingShotQueue) {
+            shotDispatchingQueue.add(queuedShot);
+            notifyShotQueued(queuedShot);
+        }
+        startDispatching();
     }
 
     @Override public void sendShot(Shot shot, File shotImage) {
@@ -45,11 +56,9 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void addToQueueAndDispatch(QueuedShot queuedShot) {
-        synchronized (shotDispatchingQueue) {
-            putShotIntoPersistenQueue(queuedShot);
-            shotDispatchingQueue.add(queuedShot);
-            notifyShotQueued(queuedShot);
-        }
+        queuedShot = putShotIntoPersistenQueue(queuedShot);
+        shotDispatchingQueue.add(queuedShot);
+        notifyShotQueued(queuedShot);
         startDispatching();
     }
 
