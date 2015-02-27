@@ -22,7 +22,6 @@ public class ShotDispatcher implements ShotSender {
     private final ShotQueueListener shotQueueListener;
 
     private boolean isDispatching;
-    private final Queue<QueuedShot> shotDispatchingQueue;
 
     @Inject public ShotDispatcher(ShotQueueRepository shotQueueRepository, ShootrShotService shootrShotService,
       BusPublisher busPublisher, ShotQueueListener shotQueueListener) {
@@ -30,18 +29,11 @@ public class ShotDispatcher implements ShotSender {
         this.shootrShotService = shootrShotService;
         this.busPublisher = busPublisher;
         this.shotQueueListener = shotQueueListener;
-        shotDispatchingQueue = new LinkedBlockingQueue<>();
-        init();
-    }
-
-    public void init() {
-
     }
 
     public void restartQueue() {
         List<QueuedShot> pendingShotQueue = shotQueueRepository.getPendingShotQueue();
         for (QueuedShot queuedShot : pendingShotQueue) {
-            shotDispatchingQueue.add(queuedShot);
             notifyShotQueued(queuedShot);
         }
         startDispatching();
@@ -57,7 +49,6 @@ public class ShotDispatcher implements ShotSender {
 
     private void addToQueueAndDispatch(QueuedShot queuedShot) {
         queuedShot = putShotIntoPersistenQueue(queuedShot);
-        shotDispatchingQueue.add(queuedShot);
         notifyShotQueued(queuedShot);
         startDispatching();
     }
@@ -83,8 +74,9 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void dispatchNextItems() {
-        sendShotToServer(shotDispatchingQueue.poll());
-        if (shotDispatchingQueue.peek() != null) {
+        QueuedShot queuedShot = shotQueueRepository.nextQueuedShot();
+        if (queuedShot != null) {
+            sendShotToServer(queuedShot);
             dispatchNextItems();
         }
     }

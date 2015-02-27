@@ -10,4 +10,6 @@ public interface ShotQueueRepository {
     void remove(QueuedShot queuedShot);
 
     List<QueuedShot> getPendingShotQueue();
+
+    QueuedShot nextQueuedShot();
 }

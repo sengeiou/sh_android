@@ -15,6 +15,9 @@ public class ShotQueueEntityMapper {
     }
 
     public ShotQueueEntity transform(QueuedShot queuedShot) {
+        if (queuedShot == null) {
+            return null;
+        }
         ShotQueueEntity entity = new ShotQueueEntity();
         entity.setIdQueue(queuedShot.getIdQueue());
         entity.setFailed(queuedShot.isFailed() ? 1 : 0);
@@ -43,9 +46,12 @@ public class ShotQueueEntityMapper {
     }
 
     public QueuedShot transform(ShotQueueEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         QueuedShot queuedShot = new QueuedShot();
         queuedShot.setIdQueue(entity.getIdQueue());
-        queuedShot.setFailed(entity.getFailed()==1);
+        queuedShot.setFailed(entity.getFailed() == 1);
         String imageFile = entity.getImageFile();
         if (imageFile != null) {
             queuedShot.setImageFile(new File(imageFile));

@@ -31,4 +31,8 @@ public class ShotQueueRepositoryImpl implements ShotQueueRepository {
     @Override public List<QueuedShot> getPendingShotQueue() {
         return mapper.transform(shotQueueManager.retrievePendingShotQueue());
     }
+
+    @Override public QueuedShot nextQueuedShot() {
+        return mapper.transform(shotQueueManager.retrieveNextPendingShot());
+    }
 }

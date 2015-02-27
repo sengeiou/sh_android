@@ -62,4 +62,26 @@ public class ShotQueueManager extends AbstractManager {
         queryResult.close();
         return results;
     }
+
+    public ShotQueueEntity retrieveNextPendingShot() {
+        String where = DatabaseContract.ShotQueueTable.FAILED + "=?";
+        String[] whereArgs = new String[] {
+          String.valueOf(0)
+        };
+        Cursor queryResult = getReadableDatabase().query(DatabaseContract.ShotQueueTable.TABLE,
+          DatabaseContract.ShotQueueTable.PROJECTION,
+          where,
+          whereArgs,
+          null,
+          null,
+          null, "1");
+
+        ShotQueueEntity shotQueueEntity = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            shotQueueEntity = shotQueueCursorMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return shotQueueEntity;
+    }
 }
