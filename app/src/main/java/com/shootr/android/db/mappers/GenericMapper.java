@@ -16,14 +16,14 @@ public abstract class GenericMapper {
     public static final String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
 
     protected void setSynchronizedfromCursor(Cursor c, Synchronized s) {
-        long date = c.getLong(c.getColumnIndex(CSYS_BIRTH));
-        s.setCsysBirth(date != 0L ? new Date(date) : null);
+        long birthDate = c.getLong(c.getColumnIndex(CSYS_BIRTH));
+        s.setCsysBirth(birthDate != 0L ? new Date(birthDate) : null);
 
-        date = c.getLong(c.getColumnIndex(CSYS_DELETED));
-        s.setCsysDeleted(date != 0L ? new Date(date) : null);
+        long deletedDate = c.getLong(c.getColumnIndex(CSYS_DELETED));
+        s.setCsysDeleted(deletedDate != 0L ? new Date(deletedDate) : null);
 
-        date = c.getLong(c.getColumnIndex(CSYS_MODIFIED));
-        s.setCsysModified(date != 0L ? new Date(date) : null);
+        long modifiedDate = c.getLong(c.getColumnIndex(CSYS_MODIFIED));
+        s.setCsysModified(modifiedDate != 0L ? new Date(modifiedDate) : new Date(birthDate));
 
         s.setCsysRevision(c.getInt(c.getColumnIndex(CSYS_REVISION)));
         s.setCsysSynchronized(c.getString(c.getColumnIndex(CSYS_SYNCHRONIZED)));
@@ -35,7 +35,9 @@ public abstract class GenericMapper {
         Date deleted = s.getCsysDeleted();
         cv.put(CSYS_DELETED, deleted!=null ? deleted.getTime() : null);
         Date modified = s.getCsysModified();
-        cv.put(CSYS_MODIFIED, modified!=null ? modified.getTime() : null);
+        if (modified != null || birth != null) {
+            cv.put(CSYS_MODIFIED, modified!=null ? modified.getTime() : birth.getTime());
+        }
 
         cv.put(CSYS_REVISION, s.getCsysRevision());
         cv.put(CSYS_SYNCHRONIZED, s.getCsysSynchronized());

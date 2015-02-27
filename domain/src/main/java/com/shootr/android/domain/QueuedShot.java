@@ -9,6 +9,9 @@ public class QueuedShot {
     private boolean failed;
     private File imageFile;
 
+    public QueuedShot() {
+    }
+
     public QueuedShot(Shot shot) {
         this.shot = shot;
     }

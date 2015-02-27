@@ -50,9 +50,12 @@ public class ShotEntityMapper {
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
         shotEntity.setIdUser(shot.getUserInfo().getIdUser());
-        shotEntity.setIdEvent(shot.getEventInfo().getIdEvent());
-        shotEntity.setEventTitle(shot.getEventInfo().getEventTitle());
-        shotEntity.setEventTag(shot.getEventInfo().getEventTag());
+        Shot.ShotEventInfo eventInfo = shot.getEventInfo();
+        if (eventInfo != null) {
+            shotEntity.setIdEvent(eventInfo.getIdEvent());
+            shotEntity.setEventTitle(eventInfo.getEventTitle());
+            shotEntity.setEventTag(eventInfo.getEventTag());
+        }
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;
