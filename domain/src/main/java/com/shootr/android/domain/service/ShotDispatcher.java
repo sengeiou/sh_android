@@ -4,12 +4,15 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
-import java.util.LinkedList;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -20,15 +23,18 @@ public class ShotDispatcher implements ShotSender {
     private final ShootrShotService shootrShotService;
     private final BusPublisher busPublisher;
     private final ShotQueueListener shotQueueListener;
+    private final File queuedImagesDir;
 
     private boolean isDispatching;
 
     @Inject public ShotDispatcher(ShotQueueRepository shotQueueRepository, ShootrShotService shootrShotService,
-      BusPublisher busPublisher, ShotQueueListener shotQueueListener) {
+      BusPublisher busPublisher, ShotQueueListener shotQueueListener, @TemporaryFilesDir File externalFilesDir) {
         this.shotQueueRepository = shotQueueRepository;
         this.shootrShotService = shootrShotService;
         this.busPublisher = busPublisher;
         this.shotQueueListener = shotQueueListener;
+        this.queuedImagesDir = new File(externalFilesDir, "queuedImages");
+        this.queuedImagesDir.mkdirs();
     }
 
     public void restartQueue() {
@@ -53,8 +59,54 @@ public class ShotDispatcher implements ShotSender {
         startDispatching();
     }
 
-    private QueuedShot putShotIntoPersistenQueue(QueuedShot shot) {
-        return shotQueueRepository.put(shot);
+    private QueuedShot putShotIntoPersistenQueue(QueuedShot queuedShot) {
+        queuedShot = shotQueueRepository.put(queuedShot);
+        queueImageInItsOwnFile(queuedShot);
+        return queuedShot;
+    }
+
+    private void queueImageInItsOwnFile(QueuedShot shot) {
+        File sourceImage = shot.getImageFile();
+        if (sourceImage != null) {
+            File targetImage = new File(queuedImagesDir, String.valueOf(shot.getIdQueue()));
+
+            if (targetImage == sourceImage) {
+                return;
+            }
+            copyImage(shot, sourceImage, targetImage);
+            shot.setImageFile(targetImage);
+            shotQueueRepository.put(shot);
+        }
+    }
+
+    private void copyImage(QueuedShot shot, File sourceImage, File targetImage) {
+        InputStream in = null;
+        OutputStream out=null;
+        try {
+            if (!targetImage.exists()) {
+                targetImage.createNewFile();
+            }
+            in = new FileInputStream(sourceImage);
+            out = new FileOutputStream(targetImage);
+            byte[] buffer = new byte[1024];
+            int lenght;
+            while ((lenght = in.read(buffer)) > 0) {
+                out.write(buffer, 0, lenght);
+            }
+        } catch (IOException e) {
+            notifyShotSendingFailed(shot, e);
+        }finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                /* no-op */
+            }
+        }
     }
 
     private QueuedShot queuedFrom(Shot shot, File shotImage) {
@@ -98,6 +150,8 @@ public class ShotDispatcher implements ShotSender {
         if (queuedShot.getShot().getImage() == null && queuedShot.getImageFile() != null) {
             String imageUrl = shootrShotService.uploadShotImage(queuedShot.getImageFile());
             queuedShot.getShot().setImage(imageUrl);
+            queuedShot.getImageFile().delete();
+            queuedShot.setImageFile(null);
         }
     }
 
