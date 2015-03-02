@@ -38,11 +38,11 @@ public class ShotDispatcher implements ShotSender {
     }
 
     public void restartQueue() {
+        shotQueueListener.resetQueue();
         List<QueuedShot> pendingShotQueue = shotQueueRepository.getPendingShotQueue();
         for (QueuedShot queuedShot : pendingShotQueue) {
-            notifyShotQueued(queuedShot);
+            persistShotFailed(queuedShot);
         }
-        startDispatching();
     }
 
     @Override public void sendShot(Shot shot, File shotImage) {
@@ -142,6 +142,7 @@ public class ShotDispatcher implements ShotSender {
             notifyShotSent(queuedShot);
             clearShotFromQueue(queuedShot);
         } catch (Exception e) {
+            persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
         }
     }
@@ -169,8 +170,12 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void notifyShotSendingFailed(QueuedShot queuedShot, Exception e) {
-        queuedShot.setFailed(true);
         shotQueueListener.onShotFailed(queuedShot, e);
+
+    }
+
+    private void persistShotFailed(QueuedShot queuedShot) {
+        queuedShot.setFailed(true);
         shotQueueRepository.put(queuedShot);
     }
 

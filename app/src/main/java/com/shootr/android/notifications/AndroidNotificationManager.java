@@ -30,4 +30,8 @@ public class AndroidNotificationManager {
     public void removeNotification(String tag, int notificationId) {
         notificationManager.cancel(tag, notificationId);
     }
+
+    public void cancelAll() {
+        notificationManager.cancelAll();
+    }
 }

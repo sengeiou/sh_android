@@ -21,6 +21,12 @@ public interface ShotSent {
         public Shot getShot() {
             return shot;
         }
+
+        @Override public String toString() {
+            return "Event{" +
+              "shot=" + shot.toString() +
+              '}';
+        }
     }
 
 }
