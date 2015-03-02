@@ -73,7 +73,9 @@ public class ShotQueueEntityMapper {
         eventInfo.setIdEvent(entity.getIdEvent());
         eventInfo.setEventTitle(entity.getEventTitle());
         eventInfo.setEventTag(entity.getEventTag());
-        shot.setEventInfo(eventInfo);
+        if (eventInfo.getIdEvent() != null && eventInfo.getIdEvent() > 0L) {
+            shot.setEventInfo(eventInfo);
+        }
 
         queuedShot.setShot(shot);
         return queuedShot;
