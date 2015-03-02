@@ -25,6 +25,11 @@
         <item name="searchViewStyle">@style/MySearchViewStyle.Closable</item>
     </style>
 
+    <style name="ShootrTheme.DarkToolbar">
+        <item name="colorPrimary">@color/gray_50</item>
+        <item name="colorPrimaryDark">@color/gray_40</item>
+    </style>
+
     <style name="ShootrTheme.TranslucentToolbar">
         <item name="toolbar">@style/ToolBar.Translucent</item>
     </style>

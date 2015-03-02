@@ -1,6 +1,7 @@
 package com.shootr.android.ui;
 
 import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
+import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EditStatusActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -22,6 +23,7 @@ import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
+import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
 import dagger.Module;
 import dagger.Provides;
@@ -52,7 +54,7 @@ import javax.inject.Singleton;
                 EventsListActivity.class,
                 NewEventActivity.class,
                 DateTimePickerDialogActivity.class,
-                UpdateWarningActivity.class, TimezonePickerActivity.class,
+                UpdateWarningActivity.class, TimezonePickerActivity.class, DraftsActivity.class, DraftsPresenter.class
         },
         complete = false
 )

@@ -49,6 +49,7 @@ import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
+import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -401,6 +402,11 @@ public class TimelineFragment extends BaseFragment
     public void startNewShot() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         startNewShotActivityWithPlaceholder(intent);
+    }
+
+    @OnClick(R.id.timeline_drafts)
+    public void openDrafts() {
+        startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
     @OnClick(R.id.timeline_new_image_camera)
