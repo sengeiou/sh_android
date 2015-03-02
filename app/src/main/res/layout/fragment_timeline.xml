@@ -70,9 +70,10 @@
               android:id="@+id/timeline_new_text"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:animateLayoutChanges="true"
               android:layout_centerVertical="true"
               android:layout_marginLeft="8dp"
-              android:layout_toLeftOf="@+id/timeline_new_image_camera"
+              android:layout_toLeftOf="@+id/timeline_drafts"
               android:background="@drawable/textfield_multiline_default_holo_light"
               android:ellipsize="end"
               android:fontFamily="sans-serif-light"
@@ -80,6 +81,17 @@
               android:text="@string/activity_timeline_new_text"
               android:textColor="@color/gray_60"
               android:textSize="16sp" />
+
+            <ImageButton
+              android:id="@+id/timeline_drafts"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_toLeftOf="@+id/timeline_new_image_camera"
+              android:visibility="gone"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_drafts_24_gray54" />
 
             <ImageButton
               android:id="@+id/timeline_new_image_camera"

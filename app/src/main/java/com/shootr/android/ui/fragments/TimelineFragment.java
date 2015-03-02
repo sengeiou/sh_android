@@ -1,5 +1,8 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
@@ -34,20 +40,6 @@ import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.EventsListActivity;
-import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.PhotoViewActivity;
-import com.shootr.android.ui.component.PhotoPickerController;
-import com.shootr.android.ui.presenter.WatchNumberPresenter;
-import com.shootr.android.ui.views.WatchingRequestView;
-import com.shootr.android.ui.widgets.BadgeDrawable;
-import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.R;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
@@ -57,13 +49,25 @@ import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
+import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.presenter.WatchNumberPresenter;
+import com.shootr.android.ui.views.WatchingRequestView;
+import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.PicassoWrapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -92,6 +96,7 @@ public class TimelineFragment extends BaseFragment
     @InjectView(R.id.select_event_fab) FloatingActionButton selectEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
+    @InjectView(R.id.timeline_drafts) View draftsButton;
 
     private View footerView;
     private ProgressBar footerProgress;
@@ -251,6 +256,8 @@ public class TimelineFragment extends BaseFragment
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
           R.color.refresh_4);
 
+        setupDraftButtonTransition();
+
         // List scroll stuff
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
                 new ListViewScrollObserver.OnListViewScrollListener() {
@@ -294,6 +301,30 @@ public class TimelineFragment extends BaseFragment
               }
           })
           .build();
+        showDraftsButton();
+    }
+
+    private void showDraftsButton() {
+        final int demoDelay = 800;
+        draftsButton.postDelayed(new Runnable() {
+            @Override public void run() {
+                draftsButton.setScaleX(0);
+                draftsButton.setScaleY(0);
+                draftsButton.setVisibility(View.VISIBLE);
+            }
+        }, demoDelay);
+    }
+
+    private void setupDraftButtonTransition() {
+        LayoutTransition transition = new LayoutTransition();
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 0f, 1f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 0f, 1f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(scaleX, scaleY);
+        transition.setAnimator(LayoutTransition.APPEARING, set);
+        transition.setDuration(LayoutTransition.APPEARING, 200);
+        transition.setInterpolator(LayoutTransition.APPEARING, new DecelerateInterpolator());
+        ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
     }
 
     @Override
