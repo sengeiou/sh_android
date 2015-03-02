@@ -129,8 +129,8 @@
     <string name="edit">Edit</string>
     <string name="edit_info_place_placeholder">Where are you?</string>
 
-    <string name="photo_edit_take">Take photo</string>
-    <string name="photo_edit_choose">Choose photo</string>
+    <string name="photo_edit_take">Take from camera</string>
+    <string name="photo_edit_choose">Choose from gallery</string>
     <string name="change_photo">Change photo</string>
     <string name="photo_edit_remove">Remove photo</string>
     <string name="photo_edit_remove_confirmation">Remove photo?</string>
@@ -180,6 +180,7 @@
     <string name="menu_event_edit_info">Edit event</string>
     <string name="menu_event_edit_photo">Edit photo</string>
     <string name="notification_shot_sending">Shooting…</string>
+    <string name="shoot_photo">Shoot photo</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

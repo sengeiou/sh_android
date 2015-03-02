@@ -8,8 +8,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,10 +38,10 @@ import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
-import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
@@ -66,6 +64,7 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -107,6 +106,7 @@ public class TimelineFragment extends BaseFragment
     private boolean shouldPoll;
     private BadgeDrawable badgeDrawable;
     private String newShotPlaceholder;
+    private PhotoPickerController photoPickerController;
 
 
      /* ---- Lifecycle methods ---- */
@@ -276,6 +276,24 @@ public class TimelineFragment extends BaseFragment
         loadInitialTimeline();
         watchNumberPresenter.initialize(this);
         loadEventPlaceholder();
+        photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
+          .withTitle(getString(R.string.shoot_photo))
+          .withHandler(new PhotoPickerController.Handler() {
+              @Override public void onSelected(File imageFile) {
+                  Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
+                  intent.putExtra(PostNewShotActivity.EXTRA_PHOTO, imageFile);
+                  startNewShotActivityWithPlaceholder(intent);
+              }
+
+              @Override public void onError(Exception e) {
+                  Timber.e(e, "Error selecting image");
+              }
+
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+                  startActivityForResult(intent, requestCode);
+              }
+          })
+          .build();
     }
 
     @Override
@@ -329,6 +347,8 @@ public class TimelineFragment extends BaseFragment
                     onEventChanged();
                 }
             });
+        } else {
+            photoPickerController.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -354,17 +374,8 @@ public class TimelineFragment extends BaseFragment
     }
 
     @OnClick(R.id.timeline_new_image_camera)
-    public void startNewShotFromCamera() {
-        Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_CAMERA);
-        startNewShotActivityWithPlaceholder(intent);
-    }
-
-    @OnClick(R.id.timeline_new_image_gallery)
-    public void startNewShotFromGallery() {
-        Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_GALLERY);
-        startNewShotActivityWithPlaceholder(intent);
+    public void startNewShotWithPhoto() {
+        photoPickerController.pickPhoto();
     }
 
     private void startNewShotActivityWithPlaceholder(Intent intent) {
