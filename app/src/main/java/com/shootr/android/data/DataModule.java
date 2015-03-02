@@ -160,7 +160,7 @@ import static android.content.Context.MODE_PRIVATE;
   library = true)
 public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-    private static final long TIMEOUT_SECONDS = 20;
+    private static final long TIMEOUT_SECONDS = 30;
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;
