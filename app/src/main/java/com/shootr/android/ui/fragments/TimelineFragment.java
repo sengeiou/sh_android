@@ -275,6 +275,7 @@ public class TimelineFragment extends BaseFragment
         super.onActivityCreated(savedInstanceState);
         loadInitialTimeline();
         watchNumberPresenter.initialize(this);
+        loadEventPlaceholder();
     }
 
     @Override
