@@ -7,6 +7,8 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -27,6 +29,7 @@ public class ShotDispatcherTest {
     private static final Long QUEUED_ID = 1L;
     private static final File IMAGE_FILE_STUB = new File(".");
     private static final File IMAGE_FILE_NULL = null;
+    private static final File EXTERNAL_FILES_STUB = new File("ext");
 
     @Mock BusPublisher busPublisher;
     @Mock ShotQueueListener shotQueueListener;
@@ -38,7 +41,7 @@ public class ShotDispatcherTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotDispatcher = new ShotDispatcher(shotQueueRepository, shootrShotService, busPublisher, shotQueueListener);
+        shotDispatcher = new ShotDispatcher(shotQueueRepository, shootrShotService, busPublisher, shotQueueListener, EXTERNAL_FILES_STUB);
     }
 
     @Test
@@ -118,6 +121,14 @@ public class ShotDispatcherTest {
 
         @Override public void remove(QueuedShot queuedShot) {
 
+        }
+
+        @Override public List<QueuedShot> getPendingShotQueue() {
+            return Arrays.asList(new QueuedShot(shot()));
+        }
+
+        @Override public QueuedShot nextQueuedShot() {
+            return new QueuedShot(shot());
         }
     }
 
