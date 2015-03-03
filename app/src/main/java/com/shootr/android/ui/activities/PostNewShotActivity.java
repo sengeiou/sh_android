@@ -1,14 +1,11 @@
 package com.shootr.android.ui.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,29 +20,24 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.shootr.android.R;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
-import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import java.io.File;
-import java.io.IOException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
-    private static final int REQUEST_CHOOSE_PHOTO = 1;
-    private static final int REQUEST_TAKE_PHOTO = 2;
 
     private static final String EXTRA_SELECTED_IMAGE = "image";
-    public static final String EXTRA_DEFAULT_INPUT_MODE = "input";
-    public static final int INPUT_CAMERA = 1;
-    public static final int INPUT_GALLERY = 2;
     public static final String KEY_PLACEHOLDER = "placeholder";
+    public static final String EXTRA_PHOTO = "photo";
 
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
@@ -63,7 +55,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private int charCounterColorError;
     private int charCounterColorNormal;
 
-    private PostNewShotPresenter presenter;
+    @Inject PostNewShotPresenter presenter;
+    private PhotoPickerController photoPickerController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +77,6 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     private void initializePresenter(String optinalPlaceholder) {
-        presenter = getObjectGraph().get(PostNewShotPresenter.class);
         presenter.initialize(this, optinalPlaceholder);
     }
 
@@ -97,6 +89,21 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
+
+        photoPickerController =
+          new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
+              @Override public void onSelected(File imageFile) {
+                  presenter.selectImage(imageFile);
+              }
+
+              @Override public void onError(Exception e) {
+                  Timber.e(e, "Error selecting image");
+              }
+
+              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+                  startActivityForResult(intent, requestCode);
+              }
+          }).build();
     }
 
     private void setTextReceivedFromIntent() {
@@ -105,20 +112,14 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     private void openDefaultInputIfAny() {
-        int defaultInputMode = getIntent().getIntExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
-        switch (defaultInputMode) {
-            case INPUT_CAMERA:
-                presenter.takePhotoFromCamera();
-                break;
-            case INPUT_GALLERY:
-                presenter.choosePhotoFromGallery();
-                break;
+        File inputImageFile = (File) getIntent().getSerializableExtra(EXTRA_PHOTO);
+        if (inputImageFile != null) {
+            presenter.selectImage(inputImageFile);
         }
-
     }
 
     private void clearDefaultInput() {
-        getIntent().putExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
+        getIntent().removeExtra(EXTRA_PHOTO);
     }
 
     @OnTextChanged(R.id.new_shot_text)
@@ -256,27 +257,11 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void takePhotoFromCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File pictureTemporaryFile = getCameraPhotoFile();
-        if (!pictureTemporaryFile.exists()) {
-            try {
-                pictureTemporaryFile.getParentFile().mkdirs();
-                pictureTemporaryFile.createNewFile();
-            } catch (IOException e) {
-                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
-                //TODO cancelar operación y avisar al usuario
-            }
-        }
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
-        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        photoPickerController.pickPhotoFromCamera();
     }
 
     @Override public void choosePhotoFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
-          REQUEST_CHOOSE_PHOTO);
+        photoPickerController.pickPhotoFromGallery();
     }
 
     @Override public void setPlaceholder(String placeholder) {
@@ -285,20 +270,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            File selectedPhotoFile = null;
-            if (requestCode == REQUEST_CHOOSE_PHOTO) {
-                Uri selectedImageUri = data.getData();
-                selectedPhotoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-            }else if (requestCode == REQUEST_TAKE_PHOTO) {
-                selectedPhotoFile = getCameraPhotoFile();
-            }
-            presenter.selectImage(selectedPhotoFile);
-        }
-    }
-
-    private File getCameraPhotoFile() {
-        return new File(this.getExternalFilesDir("tmp"), "profileUpload.jpg");
+        photoPickerController.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override public void showLoading() {

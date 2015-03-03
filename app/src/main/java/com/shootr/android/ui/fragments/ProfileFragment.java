@@ -260,7 +260,7 @@ public class ProfileFragment extends BaseFragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
           REQUEST_CHOOSE_PHOTO);
     }
 
