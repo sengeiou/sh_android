@@ -75,22 +75,12 @@
 
     </LinearLayout>
 
-    <TextView
-      android:id="@+id/shot_draft_label"
-      android:layout_width="wrap_content"
-      android:text="@string/draft_label"
-      android:layout_alignLeft="@+id/shot_text"
-      android:layout_below="@+id/shot_text"
-      android:textColor="@color/error"
-      android:visibility="gone"
-      android:layout_height="wrap_content" />
-
     <com.shootr.android.ui.widgets.ImageView169
       android:id="@+id/shot_image"
       android:layout_width="match_parent"
       android:layout_height="185dp"
       android:layout_alignLeft="@+id/shot_text"
-      android:layout_below="@+id/shot_draft_label"
+      android:layout_below="@+id/shot_text"
       android:layout_marginTop="8dp"
       android:focusable="false"
       android:focusableInTouchMode="false"

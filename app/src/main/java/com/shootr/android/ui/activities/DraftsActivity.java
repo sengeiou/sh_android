@@ -2,6 +2,10 @@ package com.shootr.android.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import butterknife.ButterKnife;
@@ -22,9 +26,8 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     @Inject DraftsPresenter presenter;
     @Inject PicassoWrapper picasso;
-    @Inject AndroidTimeUtils androidTimeUtils;
 
-    @InjectView(R.id.drafts_list) ListView listView;
+    @InjectView(R.id.drafts_list) RecyclerView listView;
 
     private DraftAdapter timelineAdapter;
 
@@ -45,8 +48,10 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     private void initializeViews() {
         ButterKnife.inject(this);
-        timelineAdapter = new DraftAdapter(this, picasso, null, null, androidTimeUtils);
+        timelineAdapter = new DraftAdapter(getResources(), picasso);
+        listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);
+        listView.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void setupActionbar() {
@@ -57,6 +62,11 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     private void initializePresenter() {
         presenter.initialize(this);
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drafts, menu);
+        return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -89,6 +99,6 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     }
 
     @Override public void showDrafts(List<ShotModel> drafts) {
-        timelineAdapter.setShots(drafts);
+        timelineAdapter.setDrafts(drafts);
     }
 }

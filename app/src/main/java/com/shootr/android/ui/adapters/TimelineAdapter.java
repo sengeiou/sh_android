@@ -131,19 +131,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 } else {
                     vh.image.setVisibility(View.GONE);
                 }
-                if (isDraft(position)) {
-                    vh.draft.setVisibility(View.VISIBLE);
-                } else {
-                    vh.draft.setVisibility(View.GONE);
-                }
                 break;
             default:
                 break;
         }
-    }
-
-    protected boolean isDraft(int position) {
-        return false;
     }
 
     private void addShotTag(ViewHolder vh, ShotModel shotModel) {
@@ -177,7 +168,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
-        @InjectView(R.id.shot_draft_label) public TextView draft;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
