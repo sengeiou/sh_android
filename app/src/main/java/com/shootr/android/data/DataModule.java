@@ -161,6 +161,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT_SECONDS = 30;
+    private static final long TIMEOUT_CONNECT_SECONDS = 15;
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;
@@ -257,6 +258,7 @@ public class DataModule {
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
         client.setCache(cache);
 
+        client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
         client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());
