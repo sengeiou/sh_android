@@ -284,7 +284,6 @@ public class TimelineFragment extends BaseFragment
         watchNumberPresenter.initialize(this);
         loadEventPlaceholder();
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
-          .withTitle(getString(R.string.shoot_photo))
           .withHandler(new PhotoPickerController.Handler() {
               @Override public void onSelected(File imageFile) {
                   Intent intent = new Intent(getActivity(), PostNewShotActivity.class);

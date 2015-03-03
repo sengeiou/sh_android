@@ -110,7 +110,7 @@ public class PhotoPickerController {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        Intent photoChooserIntent = Intent.createChooser(intent, activity.getString(R.string.photo_edit_choose));
+        Intent photoChooserIntent = Intent.createChooser(intent, activity.getString(R.string.photo_edit_gallery));
         handler.startPickerActivityForResult(photoChooserIntent, REQUEST_CHOOSE_PHOTO);
     }
 
