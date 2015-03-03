@@ -1,5 +1,6 @@
 package com.shootr.android.interactor;
 
+import com.shootr.android.domain.dagger.ServiceModule;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.CreateEventInteractor;
@@ -7,6 +8,7 @@ import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
@@ -17,15 +19,18 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
+  includes = { ServiceModule.class },
   injects = {
-    JobInteractorHandler.class, GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
-    EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class, EventsSearchInteractor.class,
-    CreateEventInteractor.class, GetEventInteractor.class, ChangeEventPhotoInteractor.class,
+    GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
+    EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class,
+    EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
+    ChangeEventPhotoInteractor.class, PostNewShotInteractor.class,
   },
-  complete = false)
+  complete = false
+)
 public class InteractorModule {
 
-    @Provides @Singleton InteractorHandler provideInteractorHandler(JobInteractorHandler jobInteractorHandler) {
+    @Provides @Singleton InteractorHandler provideInteractorHandler(InteractorExecutor jobInteractorHandler) {
         return jobInteractorHandler;
     }
 

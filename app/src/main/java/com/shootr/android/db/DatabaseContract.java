@@ -197,4 +197,30 @@ public class DatabaseContract {
           CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
+
+    public static final class ShotQueueTable implements SyncColumns {
+
+        private ShotQueueTable() {
+        }
+
+        public static final String TABLE = "ShotQueue";
+
+        public static final String ID_QUEUE = "idQueue";
+        public static final String FAILED = "failed";
+        public static final String IMAGE_FILE = "imageFile";
+
+        public static final String ID_SHOT = "idShot";
+        public static final String ID_USER = "idUser";
+        public static final String COMMENT = "comment";
+        public static final String IMAGE = "image";
+        public static final String ID_EVENT = "idEvent";
+        public static final String EVENT_TAG = "eventTag";
+        public static final String EVENT_TITLE = "eventTitle";
+        public static final String TYPE = "type";
+
+        public static final String[] PROJECTION = {
+          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE,
+          CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+        };
+    }
 }

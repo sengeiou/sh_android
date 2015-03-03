@@ -1,6 +1,5 @@
 package com.shootr.android.data.entity;
 
-
 import java.util.Date;
 
 public class Synchronized {
@@ -16,7 +15,7 @@ public class Synchronized {
     protected Integer csysRevision;
     protected String csysSynchronized;
 
-    public Synchronized(){
+    public Synchronized() {
 
     }
 
@@ -29,7 +28,7 @@ public class Synchronized {
     }
 
     public Date getCsysModified() {
-        return csysModified;
+        return csysModified != null ? csysModified : getCsysBirth();
     }
 
     public void setCsysModified(Date csysModified) {
@@ -45,7 +44,7 @@ public class Synchronized {
     }
 
     public Integer getCsysRevision() {
-        return csysRevision;
+        return csysRevision != null ? csysRevision : 0;
     }
 
     public void setCsysRevision(Integer csysRevision) {

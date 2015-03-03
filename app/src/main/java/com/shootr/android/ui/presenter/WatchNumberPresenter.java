@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.bus.WatchUpdateRequest;
+import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
@@ -59,7 +59,6 @@ public class WatchNumberPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
-        retrieveData(); //TODO sí?
     }
 
     @Override public void pause() {

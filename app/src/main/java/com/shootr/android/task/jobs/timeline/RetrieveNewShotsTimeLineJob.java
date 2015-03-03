@@ -2,13 +2,13 @@ package com.shootr.android.task.jobs.timeline;
 
 import android.app.Application;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.bus.BusPublisher;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
+import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;

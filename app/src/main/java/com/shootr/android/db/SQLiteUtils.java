@@ -3,6 +3,7 @@ package com.shootr.android.db;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.UserTable;
@@ -55,6 +56,25 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL," +
             " PRIMARY KEY(" + ShotTable.ID_SHOT + "))";
+
+    public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS " + ShotQueueTable.TABLE + " ("
+          + ShotQueueTable.ID_QUEUE + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+          + ShotQueueTable.FAILED + " INT NOT NULL,"
+          + ShotQueueTable.IMAGE_FILE+ " TEXT NULL,"
+          + ShotQueueTable.ID_SHOT + " INT NULL,"
+          + ShotQueueTable.ID_USER + " INT NOT NULL,"
+          + ShotQueueTable.COMMENT + " VARCHAR(255) NULL,"
+          + ShotQueueTable.IMAGE + " VARCHAR(255) NULL,"
+          + ShotQueueTable.ID_EVENT+ " INT NULL,"
+          + ShotQueueTable.EVENT_TAG+ " TEXT NULL,"
+          + ShotQueueTable.EVENT_TITLE+ " TEXT NULL,"
+          + ShotQueueTable.TYPE+ " INT NOT NULL,"
+          + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
+          + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
+          + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
+          + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
+          + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL" +
+          ")";
 
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS " + FollowTable.TABLE + " ("
             + FollowTable.ID_USER + " INT NOT NULL,"

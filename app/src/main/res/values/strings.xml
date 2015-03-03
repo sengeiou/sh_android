@@ -179,6 +179,7 @@
     <string name="profile_watching_label">Watching</string>
     <string name="menu_event_edit_info">Edit event</string>
     <string name="menu_event_edit_photo">Edit photo</string>
+    <string name="notification_shot_sending">Shooting…</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

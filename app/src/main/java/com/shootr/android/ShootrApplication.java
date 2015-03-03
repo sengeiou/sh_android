@@ -16,8 +16,6 @@ public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
 
-    @Inject SessionRepository currentSession;
-
     @Override
     public void onCreate() {
         super.onCreate();

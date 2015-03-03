@@ -1,6 +1,7 @@
 package com.shootr.android.data.bus;
 
-import com.shootr.android.gcm.GCMIntentService;
+import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.notifications.gcm.GCMIntentService;
 import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;

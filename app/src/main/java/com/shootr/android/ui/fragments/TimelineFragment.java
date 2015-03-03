@@ -31,6 +31,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.validation.EventValidator;
@@ -70,7 +71,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView {
+        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView, ShotSent.Receiver {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     public static final int REQUEST_NEW_SHOT = 1;
@@ -170,7 +171,6 @@ public class TimelineFragment extends BaseFragment
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         watchNumberPresenter.resume();
-        loadEventPlaceholder();
     }
 
     @Override
@@ -320,8 +320,7 @@ public class TimelineFragment extends BaseFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_SHOT && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT).show();
-            startRefreshing(getActivity());
+            /* no-op */
         }else if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
             Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
             selectEventInteractor.selectEvent(idEventSelected, new SelectEventInteractor.Callback() {
@@ -335,6 +334,7 @@ public class TimelineFragment extends BaseFragment
     private void onEventChanged() {
         this.loadEventPlaceholder();
         watchNumberPresenter.initialize(this);
+        loadEventPlaceholder();
     }
 
     /* --- UI Events --- */
@@ -522,6 +522,11 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Received %d old shots", olderShotsSize);
             adapter.addShotsBelow(shots);
         }
+    }
+
+    @Subscribe
+    @Override public void onShotSent(ShotSent.Event event) {
+        startRefreshing(getActivity());
     }
 
     @Subscribe

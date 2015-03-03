@@ -1,10 +1,10 @@
 package com.shootr.android.util;
 
 import android.app.Application;
-import com.shootr.android.data.bus.BusPublisher;
 import com.shootr.android.data.bus.UpdateWarning;
 import com.shootr.android.data.prefs.LastVersionNotCompatible;
 import com.shootr.android.data.prefs.LongPreference;
+import com.shootr.android.domain.bus.BusPublisher;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

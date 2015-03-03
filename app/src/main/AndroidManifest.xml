@@ -184,6 +184,7 @@
           android:launchMode="singleTask"
             />
 
+        <service android:name=".data.background.ShotDispatcherBackgroundService" />
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"
@@ -219,7 +220,7 @@
               android:resource="@xml/syncadapter"/>
         </service>
 
-        <receiver android:name=".gcm.GCMBroadcastReceiver"
+        <receiver android:name=".notifications.gcm.GCMBroadcastReceiver"
           android:exported="true"
           android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -228,20 +229,19 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".gcm.NotificationIntentReceiver"
+        <receiver android:name=".notifications.gcm.NotificationIntentReceiver"
           >
             <intent-filter>
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_PROFILE"/>
-                <action android:name="com.shootr.android.ACTION_START_EVENT"/>
                 <action android:name="com.shootr.android.ACTION_OPEN_WATCH_REQUEST"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
         <service
-          android:name=".gcm.GCMIntentService"
+          android:name=".notifications.gcm.GCMIntentService"
           android:exported="false" />
         <meta-data android:name="com.crashlytics.ApiKey" android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662"/>
 

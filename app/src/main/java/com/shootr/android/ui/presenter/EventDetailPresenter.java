@@ -2,10 +2,10 @@ package com.shootr.android.ui.presenter;
 
 import android.support.annotation.Nullable;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;

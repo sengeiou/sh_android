@@ -2,7 +2,6 @@ package com.shootr.android.data.repository.remote;
 
 import android.support.v4.util.LongSparseArray;
 import com.shootr.android.data.bus.Default;
-import com.shootr.android.data.bus.WatchUpdateRequest;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
@@ -13,6 +12,7 @@ import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.data.repository.sync.SyncableWatchEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;

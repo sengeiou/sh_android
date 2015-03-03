@@ -2,11 +2,15 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.res.Resources;
+import com.shootr.android.data.background.dagger.BackgroundModule;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
+import com.shootr.android.notifications.dagger.NotificationModule;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.DataModule;
 import com.shootr.android.data.bus.BusModule;
 import com.shootr.android.ui.UiModule;
+import java.io.File;
 import javax.inject.Singleton;
 
 @Module(
@@ -14,6 +18,8 @@ import javax.inject.Singleton;
                 UiModule.class,
                 DataModule.class,
                 BusModule.class,
+                NotificationModule.class,
+                BackgroundModule.class,
         },
         injects = {
                 ShootrApplication.class,
@@ -32,5 +38,9 @@ public final class ShootrModule {
 
     @Provides Resources provideResources(Application application) {
         return application.getResources();
+    }
+
+    @Provides @TemporaryFilesDir File provideTemporaryFilesDir(Application application) {
+        return application.getExternalFilesDir("tmp");
     }
 }

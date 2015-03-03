@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.support.v4.app.NotificationManagerCompat;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
@@ -14,7 +13,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.data.repository.SessionRepositoryImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
-import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
@@ -26,7 +24,6 @@ import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.presenter.EventsListPresenter;
@@ -56,10 +53,7 @@ import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.gcm.GCMIntentService;
-import com.shootr.android.gcm.NotificationIntentReceiver;
-import com.shootr.android.gcm.notifications.ShootrNotificationManager;
-import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
+import com.shootr.android.notifications.gcm.GCMIntentService;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.sync.ShootrSyncAdapter;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -71,7 +65,6 @@ import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
 import com.shootr.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
@@ -88,7 +81,6 @@ import com.shootr.android.ui.fragments.UserFollowsFragment;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import timber.log.Timber;
@@ -115,13 +107,11 @@ import static android.content.Context.MODE_PRIVATE;
 
     MainActivity.class,
 
-    PostNewShotJob.class,
-
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class,
     UploadProfilePhotoJob.class,
-    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
+    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
 
@@ -132,8 +122,6 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileFragment.class,
 
     UserManager.class, DeviceManager.class,
-
-    NotificationIntentReceiver.class,
 
     GCMIntentService.class,
 
@@ -163,8 +151,6 @@ import static android.content.Context.MODE_PRIVATE;
 
     NetworkConnection.class,
 
-    EventInfoRepository.class,
-
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
@@ -174,7 +160,8 @@ import static android.content.Context.MODE_PRIVATE;
   library = true)
 public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-    private static final long TIMEOUT_SECONDS = 20;
+    private static final long TIMEOUT_SECONDS = 30;
+    private static final long TIMEOUT_CONNECT_SECONDS = 15;
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;
@@ -221,19 +208,6 @@ public class DataModule {
 
     @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
         return GoogleCloudMessaging.getInstance(application);
-    }
-
-    @Provides @Singleton NotificationManagerCompat provideNotificationManagerCompat(Application application) {
-        return NotificationManagerCompat.from(application);
-
-    }
-
-    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
-        return new ShootrNotificationManager(app, nm, notificationBuilderFactory, picasso);
-    }
-
-    @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
-        return new NotificationBuilderFactory();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
@@ -284,6 +258,7 @@ public class DataModule {
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
         client.setCache(cache);
 
+        client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
         client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());

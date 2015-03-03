@@ -1,22 +1,17 @@
 package com.shootr.android.ui.presenter;
 
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.profile.UploadShotImageEvent;
-import com.shootr.android.task.events.shots.PostNewShotResultEvent;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
-import com.shootr.android.task.jobs.shots.UploadShotImageJob;
-import com.shootr.android.task.validation.FieldValidationError;
-import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.views.PostNewShotView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
 import java.io.File;
-import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -26,29 +21,26 @@ public class PostNewShotPresenter implements Presenter {
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final JobManager jobManager;
+    private final PostNewShotInteractor postNewShotInteractor;
 
     private PostNewShotView postNewShotView;
-    private ObjectGraph objectGraph;
     private String placeholder;
     private File selectedImageFile;
     private String shotCommentToSend;
-    private String uploadedImageUrl;
     private String currentTextWritten;
 
-    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
+    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, PostNewShotInteractor postNewShotInteractor) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.jobManager = jobManager;
+        this.postNewShotInteractor = postNewShotInteractor;
     }
 
-    public void initialize(PostNewShotView postNewShotView, ObjectGraph objectGraph) {
-        initialize(postNewShotView, objectGraph, null);
+    public void initialize(PostNewShotView postNewShotView) {
+        initialize(postNewShotView, null);
     }
 
-    public void initialize(PostNewShotView postNewShotView, ObjectGraph objectGraph, String placeholder) {
+    public void initialize(PostNewShotView postNewShotView, String placeholder) {
         this.postNewShotView = postNewShotView;
-        this.objectGraph = objectGraph;
         this.placeholder = placeholder;
         if (placeholder != null) {
             postNewShotView.setPlaceholder(placeholder);
@@ -91,11 +83,7 @@ public class PostNewShotPresenter implements Presenter {
 
         if (canSendShot(shotCommentToSend)) {
             this.showLoading();
-            if (selectedImageFile != null) {
-                uploadImageAndSendShot();
-            } else {
-                startSendingShot();
-            }
+            startSendingShot();
         } else {
             Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
         }
@@ -109,22 +97,17 @@ public class PostNewShotPresenter implements Presenter {
         return selectedImageFile != null;
     }
 
-    private void uploadImageAndSendShot() {
-        UploadShotImageJob uploadJob = objectGraph.get(UploadShotImageJob.class);
-        uploadJob.init(selectedImageFile);
-        jobManager.addJob(uploadJob);
-    }
-
-    @Subscribe
-    public void onImageUploaded(UploadShotImageEvent event) {
-        uploadedImageUrl = event.getResult();
-        startSendingShot();
-    }
-
     private void startSendingShot() {
-        PostNewShotJob job = objectGraph.get(PostNewShotJob.class);
-        job.init(shotCommentToSend, uploadedImageUrl);
-        jobManager.addJobInBackground(job);
+        postNewShotInteractor.postNewShot(shotCommentToSend, selectedImageFile, new PostNewShotInteractor.Callback() {
+            @Override public void onLoaded() {
+                postNewShotView.setResultOk();
+                postNewShotView.closeScreen();
+            }
+        }, new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
+        });
     }
 
     private void updateCharCounter(String filteredText) {
@@ -161,22 +144,6 @@ public class PostNewShotPresenter implements Presenter {
             trimmed = trimmed.replace("\n\n\n", "\n\n");
         }
         return trimmed;
-    }
-
-    @Subscribe
-    public void onShotSent(PostNewShotResultEvent event) {
-        postNewShotView.setResultOk();
-        postNewShotView.closeScreen();
-    }
-
-    @Subscribe
-    public void onValidationErrors(FieldValidationErrorEvent event) {
-        this.hideLoading();
-
-        List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
-        FieldValidationError firstError = fieldValidationErrors.get(0);
-        String errorMessage = errorMessageFactory.getMessageForCode(firstError.getErrorCode());
-        postNewShotView.showError(errorMessage);
     }
 
     @Subscribe

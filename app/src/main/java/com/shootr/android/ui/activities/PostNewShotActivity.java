@@ -85,7 +85,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     private void initializePresenter(String optinalPlaceholder) {
         presenter = getObjectGraph().get(PostNewShotPresenter.class);
-        presenter.initialize(this, getObjectGraph(), optinalPlaceholder);
+        presenter.initialize(this, optinalPlaceholder);
     }
 
     private void initializeViews() {
