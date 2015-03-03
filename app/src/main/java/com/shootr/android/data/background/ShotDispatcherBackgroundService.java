@@ -77,7 +77,8 @@ public class ShotDispatcherBackgroundService extends Service {
     //endregion
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
+        boolean serviceStartedExplicitly = intent != null;
+        if (serviceStartedExplicitly) {
             handleShot(intent);
         } else {
             serviceRestarted();
