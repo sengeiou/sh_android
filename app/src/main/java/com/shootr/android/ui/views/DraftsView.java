@@ -7,4 +7,8 @@ import java.util.List;
 public interface DraftsView extends LoadDataView {
 
     void showDrafts(List<ShotModel> drafts);
+
+    void hideShootAllButton();
+
+    void showShootAllButton();
 }

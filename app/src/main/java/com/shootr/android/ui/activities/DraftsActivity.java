@@ -30,6 +30,8 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     @InjectView(R.id.drafts_list) RecyclerView listView;
 
     private DraftAdapter timelineAdapter;
+    private boolean showShootAll = false;
+    private MenuItem shootAllMenuItem;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,15 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.drafts, menu);
+        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
+        updateShootAllVisibility();
         return true;
+    }
+
+    private void updateShootAllVisibility() {
+        if (shootAllMenuItem != null) {
+            shootAllMenuItem.setVisible(showShootAll);
+        }
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -100,5 +110,15 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     @Override public void showDrafts(List<ShotModel> drafts) {
         timelineAdapter.setDrafts(drafts);
+    }
+
+    @Override public void hideShootAllButton() {
+        showShootAll = false;
+        updateShootAllVisibility();
+    }
+
+    @Override public void showShootAllButton() {
+        showShootAll = true;
+        updateShootAllVisibility();
     }
 }
