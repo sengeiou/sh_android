@@ -7,6 +7,7 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
@@ -114,13 +115,20 @@ public class ShotDispatcherTest {
 
     class StubShotQueueRepository implements ShotQueueRepository {
 
+        List<QueuedShot> queuedShots = new ArrayList<>();
+
         @Override public QueuedShot put(QueuedShot queuedShot) {
-            queuedShot.setIdQueue(QUEUED_ID);
+            if (queuedShot.isFailed()) {
+                queuedShots.remove(0);
+            } else {
+                queuedShot.setIdQueue(QUEUED_ID);
+                queuedShots.add(queuedShot);
+            }
             return queuedShot;
         }
 
         @Override public void remove(QueuedShot queuedShot) {
-
+            queuedShots.remove(0);
         }
 
         @Override public List<QueuedShot> getPendingShotQueue() {
@@ -128,7 +136,11 @@ public class ShotDispatcherTest {
         }
 
         @Override public QueuedShot nextQueuedShot() {
-            return new QueuedShot(shot());
+            if (queuedShots.isEmpty()) {
+                return null;
+            } else {
+                return queuedShots.get(0);
+            }
         }
 
         @Override public List<QueuedShot> getFailedShotQueue() {
