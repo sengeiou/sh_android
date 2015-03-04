@@ -7,17 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.DraftAdapter;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.views.DraftsView;
-import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -50,7 +47,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     private void initializeViews() {
         ButterKnife.inject(this);
-        timelineAdapter = new DraftAdapter(getResources(), picasso);
+        timelineAdapter = new DraftAdapter(picasso);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());

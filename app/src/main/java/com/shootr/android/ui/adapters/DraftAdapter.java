@@ -1,6 +1,5 @@
 package com.shootr.android.ui.adapters;
 
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
-    public DraftAdapter(Resources resources, PicassoWrapper picasso) {
+    public DraftAdapter(PicassoWrapper picasso) {
         this.picasso = picasso;
     }
 

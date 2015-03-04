@@ -30,6 +30,8 @@ public class DraftItemView extends ForegroundRelativeLayout {
     private int fadeInDuration;
     private int fadeOutDuration;
     private int expandCollapseDuration;
+    private int collapsedBackgroundColor;
+    private int expandedBackgroundColor;
 
     public DraftItemView(Context context) {
         super(context);
@@ -49,6 +51,9 @@ public class DraftItemView extends ForegroundRelativeLayout {
 
     public void init() {
         ButterKnife.inject(this, this);
+        expandedBackgroundColor = getResources().getColor(R.color.white);
+        collapsedBackgroundColor = getResources().getColor(R.color.transparent);
+
         expandedElevation = getResources().getDimension(R.dimen.card_elevation);
         fadeInStartDelay = getResources().getInteger(R.integer.draft_buttons_fade_in_start);
         fadeInDuration = getResources().getInteger(R.integer.draft_buttons_fade_in_duration);
@@ -57,28 +62,26 @@ public class DraftItemView extends ForegroundRelativeLayout {
     }
 
     public void collapse() {
-        if(!isExpanded) {
+        if (!isExpanded) {
             return;
         }
-        ViewCompat.setTranslationZ(this, 0);
-        draftButtons.setVisibility(View.GONE);
-        setBackgroundColor(0x00ffffff);
-        separator.setVisibility(View.VISIBLE);
+        setViewValuesForExpandedState(false);
         isExpanded = false;
-
-        handleExpandCollapseAnimation();
     }
 
     public void expand() {
-        if(isExpanded) {
+        if (isExpanded) {
             return;
         }
-        setBackgroundColor(getResources().getColor(R.color.white));
-        ViewCompat.setTranslationZ(this, expandedElevation);
-        draftButtons.setVisibility(View.VISIBLE);
-        separator.setVisibility(View.INVISIBLE);
+        setViewValuesForExpandedState(true);
         isExpanded = true;
+    }
 
+    private void setViewValuesForExpandedState(boolean expand) {
+        setBackgroundColor(expand ? expandedBackgroundColor : collapsedBackgroundColor);
+        ViewCompat.setTranslationZ(this, expand ? expandedElevation : 0);
+        draftButtons.setVisibility(expand ? VISIBLE : View.GONE);
+        separator.setVisibility(expand ? INVISIBLE : View.VISIBLE);
         handleExpandCollapseAnimation();
     }
 
@@ -87,63 +90,84 @@ public class DraftItemView extends ForegroundRelativeLayout {
         final int startingHeight = view.getHeight();
         final ViewTreeObserver observer = this.getViewTreeObserver();
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            private static final boolean DONT_DRAW_THIS_FRAME = false;
+
             @Override public boolean onPreDraw() {
-                if (observer.isAlive()) {
-                    observer.removeOnPreDrawListener(this);
-                }
+                stopListeningNextFrames();
 
                 final int endingHeight = view.getHeight();
-                final int distance = Math.abs(endingHeight - startingHeight);
                 final int baseHeight = Math.min(endingHeight, startingHeight);
+                final int expandDistance = Math.abs(endingHeight - startingHeight);
                 final boolean isExpand = endingHeight > startingHeight;
 
+                setViewToInitialState(isExpand);
+                setupButtonsFadeEffect(isExpand);
+                setupExpandCollapseAnimation(baseHeight, expandDistance, isExpand);
+                return DONT_DRAW_THIS_FRAME;
+            }
+
+            private void setViewToInitialState(boolean isExpand) {
                 view.getLayoutParams().height = startingHeight;
                 if (!isExpand) {
                     draftButtons.setVisibility(VISIBLE);
                 }
+            }
 
-                // Buttons animation
+            private void setupButtonsFadeEffect(boolean isExpand) {
                 if (isExpand) {
                     draftButtons.setAlpha(0f);
-                    draftButtons.animate().alpha(1f).setStartDelay(fadeInStartDelay).setDuration(fadeInDuration).start();
+                    draftButtons.animate()
+                      .alpha(1f)
+                      .setStartDelay(fadeInStartDelay)
+                      .setDuration(fadeInDuration)
+                      .start();
                 } else {
                     draftButtons.setAlpha(1f);
                     draftButtons.animate().alpha(0f).setDuration(fadeOutDuration).start();
                 }
                 view.requestLayout();
+            }
 
-                //Expansion and shadow animation
-                final ValueAnimator animator = isExpand ? ValueAnimator.ofFloat(0f, 1f) : ValueAnimator.ofFloat(1f, 0f);
-                //TODO scroll to visible
+            private void setupExpandCollapseAnimation(final int baseHeight, final int expandDistance,
+              final boolean isExpand) {
+                final ValueAnimator animator = getAnimatorForAction(isExpand);
+                //TODO scroll to make visible
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override public void onAnimationUpdate(ValueAnimator animation) {
                         Float value = (Float) animation.getAnimatedValue();
-                        view.getLayoutParams().height = (int) (value * distance + baseHeight);
+                        view.getLayoutParams().height = (int) (value * expandDistance + baseHeight);
                         float elevation = expandedElevation * value;
                         ViewCompat.setTranslationZ(view, elevation);
                         view.requestLayout();
                     }
                 });
 
-                // Set final values after animation
+                setupFinalValuesAfterAnimation(isExpand, animator);
+
+                animator.setDuration(expandCollapseDuration);
+                animator.start();
+            }
+
+            private void setupFinalValuesAfterAnimation(final boolean isExpand, ValueAnimator animator) {
                 animator.addListener(new AnimatorListenerAdapter() {
                     @Override public void onAnimationEnd(Animator animation) {
                         view.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                        if (isExpand) {
-                            //draftButtons.setAlpha(1f);
-                        } else {
+                        if (!isExpand) {
                             draftButtons.setVisibility(GONE);
                         }
                     }
                 });
+            }
 
-                animator.setDuration(expandCollapseDuration);
-                animator.start();
+            private ValueAnimator getAnimatorForAction(boolean expand) {
+                return expand ? ValueAnimator.ofFloat(0f, 1f) : ValueAnimator.ofFloat(1f, 0f);
+            }
 
-                return false;
+            private void stopListeningNextFrames() {
+                if (observer.isAlive()) {
+                    observer.removeOnPreDrawListener(this);
+                }
             }
         });
     }
-
-
 }
