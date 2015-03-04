@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -25,6 +26,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     @Inject PicassoWrapper picasso;
 
     @InjectView(R.id.drafts_list) RecyclerView listView;
+    @InjectView(R.id.drafts_empty) View emptyView;
 
     private DraftAdapter timelineAdapter;
     private boolean showShootAll = false;
@@ -86,11 +88,11 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     }
 
     @Override public void showEmpty() {
-        /* no-op */
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideEmpty() {
-        /* no-op */
+        emptyView.setVisibility(View.GONE);
     }
 
     @Override public void showLoading() {
