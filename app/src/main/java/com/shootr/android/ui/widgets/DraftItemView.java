@@ -61,28 +61,30 @@ public class DraftItemView extends ForegroundRelativeLayout {
         expandCollapseDuration = getResources().getInteger(R.integer.draft_expand_collapse_duration);
     }
 
-    public void collapse() {
+    public void collapse(boolean animate) {
         if (!isExpanded) {
             return;
         }
-        setViewValuesForExpandedState(false);
+        setViewValuesForExpandedState(false, animate);
         isExpanded = false;
     }
 
-    public void expand() {
+    public void expand(boolean animate) {
         if (isExpanded) {
             return;
         }
-        setViewValuesForExpandedState(true);
+        setViewValuesForExpandedState(true, animate);
         isExpanded = true;
     }
 
-    private void setViewValuesForExpandedState(boolean expand) {
+    private void setViewValuesForExpandedState(boolean expand, boolean animate) {
         setBackgroundColor(expand ? expandedBackgroundColor : collapsedBackgroundColor);
         ViewCompat.setTranslationZ(this, expand ? expandedElevation : 0);
         draftButtons.setVisibility(expand ? VISIBLE : View.GONE);
         separator.setVisibility(expand ? INVISIBLE : View.VISIBLE);
-        handleExpandCollapseAnimation();
+        if (animate) {
+            handleExpandCollapseAnimation();
+        }
     }
 
     private void handleExpandCollapseAnimation() {

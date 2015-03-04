@@ -51,9 +51,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
         bindShotImageIfPresent(holder, shotModel);
         if (currentExpandedItemPosition == position) {
-            holder.draftItemView.expand();
+            holder.draftItemView.expand(false);
         } else {
-            holder.draftItemView.collapse();
+            holder.draftItemView.collapse(false);
         }
     }
 
@@ -75,7 +75,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     private void collapseItem(DraftViewHolder holder) {
-        holder.draftItemView.collapse();
+        holder.draftItemView.collapse(true);
         boolean isItemAtExpandedPosition = currentExpandedItemPosition == holder.getPosition();
         if (isItemAtExpandedPosition) {
             currentExpandedItemPosition = NONE_EXPANDED_POSITION;
@@ -88,7 +88,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     private void expandItem(DraftViewHolder holder) {
         collapseCurrentExpandedItem();
-        holder.draftItemView.expand();
+        holder.draftItemView.expand(true);
         currentExpandedItem = holder;
         currentExpandedItemPosition = holder.getPosition();
     }
@@ -97,7 +97,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         if (currentExpandedItem != null) {
             boolean isExpandedItemVisible = currentExpandedItemPosition == currentExpandedItem.getPosition();
             if (isExpandedItemVisible) {
-                currentExpandedItem.draftItemView.collapse();
+                currentExpandedItem.draftItemView.collapse(true);
             }
         }
         currentExpandedItemPosition = NONE_EXPANDED_POSITION;
