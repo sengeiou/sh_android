@@ -5,96 +5,107 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:orientation="vertical"
-  app:foreground="?selectableItemBackground">
+  android:foreground="?selectableItemBackground">
 
-    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
-      android:layout_width="@dimen/shot_avatar_size"
-      android:layout_height="@dimen/shot_avatar_size"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="8dp"
-      android:layout_marginTop="16dp"
-      android:focusable="false"
-      android:focusableInTouchMode="false"
-      android:src="@drawable/ic_contact_picture_default" />
-
-    <TextView android:id="@+id/shot_user_name"
-      android:layout_width="wrap_content"
+    <LinearLayout android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/shot_avatar"
-      android:layout_toRightOf="@id/shot_avatar"
-      android:textColor="@color/gray_10"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      tools:text="Ignasi" />
+      android:orientation="horizontal">
 
-    <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/shot_user_name"
-      android:layout_below="@id/shot_user_name"
-      android:layout_marginRight="16dp"
-      android:textColor="@color/material_black"
-      android:textColorLink="@color/links"
-      android:textSize="16sp"
-      tools:text="Who's the referee?" />
+        <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
+          android:layout_width="@dimen/shot_avatar_size"
+          android:layout_height="@dimen/shot_avatar_size"
+          android:layout_marginBottom="16dp"
+          android:layout_marginLeft="16dp"
+          android:layout_marginTop="16dp"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:src="@drawable/ic_contact_picture_default" />
 
-    <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_image"
-      android:layout_width="match_parent"
-      android:layout_height="185dp"
-      android:layout_alignLeft="@+id/shot_text"
-      android:layout_below="@+id/shot_text"
-      android:layout_marginBottom="8dp"
-      android:layout_marginRight="16dp"
-      android:layout_marginTop="8dp"
-      android:focusable="false"
-      android:focusableInTouchMode="false"
-      android:scaleType="centerCrop"
-      android:visibility="gone"
-      tools:background="#66000066"
-      tools:visibility="visible" />
-
-    <LinearLayout android:id="@+id/shot_draft_buttons"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/shot_text"
-      android:layout_below="@+id/shot_image"
-      android:layout_marginLeft="-8dp"
-      android:layout_marginRight="8dp"
-      android:orientation="horizontal"
-      android:visibility="gone"
-      tools:visibility="visible">
-
-        <Button android:id="@+id/shot_draft_shoot"
-          style="@style/BorderlessButton.Primary"
-          android:layout_width="wrap_content"
+        <LinearLayout android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:clickable="true"
-          android:text="Shoot" />
+          android:layout_marginLeft="8dp"
+          android:layout_marginTop="16dp"
+          android:orientation="vertical">
 
-        <Space android:layout_width="0dp"
-          android:layout_height="0dp"
-          android:layout_weight="1" />
+            <TextView android:id="@+id/shot_user_name"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginRight="16dp"
+              android:textColor="@color/gray_10"
+              android:textSize="16sp"
+              android:textStyle="bold"
+              tools:text="Ignasi" />
 
-        <Button android:id="@+id/shot_draft_edit"
-          style="@style/BorderlessButton.Secondary"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:clickable="true"
-          android:text="Edit" />
+            <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_text"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginRight="16dp"
+              android:textColor="@color/material_black"
+              android:textColorLink="@color/links"
+              android:textSize="16sp"
+              tools:text="Who's the referee?" />
 
-        <Button android:id="@+id/shot_draft_remove"
-          style="@style/BorderlessButton.Secondary"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:clickable="true"
-          android:text="Delete" />
+            <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_image"
+              android:layout_width="match_parent"
+              android:layout_height="185dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="8dp"
+              android:focusable="false"
+              android:focusableInTouchMode="false"
+              android:scaleType="centerCrop"
+              android:visibility="gone"
+              tools:background="#66000066"
+              tools:visibility="visible" />
+
+            <FrameLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+                <View android:id="@+id/draft_space"
+                  android:layout_width="0dp"
+                  android:layout_height="16dp" />
+
+                <LinearLayout android:id="@+id/shot_draft_buttons"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="-8dp"
+                  android:layout_marginRight="8dp"
+                  android:orientation="horizontal"
+                  android:visibility="gone"
+                  tools:visibility="visible">
+
+                    <Button android:id="@+id/shot_draft_shoot"
+                      style="@style/BorderlessButton.Primary"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:clickable="true"
+                      android:text="Shoot" />
+
+                    <Space android:layout_width="0dp"
+                      android:layout_height="0dp"
+                      android:layout_weight="1" />
+
+                    <Button android:id="@+id/shot_draft_edit"
+                      style="@style/BorderlessButton.Secondary"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:clickable="true"
+                      android:text="Edit" />
+
+                    <Button android:id="@+id/shot_draft_remove"
+                      style="@style/BorderlessButton.Secondary"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:clickable="true"
+                      android:text="Delete" />
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
     <View android:id="@+id/shot_separator"
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:layout_below="@+id/shot_draft_buttons"
-      android:layout_marginTop="16dp"
+      android:layout_gravity="bottom"
       android:background="@color/separator" />
 </com.shootr.android.ui.widgets.DraftItemView>

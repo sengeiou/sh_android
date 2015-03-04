@@ -9,13 +9,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 
-public class DraftItemView extends ForegroundRelativeLayout {
+public class DraftItemView extends FrameLayout {
 
     @InjectView(R.id.shot_avatar) ImageView avatar;
     @InjectView(R.id.shot_user_name) TextView name;
