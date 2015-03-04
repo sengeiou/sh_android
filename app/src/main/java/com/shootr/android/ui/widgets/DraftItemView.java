@@ -82,6 +82,7 @@ public class DraftItemView extends FrameLayout {
         setBackgroundColor(expand ? expandedBackgroundColor : collapsedBackgroundColor);
         ViewCompat.setTranslationZ(this, expand ? expandedElevation : 0);
         draftButtons.setVisibility(expand ? VISIBLE : View.GONE);
+        draftButtons.setAlpha(expand ? 1f : 0f);
         separator.setVisibility(expand ? INVISIBLE : View.VISIBLE);
         if (animate) {
             handleExpandCollapseAnimation();
