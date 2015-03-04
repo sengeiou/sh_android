@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.shootr.android.ui.widgets.ForegroundRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shootr.android.ui.widgets.DraftItemView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -97,4 +97,4 @@
       android:layout_below="@+id/shot_draft_buttons"
       android:layout_marginTop="16dp"
       android:background="@color/separator" />
-</com.shootr.android.ui.widgets.ForegroundRelativeLayout>
+</com.shootr.android.ui.widgets.DraftItemView>

@@ -1,9 +1,6 @@
 package com.shootr.android.ui.adapters;
 
-import android.animation.LayoutTransition;
 import android.content.res.Resources;
-import android.os.Build;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,26 +13,23 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
+import com.shootr.android.ui.widgets.DraftItemView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHolder> {
 
+    public static final int NONE_EXPANDED_POSITION = -1;
+    public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
     private final PicassoWrapper picasso;
 
     private List<ShotModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
-    private float expandedElevation;
-    private int expandedBackgroundColor;
-    private int collapsedBackgroundColor;
+    private int currentExpandedItemPosition = -1;
 
     public DraftAdapter(Resources resources, PicassoWrapper picasso) {
         this.picasso = picasso;
-        expandedBackgroundColor = resources.getColor(R.color.white);
-        collapsedBackgroundColor = 0x00ffffff;
-        expandedElevation = resources.getDimension(R.dimen.card_elevation);
-
     }
 
     public void setDrafts(List<ShotModel> drafts) {
@@ -57,6 +51,11 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         holder.text.setText(shotModel.getComment());
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
         bindShotImageIfPresent(holder, shotModel);
+        if (currentExpandedItemPosition == position) {
+            holder.draftItemView.expand();
+        } else {
+            holder.draftItemView.collapse();
+        }
     }
 
     private void bindShotImageIfPresent(DraftViewHolder holder, ShotModel shotModel) {
@@ -69,37 +68,40 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     private void toggleItem(DraftViewHolder holder) {
-        if (currentExpandedItem == holder) {
+        if (currentExpandedItemPosition == holder.getPosition()) {
             collapseItem(holder);
         } else {
             expandItem(holder);
         }
-        //notifyItemRangeChanged(0, drafts.size());
+    }
+
+    private void collapseItem(DraftViewHolder holder) {
+        holder.draftItemView.collapse();
+        boolean isItemAtExpandedPosition = currentExpandedItemPosition == holder.getPosition();
+        if (isItemAtExpandedPosition) {
+            currentExpandedItemPosition = NONE_EXPANDED_POSITION;
+        }
+        boolean isCurrentExpandedItem = currentExpandedItem == holder;
+        if (isCurrentExpandedItem) {
+            currentExpandedItem = NONE_EXPANDED_ITEM;
+        }
     }
 
     private void expandItem(DraftViewHolder holder) {
         collapseCurrentExpandedItem();
-        View itemView = holder.itemView;
-        itemView.setBackgroundColor(expandedBackgroundColor);
-        ViewCompat.setTranslationZ(itemView, expandedElevation);
-        holder.draftButtons.setVisibility(View.VISIBLE);
-        holder.separator.setVisibility(View.INVISIBLE);
+        holder.draftItemView.expand();
         currentExpandedItem = holder;
+        currentExpandedItemPosition = holder.getPosition();
     }
 
     private void collapseCurrentExpandedItem() {
         if (currentExpandedItem != null) {
-            collapseItem(currentExpandedItem);
+            boolean isExpandedItemVisible = currentExpandedItemPosition == currentExpandedItem.getPosition();
+            if (isExpandedItemVisible) {
+                currentExpandedItem.draftItemView.collapse();
+            }
         }
-    }
-
-    private void collapseItem(DraftViewHolder holder) {
-        View itemView = holder.itemView;
-        ViewCompat.setTranslationZ(itemView, 0);
-        holder.draftButtons.setVisibility(View.GONE);
-        itemView.setBackgroundColor(collapsedBackgroundColor);
-        holder.separator.setVisibility(View.VISIBLE);
-        currentExpandedItem = null;
+        currentExpandedItemPosition = NONE_EXPANDED_POSITION;
     }
 
     class DraftViewHolder extends RecyclerView.ViewHolder {
@@ -110,16 +112,17 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         @InjectView(R.id.shot_image) ImageView image;
         @InjectView(R.id.shot_draft_buttons) View draftButtons;
         @InjectView(R.id.shot_separator) View separator;
+        DraftItemView draftItemView;
 
         public DraftViewHolder(View itemView) {
             super(itemView);
+            draftItemView = (DraftItemView) itemView;
             ButterKnife.inject(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     toggleItem(DraftViewHolder.this);
                 }
             });
-            setupTransitions((ViewGroup) itemView);
         }
 
         @OnClick(R.id.shot_draft_shoot)
@@ -135,21 +138,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         @OnClick(R.id.shot_draft_remove)
         public void remove() {
             /* no-op */
-        }
-
-        private void setupTransitions(ViewGroup itemView) {
-            LayoutTransition transition = new LayoutTransition();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-            } else {
-                transition.setAnimator(LayoutTransition.DISAPPEARING, null);
-            }
-            transition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-            transition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 250);
-            transition.setStartDelay(LayoutTransition.APPEARING, 50);
-            transition.setDuration(LayoutTransition.APPEARING, 200);
-            transition.setDuration(LayoutTransition.CHANGE_APPEARING, 100);
-            ((ViewGroup) itemView).setLayoutTransition(transition);
         }
     }
 }
