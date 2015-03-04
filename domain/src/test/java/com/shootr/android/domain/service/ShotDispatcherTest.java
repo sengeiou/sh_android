@@ -130,6 +130,10 @@ public class ShotDispatcherTest {
         @Override public QueuedShot nextQueuedShot() {
             return new QueuedShot(shot());
         }
+
+        @Override public List<QueuedShot> getFailedShotQueue() {
+            return null;
+        }
     }
 
     private Shot shot() {

@@ -8,6 +8,7 @@ import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
+import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -24,7 +25,7 @@ import javax.inject.Singleton;
     GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
     EventsWatchedCountInteractor.class, EventsListInteractor.class, SelectEventInteractor.class,
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
-    ChangeEventPhotoInteractor.class, PostNewShotInteractor.class,
+    ChangeEventPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class,
   },
   complete = false
 )
