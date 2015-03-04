@@ -60,7 +60,7 @@
             <FrameLayout android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-                <View android:id="@+id/draft_space"
+                <Space android:id="@+id/draft_space"
                   android:layout_width="0dp"
                   android:layout_height="16dp" />
 

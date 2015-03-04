@@ -50,12 +50,20 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         holder.text.setText(shotModel.getComment());
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
         bindShotImageIfPresent(holder, shotModel);
+        if (isExpandedLocked(position)) {
+            currentExpandedItemPosition = position;
+            holder.draftItemView.setClickable(false);
+        }
         if (currentExpandedItemPosition == position) {
             currentExpandedItem = holder;
             holder.draftItemView.expand(false);
         } else {
             holder.draftItemView.collapse(false);
         }
+    }
+
+    private boolean isExpandedLocked(int position) {
+        return getItemCount()<=1;
     }
 
     private void bindShotImageIfPresent(DraftViewHolder holder, ShotModel shotModel) {
@@ -120,7 +128,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             ButterKnife.inject(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    toggleItem(DraftViewHolder.this);
+                    if (!isExpandedLocked(getPosition())) {
+                        toggleItem(DraftViewHolder.this);
+                    }
                 }
             });
         }
