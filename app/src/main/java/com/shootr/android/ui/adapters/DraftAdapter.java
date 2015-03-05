@@ -23,13 +23,15 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     public static final int NONE_EXPANDED_POSITION = -1;
     public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
     private final PicassoWrapper picasso;
+    private final DraftActionListener draftActionListener;
 
     private List<DraftModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
-    public DraftAdapter(PicassoWrapper picasso) {
+    public DraftAdapter(PicassoWrapper picasso, DraftActionListener draftActionListener) {
         this.picasso = picasso;
+        this.draftActionListener = draftActionListener;
     }
 
     public void setDrafts(List<DraftModel> drafts) {
@@ -66,7 +68,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     private boolean isExpandedLocked(int position) {
-        return getItemCount()<=1;
+        return getItemCount() <= 1;
     }
 
     private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
@@ -141,17 +143,30 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
         @OnClick(R.id.shot_draft_shoot)
         public void shoot() {
-            /* no-op */
+            draftActionListener.onShootDraft(getDraftForThisPosition());
         }
 
         @OnClick(R.id.shot_draft_edit)
         public void edit() {
-            /* no-op */
+            draftActionListener.onEditDraft(getDraftForThisPosition());
         }
 
         @OnClick(R.id.shot_draft_remove)
         public void remove() {
-            /* no-op */
+            draftActionListener.onRemoveDraft(getDraftForThisPosition());
         }
+
+        private DraftModel getDraftForThisPosition() {
+            return drafts.get(this.getPosition());
+        }
+    }
+
+    public interface DraftActionListener {
+
+        void onShootDraft(DraftModel draftModel);
+
+        void onEditDraft(DraftModel draftModel);
+
+        void onRemoveDraft(DraftModel draftModel);
     }
 }

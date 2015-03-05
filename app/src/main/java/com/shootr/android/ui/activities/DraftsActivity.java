@@ -20,7 +20,7 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
+public class DraftsActivity extends BaseSignedInActivity implements DraftsView, DraftAdapter.DraftActionListener {
 
     @Inject DraftsPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -32,6 +32,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     private boolean showShootAll = false;
     private MenuItem shootAllMenuItem;
 
+    //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!restoreSessionOrLogin()) {
@@ -49,7 +50,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     private void initializeViews() {
         ButterKnife.inject(this);
-        timelineAdapter = new DraftAdapter(picasso);
+        timelineAdapter = new DraftAdapter(picasso, this);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -64,18 +65,20 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     private void initializePresenter() {
         presenter.initialize(this);
     }
-
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.drafts, menu);
-        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
-        updateShootAllVisibility();
-        return true;
-    }
+    //endregion
 
     private void updateShootAllVisibility() {
         if (shootAllMenuItem != null) {
             shootAllMenuItem.setVisible(showShootAll);
         }
+    }
+
+    //region Activity methods
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drafts, menu);
+        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
+        updateShootAllVisibility();
+        return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -86,7 +89,9 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
             return super.onOptionsItemSelected(item);
         }
     }
+    //endregion
 
+    //region View methods
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -120,4 +125,19 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
         showShootAll = true;
         updateShootAllVisibility();
     }
+    //endregion
+
+    //region List actions
+    @Override public void onShootDraft(DraftModel draftModel) {
+        // TODO
+    }
+
+    @Override public void onEditDraft(DraftModel draftModel) {
+        // TODO
+    }
+
+    @Override public void onRemoveDraft(DraftModel draftModel) {
+        // TODO
+    }
+    //endregion
 }
