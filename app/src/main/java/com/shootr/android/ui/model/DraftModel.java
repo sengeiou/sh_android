@@ -1,9 +1,13 @@
 package com.shootr.android.ui.model;
 
-public class DraftModel{
+import java.io.File;
+import java.io.Serializable;
+
+public class DraftModel implements Serializable{
 
     private Long idQueue;
     private ShotModel shotModel;
+    private File imageFile;
 
     public Long getIdQueue() {
         return idQueue;
@@ -19,5 +23,13 @@ public class DraftModel{
 
     public void setShotModel(ShotModel shotModel) {
         this.shotModel = shotModel;
+    }
+
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(File imageFile) {
+        this.imageFile = imageFile;
     }
 }

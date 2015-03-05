@@ -77,6 +77,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         if (shotModel.getImage() != null) {
             picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
+        } else if (draftModel.getImageFile() != null) {
+            picasso.load(draftModel.getImageFile()).into(holder.image);
+            holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);
         }

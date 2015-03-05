@@ -22,6 +22,7 @@ public class DraftModelMapper {
     public DraftModel transform(QueuedShot draft) {
         DraftModel draftModel = new DraftModel();
         draftModel.setIdQueue(draft.getIdQueue());
+        draftModel.setImageFile(draft.getImageFile());
 
         Shot shot = draft.getShot();
 
