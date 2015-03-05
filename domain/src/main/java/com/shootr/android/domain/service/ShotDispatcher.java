@@ -72,7 +72,7 @@ public class ShotDispatcher implements ShotSender {
         if (sourceImage != null) {
             File targetImage = new File(queuedImagesDir, String.valueOf(shot.getIdQueue()));
 
-            if (targetImage == sourceImage) {
+            if (targetImage.equals(sourceImage)) {
                 return;
             }
             copyImage(shot, sourceImage, targetImage);
