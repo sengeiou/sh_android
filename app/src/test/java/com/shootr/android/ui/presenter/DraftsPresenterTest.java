@@ -41,7 +41,7 @@ public class DraftsPresenterTest {
         SessionRepository sessionRepository = mock(SessionRepository.class);
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper());
-        presenter = new DraftsPresenter(interactor, sendDraftInteractor, draftModelMapper, bus);
+        presenter = new DraftsPresenter(interactor, sendDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
     }
 
     @Test

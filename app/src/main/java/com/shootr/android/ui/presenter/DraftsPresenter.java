@@ -4,6 +4,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.bus.ShotQueued;
+import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
 import com.shootr.android.ui.model.DraftModel;
@@ -21,15 +22,17 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
 
     private final GetDraftsInteractor getDraftsInteractor;
     private final SendDraftInteractor sendDraftInteractor;
+    private final DeleteDraftInteractor deleteDraftInteractor;
     private final DraftModelMapper draftModelMapper;
     private final Bus bus;
 
     private DraftsView draftsView;
 
     @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, SendDraftInteractor sendDraftInteractor,
-      DraftModelMapper draftModelMapper, @Main Bus bus) {
+      DeleteDraftInteractor deleteDraftInteractor, DraftModelMapper draftModelMapper, @Main Bus bus) {
         this.getDraftsInteractor = getDraftsInteractor;
         this.sendDraftInteractor = sendDraftInteractor;
+        this.deleteDraftInteractor = deleteDraftInteractor;
         this.draftModelMapper = draftModelMapper;
         this.bus = bus;
     }
@@ -79,6 +82,14 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
 
     public void sendDraft(DraftModel draftModel) {
         sendDraftInteractor.sendDraft(draftModel.getIdQueue());
+    }
+
+    public void deleteDraft(DraftModel draftModel) {
+        deleteDraftInteractor.deleteDraft(draftModel.getIdQueue(), new DeleteDraftInteractor.Callback() {
+            @Override public void onDeleted() {
+                loadDrafts();
+            }
+        });
     }
 
     @Subscribe
