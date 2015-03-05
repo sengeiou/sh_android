@@ -89,6 +89,16 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
     //endregion
 
     //region View methods

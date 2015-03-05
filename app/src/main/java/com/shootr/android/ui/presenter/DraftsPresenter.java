@@ -1,30 +1,37 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.QueuedShot;
+import com.shootr.android.domain.bus.ShotFailed;
+import com.shootr.android.domain.bus.ShotQueued;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
 import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.views.DraftsView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DraftsPresenter implements Presenter {
+public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFailed.Receiver {
 
     private final GetDraftsInteractor getDraftsInteractor;
     private final SendDraftInteractor sendDraftInteractor;
     private final DraftModelMapper draftModelMapper;
+    private final Bus bus;
 
     private DraftsView draftsView;
 
     @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, SendDraftInteractor sendDraftInteractor,
-      DraftModelMapper draftModelMapper) {
+      DraftModelMapper draftModelMapper, @Main Bus bus) {
         this.getDraftsInteractor = getDraftsInteractor;
         this.sendDraftInteractor = sendDraftInteractor;
         this.draftModelMapper = draftModelMapper;
+        this.bus = bus;
     }
 
     public void initialize(DraftsView draftsView) {
@@ -63,14 +70,24 @@ public class DraftsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        /* no-op */
+        bus.register(this);
     }
 
     @Override public void pause() {
-        /* no-op */
+        bus.unregister(this);
     }
 
     public void sendDraft(DraftModel draftModel) {
         sendDraftInteractor.sendDraft(draftModel.getIdQueue());
+    }
+
+    @Subscribe
+    @Override public void onShotQueued(ShotQueued.Event event) {
+        this.loadDrafts();
+    }
+
+    @Subscribe
+    @Override public void onShotSent(ShotFailed.Event event) {
+        this.loadDrafts();
     }
 }
