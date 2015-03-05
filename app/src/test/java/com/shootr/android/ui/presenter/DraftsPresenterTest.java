@@ -5,6 +5,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -68,7 +69,7 @@ public class DraftsPresenterTest {
 
         presenter.initialize(draftsView);
 
-        verify(draftsView, times(1)).showDrafts(anyListOf(ShotModel.class));
+        verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class DraftsPresenterTest {
 
         presenter.initialize(draftsView);
 
-        verify(draftsView, never()).showDrafts(anyListOf(ShotModel.class));
+        verify(draftsView, never()).showDrafts(anyListOf(DraftModel.class));
     }
 
     @Test

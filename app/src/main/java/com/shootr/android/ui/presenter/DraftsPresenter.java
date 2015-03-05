@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.views.DraftsView;
@@ -35,7 +36,7 @@ public class DraftsPresenter implements Presenter {
         });
     }
 
-    private void onDraftListLoaded(List<ShotModel> drafts) {
+    private void onDraftListLoaded(List<DraftModel> drafts) {
         if (drafts.isEmpty()) {
             draftsView.showEmpty();
         } else {
@@ -45,11 +46,11 @@ public class DraftsPresenter implements Presenter {
         showShootAllButtonIfMoreThanOneDraft(drafts);
     }
 
-    private void renderViewDraftList(List<ShotModel> drafts) {
+    private void renderViewDraftList(List<DraftModel> drafts) {
         draftsView.showDrafts(drafts);
     }
 
-    private void showShootAllButtonIfMoreThanOneDraft(List<ShotModel> drafts) {
+    private void showShootAllButtonIfMoreThanOneDraft(List<DraftModel> drafts) {
         if (drafts.size() > 1) {
             draftsView.showShootAllButton();
         } else {

@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.DraftItemView;
@@ -23,7 +24,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
     private final PicassoWrapper picasso;
 
-    private List<ShotModel> drafts = new ArrayList<>();
+    private List<DraftModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
@@ -31,7 +32,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         this.picasso = picasso;
     }
 
-    public void setDrafts(List<ShotModel> drafts) {
+    public void setDrafts(List<DraftModel> drafts) {
         this.drafts = drafts;
     }
 
@@ -45,11 +46,13 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     @Override public void onBindViewHolder(DraftViewHolder holder, int position) {
-        ShotModel shotModel = drafts.get(position);
+        DraftModel draftModel = drafts.get(position);
+        ShotModel shotModel = draftModel.getShotModel();
+
         holder.name.setText(shotModel.getUsername());
         holder.text.setText(shotModel.getComment());
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
-        bindShotImageIfPresent(holder, shotModel);
+        bindShotImageIfPresent(holder, draftModel);
         if (isExpandedLocked(position)) {
             currentExpandedItemPosition = position;
             holder.draftItemView.setClickable(false);
@@ -66,7 +69,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         return getItemCount()<=1;
     }
 
-    private void bindShotImageIfPresent(DraftViewHolder holder, ShotModel shotModel) {
+    private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
+        ShotModel shotModel = draftModel.getShotModel();
         if (shotModel.getImage() != null) {
             picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
