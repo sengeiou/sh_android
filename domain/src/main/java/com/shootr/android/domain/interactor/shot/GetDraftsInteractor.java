@@ -30,7 +30,15 @@ public class GetDraftsInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         List<QueuedShot> failedShots = shotQueueRepository.getFailedShotQueue();
-        callback.onLoaded(failedShots);
+        notifyLoaded(failedShots);
+    }
+
+    private void notifyLoaded(final List<QueuedShot> failedShots) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                callback.onLoaded(failedShots);
+            }
+        });
     }
 
     public interface Callback {
