@@ -74,12 +74,12 @@ public class DraftsPresenterTest {
     }
 
     @Test
-    public void shouldNotShowDraftsInViewWhenDraftListEmpty() throws Exception {
+    public void shouldShowDraftsInViewWhenDraftListEmpty() throws Exception {
         setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
 
-        verify(draftsView, never()).showDrafts(anyListOf(DraftModel.class));
+        verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
     @Test

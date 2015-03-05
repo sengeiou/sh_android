@@ -45,8 +45,8 @@ public class DraftsPresenter implements Presenter {
             draftsView.showEmpty();
         } else {
             draftsView.hideEmpty();
-            renderViewDraftList(drafts);
         }
+        renderViewDraftList(drafts);
         showShootAllButtonIfMoreThanOneDraft(drafts);
     }
 

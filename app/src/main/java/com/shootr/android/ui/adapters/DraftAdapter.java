@@ -36,6 +36,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     public void setDrafts(List<DraftModel> drafts) {
         this.drafts = drafts;
+        notifyDataSetChanged();
     }
 
     @Override public DraftViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
