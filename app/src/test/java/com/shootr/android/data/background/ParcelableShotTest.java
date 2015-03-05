@@ -21,6 +21,7 @@ public class ParcelableShotTest {
     private static final Long EVENT_ID = 3L;
     private static final String EVENT_TITLE = "title";
     private static final String EVENT_TAG = "tag";
+    private static final Long QUEUE_ID = 1L;
     //endregion
 
     @Test
@@ -107,6 +108,22 @@ public class ParcelableShotTest {
         Shot shotFromParcel = createdFromParcel.getShot();
         Shot.ShotEventInfo eventInfoFromParcel = shotFromParcel.getEventInfo();
         assertThat(eventInfoFromParcel).isNull();
+    }
+
+    @Test
+    public void testShotFromparcelableHasIdQueueIfOriginalDoes() throws Exception {
+        Shot shotStub = shotStub();
+        shotStub.setIdQueue(QUEUE_ID);
+        ParcelableShot parcelableShot = new ParcelableShot(shotStub);
+
+        Parcel parcel = MockParcel.obtain();
+        parcelableShot.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+
+        ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
+        Shot shotFromParcel = createdFromParcel.getShot();
+
+        assertThat(shotFromParcel.getIdQueue()).isEqualTo(shotStub.getIdQueue());
     }
 
     //region Stubs

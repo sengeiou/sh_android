@@ -10,6 +10,7 @@ public class Shot {
     private ShotUserInfo userInfo;
     private ShotEventInfo eventInfo;
     private Date publishDate;
+    private Long idQueue;
 
     public Long getIdShot() {
         return idShot;
@@ -57,6 +58,14 @@ public class Shot {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public Long getIdQueue() {
+        return idQueue;
+    }
+
+    public void setIdQueue(Long idQueue) {
+        this.idQueue = idQueue;
     }
 
     public static class ShotEventInfo {

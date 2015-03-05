@@ -114,6 +114,9 @@ public class ShotDispatcher implements ShotSender {
         if (shotImage != null) {
             queuedShot.setImageFile(shotImage);
         }
+        if (shot.getIdQueue() != null) {
+            queuedShot.setIdQueue(shot.getIdQueue());
+        }
         return queuedShot;
     }
 
