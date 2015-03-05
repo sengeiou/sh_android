@@ -14,4 +14,6 @@ public interface ShotQueueRepository {
     QueuedShot nextQueuedShot();
 
     List<QueuedShot> getFailedShotQueue();
+
+    QueuedShot getShotQueue(Long queuedShotId);
 }

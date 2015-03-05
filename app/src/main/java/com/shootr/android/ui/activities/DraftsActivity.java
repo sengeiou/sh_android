@@ -129,7 +129,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
 
     //region List actions
     @Override public void onShootDraft(DraftModel draftModel) {
-        // TODO
+        presenter.sendDraft(draftModel);
     }
 
     @Override public void onEditDraft(DraftModel draftModel) {

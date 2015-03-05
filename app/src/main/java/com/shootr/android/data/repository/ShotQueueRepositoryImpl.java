@@ -40,4 +40,7 @@ public class ShotQueueRepositoryImpl implements ShotQueueRepository {
         return mapper.transform(shotQueueManager.retrieveFailedShotQueues());
     }
 
+    @Override public QueuedShot getShotQueue(Long queuedShotId) {
+        return mapper.transform(shotQueueManager.retrieveById(queuedShotId));
+    }
 }

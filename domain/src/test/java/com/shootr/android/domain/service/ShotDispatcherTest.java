@@ -192,11 +192,10 @@ public class ShotDispatcherTest {
         @Override public List<QueuedShot> getFailedShotQueue() {
             return null;
         }
-    }
 
-    private Shot shot() {
-        Shot shot = new Shot();
-        shot.setComment(COMMENT_STUB);
-        return shot;
+        @Override public QueuedShot getShotQueue(Long queuedShotId) {
+            return new QueuedShot(shot());
+        }
+
     }
 }

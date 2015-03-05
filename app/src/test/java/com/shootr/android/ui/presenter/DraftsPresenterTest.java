@@ -4,9 +4,9 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.DraftModel;
-import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.DraftsView;
@@ -33,6 +33,7 @@ public class DraftsPresenterTest {
     private DraftsPresenter presenter;
     @Mock DraftsView draftsView;
     @Mock GetDraftsInteractor interactor;
+    @Mock SendDraftInteractor sendDraftInteractor;
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +41,7 @@ public class DraftsPresenterTest {
         SessionRepository sessionRepository = mock(SessionRepository.class);
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper());
-        presenter = new DraftsPresenter(interactor, draftModelMapper);
+        presenter = new DraftsPresenter(interactor, sendDraftInteractor, draftModelMapper);
     }
 
     @Test

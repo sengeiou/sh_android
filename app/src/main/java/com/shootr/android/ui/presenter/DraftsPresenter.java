@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
 import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
@@ -14,12 +15,15 @@ import javax.inject.Inject;
 public class DraftsPresenter implements Presenter {
 
     private final GetDraftsInteractor getDraftsInteractor;
+    private final SendDraftInteractor sendDraftInteractor;
     private final DraftModelMapper draftModelMapper;
 
     private DraftsView draftsView;
 
-    @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, DraftModelMapper draftModelMapper) {
+    @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, SendDraftInteractor sendDraftInteractor,
+      DraftModelMapper draftModelMapper) {
         this.getDraftsInteractor = getDraftsInteractor;
+        this.sendDraftInteractor = sendDraftInteractor;
         this.draftModelMapper = draftModelMapper;
     }
 
@@ -64,5 +68,9 @@ public class DraftsPresenter implements Presenter {
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void sendDraft(DraftModel draftModel) {
+        sendDraftInteractor.sendDraft(draftModel.getIdQueue());
     }
 }
