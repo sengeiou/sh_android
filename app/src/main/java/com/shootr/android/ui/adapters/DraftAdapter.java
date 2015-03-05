@@ -152,9 +152,9 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             draftActionListener.onEditDraft(getDraftForThisPosition());
         }
 
-        @OnClick(R.id.shot_draft_remove)
-        public void remove() {
-            draftActionListener.onRemoveDraft(getDraftForThisPosition());
+        @OnClick(R.id.shot_draft_delete)
+        public void delete() {
+            draftActionListener.onDeleteDraft(getDraftForThisPosition());
         }
 
         private DraftModel getDraftForThisPosition() {
@@ -168,6 +168,6 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
         void onEditDraft(DraftModel draftModel);
 
-        void onRemoveDraft(DraftModel draftModel);
+        void onDeleteDraft(DraftModel draftModel);
     }
 }

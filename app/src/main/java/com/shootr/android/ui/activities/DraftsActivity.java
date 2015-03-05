@@ -146,7 +146,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
         // TODO
     }
 
-    @Override public void onRemoveDraft(DraftModel draftModel) {
+    @Override public void onDeleteDraft(DraftModel draftModel) {
         // TODO
     }
     //endregion
