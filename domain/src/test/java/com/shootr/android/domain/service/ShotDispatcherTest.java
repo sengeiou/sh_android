@@ -88,7 +88,7 @@ public class ShotDispatcherTest {
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
         ArgumentCaptor<ShotSent.Event> eventArgumentCaptor = ArgumentCaptor.forClass(ShotSent.Event.class);
-        verify(busPublisher, times(1)).post(eventArgumentCaptor.capture());
+        verify(busPublisher, atLeastOnce()).post(eventArgumentCaptor.capture());
         ShotSent.Event event = eventArgumentCaptor.getValue();
 
         assertThat(event.getShot()).isNotNull();

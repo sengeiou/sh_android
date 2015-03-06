@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -10,6 +11,7 @@ import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.DraftsView;
+import com.squareup.otto.Bus;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -34,6 +36,8 @@ public class DraftsPresenterTest {
     @Mock DraftsView draftsView;
     @Mock GetDraftsInteractor interactor;
     @Mock SendDraftInteractor sendDraftInteractor;
+    @Mock DeleteDraftInteractor deleteDraftInteractor;
+    @Mock Bus bus;
 
     @Before
     public void setUp() throws Exception {
