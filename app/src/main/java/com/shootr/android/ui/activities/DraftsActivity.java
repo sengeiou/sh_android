@@ -142,10 +142,6 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
         presenter.sendDraft(draftModel);
     }
 
-    @Override public void onEditDraft(DraftModel draftModel) {
-        // TODO
-    }
-
     @Override public void onDeleteDraft(DraftModel draftModel) {
         presenter.deleteDraft(draftModel);
     }
