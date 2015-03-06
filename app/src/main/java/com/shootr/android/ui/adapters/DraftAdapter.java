@@ -59,6 +59,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         if (isExpandedLocked(position)) {
             currentExpandedItemPosition = position;
             holder.draftItemView.setClickable(false);
+        } else {
+            holder.draftItemView.setClickable(true);
         }
         if (currentExpandedItemPosition == position) {
             currentExpandedItem = holder;
