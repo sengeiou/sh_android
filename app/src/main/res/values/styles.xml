@@ -25,6 +25,11 @@
         <item name="searchViewStyle">@style/MySearchViewStyle.Closable</item>
     </style>
 
+    <style name="ShootrTheme.DarkToolbar">
+        <item name="colorPrimary">@color/gray_50</item>
+        <item name="colorPrimaryDark">@color/gray_40</item>
+    </style>
+
     <style name="ShootrTheme.TranslucentToolbar">
         <item name="toolbar">@style/ToolBar.Translucent</item>
     </style>
@@ -235,6 +240,26 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ff212121</item>
+    </style>
+
+    <style name="BorderlessButton">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BorderlessButton.Primary">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="BorderlessButton.Secondary">
+        <item name="android:textColor">@color/gray_50</item>
     </style>
 
 </resources>

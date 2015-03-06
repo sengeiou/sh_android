@@ -180,6 +180,13 @@
           >
         </activity>
 
+        <activity
+          android:name=".ui.activities.DraftsActivity"
+          android:label="@string/activity_drafts_title"
+          android:theme="@style/ShootrTheme.DarkToolbar"
+          >
+        </activity>
+
         <activity android:name=".ui.activities.UpdateWarningActivity"
           android:launchMode="singleTask"
             />

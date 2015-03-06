@@ -180,6 +180,10 @@
     <string name="menu_event_edit_info">Edit event</string>
     <string name="menu_event_edit_photo">Edit photo</string>
     <string name="notification_shot_sending">Shooting…</string>
+    <string name="shoot_photo">Shoot photo</string>
+    <string name="activity_drafts_title">Drafts</string>
+    <string name="draft_label">Draft</string>
+    <string name="drafts_empty">No Drafts</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
