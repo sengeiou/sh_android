@@ -112,7 +112,7 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
     }
 
     @Subscribe
-    @Override public void onShotSent(ShotFailed.Event event) {
+    @Override public void onShotFailed(ShotFailed.Event event) {
         this.loadDrafts();
     }
 }

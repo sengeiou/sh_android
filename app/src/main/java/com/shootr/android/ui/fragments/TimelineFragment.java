@@ -1,5 +1,7 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
@@ -8,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -29,15 +34,19 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.BuildConfig;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -75,7 +84,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView, ShotSent.Receiver {
+        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView, ShotSent.Receiver, ShotFailed.Receiver {
 
     private static final int REQUEST_SELECT_EVENT = 2;
     public static final int REQUEST_NEW_SHOT = 1;
@@ -89,6 +98,7 @@ public class TimelineFragment extends BaseFragment
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject VisibleEventInfoInteractor visibleEventInfoInteractor;
     @Inject SelectEventInteractor selectEventInteractor;
+    @Inject GetDraftsInteractor getDraftsInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -177,6 +187,7 @@ public class TimelineFragment extends BaseFragment
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         watchNumberPresenter.resume();
+        updateDraftsButtonVisibility();
     }
 
     @Override
@@ -301,29 +312,81 @@ public class TimelineFragment extends BaseFragment
               }
           })
           .build();
-        showDraftsButton();
+        updateDraftsButtonVisibility();
+    }
+
+    private void updateDraftsButtonVisibility() {
+        getDraftsInteractor.loadDrafts(new GetDraftsInteractor.Callback() {
+            @Override public void onLoaded(List<QueuedShot> drafts) {
+                if (!drafts.isEmpty()) {
+                    showDraftsButton();
+                } else {
+                    hideDraftsButton();
+                }
+            }
+        });
     }
 
     private void showDraftsButton() {
-        final int demoDelay = 800;
-        draftsButton.postDelayed(new Runnable() {
-            @Override public void run() {
-                draftsButton.setScaleX(0);
-                draftsButton.setScaleY(0);
-                draftsButton.setVisibility(View.VISIBLE);
+        if (draftsButton.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        draftsButton.setVisibility(View.VISIBLE);
+        draftsButton.setScaleX(0);
+        draftsButton.setScaleY(0);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 0f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 0f, 1f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(scaleX, scaleY);
+        set.setDuration(500);
+        set.setStartDelay(200);
+        set.setInterpolator(new DecelerateInterpolator());
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override public void onAnimationEnd(Animator animation) {
+                draftsButton.setScaleX(1f);
+                draftsButton.setScaleY(1f);
             }
-        }, demoDelay);
+        });
+        set.start();
+    }
+
+    private void hideDraftsButton() {
+        if (draftsButton.getVisibility() == View.GONE) {
+            return;
+        }
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 1f, 0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 1f, 0f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(scaleX, scaleY);
+        set.setDuration(500);
+        set.setInterpolator(new AccelerateInterpolator());
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override public void onAnimationEnd(Animator animation) {
+                draftsButton.setVisibility(View.GONE);
+            }
+        });
+        set.start();
     }
 
     private void setupDraftButtonTransition() {
         LayoutTransition transition = new LayoutTransition();
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 0f, 1f);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 0f, 1f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY);
-        transition.setAnimator(LayoutTransition.APPEARING, set);
-        transition.setDuration(LayoutTransition.APPEARING, 200);
-        transition.setInterpolator(LayoutTransition.APPEARING, new DecelerateInterpolator());
+        // Disable button appearing and disappearing (button), we will do manually
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            transition.disableTransitionType(LayoutTransition.APPEARING);
+            transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        } else {
+            transition.setAnimator(LayoutTransition.APPEARING, null);
+            transition.setAnimator(LayoutTransition.DISAPPEARING, null);
+        }
+
+        // Setup text shrinking (when button appears)
+        transition.setDuration(LayoutTransition.CHANGE_APPEARING, 200);
+        transition.setInterpolator(LayoutTransition.CHANGE_APPEARING, new AccelerateDecelerateInterpolator());
+
+        // Setup text expanding (when button disappears)
+        transition.setInterpolator(LayoutTransition.CHANGE_DISAPPEARING, new AccelerateDecelerateInterpolator());
+        transition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+
         ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
     }
 
@@ -605,6 +668,11 @@ public class TimelineFragment extends BaseFragment
         } else {
             getActivity().invalidateOptionsMenu();
         }
+    }
+
+    @Subscribe
+    @Override public void onShotFailed(ShotFailed.Event event) {
+        updateDraftsButtonVisibility();
     }
 }
 

@@ -6,7 +6,7 @@ public interface ShotFailed {
 
     interface Receiver {
 
-        void onShotSent(Event event);
+        void onShotFailed(Event event);
 
     }
 
