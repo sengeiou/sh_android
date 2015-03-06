@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 public class DebugServiceAdapter {
 
-    private static final int DEFAULT_DELAY_MS = 2000; // Network calls will take 2 seconds.
+    private static final int DEFAULT_DELAY_MS = 250;
     private static final int DEFAULT_VARIANCE_PCT = 40; // Network delay varies by ±40%.
-    private static final int DEFAULT_ERROR_PCT = 3; // 3% of network calls will fail.
+    private static final int DEFAULT_ERROR_PCT = 0;
     private static final int ERROR_DELAY_FACTOR = 3; // Network errors will be scaled by this value.
     public static final boolean DEFAULT_CONNECTED = true;
 
