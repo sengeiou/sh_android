@@ -27,6 +27,7 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
     private final Bus bus;
 
     private DraftsView draftsView;
+    private List<DraftModel> drafts;
 
     @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, SendDraftInteractor sendDraftInteractor,
       DeleteDraftInteractor deleteDraftInteractor, DraftModelMapper draftModelMapper, @Main Bus bus) {
@@ -51,6 +52,7 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
     }
 
     private void onDraftListLoaded(List<DraftModel> drafts) {
+        this.drafts = drafts;
         if (drafts.isEmpty()) {
             draftsView.showEmpty();
         } else {
@@ -90,6 +92,18 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
                 loadDrafts();
             }
         });
+    }
+
+    public void shootAll() {
+        sendDraftInteractor.sendDrafts(ids(drafts));
+    }
+
+    private List<Long> ids(List<DraftModel> drafts) {
+        List<Long> ids = new ArrayList<>(drafts.size());
+        for (DraftModel draft : drafts) {
+            ids.add(draft.getIdQueue());
+        }
+        return ids;
     }
 
     @Subscribe

@@ -85,6 +85,9 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.menu_shoot_all) {
+            presenter.shootAll();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
