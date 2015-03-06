@@ -13,7 +13,7 @@ import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,18 +30,18 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     private final ShootrService service;
     private final ShotManager shotManager;
     private final UserManager userManager;
-    private final ShotModelMapper shotModelMapper;
+    private final ShotEntityModelMapper shotEntityModelMapper;
 
     private Long idUser;
     private UserEntity user;
 
     @Inject public GetLatestShotsJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService service,
-      ShotManager shotManager, UserManager userManager, ShotModelMapper shotModelMapper) {
+      ShotManager shotManager, UserManager userManager, ShotEntityModelMapper shotEntityModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.shotManager = shotManager;
         this.userManager = userManager;
-        this.shotModelMapper = shotModelMapper;
+        this.shotEntityModelMapper = shotEntityModelMapper;
     }
 
     public void init(Long idUser){
@@ -70,7 +70,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
         List<ShotModel> shotModels = new ArrayList<>(shotEntities.size());
         for(ShotEntity shot:shotEntities) {
             if (shot.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
-                shotModels.add(shotModelMapper.toShotModel(user, shot));
+                shotModels.add(shotEntityModelMapper.toShotModel(user, shot));
             }
         }
         return shotModels;

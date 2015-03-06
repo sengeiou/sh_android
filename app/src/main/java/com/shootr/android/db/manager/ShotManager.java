@@ -13,7 +13,7 @@ import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,14 +25,14 @@ public class ShotManager extends  AbstractManager{
 
     @Inject ShotEntityMapper shotEntityMapper;
     @Inject UserMapper userMapper;
-    @Inject ShotModelMapper shotVOMapper;
+    @Inject ShotEntityModelMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
     private static final String CSYS_DELETED = DatabaseContract.SyncColumns.CSYS_DELETED;
     private static final String CSYS_BIRTH = DatabaseContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
-    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
+    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotEntityModelMapper shotVOMapper){
         super(openHelper);
         this.shotEntityMapper = shotEntityMapper;
         this.userMapper = userMapper;
@@ -147,9 +147,9 @@ public class ShotManager extends  AbstractManager{
         do {
 
             ShotEntity shot = shotEntityMapper.fromCursor(cursor);
-            ShotModelMapper shotModelMapper = new ShotModelMapper();
+            ShotEntityModelMapper shotEntityModelMapper = new ShotEntityModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
-            ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
+            ShotModel shotModel = shotEntityModelMapper.toShotModel(user, shot);
             if (user != null) {
                 shotList.add(shotModel);
             } else {
@@ -222,9 +222,9 @@ public class ShotManager extends  AbstractManager{
 
             ShotEntity shot = shotEntityMapper.fromCursor(cursor);
 
-            ShotModelMapper shotModelMapper = new ShotModelMapper();
+            ShotEntityModelMapper shotEntityModelMapper = new ShotEntityModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
-            ShotModel shotModel = shotModelMapper.toShotModel(user,shot);
+            ShotModel shotModel = shotEntityModelMapper.toShotModel(user,shot);
             if (user != null) {
                 shots.add(shotModel);
             } else {

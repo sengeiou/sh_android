@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.DraftItemView;
@@ -22,17 +23,20 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     public static final int NONE_EXPANDED_POSITION = -1;
     public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
     private final PicassoWrapper picasso;
+    private final DraftActionListener draftActionListener;
 
-    private List<ShotModel> drafts = new ArrayList<>();
+    private List<DraftModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
-    public DraftAdapter(PicassoWrapper picasso) {
+    public DraftAdapter(PicassoWrapper picasso, DraftActionListener draftActionListener) {
         this.picasso = picasso;
+        this.draftActionListener = draftActionListener;
     }
 
-    public void setDrafts(List<ShotModel> drafts) {
+    public void setDrafts(List<DraftModel> drafts) {
         this.drafts = drafts;
+        notifyDataSetChanged();
     }
 
     @Override public DraftViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,14 +49,18 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     @Override public void onBindViewHolder(DraftViewHolder holder, int position) {
-        ShotModel shotModel = drafts.get(position);
+        DraftModel draftModel = drafts.get(position);
+        ShotModel shotModel = draftModel.getShotModel();
+
         holder.name.setText(shotModel.getUsername());
         holder.text.setText(shotModel.getComment());
         picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
-        bindShotImageIfPresent(holder, shotModel);
+        bindShotImageIfPresent(holder, draftModel);
         if (isExpandedLocked(position)) {
             currentExpandedItemPosition = position;
             holder.draftItemView.setClickable(false);
+        } else {
+            holder.draftItemView.setClickable(true);
         }
         if (currentExpandedItemPosition == position) {
             currentExpandedItem = holder;
@@ -63,12 +71,16 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     }
 
     private boolean isExpandedLocked(int position) {
-        return getItemCount()<=1;
+        return getItemCount() <= 1;
     }
 
-    private void bindShotImageIfPresent(DraftViewHolder holder, ShotModel shotModel) {
+    private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
+        ShotModel shotModel = draftModel.getShotModel();
         if (shotModel.getImage() != null) {
             picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
+            holder.image.setVisibility(View.VISIBLE);
+        } else if (draftModel.getImageFile() != null) {
+            picasso.load(draftModel.getImageFile()).into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);
@@ -137,17 +149,23 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
         @OnClick(R.id.shot_draft_shoot)
         public void shoot() {
-            /* no-op */
+            draftActionListener.onShootDraft(getDraftForThisPosition());
         }
 
-        @OnClick(R.id.shot_draft_edit)
-        public void edit() {
-            /* no-op */
+        @OnClick(R.id.shot_draft_delete)
+        public void delete() {
+            draftActionListener.onDeleteDraft(getDraftForThisPosition());
         }
 
-        @OnClick(R.id.shot_draft_remove)
-        public void remove() {
-            /* no-op */
+        private DraftModel getDraftForThisPosition() {
+            return drafts.get(this.getPosition());
         }
+    }
+
+    public interface DraftActionListener {
+
+        void onShootDraft(DraftModel draftModel);
+
+        void onDeleteDraft(DraftModel draftModel);
     }
 }

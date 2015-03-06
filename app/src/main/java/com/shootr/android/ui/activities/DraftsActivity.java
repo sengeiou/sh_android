@@ -13,14 +13,14 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.DraftAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.views.DraftsView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
+public class DraftsActivity extends BaseSignedInActivity implements DraftsView, DraftAdapter.DraftActionListener {
 
     @Inject DraftsPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -32,6 +32,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     private boolean showShootAll = false;
     private MenuItem shootAllMenuItem;
 
+    //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!restoreSessionOrLogin()) {
@@ -49,7 +50,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
 
     private void initializeViews() {
         ButterKnife.inject(this);
-        timelineAdapter = new DraftAdapter(picasso);
+        timelineAdapter = new DraftAdapter(picasso, this);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());
@@ -64,13 +65,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
     private void initializePresenter() {
         presenter.initialize(this);
     }
-
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.drafts, menu);
-        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
-        updateShootAllVisibility();
-        return true;
-    }
+    //endregion
 
     private void updateShootAllVisibility() {
         if (shootAllMenuItem != null) {
@@ -78,15 +73,38 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
         }
     }
 
+    //region Activity methods
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drafts, menu);
+        shootAllMenuItem = menu.findItem(R.id.menu_shoot_all);
+        updateShootAllVisibility();
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.menu_shoot_all) {
+            presenter.shootAll();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
+    //endregion
+
+    //region View methods
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -107,7 +125,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
         /* no-op */
     }
 
-    @Override public void showDrafts(List<ShotModel> drafts) {
+    @Override public void showDrafts(List<DraftModel> drafts) {
         timelineAdapter.setDrafts(drafts);
     }
 
@@ -120,4 +138,15 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView {
         showShootAll = true;
         updateShootAllVisibility();
     }
+    //endregion
+
+    //region List actions
+    @Override public void onShootDraft(DraftModel draftModel) {
+        presenter.sendDraft(draftModel);
+    }
+
+    @Override public void onDeleteDraft(DraftModel draftModel) {
+        presenter.deleteDraft(draftModel);
+    }
+    //endregion
 }

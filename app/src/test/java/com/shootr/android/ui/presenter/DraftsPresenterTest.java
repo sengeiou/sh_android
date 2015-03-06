@@ -1,16 +1,30 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.domain.QueuedShot;
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
+import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.DraftModel;
+import com.shootr.android.ui.model.mappers.DraftModelMapper;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.DraftsView;
+import com.squareup.otto.Bus;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,18 +33,24 @@ import static org.mockito.Mockito.when;
 public class DraftsPresenterTest {
 
     private DraftsPresenter presenter;
-    @Mock DraftsPresenter.MockDraftsProvider mockDraftsProvider;
     @Mock DraftsView draftsView;
+    @Mock GetDraftsInteractor interactor;
+    @Mock SendDraftInteractor sendDraftInteractor;
+    @Mock DeleteDraftInteractor deleteDraftInteractor;
+    @Mock Bus bus;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new DraftsPresenter(mockDraftsProvider);
+        SessionRepository sessionRepository = mock(SessionRepository.class);
+        when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
+        DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper());
+        presenter = new DraftsPresenter(interactor, sendDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
     }
 
     @Test
     public void shouldShowEmptyViewWhenDraftListIsEmpty() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(0));
+        setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
 
@@ -40,7 +60,7 @@ public class DraftsPresenterTest {
 
     @Test
     public void shouldHideEmptyViewWhenDraftListNotEmpty() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(1));
+        setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
 
@@ -50,25 +70,25 @@ public class DraftsPresenterTest {
 
     @Test
     public void shouldShowDraftsInViewWhenDraftListNotEmpty() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(1));
+        setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
 
-        verify(draftsView, times(1)).showDrafts(anyListOf(ShotModel.class));
+        verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
     @Test
-    public void shouldNotShowDraftsInViewWhenDraftListEmpty() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(0));
+    public void shouldShowDraftsInViewWhenDraftListEmpty() throws Exception {
+        setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
 
-        verify(draftsView, never()).showDrafts(anyListOf(ShotModel.class));
+        verify(draftsView, times(1)).showDrafts(anyListOf(DraftModel.class));
     }
 
     @Test
     public void shouldHideShootAllButtonWhenDraftListIsEmpty() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(0));
+        setupInteractorReturns(drafts(0));
 
         presenter.initialize(draftsView);
 
@@ -77,7 +97,7 @@ public class DraftsPresenterTest {
 
     @Test
     public void shouldHideShootAllButtonWhenDraftListHasOneItems() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(1));
+        setupInteractorReturns(drafts(1));
 
         presenter.initialize(draftsView);
 
@@ -86,28 +106,47 @@ public class DraftsPresenterTest {
 
     @Test
     public void shouldShowShootAllButtonWhenDraftListHasTwoItems() throws Exception {
-        when(mockDraftsProvider.getDrafts()).thenReturn(drafts(2));
+        setupInteractorReturns(drafts(2));
 
         presenter.initialize(draftsView);
 
         verify(draftsView, times(1)).showShootAllButton();
     }
 
-    private List<ShotModel> drafts(int count) {
-        List<ShotModel> shots = new ArrayList<>();
+    private void setupInteractorReturns(final List<QueuedShot> drafts) {
+        doAnswer(new Answer<Void>() {
+            @Override public Void answer(InvocationOnMock invocation) throws Throwable {
+                GetDraftsInteractor.Callback callback = (GetDraftsInteractor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(drafts);
+                return null;
+            }
+        }).when(interactor).loadDrafts(any(GetDraftsInteractor.Callback.class));
+    }
+
+
+    private List<QueuedShot> drafts(int count) {
+        List<QueuedShot> shots = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            shots.add(shot());
+            shots.add(draft());
         }
         return shots;
     }
 
-    private ShotModel shot() {
-        ShotModel shotModel = new ShotModel();
-        shotModel.setUsername("username");
-        shotModel.setComment("comment");
-        shotModel.setPhoto("avatar");
-        shotModel.setEventTag("tag");
-        shotModel.setCsysBirth(new Date());
-        return shotModel;
+    private QueuedShot draft() {
+        QueuedShot draft = new QueuedShot();
+        draft.setShot(shot());
+        return draft;
+    }
+
+    private Shot shot() {
+        Shot shot = new Shot();
+        shot.setComment("comment");
+        shot.setUserInfo(new Shot.ShotUserInfo());
+        return shot;
+    }
+
+    private User currentUser() {
+        User user = new User();
+        return user;
     }
 }

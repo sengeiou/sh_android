@@ -22,7 +22,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventEntityModelMapper;
-import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class GCMIntentService extends IntentService {
     @Inject WatchRequestNotificationManager watchRequestNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
-    @Inject ShotModelMapper shotModelMapper;
+    @Inject ShotEntityModelMapper shotEntityModelMapper;
     @Inject WatchManager watchManager;
     @Inject EventManager eventManager;
     @Inject UserEntityWatchingModelMapper userWatchingModelMapper;
@@ -98,7 +98,7 @@ public class GCMIntentService extends IntentService {
         ShotEntity shot = service.getShotById(idShot);
         UserEntity user = userManager.getUserByIdUser(idUser);
         if (shot != null && user != null) {
-            ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
+            ShotModel shotModel = shotEntityModelMapper.toShotModel(user, shot);
             shotNotificationManager.sendNewShotNotification(shotModel);
         } else {
             Timber.e("Shot or User null received, can't show notifications :(");

@@ -31,6 +31,7 @@ public class ParcelableShot implements Parcelable {
         dest.writeString(shot.getComment());
         dest.writeString(shot.getImage());
         dest.writeLong(shot.getPublishDate() != null ? shot.getPublishDate().getTime() : 0L);
+        dest.writeLong(shot.getIdQueue() != null ? shot.getIdQueue() : 0L);
 
         Shot.ShotUserInfo userInfo = shot.getUserInfo();
         dest.writeLong(userInfo != null ? userInfo.getIdUser() : 0L);
@@ -49,6 +50,8 @@ public class ParcelableShot implements Parcelable {
         shot.setComment(parcel.readString());
         shot.setImage(parcel.readString());
         shot.setPublishDate(new Date(parcel.readLong()));
+        long idQueued = parcel.readLong();
+        shot.setIdQueue(idQueued > 0 ? idQueued : null);
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(parcel.readLong());

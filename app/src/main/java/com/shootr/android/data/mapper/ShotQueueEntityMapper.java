@@ -63,6 +63,8 @@ public class ShotQueueEntityMapper {
         shot.setImage(entity.getImage());
         shot.setPublishDate(entity.getCsysBirth());
 
+        shot.setIdQueue(entity.getIdQueue());
+
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(entity.getIdUser());
         //userInfo.setUsername(entity.getUser().getUserName());

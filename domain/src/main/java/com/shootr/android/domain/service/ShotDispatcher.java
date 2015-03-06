@@ -3,6 +3,8 @@ package com.shootr.android.domain.service;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.bus.ShotFailed;
+import com.shootr.android.domain.bus.ShotQueued;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.service.shot.ShootrShotService;
@@ -70,7 +72,7 @@ public class ShotDispatcher implements ShotSender {
         if (sourceImage != null) {
             File targetImage = new File(queuedImagesDir, String.valueOf(shot.getIdQueue()));
 
-            if (targetImage == sourceImage) {
+            if (targetImage.equals(sourceImage)) {
                 return;
             }
             copyImage(shot, sourceImage, targetImage);
@@ -113,6 +115,9 @@ public class ShotDispatcher implements ShotSender {
         QueuedShot queuedShot = new QueuedShot(shot);
         if (shotImage != null) {
             queuedShot.setImageFile(shotImage);
+        }
+        if (shot.getIdQueue() != null) {
+            queuedShot.setIdQueue(shot.getIdQueue());
         }
         return queuedShot;
     }
@@ -157,6 +162,7 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void notifyShotQueued(QueuedShot queuedShot) {
+        busPublisher.post(new ShotQueued.Event(queuedShot));
         shotQueueListener.onQueueShot(queuedShot);
     }
 
@@ -171,7 +177,7 @@ public class ShotDispatcher implements ShotSender {
 
     private void notifyShotSendingFailed(QueuedShot queuedShot, Exception e) {
         shotQueueListener.onShotFailed(queuedShot, e);
-
+        busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
     }
 
     private void persistShotFailed(QueuedShot queuedShot) {

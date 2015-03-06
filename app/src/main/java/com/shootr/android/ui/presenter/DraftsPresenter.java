@@ -1,23 +1,41 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.QueuedShot;
+import com.shootr.android.domain.bus.ShotFailed;
+import com.shootr.android.domain.bus.ShotQueued;
+import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
+import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.domain.interactor.shot.SendDraftInteractor;
+import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.mappers.DraftModelMapper;
 import com.shootr.android.ui.views.DraftsView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DraftsPresenter implements Presenter {
+public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFailed.Receiver {
 
-    private final MockDraftsProvider mockDraftsProvider;
+    private final GetDraftsInteractor getDraftsInteractor;
+    private final SendDraftInteractor sendDraftInteractor;
+    private final DeleteDraftInteractor deleteDraftInteractor;
+    private final DraftModelMapper draftModelMapper;
+    private final Bus bus;
+
     private DraftsView draftsView;
+    private List<DraftModel> drafts;
 
-    @Inject public DraftsPresenter() {
-        this(MockDraftsProvider.DEFAULT);
-    }
-
-    public DraftsPresenter(MockDraftsProvider mockDraftsProvider) {
-        this.mockDraftsProvider = mockDraftsProvider;
+    @Inject public DraftsPresenter(GetDraftsInteractor getDraftsInteractor, SendDraftInteractor sendDraftInteractor,
+      DeleteDraftInteractor deleteDraftInteractor, DraftModelMapper draftModelMapper, @Main Bus bus) {
+        this.getDraftsInteractor = getDraftsInteractor;
+        this.sendDraftInteractor = sendDraftInteractor;
+        this.deleteDraftInteractor = deleteDraftInteractor;
+        this.draftModelMapper = draftModelMapper;
+        this.bus = bus;
     }
 
     public void initialize(DraftsView draftsView) {
@@ -26,28 +44,29 @@ public class DraftsPresenter implements Presenter {
     }
 
     private void loadDrafts() {
-        loadMockDrafts();
+        getDraftsInteractor.loadDrafts(new GetDraftsInteractor.Callback() {
+            @Override public void onLoaded(List<QueuedShot> drafts) {
+                onDraftListLoaded(draftModelMapper.transform(drafts));
+            }
+        });
     }
 
-    private void renderViewDraftList(List<ShotModel> drafts) {
-        draftsView.showDrafts(drafts);
-    }
-
-    private void loadMockDrafts() {
-        onDraftListLoaded(mockDraftsProvider.getDrafts());
-    }
-
-    private void onDraftListLoaded(List<ShotModel> drafts) {
+    private void onDraftListLoaded(List<DraftModel> drafts) {
+        this.drafts = drafts;
         if (drafts.isEmpty()) {
             draftsView.showEmpty();
         } else {
             draftsView.hideEmpty();
-            renderViewDraftList(drafts);
         }
+        renderViewDraftList(drafts);
         showShootAllButtonIfMoreThanOneDraft(drafts);
     }
 
-    private void showShootAllButtonIfMoreThanOneDraft(List<ShotModel> drafts) {
+    private void renderViewDraftList(List<DraftModel> drafts) {
+        draftsView.showDrafts(drafts);
+    }
+
+    private void showShootAllButtonIfMoreThanOneDraft(List<DraftModel> drafts) {
         if (drafts.size() > 1) {
             draftsView.showShootAllButton();
         } else {
@@ -56,43 +75,44 @@ public class DraftsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        /* no-op */
+        bus.register(this);
     }
 
     @Override public void pause() {
-        /* no-op */
+        bus.unregister(this);
     }
 
-    static interface MockDraftsProvider {
+    public void sendDraft(DraftModel draftModel) {
+        sendDraftInteractor.sendDraft(draftModel.getIdQueue());
+    }
 
-        List<ShotModel> getDrafts();
-
-        static MockDraftsProvider DEFAULT = new MockDraftsProvider() {
-            @Override public List<ShotModel> getDrafts() {
-                return mockDrafts();
+    public void deleteDraft(DraftModel draftModel) {
+        deleteDraftInteractor.deleteDraft(draftModel.getIdQueue(), new DeleteDraftInteractor.Callback() {
+            @Override public void onDeleted() {
+                loadDrafts();
             }
+        });
+    }
 
-            private List<ShotModel> mockDrafts() {
-                List<ShotModel> shots = new ArrayList<>();
-                shots.add(mockShot("Windows",
-                  "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja"));
-                shots.add(mockShot(null,
-                  "El viejo Señor Gómez pedía queso, kiwi y habas, pero le ha tocado un saxofón."));
-                shots.add(mockShot("Apple", "Jovencillo emponzoñado de whisky: ¡qué figurota exhibe!"));
-                shots.add(mockShot(null,
-                  "Ví aquél BMW Z3 del año 1997, 4x2, y de RIN16\" y fijo costó $20,5K... -¿Te gustó? -¡Sí, 138HP!"));
-                return shots;
-            }
+    public void shootAll() {
+        sendDraftInteractor.sendDrafts(ids(drafts));
+    }
 
-            private ShotModel mockShot(String tag, String comment) {
-                ShotModel shotModel = new ShotModel();
-                shotModel.setUsername("rafa");
-                shotModel.setComment(comment);
-                shotModel.setPhoto("https://pbs.twimg.com/profile_images/2576254530/xrq3ziszvvt90xf54579.png");
-                shotModel.setEventTag(tag);
-                shotModel.setCsysBirth(new Date());
-                return shotModel;
-            }
-        };
+    private List<Long> ids(List<DraftModel> drafts) {
+        List<Long> ids = new ArrayList<>(drafts.size());
+        for (DraftModel draft : drafts) {
+            ids.add(draft.getIdQueue());
+        }
+        return ids;
+    }
+
+    @Subscribe
+    @Override public void onShotQueued(ShotQueued.Event event) {
+        this.loadDrafts();
+    }
+
+    @Subscribe
+    @Override public void onShotFailed(ShotFailed.Event event) {
+        this.loadDrafts();
     }
 }
