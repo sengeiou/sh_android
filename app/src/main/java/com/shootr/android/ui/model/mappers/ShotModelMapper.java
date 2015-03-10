@@ -16,11 +16,13 @@ public class ShotModelMapper {
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setComment(shot.getComment());
         shotModel.setImage(shot.getImage());
+        shotModel.setCsysBirth(shot.getPublishDate());
 
         Shot.ShotUserInfo userInfo = shot.getUserInfo();
         shotModel.setUsername(userInfo.getUsername());
         shotModel.setIdUser(userInfo.getIdUser());
         shotModel.setPhoto(userInfo.getAvatar());
+
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {

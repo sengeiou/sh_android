@@ -27,19 +27,19 @@ public class GetMainTimelineInteractor implements Interactor {
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
     private final EventRepository localEventRepository;
-    private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
     private Callback callback;
 
     @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository, @Remote WatchRepository remoteWatchRepository,
-      @Local EventRepository localEventRepository, @Remote UserRepository remoteUserRepository) {
+      @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteWatchRepository = remoteWatchRepository;
         this.localEventRepository = localEventRepository;
-        this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
     }
     //endregion
 
@@ -76,7 +76,7 @@ public class GetMainTimelineInteractor implements Interactor {
 
     private List<Long> getPeopleIds() {
         List<Long> ids = new ArrayList<>();
-        for (User user : remoteUserRepository.getPeople()) {
+        for (User user : localUserRepository.getPeople()) {
             ids.add(user.getIdUser());
         }
         return ids;

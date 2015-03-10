@@ -34,27 +34,26 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.QueuedShot;
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
-import com.shootr.android.task.events.timeline.ShotsResultEvent;
-import com.shootr.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
-import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
@@ -70,6 +69,7 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.WatchingRequestView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
@@ -99,6 +99,8 @@ public class TimelineFragment extends BaseFragment
     @Inject VisibleEventInfoInteractor visibleEventInfoInteractor;
     @Inject SelectEventInteractor selectEventInteractor;
     @Inject GetDraftsInteractor getDraftsInteractor;
+    @Inject ShotModelMapper shotModelMapper;
+    @Inject GetMainTimelineInteractor getMainTimelineInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -184,7 +186,6 @@ public class TimelineFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         bus.register(this);
-        startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         watchNumberPresenter.resume();
         updateDraftsButtonVisibility();
@@ -452,8 +453,6 @@ public class TimelineFragment extends BaseFragment
         loadEventPlaceholder();
     }
 
-    /* --- UI Events --- */
-
     @OnClick(R.id.select_event_fab)
     public void selectEvent() {
         Intent intent = new Intent(getActivity(), EventsListActivity.class);
@@ -513,19 +512,8 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void startRetrieveFromDataBaseJob(Context context){
-        RetrieveFromDataBaseTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveFromDataBaseTimeLineJob.class);
-        startJob(job);
-    }
-
     private void startRetrieveOldShotsTimeLineJob(Context context){
         RetrieveOldShotsTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveOldShotsTimeLineJob.class);
-        startJob(job);
-    }
-
-    private void startRetrieveInitialTimeLineJob(Context context){
-        RetrieveInitialTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(
-          RetrieveInitialTimeLineJob.class);
         startJob(job);
     }
 
@@ -558,13 +546,17 @@ public class TimelineFragment extends BaseFragment
     }
 
     public void loadInitialTimeline() {
-        startRetrieveInitialTimeLineJob(getActivity());
         swipeRefreshLayout.setRefreshing(true);
+        getMainTimelineInteractor.loadMainTimeline(new GetMainTimelineInteractor.Callback() {
+            @Override public void onLoaded(Timeline timeline) {
+                List<Shot> shots = timeline.getShots();
+                List<ShotModel> shotModels = shotModelMapper.transform(shots);
+                showTimeline(shotModels);
+            }
+        });
     }
 
-    @Subscribe
-    public void showTimeline(ShotsResultEvent event) {
-        List<ShotModel> shots = event.getResult();
+    public void showTimeline(List<ShotModel> shots) {
         swipeRefreshLayout.setRefreshing(false);
         if (shots != null && !shots.isEmpty()) {
             adapter.setShots(shots);
