@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -29,18 +30,9 @@ public class LocalShotRepository implements ShotRepository {
         return shot;
     }
 
-    @Override public List<Shot> getShotsForEventAndUsers(Long eventId, List<Long> userIds) {
-        List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForEvent(eventId, userIds);
-        List<User> usersFromShots = localUserRepository.getUsersByIds(userIds);
+    @Override public List<Shot> getShotsForTimeline(TimelineParameters parameters) {
+        List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForTimeline(parameters);
+        List<User> usersFromShots = localUserRepository.getUsersByIds(parameters.getAllUserIds());
         return shotEntityMapper.transform(shotsForEvent, usersFromShots);
-    }
-
-    @Override public List<Shot> getShotsForEventAndUsersWithAuthor(Long eventId, Long authorId, List<Long> userIds) {
-        userIds.add(authorId);
-        return getShotsForEventAndUsers(eventId, userIds);
-    }
-
-    @Override public List<Shot> getShotsWithoutEventFromUsers(List<Long> userIds) {
-        return getShotsForEventAndUsers(null, userIds);
     }
 }

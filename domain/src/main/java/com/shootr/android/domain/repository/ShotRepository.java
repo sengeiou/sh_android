@@ -9,10 +9,4 @@ public interface ShotRepository {
     Shot putShot(Shot shot);
 
     List<Shot> getShotsForTimeline(TimelineParameters parameters);
-
-    List<Shot> getShotsForEventAndUsers(Long eventId, List<Long> userIds);
-
-    List<Shot> getShotsForEventAndUsersWithAuthor(Long eventId, Long authorId, List<Long> userIds);
-
-    List<Shot> getShotsWithoutEventFromUsers(List<Long> userIds);
 }

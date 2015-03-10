@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -23,9 +24,9 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForEvent(Long eventId, List<Long> userIds) {
+    @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
         try {
-            return shootrService.getShotsByUserIdList(userIds, 0L); //TODO filter by event
+            return shootrService.getShotsByUserIdList(parameters.getAllUserIds(), 0L); //TODO filter by event
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

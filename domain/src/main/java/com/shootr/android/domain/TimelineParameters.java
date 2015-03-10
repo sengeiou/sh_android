@@ -1,5 +1,6 @@
 package com.shootr.android.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,17 @@ public class TimelineParameters {
 
     public Date getMaxDate() {
         return maxDate;
+    }
+
+    public List<Long> getAllUserIds() {
+        //TODO cache this
+        if (getEventAuthorId() == null) {
+            return getUserIds();
+        } else {
+            ArrayList<Long> ids = new ArrayList<>(getUserIds());
+            ids.add(getEventAuthorId());
+            return ids;
+        }
     }
 
     public static Builder builder() {
