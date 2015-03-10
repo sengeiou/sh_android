@@ -5,4 +5,12 @@ public class RepositoryException extends ShootrException {
     public RepositoryException(Throwable cause) {
         super(cause);
     }
+
+    public RepositoryException(String cause) {
+        super(cause);
+    }
+
+    public RepositoryException() {
+        super();
+    }
 }

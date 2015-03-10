@@ -68,6 +68,36 @@ public class Shot {
         this.idQueue = idQueue;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shot)) return false;
+
+        Shot shot = (Shot) o;
+
+        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
+        if (eventInfo != null ? !eventInfo.equals(shot.eventInfo) : shot.eventInfo != null) return false;
+        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
+        if (!idShot.equals(shot.idShot)) return false;
+        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
+        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
+        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idShot.hashCode();
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
+        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
+        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
+        return result;
+    }
+
     public static class ShotEventInfo {
 
         private Long idEvent;
