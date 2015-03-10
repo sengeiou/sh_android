@@ -183,6 +183,7 @@ public class ShotManager extends  AbstractManager{
         return latestShots;
     }
 
+    @Deprecated
     public List<ShotModel> retrieveTimelineWithUsers() {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
@@ -283,5 +284,30 @@ public class ShotManager extends  AbstractManager{
             return lastShot;
         }
         return null;
+    }
+
+    public List<ShotEntity> getShotsForEvent(Long eventId, List<Long> userIds) {
+        List<ShotEntity> latestShots = new ArrayList<>();
+        String whereSelection = ShotTable.ID_USER + " IN ("+createListPlaceholders(userIds.size())+")"; //TODO and event id
+
+        String[] whereArguments = new String[userIds.size()];
+        for (int i = 0; i < userIds.size(); i++) {
+            whereArguments[i] = String.valueOf(userIds.get(i));
+        }
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                latestShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return latestShots;
     }
 }

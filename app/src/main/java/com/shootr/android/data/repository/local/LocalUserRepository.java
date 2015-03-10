@@ -29,6 +29,22 @@ public class LocalUserRepository implements UserRepository {
         return transformUserEntitiesForPeople(userEntities);
     }
 
+    @Override public User getUserById(Long id) {
+        return userEntityMapper.transform(localUserDataSource.getUser(id),
+          sessionRepository.getCurrentUserId(),
+          isFollower(id),
+          isFollowing(id));
+    }
+
+    @Override public List<User> getUsersByIds(List<Long> ids) {
+        // TODO optimize with its own query
+        List<User> users = new ArrayList<>(ids.size());
+        for (Long id : ids) {
+            users.add(getUserById(id));
+        }
+        return users;
+    }
+
     @Override public boolean isFollower(Long userId) {
         return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
     }

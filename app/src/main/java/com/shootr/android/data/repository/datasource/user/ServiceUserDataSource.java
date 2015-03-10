@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ServiceUserDataSource implements UserDataSource {
         try {
             return service.getFollowing(userId, 0L);
         } catch (IOException e) {
-            throw new RepositoryException(e);
+            throw new ServerCommunicationException(e);
         }
     }
 
@@ -29,6 +30,14 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
         throw new RuntimeException("Method not implemented");
+    }
+
+    @Override public UserEntity getUser(Long id) {
+        try {
+            return service.getUserByIdUser(id);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public boolean isFollower(Long from, Long who) {

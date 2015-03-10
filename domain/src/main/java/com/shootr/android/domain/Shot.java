@@ -78,7 +78,7 @@ public class Shot {
         if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
         if (eventInfo != null ? !eventInfo.equals(shot.eventInfo) : shot.eventInfo != null) return false;
         if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
-        if (!idShot.equals(shot.idShot)) return false;
+        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
         if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
         if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
         if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
@@ -88,7 +88,7 @@ public class Shot {
 
     @Override
     public int hashCode() {
-        int result = idShot.hashCode();
+        int result = idShot != null ? idShot.hashCode() : 0;
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
