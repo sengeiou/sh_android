@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -58,20 +59,30 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private void loadShotsWithoutEvent() {
-        List<Shot> localShots = localShotRepository.getShotsWithoutEventFromUsers(getPeopleIds());
+        TimelineParameters timelineParameters = buildParametersWithoutEvent();
+
+        List<Shot> localShots = localShotRepository.getShotsForTimeline(timelineParameters);
         notifyTimelineFromShots(localShots);
-        List<Shot> remoteShots = remoteShotRepository.getShotsWithoutEventFromUsers(getPeopleIds());
+        List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
         notifyTimelineFromShots(remoteShots);
     }
 
+    private TimelineParameters buildParametersWithoutEvent() {
+        return TimelineParameters.builder().forUsers(getPeopleIds()).build();
+    }
+
     private void loadShotsWithEvent(Event visibleEvent) {
-        List<Shot> localShotsWithAuthor =
-          localShotRepository.getShotsForEventAndUsersWithAuthor(visibleEvent.getId(), visibleEvent.getAuthorId(), getPeopleIds());
+        TimelineParameters timelineParameters = buildParametersWithEvent(visibleEvent);
+
+        List<Shot> localShotsWithAuthor = localShotRepository.getShotsForTimeline(timelineParameters);
         notifyTimelineFromShots(localShotsWithAuthor);
 
-        List<Shot> remoteShotsWithAuthor =
-          remoteShotRepository.getShotsForEventAndUsersWithAuthor(visibleEvent.getId(), visibleEvent.getAuthorId(), getPeopleIds());
+        List<Shot> remoteShotsWithAuthor = remoteShotRepository.getShotsForTimeline(timelineParameters);
         notifyTimelineFromShots(remoteShotsWithAuthor);
+    }
+
+    private TimelineParameters buildParametersWithEvent(Event event) {
+        return TimelineParameters.builder().forUsers(getPeopleIds()).forEvent(event).build();
     }
 
     private List<Long> getPeopleIds() {

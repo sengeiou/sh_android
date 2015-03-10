@@ -3,6 +3,8 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -16,12 +18,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static com.shootr.android.domain.asserts.TimelineAssert.assertThat;
+import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.eq;
@@ -43,7 +49,7 @@ public class GetMainTimelineInteractorTest {
     @Mock WatchRepository remoteWatchRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock EventRepository eventRepository;
-    @Mock UserRepository remoteUserRepository;
+    @Mock UserRepository localUserRepository;
 
     private GetMainTimelineInteractor interactor;
 
@@ -53,102 +59,59 @@ public class GetMainTimelineInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
+        when(localUserRepository.getPeople()).thenReturn(people());
+
         interactor = new GetMainTimelineInteractor(interactorHandler,
           postExecutionThread,
           localShotRepository,
           remoteShotRepository,
           remoteWatchRepository,
-          eventRepository,
-          remoteUserRepository);
+          eventRepository, localUserRepository);
     }
 
     @Test
-    public void shouldRetrieveShotsWithoutEventWhenNoEventVisible() throws Exception {
+    public void shouldRetrieveTimelineWithoutEventIdAndAuthorWhenNoEventVisible() throws Exception {
         when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(NO_EVENT_WATCH);
 
         interactor.loadMainTimeline(spyCallback);
 
-        verify(localShotRepository, times(1)).getShotsWithoutEventFromUsers(anyListOf(Long.class));
-        verify(remoteShotRepository, times(1)).getShotsWithoutEventFromUsers(anyListOf(Long.class));
+        TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
+        assertThat(localParameters).hasNoEventId().hasNoEventAuthorId();
+
+        TimelineParameters remoteParameters = captureTimelineParametersFromRepositoryCall(remoteShotRepository);
+        assertThat(remoteParameters).hasNoEventId().hasNoEventAuthorId();
     }
 
     @Test
-    public void shouldCallbackShotsWithoutEventsWhenNoEventVisible() throws Exception {
-        when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(NO_EVENT_WATCH);
-        when(localShotRepository.getShotsWithoutEventFromUsers(anyListOf(Long.class))).thenReturn(shotsWithoutEvent());
-        when(remoteShotRepository.getShotsWithoutEventFromUsers(anyListOf(Long.class))).thenReturn(shotsWithoutEvent());
-
-        interactor.loadMainTimeline(spyCallback);
-
-        verify(spyCallback, times(2)).onLoaded(any(Timeline.class));
-        Timeline localTimeline = spyCallback.timelinesReturned.get(0);
-        assertThat(localTimeline).hasShots(shotsWithoutEvent());
-        Timeline remoteTimeline = spyCallback.timelinesReturned.get(1);
-        assertThat(remoteTimeline).hasShots(shotsWithoutEvent());
-    }
-
-    @Test
-    public void shouldRetrieveShotsForEventIncludingAuthorShotsWhenEventVisible() throws Exception {
+    public void shouldRetrieveTimelineWithEventIdAndAuthorWhenEventVisible() throws Exception {
         setupVisibleEvent();
 
         interactor.loadMainTimeline(spyCallback);
 
-        verify(localShotRepository).getShotsForEventAndUsersWithAuthor(eq(VISIBLE_EVENT_ID),
-          eq(EVENT_AUTHOR_ID),
-          anyListOf(Long.class));
-        verify(remoteShotRepository).getShotsForEventAndUsersWithAuthor(eq(VISIBLE_EVENT_ID),
-          eq(EVENT_AUTHOR_ID),
-          anyListOf(Long.class));
-    }
-
-    @Test
-    public void shouldCallbackShotsWithVisibleEventWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-
-        interactor.loadMainTimeline(spyCallback);
-
-        Timeline localTimeline = spyCallback.timelinesReturned.get(0);
-        Timeline remoteTimeline = spyCallback.timelinesReturned.get(1);
-        assertThat(localTimeline).hasShots(shotsWithVisibleEvent());
-        assertThat(remoteTimeline).hasShots(shotsWithVisibleEvent());
-    }
-
-    @Test
-    public void shouldCallbackShotsFromEventAuthorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-
-        interactor.loadMainTimeline(spyCallback);
-
-        Timeline localTimeline = spyCallback.timelinesReturned.get(0);
-        assertThat(localTimeline).hasShots(shotsFromAuthor());
-        Timeline remoteTimeline = spyCallback.timelinesReturned.get(1);
-        assertThat(remoteTimeline).hasShots(shotsFromAuthor());
+        TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
+        assertThat(localParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
+        TimelineParameters remoteParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
+        assertThat(remoteParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
     }
 
     private void setupVisibleEvent() {
         when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(eventVisibleWatch());
         when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
-        when(localShotRepository.getShotsForEventAndUsersWithAuthor(eq(VISIBLE_EVENT_ID),
-          eq(EVENT_AUTHOR_ID),
-          anyListOf(Long.class))).thenReturn(shotsWithVisibleEventAndAuthor());
-        when(remoteShotRepository.getShotsForEventAndUsersWithAuthor(eq(VISIBLE_EVENT_ID),
-          eq(EVENT_AUTHOR_ID),
-          anyListOf(Long.class))).thenReturn(shotsWithVisibleEventAndAuthor());
     }
 
+    //region Stubs
     private List<Shot> shotsWithVisibleEventAndAuthor() {
         List<Shot> shots = shotsWithVisibleEvent();
         shots.addAll(shotsFromAuthor());
         return shots;
     }
-
-    //region Stubs
+    
     private List<Shot> shotsFromAuthor() {
         return Arrays.asList(shotFromAuthor());
     }
 
-    private List<Long> peopleIds() {
-        return new ArrayList<>();
+    private List<User> people() {
+        return Arrays.asList(new User());
     }
 
     private Shot shotFromAuthor() {
@@ -208,6 +171,12 @@ public class GetMainTimelineInteractorTest {
     //endregion
 
     //region Spies
+    private TimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
+        ArgumentCaptor<TimelineParameters> captor =
+          ArgumentCaptor.forClass(TimelineParameters.class);
+        verify(shotRepository).getShotsForTimeline(captor.capture());
+        return captor.getValue();
+    }
 
     static class SpyCallback implements GetMainTimelineInteractor.Callback {
 
