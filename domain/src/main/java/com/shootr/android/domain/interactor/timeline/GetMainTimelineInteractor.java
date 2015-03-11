@@ -17,6 +17,7 @@ import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -65,8 +66,10 @@ public class GetMainTimelineInteractor implements Interactor {
         TimelineParameters timelineParameters = buildParametersWithoutEvent();
 
         List<Shot> localShots = localShotRepository.getShotsForTimeline(timelineParameters);
+        localShots = sortShotsByPublishDate(localShots);
         notifyTimelineFromShots(localShots);
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+        remoteShots= sortShotsByPublishDate(remoteShots);
         notifyTimelineFromShots(remoteShots);
     }
 
@@ -78,14 +81,21 @@ public class GetMainTimelineInteractor implements Interactor {
         TimelineParameters timelineParameters = buildParametersWithEvent(visibleEvent);
 
         List<Shot> localShotsWithAuthor = localShotRepository.getShotsForTimeline(timelineParameters);
+        localShotsWithAuthor = sortShotsByPublishDate(localShotsWithAuthor);
         notifyTimelineFromShots(localShotsWithAuthor);
 
         List<Shot> remoteShotsWithAuthor = remoteShotRepository.getShotsForTimeline(timelineParameters);
+        remoteShotsWithAuthor = sortShotsByPublishDate(remoteShotsWithAuthor);
         notifyTimelineFromShots(remoteShotsWithAuthor);
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
         return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).forEvent(event).build();
+    }
+
+    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
+        Collections.sort(remoteShots, new Shot.PublishDateComparator());
+        return remoteShots;
     }
 
     private List<Long> getPeopleIds() {

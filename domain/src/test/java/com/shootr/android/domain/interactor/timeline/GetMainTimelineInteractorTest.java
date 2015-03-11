@@ -17,6 +17,7 @@ import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,10 @@ public class GetMainTimelineInteractorTest {
     private static final Long ID_SHOT_WITH_EVENT = 3L;
     private static final Long EVENT_AUTHOR_ID = 4L;
     private static final Long ID_SHOT_FROM_AUTHOR = 5L;
+
+    private static final Long DATE_OLDER = 1000L;
+    private static final Long DATE_MIDDLE = 2000L;
+    private static final Long DATE_NEWER = 3000L;
 
     @Mock ShotRepository localShotRepository;
     @Mock ShotRepository remoteShotRepository;
@@ -91,6 +96,30 @@ public class GetMainTimelineInteractorTest {
         assertThat(remoteParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
     }
 
+
+    @Test
+    public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
+        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadMainTimeline(spyCallback);
+        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+        List<Shot> remoteShotsReturned = spyCallback.timelinesReturned.get(1).getShots();
+
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
+        assertThat(remoteShotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
+    }
+
+    private List<Shot> unorderedShots() {
+        return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
+    }
+
+
+    private Shot shotWithDate(Long date) {
+        Shot shot = new Shot();
+        shot.setPublishDate(new Date(date));
+        return shot;
+    }
     private void setupVisibleEvent() {
         when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(eventVisibleWatch());
         when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());

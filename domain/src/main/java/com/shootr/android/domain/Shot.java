@@ -99,6 +99,15 @@ public class Shot {
         return result;
     }
 
+    @Override public String toString() {
+        return "Shot{" +
+          "idShot=" + idShot +
+          ", comment='" + comment + '\'' +
+          ", image='" + image + '\'' +
+          ", publishDate=" + publishDate +
+          '}';
+    }
+
     public static class ShotEventInfo {
 
         private Long idEvent;
