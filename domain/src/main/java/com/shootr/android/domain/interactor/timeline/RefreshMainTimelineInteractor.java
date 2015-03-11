@@ -18,6 +18,7 @@ import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -59,9 +60,15 @@ public class RefreshMainTimelineInteractor implements Interactor {
         TimelineParameters timelineParameters = buildTimelineParameters();
 
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+        remoteShots = sortShotsByPublishDate(remoteShots);
         notifyTimelineFromShots(remoteShots);
 
         updateLastRefreshDate(remoteShots);
+    }
+
+    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
+        Collections.sort(remoteShots, new Shot.PublishDateComparator());
+        return remoteShots;
     }
 
     private void updateLastRefreshDate(List<Shot> remoteShots) {

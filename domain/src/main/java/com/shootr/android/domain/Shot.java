@@ -1,5 +1,6 @@
 package com.shootr.android.domain;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class Shot {
@@ -205,6 +206,13 @@ public class Shot {
               "username='" + username + '\'' +
               ", idUser=" + idUser +
               '}';
+        }
+    }
+
+    public static class PublishDateComparator implements Comparator<Shot> {
+
+        @Override public int compare(Shot s1, Shot s2) {
+            return s2.getPublishDate().compareTo(s1.getPublishDate());
         }
     }
 }
