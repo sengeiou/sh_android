@@ -49,12 +49,12 @@ import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
-import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.DraftsActivity;
@@ -101,6 +101,7 @@ public class TimelineFragment extends BaseFragment
     @Inject GetDraftsInteractor getDraftsInteractor;
     @Inject ShotModelMapper shotModelMapper;
     @Inject GetMainTimelineInteractor getMainTimelineInteractor;
+    @Inject RefreshMainTimelineInteractor refreshMainTimelineInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -169,7 +170,7 @@ public class TimelineFragment extends BaseFragment
                     }
                     Context context = getActivity();
                     if (context != null) {
-                        startRetrieveNewShotsTimeLineJob(context);
+                        startRetrieveNewShotsTimeLineJob();
                     }
                     pollShots();
                 }
@@ -508,7 +509,7 @@ public class TimelineFragment extends BaseFragment
             isRefreshing = true;
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
-            startRetrieveNewShotsTimeLineJob(context);
+            startRetrieveNewShotsTimeLineJob();
         }
     }
 
@@ -517,9 +518,53 @@ public class TimelineFragment extends BaseFragment
         startJob(job);
     }
 
-    private void startRetrieveNewShotsTimeLineJob(Context context) {
-        RetrieveNewShotsTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
-        startJob(job);
+    private void startRetrieveNewShotsTimeLineJob() {
+        refreshMainTimelineInteractor.refreshMainTimeline(new RefreshMainTimelineInteractor.Callback() {
+            @Override public void onLoaded(Timeline timeline) {
+                isRefreshing = false;
+                swipeRefreshLayout.setRefreshing(false);
+                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+
+                int originalPosition = listView.getFirstVisiblePosition();
+                int newPosition = originalPosition + shotModels.size();
+                adapter.addShotsAbove(shotModels);
+                adapter.notifyDataSetChanged();
+                setListPosition(newPosition);
+                if (shouldGoToTop()) {
+                    goToTop();
+                }
+            }
+        });
+    }
+
+    @Subscribe
+    public void displayNewShots(NewShotsReceivedEvent event) {
+        if (true) {
+            throw new RuntimeException("You shall not pass!");
+        }
+        isRefreshing = false;
+        swipeRefreshLayout.setRefreshing(false);
+        int newShotsCount = event.getNewShotsCount();
+        List<ShotModel> updatedTimeline = event.getResult();
+
+        if (newShotsCount == 0) {
+            Timber.i("No new shots");
+            if (adapter
+              != null) { //Means that We have at least one shot and for that reason the adapter was initialized
+                adapter.notifyDataSetChanged(); // Refresh time indicator
+            } else {
+                //TODO why is this empty?
+            }
+        } else {
+            Timber.i("Received %d new shots", newShotsCount);
+            int originalPosition = listView.getFirstVisiblePosition();
+            int newPosition = originalPosition + newShotsCount;
+            adapter.setShots(updatedTimeline);
+            setListPosition(newPosition);
+            if (shouldGoToTop()) {
+                goToTop();
+            }
+        }
     }
 
     private void startJob(TimelineJob job){
@@ -550,8 +595,10 @@ public class TimelineFragment extends BaseFragment
         getMainTimelineInteractor.loadMainTimeline(new GetMainTimelineInteractor.Callback() {
             @Override public void onLoaded(Timeline timeline) {
                 List<Shot> shots = timeline.getShots();
-                List<ShotModel> shotModels = shotModelMapper.transform(shots);
-                showTimeline(shotModels);
+                if (!shots.isEmpty()) {
+                    List<ShotModel> shotModels = shotModelMapper.transform(shots);
+                    showTimeline(shotModels);
+                }
             }
         });
     }
@@ -571,32 +618,6 @@ public class TimelineFragment extends BaseFragment
     private void setEmpty(boolean empty) {
         emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
         swipeRefreshLayout.setVisibility(empty ? View.GONE : View.VISIBLE);
-    }
-
-    @Subscribe
-    public void displayNewShots(NewShotsReceivedEvent event) {
-        isRefreshing = false;
-        swipeRefreshLayout.setRefreshing(false);
-        int newShotsCount = event.getNewShotsCount();
-        List<ShotModel> updatedTimeline = event.getResult();
-
-        if (newShotsCount == 0) {
-            Timber.i("No new shots");
-            if(adapter != null){ //Means that We have at least one shot and for that reason the adapter was initialized
-                adapter.notifyDataSetChanged(); // Refresh time indicator
-            }else{
-                //TODO why is this empty?
-            }
-        } else {
-            Timber.i("Received %d new shots", newShotsCount);
-            int originalPosition = listView.getFirstVisiblePosition();
-            int newPosition = originalPosition + newShotsCount;
-            adapter.setShots(updatedTimeline);
-            setListPosition(newPosition);
-            if (shouldGoToTop()) {
-                goToTop();
-            }
-        }
     }
 
     private boolean shouldGoToTop() {

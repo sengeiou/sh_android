@@ -47,7 +47,6 @@ import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.MainActivity;
@@ -106,7 +105,6 @@ import static android.content.Context.MODE_PRIVATE;
     MainActivity.class,
 
     ProfileFragment.class,
-    RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class,
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,

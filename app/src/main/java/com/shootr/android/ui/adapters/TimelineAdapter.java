@@ -162,6 +162,12 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         notifyDataSetChanged();
     }
 
+    public void addShotsAbove(List<ShotModel> shotModels) {
+        ArrayList<ShotModel> newShotList = new ArrayList<>(shotModels);
+        newShotList.addAll(this.shots);
+        this.shots = newShotList;
+    }
+
     public static class ViewHolder {
         @InjectView(R.id.shot_avatar) public ImageView avatar;
         @InjectView(R.id.shot_user_name) public TextView name;
