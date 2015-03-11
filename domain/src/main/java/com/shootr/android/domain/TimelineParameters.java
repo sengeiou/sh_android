@@ -13,9 +13,9 @@ public class TimelineParameters {
 
     private Long eventAuthorId;
 
-    private Date sinceDate;
+    private Long sinceDate;
 
-    private Date maxDate;
+    private Long maxDate;
 
     private TimelineParameters() {
         /* private constructor, use builder */
@@ -33,11 +33,11 @@ public class TimelineParameters {
         return eventAuthorId;
     }
 
-    public Date getSinceDate() {
+    public Long getSinceDate() {
         return sinceDate;
     }
 
-    public Date getMaxDate() {
+    public Long getMaxDate() {
         return maxDate;
     }
 
@@ -65,6 +65,12 @@ public class TimelineParameters {
             return this;
         }
 
+        public Builder forUsers(List<Long> userIds, Long... moreUserIds) {
+            parameters.userIds = userIds;
+            parameters.userIds.addAll(Arrays.asList(moreUserIds));
+            return this;
+        }
+
         public Builder forUsers(Long... userIds) {
             parameters.userIds = Arrays.asList(userIds);
             return this;
@@ -82,12 +88,12 @@ public class TimelineParameters {
             return this;
         }
 
-        public Builder since(Date sinceDate) {
+        public Builder since(Long sinceDate) {
             parameters.sinceDate = sinceDate;
             return this;
         }
 
-        public Builder maxDate(Date maxDate) {
+        public Builder maxDate(Long maxDate) {
             parameters.maxDate = maxDate;
             return this;
         }
@@ -97,7 +103,7 @@ public class TimelineParameters {
                 throw new IllegalArgumentException("User list in TimelineParameters must not be null or empty");
             }
             if (parameters.getSinceDate() == null) {
-                parameters.sinceDate = new Date(0L);
+                parameters.sinceDate = 0L;
             }
             return parameters;
         }
