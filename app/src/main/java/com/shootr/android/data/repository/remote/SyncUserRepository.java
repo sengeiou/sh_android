@@ -46,6 +46,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
         } else {
             UserEntity remoteUser = remoteUserDataSource.getUser(id);
             if (remoteUser != null) {
+                localUserDataSource.putUser(remoteUser);
                 return entityToDomain(remoteUser);
             } else {
                 return null;
