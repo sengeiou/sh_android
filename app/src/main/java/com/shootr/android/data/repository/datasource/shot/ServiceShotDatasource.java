@@ -26,7 +26,7 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
         try {
-            return shootrService.getShotsByUserIdList(parameters.getAllUserIds(), 0L); //TODO filter by event
+            return shootrService.getShotsByUserIdList(parameters.getAllUserIds(), parameters.getSinceDate()); //TODO filter by event
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

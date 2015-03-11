@@ -44,4 +44,8 @@ public class PreferenceModule {
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
     }
+
+    @Provides @Singleton @TimelineLastRefresh LongPreference provideTimelineLastRefresh(SharedPreferences preferences) {
+        return new LongPreference(preferences, "synchronization_timeline_last_refresh", 0L);
+    }
 }
