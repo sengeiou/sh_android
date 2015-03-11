@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -24,6 +25,7 @@ public class GetMainTimelineInteractor implements Interactor {
     //region Dependencies
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
+    private final SessionRepository sessionRepository;
     private final WatchRepository remoteWatchRepository;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
@@ -32,8 +34,9 @@ public class GetMainTimelineInteractor implements Interactor {
     private Callback callback;
 
     @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository, @Remote WatchRepository remoteWatchRepository,
-      @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+      SessionRepository sessionRepository, @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
+      @Remote WatchRepository remoteWatchRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+        this.sessionRepository = sessionRepository;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
@@ -68,7 +71,7 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildParametersWithoutEvent() {
-        return TimelineParameters.builder().forUsers(getPeopleIds()).build();
+        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).build();
     }
 
     private void loadShotsWithEvent(Event visibleEvent) {
@@ -82,7 +85,7 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
-        return TimelineParameters.builder().forUsers(getPeopleIds()).forEvent(event).build();
+        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).forEvent(event).build();
     }
 
     private List<Long> getPeopleIds() {

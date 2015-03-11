@@ -11,6 +11,7 @@ import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -26,12 +26,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.shootr.android.domain.asserts.TimelineAssert.assertThat;
 import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +47,7 @@ public class GetMainTimelineInteractorTest {
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock EventRepository eventRepository;
     @Mock UserRepository localUserRepository;
+    @Mock SessionRepository sessionRepository;
 
     private GetMainTimelineInteractor interactor;
 
@@ -62,8 +60,7 @@ public class GetMainTimelineInteractorTest {
         when(localUserRepository.getPeople()).thenReturn(people());
 
         interactor = new GetMainTimelineInteractor(interactorHandler,
-          postExecutionThread,
-          localShotRepository,
+          postExecutionThread, sessionRepository, localShotRepository,
           remoteShotRepository,
           remoteWatchRepository,
           eventRepository, localUserRepository);
