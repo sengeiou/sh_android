@@ -14,6 +14,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
@@ -32,11 +33,14 @@ public class GetMainTimelineInteractor implements Interactor {
     private final ShotRepository remoteShotRepository;
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
+    private final SynchronizationRepository synchronizationRepository;
     private Callback callback;
 
-    @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
-      @Remote WatchRepository remoteWatchRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
+      @Remote WatchRepository remoteWatchRepository, @Local EventRepository localEventRepository,
+      @Local UserRepository localUserRepository, SynchronizationRepository synchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
@@ -45,6 +49,7 @@ public class GetMainTimelineInteractor implements Interactor {
         this.remoteWatchRepository = remoteWatchRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
+        this.synchronizationRepository = synchronizationRepository;
     }
     //endregion
 
@@ -69,8 +74,9 @@ public class GetMainTimelineInteractor implements Interactor {
         localShots = sortShotsByPublishDate(localShots);
         notifyTimelineFromShots(localShots);
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
-        remoteShots= sortShotsByPublishDate(remoteShots);
+        remoteShots = sortShotsByPublishDate(remoteShots);
         notifyTimelineFromShots(remoteShots);
+        updateLastRefreshDate(remoteShots);
     }
 
     private TimelineParameters buildParametersWithoutEvent() {
@@ -87,10 +93,20 @@ public class GetMainTimelineInteractor implements Interactor {
         List<Shot> remoteShotsWithAuthor = remoteShotRepository.getShotsForTimeline(timelineParameters);
         remoteShotsWithAuthor = sortShotsByPublishDate(remoteShotsWithAuthor);
         notifyTimelineFromShots(remoteShotsWithAuthor);
+        updateLastRefreshDate(remoteShotsWithAuthor);
+    }
+
+    private void updateLastRefreshDate(List<Shot> remoteShots) {
+        if (remoteShots.size() > 0) {
+            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0).getPublishDate().getTime());
+        }
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
-        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).forEvent(event).build();
+        return TimelineParameters.builder()
+          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId())
+          .forEvent(event)
+          .build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {

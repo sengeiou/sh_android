@@ -13,6 +13,7 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class GetMainTimelineInteractorTest {
     @Mock EventRepository eventRepository;
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
+    @Mock SynchronizationRepository synchronizationRepository;
 
     private GetMainTimelineInteractor interactor;
 
@@ -65,10 +67,14 @@ public class GetMainTimelineInteractorTest {
         when(localUserRepository.getPeople()).thenReturn(people());
 
         interactor = new GetMainTimelineInteractor(interactorHandler,
-          postExecutionThread, sessionRepository, localShotRepository,
+          postExecutionThread,
+          sessionRepository,
+          localShotRepository,
           remoteShotRepository,
           remoteWatchRepository,
-          eventRepository, localUserRepository);
+          eventRepository,
+          localUserRepository,
+          synchronizationRepository);
     }
 
     @Test
@@ -96,7 +102,6 @@ public class GetMainTimelineInteractorTest {
         assertThat(remoteParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
     }
 
-
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
@@ -110,16 +115,29 @@ public class GetMainTimelineInteractorTest {
         assertThat(remoteShotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
     }
 
+    @Test
+    public void shouldUpdateLastRefreshDateWithNewestShotPublishDateFromRemoteRepo() throws Exception {
+        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadMainTimeline(spyCallback);
+
+        ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
+        verify(synchronizationRepository).putTimelineLastRefresh(captor.capture());
+        Long updatedRefreshDate = captor.getValue();
+
+        assertThat(updatedRefreshDate).isEqualTo(DATE_NEWER);
+    }
+
     private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
-
 
     private Shot shotWithDate(Long date) {
         Shot shot = new Shot();
         shot.setPublishDate(new Date(date));
         return shot;
     }
+
     private void setupVisibleEvent() {
         when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(eventVisibleWatch());
         when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
@@ -131,7 +149,7 @@ public class GetMainTimelineInteractorTest {
         shots.addAll(shotsFromAuthor());
         return shots;
     }
-    
+
     private List<Shot> shotsFromAuthor() {
         return Arrays.asList(shotFromAuthor());
     }
@@ -198,8 +216,7 @@ public class GetMainTimelineInteractorTest {
 
     //region Spies
     private TimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
-        ArgumentCaptor<TimelineParameters> captor =
-          ArgumentCaptor.forClass(TimelineParameters.class);
+        ArgumentCaptor<TimelineParameters> captor = ArgumentCaptor.forClass(TimelineParameters.class);
         verify(shotRepository).getShotsForTimeline(captor.capture());
         return captor.getValue();
     }
