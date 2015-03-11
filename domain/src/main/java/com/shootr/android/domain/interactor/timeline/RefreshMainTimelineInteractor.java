@@ -52,6 +52,10 @@ public class RefreshMainTimelineInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
+        executeSynchronized();
+    }
+
+    private synchronized void executeSynchronized() {
         TimelineParameters timelineParameters = buildTimelineParameters();
 
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
