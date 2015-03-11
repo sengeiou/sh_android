@@ -66,7 +66,7 @@ public class RefreshMainTimelineInteractor implements Interactor {
 
     private void updateLastRefreshDate(List<Shot> remoteShots) {
         if (remoteShots.size() > 0) {
-            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(remoteShots.size() - 1)
+            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0)
               .getPublishDate()
               .getTime());
         }
