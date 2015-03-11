@@ -8,5 +8,7 @@ public interface ShotDataSource {
 
     ShotEntity putShot(ShotEntity shotEntity);
 
+    void putShots(List<ShotEntity> shotEntities);
+
     List<ShotEntity> getShotsForTimeline(TimelineParameters parameters);
 }

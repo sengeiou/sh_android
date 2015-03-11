@@ -40,6 +40,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public List<Shot> getShotsForTimeline(TimelineParameters parameters) {
         List<User> usersFromShots = remoteUserRepository.getUsersByIds(parameters.getAllUserIds());
         List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForTimeline(parameters);
+        //TODO wanna put only in some cases? Say that through TimelineParameters
+        localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline, usersFromShots);
     }
 }

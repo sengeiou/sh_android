@@ -243,12 +243,16 @@ public class ShotManager extends  AbstractManager{
     public void saveShots(List<ShotEntity> shotList) {
         long res;
         Collections.reverse(shotList);
+        SQLiteDatabase database = getWritableDatabase();
         for (ShotEntity shot : shotList) {
             ContentValues contentValues = shotEntityMapper.toContentValues(shot);
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 res = deleteShot(shot);
             } else {
-                res = getReadableDatabase().insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                res = database.insertWithOnConflict(ShotTable.TABLE,
+                  null,
+                  contentValues,
+                  SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
            insertInSync();
