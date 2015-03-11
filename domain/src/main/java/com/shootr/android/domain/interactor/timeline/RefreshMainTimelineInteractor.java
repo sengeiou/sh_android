@@ -61,11 +61,15 @@ public class RefreshMainTimelineInteractor implements Interactor {
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
         notifyTimelineFromShots(remoteShots);
 
-        updateLastRefreshDate();
+        updateLastRefreshDate(remoteShots);
     }
 
-    private void updateLastRefreshDate() {
-        synchronizationRepository.putTimelineLastRefresh(System.currentTimeMillis());
+    private void updateLastRefreshDate(List<Shot> remoteShots) {
+        if (remoteShots.size() > 0) {
+            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(remoteShots.size() - 1)
+              .getPublishDate()
+              .getTime());
+        }
     }
 
     private TimelineParameters buildTimelineParameters() {
