@@ -574,14 +574,13 @@ public class TimelineFragment extends BaseFragment
     }
 
     public void loadInitialTimeline() {
+        setEmpty(false);
         swipeRefreshLayout.setRefreshing(true);
         getMainTimelineInteractor.loadMainTimeline(new GetMainTimelineInteractor.Callback() {
             @Override public void onLoaded(Timeline timeline) {
                 List<Shot> shots = timeline.getShots();
-                if (!shots.isEmpty()) {
-                    List<ShotModel> shotModels = shotModelMapper.transform(shots);
-                    showTimeline(shotModels);
-                }
+                List<ShotModel> shotModels = shotModelMapper.transform(shots);
+                showTimeline(shotModels);
             }
         });
     }
@@ -591,11 +590,11 @@ public class TimelineFragment extends BaseFragment
         if (shots != null && !shots.isEmpty()) {
             adapter.setShots(shots);
             setEmpty(false);
+            loadMoreShotsIfNeeded();
         } else {
             setEmpty(true);
             Timber.i("No shots received");
         }
-        loadMoreShotsIfNeeded();
     }
 
     private void setEmpty(boolean empty) {
