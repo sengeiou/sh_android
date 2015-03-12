@@ -537,36 +537,6 @@ public class TimelineFragment extends BaseFragment
         });
     }
 
-    @Subscribe
-    public void displayNewShots(NewShotsReceivedEvent event) {
-        if (true) {
-            throw new RuntimeException("You shall not pass!");
-        }
-        isRefreshing = false;
-        swipeRefreshLayout.setRefreshing(false);
-        int newShotsCount = event.getNewShotsCount();
-        List<ShotModel> updatedTimeline = event.getResult();
-
-        if (newShotsCount == 0) {
-            Timber.i("No new shots");
-            if (adapter
-              != null) { //Means that We have at least one shot and for that reason the adapter was initialized
-                adapter.notifyDataSetChanged(); // Refresh time indicator
-            } else {
-                //TODO why is this empty?
-            }
-        } else {
-            Timber.i("Received %d new shots", newShotsCount);
-            int originalPosition = listView.getFirstVisiblePosition();
-            int newPosition = originalPosition + newShotsCount;
-            adapter.setShots(updatedTimeline);
-            setListPosition(newPosition);
-            if (shouldGoToTop()) {
-                goToTop();
-            }
-        }
-    }
-
     private void startJob(TimelineJob job){
         jobManager.addJobInBackground(job);
     }
