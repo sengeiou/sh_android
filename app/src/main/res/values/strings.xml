@@ -184,6 +184,7 @@
     <string name="activity_drafts_title">Drafts</string>
     <string name="draft_label">Draft</string>
     <string name="drafts_empty">No Drafts</string>
+    <string name="timeline_hall_title">Hall</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

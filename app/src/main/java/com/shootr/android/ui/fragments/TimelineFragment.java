@@ -50,7 +50,6 @@ import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
-import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
@@ -203,28 +202,16 @@ public class TimelineFragment extends BaseFragment
             @Override public void onLoaded(EventInfo eventInfo) {
                 Event event = eventInfo.getEvent();
                 if (event != null) {
-                    showEventTitleInPlaceholder(event.getTitle());
+                    showEventTagInToolbar(event.getTag());
+                } else {
+                    showEventTagInToolbar(getString(R.string.timeline_hall_title));
                 }
             }
         });
     }
 
-    private void showEventTitleInPlaceholder(String eventTitle) {
-        newShotPlaceholder = filterAndTrimEventTitle(eventTitle);
-        newShotTextView.setText(newShotPlaceholder);
-    }
-
-    private String filterAndTrimEventTitle(String eventTitle) {
-        eventTitle = filterTitleEmojis(eventTitle);
-        if (eventTitle.length() > PLACEHOLDER_MAX_LENGHT) {
-            eventTitle = eventTitle.substring(0, PLACEHOLDER_MAX_LENGHT);
-            eventTitle += "...";
-        }
-        return eventTitle;
-    }
-
-    private String filterTitleEmojis(String eventTitle) {
-        return eventTitle.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
+    private void showEventTagInToolbar(String eventTag) {
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(eventTag);
     }
 
     @Subscribe
