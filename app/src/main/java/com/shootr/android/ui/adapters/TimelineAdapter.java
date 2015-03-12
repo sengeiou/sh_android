@@ -112,7 +112,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     vh.text.setVisibility(View.GONE);
                 }
 
-                if (item.getEventTag() != null) {
+                if (shouldShowTag() && item.getEventTag() != null) {
                     addShotTag(vh, item);
                 }
 
@@ -135,6 +135,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             default:
                 break;
         }
+    }
+
+    protected boolean shouldShowTag() {
+        return false;
     }
 
     private void addShotTag(ViewHolder vh, ShotModel shotModel) {

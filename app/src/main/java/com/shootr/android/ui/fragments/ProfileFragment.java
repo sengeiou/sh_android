@@ -529,7 +529,11 @@ public class ProfileFragment extends BaseFragment {
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             latestsShotsAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils){
+                  @Override protected boolean shouldShowTag() {
+                      return true;
+                  }
+              };
             latestsShotsAdapter.setShots(shots);
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
