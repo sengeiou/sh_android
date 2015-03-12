@@ -72,7 +72,10 @@ public class GetMainTimelineInteractor implements Interactor {
 
         List<Shot> localShots = localShotRepository.getShotsForTimeline(timelineParameters);
         localShots = sortShotsByPublishDate(localShots);
-        notifyTimelineFromShots(localShots);
+        if (!localShots.isEmpty()) {
+            notifyTimelineFromShots(localShots);
+        }
+
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
         remoteShots = sortShotsByPublishDate(remoteShots);
         notifyTimelineFromShots(remoteShots);
@@ -88,7 +91,9 @@ public class GetMainTimelineInteractor implements Interactor {
 
         List<Shot> localShotsWithAuthor = localShotRepository.getShotsForTimeline(timelineParameters);
         localShotsWithAuthor = sortShotsByPublishDate(localShotsWithAuthor);
-        notifyTimelineFromShots(localShotsWithAuthor);
+        if (!localShotsWithAuthor.isEmpty()) {
+            notifyTimelineFromShots(localShotsWithAuthor);
+        }
 
         List<Shot> remoteShotsWithAuthor = remoteShotRepository.getShotsForTimeline(timelineParameters);
         remoteShotsWithAuthor = sortShotsByPublishDate(remoteShotsWithAuthor);
