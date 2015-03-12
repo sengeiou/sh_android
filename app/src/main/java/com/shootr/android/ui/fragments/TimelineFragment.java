@@ -449,7 +449,7 @@ public class TimelineFragment extends BaseFragment
     private void onEventChanged() {
         this.loadEventPlaceholder();
         watchNumberPresenter.initialize(this);
-        loadEventPlaceholder();
+        loadInitialTimeline();
     }
 
     @OnClick(R.id.select_event_fab)
