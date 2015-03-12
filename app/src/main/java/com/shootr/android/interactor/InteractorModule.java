@@ -31,6 +31,7 @@ import javax.inject.Singleton;
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class, SendDraftInteractor.class,
     DeleteDraftInteractor.class, GetMainTimelineInteractor.class, RefreshMainTimelineInteractor.class,
+    InteractorModule.class
   },
   complete = false
 )

@@ -35,7 +35,6 @@ import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
@@ -49,14 +48,12 @@ import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
-import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
-import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -102,6 +99,7 @@ public class TimelineFragment extends BaseFragment
     @Inject ShotModelMapper shotModelMapper;
     @Inject GetMainTimelineInteractor getMainTimelineInteractor;
     @Inject RefreshMainTimelineInteractor refreshMainTimelineInteractor;
+    @Inject GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -513,9 +511,29 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void startRetrieveOldShotsTimeLineJob(Context context){
-        RetrieveOldShotsTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveOldShotsTimeLineJob.class);
-        startJob(job);
+    private void startRetrieveOldShotsTimeLineJob(){
+        getOlderMainTimelineInteractor.loadOlderMainTimeline(oldestShotDate(),
+          new GetOlderMainTimelineInteractor.Callback() {
+              @Override public void onLoaded(Timeline timeline) {
+                  isLoadingMore = false;
+                  List<Shot> shots = timeline.getShots();
+                  int olderShotsSize = shots.size();
+                  if (olderShotsSize == 0) {
+                      footerProgress.setVisibility(View.INVISIBLE); // Maintain size
+                      footerText.setVisibility(View.VISIBLE);
+                      footerText.setText(R.string.no_more_shots);
+                      moreShots = false;
+                  } else {
+                      Timber.d("Received %d old shots", olderShotsSize);
+                      adapter.addShotsBelow(shotModelMapper.transform(shots));
+                  }
+              }
+          });
+    }
+
+    private Long oldestShotDate() {
+        Long oldestShotDate = adapter.getItem(adapter.getCount() - 1).getCsysBirth().getTime();
+        return oldestShotDate;
     }
 
     private void startRetrieveNewShotsTimeLineJob() {
@@ -537,26 +555,21 @@ public class TimelineFragment extends BaseFragment
         });
     }
 
-    private void startJob(TimelineJob job){
-        jobManager.addJobInBackground(job);
-    }
-
     private void loadMoreShotsIfNeeded() {
         int lastVisiblePosition = listView.getLastVisiblePosition();
         if (lastVisiblePosition >= listView.getAdapter().getCount()-1) {
             Context context = getActivity();
             if (context != null) {
-                startLoadMoreShots(context);
+                startLoadMoreShots();
             }
         }
     }
 
-    //TODO parameter: last shot as offset
-    public void startLoadMoreShots(Context context) {
+    public void startLoadMoreShots() {
         if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
-            startRetrieveOldShotsTimeLineJob(context);
+            startRetrieveOldShotsTimeLineJob();
         }
     }
 
