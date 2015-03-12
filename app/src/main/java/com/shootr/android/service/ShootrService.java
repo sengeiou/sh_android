@@ -8,6 +8,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.domain.TimelineParameters;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ public interface ShootrService {
     public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
 
     public ShotEntity getShotById(Long idShot) throws IOException;
+
+    public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
 
     public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 

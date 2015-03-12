@@ -163,6 +163,10 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
+        public T matches(FilterMatcher<T> matcher) {
+            NexusItem nexusItem = matcher.match(this);
+            return nexusItemReference;
+        }
 
         private void createAndAddItem(String comparator, Object value) {
             FilterItemDto item = new FilterItemDto(comparator, fieldName, value);
@@ -181,6 +185,10 @@ public class FilterBuilder {
         }
     }
 
+    public static interface FilterMatcher<T extends NexusItem> {
+
+        T match(ItemField<T> itemField);
+    }
 
     public static class OrItem extends NexusItem {
         protected OrItem() {
