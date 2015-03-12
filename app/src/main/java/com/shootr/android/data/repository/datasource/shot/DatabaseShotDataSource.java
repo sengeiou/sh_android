@@ -30,6 +30,6 @@ public class DatabaseShotDataSource implements ShotDataSource {
     }
 
     @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
-        return shotManager.getShotsForEvent(parameters.getEventId(), parameters.getAllUserIds());
+        return shotManager.getShotsByParameters(parameters);
     }
 }

@@ -12,6 +12,7 @@ import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
@@ -313,5 +314,38 @@ public class ShotManager extends  AbstractManager{
         }
         queryResult.close();
         return latestShots;
+    }
+
+    public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
+        List<Long> userIds = parameters.getAllUserIds();
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
+        String eventSelection = ShotTable.ID_EVENT + (parameters.getEventId() != null ? " = ?" : " IS NULL");
+        //TODO since & max
+        //TODO limit
+
+        String[] whereArguments = new String[parameters.getEventId() != null? userIds.size()+1 : userIds.size()];
+        for (int i = 0; i < userIds.size(); i++) {
+            whereArguments[i] = String.valueOf(userIds.get(i));
+        }
+        if (parameters.getEventId() != null) {
+            whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
+        }
+        String whereClause = usersSelection + " AND " + eventSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultShots;
     }
 }
