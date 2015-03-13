@@ -11,6 +11,8 @@ public interface UserDataSource {
 
     List<UserEntity> putUsers(List<UserEntity> userEntities);
 
+    UserEntity getUser(Long id);
+
     boolean isFollower(Long from, Long who);
 
     boolean isFollowing(Long who, Long to);

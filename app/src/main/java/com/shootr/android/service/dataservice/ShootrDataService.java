@@ -16,6 +16,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.domain.exception.ShootrError;
@@ -167,6 +168,24 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
+    @Override public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException {
+        GenericDto genericDto = timelineDtoFactory.getTimelineOperationDto(parameters);
+        GenericDto responseDto = postRequest(genericDto);
+        OperationDto[] ops = responseDto.getOps();
+
+        List<ShotEntity> resultShots = new ArrayList<>();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else if(ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object>[] data = ops[0].getData();
+            for (Map<String, Object> aData : data) {
+                ShotEntity shot = shotEntityMapper.fromDto(aData);
+                resultShots.add(shot);
+            }
+        }
+        return resultShots;
+    }
+
     @Override
     public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         List<ShotEntity> newerShots = new ArrayList<>();
@@ -208,7 +227,7 @@ public class ShootrDataService implements ShootrService {
     @Override
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<ShotEntity> shots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, DEFAULT_LIMIT);
+        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

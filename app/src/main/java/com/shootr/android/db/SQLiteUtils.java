@@ -42,7 +42,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1));";
 
     public static final String CREATE_TABLE_SHOT = "CREATE TABLE IF NOT EXISTS " + ShotTable.TABLE + " ("
-            + ShotTable.ID_SHOT + " INT NOT NULL,"
+            + ShotTable.ID_SHOT + " INT NOT NULL PRIMARY KEY,"
             + ShotTable.ID_USER + " INT NOT NULL,"
             + ShotTable.COMMENT + " VARCHAR(255) NULL,"
             + ShotTable.IMAGE + " VARCHAR(255) NULL,"
@@ -54,8 +54,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL," +
-            " PRIMARY KEY(" + ShotTable.ID_SHOT + "))";
+            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS " + ShotQueueTable.TABLE + " ("
           + ShotQueueTable.ID_QUEUE + " INTEGER PRIMARY KEY AUTOINCREMENT,"

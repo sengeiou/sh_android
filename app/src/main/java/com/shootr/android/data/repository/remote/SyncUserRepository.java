@@ -6,6 +6,7 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -35,6 +36,38 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
         markSynchronized(remotePeopleEntities);
         localUserDataSource.putUsers(remotePeopleEntities);
         return transformUserEntitiesForPeople(remotePeopleEntities);
+    }
+
+    @Override public User getUserById(Long id) {
+        UserEntity localUser = localUserDataSource.getUser(id);
+        if (localUser != null) {
+            //TODO update always? or when?
+            return entityToDomain(localUser);
+        } else {
+            UserEntity remoteUser = remoteUserDataSource.getUser(id);
+            if (remoteUser != null) {
+                localUserDataSource.putUser(remoteUser);
+                return entityToDomain(remoteUser);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private User entityToDomain(UserEntity remoteUser) {
+        return userEntityMapper.transform(remoteUser, sessionRepository.getCurrentUserId(), isFollower(remoteUser.getIdUser()), isFollowing(remoteUser.getIdUser()));
+    }
+
+    @Override public List<User> getUsersByIds(List<Long> userIds) {
+        List<User> users = new ArrayList<>();
+        for (Long userId : userIds) {
+            User user = getUserById(userId);
+            if (user == null) {
+                throw new RepositoryException("User with id " + userId + " not found");
+            }
+            users.add(user);
+        }
+        return users;
     }
 
     @Override public boolean isFollower(Long userId) {

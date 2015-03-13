@@ -10,6 +10,9 @@ public class UserEntityMapper {
     }
 
     public User transform(UserEntity userEntity, Long currentUserId, boolean isFollower, boolean isFollowing) {
+        if (userEntity == null) {
+            return null;
+        }
         User user = new User();
         user.setIdUser(userEntity.getIdUser());
         user.setFavoriteTeamName(userEntity.getFavoriteTeamName());
@@ -34,6 +37,9 @@ public class UserEntityMapper {
     }
 
     public UserEntity transform(User user) {
+        if (user == null) {
+            return null;
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setIdUser(user.getIdUser());
         userEntity.setFavoriteTeamId(user.getFavoriteTeamId());
@@ -50,7 +56,7 @@ public class UserEntityMapper {
 
         userEntity.setIdEvent(user.getEventWatchingId());
         userEntity.setEventTitle(user.getEventWatchingTitle());
-        
+
         //TODO synchronized fields
         return userEntity;
     }

@@ -71,7 +71,7 @@ public class ShotDispatcherTest {
 
     @Test
     public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException(null));
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
@@ -108,7 +108,7 @@ public class ShotDispatcherTest {
 
     @Test
     public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException(null));
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 

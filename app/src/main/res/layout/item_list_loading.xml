@@ -16,16 +16,4 @@
         android:padding="8dp"
         />
 
-    <TextView
-        android:id="@+id/loading_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="8dp"
-        android:textColor="@color/gray_60"
-        android:visibility="gone"
-        tools:text="No more shots"
-        tools:visibility="visible"
-
-        />
 </FrameLayout>

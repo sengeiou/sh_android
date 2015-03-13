@@ -5,12 +5,11 @@ import java.util.List;
 
 public interface UserRepository {
 
-    @Deprecated
-    interface UserListCallback {
-        void onLoaded(List<User> userList);
-    }
-
     List<User> getPeople();
+
+    User getUserById(Long id);
+
+    List<User> getUsersByIds(List<Long> ids);
 
     boolean isFollower(Long userId);
 

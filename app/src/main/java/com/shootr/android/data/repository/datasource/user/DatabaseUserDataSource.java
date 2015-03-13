@@ -39,12 +39,22 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userEntities;
     }
 
+    @Override public UserEntity getUser(Long id) {
+        return userManager.getUserByIdUser(id);
+    }
+
     @Override public boolean isFollower(Long from, Long who) {
+        if (from == null || who == null) {
+            return false;
+        }
         FollowEntity follow = followManager.getFollowByUserIds(who, from);
         return follow != null;
     }
 
     @Override public boolean isFollowing(Long who, Long to) {
+        if (who == null | to == null) {
+            return false;
+        }
         FollowEntity follow = followManager.getFollowByUserIds(who, to);
         return follow != null;
     }
