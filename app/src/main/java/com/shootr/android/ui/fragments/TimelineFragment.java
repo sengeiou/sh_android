@@ -112,7 +112,6 @@ public class TimelineFragment extends BaseFragment
     private View footerView;
     private ProgressBar footerProgress;
 
-    private TextView footerText;
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
@@ -244,7 +243,6 @@ public class TimelineFragment extends BaseFragment
         footerView =
                 LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
-        footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
         listView.addFooterView(footerView, null, false);
 
@@ -506,9 +504,7 @@ public class TimelineFragment extends BaseFragment
                   List<Shot> shots = timeline.getShots();
                   int olderShotsSize = shots.size();
                   if (olderShotsSize == 0) {
-                      footerProgress.setVisibility(View.INVISIBLE); // Maintain size
-                      footerText.setVisibility(View.VISIBLE);
-                      footerText.setText(R.string.no_more_shots);
+                      footerProgress.setVisibility(View.GONE);
                       moreShots = false;
                   } else {
                       Timber.d("Received %d old shots", olderShotsSize);
@@ -528,15 +524,17 @@ public class TimelineFragment extends BaseFragment
             @Override public void onLoaded(Timeline timeline) {
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-
-                int originalPosition = listView.getFirstVisiblePosition();
-                int newPosition = originalPosition + shotModels.size();
-                adapter.addShotsAbove(shotModels);
-                adapter.notifyDataSetChanged();
-                setListPosition(newPosition);
-                if (shouldGoToTop()) {
-                    goToTop();
+                List<Shot> shots = timeline.getShots();
+                if (!shots.isEmpty()) {
+                    List<ShotModel> shotModels = shotModelMapper.transform(shots);
+                    int originalPosition = listView.getFirstVisiblePosition();
+                    int newPosition = originalPosition + shotModels.size();
+                    adapter.addShotsAbove(shotModels);
+                    adapter.notifyDataSetChanged();
+                    setListPosition(newPosition);
+                    if (shouldGoToTop()) {
+                        goToTop();
+                    }
                 }
             }
         });
@@ -599,22 +597,6 @@ public class TimelineFragment extends BaseFragment
 
     public void goToTop() {
         listView.smoothScrollToPosition(0);
-    }
-
-    @Subscribe
-    public void displayOldShots(OldShotsReceivedEvent event) {
-        isLoadingMore = false;
-        List<ShotModel> shots = event.getResult();
-        int olderShotsSize = shots.size();
-        if (olderShotsSize == 0) {
-            footerProgress.setVisibility(View.INVISIBLE); // Maintain size
-            footerText.setVisibility(View.VISIBLE);
-            footerText.setText(R.string.no_more_shots);
-            moreShots = false;
-        } else {
-            Timber.d("Received %d old shots", olderShotsSize);
-            adapter.addShotsBelow(shots);
-        }
     }
 
     @Subscribe
