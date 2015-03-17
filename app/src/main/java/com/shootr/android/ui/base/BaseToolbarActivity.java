@@ -22,7 +22,7 @@ import com.shootr.android.ui.AppContainer;
 
 import static butterknife.ButterKnife.findById;
 
-public class BaseActivity extends ActionBarActivity {
+public class BaseToolbarActivity extends ActionBarActivity {
 
     @Inject AppContainer appContainer;
     @Inject @Main Bus bus;

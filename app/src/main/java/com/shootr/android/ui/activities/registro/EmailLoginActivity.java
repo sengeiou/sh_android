@@ -21,6 +21,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
@@ -32,14 +33,13 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.loginregister.LoginResultEvent;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.ui.activities.MainActivity;
-import com.shootr.android.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class EmailLoginActivity extends BaseActivity {
+public class EmailLoginActivity extends BaseToolbarActivity {
 
     private static final int BUTTON_ERROR = -1;
     private static final int BUTTON_NORMAL = 0;

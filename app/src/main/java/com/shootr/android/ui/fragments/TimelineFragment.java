@@ -52,7 +52,6 @@ import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInterac
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -61,7 +60,7 @@ import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -210,7 +209,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showEventTagInToolbar(String eventTag) {
-        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(eventTag);
+        ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle(eventTag);
     }
 
     @Subscribe
@@ -234,7 +233,7 @@ public class TimelineFragment extends BaseFragment
 
         //TODO change by drawerLayout, not the fragment itself
         try {
-            ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Timeline");
+            ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle("Timeline");
         } catch (NullPointerException e) {
             Timber.w("Activity null in TimelineFragment#onViewCreated()",e);
         }

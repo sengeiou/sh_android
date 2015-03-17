@@ -1,8 +1,6 @@
 package com.shootr.android.ui.base;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
 import com.shootr.android.data.mapper.UserEntityMapper;
@@ -12,7 +10,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import javax.inject.Inject;
 
-public class BaseSignedInActivity extends BaseActivity {
+public class BaseSignedInActivity extends BaseToolbarActivity {
 
     @Inject UserManager userManager;
     @Inject SessionRepository sessionRepository;

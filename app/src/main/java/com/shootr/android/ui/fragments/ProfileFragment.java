@@ -37,6 +37,7 @@ import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -59,7 +60,6 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
-import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
@@ -387,7 +387,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setTitle(String title) {
-        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
+        ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
     private void setBasicUserInfo(UserModel user) {
