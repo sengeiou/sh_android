@@ -35,5 +35,6 @@
     <dimen name="badge_text_size">10sp</dimen>
     <dimen name="event_result_picture_size">72dp</dimen>
     <dimen name="event_header_elevation">4dp</dimen>
+    <dimen name="navdrawer_profile_avatar_size">64dp</dimen>
 
 </resources>

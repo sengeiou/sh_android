@@ -5,13 +5,13 @@
   android:layout_height="match_parent">
     <!-- The main content view -->
     <FrameLayout
-      android:id="@+id/main_content"
+      android:id="@+id/navdrawer_content"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
     </FrameLayout>
 
     <!-- The navigation drawer -->
-    <include layout="@layout/drawer_layout_old" />
+    <include layout="@layout/navdrawer" />
 
 </android.support.v4.widget.DrawerLayout>
