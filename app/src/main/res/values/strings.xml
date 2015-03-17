@@ -185,6 +185,8 @@
     <string name="draft_label">Draft</string>
     <string name="drafts_empty">No Drafts</string>
     <string name="timeline_hall_title">Hall</string>
+    <string name="drawer_timeline_title">Timeline</string>
+    <string name="drawer_people_title">People</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

@@ -42,6 +42,8 @@
     <color name="drawer_background">#ffffff</color>
     <color name="drawer_indicator">#0091ea</color>
     <color name="drawer_text">#de000000</color>
+    <color name="navdrawer_icon_tint">#888</color>
+    <color name="navdrawer_icon_tint_selected">@color/primary</color>
 
 
     <color name="new_shot_bottom">#09000000</color>
