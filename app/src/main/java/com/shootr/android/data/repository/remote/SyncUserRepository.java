@@ -1,8 +1,10 @@
 package com.shootr.android.data.repository.remote;
 
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.User;
@@ -20,14 +22,16 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
+    private final FollowDataSource localFollowDataSource;
     private final UserEntityMapper userEntityMapper;
 
     @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
-      UserEntityMapper userEntityMapper) {
+      @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
+        this.localFollowDataSource = localFollowDataSource;
         this.userEntityMapper = userEntityMapper;
     }
 
@@ -35,7 +39,25 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
         List<UserEntity> remotePeopleEntities = remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
         markSynchronized(remotePeopleEntities);
         localUserDataSource.putUsers(remotePeopleEntities);
+        localFollowDataSource.putFollows(getFollowsByFollowingUsers(remotePeopleEntities));
         return transformUserEntitiesForPeople(remotePeopleEntities);
+    }
+
+    public List<FollowEntity> getFollowsByFollowingUsers(List<UserEntity> following){
+        long currentUserId = sessionRepository.getCurrentUserId();
+        List<FollowEntity> followsByFollowing = new ArrayList<>();
+        for(UserEntity u:following){
+            FollowEntity f = new FollowEntity();
+            f.setIdUser(currentUserId);
+            f.setFollowedUser(u.getIdUser());
+            f.setCsysBirth(u.getCsysBirth());
+            f.setCsysModified(u.getCsysModified());
+            f.setCsysRevision(u.getCsysRevision());
+            f.setCsysDeleted(u.getCsysDeleted());
+            f.setCsysSynchronized(u.getCsysSynchronized());
+            followsByFollowing.add(f);
+        }
+        return followsByFollowing;
     }
 
     @Override public User getUserById(Long id) {
