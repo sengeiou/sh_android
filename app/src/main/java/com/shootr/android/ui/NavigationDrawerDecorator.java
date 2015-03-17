@@ -1,10 +1,12 @@
 package com.shootr.android.ui;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,11 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     public static final int NAVDRAWER_ITEM_TIMELINE = 0;
     public static final int NAVDRAWER_ITEM_PEOPLE = 1;
 
+    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
+
+    private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
+    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
+
     private static final int[] NAV_DRAWER_ICON_RES =
       { R.drawable.ic_drawer_timeline_mask, R.drawable.ic_drawer_people_mask };
     private static final int[] NAV_DRAWER_TITLE_RES = { R.string.drawer_timeline_title, R.string.drawer_people_title };
@@ -30,10 +37,14 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     private ViewGroup navDrawerItemsListContainer;
     private View[] navDrawerItemViews;
     private final int currentNavigationDrawerItem;
+    private OnNavDrawerItemClickedListener clickListener;
+    private Handler mainThreadHanlder;
+    private ViewGroup decoratedContainer;
 
     public NavigationDrawerDecorator(Activity activity, int currentNavigationDrawerItem) {
         this.activity = activity;
         this.currentNavigationDrawerItem = currentNavigationDrawerItem;
+        this.mainThreadHanlder = new Handler();
     }
 
     @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
@@ -42,10 +53,20 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         drawerLayout = (DrawerLayout) inflatedView.findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         navDrawerItemsListContainer = (ViewGroup) drawerLayout.findViewById(R.id.navdrawer_items_list);
-        ViewGroup newContainer = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_content);
+        decoratedContainer = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_content);
         populateMenu();
-        return newContainer;
+        return decoratedContainer;
     }
+
+    public void fadeOutContent() {
+        decoratedContainer.animate().alpha(0).setDuration(MAIN_CONTENT_FADEOUT_DURATION);
+    }
+
+    public void fadeInContent() {
+        decoratedContainer.setAlpha(0);
+        decoratedContainer.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
+    }
+
 
     public void populateMenu() {
         List<Integer> navItemList = new ArrayList<>();
@@ -91,9 +112,42 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         return itemView;
     }
 
-    private void onNavDrawerItemClicked(int itemId) {
-        //TODO
-        Timber.d("Click: %d", itemId);
+    private void onNavDrawerItemClicked(final int itemId) {
+        if (isSelected(itemId)) {
+            drawerLayout.closeDrawer(Gravity.START);
+            return;
+        }
+
+        if (clickListener == null) {
+            Timber.d("Clicked navdrawer item, but no listener is setted");
+            return;
+        }
+
+        // launch the target Activity after a short delay, to allow the close animation to play
+        mainThreadHanlder.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                clickListener.goToNavDrawerItem(itemId);
+            }
+        }, NAVDRAWER_LAUNCH_DELAY);
+
+        // change the active item on the list so the user can see the item changed
+        setSelectedNavDrawerItem(itemId);
+        // fade out the main content
+        fadeOutContent();
+
+        drawerLayout.closeDrawer(Gravity.START);
+    }
+
+    private void setSelectedNavDrawerItem(int itemId) {
+        if (navDrawerItemViews != null) {
+            /*for (int i = 0; i < navDrawerItemViews.length; i++) {
+                if (i < mNavDrawerItems.size()) {
+                    int thisItemId = mNavDrawerItems.get(i);
+                    formatNavDrawerItem(mNavDrawerItemViews[i], thisItemId, itemId == thisItemId);
+                }
+            }*/
+        }
     }
 
     private void formatNavDrawerItem(View itemView, int itemId) {
@@ -120,5 +174,14 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         ActionBarDrawerToggle drawerToggle =
           new ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
+    }
+
+    public void setNavDrawerItemClickListener(OnNavDrawerItemClickedListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface OnNavDrawerItemClickedListener {
+
+        void goToNavDrawerItem(int itemId);
     }
 }
