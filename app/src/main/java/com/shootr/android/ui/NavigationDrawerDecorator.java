@@ -13,7 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.domain.User;
+import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
@@ -33,16 +37,23 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     private static final int[] NAV_DRAWER_TITLE_RES = { R.string.drawer_timeline_title, R.string.drawer_people_title };
 
     private final Activity activity;
+    private final PicassoWrapper picasso;
+    private final int currentNavigationDrawerItem;
     private DrawerLayout drawerLayout;
+    private ViewGroup drawerHeader;
     private ViewGroup navDrawerItemsListContainer;
     private View[] navDrawerItemViews;
-    private final int currentNavigationDrawerItem;
     private OnNavDrawerItemClickedListener clickListener;
     private Handler mainThreadHanlder;
     private ViewGroup decoratedContainer;
 
-    public NavigationDrawerDecorator(Activity activity, int currentNavigationDrawerItem) {
+    @InjectView(R.id.navdrawer_profile_name) TextView profileName;
+    @InjectView(R.id.navdrawer_profile_email) TextView profileEmail;
+    @InjectView(R.id.drawer_profile_avatar) ImageView profileAvatar;
+
+    public NavigationDrawerDecorator(Activity activity, PicassoWrapper picasso, int currentNavigationDrawerItem) {
         this.activity = activity;
+        this.picasso = picasso;
         this.currentNavigationDrawerItem = currentNavigationDrawerItem;
         this.mainThreadHanlder = new Handler();
     }
@@ -52,6 +63,7 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
           LayoutInflater.from(activity).inflate(R.layout.activity_navdrawer_decorator, originalRoot, true);
         drawerLayout = (DrawerLayout) inflatedView.findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        drawerHeader = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_header);
         navDrawerItemsListContainer = (ViewGroup) drawerLayout.findViewById(R.id.navdrawer_items_list);
         decoratedContainer = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_content);
         populateMenu();
@@ -66,7 +78,6 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         decoratedContainer.setAlpha(0);
         decoratedContainer.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
     }
-
 
     public void populateMenu() {
         List<Integer> navItemList = new ArrayList<>();
@@ -178,6 +189,14 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
 
     public void setNavDrawerItemClickListener(OnNavDrawerItemClickedListener clickListener) {
         this.clickListener = clickListener;
+    }
+
+    //TODO ummm using a domain object in presentation layer? A decorator? Bad start...
+    public void bindUser(User currentUser) {
+        ButterKnife.inject(this, drawerHeader);
+        profileName.setText(currentUser.getName());
+        profileEmail.setText(currentUser.getUsername()+" [email]");
+        picasso.loadProfilePhoto(currentUser.getPhoto()).into(profileAvatar);
     }
 
     public interface OnNavDrawerItemClickedListener {
