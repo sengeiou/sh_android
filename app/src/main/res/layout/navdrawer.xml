@@ -15,7 +15,7 @@
         <FrameLayout android:id="@+id/navdrawer_header"
           android:layout_width="match_parent"
           android:foreground="?selectableItemBackground"
-          android:layout_height="140dp">
+          android:layout_height="164dp">
 
             <ImageView android:id="@+id/navdrawer_profile_background"
               android:layout_width="match_parent"
