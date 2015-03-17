@@ -4,14 +4,18 @@ import android.view.ViewGroup;
 import com.shootr.android.ui.ViewContainerDecorator;
 import java.util.List;
 
-public abstract class BaseDecoratedActivity extends BaseActivity{
+public abstract class BaseDecoratedActivity extends BaseActivity {
+
+    private ViewGroup decoratedContent;
 
     @Override protected ViewGroup getContentViewRoot() {
-        ViewGroup activityRoot = super.getContentViewRoot();
-        for (ViewContainerDecorator viewDecorator : getDecorators()) {
-            activityRoot = viewDecorator.decorateContainer(activityRoot);
+        if (decoratedContent == null) {
+            decoratedContent = super.getContentViewRoot();
+            for (ViewContainerDecorator viewDecorator : getDecorators()) {
+                decoratedContent = viewDecorator.decorateContainer(decoratedContent);
+            }
         }
-        return activityRoot;
+        return decoratedContent;
     }
 
     protected abstract List<ViewContainerDecorator> getDecorators();
