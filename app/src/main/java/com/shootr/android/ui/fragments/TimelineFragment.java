@@ -52,6 +52,7 @@ import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInterac
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -209,7 +210,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showEventTagInToolbar(String eventTag) {
-        ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle(eventTag);
+        ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator().setTitle(eventTag);
     }
 
     @Subscribe
@@ -230,13 +231,6 @@ public class TimelineFragment extends BaseFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
-
-        //TODO change by drawerLayout, not the fragment itself
-        try {
-            ((BaseToolbarActivity) getActivity()).getSupportActionBar().setTitle("Timeline");
-        } catch (NullPointerException e) {
-            Timber.w("Activity null in TimelineFragment#onViewCreated()",e);
-        }
 
         // Header and footer
         footerView =

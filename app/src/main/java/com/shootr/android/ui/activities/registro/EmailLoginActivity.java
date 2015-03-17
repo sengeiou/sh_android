@@ -21,6 +21,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
+import com.shootr.android.ui.activities.TimelineActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -79,7 +80,7 @@ public class EmailLoginActivity extends BaseToolbarActivity {
         sessionRepository.createSession(user.getIdUser(), userEntity.getSessionToken(), user); //TODO quitar token del User
         // Launch main activity, and destroy the stack trace
         finish();
-        Intent i = new Intent(this,MainActivity.class);
+        Intent i = new Intent(this,TimelineActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
