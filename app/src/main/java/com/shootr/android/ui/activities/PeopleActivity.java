@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.NavigationDrawerDecorator;
 import com.shootr.android.ui.adapters.PeopleAdapter;
@@ -83,6 +84,13 @@ public class PeopleActivity extends BaseNavDrawerToolbarActivity implements Peop
         presenter.pause();
     }
 
+    @OnItemClick(R.id.userlist_list)
+    public void openUserProfile(int position) {
+        // TODO not going through the presenter? You naughty boy...
+        UserModel user = getPeopleAdapter().getItem(position);
+        startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()),
+          REQUEST_REFRESH_DATA_WHEN_RETURNS);
+    }
 
     private void findFriends() {
         // TODO not going through the presenter? You naughty boy...
