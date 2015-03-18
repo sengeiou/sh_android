@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.domain.User;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -192,11 +193,16 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     }
 
     //TODO ummm using a domain object in presentation layer? A decorator? Bad start...
-    public void bindUser(User currentUser) {
+    public void bindUser(final User currentUser) {
         ButterKnife.inject(this, drawerHeader);
         profileName.setText(currentUser.getName());
         profileEmail.setText(currentUser.getUsername()+" [email]");
         picasso.loadProfilePhoto(currentUser.getPhoto()).into(profileAvatar);
+        drawerHeader.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                activity.startActivity(ProfileContainerActivity.getIntent(activity, currentUser.getIdUser()));
+            }
+        });
     }
 
     public interface OnNavDrawerItemClickedListener {
