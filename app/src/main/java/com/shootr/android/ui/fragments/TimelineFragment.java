@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.data.bus.Main;
@@ -103,6 +104,7 @@ public class TimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_new_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.exit_event_fab) FloatingActionButton exitEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_drafts) View draftsButton;
@@ -258,6 +260,11 @@ public class TimelineFragment extends BaseFragment
                 new ListViewScrollObserver.OnListViewScrollListener() {
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                        if (delta < -10) {
+                            exitEventFab.hide();
+                        } else if(delta > 10) {
+                            exitEventFab.show();
+                        }
                     }
 
                     @Override
@@ -435,6 +442,10 @@ public class TimelineFragment extends BaseFragment
         startActivityForResult(intent, REQUEST_SELECT_EVENT);
     }
 
+    @OnClick(R.id.exit_event_fab)
+    public void exitEvent() {
+        Toast.makeText(getActivity(), "exit", Toast.LENGTH_SHORT).show();
+    }
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
