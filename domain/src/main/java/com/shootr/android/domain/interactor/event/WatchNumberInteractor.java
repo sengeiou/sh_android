@@ -18,6 +18,7 @@ import javax.inject.Inject;
  */
 public class WatchNumberInteractor implements Interactor{
 
+    public static final int NO_EVENT = -1;
     private EventsWatchedCountInteractor.Callback callback;
     private InteractorErrorCallback errorCallback;
 
@@ -45,6 +46,7 @@ public class WatchNumberInteractor implements Interactor{
     @Override public void execute() throws Throwable {
         Long currentVisibleEventId = getCurrentVisibleEventId();
         if (currentVisibleEventId == null) {
+            notifyLoaded(NO_EVENT);
             return;
         }
         List<User> peopleAndMe = getPeopleAndMe();

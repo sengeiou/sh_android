@@ -48,12 +48,20 @@ public class WatchNumberPresenter implements Presenter {
 
     public void onNumberReceived(Integer count) {
         peopleWatchingCount = count;
-        watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
+        setViewWathingCount();
     }
 
     public void menuCreated() {
         if (peopleWatchingCount != null) {
+            setViewWathingCount();
+        }
+    }
+
+    private void setViewWathingCount() {
+        if (peopleWatchingCount != WatchNumberInteractor.NO_EVENT) {
             watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
+        } else {
+            watchingRequestView.hideWatchingPeopleCount();
         }
     }
 

@@ -124,6 +124,7 @@ public class TimelineFragment extends BaseFragment
     private BadgeDrawable badgeDrawable;
     private String newShotPlaceholder;
     private PhotoPickerController photoPickerController;
+    private MenuItem watchersMenuItem;
 
 
      /* ---- Lifecycle methods ---- */
@@ -388,18 +389,22 @@ public class TimelineFragment extends BaseFragment
         setBadgeCount(count);
     }
 
+    @Override public void hideWatchingPeopleCount() {
+        watchersMenuItem.setVisible(false);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.timeline, menu);
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem menuItem = menu.findItem(R.id.menu_info);
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        watchersMenuItem = menu.findItem(R.id.menu_info);
+        watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
         icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
         setBadgeIcon(getActivity(), icon, 0);
-        menuItem.setIcon(icon);
-        menuItem.getIcon();
+        watchersMenuItem.setIcon(icon);
+        watchersMenuItem.getIcon();
         watchNumberPresenter.menuCreated();
     }
 
@@ -644,6 +649,7 @@ public class TimelineFragment extends BaseFragment
     private void setBadgeCount(int count) {
         if (badgeDrawable != null) {
             badgeDrawable.setCount(count);
+            watchersMenuItem.setVisible(true);
         } else {
             getActivity().invalidateOptionsMenu();
         }
