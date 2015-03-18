@@ -30,19 +30,6 @@
 
         <include layout="@layout/fragment_timeline_empty" />
 
-        <com.melnykov.fab.FloatingActionButton
-          android:id="@+id/select_event_fab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom|right"
-          android:layout_marginRight="16dp"
-          android:layout_marginBottom="16dp"
-          android:src="@drawable/ic_action_watching_white"
-          fab:fab_colorNormal="@color/primary"
-          fab:fab_colorPressed="@color/primary_dark"
-          fab:fab_colorRipple="@color/primary_disabled"
-          fab:fab_shadow="true" />
-
         <View
           android:layout_width="match_parent"
           android:layout_height="4dp"

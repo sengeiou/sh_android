@@ -32,7 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.data.bus.Main;
@@ -52,6 +51,7 @@ import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInterac
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
@@ -61,7 +61,6 @@ import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -104,7 +103,6 @@ public class TimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_new_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.select_event_fab) FloatingActionButton selectEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_drafts) View draftsButton;
@@ -210,7 +208,14 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showEventTagInToolbar(String eventTag) {
-        ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator().setTitle(eventTag);
+        ToolbarDecorator toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
+        toolbarDecorator.setTitle(eventTag);
+        toolbarDecorator.showDropdownIcon(true);
+        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                selectEvent();
+            }
+        });
     }
 
     @Subscribe
@@ -253,11 +258,6 @@ public class TimelineFragment extends BaseFragment
                 new ListViewScrollObserver.OnListViewScrollListener() {
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                        if (delta < -10) {
-                            selectEventFab.hide();
-                        } else if(delta > 10) {
-                            selectEventFab.show();
-                        }
                     }
 
                     @Override
@@ -430,7 +430,6 @@ public class TimelineFragment extends BaseFragment
         loadInitialTimeline();
     }
 
-    @OnClick(R.id.select_event_fab)
     public void selectEvent() {
         Intent intent = new Intent(getActivity(), EventsListActivity.class);
         startActivityForResult(intent, REQUEST_SELECT_EVENT);
