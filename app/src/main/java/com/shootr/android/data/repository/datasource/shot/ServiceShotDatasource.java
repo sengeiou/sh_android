@@ -5,6 +5,7 @@ import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,10 +16,14 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     private final ShootrService shootrService;
     private final BusPublisher busPublisher;
+    private final SessionRepository sessionRepository;
+    private long lastTriggerDate;
 
-    @Inject public ServiceShotDatasource(ShootrService shootrService, BusPublisher busPublisher) {
+    @Inject public ServiceShotDatasource(ShootrService shootrService, BusPublisher busPublisher,
+      SessionRepository sessionRepository) {
         this.shootrService = shootrService;
         this.busPublisher = busPublisher;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override public ShotEntity putShot(ShotEntity shotEntity) {
@@ -55,11 +60,20 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     private void notifySyncTrigger(List<ShotEntity> newShots) {
+        long currentUserId = sessionRepository.getCurrentUserId();
         for (ShotEntity newShot : newShots) {
-            if (newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC || newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
+            if ((newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC
+              || newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW)
+              && isNewerThanLastTrigger(newShot)
+              && newShot.getIdUser() != currentUserId) {
                 busPublisher.post(new WatchUpdateRequest.Event());
+                lastTriggerDate = newShot.getCsysBirth().getTime();
                 break;
             }
         }
+    }
+
+    private boolean isNewerThanLastTrigger(ShotEntity newShot) {
+        return newShot.getCsysBirth().getTime() > lastTriggerDate;
     }
 }
