@@ -517,6 +517,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void startRetrieveOldShotsTimeLineJob(){
+        footerProgress.setVisibility(View.VISIBLE);
         getOlderMainTimelineInteractor.loadOlderMainTimeline(oldestShotDate(),
           new GetOlderMainTimelineInteractor.Callback() {
               @Override public void onLoaded(Timeline timeline) {
