@@ -98,6 +98,7 @@ public class SyncWatchRepository implements WatchRepository, SyncableRepository,
             WatchEntity remoteWatchEntity = remoteWatchDataSource.putWatch(currentOrNewWatchEntity);
             markEntitySynchronized(remoteWatchEntity);
             localWatchDataSource.putWatch(remoteWatchEntity);
+            cachedWatchDataSource.putWatch(remoteWatchEntity);
             return watchEntityMapper.transform(remoteWatchEntity, watch.getUser());
         } catch (ServerCommunicationException e) {
             queueUpload(currentOrNewWatchEntity, e);

@@ -595,7 +595,6 @@ public class TimelineFragment extends BaseFragment
         if (shots != null && !shots.isEmpty()) {
             adapter.setShots(shots);
             setEmpty(false);
-            loadMoreShotsIfNeeded();
         } else {
             setEmpty(true);
             Timber.i("No shots received");
