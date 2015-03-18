@@ -44,6 +44,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.interactor.event.ExitEventInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
@@ -99,6 +100,7 @@ public class TimelineFragment extends BaseFragment
     @Inject GetMainTimelineInteractor getMainTimelineInteractor;
     @Inject RefreshMainTimelineInteractor refreshMainTimelineInteractor;
     @Inject GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
+    @Inject ExitEventInteractor exitEventInteractor;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -196,14 +198,16 @@ public class TimelineFragment extends BaseFragment
         watchNumberPresenter.pause();
     }
 
-    private void loadEventPlaceholder() {
+    private void loadEventTitle() {
         visibleEventInfoInteractor.obtainVisibleEventInfo(new VisibleEventInfoInteractor.Callback() {
             @Override public void onLoaded(EventInfo eventInfo) {
                 Event event = eventInfo.getEvent();
                 if (event != null) {
                     showEventTagInToolbar(event.getTag());
+                    exitEventFab.setVisibility(View.VISIBLE);
                 } else {
                     showEventTagInToolbar(getString(R.string.timeline_hall_title));
+                    exitEventFab.setVisibility(View.GONE);
                 }
             }
         });
@@ -277,9 +281,7 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadInitialTimeline();
-        watchNumberPresenter.initialize(this);
-        loadEventPlaceholder();
+        loadInterfaceForCurrentEvent();
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
           .withHandler(new PhotoPickerController.Handler() {
               @Override public void onSelected(File imageFile) {
@@ -298,6 +300,12 @@ public class TimelineFragment extends BaseFragment
           })
           .build();
         updateDraftsButtonVisibility();
+    }
+
+    private void loadInterfaceForCurrentEvent() {
+        loadEventTitle();
+        loadInitialTimeline();
+        watchNumberPresenter.initialize(this);
     }
 
     private void updateDraftsButtonVisibility() {
@@ -432,7 +440,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void onEventChanged() {
-        this.loadEventPlaceholder();
+        this.loadEventTitle();
         watchNumberPresenter.initialize(this);
         loadInitialTimeline();
     }
@@ -444,7 +452,11 @@ public class TimelineFragment extends BaseFragment
 
     @OnClick(R.id.exit_event_fab)
     public void exitEvent() {
-        Toast.makeText(getActivity(), "exit", Toast.LENGTH_SHORT).show();
+        exitEventInteractor.exitEvent(new ExitEventInteractor.Callback() {
+            @Override public void onLoaded() {
+                loadInterfaceForCurrentEvent();
+            }
+        });
     }
 
     @OnClick(R.id.timeline_new_text)
