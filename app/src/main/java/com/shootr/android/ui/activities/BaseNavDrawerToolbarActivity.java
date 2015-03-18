@@ -28,6 +28,11 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
         navigationDrawerDecorator.fadeInContent();
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        updateUserProfileInfo();
+    }
+
     @Override protected List<ViewContainerDecorator> getDecorators() {
         navigationDrawerDecorator = new NavigationDrawerDecorator(this, picasso, getNavDrawerItemId());
         toolbarDecorator = new ToolbarDecorator(this);
@@ -56,6 +61,9 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
                 finish();
             }
         });
+    }
+
+    private void updateUserProfileInfo() {
         navigationDrawerDecorator.bindUser(sessionRepository.getCurrentUser());
     }
 
