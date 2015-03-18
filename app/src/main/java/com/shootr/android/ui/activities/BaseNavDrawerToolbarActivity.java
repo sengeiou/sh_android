@@ -43,7 +43,6 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
 
     private void setupDecorators() {
         toolbarDecorator.bindActionbar(this);
-        toolbarDecorator.setTitle(R.string.drawer_timeline_title);
 
         navigationDrawerDecorator.bindToolbar(toolbarDecorator.getToolbar());
         navigationDrawerDecorator.setNavDrawerItemClickListener(new NavigationDrawerDecorator.OnNavDrawerItemClickedListener() {
