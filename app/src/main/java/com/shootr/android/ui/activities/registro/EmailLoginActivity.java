@@ -33,7 +33,6 @@ import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.loginregister.LoginResultEvent;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
-import com.shootr.android.ui.activities.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

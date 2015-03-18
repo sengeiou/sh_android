@@ -84,13 +84,13 @@
         <activity android:name=".ui.activities.ProfileContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.TimelineActivity" />
         </activity>
 
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.TimelineActivity" />
         </activity>
 
         <activity
@@ -100,7 +100,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.TimelineActivity" />
         </activity>
 
         <activity
@@ -110,7 +110,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.TimelineActivity" />
         </activity>
 
         <activity
@@ -141,11 +141,11 @@
 
         <activity
           android:name="com.shootr.android.ui.activities.ShotDetailActivity"
-          android:parentActivityName="com.shootr.android.ui.activities.MainActivity"
+          android:parentActivityName="com.shootr.android.ui.activities.TimelineActivity"
           >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.TimelineActivity" />
         </activity>
 
         <activity

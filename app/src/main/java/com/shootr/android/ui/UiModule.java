@@ -6,7 +6,6 @@ import com.shootr.android.ui.activities.EditStatusActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
-import com.shootr.android.ui.activities.MainActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.activities.PeopleActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -36,7 +35,6 @@ import javax.inject.Singleton;
                 // Every single activity extending BaseActivity, sadly
                 BaseToolbarActivity.class,
                 WelcomeLoginActivity.class,
-                MainActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,
