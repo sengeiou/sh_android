@@ -202,6 +202,10 @@ public class TimelineFragment extends BaseFragment
     private void loadEventTitle() {
         visibleEventInfoInteractor.obtainVisibleEventInfo(new VisibleEventInfoInteractor.Callback() {
             @Override public void onLoaded(EventInfo eventInfo) {
+                if (!isAdded()) {
+                    Timber.d("Callback received but fragment not added");
+                    return;
+                }
                 Event event = eventInfo.getEvent();
                 if (event != null) {
                     showEventTagInToolbar(event.getTag());
@@ -312,6 +316,10 @@ public class TimelineFragment extends BaseFragment
     private void updateDraftsButtonVisibility() {
         getDraftsInteractor.loadDrafts(new GetDraftsInteractor.Callback() {
             @Override public void onLoaded(List<QueuedShot> drafts) {
+                if (!isAdded()) {
+                    Timber.d("Callback received but fragment not added");
+                    return;
+                }
                 if (!drafts.isEmpty()) {
                     showDraftsButton();
                 } else {
@@ -459,6 +467,10 @@ public class TimelineFragment extends BaseFragment
     public void exitEvent() {
         exitEventInteractor.exitEvent(new ExitEventInteractor.Callback() {
             @Override public void onLoaded() {
+                if (!isAdded()) {
+                    Timber.d("Callback received but fragment not added");
+                    return;
+                }
                 loadInterfaceForCurrentEvent();
             }
         });
@@ -521,6 +533,10 @@ public class TimelineFragment extends BaseFragment
         getOlderMainTimelineInteractor.loadOlderMainTimeline(oldestShotDate(),
           new GetOlderMainTimelineInteractor.Callback() {
               @Override public void onLoaded(Timeline timeline) {
+                  if (!isAdded()) {
+                      Timber.d("Callback received but fragment not added");
+                      return;
+                  }
                   isLoadingMore = false;
                   List<Shot> shots = timeline.getShots();
                   int olderShotsSize = shots.size();
@@ -543,6 +559,10 @@ public class TimelineFragment extends BaseFragment
     private void startRetrieveNewShotsTimeLineJob() {
         refreshMainTimelineInteractor.refreshMainTimeline(new RefreshMainTimelineInteractor.Callback() {
             @Override public void onLoaded(Timeline timeline) {
+                if (!isAdded()) {
+                    Timber.d("Callback received but fragment not added");
+                    return;
+                }
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
                 List<Shot> shots = timeline.getShots();
@@ -584,6 +604,10 @@ public class TimelineFragment extends BaseFragment
         swipeRefreshLayout.setRefreshing(true);
         getMainTimelineInteractor.loadMainTimeline(new GetMainTimelineInteractor.Callback() {
             @Override public void onLoaded(Timeline timeline) {
+                if (!isAdded()) {
+                    Timber.d("Callback received but fragment not added");
+                    return;
+                }
                 List<Shot> shots = timeline.getShots();
                 List<ShotModel> shotModels = shotModelMapper.transform(shots);
                 showTimeline(shotModels);
