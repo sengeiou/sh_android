@@ -170,6 +170,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         ArrayList<ShotModel> newShotList = new ArrayList<>(shotModels);
         newShotList.addAll(this.shots);
         this.shots = newShotList;
+        notifyDataSetChanged();
+    }
+
+    public ShotModel getLastShot() {
+        return shots.get(shots.size() - 1);
     }
 
     public static class ViewHolder {

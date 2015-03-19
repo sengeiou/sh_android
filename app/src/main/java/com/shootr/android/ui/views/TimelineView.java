@@ -1,0 +1,18 @@
+package com.shootr.android.ui.views;
+
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.views.base.LoadDataView;
+import java.util.List;
+
+public interface TimelineView extends LoadDataView{
+
+    void setShots(List<ShotModel> shots);
+
+    void addNewShots(List<ShotModel> newShots);
+
+    void addOldShots(List<ShotModel> oldShots);
+
+    void showLoadingOldShots();
+
+    void hideLoadingOldShots();
+}
