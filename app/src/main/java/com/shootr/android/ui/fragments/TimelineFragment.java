@@ -125,6 +125,20 @@ public class TimelineFragment extends BaseFragment
     private String newShotPlaceholder;
     private PhotoPickerController photoPickerController;
     private MenuItem watchersMenuItem;
+    private Handler pollShotsHanlder = new Handler();
+    private Runnable pollShotsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!shouldPoll) {
+                return;
+            }
+            Context context = getActivity();
+            if (context != null) {
+                startRetrieveNewShotsTimeLineJob();
+            }
+            pollShots();
+        }
+    };
 
 
      /* ---- Lifecycle methods ---- */
@@ -157,23 +171,12 @@ public class TimelineFragment extends BaseFragment
 
     private void stopPollingShots() {
         shouldPoll = false;
+        pollShotsHanlder.removeCallbacks(pollShotsRunnable);
     }
 
     private void pollShots() {
         if (shouldPoll) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!shouldPoll){
-                        return;
-                    }
-                    Context context = getActivity();
-                    if (context != null) {
-                        startRetrieveNewShotsTimeLineJob();
-                    }
-                    pollShots();
-                }
-            }, REFRESH_INTERVAL_MILLISECONDS);
+            pollShotsHanlder.postDelayed(pollShotsRunnable, REFRESH_INTERVAL_MILLISECONDS);
         }
     }
 
