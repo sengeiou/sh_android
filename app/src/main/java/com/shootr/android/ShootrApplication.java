@@ -54,7 +54,7 @@ public class ShootrApplication extends Application {
      * @throws IllegalArgumentException  if the runtime type of {@code instance} is
      *     not one of this object graph's {@link dagger.Module#injects injectable types}.
      */
-    public void inject(Object o) {
+    public <T> void inject(T o) {
         objectGraph.inject(o);
     }
 
