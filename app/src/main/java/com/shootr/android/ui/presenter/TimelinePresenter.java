@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
@@ -14,7 +15,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelinePresenter implements Presenter, ShotSent.Receiver {
+public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventChanged.Receiver {
 
     private final GetMainTimelineInteractor getMainTimelineInteractor;
     private final RefreshMainTimelineInteractor refreshMainTimelineInteractor;
@@ -109,5 +110,10 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     @Subscribe
     @Override public void onShotSent(ShotSent.Event event) {
         refresh();
+    }
+
+    @Subscribe
+    @Override public void onEventChanged(EventChanged.Event event) {
+        loadMainTimeline();
     }
 }

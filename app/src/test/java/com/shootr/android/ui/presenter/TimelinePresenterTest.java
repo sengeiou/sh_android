@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
@@ -36,6 +37,7 @@ public class TimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
+    private static final EventChanged.Event EVENT_CHANGED_EVENT = null;
 
     @Mock TimelineView timelineView;
     @Mock GetMainTimelineInteractor getMainTimelineInteractor;
@@ -45,6 +47,7 @@ public class TimelinePresenterTest {
 
     private TimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
+    private EventChanged.Receiver eventChangedReceiver;
 
     @Before
     public void setUp() throws Exception {
@@ -55,6 +58,7 @@ public class TimelinePresenterTest {
           shotModelMapper, bus);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
+        eventChangedReceiver = presenter;
     }
 
     //region Get main timeline
@@ -194,7 +198,8 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(),
+          any(GetOlderMainTimelineInteractor.Callback.class));
     }
 
     @Test
@@ -205,10 +210,26 @@ public class TimelinePresenterTest {
     }
 
     @Test
-    public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
+    public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
+        presenter.onEventChanged(EVENT_CHANGED_EVENT);
+
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+    }
+
+    @Test
+    public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
 
         Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Event.class);
+        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
+        assertThat(annotationPresent).isTrue();
+    }
+
+    @Test
+    public void shouldEventChangedReceiverHaveSubscribeAnnotation() throws Exception {
+        String receiverMethodName = EventChanged.Receiver.class.getDeclaredMethods()[0].getName();
+
+        Method receiverDeclaredMethod = eventChangedReceiver.getClass().getMethod(receiverMethodName, EventChanged.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
