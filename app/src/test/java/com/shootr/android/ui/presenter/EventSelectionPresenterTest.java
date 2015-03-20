@@ -83,6 +83,16 @@ public class EventSelectionPresenterTest {
         assertThat(newEventId).isEqualTo(EVENT_ID);
     }
 
+    @Test
+    public void shouldUpdateEventTitleWhenEventSelected() throws Exception {
+        setupSelectEventInteractorCallbacksVisibleEventWatch();
+        setupVisibleEventInteractorCallbacks(visibleEventInfo());
+
+        presenter.onEventSelected(EVENT_ID);
+
+        verify(eventSelectionView).showCurrentEventTitle(anyString());
+    }
+
     private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

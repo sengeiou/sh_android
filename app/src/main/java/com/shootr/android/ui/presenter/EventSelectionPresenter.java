@@ -59,6 +59,7 @@ public class EventSelectionPresenter implements Presenter{
     }
 
     private void onEventChanged(Long idEvent) {
+        loadCurrentEventTitle();
         notifyEventChanged(idEvent);
     }
 
