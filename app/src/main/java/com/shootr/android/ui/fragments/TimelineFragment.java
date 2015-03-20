@@ -24,14 +24,18 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
+import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.presenter.EventSelectionPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
+import com.shootr.android.ui.views.EventSelectionView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
@@ -42,11 +46,12 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TimelineFragment extends BaseFragment implements TimelineView, NewShotBarView {
+public class TimelineFragment extends BaseFragment implements TimelineView, NewShotBarView, EventSelectionView {
 
     private static final int REQUEST_NEW_SHOT = 1;
 
     //region Fields
+    @Inject EventSelectionPresenter eventSelectionPresenter;
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject PicassoWrapper picasso;
@@ -66,6 +71,8 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
     private PhotoPickerController photoPickerController;
+
+    private ToolbarDecorator toolbarDecorator;
     //endregion
 
     //region Lifecycle methods
@@ -88,6 +95,7 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeToolbar();
         initializePresenters();
     }
 
@@ -108,9 +116,15 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     }
     //endregion
 
+    private void initializeToolbar() {
+        //TODO So coupling. Much bad. Such ugly.
+        toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
+    }
+
     private void initializePresenters() {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
+        eventSelectionPresenter.initialize(this);
     }
 
     //region Views manipulation
@@ -313,6 +327,14 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
             }
         });
         set.start();
+    }
+
+    @Override public void showCurrentEventTitle(String eventTitle) {
+        toolbarDecorator.setTitle(eventTitle);
+    }
+
+    @Override public void showHallTitle() {
+        toolbarDecorator.setTitle(getString(R.string.timeline_hall_title));
     }
     //endregion
 }
