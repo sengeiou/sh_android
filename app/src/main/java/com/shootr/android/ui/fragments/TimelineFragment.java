@@ -64,7 +64,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, EventSelectionView, WatchingRequestView {
+  implements TimelineView, NewShotBarView, EventSelectionView, WatchNumberView{
 
     private static final int REQUEST_NEW_SHOT = 1;
     private static final int REQUEST_SELECT_EVENT = 2;
