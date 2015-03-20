@@ -6,12 +6,18 @@ import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -25,11 +31,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
-import com.shootr.android.domain.Watch;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
+import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -39,9 +44,12 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.EventSelectionPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
+import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.EventSelectionView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.ui.views.WatchingRequestView;
+import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -50,7 +58,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TimelineFragment extends BaseFragment implements TimelineView, NewShotBarView, EventSelectionView {
+public class TimelineFragment extends BaseFragment
+  implements TimelineView, NewShotBarView, EventSelectionView, WatchingRequestView {
 
     private static final int REQUEST_NEW_SHOT = 1;
     private static final int REQUEST_SELECT_EVENT = 2;
@@ -59,6 +68,8 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     @Inject EventSelectionPresenter eventSelectionPresenter;
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
+    @Inject WatchNumberPresenter watchNumberPresenter;
+
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
 
@@ -78,6 +89,8 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     private PhotoPickerController photoPickerController;
 
     private ToolbarDecorator toolbarDecorator;
+    private MenuItem watchersMenuItem;
+    private BadgeDrawable badgeDrawable;
     //endregion
 
     //region Lifecycle methods
@@ -100,6 +113,7 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
         initializeToolbar();
         initializePresenters();
     }
@@ -110,6 +124,31 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
             eventSelectionPresenter.onEventSelected(idEventSelected);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.timeline, menu);
+        menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        watchersMenuItem = menu.findItem(R.id.menu_info);
+        watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
+        icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+        setBadgeIcon(getActivity(), icon, 0);
+        watchersMenuItem.setIcon(icon);
+        watchersMenuItem.getIcon();
+        watchNumberPresenter.menuCreated();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_info:
+                startActivity(new Intent(getActivity(), EventDetailActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -141,6 +180,31 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
         eventSelectionPresenter.initialize(this);
+        watchNumberPresenter.initialize(this);
+    }
+
+    public void setBadgeIcon(Context context, LayerDrawable icon, int count) {
+        // Reuse drawable if possible
+        if (badgeDrawable == null) {
+            Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+            if (reuse != null && reuse instanceof BadgeDrawable) {
+                badgeDrawable = (BadgeDrawable) reuse;
+            } else {
+                badgeDrawable = new BadgeDrawable(context);
+            }
+        }
+        setBadgeCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, badgeDrawable);
+    }
+
+    private void setBadgeCount(int count) {
+        if (badgeDrawable != null) {
+            badgeDrawable.setCount(count);
+            watchersMenuItem.setVisible(true);
+        } else {
+            getActivity().invalidateOptionsMenu();
+        }
     }
 
     //region Views manipulation
@@ -370,5 +434,15 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     @Override public void hideExitButton() {
         exitEventFab.setVisibility(View.GONE);
     }
+
+    @Override
+    public void setWatchingPeopleCount(Integer count) {
+        setBadgeCount(count);
+    }
+
+    @Override public void hideWatchingPeopleCount() {
+        watchersMenuItem.setVisible(false);
+    }
+
     //endregion
 }
