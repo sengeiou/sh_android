@@ -67,6 +67,10 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
 
     @Subscribe
     @Override public void onEventChanged(EventChanged.Event event) {
-        retrieveData();
+        if (event.getNewEventId() != null) {
+            retrieveData();
+        } else {
+            watchNumberView.hideWatchingPeopleCount();
+        }
     }
 }

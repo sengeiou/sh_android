@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 public class WatchNumberPresenterTest {
@@ -29,8 +30,8 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_1_PERSON = 1;
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
-    public static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
-    private static final EventChanged.Event EVENT_CHANGED_EVENT = null;
+    private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
+    private static final Long EVENT_ID = 3L;
 
     @Mock WatchNumberInteractor watchNumberInteractor;
     @Mock Bus bus;
@@ -101,9 +102,18 @@ public class WatchNumberPresenterTest {
 
     @Test
     public void shouldLoadWatchNumberWhenEventChanged() throws Exception {
-        eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
+        eventChangedReceiver.onEventChanged(eventChangedEvent());
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+    }
+
+    @Test
+    public void shouldHideWatchNumberWhenExitEventReceivedAlthougInteractorHasntCallback() throws Exception {
+        doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+
+        eventChangedReceiver.onEventChanged(exitEventEvent());
+
+        verify(watchNumberView).hideWatchingPeopleCount();
     }
 
     @Test
@@ -124,6 +134,13 @@ public class WatchNumberPresenterTest {
         assertThat(annotationPresent).isTrue();
     }
 
+    private EventChanged.Event eventChangedEvent() {
+        return new EventChanged.Event(EVENT_ID);
+    }
+
+    private EventChanged.Event exitEventEvent() {
+        return new EventChanged.Event(null);
+    }
 
     private void setupWatchNumberInteractorCallbacks(final Integer count) {
         doAnswer(new Answer() {
