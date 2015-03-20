@@ -8,6 +8,7 @@ import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteract
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.TimelineView;
+import com.squareup.otto.Bus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,13 +31,16 @@ import static org.mockito.Mockito.verify;
 public class TimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
+    private static final ShotSent.Event SHOT_SENT_EVENT = null;
 
     @Mock TimelineView timelineView;
     @Mock GetMainTimelineInteractor getMainTimelineInteractor;
     @Mock RefreshMainTimelineInteractor refreshMainTimelineInteractor;
     @Mock GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
+    @Mock Bus bus;
 
     private TimelinePresenter presenter;
+    private ShotSent.Receiver shotSentReceiver;
 
     @Before
     public void setUp() throws Exception {
@@ -44,8 +48,9 @@ public class TimelinePresenterTest {
         ShotModelMapper shotModelMapper = new ShotModelMapper();
         presenter = new TimelinePresenter(getMainTimelineInteractor, refreshMainTimelineInteractor,
           getOlderMainTimelineInteractor,
-          shotModelMapper);
+          shotModelMapper, bus);
         presenter.setView(timelineView);
+        shotSentReceiver = presenter;
     }
 
     //region Get main timeline
@@ -186,6 +191,13 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
 
         verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), any(GetOlderMainTimelineInteractor.Callback.class));
+    }
+
+    @Test
+    public void shouldRefreshTimelineWhenShotSent() throws Exception {
+        shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
+
+        verify(refreshMainTimelineInteractor).refreshMainTimeline(any(RefreshMainTimelineInteractor.Callback.class));
     }
 
     private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {

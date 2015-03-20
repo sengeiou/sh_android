@@ -1,22 +1,26 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Shot;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.TimelineView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelinePresenter implements Presenter {
+public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private final GetMainTimelineInteractor getMainTimelineInteractor;
     private final RefreshMainTimelineInteractor refreshMainTimelineInteractor;
     private final GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
     private final ShotModelMapper shotModelMapper;
+    private final Bus bus;
 
     private TimelineView timelineView;
     private boolean isLoadingOlderShots;
@@ -24,11 +28,12 @@ public class TimelinePresenter implements Presenter {
 
     @Inject public TimelinePresenter(GetMainTimelineInteractor getMainTimelineInteractor,
       RefreshMainTimelineInteractor refreshMainTimelineInteractor,
-      GetOlderMainTimelineInteractor getOlderMainTimelineInteractor, ShotModelMapper shotModelMapper) {
+      GetOlderMainTimelineInteractor getOlderMainTimelineInteractor, ShotModelMapper shotModelMapper, @Main Bus bus) {
         this.getMainTimelineInteractor = getMainTimelineInteractor;
         this.refreshMainTimelineInteractor = refreshMainTimelineInteractor;
         this.getOlderMainTimelineInteractor = getOlderMainTimelineInteractor;
         this.shotModelMapper = shotModelMapper;
+        this.bus = bus;
     }
 
     protected void setView(TimelineView timelineView) {
@@ -94,10 +99,15 @@ public class TimelinePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        
+        bus.register(this);
     }
 
     @Override public void pause() {
+        bus.unregister(this);
+    }
 
+    @Subscribe
+    @Override public void onShotSent(ShotSent.Event event) {
+        refresh();
     }
 }
