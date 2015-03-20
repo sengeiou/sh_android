@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
@@ -9,6 +10,8 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
@@ -198,6 +202,15 @@ public class TimelinePresenterTest {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
         verify(refreshMainTimelineInteractor).refreshMainTimeline(any(RefreshMainTimelineInteractor.Callback.class));
+    }
+
+    @Test
+    public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
+        String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
+
+        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Event.class);
+        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
+        assertThat(annotationPresent).isTrue();
     }
 
     private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {

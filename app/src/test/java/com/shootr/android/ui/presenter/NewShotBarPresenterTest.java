@@ -2,9 +2,12 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.bus.ShotFailed;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -88,6 +92,16 @@ public class NewShotBarPresenterTest {
         presenter.resume();
 
         verify(newShotBarView).showDraftsButton();
+    }
+
+
+    @Test
+    public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
+        String receiverMethodName = ShotFailed.Receiver.class.getDeclaredMethods()[0].getName();
+
+        Method receiverDeclaredMethod = shotFailedReceiver.getClass().getMethod(receiverMethodName, ShotFailed.Event.class);
+        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
+        assertThat(annotationPresent).isTrue();
     }
 
     private List<QueuedShot> draftsList() {
