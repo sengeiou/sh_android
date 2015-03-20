@@ -248,6 +248,11 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
+    @OnClick(R.id.exit_event_fab)
+    public void exitEventClick() {
+        eventSelectionPresenter.exitEventClick();
+    }
+
     //region View methods
     @Override public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
@@ -356,6 +361,14 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     @Override public void openEventSelectionView() {
         Intent intent = new Intent(getActivity(), EventsListActivity.class);
         startActivityForResult(intent, REQUEST_SELECT_EVENT);
+    }
+
+    @Override public void showExitButton() {
+        exitEventFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideExitButton() {
+        exitEventFab.setVisibility(View.GONE);
     }
     //endregion
 }
