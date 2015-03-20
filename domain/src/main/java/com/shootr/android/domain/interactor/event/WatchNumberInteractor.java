@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class WatchNumberInteractor implements Interactor{
 
     public static final int NO_EVENT = -1;
-    private EventsWatchedCountInteractor.Callback callback;
+    private Callback callback;
     private InteractorErrorCallback errorCallback;
 
     private final InteractorHandler interactorHandler;
@@ -37,7 +37,7 @@ public class WatchNumberInteractor implements Interactor{
         this.remoteWatchRepository = remoteWatchRepository;
     }
 
-    public void loadWatchNumber(EventsWatchedCountInteractor.Callback callback, InteractorErrorCallback errorCallback) {
+    public void loadWatchNumber(Callback callback, InteractorErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);

@@ -211,7 +211,7 @@ public class TimelinePresenterTest {
 
     @Test
     public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
-        presenter.onEventChanged(EVENT_CHANGED_EVENT);
+        eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
 
         verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
     }

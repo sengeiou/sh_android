@@ -26,9 +26,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -48,14 +50,17 @@ import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.EventSelectionView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.TimelineView;
-import com.shootr.android.ui.views.WatchingRequestView;
+import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -90,7 +95,8 @@ public class TimelineFragment extends BaseFragment
 
     private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
-    private BadgeDrawable badgeDrawable;
+    private BadgeDrawable watchersBadgeDrawable;
+    private Integer watchNumberCount;
     //endregion
 
     //region Lifecycle methods
@@ -136,10 +142,10 @@ public class TimelineFragment extends BaseFragment
 
         LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
         icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
-        setBadgeIcon(getActivity(), icon, 0);
+        setupWatchNumberBadgeIcon(getActivity(), icon);
         watchersMenuItem.setIcon(icon);
         watchersMenuItem.getIcon();
-        watchNumberPresenter.menuCreated();
+        updateWatchNumberIcon();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -156,14 +162,17 @@ public class TimelineFragment extends BaseFragment
         super.onResume();
         timelinePresenter.resume();
         newShotBarPresenter.resume();
+        eventSelectionPresenter.resume();
+        watchNumberPresenter.resume();
     }
 
     @Override public void onPause() {
         super.onPause();
         timelinePresenter.pause();
         newShotBarPresenter.pause();
+        eventSelectionPresenter.pause();
+        watchNumberPresenter.pause();
     }
-    //endregion
 
     private void initializeToolbar() {
         //TODO So coupling. Much bad. Such ugly.
@@ -183,27 +192,30 @@ public class TimelineFragment extends BaseFragment
         watchNumberPresenter.initialize(this);
     }
 
-    public void setBadgeIcon(Context context, LayerDrawable icon, int count) {
+    //endregion
+
+    public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
         // Reuse drawable if possible
-        if (badgeDrawable == null) {
+        if (watchersBadgeDrawable == null) {
             Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
             if (reuse != null && reuse instanceof BadgeDrawable) {
-                badgeDrawable = (BadgeDrawable) reuse;
+                watchersBadgeDrawable = (BadgeDrawable) reuse;
             } else {
-                badgeDrawable = new BadgeDrawable(context);
+                watchersBadgeDrawable = new BadgeDrawable(context);
             }
         }
-        setBadgeCount(count);
         icon.mutate();
-        icon.setDrawableByLayerId(R.id.ic_badge, badgeDrawable);
+        icon.setDrawableByLayerId(R.id.ic_badge, watchersBadgeDrawable);
     }
 
-    private void setBadgeCount(int count) {
-        if (badgeDrawable != null) {
-            badgeDrawable.setCount(count);
-            watchersMenuItem.setVisible(true);
-        } else {
-            getActivity().invalidateOptionsMenu();
+    private void updateWatchNumberIcon() {
+        if (watchersBadgeDrawable != null && watchersMenuItem != null) {
+            if (watchNumberCount != null) {
+                watchersBadgeDrawable.setCount(watchNumberCount);
+                watchersMenuItem.setVisible(true);
+            } else {
+                watchersMenuItem.setVisible(false);
+            }
         }
     }
 
@@ -435,14 +447,14 @@ public class TimelineFragment extends BaseFragment
         exitEventFab.setVisibility(View.GONE);
     }
 
-    @Override
-    public void setWatchingPeopleCount(Integer count) {
-        setBadgeCount(count);
+    @Override public void showWatchingPeopleCount(Integer count) {
+        watchNumberCount = count;
+        updateWatchNumberIcon();
     }
 
     @Override public void hideWatchingPeopleCount() {
-        watchersMenuItem.setVisible(false);
+        watchNumberCount = null;
+        updateWatchNumberIcon();
     }
-
     //endregion
 }
