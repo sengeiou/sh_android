@@ -332,6 +332,11 @@ public class TimelineFragment extends BaseFragment
     //region View methods
     @Override public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
+        listView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideShots() {
+        listView.setVisibility(View.GONE);
     }
 
     @Override public void addNewShots(List<ShotModel> newShots) {

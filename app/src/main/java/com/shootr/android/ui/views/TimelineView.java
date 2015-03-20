@@ -8,6 +8,8 @@ public interface TimelineView extends LoadDataView{
 
     void setShots(List<ShotModel> shots);
 
+    void hideShots();
+
     void addNewShots(List<ShotModel> newShots);
 
     void addOldShots(List<ShotModel> oldShots);

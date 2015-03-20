@@ -121,6 +121,15 @@ public class TimelinePresenterTest {
         verify(timelineView).hideEmpty();
     }
 
+    @Test
+    public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadMainTimeline();
+
+        verify(timelineView).hideShots();
+    }
+
     //endregion
 
     //region Refresh main timeline
@@ -168,6 +177,7 @@ public class TimelinePresenterTest {
     }
     //endregion
 
+    //region Older shots
     @Test
     public void shouldLoadMoreShotsWhenLastShotVisiblePositionIsLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
@@ -201,7 +211,9 @@ public class TimelinePresenterTest {
         verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(),
           any(GetOlderMainTimelineInteractor.Callback.class));
     }
+    //endregion
 
+    //region Events
     @Test
     public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
@@ -233,6 +245,7 @@ public class TimelinePresenterTest {
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
+    //endregion
 
     private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer() {
