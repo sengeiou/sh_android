@@ -2,6 +2,10 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.bus.EventChanged;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.ui.views.EventSelectionView;
 import org.junit.Before;
@@ -14,6 +18,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -21,16 +26,19 @@ import static org.mockito.Mockito.verify;
 public class EventSelectionPresenterTest {
 
     private static final String EVENT_TAG = "tag";
+    private static final Long EVENT_ID = 1L;
 
     @Mock EventSelectionView eventSelectionView;
     @Mock VisibleEventInfoInteractor visibleEventInfoInteractor;
+    @Mock SelectEventInteractor selectEventInteractor;
+    @Mock BusPublisher busPublisher;
 
     private EventSelectionPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new EventSelectionPresenter(visibleEventInfoInteractor);
+        presenter = new EventSelectionPresenter(visibleEventInfoInteractor, selectEventInteractor, busPublisher);
         presenter.setView(eventSelectionView);
     }
 
@@ -61,6 +69,35 @@ public class EventSelectionPresenterTest {
         presenter.loadCurrentEventTitle();
 
         verify(eventSelectionView).showHallTitle();
+    }
+
+    @Test
+    public void shouldPostEventToBusPublisherWhenEventSelected() throws Exception {
+        setupSelectEventInteractorCallbacksVisibleEventWatch();
+
+        presenter.onEventSelected(EVENT_ID);
+
+        ArgumentCaptor<EventChanged.Event> captor = ArgumentCaptor.forClass(EventChanged.Event.class);
+        verify(busPublisher).post(captor.capture());
+        Long newEventId = captor.getValue().getNewEventId();
+        assertThat(newEventId).isEqualTo(EVENT_ID);
+    }
+
+    private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Long selectedEventId = (Long) invocation.getArguments()[0];
+                ((SelectEventInteractor.Callback) invocation.getArguments()[1]).onLoaded(visibleEventWatch(
+                  selectedEventId));
+                return null;
+            }
+        }).when(selectEventInteractor).selectEvent(anyLong(), any(SelectEventInteractor.Callback.class));
+    }
+
+    private Watch visibleEventWatch(Long selectedEventId) {
+        Watch watch = new Watch();
+        watch.setIdEvent(selectedEventId);
+        return watch;
     }
 
     private EventInfo noEventInfo() {

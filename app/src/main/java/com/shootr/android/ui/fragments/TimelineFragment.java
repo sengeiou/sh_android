@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,9 +25,12 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
+import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
@@ -49,6 +53,7 @@ import timber.log.Timber;
 public class TimelineFragment extends BaseFragment implements TimelineView, NewShotBarView, EventSelectionView {
 
     private static final int REQUEST_NEW_SHOT = 1;
+    private static final int REQUEST_SELECT_EVENT = 2;
 
     //region Fields
     @Inject EventSelectionPresenter eventSelectionPresenter;
@@ -100,7 +105,12 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        photoPickerController.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
+            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            eventSelectionPresenter.onEventSelected(idEventSelected);
+        } else {
+            photoPickerController.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override public void onResume() {
@@ -119,6 +129,12 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
     private void initializeToolbar() {
         //TODO So coupling. Much bad. Such ugly.
         toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
+        toolbarDecorator.showDropdownIcon(true);
+        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                eventSelectionPresenter.selectEventClick();
+            }
+        });
     }
 
     private void initializePresenters() {
@@ -224,7 +240,7 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
 
     @OnClick(R.id.timeline_new_image_camera)
     public void startNewShotWithPhoto() {
-       newShotBarPresenter.newShotFromImage();
+        newShotBarPresenter.newShotFromImage();
     }
 
     @OnClick(R.id.timeline_drafts)
@@ -335,6 +351,11 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
 
     @Override public void showHallTitle() {
         toolbarDecorator.setTitle(getString(R.string.timeline_hall_title));
+    }
+
+    @Override public void openEventSelectionView() {
+        Intent intent = new Intent(getActivity(), EventsListActivity.class);
+        startActivityForResult(intent, REQUEST_SELECT_EVENT);
     }
     //endregion
 }

@@ -5,4 +5,6 @@ public interface EventSelectionView {
     void showCurrentEventTitle(String eventTitle);
 
     void showHallTitle();
+
+    void openEventSelectionView();
 }
