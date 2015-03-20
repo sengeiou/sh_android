@@ -60,7 +60,7 @@ public class EventSelectionPresenterTest {
     public void shouldShowCurrentEventTagAsTitleWhenThereIsCurrentEvent() throws Exception {
         setupVisibleEventInteractorCallbacks(visibleEventInfo());
 
-        presenter.initialize(eventSelectionView);
+        presenter.loadCurrentEventTitle();
 
         ArgumentCaptor<String> titleCaptor = ArgumentCaptor.forClass(String.class);
         verify(eventSelectionView).showCurrentEventTitle(titleCaptor.capture());
@@ -121,6 +121,23 @@ public class EventSelectionPresenterTest {
         verify(eventSelectionView).showHallTitle();
     }
 
+    @Test
+    public void shouldShowExitButtonWhenThereIsCurrentEvent() throws Exception {
+        setupVisibleEventInteractorCallbacks(visibleEventInfo());
+
+        presenter.loadCurrentEventTitle();
+
+        verify(eventSelectionView).showExitButton();
+    }
+
+    @Test
+    public void shouldHideExitButtonWhenNoCurrentEvent() throws Exception {
+        setupVisibleEventInteractorCallbacks(noEventInfo());
+
+        presenter.loadCurrentEventTitle();
+
+        verify(eventSelectionView).hideExitButton();
+    }
 
     private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
         doAnswer(new Answer() {

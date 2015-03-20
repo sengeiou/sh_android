@@ -7,4 +7,8 @@ public interface EventSelectionView {
     void showHallTitle();
 
     void openEventSelectionView();
+
+    void showExitButton();
+
+    void hideExitButton();
 }

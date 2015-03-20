@@ -42,8 +42,10 @@ public class EventSelectionPresenter implements Presenter {
                 if (eventInfo.getEvent() != null) {
                     String visibleEventTag = eventInfo.getEvent().getTag();
                     eventSelectionView.showCurrentEventTitle(visibleEventTag);
+                    eventSelectionView.showExitButton();
                 } else {
                     eventSelectionView.showHallTitle();
+                    eventSelectionView.hideExitButton();
                 }
             }
         });
