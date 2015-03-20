@@ -95,6 +95,17 @@ public class TimelineFragment extends BaseFragment implements TimelineView, NewS
         photoPickerController.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        timelinePresenter.resume();
+        newShotBarPresenter.resume();
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        timelinePresenter.pause();
+        newShotBarPresenter.pause();
+    }
     //endregion
 
     private void initializePresenters() {

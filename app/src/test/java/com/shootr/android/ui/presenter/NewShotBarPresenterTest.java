@@ -1,8 +1,10 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.QueuedShot;
+import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.ui.views.NewShotBarView;
+import com.squareup.otto.Bus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,16 +21,21 @@ import static org.mockito.Mockito.verify;
 
 public class NewShotBarPresenterTest {
 
+    private static final ShotFailed.Event SHOT_FAILED_EVENT = null;
+
     @Mock GetDraftsInteractor getDraftsInteractor;
     @Mock NewShotBarView newShotBarView;
+    @Mock Bus bus;
 
     private NewShotBarPresenter presenter;
+    private ShotFailed.Receiver shotFailedReceiver;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new NewShotBarPresenter(getDraftsInteractor);
+        presenter = new NewShotBarPresenter(getDraftsInteractor, bus);
         presenter.setView(newShotBarView);
+        shotFailedReceiver = presenter;
     }
 
     @Test
@@ -54,6 +61,33 @@ public class NewShotBarPresenterTest {
         presenter.initialize(newShotBarView);
 
         verify(newShotBarView).hideDraftsButton();
+    }
+
+    @Test
+    public void shouldShowDraftsButtonWhenShotFailedEventReceived() throws Exception {
+        setupDraftsInteractorCallbacks(draftsList());
+
+        shotFailedReceiver.onShotFailed(SHOT_FAILED_EVENT);
+
+        verify(newShotBarView).showDraftsButton();
+    }
+
+    @Test
+    public void shouldHideDraftsButtonWhenResumedAndNoDraftsReturned() throws Exception {
+        setupDraftsInteractorCallbacks(emptyDraftsList());
+
+        presenter.resume();
+
+        verify(newShotBarView).hideDraftsButton();
+    }
+
+    @Test
+    public void shouldShowDraftsButtonWhenResumedAndDraftsReturned() throws Exception {
+        setupDraftsInteractorCallbacks(draftsList());
+
+        presenter.resume();
+
+        verify(newShotBarView).showDraftsButton();
     }
 
     private List<QueuedShot> draftsList() {
