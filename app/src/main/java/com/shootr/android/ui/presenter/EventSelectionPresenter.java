@@ -4,23 +4,26 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.EventChanged;
+import com.shootr.android.domain.interactor.event.ExitEventInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.ui.views.EventSelectionView;
 import javax.inject.Inject;
 
-public class EventSelectionPresenter implements Presenter{
+public class EventSelectionPresenter implements Presenter {
 
     private final VisibleEventInfoInteractor visibleEventInfoInteractor; //TODO might use a more lightweight interactor
     private final SelectEventInteractor selectEventInteractor;
+    private final ExitEventInteractor exitEventInteractor;
     private final BusPublisher busPublisher;
 
     private EventSelectionView eventSelectionView;
 
     @Inject public EventSelectionPresenter(VisibleEventInfoInteractor visibleEventInfoInteractor,
-      SelectEventInteractor selectEventInteractor, BusPublisher busPublisher) {
+      SelectEventInteractor selectEventInteractor, ExitEventInteractor exitEventInteractor, BusPublisher busPublisher) {
         this.visibleEventInfoInteractor = visibleEventInfoInteractor;
         this.selectEventInteractor = selectEventInteractor;
+        this.exitEventInteractor = exitEventInteractor;
         this.busPublisher = busPublisher;
     }
 
@@ -48,6 +51,14 @@ public class EventSelectionPresenter implements Presenter{
 
     public void selectEventClick() {
         eventSelectionView.openEventSelectionView();
+    }
+
+    public void exitEventClick() {
+        exitEventInteractor.exitEvent(new ExitEventInteractor.Callback() {
+            @Override public void onLoaded() {
+                onEventChanged(null);
+            }
+        });
     }
 
     public void onEventSelected(Long eventId) {

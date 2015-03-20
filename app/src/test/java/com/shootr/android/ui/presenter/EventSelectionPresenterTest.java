@@ -5,6 +5,7 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.EventChanged;
+import com.shootr.android.domain.interactor.event.ExitEventInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.ui.views.EventSelectionView;
@@ -31,6 +32,7 @@ public class EventSelectionPresenterTest {
     @Mock EventSelectionView eventSelectionView;
     @Mock VisibleEventInfoInteractor visibleEventInfoInteractor;
     @Mock SelectEventInteractor selectEventInteractor;
+    @Mock ExitEventInteractor exitEventInteractor;
     @Mock BusPublisher busPublisher;
 
     private EventSelectionPresenter presenter;
@@ -38,7 +40,10 @@ public class EventSelectionPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new EventSelectionPresenter(visibleEventInfoInteractor, selectEventInteractor, busPublisher);
+        presenter = new EventSelectionPresenter(visibleEventInfoInteractor,
+          selectEventInteractor,
+          exitEventInteractor,
+          busPublisher);
         presenter.setView(eventSelectionView);
     }
 
@@ -84,7 +89,7 @@ public class EventSelectionPresenterTest {
     }
 
     @Test
-    public void shouldUpdateEventTitleWhenEventSelected() throws Exception {
+    public void shouldShowCurrentEventTitleWhenEventSelected() throws Exception {
         setupSelectEventInteractorCallbacksVisibleEventWatch();
         setupVisibleEventInteractorCallbacks(visibleEventInfo());
 
@@ -92,6 +97,30 @@ public class EventSelectionPresenterTest {
 
         verify(eventSelectionView).showCurrentEventTitle(anyString());
     }
+
+    @Test
+    public void shouldPostEventToBusPublisherWhenExitEvent() throws Exception {
+        setupExitEventInteractorCallbacks();
+
+        presenter.exitEventClick();
+
+        ArgumentCaptor<EventChanged.Event> captor = ArgumentCaptor.forClass(EventChanged.Event.class);
+        verify(busPublisher).post(captor.capture());
+        Long newEventId = captor.getValue().getNewEventId();
+        assertThat(newEventId).isNull();
+    }
+
+
+    @Test
+    public void shouldshowHallTitleWhenExitEvent() throws Exception {
+        setupExitEventInteractorCallbacks();
+        setupVisibleEventInteractorCallbacks(noEventInfo());
+
+        presenter.exitEventClick();
+
+        verify(eventSelectionView).showHallTitle();
+    }
+
 
     private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
         doAnswer(new Answer() {
@@ -102,6 +131,15 @@ public class EventSelectionPresenterTest {
                 return null;
             }
         }).when(selectEventInteractor).selectEvent(anyLong(), any(SelectEventInteractor.Callback.class));
+    }
+
+    private void setupExitEventInteractorCallbacks() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((ExitEventInteractor.Callback) invocation.getArguments()[0]).onLoaded();
+                return null;
+            }
+        }).when(exitEventInteractor).exitEvent(any(ExitEventInteractor.Callback.class));
     }
 
     private Watch visibleEventWatch(Long selectedEventId) {
