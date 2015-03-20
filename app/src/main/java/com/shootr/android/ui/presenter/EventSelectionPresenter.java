@@ -41,14 +41,22 @@ public class EventSelectionPresenter implements Presenter {
             @Override public void onLoaded(EventInfo eventInfo) {
                 if (eventInfo.getEvent() != null) {
                     String visibleEventTag = eventInfo.getEvent().getTag();
-                    eventSelectionView.showCurrentEventTitle(visibleEventTag);
-                    eventSelectionView.showExitButton();
+                    showViewEventTimeline(visibleEventTag);
                 } else {
-                    eventSelectionView.showHallTitle();
-                    eventSelectionView.hideExitButton();
+                    showViewHall();
                 }
             }
         });
+    }
+
+    private void showViewEventTimeline(String visibleEventTag) {
+        eventSelectionView.showCurrentEventTitle(visibleEventTag);
+        eventSelectionView.showExitButton();
+    }
+
+    private void showViewHall() {
+        eventSelectionView.showHallTitle();
+        eventSelectionView.hideExitButton();
     }
 
     public void selectEventClick() {
@@ -72,7 +80,11 @@ public class EventSelectionPresenter implements Presenter {
     }
 
     private void onEventChanged(Long idEvent) {
-        loadCurrentEventTitle();
+        if (idEvent == null) {
+            showViewHall();
+        } else {
+            loadCurrentEventTitle();
+        }
         notifyEventChanged(idEvent);
     }
 

@@ -22,6 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 public class EventSelectionPresenterTest {
@@ -110,11 +111,20 @@ public class EventSelectionPresenterTest {
         assertThat(newEventId).isNull();
     }
 
-
     @Test
     public void shouldshowHallTitleWhenExitEvent() throws Exception {
         setupExitEventInteractorCallbacks();
         setupVisibleEventInteractorCallbacks(noEventInfo());
+
+        presenter.exitEventClick();
+
+        verify(eventSelectionView).showHallTitle();
+    }
+
+    @Test
+    public void shouldShowHallTitleWhenExitEventAlthoughEventInteractorHasntCallback() throws Exception {
+        doNothing().when(visibleEventInfoInteractor).obtainVisibleEventInfo(any(VisibleEventInfoInteractor.Callback.class));
+        setupExitEventInteractorCallbacks();
 
         presenter.exitEventClick();
 
