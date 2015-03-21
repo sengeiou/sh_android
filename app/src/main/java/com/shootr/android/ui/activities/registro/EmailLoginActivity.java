@@ -21,6 +21,8 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.ui.activities.TimelineActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
@@ -48,6 +50,8 @@ public class EmailLoginActivity extends BaseToolbarActivity {
     @Inject JobManager jobManager;
     @Inject @Main Bus bus;
     @Inject @Deprecated UserEntityMapper userEntityMapper;
+    @Inject GetPeopleInteractor getPeopleInteractor;
+
 
     @Inject SessionRepository sessionRepository;
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
@@ -77,6 +81,16 @@ public class EmailLoginActivity extends BaseToolbarActivity {
         Timber.d("Succesfuly logged in %s", user.getUsername());
         // Store user in current session
         sessionRepository.createSession(user.getIdUser(), userEntity.getSessionToken(), user); //TODO quitar token del User
+        getPeopleInteractor.obtainPeople();
+        goToTimeline();
+    }
+
+    @Subscribe
+    public void onPeopleLoaded(UserList userList){
+        goToTimeline();
+    }
+
+    private void goToTimeline() {
         // Launch main activity, and destroy the stack trace
         finish();
         Intent i = new Intent(this,TimelineActivity.class);
