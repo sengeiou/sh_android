@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import com.shootr.android.BuildConfig;
 import com.shootr.android.R;
 import com.shootr.android.domain.User;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -47,6 +49,7 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     private OnNavDrawerItemClickedListener clickListener;
     private Handler mainThreadHanlder;
     private ViewGroup decoratedContainer;
+    private TextView versionText;
 
     @InjectView(R.id.navdrawer_profile_name) TextView profileName;
     @InjectView(R.id.navdrawer_profile_email) TextView profileEmail;
@@ -67,6 +70,8 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         drawerHeader = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_header);
         navDrawerItemsListContainer = (ViewGroup) drawerLayout.findViewById(R.id.navdrawer_items_list);
         decoratedContainer = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_content);
+        versionText = (TextView) drawerLayout.findViewById(R.id.navdrawer_version);
+        versionText.setText(BuildConfig.VERSION_NAME);
         populateMenu();
         return decoratedContainer;
     }
