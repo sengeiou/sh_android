@@ -296,13 +296,17 @@ public class TimelineFragment extends BaseFragment
 
             @Override
             public void onScrollIdle() {
-                int lastItemPosition = listView.getAdapter().getCount() - 1;
-                int lastVisiblePosition = listView.getLastVisiblePosition();
-                if (lastItemPosition == lastVisiblePosition) {
-                    timelinePresenter.showingLastShot(adapter.getLastShot());
-                }
+                checkIfEndOfListVisible();
             }
         });
+    }
+
+    private void checkIfEndOfListVisible() {
+        int lastItemPosition = listView.getAdapter().getCount() - 1;
+        int lastVisiblePosition = listView.getLastVisiblePosition();
+        if (lastItemPosition == lastVisiblePosition) {
+            timelinePresenter.showingLastShot(adapter.getLastShot());
+        }
     }
 
     private void setupDraftButtonTransition() {

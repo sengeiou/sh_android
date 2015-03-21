@@ -11,10 +11,13 @@ public class BaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        injectDependenciesOnFirstAttach();
+    }
+
+    private void injectDependenciesOnFirstAttach() {
         if (mFistAttach) {
             ShootrApplication.get(getActivity()).inject(this);
             mFistAttach = false;
         }
     }
-
 }
