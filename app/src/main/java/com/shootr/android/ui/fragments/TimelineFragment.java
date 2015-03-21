@@ -38,7 +38,10 @@ import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
@@ -61,6 +64,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -248,6 +252,21 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
+        avatarClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                openProfile(position);
+            }
+        };
+
+        imageClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                openImage(position);
+            }
+        };
+
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
         listView.setAdapter(adapter);
     }
@@ -308,6 +327,28 @@ public class TimelineFragment extends BaseFragment
         ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
     }
     //endregion
+
+    @OnItemClick(R.id.timeline_list)
+    public void openShot(int position) {
+        ShotModel shot = adapter.getItem(position);
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
+    }
+
+    public void openProfile(int position) {
+        ShotModel shotVO = adapter.getItem(position);
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
+        startActivity(profileIntent);
+    }
+
+    public void openImage(int position) {
+        ShotModel shotVO = adapter.getItem(position);
+        String imageUrl = shotVO.getImage();
+        if (imageUrl != null) {
+            Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+            startActivity(intentForImage);
+        }
+    }
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
