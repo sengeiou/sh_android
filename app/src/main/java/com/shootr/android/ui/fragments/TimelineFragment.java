@@ -52,8 +52,12 @@ import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.EventSelectionView;
 import com.shootr.android.ui.views.NewShotBarView;
+import com.shootr.android.ui.views.NullEventSelectionView;
+import com.shootr.android.ui.views.NullNewShotBarView;
+import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
+import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -120,6 +124,10 @@ public class TimelineFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        timelinePresenter.setView(new NullTimelineView());
+        newShotBarPresenter.setView(new NullNewShotBarView());
+        eventSelectionPresenter.setView(new NullEventSelectionView());
+        watchNumberPresenter.setView(new NullWatchNumberView());
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {

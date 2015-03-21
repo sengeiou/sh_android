@@ -23,7 +23,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.bus = bus;
     }
 
-    protected void setView(NewShotBarView newShotBarView) {
+    public void setView(NewShotBarView newShotBarView) {
         this.newShotBarView = newShotBarView;
     }
 

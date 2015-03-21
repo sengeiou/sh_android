@@ -37,7 +37,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
         this.bus = bus;
     }
 
-    protected void setView(TimelineView timelineView) {
+    public void setView(TimelineView timelineView) {
         this.timelineView = timelineView;
     }
 

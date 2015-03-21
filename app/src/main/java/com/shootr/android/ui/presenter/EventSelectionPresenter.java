@@ -27,7 +27,7 @@ public class EventSelectionPresenter implements Presenter {
         this.busPublisher = busPublisher;
     }
 
-    protected void setView(EventSelectionView eventSelectionView) {
+    public void setView(EventSelectionView eventSelectionView) {
         this.eventSelectionView = eventSelectionView;
     }
 

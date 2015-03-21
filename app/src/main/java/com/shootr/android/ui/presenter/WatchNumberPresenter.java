@@ -23,7 +23,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         this.watchNumberInteractor = watchNumberInteractor;
     }
 
-    protected void setView(WatchNumberView watchNumberView) {
+    public void setView(WatchNumberView watchNumberView) {
         this.watchNumberView = watchNumberView;
     }
 
