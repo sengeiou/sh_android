@@ -101,6 +101,7 @@ public class TimelineFragment extends BaseFragment
     private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
+    private View footerProgress;
     //endregion
 
     //region Lifecycle methods
@@ -267,6 +268,11 @@ public class TimelineFragment extends BaseFragment
             }
         };
 
+        View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+        footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
+
+        listView.addFooterView(footerView, null, false);
+
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
         listView.setAdapter(adapter);
     }
@@ -393,11 +399,11 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override public void showLoadingOldShots() {
-        //TODO
+        footerProgress.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoadingOldShots() {
-        //TODO
+        footerProgress.setVisibility(View.GONE);
     }
 
     @Override public void showEmpty() {
