@@ -139,6 +139,39 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
+    public List<UserEntity> getUsersWatchingSomething(List<Long> usersIds) {
+        int userIdsSize = usersIds.size();
+        List<UserEntity> result = new ArrayList<>(userIdsSize);
+
+        if (userIdsSize == 0) {
+            return result;
+        }
+
+        String whereSelection =
+          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ") AND " + UserTable.EVENT_ID + " IS NOT NULL";
+
+        String[] selectionArguments = new String[userIdsSize];
+        for (int i = 0; i < userIdsSize; i++) {
+            selectionArguments[i] = String.valueOf(usersIds.get(i));
+        }
+
+        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
+          whereSelection, selectionArguments, null, null,
+          UserTable.NAME);
+
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                UserEntity user = userMapper.fromCursor(queryResults);
+                if (user != null) {
+                    result.add(user);
+                }
+            } while (queryResults.moveToNext());
+        }
+        queryResults.close();
+        return result;
+    }
+
     public List<UserEntity> searchUsers(String searchString){
         List<UserEntity> users = new ArrayList<>();
         String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)

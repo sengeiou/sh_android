@@ -1,10 +1,9 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.EventSearchEntity;
-import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
@@ -15,18 +14,19 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
+//TODO this implementation is a bit... raw. I'll keep it with the hope of removing it thanks to backend's mercy
 public class ServiceEventSearchDataSource implements EventSearchDataSource {
 
     private final FollowManager followManager;
-    private final WatchManager watchManager;
     private final ShootrService shootrService;
+    private final UserManager userManager;
     private final SessionRepository sessionRepository;
 
-    @Inject public ServiceEventSearchDataSource(FollowManager followManager, WatchManager watchManager,
-      ShootrService shootrService, SessionRepository sessionRepository) {
+    @Inject public ServiceEventSearchDataSource(FollowManager followManager, ShootrService shootrService,
+      UserManager userManager, SessionRepository sessionRepository) {
         this.followManager = followManager;
-        this.watchManager = watchManager;
         this.shootrService = shootrService;
+        this.userManager = userManager;
         this.sessionRepository = sessionRepository;
     }
 
@@ -53,17 +53,15 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         List<Long> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
         followingAndCurrentUserIds.add(currentUserId);
 
-        List<WatchEntity> watches = watchManager.getWatchesNotEndedFromUsers(followingAndCurrentUserIds);
+        List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingAndCurrentUserIds);
 
         Map<Long, Integer> eventsWatchesCounts = new HashMap<>();
-        for (WatchEntity watch : watches) {
-            if (watch.isVisible()) {
-                Integer currentCount = eventsWatchesCounts.get(watch.getIdEvent());
-                if (currentCount != null) {
-                    eventsWatchesCounts.put(watch.getIdEvent(), currentCount + 1);
-                } else {
-                    eventsWatchesCounts.put(watch.getIdEvent(), 1);
-                }
+        for (UserEntity watcher : watchers) {
+            Integer currentCount = eventsWatchesCounts.get(watcher.getIdEvent());
+            if (currentCount != null) {
+                eventsWatchesCounts.put(watcher.getIdEvent(), currentCount + 1);
+            } else {
+                eventsWatchesCounts.put(watcher.getIdEvent(), 1);
             }
         }
         return eventsWatchesCounts;

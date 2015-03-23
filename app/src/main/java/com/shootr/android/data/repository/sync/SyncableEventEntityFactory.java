@@ -2,7 +2,6 @@ package com.shootr.android.data.repository.sync;
 
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.Synchronized;
-import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.domain.Event;
