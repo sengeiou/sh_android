@@ -73,8 +73,8 @@ public class EventSelectionPresenter implements Presenter {
 
     public void onEventSelected(Long eventId) {
         selectEventInteractor.selectEvent(eventId, new SelectEventInteractor.Callback() {
-            @Override public void onLoaded(Watch watch) {
-                onEventChanged(watch.getIdEvent());
+            @Override public void onLoaded(Long selectedEventId) {
+                onEventChanged(selectedEventId);
             }
         });
     }
