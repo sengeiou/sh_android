@@ -3,6 +3,7 @@ package com.shootr.android.data.repository.local;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
+import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -16,12 +17,14 @@ public class LocalUserRepository implements UserRepository {
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserEntityMapper userEntityMapper;
+    private final SyncableUserEntityFactory syncableUserEntityFactory;
 
     @Inject public LocalUserRepository(SessionRepository sessionRepository, @Local UserDataSource userDataSource,
-      UserEntityMapper userEntityMapper) {
+      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory) {
         this.sessionRepository = sessionRepository;
         localUserDataSource = userDataSource;
         this.userEntityMapper = userEntityMapper;
+        this.syncableUserEntityFactory = syncableUserEntityFactory;
     }
 
     @Override public List<User> getPeople() {
@@ -54,7 +57,8 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public User putUser(User user) {
-        localUserDataSource.putUser(userEntityMapper.transform(user));
+        UserEntity currentOrNewEntity = syncableUserEntityFactory.currentOrNewEntity(user);
+        localUserDataSource.putUser(currentOrNewEntity);
         return user;
     }
 

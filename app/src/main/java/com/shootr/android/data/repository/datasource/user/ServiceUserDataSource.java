@@ -25,7 +25,11 @@ public class ServiceUserDataSource implements UserDataSource {
     }
 
     @Override public UserEntity putUser(UserEntity userEntity) {
-        throw new RuntimeException("Method not implemented");
+        try {
+            return service.saveUserProfile(userEntity);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
@@ -46,5 +50,9 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public boolean isFollowing(Long who, Long to) {
         throw new RuntimeException("Method not implemented for service.");
+    }
+
+    @Override public List<UserEntity> getEntitiesNotSynchronized() {
+        throw new RuntimeException("Server DataSource can't access synchronization fields");
     }
 }

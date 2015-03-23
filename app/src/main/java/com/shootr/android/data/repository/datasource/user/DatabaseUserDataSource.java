@@ -58,4 +58,8 @@ public class DatabaseUserDataSource implements UserDataSource {
         FollowEntity follow = followManager.getFollowByUserIds(who, to);
         return follow != null;
     }
+
+    @Override public List<UserEntity> getEntitiesNotSynchronized() {
+        return userManager.getUsersNotSynchronized();
+    }
 }

@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserMapper;
+import com.squareup.phrase.Phrase;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -191,5 +193,26 @@ public class UserManager extends AbstractManager {
           }
         c.close();
         return users;
+    }
+
+    public List<UserEntity> getUsersNotSynchronized() {
+        String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
+          .put("field", UserTable.CSYS_SYNCHRONIZED)
+          .put("n", Synchronized.SYNC_NEW)
+          .put("u", Synchronized.SYNC_UPDATED)
+          .format().toString();
+        Cursor queryResult =
+          getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);
+
+        List<UserEntity> resultUsers = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                UserEntity watchEntity = userMapper.fromCursor(queryResult);
+                resultUsers.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultUsers;
     }
 }
