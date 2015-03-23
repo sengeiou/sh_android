@@ -92,11 +92,8 @@ public class VisibleEventInfoInteractor implements Interactor {
 
             List<User> people = localUserRepository.getPeople();
             List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
-            if (wantedEventId.equals(currentUser.getVisibleEventId())) {
-                watchesFromPeople.add(currentUser);
-            }
 
-            return buildEventInfo(visibleEvent, watchesFromPeople);
+            return buildEventInfo(visibleEvent, watchesFromPeople, currentUser);
         }
         return NO_EVENT_VISIBLE_INFO;
     }
@@ -119,10 +116,12 @@ public class VisibleEventInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private EventInfo buildEventInfo(Event currentVisibleEvent, List<User> eventWatchers) {
+    private EventInfo buildEventInfo(Event currentVisibleEvent, List<User> eventWatchers, User currentUser) {
+        boolean isCurrentUserWatching = currentVisibleEvent.getId().equals(currentUser.getVisibleEventId());
         return EventInfo.builder()
           .event(currentVisibleEvent)
           .watchers(eventWatchers)
+          .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();
     }
 

@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.interactor.event.ExitEventInteractor;
@@ -123,7 +122,8 @@ public class EventSelectionPresenterTest {
 
     @Test
     public void shouldShowHallTitleWhenExitEventAlthoughEventInteractorHasntCallback() throws Exception {
-        doNothing().when(visibleEventInfoInteractor).obtainVisibleEventInfo(any(VisibleEventInfoInteractor.Callback.class));
+        doNothing().when(visibleEventInfoInteractor)
+          .obtainVisibleEventInfo(any(VisibleEventInfoInteractor.Callback.class));
         setupExitEventInteractorCallbacks();
 
         presenter.exitEventClick();
@@ -153,8 +153,7 @@ public class EventSelectionPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Long selectedEventId = (Long) invocation.getArguments()[0];
-                ((SelectEventInteractor.Callback) invocation.getArguments()[1]).onLoaded(visibleEventWatch(
-                  selectedEventId));
+                ((SelectEventInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedEventId);
                 return null;
             }
         }).when(selectEventInteractor).selectEvent(anyLong(), any(SelectEventInteractor.Callback.class));
@@ -167,12 +166,6 @@ public class EventSelectionPresenterTest {
                 return null;
             }
         }).when(exitEventInteractor).exitEvent(any(ExitEventInteractor.Callback.class));
-    }
-
-    private Watch visibleEventWatch(Long selectedEventId) {
-        Watch watch = new Watch();
-        watch.setIdEvent(selectedEventId);
-        return watch;
     }
 
     private EventInfo noEventInfo() {

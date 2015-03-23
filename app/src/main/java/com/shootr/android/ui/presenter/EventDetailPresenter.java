@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
-import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -14,9 +14,9 @@ import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
-import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -34,24 +34,24 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
 
     private final EventModelMapper eventModelMapper;
-    private final UserWatchingModelMapper userWatchingModelMapper;
+    private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventDetailView eventDetailView;
     private long idEvent;
 
-    private UserWatchingModel currentUserWatchingModel;
+    private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
     @Inject public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingStatusInteractor = watchingStatusInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
         this.eventModelMapper = eventModelMapper;
-        this.userWatchingModelMapper = userWatchingModelMapper;
+        this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
@@ -64,7 +64,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Edit status
     public void editStatus() {
-        eventDetailView.navigateToEditStatus(eventModel, currentUserWatchingModel);
+        eventDetailView.navigateToEditStatus(eventModel, currentUserWatchingModel.getStatus());
     }
 
     public void resultFromEditStatus(@Nullable String statusText) {
@@ -73,9 +73,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     private void updateWatchStatus(String statusText) {
-        watchingStatusInteractor.sendWatching(eventModel.getIdEvent(), statusText, new WatchingInteractor.Callback() {
-              @Override public void onLoaded(Watch watchUpdated) {
-                  renderCurrentUserWatching(watchUpdated);
+        watchingStatusInteractor.updateStatus(
+          statusText,
+          new UpdateStatusInteractor.Callback() {
+              @Override public void onLoaded(User currentUser) {
+                  renderCurrentUserWatching(currentUser);
               }
           });
     }
@@ -146,7 +148,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.hideViewEmpty();
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
-            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
+            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
         }
@@ -181,14 +183,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     //region renders
-    private void renderWatchersList(List<Watch> watchers) {
-        List<UserWatchingModel> watcherModels = userWatchingModelMapper.transform(watchers);
+    private void renderWatchersList(List<User> watchers) {
+        List<UserModel> watcherModels = userModelMapper.transform(watchers);
         eventDetailView.setWatchers(watcherModels);
     }
 
-    private void renderCurrentUserWatching(Watch currentUserWatch) {
-        if (currentUserWatch != null && currentUserWatch.isVisible()) {
-            currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
+    private void renderCurrentUserWatching(User currentUserWatch) {
+        if (currentUserWatch != null) {
+            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }

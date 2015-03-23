@@ -1,9 +1,7 @@
 package com.shootr.android.db;
 
-import android.app.Application;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
-import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.TeamModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -27,10 +25,6 @@ import javax.inject.Singleton;
   }
 )
 public class MapperModule {
-
-    @Provides UserEntityWatchingModelMapper provideUserWatchingModelMapper(Application application) {
-        return new UserEntityWatchingModelMapper();
-    }
 
     @Provides FollowMapper provideFollowMapper() {
         return new FollowMapper();

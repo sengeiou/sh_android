@@ -6,19 +6,14 @@ import android.os.Bundle;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
-import com.shootr.android.notifications.watch.WatchRequestNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.EventEntityModelMapper;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
-import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
@@ -32,15 +27,10 @@ public class GCMIntentService extends IntentService {
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject FollowNotificationManager followNotificationManager;
-    @Inject WatchRequestNotificationManager watchRequestNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject ShotEntityModelMapper shotEntityModelMapper;
-    @Inject EventManager eventManager;
-    @Inject UserEntityWatchingModelMapper userWatchingModelMapper;
     @Inject UserEntityModelMapper userModelMapper;
-    @Inject EventEntityModelMapper eventEntityModelMapper;
-    @Inject BusPublisher busPublisher;
 
     public GCMIntentService() {
         super("GCM Service");

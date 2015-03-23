@@ -1,7 +1,6 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.EventInfo;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.interactor.event.ExitEventInteractor;
