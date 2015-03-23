@@ -11,7 +11,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import javax.inject.Inject;
 
-public class WatchingInteractor implements Interactor {
+public class UpdateStatusInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -23,8 +23,9 @@ public class WatchingInteractor implements Interactor {
     private String userStatus;
     private Callback callback;
 
-    @Inject public WatchingInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository, SessionRepository sessionRepository) {
+    @Inject public UpdateStatusInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localWatchRepository = localWatchRepository;
@@ -46,7 +47,7 @@ public class WatchingInteractor implements Interactor {
     private void setNewWatch() {
         User currentUser = sessionRepository.getCurrentUser();
 
-        Watch watch = new Watch();
+        User watch = new Watch();
         watch.setUser(currentUser);
         watch.setIdEvent(idEvent);
         watch.setUserStatus(userStatus);
@@ -57,7 +58,7 @@ public class WatchingInteractor implements Interactor {
         remoteWatchRepository.putWatch(watch);
     }
 
-    private void notifyLoaded(final Watch watch) {
+    private void notifyLoaded(final User watch) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(watch);
@@ -67,7 +68,7 @@ public class WatchingInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(Watch watchUpdated);
+        void onLoaded(User watchUpdated);
 
     }
 }
