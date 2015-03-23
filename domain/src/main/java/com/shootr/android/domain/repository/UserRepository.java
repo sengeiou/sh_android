@@ -15,5 +15,5 @@ public interface UserRepository {
 
     boolean isFollowing(Long userId);
 
-    void putUser(User user);
+    User putUser(User user);
 }

@@ -100,6 +100,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
         return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
     }
 
+    @Override public User putUser(User user) {
+        remoteUserDataSource.putUser(userEntityMapper.transform(user));
+        //TODO transform server's user and return it instead
+        return user;
+    }
+
     @Override public void dispatchSync() {
         throw new RuntimeException("Method not implemented yet!");
     }

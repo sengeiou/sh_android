@@ -53,6 +53,11 @@ public class LocalUserRepository implements UserRepository {
         return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
     }
 
+    @Override public User putUser(User user) {
+        localUserDataSource.putUser(userEntityMapper.transform(user));
+        return user;
+    }
+
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
         long currentUserId = sessionRepository.getCurrentUserId();
