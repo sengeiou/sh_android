@@ -4,30 +4,19 @@ import java.util.List;
 
 public class EventInfo {
 
-    private Watch currentUserWatch;
-
-    private List<Watch> watchers;
+    private List<User> watchers;
 
     private Event event;
 
     public int getWatchersCount() {
-        int watchers = this.watchers.size();
-        return currentUserWatch !=null && currentUserWatch.isVisible() ? watchers + 1 : watchers;
+        return this.watchers.size();
     }
 
-    public Watch getCurrentUserWatch() {
-        return currentUserWatch;
-    }
-
-    public void setCurrentUserWatch(Watch currentUserWatch) {
-        this.currentUserWatch = currentUserWatch;
-    }
-
-    public List<Watch> getWatchers() {
+    public List<User> getWatchers() {
         return watchers;
     }
 
-    public void setWatchers(List<Watch> watchers) {
+    public void setWatchers(List<User> watchers) {
         this.watchers = watchers;
     }
 
@@ -51,12 +40,7 @@ public class EventInfo {
             this.eventInfo = new EventInfo();
         }
 
-        public Builder currentUserWatch(Watch currentUserWatch) {
-            eventInfo.setCurrentUserWatch(currentUserWatch);
-            return this;
-        }
-
-        public Builder watchers(List<Watch> watches) {
+        public Builder watchers(List<User> watches) {
             eventInfo.setWatchers(watches);
             return this;
         }

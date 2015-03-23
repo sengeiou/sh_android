@@ -1,19 +1,20 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -21,81 +22,93 @@ import static org.mockito.Mockito.when;
 public class WatchNumberInteractorTest {
 
     public static final long ID_USER_ME = 666L;
-    public static final long ANY_ID_EVENT = 1L;
+    public static final long ID_EVENT = 1L;
     public static final long ID_USER_1 = 1L;
     public static final long ID_USER_2 = 2L;
 
     private WatchNumberInteractor interactor;
-    private PostExecutionThread postExecutionThread;
 
-    private TestInteractorHandler testInteractorHandler;
-    @Mock UserRepository userRepository;
+    @Mock UserRepository localUserRepository;
+    @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock WatchRepository watchRepository;
+    @Mock Interactor.InteractorErrorCallback dummyErrorCallback;
+    @Spy SpyCallback spyCallback = new SpyCallback();
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        postExecutionThread = new TestPostExecutionThread();
-        testInteractorHandler = new TestInteractorHandler();
-        interactor = new WatchNumberInteractor(testInteractorHandler, postExecutionThread, sessionRepository, userRepository,
-          watchRepository);
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+        TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
+        interactor = new WatchNumberInteractor(testInteractorHandler,
+          postExecutionThread,
+          sessionRepository,
+          localUserRepository,
+          remoteUserRepository);
     }
 
     @Test
     public void testPeopleAndMeIncludesMe() throws Exception {
-        when(userRepository.getPeople()).thenReturn(onePersonList());
+        when(localUserRepository.getPeople()).thenReturn(onePersonList());
         when(sessionRepository.getCurrentUser()).thenReturn(me());
 
         List<User> peopleAndMe = interactor.getPeopleAndMe();
 
-        assertThat(peopleAndMe).contains(me());
-        assertThat(peopleAndMe).hasSize(2);
+        assertThat(peopleAndMe).contains(me()).hasSize(2);
         assertThat(peopleAndMe.get(1).isMe()).isTrue();
     }
 
     @Test
-    public void testCountOnlyIncludesIsWatching() throws Exception {
-        Integer oneCount = interactor.countIsVisible(watchingAndNotWatching());
-        assertThat(oneCount).isEqualTo(1);
+    public void shouldIncludeMeInTheCount() throws Exception {
+        when(localUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
+        when(sessionRepository.getCurrentUser()).thenReturn(me());
+
+        interactor.loadWatchNumber(spyCallback, dummyErrorCallback);
+
+        assertThat(spyCallback.count).isEqualTo(2);
     }
 
-    private List<Watch> watchingAndNotWatching() {
-        List<Watch> watches = new ArrayList<>();
-        watches.add(newWatch(ANY_ID_EVENT, ID_USER_1));
-        watches.add(newWatchNotWatching(ANY_ID_EVENT, ID_USER_2));
-        return watches;
-    }
+    @Test
+    public void shouldFilterOutPeopleNotWatchingTheEvent() throws Exception {
+        List<User> oneUserWatchingAndOneNotWatching =
+          Arrays.asList(newUserWatching(ID_USER_1), newUserNotWatching(ID_USER_2));
 
-    private Watch newWatchNotWatching(Long idEvent, Long idUser) {
-        Watch watch = newWatch(idEvent, idUser);
-        watch.setVisible(false);
-        return watch;
-    }
+        List<User> filteredUsers = interactor.filterUsersWatchingEvent(oneUserWatchingAndOneNotWatching, ID_EVENT);
 
-    private Watch newWatch(Long idEvent, Long idUser) {
-        Watch watch = new Watch();
-        watch.setIdEvent(idEvent);
-        watch.setUser(newUser(idUser));
-        watch.setVisible(true);
-        return watch;
+        assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
+        assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
     }
 
     private User me() {
-        User user = newUser(ID_USER_ME);
+        User user = newUserWatching(ID_USER_ME);
         user.setMe(true);
+        user.setVisibleEventId(ID_EVENT);
         return user;
     }
 
     private List<User> onePersonList() {
         List<User> users = new ArrayList<>();
-        users.add(newUser(ID_USER_1));
+        users.add(newUserWatching(ID_USER_1));
         return users;
     }
 
-    private User newUser(Long id) {
+    private User newUserWatching(Long id) {
+        User user = newUserNotWatching(id);
+        user.setVisibleEventId(ID_EVENT);
+        return user;
+    }
+
+    private User newUserNotWatching(Long id) {
         User user = new User();
         user.setIdUser(id);
         return user;
+    }
+
+    private class SpyCallback implements WatchNumberInteractor.Callback {
+
+        public Integer count;
+
+        @Override public void onLoaded(Integer count) {
+            this.count = count;
+        }
     }
 }

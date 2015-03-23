@@ -2,29 +2,29 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
+import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -34,63 +34,55 @@ public class SelectEventInteractorTest {
 
     private static final Long OLD_EVENT_ID = 1L;
     private static final Long NEW_EVENT_ID = 2L;
-    private static final Long IRRELEVANT_USER_ID = 1L;
-    private static final String EXISTING_STATUS = "status";
-    private static final Date DATE_NOW = new Date();
-    private static final Date DATE_BEFORE = new Date(DATE_NOW.getTime() - 1);
+    private static final Long CURRENT_USER_ID = 1L;
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock EventRepository eventRepository;
-    @Mock WatchRepository localWatchRepository;
-    @Mock WatchRepository remoteWatchRepository;
-    @Mock TimeUtils timeUtils;
+    @Mock UserRepository localUserRepository;
+    @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock SelectEventInteractor.Callback dummyCallback;
 
     private SelectEventInteractor interactor;
-    private PostExecutionThread postExecutionThread;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        postExecutionThread = new TestPostExecutionThread();
-        when(timeUtils.getCurrentDate()).thenReturn(DATE_NOW);
-        when(timeUtils.getCurrentTime()).thenReturn(DATE_NOW.getTime());
+        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
-        interactor =
-          new SelectEventInteractor(interactorHandler, postExecutionThread, eventRepository, localWatchRepository, remoteWatchRepository,
-            sessionRepository, timeUtils);
+        interactor = new SelectEventInteractor(interactorHandler, postExecutionThread,
+          eventRepository,
+          localUserRepository,
+          remoteUserRepository,
+          sessionRepository);
     }
 
     @Test
-    public void oldEventNotVisibleAnymore() throws Exception {
-        setupOldVisibleEventInLocal();
+    public void shouldSetNewEventIdInSessionRepository() throws Exception {
+        setupOldVisibleEvent();
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
-        verifyOldWatchSavedNotVisibleInRepo(localWatchRepository);
-        verifyOldWatchSavedNotVisibleInRepo(remoteWatchRepository);
+        verify(sessionRepository).setCurrentUser(currentUserWatchingNewEvent());
     }
 
     @Test
-    public void newEventVisibleWhenWatchExistInLocal() throws Exception {
-        setupExistingWatchNotVisibleInLocal();
+    public void shouldSetNewEventIdInLocalRepository() throws Exception {
+        setupOldVisibleEvent();
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
-        verifyExistingWatchSavedVisibleInRepoWithExistingStatus(localWatchRepository);
-        verifyExistingWatchSavedVisibleInRepoWithExistingStatus(remoteWatchRepository);
+        verify(localUserRepository).putUser(currentUserWatchingNewEvent());
     }
 
     @Test
-    public void newEventWatchCreatedIfNotExists() throws Exception {
-        setupNewWatchDoesntExist();
+    public void shouldSetNewEventIdInRemoteRepository() throws Exception {
+        setupOldVisibleEvent();
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
-        verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(localWatchRepository);
-        verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(remoteWatchRepository);
+        verify(remoteUserRepository).putUser(currentUserWatchingNewEvent());
     }
 
     @Test @Ignore
@@ -100,72 +92,37 @@ public class SelectEventInteractorTest {
 
     @Test
     public void selectingCurrentEventDoesntNotifyUi() throws Exception {
-        setupOldVisibleEventInLocal();
+        setupOldVisibleEvent();
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
         verify(interactorHandler, never()).sendUiMessage(anyObject());
     }
 
-    //region Setup
-    private void setupNewWatchDoesntExist() {
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID))).thenReturn(null);
-        when(remoteWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID)))
-          .thenReturn(null);
+    @Test
+    public void shouldNotifyCallbackBeforeSettingUserInRemoteRepository() throws Exception {
+        InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
+
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+
+        inOrder.verify(dummyCallback).onLoaded(anyLong());
+        inOrder.verify(remoteUserRepository).putUser(any(User.class));
     }
 
-    private void setupExistingWatchNotVisibleInLocal() {
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID))).thenReturn(
-          existingEventWatchNotVisible());
+    private void setupOldVisibleEvent() {
+        when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatchingOldEvent());
     }
 
-    private void setupOldVisibleEventInLocal() {
-        when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(oldVisibleEventWatch());
+    private User currentUserWatchingOldEvent() {
+        User user = currentUser();
+        user.setVisibleEventId(OLD_EVENT_ID);
+        return user;
     }
 
-    //endregion
-
-    //region Asserts
-
-    private void verifyOldWatchSavedNotVisibleInRepo(WatchRepository watchRepository) {
-        ArgumentCaptor<Watch> watchArgumentCaptor = ArgumentCaptor.forClass(Watch.class);
-        verify(watchRepository, atLeastOnce()).putWatch(watchArgumentCaptor.capture());
-        Watch oldVisibleWatch = watchArgumentCaptor.getAllValues().get(0);
-        assertOldWatchNotVisible(oldVisibleWatch);
-    }
-
-    private void assertOldWatchNotVisible(Watch oldVisibleWatch) {
-        assertThat(oldVisibleWatch.getIdEvent()).isEqualTo(OLD_EVENT_ID);
-        assertThat(oldVisibleWatch.isVisible()).isFalse();
-    }
-
-    private ArgumentCaptor<Watch> verifyExistingWatchSavedVisibleInRepoWithExistingStatus(
-      WatchRepository watchRepository) {
-        ArgumentCaptor<Watch> watchArgumentCaptor = ArgumentCaptor.forClass(Watch.class);
-        verify(watchRepository).putWatch(watchArgumentCaptor.capture());
-        Watch newEventWatch = watchArgumentCaptor.getValue();
-        assertNewEventIsVisible(newEventWatch);
-        assertThat(newEventWatch.getUserStatus()).isEqualTo(EXISTING_STATUS);
-        return watchArgumentCaptor;
-    }
-
-    private void assertNewEventIsVisible(Watch newEventWatch) {
-        assertThat(newEventWatch.getIdEvent()).isEqualTo(NEW_EVENT_ID);
-        assertThat(newEventWatch.isVisible()).isTrue();
-    }
-
-    private void verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(WatchRepository watchRepository) {
-        ArgumentCaptor<Watch> watchArgumentCaptor = ArgumentCaptor.forClass(Watch.class);
-        verify(watchRepository).putWatch(watchArgumentCaptor.capture());
-        Watch newEventWatch = watchArgumentCaptor.getValue();
-        assertNewWatchHasRightIdUserVisibilityStatus(newEventWatch);
-    }
-
-    private void assertNewWatchHasRightIdUserVisibilityStatus(Watch newEventWatch) {
-        assertThat(newEventWatch.getIdEvent()).isEqualTo(NEW_EVENT_ID);
-        assertThat(newEventWatch.getUser().getIdUser()).isEqualTo(IRRELEVANT_USER_ID);
-        assertThat(newEventWatch.isVisible()).isTrue();
-        assertThat(newEventWatch.getUserStatus()).isNotEmpty();
+    private User currentUserWatchingNewEvent() {
+        User user = currentUser();
+        user.setVisibleEventId(NEW_EVENT_ID);
+        return user;
     }
     //endregion
 
@@ -178,23 +135,8 @@ public class SelectEventInteractorTest {
 
     private User currentUser() {
         User user = new User();
-        user.setIdUser(IRRELEVANT_USER_ID);
+        user.setIdUser(CURRENT_USER_ID);
         return user;
-    }
-
-    private Watch existingEventWatchNotVisible() {
-        Watch watch = new Watch();
-        watch.setIdEvent(NEW_EVENT_ID);
-        watch.setVisible(false);
-        watch.setUserStatus(EXISTING_STATUS);
-        return watch;
-    }
-
-    private Watch oldVisibleEventWatch() {
-        Watch watch = new Watch();
-        watch.setVisible(true);
-        watch.setIdEvent(OLD_EVENT_ID);
-        return watch;
     }
     //endregion
 }

@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
-import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -9,8 +8,7 @@ import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
-import com.shootr.android.domain.utils.TimeUtils;
+import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
@@ -19,85 +17,52 @@ public class SelectEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final EventRepository localEventRepository;
-    private final WatchRepository localWatchRepository;
-    private final WatchRepository remoteWatchRepository;
+    private final UserRepository localUserRepository;
+    private final UserRepository remoteUserRepository;
     private final SessionRepository sessionRepository;
-    private final TimeUtils timeUtils;
 
-    private Long idEvent;
+    private Long idSelectedEvent;
     private Callback callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
-      @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository,
-      SessionRepository sessionRepository, TimeUtils timeUtils) {
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
-        this.localWatchRepository = localWatchRepository;
-        this.remoteWatchRepository = remoteWatchRepository;
+        this.localUserRepository = localUserRepository;
+        this.remoteUserRepository = remoteUserRepository;
         this.sessionRepository = sessionRepository;
-        this.timeUtils = timeUtils;
     }
     //endregion
 
     public void selectEvent(Long idEvent, Callback callback) {
-        this.idEvent = idEvent;
+        this.idSelectedEvent = idEvent;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (oldVisibleEventWatch != null) {
-            hideOldVisibleEvent(oldVisibleEventWatch);
-        }
-        if (oldVisibleEventWatch == null || (!oldVisibleEventWatch.getIdEvent().equals(idEvent))) {
-            setNewVisibleEvent();
-        }
+        User currentUser = sessionRepository.getCurrentUser();
+        currentUser.setVisibleEventId(idSelectedEvent);
+
+        sessionRepository.setCurrentUser(currentUser);
+        localUserRepository.putUser(currentUser);
+        notifyLoaded(idSelectedEvent);
+        remoteUserRepository.putUser(currentUser); // TODO might have to change to the new actions/endpoint
     }
 
-    private void setNewVisibleEvent() {
-        Watch selectedEventWatch =
-          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent);
-        if (selectedEventWatch == null) {
-            selectedEventWatch = createWatch();
-        }
-        selectedEventWatch.setVisible(true);
-
-        localWatchRepository.putWatch(selectedEventWatch);
-        notifyLoaded(selectedEventWatch);
-        remoteWatchRepository.putWatch(selectedEventWatch);
-    }
-
-    private void hideOldVisibleEvent(Watch oldVisibleEventWatch) {
-        oldVisibleEventWatch.setVisible(false);
-
-        localWatchRepository.putWatch(oldVisibleEventWatch);
-        remoteWatchRepository.putWatch(oldVisibleEventWatch);
-    }
-
-    //TODO Don't like this, Interactor is probablly not the best place for creatin objects
-    private Watch createWatch() {
-        Watch newWatch = new Watch();
-        newWatch.setIdEvent(idEvent);
-        newWatch.setUser(sessionRepository.getCurrentUser());
-        newWatch.setVisible(false);
-        newWatch.setUserStatus("Watching"); //TODO localize
-        return newWatch;
-    }
-
-    private void notifyLoaded(final Watch watch) {
+    private void notifyLoaded(final Long selectedEventId) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(watch);
+                callback.onLoaded(selectedEventId);
             }
         });
     }
 
     public interface Callback {
 
-        void onLoaded(Watch watch);
-
+        void onLoaded(Long selectedEventId);
     }
 }

@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.shot;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -12,7 +11,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.domain.service.ShotSender;
 import java.io.File;
 import org.junit.Before;
@@ -40,7 +38,6 @@ public class PostNewShotInteractorTest {
 
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
-    @Mock WatchRepository localWatchRepository;
     @Mock ShotSender shotSender;
 
     private PostNewShotInteractor interactor;
@@ -52,7 +49,7 @@ public class PostNewShotInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         interactor =
           new PostNewShotInteractor(postExecutionThread, interactorHandler, sessionRepository, localEventRepository,
-            localWatchRepository, shotSender);
+            shotSender);
     }
 
     @Test
@@ -138,9 +135,10 @@ public class PostNewShotInteractorTest {
     }
 
     private void setupVisibleEvent() {
-        when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(visibleWatch());
+        when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
         when(localEventRepository.getEventById(VISIBLE_EVENT_ID)).thenReturn(visibleEvent());
     }
+
     //endregion
 
     //region Stubs
@@ -152,11 +150,10 @@ public class PostNewShotInteractorTest {
         return event;
     }
 
-    private Watch visibleWatch() {
-        Watch watch = new Watch();
-        watch.setIdEvent(VISIBLE_EVENT_ID);
-        watch.setUser(currentUser());
-        return watch;
+    private User currentUserWatching() {
+        User user = currentUser();
+        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        return user;
     }
 
     private User currentUser() {

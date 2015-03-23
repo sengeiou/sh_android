@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -13,7 +12,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.WatchRepository;
+import com.shootr.android.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,22 +21,22 @@ public class EventsSearchInteractor implements Interactor {
 
     public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
+    private final SessionRepository sessionRepository;
     private final EventSearchRepository eventSearchRepository;
     private final EventRepository localEventRepository;
-    private final WatchRepository localWatchRepository;
     private final PostExecutionThread postExecutionThread;
 
     private String query;
     private Callback callback;
     private InteractorErrorCallback errorCallback;
 
-    @Inject public EventsSearchInteractor(InteractorHandler interactorHandler,
+    @Inject public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
       EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
-      @Local WatchRepository localWatchRepository, PostExecutionThread postExecutionThread) {
+      PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
+        this.sessionRepository = sessionRepository;
         this.eventSearchRepository = eventSearchRepository;
         this.localEventRepository = localEventRepository;
-        this.localWatchRepository = localWatchRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -79,10 +78,12 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void setCurrentVisibleEventIfAny(EventSearchResultList eventSearchResultList) {
-        Watch currentVisibleWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (currentVisibleWatch != null) {
-            Event visibleEvent = localEventRepository.getEventById(currentVisibleWatch.getIdEvent());
-            eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
+        Long eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
+        if (eventWatchingId != null) {
+            Event visibleEvent = localEventRepository.getEventById(eventWatchingId);
+            if (visibleEvent != null) {
+                eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
+            }
         }
     }
 
@@ -99,7 +100,6 @@ public class EventsSearchInteractor implements Interactor {
     private boolean matchesQuery(EventSearchResult event) {
         return event.getEvent().getTitle().toLowerCase().contains(query.toLowerCase());
     }
-
 
     private void notifySearchResultsSuccessful(final EventSearchResultList events) {
         postExecutionThread.post(new Runnable() {
@@ -120,6 +120,5 @@ public class EventsSearchInteractor implements Interactor {
     public interface Callback {
 
         void onLoaded(EventSearchResultList results);
-
     }
 }

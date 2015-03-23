@@ -5,7 +5,6 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -15,7 +14,6 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +24,6 @@ public class GetOlderMainTimelineInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final WatchRepository localWatchRepository;
     private final ShotRepository remoteShotRepository;
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
@@ -36,13 +33,11 @@ public class GetOlderMainTimelineInteractor implements Interactor {
 
     @Inject public GetOlderMainTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local WatchRepository localWatchRepository,
-      @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+      @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localWatchRepository = localWatchRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
     }
@@ -97,9 +92,9 @@ public class GetOlderMainTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEvent() {
-        Watch currentVisibleWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (currentVisibleWatch != null) {
-            return localEventRepository.getEventById(currentVisibleWatch.getIdEvent());
+        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
+        if (visibleEventId != null) {
+            return localEventRepository.getEventById(visibleEventId);
         }
         return null;
     }

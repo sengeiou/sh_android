@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.shot;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -13,7 +12,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.domain.service.ShotSender;
 import com.shootr.android.domain.service.dagger.Background;
 import java.io.File;
@@ -26,7 +24,6 @@ public class PostNewShotInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
-    private final WatchRepository localWatchRepository;
     private final ShotSender shotSender;
     private String comment;
     private File imageFile;
@@ -35,13 +32,11 @@ public class PostNewShotInteractor implements Interactor {
 
     @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Local EventRepository localEventRepository,
-      @Local WatchRepository localWatchRepository, @Background
-    ShotSender shotSender) {
+      @Background ShotSender shotSender) {
         this.postExecutionThread = postExecutionThread;
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
-        this.localWatchRepository = localWatchRepository;
         this.shotSender = shotSender;
     }
 
@@ -110,10 +105,9 @@ public class PostNewShotInteractor implements Interactor {
     }
 
     private Event currentVisibleEvent() {
-        Watch currentVisibleWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (currentVisibleWatch != null) {
-            Long idEvent = currentVisibleWatch.getIdEvent();
-            return localEventRepository.getEventById(idEvent);
+        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
+        if (visibleEventId != null) {
+            return localEventRepository.getEventById(visibleEventId);
         } else {
             return null;
         }

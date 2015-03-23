@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -12,42 +11,45 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.repository.WatchRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class VisibleEventInfoInteractor implements Interactor {
 
     private static final long VISIBLE_EVENT = -1;
+    private static final EventInfo NO_EVENT_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
-    private final WatchRepository remoteWatchRepository;
-    private final WatchRepository localWatchRepository;
+    private final UserRepository remoteUserRepository;
+    private final UserRepository localWatchRepository;
     private final EventRepository remoteEventRepository;
     private final EventRepository localEventRepository;
     private final SessionRepository sessionRepository;
-    private long idEvent;
+
+    private long idEventWanted;
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
-      @Remote WatchRepository remoteWatchRepository, @Local WatchRepository localWatchRepository,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localWatchRepository,
       @Remote EventRepository remoteEventRepository, @Local EventRepository localEventRepository,
       SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;
-        this.remoteWatchRepository = remoteWatchRepository;
+        this.remoteUserRepository = remoteUserRepository;
         this.localWatchRepository = localWatchRepository;
         this.remoteEventRepository = remoteEventRepository;
         this.localEventRepository = localEventRepository;
         this.sessionRepository = sessionRepository;
     }
 
-    public void obtainEventInfo(long idEvent, Callback callback) {
-        this.idEvent = idEvent;
+    //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
+    public void obtainEventInfo(long idEventWanted, Callback callback) {
+        this.idEventWanted = idEventWanted;
         this.callback = callback;
         interactorHandler.execute(this);
     }
@@ -63,13 +65,13 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected void obtainLocalEventInfo() {
         EventInfo eventInfo = getEventInfo(localWatchRepository, localEventRepository);
-        if (eventInfo != null) {
+        if (eventInfo != NO_EVENT_VISIBLE_INFO) {
             notifyLoaded(eventInfo);
         }
     }
 
     protected void obtainRemoteEventInfo() {
-        EventInfo eventInfo = getEventInfo(remoteWatchRepository, remoteEventRepository);
+        EventInfo eventInfo = getEventInfo(remoteUserRepository, remoteEventRepository);
         if (eventInfo != null) {
             notifyLoaded(eventInfo);
         } else {
@@ -77,40 +79,50 @@ public class VisibleEventInfoInteractor implements Interactor {
         }
     }
 
-    protected EventInfo getEventInfo(WatchRepository watchRepository, EventRepository eventRepository) {
-        Watch currentVisibleWatch = getEventWatch(watchRepository);
+    protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
+        User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
+        Long wantedEventId = getWantedEventId(currentUser);
 
-        if (idEvent > 0) {
-            Event visibleEvent = eventRepository.getEventById(idEvent);
+        if (wantedEventId > 0) {
+            Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
-                return null;
+                //TODO should not happen, but can't assert that right now
+                return NO_EVENT_VISIBLE_INFO;
             }
 
             List<User> people = localUserRepository.getPeople();
-            List<Watch> watchesFromPeople = watchRepository.getWatchesForUsersAndEvent(people, visibleEvent.getId());
-
-            return buildEventInfo(visibleEvent, currentVisibleWatch, watchesFromPeople);
-        }
-        return null;
-    }
-
-    private Watch getEventWatch(WatchRepository watchRepository) {
-        if (idEvent > 0) {
-            return watchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent);
-        } else {
-            Watch currentVisibleWatch = watchRepository.getCurrentVisibleWatch();
-            if (currentVisibleWatch != null) {
-                idEvent = currentVisibleWatch.getIdEvent();
+            List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
+            if (wantedEventId.equals(currentUser.getVisibleEventId())) {
+                watchesFromPeople.add(currentUser);
             }
-            return currentVisibleWatch;
+
+            return buildEventInfo(visibleEvent, watchesFromPeople);
+        }
+        return NO_EVENT_VISIBLE_INFO;
+    }
+
+    private Long getWantedEventId(User currentUser) {
+        if (idEventWanted > 0) {
+            return idEventWanted;
+        } else {
+            return currentUser.getVisibleEventId();
         }
     }
 
-    private EventInfo buildEventInfo(Event currentVisibleEvent, Watch visibleEventWatch, List<Watch> followingWatches) {
+    protected List<User> filterUsersWatchingEvent(List<User> people, Long idEvent) {
+        List<User> watchers = new ArrayList<>();
+        for (User user : people) {
+            if (idEvent.equals(user.getVisibleEventId())) {
+                watchers.add(user);
+            }
+        }
+        return watchers;
+    }
+
+    private EventInfo buildEventInfo(Event currentVisibleEvent, List<User> eventWatchers) {
         return EventInfo.builder()
           .event(currentVisibleEvent)
-          .currentUserWatch(visibleEventWatch)
-          .watchers(followingWatches)
+          .watchers(eventWatchers)
           .build();
     }
 

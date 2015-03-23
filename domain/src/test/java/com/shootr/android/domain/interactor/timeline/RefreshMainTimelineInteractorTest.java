@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -12,7 +13,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.repository.WatchRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -39,7 +39,6 @@ public class RefreshMainTimelineInteractorTest {
 
     @Mock SessionRepository sessionRepository;
     @Mock ShotRepository remoteShotRepository;
-    @Mock WatchRepository localWatchRepository;
     @Mock EventRepository localEventRepository;
     @Mock UserRepository localUserRepository;
     @Mock SynchronizationRepository synchronizationRepository;
@@ -54,9 +53,7 @@ public class RefreshMainTimelineInteractorTest {
 
         this.interactor = new RefreshMainTimelineInteractor(interactorHandler, postExecutionThread,
           sessionRepository,
-          remoteShotRepository,
-          localWatchRepository,
-          localEventRepository,
+          remoteShotRepository, localEventRepository,
           localUserRepository,
           synchronizationRepository);
     }
@@ -64,6 +61,7 @@ public class RefreshMainTimelineInteractorTest {
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
 
         interactor.refreshMainTimeline(spyCallback);
         List<Shot> shotsReturned = spyCallback.timelinesReturned.get(0).getShots();
@@ -74,6 +72,7 @@ public class RefreshMainTimelineInteractorTest {
     @Test
     public void shouldUpdateLastRefreshDateWithNewestShotPublishDate() throws Exception {
         when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
 
         interactor.refreshMainTimeline(spyCallback);
 
@@ -92,6 +91,10 @@ public class RefreshMainTimelineInteractorTest {
         Shot shot = new Shot();
         shot.setPublishDate(new Date(date));
         return shot;
+    }
+
+    private User currentUser() {
+        return new User();
     }
 
     static class SpyCallback implements RefreshMainTimelineInteractor.Callback {

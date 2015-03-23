@@ -1,15 +1,13 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
-import com.shootr.android.domain.utils.TimeUtils;
+import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
 public class ExitEventInteractor implements Interactor {
@@ -17,18 +15,20 @@ public class ExitEventInteractor implements Interactor {
     //region Dependencies
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final WatchRepository localWatchRepository;
-    private final WatchRepository remoteWatchRepository;
+    private final SessionRepository sessionRepository;
+    private final UserRepository localUserRepository;
+    private final UserRepository remoteUserRepository;
 
     private Callback callback;
 
     @Inject public ExitEventInteractor(final InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local WatchRepository localWatchRepository,
-      @Remote WatchRepository remoteWatchRepository) {
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localWatchRepository = localWatchRepository;
-        this.remoteWatchRepository = remoteWatchRepository;
+        this.sessionRepository = sessionRepository;
+        this.localUserRepository = localUserRepository;
+        this.remoteUserRepository = remoteUserRepository;
     }
     //endregion
 
@@ -38,14 +38,17 @@ public class ExitEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
-        if (oldVisibleEventWatch != null) {
-            oldVisibleEventWatch.setVisible(false);
-            localWatchRepository.putWatch(oldVisibleEventWatch);
-            notifyLoaded();
-            remoteWatchRepository.putWatch(oldVisibleEventWatch);
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+        removeEventFromUser(currentUser);
+        localUserRepository.putUser(currentUser);
+        sessionRepository.setCurrentUser(currentUser);
+        notifyLoaded();
+        remoteUserRepository.putUser(currentUser);
         }
 
+    private void removeEventFromUser(User currentUser) {
+        currentUser.setVisibleEventId(null);
+        currentUser.setVisibleEventTitle(null);
     }
 
     private void notifyLoaded() {
