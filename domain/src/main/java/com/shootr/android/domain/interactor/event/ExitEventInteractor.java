@@ -40,16 +40,12 @@ public class ExitEventInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         Watch oldVisibleEventWatch = localWatchRepository.getCurrentVisibleWatch();
         if (oldVisibleEventWatch != null) {
-            hideOldVisibleEvent(oldVisibleEventWatch);
+            oldVisibleEventWatch.setVisible(false);
+            localWatchRepository.putWatch(oldVisibleEventWatch);
+            notifyLoaded();
+            remoteWatchRepository.putWatch(oldVisibleEventWatch);
         }
-        notifyLoaded();
-    }
 
-    private void hideOldVisibleEvent(Watch oldVisibleEventWatch) {
-        oldVisibleEventWatch.setVisible(false);
-
-        localWatchRepository.putWatch(oldVisibleEventWatch);
-        remoteWatchRepository.putWatch(oldVisibleEventWatch);
     }
 
     private void notifyLoaded() {
