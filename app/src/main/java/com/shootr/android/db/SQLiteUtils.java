@@ -35,6 +35,7 @@ public class SQLiteUtils {
             + UserTable.EMAIL_NORMALIZED+" VARCHAR(255) NULL,"
             + UserTable.EVENT_ID+" INT NULL,"
             + UserTable.EVENT_TITLE+" TEXT NULL,"
+            + UserTable.STATUS+" TEXT NULL,"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME,"

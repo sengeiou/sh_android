@@ -17,6 +17,7 @@ public class User {
 
     private Long eventWatchingId;
     private String eventWatchingTitle;
+    private String status;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -173,5 +174,13 @@ public class User {
 
     public void setEventWatchingTitle(String eventWatchingTitle) {
         this.eventWatchingTitle = eventWatchingTitle;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
