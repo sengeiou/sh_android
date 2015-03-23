@@ -19,7 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.EndDate;
 import com.shootr.android.ui.model.RelativeEndDate;
 import com.shootr.android.ui.presenter.NewEventPresenter;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class NewEventActivity extends BaseActivity implements NewEventView {
+public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
 
     private static final long TIME_1_DAY_MILLIS = 24 * 60 * 60 * 1000;
     private static final long TIME_6_HOURS_MILLIS = 6 * 60 * 60 * 1000;

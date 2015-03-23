@@ -15,10 +15,6 @@ public class PreferenceModule {
     public static final String GCM_REGISTRATION_ID_DEFAULT = "";
     private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
 
-    @Provides @Singleton @InitialSetupCompleted BooleanPreference provideInitialSetupCompleted(SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "initial_setup", false);
-    }
-
     @Provides @Singleton @GCMAppVersion IntPreference provideGCMAppVersion(SharedPreferences preferences) {
         return new IntPreference(preferences, "gcm_app_version", GCM_APP_VERSION_DEFAULT);
     }

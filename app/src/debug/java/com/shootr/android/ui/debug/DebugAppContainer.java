@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
+import com.shootr.android.ui.activities.TimelineActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -47,12 +48,10 @@ import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
 import com.shootr.android.data.prefs.BooleanPreference;
-import com.shootr.android.data.prefs.InitialSetupCompleted;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.LogReaderActivity;
-import com.shootr.android.ui.activities.MainActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -98,7 +97,6 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference notificationsEnabled;
-    private BooleanPreference initialSetupCompleted;
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
     private final DebugServiceAdapter debugServiceAdapter;
@@ -113,7 +111,7 @@ public class DebugAppContainer implements AppContainer {
       @NetworkProxy StringPreference networkProxy, @AnimationSpeed IntPreference animationSpeed,
       @PicassoDebugging BooleanPreference picassoDebugging, @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
-      @InitialSetupCompleted BooleanPreference initialSetupCompleted, @CustomEndpoint StringPreference customEndpoint,
+      @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled, DebugServiceAdapter debugServiceAdapter,
       Application app) {
         this.client = client;
@@ -126,7 +124,6 @@ public class DebugAppContainer implements AppContainer {
         this.scalpelWireframeEnabled = scalpelWireframeEnabled;
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
-        this.initialSetupCompleted = initialSetupCompleted;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
         this.debugServiceAdapter = debugServiceAdapter;
@@ -699,7 +696,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void relaunch() {
-        Intent newApp = new Intent(app, MainActivity.class);
+        Intent newApp = new Intent(app, TimelineActivity.class);
         newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ShootrApplication.get(app).buildObjectGraphAndInject();

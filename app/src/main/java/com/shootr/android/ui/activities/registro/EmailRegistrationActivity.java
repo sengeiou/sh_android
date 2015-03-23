@@ -15,18 +15,18 @@ import android.widget.Spinner;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.util.Gravatar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 
-public class EmailRegistrationActivity extends BaseActivity {
+public class EmailRegistrationActivity extends BaseToolbarActivity {
 
 
     @InjectView(R.id.email_registro_email_spinner) Spinner mEmailRegistroEmailSpinner;

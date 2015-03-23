@@ -12,6 +12,6 @@
     </FrameLayout>
 
     <!-- The navigation drawer -->
-    <include layout="@layout/drawer_layout" />
+    <include layout="@layout/drawer_layout_old" />
 
 </android.support.v4.widget.DrawerLayout>

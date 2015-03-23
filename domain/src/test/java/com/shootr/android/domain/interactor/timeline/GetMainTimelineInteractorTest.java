@@ -6,6 +6,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +51,7 @@ public class GetMainTimelineInteractorTest {
 
     @Mock ShotRepository localShotRepository;
     @Mock ShotRepository remoteShotRepository;
+    @Mock WatchRepository localWatchRepository;
     @Mock WatchRepository remoteWatchRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock EventRepository eventRepository;
@@ -68,8 +71,7 @@ public class GetMainTimelineInteractorTest {
 
         interactor = new GetMainTimelineInteractor(interactorHandler,
           postExecutionThread,
-          sessionRepository,
-          localShotRepository,
+          sessionRepository, localWatchRepository, localShotRepository,
           remoteShotRepository,
           remoteWatchRepository,
           eventRepository,
@@ -128,6 +130,19 @@ public class GetMainTimelineInteractorTest {
         assertThat(updatedRefreshDate).isEqualTo(DATE_NEWER);
     }
 
+    @Test
+    public void shouldCallbackShotsOnceWhenRemoteWatchRepositoryFails() throws Exception {
+        setupVisibleEvent();
+        when(remoteWatchRepository.getCurrentVisibleWatch()).thenThrow(new RepositoryException("Test exception"));
+        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadMainTimeline(spyCallback);
+
+        verify(spyCallback, times(1)).onLoaded(any(Timeline.class));
+
+    }
+
     private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
@@ -140,6 +155,7 @@ public class GetMainTimelineInteractorTest {
 
     private void setupVisibleEvent() {
         when(remoteWatchRepository.getCurrentVisibleWatch()).thenReturn(eventVisibleWatch());
+        when(localWatchRepository.getCurrentVisibleWatch()).thenReturn(eventVisibleWatch());
         when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
     }
 

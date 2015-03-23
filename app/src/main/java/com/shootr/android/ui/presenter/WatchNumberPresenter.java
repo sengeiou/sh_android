@@ -1,38 +1,41 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.EventsWatchedCountInteractor;
 import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
-import com.shootr.android.ui.views.WatchingRequestView;
+import com.shootr.android.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
-public class WatchNumberPresenter implements Presenter {
+public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, EventChanged.Receiver {
 
     private final Bus bus;
     private final WatchNumberInteractor watchNumberInteractor;
 
-    private WatchingRequestView watchingRequestView;
-    private Integer peopleWatchingCount;
+    private WatchNumberView watchNumberView;
 
     @Inject public WatchNumberPresenter(@Main Bus bus, WatchNumberInteractor watchNumberInteractor) {
         this.bus = bus;
         this.watchNumberInteractor = watchNumberInteractor;
     }
 
-    public void initialize(WatchingRequestView watchingRequestView) {
-        this.watchingRequestView = watchingRequestView;
+    protected void setView(WatchNumberView watchNumberView) {
+        this.watchNumberView = watchNumberView;
+    }
+
+    public void initialize(WatchNumberView watchNumberView) {
+        this.setView(watchNumberView);
         this.retrieveData();
     }
 
-    private void retrieveData() {
-        watchNumberInteractor.loadWatchNumber(new EventsWatchedCountInteractor.Callback() {
+    protected void retrieveData() {
+        watchNumberInteractor.loadWatchNumber(new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer count) {
-                onNumberReceived(count);
+                setViewWathingCount(count);
             }
         }, new Interactor.InteractorErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -41,19 +44,11 @@ public class WatchNumberPresenter implements Presenter {
         });
     }
 
-    //TODO...
-    @Subscribe public void onRequestWatchByPush(WatchUpdateRequest.Event event) {
-        retrieveData();
-    }
-
-    public void onNumberReceived(Integer count) {
-        peopleWatchingCount = count;
-        watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
-    }
-
-    public void menuCreated() {
-        if (peopleWatchingCount != null) {
-            watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
+    private void setViewWathingCount(Integer count) {
+        if (count != WatchNumberInteractor.NO_EVENT) {
+            watchNumberView.showWatchingPeopleCount(count);
+        } else {
+            watchNumberView.hideWatchingPeopleCount();
         }
     }
 
@@ -63,5 +58,19 @@ public class WatchNumberPresenter implements Presenter {
 
     @Override public void pause() {
         bus.unregister(this);
+    }
+
+    @Subscribe
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+        retrieveData();
+    }
+
+    @Subscribe
+    @Override public void onEventChanged(EventChanged.Event event) {
+        if (event.getNewEventId() != null) {
+            retrieveData();
+        } else {
+            watchNumberView.hideWatchingPeopleCount();
+        }
     }
 }

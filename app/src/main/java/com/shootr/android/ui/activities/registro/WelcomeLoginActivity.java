@@ -20,16 +20,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.WelcomePagerAdapter;
-import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.widgets.WelcomeIndicator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class WelcomeLoginActivity extends BaseActivity {
+public class WelcomeLoginActivity extends BaseToolbarActivity {
 
     // Main layouts
     @InjectView(R.id.welcome_container) View mWelcomeContainer;

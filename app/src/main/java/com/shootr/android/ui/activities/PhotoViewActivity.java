@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PhotoViewActivity extends BaseActivity {
+public class PhotoViewActivity extends BaseToolbarActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
     private static final String EXTRA_IMAGE_URL = "image";

@@ -16,15 +16,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.task.events.loginregister.RegistrationCompletedEvent;
-import com.shootr.android.ui.base.BaseActivity;
 import javax.inject.Inject;
 
-public class FacebookRegistroActivity extends BaseActivity {
+public class FacebookRegistroActivity extends BaseToolbarActivity {
 
     private static final String KEY_EMAIL = "email";
     private static final String KEY_USERNAME = "usernameSuggestion";

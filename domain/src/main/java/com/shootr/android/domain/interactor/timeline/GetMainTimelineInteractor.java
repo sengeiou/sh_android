@@ -6,6 +6,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -28,6 +29,7 @@ public class GetMainTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
+    private final WatchRepository localWatchRepository;
     private final WatchRepository remoteWatchRepository;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
@@ -38,10 +40,12 @@ public class GetMainTimelineInteractor implements Interactor {
 
     @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
-      @Remote WatchRepository remoteWatchRepository, @Local EventRepository localEventRepository,
-      @Local UserRepository localUserRepository, SynchronizationRepository synchronizationRepository) {
+      @Local WatchRepository localWatchRepository, @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository, @Remote WatchRepository remoteWatchRepository,
+      @Local EventRepository localEventRepository, @Local UserRepository localUserRepository,
+      SynchronizationRepository synchronizationRepository) {
         this.sessionRepository = sessionRepository;
+        this.localWatchRepository = localWatchRepository;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
@@ -59,52 +63,65 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            loadShotsWithEvent(visibleEvent);
+        loadLocalShots();
+        loadRemoteShots();
+    }
+
+    private void loadLocalShots() {
+        Event localVisibleEvent = getVisibleEventFromRepository(localWatchRepository);
+        if (localVisibleEvent == null) {
+            loadLocalShotsWithoutEvent(buildParametersWithoutEvent());
         } else {
-            loadShotsWithoutEvent();
+            loadLocalShotsWithEvent(buildParametersWithEvent(localVisibleEvent));
         }
     }
 
-    private void loadShotsWithoutEvent() {
-        TimelineParameters timelineParameters = buildParametersWithoutEvent();
+    private void loadRemoteShots() {
+        try {
+            Event remoteVisibleEvent = getVisibleEventFromRepository(remoteWatchRepository);
+            if (remoteVisibleEvent == null) {
+                loadRemoteShotsWithoutEvent(buildParametersWithoutEvent());
+            } else {
+                loadRemoteShotsWithEvent(buildParametersWithEvent(remoteVisibleEvent));
+            }
+        } catch (ShootrException error) {
+            //TODO hanlde network errors in UI
+        }
+    }
 
+    private void loadLocalShotsWithoutEvent(TimelineParameters timelineParameters) {
         List<Shot> localShots = localShotRepository.getShotsForTimeline(timelineParameters);
         localShots = sortShotsByPublishDate(localShots);
         if (!localShots.isEmpty()) {
             notifyTimelineFromShots(localShots);
         }
+    }
 
+    private void loadRemoteShotsWithoutEvent(TimelineParameters timelineParameters) {
         List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
         remoteShots = sortShotsByPublishDate(remoteShots);
         notifyTimelineFromShots(remoteShots);
         updateLastRefreshDate(remoteShots);
     }
 
-    private TimelineParameters buildParametersWithoutEvent() {
-        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).build();
-    }
-
-    private void loadShotsWithEvent(Event visibleEvent) {
-        TimelineParameters timelineParameters = buildParametersWithEvent(visibleEvent);
-
+    private void loadLocalShotsWithEvent(TimelineParameters timelineParameters) {
         List<Shot> localShotsWithAuthor = localShotRepository.getShotsForTimeline(timelineParameters);
         localShotsWithAuthor = sortShotsByPublishDate(localShotsWithAuthor);
         if (!localShotsWithAuthor.isEmpty()) {
             notifyTimelineFromShots(localShotsWithAuthor);
         }
+    }
 
+    private void loadRemoteShotsWithEvent(TimelineParameters timelineParameters) {
         List<Shot> remoteShotsWithAuthor = remoteShotRepository.getShotsForTimeline(timelineParameters);
         remoteShotsWithAuthor = sortShotsByPublishDate(remoteShotsWithAuthor);
         notifyTimelineFromShots(remoteShotsWithAuthor);
         updateLastRefreshDate(remoteShotsWithAuthor);
     }
 
-    private void updateLastRefreshDate(List<Shot> remoteShots) {
-        if (remoteShots.size() > 0) {
-            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0).getPublishDate().getTime());
-        }
+
+    private TimelineParameters buildParametersWithoutEvent() {
+        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).build();
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
@@ -112,6 +129,12 @@ public class GetMainTimelineInteractor implements Interactor {
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId())
           .forEvent(event)
           .build();
+    }
+
+    private void updateLastRefreshDate(List<Shot> remoteShots) {
+        if (remoteShots.size() > 0) {
+            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0).getPublishDate().getTime());
+        }
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
@@ -127,6 +150,14 @@ public class GetMainTimelineInteractor implements Interactor {
         return ids;
     }
 
+    private Event getVisibleEventFromRepository(WatchRepository watchRepository) {
+        Watch currentVisibleWatch = watchRepository.getCurrentVisibleWatch();
+        if (currentVisibleWatch != null) {
+            return localEventRepository.getEventById(currentVisibleWatch.getIdEvent());
+        }
+        return null;
+    }
+
     //region Result
     private void notifyTimelineFromShots(List<Shot> shots) {
         Timeline timeline = buildTimeline(shots);
@@ -137,14 +168,6 @@ public class GetMainTimelineInteractor implements Interactor {
         Timeline timeline = new Timeline();
         timeline.setShots(shots);
         return timeline;
-    }
-
-    private Event getVisibleEvent() {
-        Watch currentVisibleWatch = remoteWatchRepository.getCurrentVisibleWatch();
-        if (currentVisibleWatch != null) {
-            return localEventRepository.getEventById(currentVisibleWatch.getIdEvent());
-        }
-        return null;
     }
 
     private void notifyLoaded(final Timeline timeline) {

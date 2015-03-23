@@ -9,7 +9,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.widgets.DatePickerBuilder;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.shootr.android.util.DateFormatter;
@@ -17,7 +17,7 @@ import com.shootr.android.util.TimeFormatter;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
 
-public class DateTimePickerDialogActivity extends BaseActivity
+public class DateTimePickerDialogActivity extends BaseToolbarActivity
   implements DatePickerBuilder.DateListener, TimePickerBuilder.TimeListener {
 
     public static final String KEY_TIMESTAMP = "timestamp";

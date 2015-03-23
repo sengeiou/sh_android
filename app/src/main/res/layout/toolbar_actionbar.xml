@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v7.widget.Toolbar
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.Toolbar android:id="@+id/toolbar_actionbar"
   style="?toolbar"
-  android:id="@+id/toolbar_actionbar"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="?actionBarSize"
-  >
+  android:layout_height="?actionBarSize">
+
+    <TextView android:id="@+id/toolbar_title"
+      style="@style/ActionBar.TitleText"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:background="?selectableItemBackground"
+      android:drawablePadding="8dp"
+      android:gravity="center_vertical|start"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:visibility="gone"
+      tools:drawableRight="@drawable/spinner_triangle_white"
+      tools:text="Title"
+      tools:visibility="visible" />
 
 </android.support.v7.widget.Toolbar>

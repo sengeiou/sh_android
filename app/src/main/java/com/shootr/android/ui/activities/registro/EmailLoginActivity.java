@@ -21,6 +21,10 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
+import com.shootr.android.ui.activities.TimelineActivity;
+import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
@@ -31,15 +35,13 @@ import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.loginregister.LoginResultEvent;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
-import com.shootr.android.ui.activities.MainActivity;
-import com.shootr.android.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class EmailLoginActivity extends BaseActivity {
+public class EmailLoginActivity extends BaseToolbarActivity {
 
     private static final int BUTTON_ERROR = -1;
     private static final int BUTTON_NORMAL = 0;
@@ -48,6 +50,8 @@ public class EmailLoginActivity extends BaseActivity {
     @Inject JobManager jobManager;
     @Inject @Main Bus bus;
     @Inject @Deprecated UserEntityMapper userEntityMapper;
+    @Inject GetPeopleInteractor getPeopleInteractor;
+
 
     @Inject SessionRepository sessionRepository;
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
@@ -77,9 +81,19 @@ public class EmailLoginActivity extends BaseActivity {
         Timber.d("Succesfuly logged in %s", user.getUsername());
         // Store user in current session
         sessionRepository.createSession(user.getIdUser(), userEntity.getSessionToken(), user); //TODO quitar token del User
+        getPeopleInteractor.obtainPeople();
+        goToTimeline();
+    }
+
+    @Subscribe
+    public void onPeopleLoaded(UserList userList){
+        goToTimeline();
+    }
+
+    private void goToTimeline() {
         // Launch main activity, and destroy the stack trace
         finish();
-        Intent i = new Intent(this,MainActivity.class);
+        Intent i = new Intent(this,TimelineActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
