@@ -22,7 +22,7 @@ import javax.inject.Singleton;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_API_URL = "http://api.shootr.com/data-services/rest/generic/";
+    public static final String PRODUCTION_API_URL = "http://dataservices.shootr.com/data-services/rest/generic/";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
