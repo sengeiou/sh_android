@@ -9,8 +9,8 @@ import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
+import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -30,7 +30,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //region Dependencies
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
-    private final WatchingInteractor watchingStatusInteractor;
+    private final UpdateStatusInteractor watchingStatusInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
 
     private final EventModelMapper eventModelMapper;
@@ -44,7 +44,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
 
     @Inject public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
+      UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
       EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
