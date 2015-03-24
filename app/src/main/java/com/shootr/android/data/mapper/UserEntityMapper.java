@@ -33,6 +33,8 @@ public class UserEntityMapper {
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
 
+        user.setStatus(userEntity.getStatus());
+
         return user;
     }
 
@@ -56,6 +58,8 @@ public class UserEntityMapper {
 
         userEntity.setIdEvent(user.getVisibleEventId());
         userEntity.setEventTitle(user.getVisibleEventTitle());
+
+        userEntity.setStatus(user.getStatus());
 
         //TODO synchronized fields
         return userEntity;
