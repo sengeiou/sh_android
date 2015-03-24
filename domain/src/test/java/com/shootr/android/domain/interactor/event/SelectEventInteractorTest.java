@@ -19,7 +19,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static com.shootr.android.domain.asserts.UserAssert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
@@ -35,6 +37,9 @@ public class SelectEventInteractorTest {
     private static final Long OLD_EVENT_ID = 1L;
     private static final Long NEW_EVENT_ID = 2L;
     private static final Long CURRENT_USER_ID = 1L;
+    private static final String OLD_EVENT_TITLE = "oldTitle";
+    private static final String NEW_EVENT_TITLE = "newTitle";
+    private static final String STATUS_WATCHING = "Watching";
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock EventRepository eventRepository;
@@ -61,6 +66,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInSessionRepository() throws Exception {
         setupOldVisibleEvent();
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -70,6 +76,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInLocalRepository() throws Exception {
         setupOldVisibleEvent();
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -79,6 +86,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInRemoteRepository() throws Exception {
         setupOldVisibleEvent();
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -93,6 +101,7 @@ public class SelectEventInteractorTest {
     @Test
     public void selectingCurrentEventDoesntNotifyUi() throws Exception {
         setupOldVisibleEvent();
+        when(eventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
@@ -101,12 +110,44 @@ public class SelectEventInteractorTest {
 
     @Test
     public void shouldNotifyCallbackBeforeSettingUserInRemoteRepository() throws Exception {
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
         inOrder.verify(dummyCallback).onLoaded(anyLong());
         inOrder.verify(remoteUserRepository).putUser(any(User.class));
+    }
+
+    @Test
+    public void should_setEventId_when_updateUserWithEventInfo() throws Exception {
+        User userWithOldEvent = currentUserWatchingOldEvent();
+        Event selectedEvent = newEvent();
+
+        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
+
+        assertThat(updatedUser).hasVisibleEventId(NEW_EVENT_ID);
+    }
+
+    @Test
+    public void should_setEventTitle_when_updateUserWithEventInfo() throws Exception {
+        User userWithOldEvent = currentUserWatchingOldEvent();
+        Event selectedEvent = newEvent();
+
+        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
+
+        assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
+    }
+
+    @Test
+    public void should_setStatusAsWatching_when_updateUserWithEventInfo() throws Exception {
+        User userWithOldEvent = currentUserWatchingOldEvent();
+        userWithOldEvent.setStatus("oldStatus");
+        Event selectedEvent = newEvent();
+
+        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
+
+        assertThat(updatedUser).hasStatus(STATUS_WATCHING);
     }
 
     private void setupOldVisibleEvent() {
@@ -116,6 +157,7 @@ public class SelectEventInteractorTest {
     private User currentUserWatchingOldEvent() {
         User user = currentUser();
         user.setVisibleEventId(OLD_EVENT_ID);
+        user.setVisibleEventTitle(OLD_EVENT_TITLE);
         return user;
     }
 
@@ -130,6 +172,14 @@ public class SelectEventInteractorTest {
     private Event newEvent() {
         Event event = new Event();
         event.setId(NEW_EVENT_ID);
+        event.setTitle(NEW_EVENT_TITLE);
+        return event;
+    }
+
+    private Event oldEvent() {
+        Event event = new Event();
+        event.setId(OLD_EVENT_ID);
+        event.setTitle(OLD_EVENT_TITLE);
         return event;
     }
 

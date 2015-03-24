@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
+import com.shootr.android.domain.Event;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -45,12 +46,21 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
-        currentUser.setVisibleEventId(idSelectedEvent);
+        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
 
-        sessionRepository.setCurrentUser(currentUser);
-        localUserRepository.putUser(currentUser);
+        User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
+
+        sessionRepository.setCurrentUser(updatedUser);
+        localUserRepository.putUser(updatedUser);
         notifyLoaded(idSelectedEvent);
-        remoteUserRepository.putUser(currentUser); // TODO might have to change to the new actions/endpoint
+        remoteUserRepository.putUser(updatedUser); // TODO might have to change to the new actions/endpoint
+    }
+
+    protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
+        currentUser.setVisibleEventId(selectedEvent.getId());
+        currentUser.setVisibleEventTitle(selectedEvent.getTitle());
+        currentUser.setStatus("Watching"); //TODO hardoced, eh??
+        return currentUser;
     }
 
     private void notifyLoaded(final Long selectedEventId) {
