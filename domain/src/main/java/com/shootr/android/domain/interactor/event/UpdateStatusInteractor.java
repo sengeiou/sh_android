@@ -46,6 +46,7 @@ public class UpdateStatusInteractor implements Interactor {
 
         currentUser.setStatus(userStatus);
 
+        sessionRepository.setCurrentUser(currentUser);
         localUserRepository.putUser(currentUser);
         notifyLoaded(currentUser);
         remoteUserRepository.putUser(currentUser);
