@@ -105,7 +105,7 @@ public class SelectEventInteractorTest {
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
-        verify(interactorHandler, never()).sendUiMessage(anyObject());
+        verify(dummyCallback, never()).onLoaded(anyLong());
     }
 
     @Test

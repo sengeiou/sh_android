@@ -46,6 +46,9 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
+        if (isSelectingCurrentVisibleEvent(currentUser)) {
+            return;
+        }
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
 
         User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
@@ -54,6 +57,10 @@ public class SelectEventInteractor implements Interactor {
         localUserRepository.putUser(updatedUser);
         notifyLoaded(idSelectedEvent);
         remoteUserRepository.putUser(updatedUser); // TODO might have to change to the new actions/endpoint
+    }
+
+    private boolean isSelectingCurrentVisibleEvent(User currentUser) {
+        return idSelectedEvent.equals(currentUser.getVisibleEventId());
     }
 
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
