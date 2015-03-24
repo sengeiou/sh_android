@@ -70,18 +70,13 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
     }
 
     @Override public User getUserById(Long id) {
-        UserEntity localUser = localUserDataSource.getUser(id);
-        if (localUser != null) {
-            //TODO update always? or when? cache maybe?
-            return entityToDomain(localUser);
+        UserEntity remoteUser = remoteUserDataSource.getUser(id);
+        if (remoteUser != null) {
+            localUserDataSource.putUser(remoteUser);
+            return entityToDomain(remoteUser);
         } else {
-            UserEntity remoteUser = remoteUserDataSource.getUser(id);
-            if (remoteUser != null) {
-                localUserDataSource.putUser(remoteUser);
-                return entityToDomain(remoteUser);
-            } else {
-                return null;
-            }
+            //TODO throw exception when not found? Maybe, but needs some work done in interactors' error handling
+            return null;
         }
     }
 

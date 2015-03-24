@@ -28,7 +28,6 @@ public class WatchNumberInteractorTest {
 
     private WatchNumberInteractor interactor;
 
-    @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock Interactor.InteractorErrorCallback dummyErrorCallback;
@@ -41,14 +40,12 @@ public class WatchNumberInteractorTest {
         TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
         interactor = new WatchNumberInteractor(testInteractorHandler,
           postExecutionThread,
-          sessionRepository,
-          localUserRepository,
-          remoteUserRepository);
+          sessionRepository, remoteUserRepository);
     }
 
     @Test
     public void testPeopleAndMeIncludesMe() throws Exception {
-        when(localUserRepository.getPeople()).thenReturn(onePersonList());
+        when(remoteUserRepository.getPeople()).thenReturn(onePersonList());
         when(sessionRepository.getCurrentUser()).thenReturn(me());
 
         List<User> peopleAndMe = interactor.getPeopleAndMe();
@@ -59,7 +56,7 @@ public class WatchNumberInteractorTest {
 
     @Test
     public void shouldIncludeMeInTheCount() throws Exception {
-        when(localUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
+        when(remoteUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
         when(sessionRepository.getCurrentUser()).thenReturn(me());
 
         interactor.loadWatchNumber(spyCallback, dummyErrorCallback);

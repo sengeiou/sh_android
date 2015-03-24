@@ -90,7 +90,7 @@ public class VisibleEventInfoInteractor implements Interactor {
                 return NO_EVENT_VISIBLE_INFO;
             }
 
-            List<User> people = localUserRepository.getPeople();
+            List<User> people = userRepository.getPeople();
             List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
 
             return buildEventInfo(visibleEvent, watchesFromPeople, currentUser);

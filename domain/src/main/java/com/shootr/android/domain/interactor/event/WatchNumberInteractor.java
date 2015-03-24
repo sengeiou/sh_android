@@ -24,15 +24,13 @@ public class WatchNumberInteractor implements Interactor{
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
 
     @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository) {
+      SessionRepository sessionRepository, @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
     }
 
@@ -79,7 +77,7 @@ public class WatchNumberInteractor implements Interactor{
     //TODO want local or remote?
     protected List<User> getPeopleAndMe() {
         List<User> peopleAndMe = new ArrayList<>();
-        List<User> people = localUserRepository.getPeople();
+        List<User> people = remoteUserRepository.getPeople();
         peopleAndMe.addAll(people);
         peopleAndMe.add(sessionRepository.getCurrentUser());
         return peopleAndMe;
