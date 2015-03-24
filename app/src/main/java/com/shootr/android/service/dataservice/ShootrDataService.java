@@ -129,6 +129,22 @@ public class ShootrDataService implements ShootrService {
         return following;
     }
 
+    @Override public List<UserEntity> getUsersById(List<Long> userIds) throws IOException{
+        List<UserEntity> users = new ArrayList<>();
+        GenericDto requestDto = userDtoFactory.getUsersOperationDto(userIds);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else if (ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object>[] data = ops[0].getData();
+            for(Map<String,Object> d:data){
+                UserEntity user = userMapper.fromDto(d);
+                users.add(user);
+            }
+        }
+        return users;
+    }
 
     @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
         List<UserEntity> followers = new ArrayList<>();

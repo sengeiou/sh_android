@@ -43,6 +43,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userManager.getUserByIdUser(id);
     }
 
+    @Override public List<UserEntity> getUsers(List<Long> userIds) {
+        return userManager.getUsersByIds(userIds);
+    }
+
     @Override public boolean isFollower(Long from, Long who) {
         if (from == null || who == null) {
             return false;

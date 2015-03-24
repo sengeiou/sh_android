@@ -20,6 +20,10 @@ public interface ShootrService {
 
     public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
 
+    public List<UserEntity> getUsersById(List<Long> userIds) throws IOException;
+
+    public UserEntity getUserByIdUser(Long idUser) throws IOException;
+
     public ShotEntity getShotById(Long idShot) throws IOException;
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
@@ -31,8 +35,6 @@ public interface ShootrService {
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
-
-    public UserEntity getUserByIdUser(Long idUser) throws IOException;
 
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;

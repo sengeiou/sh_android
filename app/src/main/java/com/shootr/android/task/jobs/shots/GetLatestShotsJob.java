@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
 
@@ -54,13 +53,11 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
             user = getUserByIdFromService();
         }
         //OfflineMode
-        Timber.e("Sending Offline Shots");
         List<ShotEntity> latestShotsOffline = getLatestShotsFromDatabase();
         postSuccessfulEvent(new LatestShotsResultEvent(getLatestShotModels(latestShotsOffline)));
 
         if(hasInternetConnection()){
             //OnlineMode
-            Timber.e("Sending Shots Updated from Service");
             List<ShotEntity> latestShots = getLatestsShotsFromService();
             postSuccessfulEvent(new LatestShotsResultEvent(getLatestShotModels(latestShots)));
         }
