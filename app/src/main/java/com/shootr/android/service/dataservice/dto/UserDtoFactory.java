@@ -226,7 +226,7 @@ public class UserDtoFactory {
 
     public GenericDto saveUserDto(UserEntity userEntity) {
         MetadataDto md = new MetadataDto.Builder()
-          .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
+          .operation(ServiceConstants.OPERATION_UPDATE)
           .entity(UserTable.TABLE)
           .putKey(UserTable.ID, userEntity.getIdUser())
           .build();
