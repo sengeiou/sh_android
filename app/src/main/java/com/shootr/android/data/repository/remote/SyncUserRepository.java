@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.remote;
 
+import com.shootr.android.data.bus.Default;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
@@ -11,55 +12,55 @@ import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SyncUserRepository implements UserRepository, SyncableRepository {
+public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
-    private final CachedUserDataSource cachedUserDataSource;
+    private final CachedUserDataSource cachedRemoteUserDataSource;
     private final FollowDataSource localFollowDataSource;
     private final UserEntityMapper userEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SyncTrigger syncTrigger;
+    private final Bus bus;
 
     @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
-      CachedUserDataSource cachedUserDataSource, @Local FollowDataSource localFollowDataSource,
-      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger) {
+      CachedUserDataSource cachedRemoteUserDataSource, @Local FollowDataSource localFollowDataSource,
+      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger,
+      @Default Bus bus) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
-        this.cachedUserDataSource = cachedUserDataSource;
+        this.cachedRemoteUserDataSource = cachedRemoteUserDataSource;
         this.localFollowDataSource = localFollowDataSource;
         this.userEntityMapper = userEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
         this.syncTrigger = syncTrigger;
+        this.bus = bus;
+        this.bus.register(this);
     }
 
     @Override public List<User> getPeople() {
-        List<UserEntity> cachedFollowing = cachedUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
-        if (cachedFollowing != null) {
-            return transformUserEntitiesForPeople(cachedFollowing);
-        } else {
-            List<UserEntity> remotePeopleEntities =
-              remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
-            markSynchronized(remotePeopleEntities);
-            localUserDataSource.putUsers(remotePeopleEntities);
-            cachedUserDataSource.putUsers(remotePeopleEntities);
-            localFollowDataSource.putFollows(createFollowsFromUsers(remotePeopleEntities));
-            return transformUserEntitiesForPeople(remotePeopleEntities);
-        }
+        List<UserEntity> remotePeopleEntities =
+          remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+        markSynchronized(remotePeopleEntities);
+        localUserDataSource.putUsers(remotePeopleEntities);
+        localFollowDataSource.putFollows(createFollowsFromUsers(remotePeopleEntities));
+        return transformUserEntitiesForPeople(remotePeopleEntities);
     }
 
     private List<FollowEntity> createFollowsFromUsers(List<UserEntity> following) {
@@ -80,15 +81,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
     }
 
     @Override public User getUserById(Long id) {
-        UserEntity cachedUser = cachedUserDataSource.getUser(id);
-        if (cachedUser != null) {
-            return entityToDomain(cachedUser);
-        } else {
-            UserEntity remoteUser = remoteUserDataSource.getUser(id);
-            localUserDataSource.putUser(remoteUser);
-            cachedUserDataSource.putUser(remoteUser);
-            return entityToDomain(remoteUser);
-        }
+        UserEntity user = cachedRemoteUserDataSource.getUser(id);
+        return entityToDomain(user);
     }
 
     private User entityToDomain(UserEntity remoteUser) {
@@ -107,16 +101,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
     }
 
     @Override public List<User> getUsersByIds(List<Long> userIds) {
-        List<UserEntity> cachedEntities = cachedUserDataSource.getUsers(userIds);
-        if (cachedEntities != null) {
-            return entitiesToDomain(cachedEntities);
-        } else {
-            List<UserEntity> remoteEntities = remoteUserDataSource.getUsers(userIds);
-            localUserDataSource.putUsers(remoteEntities);
-            cachedUserDataSource.putUsers(remoteEntities);
-            return entitiesToDomain(remoteEntities);
-
-        }
+        List<UserEntity> userEntities = cachedRemoteUserDataSource.getUsers(userIds);
+        return entitiesToDomain(userEntities);
     }
 
     @Override public boolean isFollower(Long userId) {
@@ -133,7 +119,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
             UserEntity remoteWatchEntity = remoteUserDataSource.putUser(currentOrNewUserEntity);
             markEntitySynchronized(remoteWatchEntity);
             localUserDataSource.putUser(remoteWatchEntity); //TODO Should think about making the cache responsible for this
-            cachedUserDataSource.putUser(remoteWatchEntity);
+            cachedRemoteUserDataSource.putUser(remoteWatchEntity);
             return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
         } catch (ServerCommunicationException e) {
             queueUpload(currentOrNewUserEntity, e);
@@ -192,5 +178,22 @@ public class SyncUserRepository implements UserRepository, SyncableRepository {
 
     private void markEntitySynchronized(UserEntity userEntity) {
         userEntity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
+    }
+
+    private void forceUpdatePeopleAndMe() {
+        syncTrigger.triggerSync();
+        List<UserEntity> people = remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+        UserEntity me = remoteUserDataSource.getUser(sessionRepository.getCurrentUserId());
+        // TODO download events? Do I need them? At least mine, I guess.
+        markSynchronized(people);
+        markEntitySynchronized(me);
+        localUserDataSource.putUsers(people);
+        localUserDataSource.putUser(me);
+        cachedRemoteUserDataSource.resetCachedUpdateTime();
+    }
+
+    @Subscribe
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+        forceUpdatePeopleAndMe();
     }
 }

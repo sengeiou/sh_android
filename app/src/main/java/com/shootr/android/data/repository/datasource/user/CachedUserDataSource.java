@@ -3,6 +3,7 @@ package com.shootr.android.data.repository.datasource.user;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -12,11 +13,13 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
     private static final long EXPIRATION_TIME_MILLIS = 20 * 1000;
 
     private final UserDataSource localUserDataSource;
+    private final UserDataSource remoteUserDataSource;
     boolean wasValidLastCheck = false;
     long lastCacheUpdateTime;
 
-    @Inject public CachedUserDataSource(@Local UserDataSource localUserDataSource) {
+    @Inject public CachedUserDataSource(@Local UserDataSource localUserDataSource, @Remote UserDataSource remoteUserDataSource) {
         this.localUserDataSource = localUserDataSource;
+        this.remoteUserDataSource = remoteUserDataSource;
     }
 
     @Override public boolean isValid() {
@@ -31,50 +34,54 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         wasValidLastCheck = false;
     }
 
-
     protected boolean hasExpired() {
         return System.currentTimeMillis() > lastCacheUpdateTime + EXPIRATION_TIME_MILLIS;
     }
 
-    protected void resetCachedUpdateTime() {
+    public void resetCachedUpdateTime() {
         lastCacheUpdateTime = System.currentTimeMillis();
         wasValidLastCheck = true;
     }
 
     @Override public List<UserEntity> getFollowing(Long userId) {
-        if (isValid()) {
-            Timber.d("Cache hit: getFollowing");
-            return localUserDataSource.getFollowing(userId);
-        } else {
-            return null;
-        }
+        throw new RuntimeException("getFollowing not cacheable");
     }
 
     @Override public UserEntity putUser(UserEntity userEntity) {
-        resetCachedUpdateTime();
         return userEntity;
     }
 
     @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
-        resetCachedUpdateTime();
         return userEntities;
     }
 
     @Override public UserEntity getUser(Long id) {
+        UserEntity cachedUser = null;
         if (isValid()) {
-            Timber.d("Cache hit: getUser %d", id);
-            return localUserDataSource.getUser(id);
+            cachedUser = localUserDataSource.getUser(id);
+        }
+        if (cachedUser != null) {
+            return cachedUser;
         } else {
-            return null;
+            UserEntity remoteUser = remoteUserDataSource.getUser(id);
+            localUserDataSource.putUser(remoteUser);
+            this.resetCachedUpdateTime();
+            return remoteUser;
         }
     }
 
     @Override public List<UserEntity> getUsers(List<Long> userIds) {
+        List<UserEntity> cachedUsers = null;
         if (isValid()) {
-            Timber.d("Cache hit: getUsers");
-            return localUserDataSource.getUsers(userIds);
+            cachedUsers = localUserDataSource.getUsers(userIds);
+        }
+        if (cachedUsers != null) {
+            return cachedUsers;
         } else {
-            return null;
+            List<UserEntity> remoteUsers = remoteUserDataSource.getUsers(userIds);
+            localUserDataSource.putUsers(remoteUsers);
+            this.resetCachedUpdateTime();
+            return remoteUsers;
         }
     }
 
