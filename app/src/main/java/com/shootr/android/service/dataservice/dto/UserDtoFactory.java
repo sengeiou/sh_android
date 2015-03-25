@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
@@ -190,12 +191,15 @@ public class UserDtoFactory {
     }
 
     public GenericDto getUsersOperationDto(List<Long> userIds) {
-        FilterDto filter = orModifiedOrDeletedAfter(0L)
+        FilterDto filter = orIsNotDeleted()
+          .or(UserTable.CSYS_MODIFIED).greaterThan(0L)
           .or(UserTable.ID).isIn(userIds).build();
 
         MetadataDto metadata = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(UserTable.TABLE)
           .filter(filter)
+          .items(100)
+          .totalItems(100)
           .includeDeleted(false)
           .build();
 
