@@ -5,7 +5,7 @@ import com.shootr.android.service.ApiModule;
 
 public enum ApiEndpoints {
   PRODUCTION("Production", ApiModule.PRODUCTION_API_URL),
-  TEST("Test", "http://api.shootr.com/data-services/rest/generic"),
+  TEST("Test", "http://tst.dataservices.shootr.com/data-services/rest/generic/"),
   MOCK_MODE("Mock Mode", "mock://"),
   CUSTOM("Custom", null);
 
