@@ -126,7 +126,7 @@ public class UserManager extends AbstractManager {
         }
         Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
           UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")", selectionArguments, null, null,
-          UserTable.NAME);
+          UserTable.USER_NAME);
 
         if (queryResults.getCount() > 0) {
             queryResults.moveToFirst();
