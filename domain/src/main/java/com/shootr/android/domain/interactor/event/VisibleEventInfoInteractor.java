@@ -83,7 +83,7 @@ public class VisibleEventInfoInteractor implements Interactor {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
         Long wantedEventId = getWantedEventId(currentUser);
 
-        if (wantedEventId > 0) {
+        if (wantedEventId!=null && wantedEventId > 0) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
