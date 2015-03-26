@@ -20,8 +20,10 @@ import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.Event;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.interactor.event.GetEventInteractor;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.ui.activities.TimelineActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
@@ -51,6 +53,7 @@ public class EmailLoginActivity extends BaseToolbarActivity {
     @Inject @Main Bus bus;
     @Inject @Deprecated UserEntityMapper userEntityMapper;
     @Inject GetPeopleInteractor getPeopleInteractor;
+    @Inject GetEventInteractor getEventInteractor;
 
 
     @Inject SessionRepository sessionRepository;
@@ -81,14 +84,26 @@ public class EmailLoginActivity extends BaseToolbarActivity {
         Timber.d("Succesfuly logged in %s", user.getUsername());
         // Store user in current session
         sessionRepository.createSession(user.getIdUser(), userEntity.getSessionToken(), user); //TODO quitar token del User
-        getPeopleInteractor.obtainPeople();
-        goToTimeline();
+
+        // Another ñapa
+        if (user.getVisibleEventId() != null) {
+            getEventInteractor.loadEvent(user.getVisibleEventId(), new GetEventInteractor.Callback() {
+                @Override public void onLoaded(Event event) {
+                    getPeopleInteractor.obtainPeople();
+                }
+            });
+        } else {
+            getPeopleInteractor.obtainPeople();
+
+        }
+
     }
 
     @Subscribe
     public void onPeopleLoaded(UserList userList){
         goToTimeline();
     }
+
 
     private void goToTimeline() {
         // Launch main activity, and destroy the stack trace
