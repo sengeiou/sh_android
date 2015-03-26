@@ -5,6 +5,9 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.Cached;
+import com.shootr.android.data.repository.datasource.CachedDataSource;
+import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.datasource.user.CachedUserDataSource;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
@@ -32,6 +35,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final UserDataSource remoteUserDataSource;
     private final CachedUserDataSource cachedRemoteUserDataSource;
     private final FollowDataSource localFollowDataSource;
+    private final EventSearchDataSource cachedEventSearchDataSource;
     private final UserEntityMapper userEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SyncTrigger syncTrigger;
@@ -40,13 +44,14 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
       CachedUserDataSource cachedRemoteUserDataSource, @Local FollowDataSource localFollowDataSource,
-      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger,
-      @Default Bus bus) {
+      @Cached EventSearchDataSource cachedEventSearchDataSource, UserEntityMapper userEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
         this.cachedRemoteUserDataSource = cachedRemoteUserDataSource;
         this.localFollowDataSource = localFollowDataSource;
+        this.cachedEventSearchDataSource = cachedEventSearchDataSource;
         this.userEntityMapper = userEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
         this.syncTrigger = syncTrigger;
@@ -120,11 +125,16 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
             markEntitySynchronized(remoteWatchEntity);
             localUserDataSource.putUser(remoteWatchEntity); //TODO Should think about making the cache responsible for this
             cachedRemoteUserDataSource.putUser(remoteWatchEntity);
+            invalidateEventListCache();
             return userEntityMapper.transform(remoteWatchEntity, sessionRepository.getCurrentUserId());
         } catch (ServerCommunicationException e) {
             queueUpload(currentOrNewUserEntity, e);
             return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
         }
+    }
+
+    private void invalidateEventListCache() {
+        ((CachedDataSource) cachedEventSearchDataSource).invalidate();
     }
 
     //region Synchronization

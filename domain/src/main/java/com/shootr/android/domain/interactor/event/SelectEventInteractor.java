@@ -56,7 +56,7 @@ public class SelectEventInteractor implements Interactor {
         sessionRepository.setCurrentUser(updatedUser);
         localUserRepository.putUser(updatedUser);
         notifyLoaded(idSelectedEvent);
-        remoteUserRepository.putUser(updatedUser); // TODO might have to change to the new actions/endpoint
+        remoteUserRepository.putUser(updatedUser);
     }
 
     private boolean isSelectingCurrentVisibleEvent(User currentUser) {
