@@ -72,6 +72,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
                 if (!shotModels.isEmpty()) {
                     timelineView.addNewShots(shotModels);
                     timelineView.hideEmpty();
+                    timelineView.showShots();
                 }
                 timelineView.hideLoading();
             }

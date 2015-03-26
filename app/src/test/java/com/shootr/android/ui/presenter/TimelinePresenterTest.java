@@ -79,6 +79,15 @@ public class TimelinePresenterTest {
     }
 
     @Test
+    public void shouldShowShotsInViewWhenGetMainTimelineRespondsShots() throws Exception {
+        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadMainTimeline();
+
+        verify(timelineView).showShots();
+    }
+
+    @Test
     public void shouldShowLoadingViewWhenLoadMainTimeline() throws Exception {
         presenter.loadMainTimeline();
 
@@ -183,6 +192,15 @@ public class TimelinePresenterTest {
         presenter.refresh();
 
         verify(timelineView).hideEmpty();
+    }
+
+    @Test
+    public void shouldShowShotsIfReceivedShotsWhenRefreshing() throws Exception {
+        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(timelineView).showShots();
     }
 
     //endregion
