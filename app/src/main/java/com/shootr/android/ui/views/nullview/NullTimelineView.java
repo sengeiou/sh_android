@@ -15,6 +15,10 @@ public class NullTimelineView implements TimelineView {
         /* no-op */
     }
 
+    @Override public void showShots() {
+        /* no-op */
+    }
+
     @Override public void addNewShots(List<ShotModel> newShots) {
         /* no-op */
     }
