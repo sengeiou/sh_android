@@ -99,7 +99,6 @@ android {
             signingConfig signingConfigs.debug
             signingConfig signingConfigs.debug
 
-            buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.dataservices.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
         }
@@ -108,7 +107,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            buildConfigField "Boolean", "USE_FILE_LOGGER", "false"
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://dataservices.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
         }
@@ -166,6 +164,8 @@ dependencies {
     compile 'com.facebook.stetho:stetho-okhttp:1.0.0'
 
     compile 'com.crashlytics.android:crashlytics:1.1.13'
+
+    debugCompile 'com.github.pedrovgs:lynx:1.4'
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"

@@ -5,10 +5,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application android:vmSafeMode="true">
-        <activity
-            android:name=".ui.activities.LogReaderActivity"
-            android:label="Log Viewer">
-        </activity>
+
+        <activity android:name="com.github.pedrovgs.lynx.LynxActivity"/>
 
         <receiver android:name=".data.SyncBroadcastReceiver">
             <intent-filter >

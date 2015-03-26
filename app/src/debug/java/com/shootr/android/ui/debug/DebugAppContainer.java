@@ -28,6 +28,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
@@ -51,7 +52,6 @@ import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.ui.AppContainer;
-import com.shootr.android.ui.activities.LogReaderActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -499,7 +499,8 @@ public class DebugAppContainer implements AppContainer {
 
     @OnClick(R.id.debug_device_log)
     public void openLog() {
-        drawerContext.startActivity(new Intent(drawerContext, LogReaderActivity.class));
+        Intent lynxActivityIntent = LynxActivity.getIntent(drawerContext);
+        drawerContext.startActivity(lynxActivityIntent);
     }
 
     @OnClick(R.id.debug_device_database_extract)
