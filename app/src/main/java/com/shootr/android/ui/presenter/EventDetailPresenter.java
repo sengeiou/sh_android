@@ -24,6 +24,7 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
@@ -119,6 +120,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
                   eventDetailView.showEditPicture(eventModel.getPicture());
                   eventDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
+                  Timber.e(error, "Error changing event photo");
               }
           });
     }
