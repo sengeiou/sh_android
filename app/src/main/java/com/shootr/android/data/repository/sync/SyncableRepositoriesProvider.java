@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.sync;
 
-import com.shootr.android.data.repository.remote.SyncWatchRepository;
+import com.shootr.android.data.repository.remote.SyncUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -11,9 +11,9 @@ public class SyncableRepositoriesProvider {
 
     private final List<SyncableRepository> syncableRepositories;
 
-    @Inject public SyncableRepositoriesProvider(SyncWatchRepository watchRepository) {
+    @Inject public SyncableRepositoriesProvider(SyncUserRepository syncUserRepository) {
         syncableRepositories = new ArrayList<>();
-        syncableRepositories.add(watchRepository);
+        syncableRepositories.add(syncUserRepository);
     }
 
     public List<SyncableRepository> getSyncableRepositories() {

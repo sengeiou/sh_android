@@ -1,63 +1,58 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.WatchRepository;
+import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
-public class WatchingInteractor implements Interactor {
+public class UpdateStatusInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final WatchRepository localWatchRepository;
-    private final WatchRepository remoteWatchRepository;
+    private final UserRepository localUserRepository;
+    private final UserRepository remoteUserRepository;
     private final SessionRepository sessionRepository;
 
-    private Long idEvent;
     private String userStatus;
     private Callback callback;
 
-    @Inject public WatchingInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local WatchRepository localWatchRepository, @Remote WatchRepository remoteWatchRepository, SessionRepository sessionRepository) {
+    @Inject public UpdateStatusInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localWatchRepository = localWatchRepository;
-        this.remoteWatchRepository = remoteWatchRepository;
+        this.localUserRepository = localUserRepository;
+        this.remoteUserRepository = remoteUserRepository;
         this.sessionRepository = sessionRepository;
     }
 
-    public void sendWatching(Long idEvent, String userStatus, Callback callback) {
-        this.idEvent = idEvent;
+    public void updateStatus(String userStatus, Callback callback) {
         this.userStatus = userStatus;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        setNewWatch();
+        setNewStatus();
     }
 
-    private void setNewWatch() {
+    private void setNewStatus() {
         User currentUser = sessionRepository.getCurrentUser();
 
-        Watch watch = new Watch();
-        watch.setUser(currentUser);
-        watch.setIdEvent(idEvent);
-        watch.setUserStatus(userStatus);
-        watch.setVisible(true); //TODO what if watching is activated from a not visible event? OMG!
+        currentUser.setStatus(userStatus);
 
-        localWatchRepository.putWatch(watch);
-        notifyLoaded(watch);
-        remoteWatchRepository.putWatch(watch);
+        sessionRepository.setCurrentUser(currentUser);
+        localUserRepository.putUser(currentUser);
+        notifyLoaded(currentUser);
+        remoteUserRepository.putUser(currentUser);
     }
 
-    private void notifyLoaded(final Watch watch) {
+    private void notifyLoaded(final User watch) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(watch);
@@ -67,7 +62,6 @@ public class WatchingInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(Watch watchUpdated);
-
+        void onLoaded(User currentUser);
     }
 }

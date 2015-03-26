@@ -17,7 +17,6 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
 import javax.inject.Inject;
@@ -34,13 +33,12 @@ public class EditStatusActivity extends BaseSignedInActivity implements EditInfo
     private int sendMenuIcon;
     private MenuItem sendMenuItem;
 
-    public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
+    public static Intent getIntent(Context context, EventModel eventModel, String currentStatus) {
         String title = eventModel.getTitle();
-        String status = watchingModel.getStatus();
 
         Intent intent = new Intent(context, EditStatusActivity.class);
         intent.putExtra(KEY_TITLE, title);
-        intent.putExtra(KEY_STATUS, status);
+        intent.putExtra(KEY_STATUS, currentStatus);
         return intent;
     }
 

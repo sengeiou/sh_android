@@ -2,13 +2,12 @@ package com.shootr.android.db;
 
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
-import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.ShotQueueTable;
+import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
-import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.DatabaseContract.TeamTable;
-import com.shootr.android.db.DatabaseContract.WatchTable;
+import com.shootr.android.db.DatabaseContract.UserTable;
 
 public class SQLiteUtils {
 
@@ -35,6 +34,7 @@ public class SQLiteUtils {
             + UserTable.EMAIL_NORMALIZED+" VARCHAR(255) NULL,"
             + UserTable.EVENT_ID+" INT NULL,"
             + UserTable.EVENT_TITLE+" TEXT NULL,"
+            + UserTable.STATUS+" TEXT NULL,"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME,"
@@ -138,16 +138,4 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
             + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
-
-    public static final String CREATE_TABLE_WATCH = "CREATE TABLE IF NOT EXISTS "+ WatchTable.TABLE+" ("
-            + WatchTable.ID_EVENT + " INT NOT NULL,"
-            + WatchTable.ID_USER+ " INT NOT NULL,"
-            + WatchTable.STATUS +" TEXT NULL,"
-            + WatchTable.VISIBLE+" INT NOT NULL,"
-            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL,"
-            + " PRIMARY KEY("+WatchTable.ID_USER+","+WatchTable.ID_EVENT +"))";
     }

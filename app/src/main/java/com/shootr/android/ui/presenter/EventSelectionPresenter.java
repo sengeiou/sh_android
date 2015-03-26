@@ -1,7 +1,6 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.EventInfo;
-import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.interactor.event.ExitEventInteractor;
@@ -73,8 +72,8 @@ public class EventSelectionPresenter implements Presenter {
 
     public void onEventSelected(Long eventId) {
         selectEventInteractor.selectEvent(eventId, new SelectEventInteractor.Callback() {
-            @Override public void onLoaded(Watch watch) {
-                onEventChanged(watch.getIdEvent());
+            @Override public void onLoaded(Long selectedEventId) {
+                onEventChanged(selectedEventId);
             }
         });
     }

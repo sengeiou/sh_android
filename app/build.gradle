@@ -34,7 +34,7 @@ def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone(
 
 def versionMajor = 0
 def versionMinor = 0
-def versionRevision = 304
+def versionRevision = 306
 def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
 
 android {

@@ -19,6 +19,7 @@ public class UserModel implements Serializable, Cloneable {
     private Long points;
     private Long eventWatchingId;
     private String eventWatchingTitle;
+    private String status;
 
     public Long getPoints() {
         return points;
@@ -146,5 +147,13 @@ public class UserModel implements Serializable, Cloneable {
 
     public void setEventWatchingTitle(String eventWatchingTitle) {
         this.eventWatchingTitle = eventWatchingTitle;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

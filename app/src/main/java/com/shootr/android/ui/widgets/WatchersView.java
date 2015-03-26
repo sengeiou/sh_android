@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
-import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class WatchersView extends LinearLayout{
     private LayoutInflater layoutInflater;
     private OnEditListener onEditListener;
     private WatcherViewHolder currentUserViewHolder;
-    private Map<UserWatchingModel, WatcherViewHolder> watchersHoldersMap;
+    private Map<UserModel, WatcherViewHolder> watchersHoldersMap;
     private OnProfileClickListener profileClickListener;
 
     //region Construction
@@ -68,7 +68,7 @@ public class WatchersView extends LinearLayout{
     //endregion
 
     //region Public Api
-    public void setCurrentUserWatching(UserWatchingModel currentUserWatching) {
+    public void setCurrentUserWatching(UserModel currentUserWatching) {
         if (currentUserViewHolder == null) {
             currentUserViewHolder = createViewHolder();
             this.addView(currentUserViewHolder.itemView, 0);
@@ -83,13 +83,13 @@ public class WatchersView extends LinearLayout{
         this.removeAllViews();
     }
 
-    public void setWatchers(List<UserWatchingModel> watchers) {
-        for (UserWatchingModel watcher : watchers) {
+    public void setWatchers(List<UserModel> watchers) {
+        for (UserModel watcher : watchers) {
             putWatcher(watcher);
         }
     }
 
-    public void putWatcher(UserWatchingModel userWatching) {
+    public void putWatcher(UserModel userWatching) {
         WatcherViewHolder viewHolder;
         if (watchersHoldersMap.containsKey(userWatching)) {
             viewHolder = watchersHoldersMap.get(userWatching);
@@ -111,11 +111,8 @@ public class WatchersView extends LinearLayout{
     //endregion
 
     //region Private methods
-    private void bindCurrentUserData(WatcherViewHolder viewHolder, UserWatchingModel currentUserWatching) {
+    private void bindCurrentUserData(WatcherViewHolder viewHolder, UserModel currentUserWatching) {
         bindWatcherData(viewHolder, currentUserWatching);
-
-        boolean currenUserItemEnabled = currentUserWatching.isVisible();
-        setCurrentUserEnabledStatus(viewHolder, currenUserItemEnabled);
 
         viewHolder.editButton.setVisibility(VISIBLE);
         viewHolder.editButton.setOnClickListener(new OnClickListener() {
@@ -127,21 +124,9 @@ public class WatchersView extends LinearLayout{
         });
     }
 
-    private void setCurrentUserEnabledStatus(WatcherViewHolder viewHolder, boolean currenUserItemEnabled) {
-        if (currenUserItemEnabled) {
-            viewHolder.name.setAlpha(1f);
-            viewHolder.watchingText.setAlpha(1f);
-            viewHolder.avatar.setAlpha(1f);
-        } else {
-            viewHolder.name.setAlpha(0.5f);
-            viewHolder.watchingText.setAlpha(0.5f);
-            viewHolder.avatar.setAlpha(0.5f);
-        }
-    }
-
-    private void bindWatcherData(WatcherViewHolder viewHolder, UserWatchingModel userWatching) {
+    private void bindWatcherData(WatcherViewHolder viewHolder, UserModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
-        viewHolder.name.setText(userWatching.getUserName());
+        viewHolder.name.setText(userWatching.getUsername());
         viewHolder.watchingText.setText(userWatching.getStatus());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
@@ -154,10 +139,10 @@ public class WatchersView extends LinearLayout{
     }
 
     private void addMockData() {
-        List<UserWatchingModel> userWatchingMocks = new ArrayList<>();
-        UserWatchingModel watch1 = new UserWatchingModel();
+        List<UserModel> userWatchingMocks = new ArrayList<>();
+        UserModel watch1 = new UserModel();
         watch1.setIdUser(1L);
-        watch1.setUserName("Username");
+        watch1.setUsername("Username");
         watch1.setStatus("Watching");
 
         userWatchingMocks.add(watch1);

@@ -2,6 +2,8 @@ package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class UserEntityMapper {
@@ -26,12 +28,14 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setEventWatchingId(userEntity.getIdEvent());
-        user.setEventWatchingTitle(userEntity.getEventTitle());
+        user.setVisibleEventId(userEntity.getIdEvent());
+        user.setVisibleEventTitle(userEntity.getEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
+
+        user.setStatus(userEntity.getStatus());
 
         return user;
     }
@@ -54,11 +58,25 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        userEntity.setIdEvent(user.getEventWatchingId());
-        userEntity.setEventTitle(user.getEventWatchingTitle());
+        userEntity.setIdEvent(user.getVisibleEventId());
+        userEntity.setEventTitle(user.getVisibleEventTitle());
+
+        userEntity.setStatus(user.getStatus());
 
         //TODO synchronized fields
         return userEntity;
+    }
+
+    public List<UserEntity> transform(List<User> users) {
+        List<UserEntity> userEntities = new ArrayList<>(users.size());
+        UserEntity userEntity;
+        for (User user : users) {
+            userEntity = transform(user);
+            if (userEntity != null) {
+                userEntities.add(userEntity);
+            }
+        }
+        return userEntities;
     }
 
     public User transform(UserEntity user, Long idCurrentUser) {

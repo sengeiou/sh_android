@@ -29,7 +29,7 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.ui.widgets.ObservableScrollView;
@@ -429,7 +429,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         ActivityCompat.startActivity(this, photoIntent, animationBundle);
     }
 
-    @Override public void setWatchers(List<UserWatchingModel> watchers) {
+    @Override public void setWatchers(List<UserModel> watchers) {
         watchersList.clearWatchers();
         watchersList.setWatchers(watchers);
     }
@@ -439,12 +439,12 @@ public class EventDetailActivity extends BaseNoToolbarActivity
           getResources().getQuantityString(R.plurals.event_watching_watchers_number, watchersCount, watchersCount));
     }
 
-    @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
+    @Override public void setCurrentUserWatching(UserModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
     }
 
-    @Override public void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
-        Intent intent = EditStatusActivity.getIntent(this, eventModel, currentUserWatchingModel);
+    @Override public void navigateToEditStatus(EventModel eventModel, String currentcurrentStatus) {
+        Intent intent = EditStatusActivity.getIntent(this, eventModel, currentcurrentStatus);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 

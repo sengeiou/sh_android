@@ -1,7 +1,7 @@
 package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
@@ -29,13 +29,13 @@ public interface EventDetailView extends LoadDataView {
 
     void zoomPhoto(String picture);
 
-    void setWatchers(List<UserWatchingModel> watchers);
+    void setWatchers(List<UserModel> watchers);
 
     void setWatchersCount(int watchersCount);
 
-    void setCurrentUserWatching(UserWatchingModel userWatchingModel);
+    void setCurrentUserWatching(UserModel userWatchingModel);
 
-    void navigateToEditStatus(EventModel eventModel, UserWatchingModel currentUserWatchingModel);
+    void navigateToEditStatus(EventModel eventModel, String currentStatus);
 
     void navigateToEditEvent(Long idEvent);
 

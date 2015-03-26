@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.event.CreateEventInteractor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
+import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
@@ -17,7 +18,6 @@ import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.event.WatchingInteractor;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -25,7 +25,7 @@ import javax.inject.Singleton;
 @Module(
   includes = { ServiceModule.class },
   injects = {
-    GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
+    GetPeopleInteractor.class, VisibleEventInfoInteractor.class, UpdateStatusInteractor.class,
     EventsListInteractor.class, SelectEventInteractor.class,
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class, SendDraftInteractor.class,

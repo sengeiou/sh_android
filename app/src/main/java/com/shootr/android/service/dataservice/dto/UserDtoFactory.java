@@ -3,22 +3,26 @@ package com.shootr.android.service.dataservice.dto;
 import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.service.dataservice.generic.FilterBuilder;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
@@ -38,6 +42,7 @@ public class UserDtoFactory {
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
+    private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
 
@@ -185,6 +190,24 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
     }
 
+    public GenericDto getUsersOperationDto(List<Long> userIds) {
+        FilterDto filter = orIsNotDeleted()
+          .or(UserTable.CSYS_MODIFIED).greaterThan(0L)
+          .or(UserTable.ID).isIn(userIds).build();
+
+        MetadataDto metadata = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+          .entity(UserTable.TABLE)
+          .filter(filter)
+          .items(100)
+          .totalItems(100)
+          .includeDeleted(false)
+          .build();
+
+        OperationDto operationDto =
+          new OperationDto.Builder().metadata(metadata).putData(userMapper.reqRestUsersToDto(null)).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERS, operationDto);
+    }
 
     public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {
         FilterDto filter = and(
@@ -207,7 +230,7 @@ public class UserDtoFactory {
 
     public GenericDto saveUserDto(UserEntity userEntity) {
         MetadataDto md = new MetadataDto.Builder()
-          .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
+          .operation(ServiceConstants.OPERATION_UPDATE)
           .entity(UserTable.TABLE)
           .putKey(UserTable.ID, userEntity.getIdUser())
           .build();

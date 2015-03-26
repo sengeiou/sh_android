@@ -74,7 +74,6 @@ public class FollowManager extends AbstractManager{
             } else {
                 contentValues.put(CSYS_SYNCHRONIZED,"S");
                 getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                Timber.i("Follow inserted ",follow.getIdUser());
             }
         }
        insertInSync();

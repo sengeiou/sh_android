@@ -7,7 +7,6 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.domain.TimelineParameters;
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +20,10 @@ public interface ShootrService {
 
     public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
 
+    public List<UserEntity> getUsersById(List<Long> userIds) throws IOException;
+
+    public UserEntity getUserByIdUser(Long idUser) throws IOException;
+
     public ShotEntity getShotById(Long idShot) throws IOException;
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
@@ -32,8 +35,6 @@ public interface ShootrService {
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
-
-    public UserEntity getUserByIdUser(Long idUser) throws IOException;
 
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
@@ -48,19 +49,9 @@ public interface ShootrService {
 
     public FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    public List<WatchEntity> getWatchesFromUsersAndMe(List<Long> followingIds, Long idCurrentUser) throws IOException;
-
-    public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException;
-
-    public WatchEntity getVisibleWatch(Long currentUserId) throws IOException;
-
     public EventEntity saveEvent(EventEntity eventEntity) throws IOException;
 
     public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
-
-    public WatchEntity setWatchStatus(WatchEntity watch) throws IOException;
-
-    public WatchEntity getWatchStatus(Long idUser, Long idEvent) throws IOException;
 
     public EventEntity getEventById(Long idEvent) throws IOException;
 

@@ -1,4 +1,4 @@
-package com.shootr.android.notifications.watch;
+package com.shootr.android.notifications.status;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,43 +11,46 @@ import com.shootr.android.R;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
 import timber.log.Timber;
 
-public class WatchRequestNotification extends CommonNotification {
+public class StatusChangedNotification extends CommonNotification {
 
     private static final int REQUEST_OPEN = 2;
 
-
-    private UserWatchingModel userWatchingModel;
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
     private PicassoWrapper picasso;
-    private EventModel eventModel;
     private Bitmap largeIcon;
+    private final UserModel userModel;
+    private final String newStatus;
 
-    private final String formatWatching;
-    private final String formatWatchingStatus;
+    private final String statusFormat;
 
-    public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
-      PicassoWrapper picasso, UserWatchingModel userWatchingModel, EventModel eventModel) {
+    public StatusChangedNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
+      PicassoWrapper picasso, UserModel userModel, String newStatus) {
         super(context,notificationBuilderFactory);
-        this.userWatchingModel = userWatchingModel;
-        this.eventModel = eventModel;
         this.picasso = picasso;
+        this.userModel = userModel;
+        this.newStatus = newStatus;
 
-        formatWatching = context.getString(R.string.notification_watch_watching);
-        formatWatchingStatus = context.getString(R.string.notification_watch_watching_status);
+        statusFormat = context.getString(R.string.notification_status_changed);
+        if (newStatus == null) {
+            throw new RuntimeException("Not allowed to receive null statuses");
+        }
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentTitle(userWatchingModel.getUserName());
+        builder.setContentTitle(getTitle());
         String message = getMessage();
         builder.setContentText(message);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         builder.setContentIntent(getOpenWatchRequestPendingIntent());
+    }
+
+    private String getTitle() {
+        return userModel.getUsername();
     }
 
     protected Bitmap getUserPhoto(String url) {
@@ -67,18 +70,18 @@ public class WatchRequestNotification extends CommonNotification {
     }
 
     protected PendingIntent getOpenWatchRequestPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_WATCH_REQUEST);
+        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STATUS_CHANGED);
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override
     public Bitmap getLargeIcon() {
-        return getUserPhoto(userWatchingModel.getPhoto());
+        return getUserPhoto(userModel.getPhoto());
     }
 
     @Override
     public Bitmap getWearBackground() {
-        return getUserPhoto(userWatchingModel.getPhoto());
+        return getUserPhoto(userModel.getPhoto());
     }
 
     private Bitmap getDefaultPhoto() {
@@ -90,14 +93,6 @@ public class WatchRequestNotification extends CommonNotification {
     }
 
     public String getMessage() {
-        return getWatchingMessage();
-    }
-
-    public String getWatchingMessage() {
-        if (userWatchingModel.getStatus() != null) {
-            return String.format(formatWatchingStatus, userWatchingModel.getStatus());
-        } else {
-            return String.format(formatWatching, eventModel.getTitle());
-        }
+        return String.format(statusFormat, newStatus);
     }
 }

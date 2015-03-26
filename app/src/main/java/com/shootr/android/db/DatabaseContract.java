@@ -67,10 +67,11 @@ public class DatabaseContract {
         public static final String EMAIL_NORMALIZED = "emailNormalized";
         public static final String EVENT_ID = "idEvent";
         public static final String EVENT_TITLE = "eventTitle";
+        public static final String STATUS = "status";
 
         public static final String[] PROJECTION = {
           ID, FAVORITE_TEAM_ID, FAVORITE_TEAM_NAME, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }
@@ -177,24 +178,6 @@ public class DatabaseContract {
         public static final String[] PROJECTION = {
           ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
-        };
-    }
-
-    public static final class WatchTable implements SyncColumns {
-
-        private WatchTable() {
-
-        }
-
-        public static final String TABLE = "Watch";
-        public static final String ID_USER = "idUser";
-        public static final String ID_EVENT = "idEvent";
-        public static final String STATUS = "status";
-        public static final String VISIBLE = "visible";
-
-        public static final String[] PROJECTION = {
-          ID_USER, ID_EVENT, STATUS, VISIBLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
-          CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 

@@ -24,13 +24,13 @@ public class ShootrPhotoService implements PhotoService {
 
     // TODO invertir dependencia
     public static final String ENDPOINT_UPLOAD_PHOTO_PROFILE =
-      "http://api.shootr.com/shootr-services/rest/upload/img/profile";
+      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/profile";
 
     public static final String ENDPOINT_UPLOAD_PHOTO_SHOT =
-      "http://api.shootr.com/shootr-services/rest/upload/img/shot";
+      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/shot";
 
     public static final String ENDPOINT_UPLOAD_EVENT_IMAGE =
-      "http://api.shootr.com/shootr-services/rest/upload/img/event";
+      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/event";
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;

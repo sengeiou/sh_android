@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserMapper;
+import com.squareup.phrase.Phrase;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -124,6 +126,39 @@ public class UserManager extends AbstractManager {
         }
         Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
           UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")", selectionArguments, null, null,
+          UserTable.USER_NAME);
+
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                UserEntity user = userMapper.fromCursor(queryResults);
+                if (user != null) {
+                    result.add(user);
+                }
+            } while (queryResults.moveToNext());
+        }
+        queryResults.close();
+        return result;
+    }
+
+    public List<UserEntity> getUsersWatchingSomething(List<Long> usersIds) {
+        int userIdsSize = usersIds.size();
+        List<UserEntity> result = new ArrayList<>(userIdsSize);
+
+        if (userIdsSize == 0) {
+            return result;
+        }
+
+        String whereSelection =
+          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ") AND " + UserTable.EVENT_ID + " IS NOT NULL";
+
+        String[] selectionArguments = new String[userIdsSize];
+        for (int i = 0; i < userIdsSize; i++) {
+            selectionArguments[i] = String.valueOf(usersIds.get(i));
+        }
+
+        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
+          whereSelection, selectionArguments, null, null,
           UserTable.NAME);
 
         if (queryResults.getCount() > 0) {
@@ -158,5 +193,26 @@ public class UserManager extends AbstractManager {
           }
         c.close();
         return users;
+    }
+
+    public List<UserEntity> getUsersNotSynchronized() {
+        String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
+          .put("field", UserTable.CSYS_SYNCHRONIZED)
+          .put("n", Synchronized.SYNC_NEW)
+          .put("u", Synchronized.SYNC_UPDATED)
+          .format().toString();
+        Cursor queryResult =
+          getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);
+
+        List<UserEntity> resultUsers = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                UserEntity watchEntity = userMapper.fromCursor(queryResult);
+                resultUsers.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultUsers;
     }
 }

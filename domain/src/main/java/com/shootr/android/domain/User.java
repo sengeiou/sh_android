@@ -15,8 +15,9 @@ public class User {
     private String bio;
     private Long points;
 
-    private Long eventWatchingId;
-    private String eventWatchingTitle;
+    private Long visibleEventId;
+    private String visibleEventTitle;
+    private String status;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -159,19 +160,27 @@ public class User {
         this.email = email;
     }
 
-    public Long getEventWatchingId() {
-        return eventWatchingId;
+    public Long getVisibleEventId() {
+        return visibleEventId;
     }
 
-    public void setEventWatchingId(Long eventWatchingId) {
-        this.eventWatchingId = eventWatchingId;
+    public void setVisibleEventId(Long visibleEventId) {
+        this.visibleEventId = visibleEventId;
     }
 
-    public String getEventWatchingTitle() {
-        return eventWatchingTitle;
+    public String getVisibleEventTitle() {
+        return visibleEventTitle;
     }
 
-    public void setEventWatchingTitle(String eventWatchingTitle) {
-        this.eventWatchingTitle = eventWatchingTitle;
+    public void setVisibleEventTitle(String visibleEventTitle) {
+        this.visibleEventTitle = visibleEventTitle;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

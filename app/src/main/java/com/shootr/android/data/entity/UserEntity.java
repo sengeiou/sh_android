@@ -20,6 +20,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String bio;
     private String eventTitle;
     private Long idEvent;
+    private String status;
 
     public UserEntity(){
     }
@@ -180,6 +181,18 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     }
 
     public void setIdEvent(Long idEvent) {
-        this.idEvent = idEvent;
+        if (idEvent!=null && idEvent > 0) {
+            this.idEvent = idEvent;
+        } else {
+            this.idEvent = null;
+        }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -43,6 +43,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userManager.getUserByIdUser(id);
     }
 
+    @Override public List<UserEntity> getUsers(List<Long> userIds) {
+        return userManager.getUsersByIds(userIds);
+    }
+
     @Override public boolean isFollower(Long from, Long who) {
         if (from == null || who == null) {
             return false;
@@ -57,5 +61,9 @@ public class DatabaseUserDataSource implements UserDataSource {
         }
         FollowEntity follow = followManager.getFollowByUserIds(who, to);
         return follow != null;
+    }
+
+    @Override public List<UserEntity> getEntitiesNotSynchronized() {
+        return userManager.getUsersNotSynchronized();
     }
 }
