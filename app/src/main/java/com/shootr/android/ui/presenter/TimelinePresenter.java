@@ -52,9 +52,9 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 timelineView.hideLoading();
+                timelineView.setShots(shotModels);
                 if (!shotModels.isEmpty()) {
                     timelineView.hideEmpty();
-                    timelineView.setShots(shotModels);
                     timelineView.showShots();
                 } else {
                     timelineView.showEmpty();

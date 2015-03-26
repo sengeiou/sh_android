@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -137,6 +138,18 @@ public class TimelinePresenterTest {
         presenter.loadMainTimeline();
 
         verify(timelineView).hideShots();
+    }
+
+    @Test
+    public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadMainTimeline();
+
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(timelineView).setShots(captor.capture());
+        List renderedShotList = captor.<List<ShotModel>>getValue();
+        assertThat(renderedShotList).isEmpty();
     }
 
     //endregion
