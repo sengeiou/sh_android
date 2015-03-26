@@ -175,6 +175,16 @@ public class TimelinePresenterTest {
 
         verify(timelineView).hideLoading();
     }
+
+    @Test
+    public void shouldHideEmptyIfReceivedShotsWhenRefreshing() throws Exception {
+        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(timelineView).hideEmpty();
+    }
+
     //endregion
 
     //region Older shots
