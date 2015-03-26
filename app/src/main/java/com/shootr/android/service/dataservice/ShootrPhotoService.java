@@ -1,6 +1,7 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.BuildConfig;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.repository.PhotoService;
@@ -24,13 +25,13 @@ public class ShootrPhotoService implements PhotoService {
 
     // TODO invertir dependencia
     public static final String ENDPOINT_UPLOAD_PHOTO_PROFILE =
-      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/profile";
+      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/profile";
 
     public static final String ENDPOINT_UPLOAD_PHOTO_SHOT =
-      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/shot";
+      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/shot";
 
     public static final String ENDPOINT_UPLOAD_EVENT_IMAGE =
-      "http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/event";
+      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/event";
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;

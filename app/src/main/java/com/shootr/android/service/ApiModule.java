@@ -1,6 +1,7 @@
 package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.BuildConfig;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
 import dagger.Module;
@@ -22,7 +23,7 @@ import javax.inject.Singleton;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_API_URL = "http://tst.dataservices.shootr.com/data-services/rest/generic/";
+    public static final String PRODUCTION_API_URL = BuildConfig.DATA_SERVICES_ENDPOINT_BASE+"/data-services/rest/generic/";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;

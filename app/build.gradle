@@ -100,6 +100,8 @@ android {
             signingConfig signingConfigs.debug
 
             buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
+            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.dataservices.shootr.com\""
+            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
@@ -107,6 +109,8 @@ android {
             signingConfig signingConfigs.release
 
             buildConfigField "Boolean", "USE_FILE_LOGGER", "false"
+            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://dataservices.shootr.com\""
+            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
         }
     }
     compileOptions {
