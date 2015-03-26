@@ -2,7 +2,6 @@ package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.UserRepository;
@@ -14,18 +13,15 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,18 +29,18 @@ public class GetPeopleInteractorTest {
 
     private GetPeopleInteractor getPeopleInteractor;
 
-    @Mock TestInteractorHandler interactorHandler;
-    @Mock UserRepository userRepository;
+    @Spy TestInteractorHandler interactorHandler = new TestInteractorHandler();
+    @Mock UserRepository localUserRepository;
+    @Mock UserRepository remoteUserRepository;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, userRepository, userRepository);
+        getPeopleInteractor = new GetPeopleInteractor(interactorHandler, remoteUserRepository, localUserRepository);
     }
 
     @Test
     public void resultsAreSortedByUsername() throws Exception {
-        setupHandlerRealExecution();
         setupRepositoryReturnsUserList();
 
         getPeopleInteractor.obtainPeople();
@@ -55,12 +51,23 @@ public class GetPeopleInteractorTest {
         assertThat(argumentCaptor.getValue().getUsers()).isSortedAccordingTo(new TestUsernameComparator());
     }
 
-    private void setupHandlerRealExecution() {
-        doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
+    @Test
+    public void shouldCallbackOnceWhenNoPeopleReturned() throws Exception {
+        when(localUserRepository.getPeople()).thenReturn(emptyUserList());
+        when(remoteUserRepository.getPeople()).thenReturn(emptyUserList());
+
+        getPeopleInteractor.obtainPeople();
+
+        verify(interactorHandler).sendUiMessage(anyObject());
+    }
+
+    private List<User> emptyUserList() {
+        return new ArrayList<>();
     }
 
     private void setupRepositoryReturnsUserList() {
-        when(userRepository.getPeople()).thenReturn(mockUserList());
+        when(localUserRepository.getPeople()).thenReturn(mockUserList());
+        when(remoteUserRepository.getPeople()).thenReturn(mockUserList());
     }
 
     private List<User> mockUserList() {

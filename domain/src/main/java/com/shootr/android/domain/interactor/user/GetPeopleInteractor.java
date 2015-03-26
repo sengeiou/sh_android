@@ -30,12 +30,20 @@ public class GetPeopleInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        obtainPeopleFromRepository(localUserRepository);
-        obtainPeopleFromRepository(remoteUserRepository);
+        obtainLocalPeople();
+        obtainRemotePeople();
     }
 
-    private void obtainPeopleFromRepository(UserRepository userRepository) {
-        List<User> userList = userRepository.getPeople();
+    private void obtainLocalPeople() {
+        List<User> userList = localUserRepository.getPeople();
+        if (!userList.isEmpty()) {
+            userList = reorderPeopleByUsername(userList);
+            interactorHandler.sendUiMessage(new UserList(userList));
+        }
+    }
+
+    private void obtainRemotePeople() {
+        List<User> userList = remoteUserRepository.getPeople();
         userList = reorderPeopleByUsername(userList);
         interactorHandler.sendUiMessage(new UserList(userList));
     }
@@ -46,11 +54,9 @@ public class GetPeopleInteractor implements Interactor {
     }
 
     static class UsernameComparator implements Comparator<User> {
+
         @Override public int compare(User user1, User user2) {
-            return user1.getUsername()
-              .compareToIgnoreCase(user2.getUsername());
+            return user1.getUsername().compareToIgnoreCase(user2.getUsername());
         }
-
     }
-
 }
