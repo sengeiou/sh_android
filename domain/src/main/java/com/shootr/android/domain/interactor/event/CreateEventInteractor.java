@@ -68,8 +68,12 @@ public class CreateEventInteractor implements Interactor {
     }
 
     private Event eventFromParameters() {
-        Event event = new Event();
-        event.setId(idEvent);
+        Event event;
+        if (isNewEvent()) {
+            event = new Event();
+        } else {
+            event = remoteEventRepository.getEventById(idEvent);
+        }
         event.setTitle(title);
         event.setAuthorId(sessionRepository.getCurrentUserId());
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
@@ -78,6 +82,10 @@ public class CreateEventInteractor implements Interactor {
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
         return event;
+    }
+
+    private boolean isNewEvent() {
+        return idEvent == null;
     }
 
     private String makeTag(String title) {
