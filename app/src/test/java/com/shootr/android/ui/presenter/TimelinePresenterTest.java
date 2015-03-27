@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -79,6 +80,15 @@ public class TimelinePresenterTest {
     }
 
     @Test
+    public void shouldShowShotsInViewWhenGetMainTimelineRespondsShots() throws Exception {
+        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadMainTimeline();
+
+        verify(timelineView).showShots();
+    }
+
+    @Test
     public void shouldShowLoadingViewWhenLoadMainTimeline() throws Exception {
         presenter.loadMainTimeline();
 
@@ -130,6 +140,18 @@ public class TimelinePresenterTest {
         verify(timelineView).hideShots();
     }
 
+    @Test
+    public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadMainTimeline();
+
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(timelineView).setShots(captor.capture());
+        List renderedShotList = captor.<List<ShotModel>>getValue();
+        assertThat(renderedShotList).isEmpty();
+    }
+
     //endregion
 
     //region Refresh main timeline
@@ -175,6 +197,25 @@ public class TimelinePresenterTest {
 
         verify(timelineView).hideLoading();
     }
+
+    @Test
+    public void shouldHideEmptyIfReceivedShotsWhenRefreshing() throws Exception {
+        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(timelineView).hideEmpty();
+    }
+
+    @Test
+    public void shouldShowShotsIfReceivedShotsWhenRefreshing() throws Exception {
+        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(timelineView).showShots();
+    }
+
     //endregion
 
     //region Older shots
