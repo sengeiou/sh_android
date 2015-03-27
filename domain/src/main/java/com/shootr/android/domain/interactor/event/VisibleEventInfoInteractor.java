@@ -12,6 +12,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -92,10 +93,15 @@ public class VisibleEventInfoInteractor implements Interactor {
 
             List<User> people = userRepository.getPeople();
             List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
-
+            watchesFromPeople = orderWatchersByUsername(watchesFromPeople);
             return buildEventInfo(visibleEvent, watchesFromPeople, currentUser);
         }
         return NO_EVENT_VISIBLE_INFO;
+    }
+
+    private List<User> orderWatchersByUsername(List<User> watchesFromPeople) {
+        Collections.sort(watchesFromPeople, new User.UsernameComparator());
+        return watchesFromPeople;
     }
 
     private Long getWantedEventId(User currentUser) {

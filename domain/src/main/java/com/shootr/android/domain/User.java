@@ -1,5 +1,7 @@
 package com.shootr.android.domain;
 
+import java.util.Comparator;
+
 public class User {
 
     private Long idUser;
@@ -180,7 +182,23 @@ public class User {
         return status;
     }
 
+    @Override public String toString() {
+        return "User{" +
+          "idUser=" + idUser +
+          ", username='" + username + '\'' +
+          ", visibleEventId=" + visibleEventId +
+          ", status='" + status + '\'' +
+          '}';
+    }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public static class UsernameComparator implements Comparator<User> {
+
+        @Override public int compare(User o1, User o2) {
+            return o1.getUsername().compareTo(o2.getUsername());
+        }
     }
 }
