@@ -75,6 +75,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import timber.log.Timber;
@@ -241,10 +242,14 @@ public class DataModule {
     static OkHttpClient createOkHttpClient(Application app) {
         OkHttpClient client = new OkHttpClient();
 
-        // Install an HTTP cache in the application cache directory.
-        File cacheDir = new File(app.getCacheDir(), "http");
-        Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-        client.setCache(cache);
+        try {
+            // Install an HTTP cache in the application cache directory.
+            File cacheDir = new File(app.getCacheDir(), "http");
+            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+            client.setCache(cache);
+        } catch (IOException e) {
+            Timber.e(e, "Unable to install disk cache.");
+        }
 
         client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
         client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
