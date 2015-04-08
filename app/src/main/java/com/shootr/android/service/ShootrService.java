@@ -14,53 +14,53 @@ import java.util.Map;
 
 public interface ShootrService {
 
-    public UserEntity login(String id, String password) throws IOException;
+    UserEntity login(String id, String password) throws IOException;
 
-    public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws  IOException;
+    List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws  IOException;
 
-    public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
+    List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
 
-    public List<UserEntity> getUsersById(List<Long> userIds) throws IOException;
+    List<UserEntity> getUsersById(List<Long> userIds) throws IOException;
 
-    public UserEntity getUserByIdUser(Long idUser) throws IOException;
+    UserEntity getUserByIdUser(Long idUser) throws IOException;
 
-    public ShotEntity getShotById(Long idShot) throws IOException;
+    ShotEntity getShotById(Long idShot) throws IOException;
 
-    public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
+    List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
 
-    public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
+    List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 
-    public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException;
+    List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException;
 
-    public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
+    List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
-    public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
+    PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
 
-    public FollowEntity getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws  IOException;
+    FollowEntity getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws  IOException;
 
-    public DeviceEntity updateDevice(DeviceEntity device) throws IOException;
+    DeviceEntity updateDevice(DeviceEntity device) throws IOException;
 
-    public DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException;
+    DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException;
 
-    public FollowEntity followUser(FollowEntity follow) throws IOException;
+    FollowEntity followUser(FollowEntity follow) throws IOException;
 
-    public FollowEntity unfollowUser(FollowEntity follow) throws IOException;
+    FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    public EventEntity saveEvent(EventEntity eventEntity) throws IOException;
+    EventEntity saveEvent(EventEntity eventEntity) throws IOException;
 
-    public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
+    List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
 
-    public EventEntity getEventById(Long idEvent) throws IOException;
+    EventEntity getEventById(Long idEvent) throws IOException;
 
-    public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
+    List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
 
-    public UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
+    UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
-    public List<TeamEntity> searchTeams(String queryText) throws IOException;
+    List<TeamEntity> searchTeams(String queryText) throws IOException;
 
-    public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+    List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
       throws IOException;
 }
