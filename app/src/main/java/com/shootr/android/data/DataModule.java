@@ -15,6 +15,7 @@ import com.shootr.android.BuildConfig;
 import com.shootr.android.data.prefs.PreferenceModule;
 import com.shootr.android.data.repository.SessionRepositoryImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
+import com.shootr.android.data.service.ServiceModule;
 import com.shootr.android.db.ManagerModule;
 import com.shootr.android.db.MapperModule;
 import com.shootr.android.db.ShootrDbOpenHelper;
@@ -143,7 +144,7 @@ import static android.content.Context.MODE_PRIVATE;
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
-    RepositoryModule.class,
+    RepositoryModule.class, ServiceModule.class,
   },
   complete = false,
   library = true)

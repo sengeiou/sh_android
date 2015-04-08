@@ -8,6 +8,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.service.PaginatedResult;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -63,4 +64,6 @@ public interface ShootrService {
 
     List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
       throws IOException;
+
+    void performCheckin(Long idUser, Long idEvent) throws IOException;
 }
