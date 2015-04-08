@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
+import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -35,6 +36,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final UpdateStatusInteractor watchingStatusInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
     private final GetCheckinStatusInteractor getCheckinStatusInteractor;
+    private final PerformCheckinInteractor performCheckinInteractor;
 
     private final EventModelMapper eventModelMapper;
     private final UserModelMapper userModelMapper;
@@ -46,14 +48,17 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
-    @Inject public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
+    @Inject
+    public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-      GetCheckinStatusInteractor getCheckinStatusInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetCheckinStatusInteractor getCheckinStatusInteractor, PerformCheckinInteractor performCheckinInteractor,
+      EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingStatusInteractor = watchingStatusInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
         this.getCheckinStatusInteractor = getCheckinStatusInteractor;
+        this.performCheckinInteractor = performCheckinInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -180,10 +185,31 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         eventDetailView.navigateToUser(eventModel.getAuthorId());
     }
 
+    //region Check in
     public void clickCheckin() {
-        //TODO hacer y ocultar
-        eventDetailView.hideCheckin();
+        performCheckin();
     }
+
+    public void retryCheckin() {
+        performCheckin();
+    }
+
+    private void performCheckin() {
+        eventDetailView.showCheckinLoading();
+        performCheckinInteractor.performCheckin(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                eventDetailView.hideCheckin();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                Timber.e(error, "Error while doing check-in");
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                eventDetailView.showCheckinErrorRetry(errorMessage);
+                eventDetailView.hideCheckinLoading();
+            }
+        });
+    }
+    //endregion
 
     public void photoClick() {
         if (eventModel.amIAuthor() && eventModel.getPicture() == null) {

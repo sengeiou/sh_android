@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -34,7 +33,7 @@ public class PerformCheckinInteractor implements Interactor {
         try {
             shootrUserService.checkInCurrentEvent();
             notifyCompleted();
-        } catch (InvalidCheckinException error) {
+        } catch (ShootrException error) {
             notifyError(error);
         }
     }

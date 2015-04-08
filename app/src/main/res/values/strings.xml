@@ -188,6 +188,7 @@
     <string name="drawer_people_title">People</string>
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
+    <string name="retry">Retry</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

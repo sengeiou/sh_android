@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -81,6 +82,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @InjectView(R.id.event_checkin) View checkin;
     @InjectView(R.id.event_checkin_text) TextView checkinText;
+    @InjectView(R.id.event_checkin_icon) View checkinIcon;
+    @InjectView(R.id.event_checkin_progress) View checkinProgres;
 
 
     @Inject EventDetailPresenter presenter;
@@ -501,15 +504,41 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         checkin.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideCheckin() {
+    @Override public void hideCheckinLoading() {
+        checkin.setClickable(true);
+        checkinText.setEnabled(true);
+        checkinText.setText(R.string.checkin_action);
+        checkinIcon.setVisibility(View.VISIBLE);
+        checkinProgres.setVisibility(View.GONE);
+    }
+
+    @Override public void showCheckinLoading() {
         checkin.setClickable(false);
-        checkinText.setTextColor(getResources().getColor(R.color.disabled));
+        checkinText.setEnabled(false);
+        checkinIcon.setVisibility(View.GONE);
+        checkinProgres.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideCheckin() {
+        checkinProgres.setVisibility(View.GONE);
+        checkinIcon.setVisibility(View.VISIBLE);
         checkinText.setText(R.string.checkin_done);
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 checkin.setVisibility(View.GONE);
             }
         }, 500);
+    }
+
+    @Override public void showCheckinErrorRetry(String errorMessage) {
+        new AlertDialog.Builder(this).setMessage(errorMessage)
+          .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.retryCheckin();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
     }
 
     @Override public void showEmpty() {

@@ -53,5 +53,11 @@ public interface EventDetailView extends LoadDataView {
 
     void showCheckin();
 
+    void hideCheckinLoading();
+
+    void showCheckinLoading();
+
     void hideCheckin();
+
+    void showCheckinErrorRetry(String errorMessage);
 }
