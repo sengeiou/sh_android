@@ -36,6 +36,7 @@ public class UserEntityMapper {
         user.setFollowing(isFollowing);
 
         user.setStatus(userEntity.getStatus());
+        user.setCheckedIn(userEntity.getCheckIn() == 1);
 
         return user;
     }
@@ -62,6 +63,7 @@ public class UserEntityMapper {
         userEntity.setEventTitle(user.getVisibleEventTitle());
 
         userEntity.setStatus(user.getStatus());
+        userEntity.setCheckIn(user.isCheckedIn() ? 1 : 0);
 
         //TODO synchronized fields
         return userEntity;

@@ -21,6 +21,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String eventTitle;
     private Long idEvent;
     private String status;
+    private Integer checkIn;
 
     public UserEntity(){
     }
@@ -194,5 +195,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(Integer checkIn) {
+        this.checkIn = checkIn;
     }
 }
