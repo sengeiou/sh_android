@@ -1,5 +1,6 @@
 package com.shootr.android.service;
 
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -79,7 +80,7 @@ public class DebugServiceAdapter {
 
             if (calculateIsFailure()) {
                 sleep(calculateDelayForError());
-                throw new IOException("Debug network error");
+                throw new ServerCommunicationException(new IOException("Debug network error"));
             }
 
             int callDelay = calculateDelayForCall();
