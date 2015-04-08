@@ -14,6 +14,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -148,6 +149,17 @@ public class SelectEventInteractorTest {
         User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
 
         assertThat(updatedUser).hasStatus(STATUS_WATCHING);
+    }
+
+    @Test public void shouldSetCheckinAsFalseInLocalRepository() throws Exception {
+        setupOldVisibleEvent();
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+
+        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(localUserRepository).putUser(userCaptor.capture());
+        assertThat(userCaptor.getValue().isCheckedIn()).isFalse();
     }
 
     private void setupOldVisibleEvent() {
