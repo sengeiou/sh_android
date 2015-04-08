@@ -27,7 +27,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
     private Long idEvent;
     private File photoFile;
     private Callback callback;
-    private InteractorErrorCallback errorCallback;
+    private ErrorCallback errorCallback;
 
     @Inject public ChangeEventPhotoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ImageResizer imageResizer, PhotoService photoService,
@@ -40,7 +40,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void changeEventPhoto(Long idEvent, File photoFile, Callback callback, InteractorErrorCallback errorCallback) {
+    public void changeEventPhoto(Long idEvent, File photoFile, Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.photoFile = photoFile;
         this.callback = callback;

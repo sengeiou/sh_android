@@ -4,7 +4,7 @@ import com.shootr.android.domain.exception.ShootrException;
 
 public interface Interactor {
 
-    interface InteractorErrorCallback {
+    interface ErrorCallback {
 
         void onError(ShootrException error);
 

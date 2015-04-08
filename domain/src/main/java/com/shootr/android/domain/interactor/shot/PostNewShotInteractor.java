@@ -28,7 +28,7 @@ public class PostNewShotInteractor implements Interactor {
     private String comment;
     private File imageFile;
     private Callback callback;
-    private InteractorErrorCallback errorCallback;
+    private ErrorCallback errorCallback;
 
     @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Local EventRepository localEventRepository,
@@ -40,7 +40,7 @@ public class PostNewShotInteractor implements Interactor {
         this.shotSender = shotSender;
     }
 
-    public void postNewShot(String comment, File image, Callback callback, InteractorErrorCallback errorCallback) {
+    public void postNewShot(String comment, File image, Callback callback, ErrorCallback errorCallback) {
         this.comment = comment;
         this.imageFile = image;
         this.callback = callback;

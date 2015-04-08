@@ -31,7 +31,7 @@ public class CreateEventInteractor implements Interactor {
     private String timezoneId;
     private boolean notifyCreation;
     private Callback callback;
-    private InteractorErrorCallback errorCallback;
+    private ErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository) {
@@ -42,7 +42,7 @@ public class CreateEventInteractor implements Interactor {
     }
 
     public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId,
-      boolean notifyCreation, Callback callback, InteractorErrorCallback errorCallback) {
+      boolean notifyCreation, Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;

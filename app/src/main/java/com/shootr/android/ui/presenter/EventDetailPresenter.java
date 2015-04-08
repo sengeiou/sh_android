@@ -114,7 +114,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
                   eventDetailView.hideLoadingPictureUpload();
                   eventDetailView.showEditPicture(event.getPicture());
               }
-          }, new Interactor.InteractorErrorCallback() {
+          }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                   eventDetailView.showEditPicture(eventModel.getPicture());
                   eventDetailView.hideLoadingPictureUpload();

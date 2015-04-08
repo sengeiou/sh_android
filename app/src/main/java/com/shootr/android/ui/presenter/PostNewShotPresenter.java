@@ -10,7 +10,6 @@ import com.shootr.android.ui.views.PostNewShotView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import dagger.ObjectGraph;
 import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -103,7 +102,7 @@ public class PostNewShotPresenter implements Presenter {
                 postNewShotView.setResultOk();
                 postNewShotView.closeScreen();
             }
-        }, new Interactor.InteractorErrorCallback() {
+        }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }

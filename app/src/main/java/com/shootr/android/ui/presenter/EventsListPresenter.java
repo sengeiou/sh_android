@@ -75,7 +75,7 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
                 onSearchResults(results);
             }
         },
-        new Interactor.InteractorErrorCallback() {
+        new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
             }

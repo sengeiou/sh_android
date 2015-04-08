@@ -54,7 +54,7 @@ public class WatchNumberPresenterTest {
     public void shouldLoadWatchNumberWhenInitialized() throws Exception {
         presenter.initialize(watchNumberView);
 
-        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     @Test
@@ -97,19 +97,19 @@ public class WatchNumberPresenterTest {
     public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
         watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
 
-        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     @Test
     public void shouldLoadWatchNumberWhenEventChanged() throws Exception {
         eventChangedReceiver.onEventChanged(eventChangedEvent());
 
-        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     @Test
     public void shouldHideWatchNumberWhenExitEventReceivedAlthougInteractorHasntCallback() throws Exception {
-        doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+        doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
 
         eventChangedReceiver.onEventChanged(exitEventEvent());
 
@@ -148,7 +148,7 @@ public class WatchNumberPresenterTest {
                 ((WatchNumberInteractor.Callback) invocation.getArguments()[0]).onLoaded(count);
                 return null;
             }
-        }).when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.InteractorErrorCallback.class));
+        }).when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
 }
