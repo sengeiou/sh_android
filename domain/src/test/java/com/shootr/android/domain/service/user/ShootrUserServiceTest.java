@@ -6,9 +6,11 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,6 +48,17 @@ public class ShootrUserServiceTest {
         shootrUserService.checkInCurrentEvent();
 
         verify(checkinGateway).performCheckin(CURRENT_USER_ID, VISIBLE_EVENT_ID);
+    }
+
+    @Test public void shouldStoreCurrentUserInLocalCheckedIn() throws Exception {
+        setupCurrentUserNotCheckedIn();
+
+        shootrUserService.checkInCurrentEvent();
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(localUserRepository).putUser(userCaptor.capture());
+        User userStoredInLocal = userCaptor.getValue();
+        assertThat(userStoredInLocal.isCheckedIn()).isTrue();
     }
 
     private void setupCurrentUserWithoutVisibleEvent() {

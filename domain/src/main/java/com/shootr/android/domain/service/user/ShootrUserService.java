@@ -37,6 +37,9 @@ public class ShootrUserService {
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
+
+        currentUser.setCheckedIn(true);
+        localUserRepository.putUser(currentUser);
     }
 
 }
