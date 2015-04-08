@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -77,6 +78,10 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
+
+    @InjectView(R.id.event_checkin) View checkin;
+    @InjectView(R.id.event_checkin_text) TextView checkinText;
+
 
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -157,6 +162,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @OnClick(R.id.event_author)
     public void onAuthorClick() {
         presenter.clickAuthor();
+    }
+
+    @OnClick(R.id.event_checkin)
+    public void onCheckinClick() {
+        presenter.clickCheckin();
     }
 
     //region Edit photo
@@ -485,6 +495,21 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (editMenuItem != null) {
             updateEditIcon();
         }
+    }
+
+    @Override public void showCheckin() {
+        checkin.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideCheckin() {
+        checkin.setClickable(false);
+        checkinText.setTextColor(getResources().getColor(R.color.disabled));
+        checkinText.setText(R.string.checkin_done);
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                checkin.setVisibility(View.GONE);
+            }
+        }, 500);
     }
 
     @Override public void showEmpty() {

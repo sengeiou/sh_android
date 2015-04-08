@@ -61,6 +61,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.eventDetailView = eventDetailView;
         this.idEvent = idEvent;
         this.loadEventInfo();
+        this.eventDetailView.showCheckin(); //TODO mostrar sólo si se puede hacer
     }
 
     //region Edit status
@@ -71,7 +72,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     public void resultFromEditStatus(@Nullable String statusText) {
         updateWatchStatus(statusText);
     }
-    //endregion
 
     private void updateWatchStatus(String statusText) {
         watchingStatusInteractor.updateStatus(
@@ -82,6 +82,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
               }
           });
     }
+    //endregion
 
     //region Edit event
     public void editEventClick() {
@@ -99,8 +100,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             loadEventInfo();
         }
     }
-
-    //endregion
 
     public void editEventPhoto() {
         eventDetailView.showPhotoPicker();
@@ -124,6 +123,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
               }
           });
     }
+    //endregion
 
     //region Event info
     public void refreshInfo() {
@@ -165,6 +165,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void clickAuthor() {
         eventDetailView.navigateToUser(eventModel.getAuthorId());
+    }
+
+    public void clickCheckin() {
+        //TODO hacer y ocultar
+        eventDetailView.hideCheckin();
     }
 
     public void photoClick() {

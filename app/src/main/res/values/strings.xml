@@ -186,6 +186,8 @@
     <string name="timeline_hall_title">Hall</string>
     <string name="drawer_timeline_title">Timeline</string>
     <string name="drawer_people_title">People</string>
+    <string name="checkin_action">Check In</string>
+    <string name="checkin_done">Checked In</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

@@ -75,6 +75,7 @@
                     <LinearLayout android:id="@+id/event_content_detail"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
+                      android:animateLayoutChanges="true"
                       android:orientation="vertical"
                       android:visibility="invisible"
                       tools:visibility="visible">
@@ -91,19 +92,43 @@
                             <TextView android:id="@+id/event_author"
                               android:layout_width="match_parent"
                               android:layout_height="56dp"
-                              android:paddingLeft="@dimen/keyline_2"
                               android:background="?selectableItemBackground"
                               android:clickable="true"
+                              android:gravity="center_vertical"
+                              android:paddingLeft="@dimen/keyline_2"
                               android:textAppearance="@style/TextAppearance.Switch"
                               android:textColor="?android:attr/textColorPrimary"
-                              android:gravity="center_vertical"
                               tools:text="rafa" />
-
-                            <View android:layout_width="match_parent"
-                              android:layout_height="1dp"
-                              android:layout_gravity="bottom"
-                              android:background="?dividerHorizontal" />
                         </FrameLayout>
+
+                        <FrameLayout android:id="@+id/event_checkin"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:visibility="gone"
+                          tools:visibility="visible">
+
+                            <ImageView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_gravity="center_vertical"
+                              android:layout_marginLeft="16dp"
+                              android:src="@drawable/ic_checkin_24_gray50" />
+
+                            <TextView android:id="@+id/event_checkin_text"
+                              android:layout_width="match_parent"
+                              android:layout_height="56dp"
+                              android:background="?selectableItemBackground"
+                              android:gravity="center_vertical"
+                              android:paddingLeft="@dimen/keyline_2"
+                              android:text="@string/checkin_action"
+                              android:textAppearance="@style/TextAppearance.Switch"
+                              android:textColor="?android:attr/textColorPrimary" />
+
+                        </FrameLayout>
+
+                        <View android:layout_width="match_parent"
+                          android:layout_height="1dp"
+                          android:layout_gravity="bottom"
+                          android:background="?dividerHorizontal" />
 
                         <!-- watchers -->
                         <TextView android:id="@+id/event_content_detail_watchers_number"
