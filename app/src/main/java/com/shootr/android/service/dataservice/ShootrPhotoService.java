@@ -28,7 +28,7 @@ public class ShootrPhotoService implements PhotoService {
       BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/profile";
 
     public static final String ENDPOINT_UPLOAD_PHOTO_SHOT =
-      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"http://tst.specialservices.shootr.com/shootr-services/rest/upload/img/shot";
+      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/shot";
 
     public static final String ENDPOINT_UPLOAD_EVENT_IMAGE =
       BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/event";
