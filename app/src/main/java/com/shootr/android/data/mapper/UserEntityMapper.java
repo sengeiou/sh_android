@@ -51,6 +51,7 @@ public class UserEntityMapper {
         userEntity.setFavoriteTeamName(user.getFavoriteTeamName());
         //TODO userEntity.setSessionToken();
         userEntity.setUserName(user.getUsername());
+        userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
         userEntity.setPhoto(user.getPhoto());
         userEntity.setPoints(user.getPoints());
