@@ -1,10 +1,6 @@
 package com.shootr.android.ui.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +33,6 @@ import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
-import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -74,7 +67,6 @@ import timber.log.Timber;
 public class TimelineFragment extends BaseFragment
   implements TimelineView, NewShotBarView, EventSelectionView, WatchNumberView{
 
-    private static final int REQUEST_NEW_SHOT = 1;
     private static final int REQUEST_SELECT_EVENT = 2;
 
     //region Fields
@@ -101,6 +93,7 @@ public class TimelineFragment extends BaseFragment
     private View.OnClickListener imageClickListener;
     private PhotoPickerController photoPickerController;
 
+    private NewShotBarView newShotBarViewDelegate;
     private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
@@ -207,6 +200,10 @@ public class TimelineFragment extends BaseFragment
 
     //endregion
 
+    private void setupNewShotBarDelegate() {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton);
+    }
+
     public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
         // Reuse drawable if possible
         if (watchersBadgeDrawable == null) {
@@ -237,8 +234,8 @@ public class TimelineFragment extends BaseFragment
         setupListAdapter();
         setupSwipeRefreshLayout();
         setupListScrollListeners();
-        setupDraftButtonTransition();
         setupPhotoPicker();
+        setupNewShotBarDelegate();
     }
 
     private void setupPhotoPicker() {
@@ -323,27 +320,6 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void setupDraftButtonTransition() {
-        LayoutTransition transition = new LayoutTransition();
-        // Disable button appearing and disappearing (button), we will do manually
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            transition.disableTransitionType(LayoutTransition.APPEARING);
-            transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-        } else {
-            transition.setAnimator(LayoutTransition.APPEARING, null);
-            transition.setAnimator(LayoutTransition.DISAPPEARING, null);
-        }
-
-        // Setup text shrinking (when button appears)
-        transition.setDuration(LayoutTransition.CHANGE_APPEARING, 200);
-        transition.setInterpolator(LayoutTransition.CHANGE_APPEARING, new AccelerateDecelerateInterpolator());
-
-        // Setup text expanding (when button disappears)
-        transition.setInterpolator(LayoutTransition.CHANGE_DISAPPEARING, new AccelerateDecelerateInterpolator());
-        transition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-
-        ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
-    }
     //endregion
 
     @OnItemClick(R.id.timeline_list)
@@ -438,59 +414,23 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override public void openNewShotView() {
-        Intent newShotIntent = new Intent(getActivity(), PostNewShotActivity.class);
-        startActivityForResult(newShotIntent, REQUEST_NEW_SHOT);
+        newShotBarViewDelegate.openNewShotView();
     }
 
     @Override public void pickImage() {
-        photoPickerController.pickPhoto();
+        newShotBarViewDelegate.pickImage();
     }
 
     @Override public void openNewShotViewWithImage(File image) {
-        Intent newShotIntent = new Intent(getActivity(), PostNewShotActivity.class);
-        newShotIntent.putExtra(PostNewShotActivity.EXTRA_PHOTO, image);
-        startActivityForResult(newShotIntent, REQUEST_NEW_SHOT);
+        newShotBarViewDelegate.openNewShotViewWithImage(image);
     }
 
     @Override public void showDraftsButton() {
-        if (draftsButton.getVisibility() == View.VISIBLE) {
-            return;
-        }
-        draftsButton.setVisibility(View.VISIBLE);
-        draftsButton.setScaleX(0);
-        draftsButton.setScaleY(0);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 0f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 0f, 1f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY);
-        set.setDuration(500);
-        set.setStartDelay(200);
-        set.setInterpolator(new DecelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
-                draftsButton.setScaleX(1f);
-                draftsButton.setScaleY(1f);
-            }
-        });
-        set.start();
+        newShotBarViewDelegate.showDraftsButton();
     }
 
     @Override public void hideDraftsButton() {
-        if (draftsButton.getVisibility() == View.GONE) {
-            return;
-        }
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 1f, 0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 1f, 0f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY);
-        set.setDuration(500);
-        set.setInterpolator(new AccelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
-                draftsButton.setVisibility(View.GONE);
-            }
-        });
-        set.start();
+        newShotBarViewDelegate.hideDraftsButton();
     }
 
     @Override public void showCurrentEventTitle(String eventTitle) {
