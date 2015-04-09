@@ -45,11 +45,7 @@
           fab:fab_shadow="true"
           tools:visibility="visible" />
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="4dp"
-          android:layout_gravity="bottom"
-          android:background="@drawable/shadow_down_top" />
+      <include layout="@layout/include_shadow_above_shot_bar" />
 
     </FrameLayout>
 
