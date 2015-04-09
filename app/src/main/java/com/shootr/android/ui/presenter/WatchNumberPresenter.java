@@ -54,6 +54,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
 
     @Override public void resume() {
         bus.register(this);
+        this.retrieveData();
     }
 
     @Override public void pause() {

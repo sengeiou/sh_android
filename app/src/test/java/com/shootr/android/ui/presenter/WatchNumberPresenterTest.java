@@ -108,6 +108,13 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
+    public void shouldLoadWatchNumberWhenPresenterResumed() throws Exception {
+        presenter.resume();
+
+        verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    @Test
     public void shouldHideWatchNumberWhenExitEventReceivedAlthougInteractorHasntCallback() throws Exception {
         doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
 
@@ -148,7 +155,8 @@ public class WatchNumberPresenterTest {
                 ((WatchNumberInteractor.Callback) invocation.getArguments()[0]).onLoaded(count);
                 return null;
             }
-        }).when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class),
+          any(Interactor.ErrorCallback.class));
     }
 
 }
