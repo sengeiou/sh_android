@@ -189,6 +189,8 @@
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>
+    <string name="checkin_confirmation_message">Check In will send a notification to your followers</string>
+    <string name="ok">Ok</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

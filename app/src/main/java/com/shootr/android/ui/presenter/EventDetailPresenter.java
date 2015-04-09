@@ -187,6 +187,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Check in
     public void clickCheckin() {
+        eventDetailView.showCheckinConfirmation();
+    }
+
+    public void confirmCheckin() {
         performCheckin();
     }
 

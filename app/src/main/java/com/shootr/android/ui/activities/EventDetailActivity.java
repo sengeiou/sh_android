@@ -541,6 +541,17 @@ public class EventDetailActivity extends BaseNoToolbarActivity
           .show();
     }
 
+    @Override public void showCheckinConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.checkin_confirmation_message)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmCheckin();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
     @Override public void showEmpty() {
         contentEmpty.setVisibility(View.VISIBLE);
         contentDetail.setVisibility(View.INVISIBLE);
