@@ -16,6 +16,8 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
       android:visibility="gone"
+      android:singleLine="true"
+      android:ellipsize="end"
       tools:drawableRight="@drawable/spinner_triangle_white"
       tools:text="Title"
       tools:visibility="visible" />
