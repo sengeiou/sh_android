@@ -171,7 +171,7 @@ public class DataModule {
           .listener(new Picasso.Listener() {
               @Override
               public void onImageLoadFailed(Picasso picasso, Uri uri, Exception e) {
-                  Timber.e(e, "Failed to load image: %s", uri);
+                  Timber.w(e, "Failed to load image: %s", uri);
               }
           }).build();
     }
