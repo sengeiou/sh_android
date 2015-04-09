@@ -73,7 +73,8 @@ public class TimelinePresenterTest {
     public void shouldGetMainTimlelineWhenInitialized() throws Exception {
         presenter.initialize(timelineView);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class),
+          anyErrorCallback());
     }
 
     @Test
@@ -229,8 +230,7 @@ public class TimelinePresenterTest {
     public void shouldLoadMoreShotsWhenLastShotVisiblePositionIsLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
 
     @Test
@@ -238,8 +238,7 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
 
     @Test
@@ -256,8 +255,7 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
     //endregion
 
@@ -301,8 +299,11 @@ public class TimelinePresenterTest {
                 ((GetOlderMainTimelineInteractor.Callback) invocation.getArguments()[1]).onLoaded(timeline);
                 return null;
             }
-        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+    }
+
+    private GetOlderMainTimelineInteractor.Callback anyOlderCallback() {
+        return any(GetOlderMainTimelineInteractor.Callback.class);
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {

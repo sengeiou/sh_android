@@ -5,6 +5,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -30,6 +31,7 @@ public class GetOlderMainTimelineInteractor implements Interactor {
 
     private Long currentOldestDate;
     private Callback callback;
+    private ErrorCallback errorCallback;
 
     @Inject public GetOlderMainTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
@@ -42,17 +44,22 @@ public class GetOlderMainTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderMainTimeline(Long currentOldestDate, Callback callback) {
+    public void loadOlderMainTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        TimelineParameters timelineParameters = buildTimelineParameters();
-        List<Shot> olderShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
-        sortShotsByPublishDate(olderShots);
-        notifyTimelineFromShots(olderShots);
+        try {
+            TimelineParameters timelineParameters = buildTimelineParameters();
+            List<Shot> olderShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+            sortShotsByPublishDate(olderShots);
+            notifyTimelineFromShots(olderShots);
+        } catch (ShootrException error) {
+            notifyError(error);
+        }
     }
 
     private TimelineParameters buildTimelineParameters() {
@@ -103,6 +110,14 @@ public class GetOlderMainTimelineInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

@@ -116,6 +116,11 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
                       mightHaveMoreShots = false;
                   }
               }
+          }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  timelineView.hideLoadingOldShots();
+                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+              }
           });
     }
 
