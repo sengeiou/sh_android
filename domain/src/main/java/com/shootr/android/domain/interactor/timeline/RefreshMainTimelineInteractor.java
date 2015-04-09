@@ -5,6 +5,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -30,6 +31,7 @@ public class RefreshMainTimelineInteractor implements Interactor {
     private final UserRepository localUserRepository;
     private final SynchronizationRepository synchronizationRepository;
     private Callback callback;
+    private ErrorCallback errorCallback;
 
     @Inject public RefreshMainTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository,
@@ -43,8 +45,9 @@ public class RefreshMainTimelineInteractor implements Interactor {
         this.synchronizationRepository = synchronizationRepository;
     }
 
-    public void refreshMainTimeline(Callback callback) {
+    public void refreshMainTimeline(Callback callback, ErrorCallback errorCallback) {
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -53,13 +56,17 @@ public class RefreshMainTimelineInteractor implements Interactor {
     }
 
     private synchronized void executeSynchronized() {
-        TimelineParameters timelineParameters = buildTimelineParameters();
+        try {
+            TimelineParameters timelineParameters = buildTimelineParameters();
 
-        List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
-        remoteShots = sortShotsByPublishDate(remoteShots);
-        notifyTimelineFromShots(remoteShots);
+            List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+            remoteShots = sortShotsByPublishDate(remoteShots);
+            notifyTimelineFromShots(remoteShots);
 
-        updateLastRefreshDate(remoteShots);
+            updateLastRefreshDate(remoteShots);
+        } catch (ShootrException error) {
+            notifyError(error);
+        }
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
@@ -121,10 +128,18 @@ public class RefreshMainTimelineInteractor implements Interactor {
             }
         });
     }
+    //endregion
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
+            }
+        });
+    }
 
     public interface Callback {
 
         void onLoaded(Timeline timeline);
     }
-    //endregion
 }

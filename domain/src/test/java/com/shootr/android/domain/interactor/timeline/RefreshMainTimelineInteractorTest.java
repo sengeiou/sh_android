@@ -6,6 +6,7 @@ import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
@@ -43,6 +44,7 @@ public class RefreshMainTimelineInteractorTest {
     @Mock UserRepository localUserRepository;
     @Mock SynchronizationRepository synchronizationRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
+    @Mock Interactor.ErrorCallback errorCallback;
 
     @Before
     public void setUp() throws Exception {
@@ -63,7 +65,7 @@ public class RefreshMainTimelineInteractorTest {
         when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
 
-        interactor.refreshMainTimeline(spyCallback);
+        interactor.refreshMainTimeline(spyCallback, errorCallback);
         List<Shot> shotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(shotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
@@ -74,7 +76,7 @@ public class RefreshMainTimelineInteractorTest {
         when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
 
-        interactor.refreshMainTimeline(spyCallback);
+        interactor.refreshMainTimeline(spyCallback, errorCallback);
 
         ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
         verify(synchronizationRepository).putTimelineLastRefresh(captor.capture());

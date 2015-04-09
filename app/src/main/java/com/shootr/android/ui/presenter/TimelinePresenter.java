@@ -4,12 +4,15 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
@@ -22,6 +25,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     private final GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private TimelineView timelineView;
     private boolean isLoadingOlderShots;
@@ -29,12 +33,14 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
 
     @Inject public TimelinePresenter(GetMainTimelineInteractor getMainTimelineInteractor,
       RefreshMainTimelineInteractor refreshMainTimelineInteractor,
-      GetOlderMainTimelineInteractor getOlderMainTimelineInteractor, ShotModelMapper shotModelMapper, @Main Bus bus) {
+      GetOlderMainTimelineInteractor getOlderMainTimelineInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory) {
         this.getMainTimelineInteractor = getMainTimelineInteractor;
         this.refreshMainTimelineInteractor = refreshMainTimelineInteractor;
         this.getOlderMainTimelineInteractor = getOlderMainTimelineInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(TimelineView timelineView) {
@@ -74,6 +80,11 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
                     timelineView.hideEmpty();
                     timelineView.showShots();
                 }
+                timelineView.hideLoading();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 timelineView.hideLoading();
             }
         });
