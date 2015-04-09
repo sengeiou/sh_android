@@ -87,13 +87,13 @@ public class TimelineFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
 
     @InjectView(R.id.timeline_list) ListView listView;
-    @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_new_text) TextView newShotTextView;
+    @InjectView(R.id.new_shot_bar) View newShotView;
+    @InjectView(R.id.shot_bar_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.exit_event_fab) FloatingActionButton exitEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.timeline_drafts) View draftsButton;
+    @InjectView(R.id.shot_bar_drafts) View draftsButton;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -368,17 +368,17 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    @OnClick(R.id.timeline_new_text)
+    @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(R.id.timeline_new_image_camera)
+    @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
         newShotBarPresenter.newShotFromImage();
     }
 
-    @OnClick(R.id.timeline_drafts)
+    @OnClick(R.id.shot_bar_drafts)
     public void openDrafts() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
