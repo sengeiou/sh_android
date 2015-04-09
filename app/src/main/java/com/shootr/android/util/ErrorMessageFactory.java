@@ -4,7 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -79,5 +81,13 @@ public class ErrorMessageFactory {
             Timber.w("No string resource mapping found for code %s. Using default unknown message", errorCode);
         }
         return errorStringResource;
+    }
+
+    public String getMessageForError(ShootrException error) {
+        if (error instanceof ServerCommunicationException || error.getCause() instanceof  ServerCommunicationException) {
+            return getCommunicationErrorMessage();
+        } else {
+            return getUnknownErrorMessage();
+        }
     }
 }

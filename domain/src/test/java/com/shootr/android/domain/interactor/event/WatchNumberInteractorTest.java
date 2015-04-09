@@ -30,7 +30,7 @@ public class WatchNumberInteractorTest {
 
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock Interactor.InteractorErrorCallback dummyErrorCallback;
+    @Mock Interactor.ErrorCallback dummyErrorCallback;
     @Spy SpyCallback spyCallback = new SpyCallback();
 
     @Before

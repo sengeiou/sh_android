@@ -44,7 +44,7 @@ public abstract class GenericMapper {
     }
 
     protected void setSynchronizedfromDto(Map<String, Object> dto, Synchronized s) {
-        Number date =  (Long)dto.get(CSYS_BIRTH);
+        Number date =  (Number)dto.get(CSYS_BIRTH);
         s.setCsysBirth(date != null ? new Date(date.longValue()) : null);
 
         date = (Number) dto.get(CSYS_DELETED);

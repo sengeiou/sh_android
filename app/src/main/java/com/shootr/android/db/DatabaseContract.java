@@ -68,10 +68,11 @@ public class DatabaseContract {
         public static final String EVENT_ID = "idEvent";
         public static final String EVENT_TITLE = "eventTitle";
         public static final String STATUS = "status";
+        public static final String CHECK_IN = "checkIn";
 
         public static final String[] PROJECTION = {
           ID, FAVORITE_TEAM_ID, FAVORITE_TEAM_NAME, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, CHECK_IN, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }

@@ -53,10 +53,16 @@ public class SelectEventInteractor implements Interactor {
 
         User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
 
+        deleteCheckin(updatedUser);
+
         sessionRepository.setCurrentUser(updatedUser);
         localUserRepository.putUser(updatedUser);
         notifyLoaded(idSelectedEvent);
         remoteUserRepository.putUser(updatedUser);
+    }
+
+    private void deleteCheckin(User updatedUser) {
+        updatedUser.setCheckedIn(false);
     }
 
     private boolean isSelectingCurrentVisibleEvent(User currentUser) {

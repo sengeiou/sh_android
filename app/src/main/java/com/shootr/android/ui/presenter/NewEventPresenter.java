@@ -222,7 +222,7 @@ public class NewEventPresenter implements Presenter {
                 @Override public void onLoaded(Event event) {
                     eventCreated(event);
                 }
-            }, new Interactor.InteractorErrorCallback() {
+            }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
                     eventCreationError(error);
                 }

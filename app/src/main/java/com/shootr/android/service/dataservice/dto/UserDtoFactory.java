@@ -3,14 +3,12 @@ package com.shootr.android.service.dataservice.dto;
 import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
-import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.service.dataservice.generic.FilterBuilder;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -36,7 +34,9 @@ public class UserDtoFactory {
     public static final int UNFOLLOW_TYPE = 1;
 
     private static final String ENTITY_LOGIN = "Login";
+    private static final String ENTITY_CHECKIN = "CheckIn";
     private static final String ALIAS_LOGIN = "Login";
+    private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
@@ -57,6 +57,18 @@ public class UserDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
+    }
+
+    public GenericDto getCheckinOperationDto(Long idUser, Long idEvent) {
+        MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
+          .putKey(UserTable.ID, idUser)
+          .putKey(UserTable.EVENT_ID, idEvent)
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .build();
+
+        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).setData(null).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CHECKIN, operationDto);
     }
 
     public GenericDto getLoginOperationDto(String id, String password) {

@@ -28,7 +28,7 @@ public class EventsSearchInteractor implements Interactor {
 
     private String query;
     private Callback callback;
-    private InteractorErrorCallback errorCallback;
+    private ErrorCallback errorCallback;
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
       EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
@@ -40,7 +40,7 @@ public class EventsSearchInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void searchEvents(String query, Callback callback, InteractorErrorCallback errorCallback) {
+    public void searchEvents(String query, Callback callback, ErrorCallback errorCallback) {
         this.query = query;
         this.callback = callback;
         this.errorCallback = errorCallback;

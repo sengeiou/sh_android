@@ -171,7 +171,7 @@ public class PostNewShotInteractorTest {
         }
     }
 
-    private class SpyErrorCallback implements Interactor.InteractorErrorCallback {
+    private class SpyErrorCallback implements Interactor.ErrorCallback {
 
         public ShootrException error;
 
@@ -180,7 +180,7 @@ public class PostNewShotInteractorTest {
         }
     }
 
-    private class DummyErrorCallback implements Interactor.InteractorErrorCallback {
+    private class DummyErrorCallback implements Interactor.ErrorCallback {
 
         @Override public void onError(ShootrException error) {
         }

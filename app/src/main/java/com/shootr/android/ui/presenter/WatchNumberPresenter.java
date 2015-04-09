@@ -37,7 +37,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
             @Override public void onLoaded(Integer count) {
                 setViewWathingCount(count);
             }
-        }, new Interactor.InteractorErrorCallback() {
+        }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 //TODO error handling
             }

@@ -480,6 +480,12 @@ public class ShootrDataService implements ShootrService {
         return eventSearchResults;
     }
 
+    @Override public void performCheckin(Long idUser, Long idEvent) throws IOException {
+        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
+        GenericDto responseDto = postRequest(checkinDto);
+        // We are done... right? Any errors should have been thrown already. I'm not expecting any value
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

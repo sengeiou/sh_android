@@ -59,6 +59,7 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.EVENT_ID, u.getIdEvent());
         cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
         cv.put(UserTable.STATUS, u.getStatus());
+        cv.put(UserTable.CHECK_IN, u.getCheckIn());
         setSynchronizedtoContentValues(u, cv);
         return cv;
     }
@@ -93,6 +94,7 @@ public class UserMapper extends GenericMapper {
 
         user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? ((String) dto.get(UserTable.EVENT_TITLE)) : null);
         user.setStatus(dto.containsKey(UserTable.STATUS) ? ((String) dto.get(UserTable.STATUS)) : null);
+        user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
         setSynchronizedfromDto(dto,user);
         return user;
     }
@@ -128,6 +130,7 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.EVENT_ID, user == null ? null : user.getIdEvent());
         dto.put(UserTable.EVENT_TITLE, user == null ? null : user.getEventTitle());
         dto.put(UserTable.STATUS, user == null ? null : user.getStatus());
+        dto.put(UserTable.CHECK_IN, user == null ? null : user.getCheckIn());
         setSynchronizedtoDto(user, dto);
         return dto;
     }
@@ -152,6 +155,7 @@ public class UserMapper extends GenericMapper {
         user.setIdEvent(c.getLong(c.getColumnIndex(UserTable.EVENT_ID)));
         user.setEventTitle(c.getString(c.getColumnIndex(UserTable.EVENT_TITLE)));
         user.setStatus(c.getString(c.getColumnIndex(UserTable.STATUS)));
+        user.setCheckIn(c.getInt(c.getColumnIndex(UserTable.CHECK_IN)));
         return user;
     }
 

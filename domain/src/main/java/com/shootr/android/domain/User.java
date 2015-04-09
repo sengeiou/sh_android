@@ -20,6 +20,7 @@ public class User {
     private Long visibleEventId;
     private String visibleEventTitle;
     private String status;
+    private Boolean checkedIn;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -193,6 +194,14 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean isCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(Boolean checkedIn) {
+        this.checkedIn = checkedIn;
     }
 
     public static class UsernameComparator implements Comparator<User> {

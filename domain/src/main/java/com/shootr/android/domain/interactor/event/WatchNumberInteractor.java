@@ -4,7 +4,6 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -19,7 +18,7 @@ public class WatchNumberInteractor implements Interactor{
 
     public static final int NO_EVENT = -1;
     private Callback callback;
-    private InteractorErrorCallback errorCallback;
+    private ErrorCallback errorCallback;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -34,7 +33,7 @@ public class WatchNumberInteractor implements Interactor{
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void loadWatchNumber(Callback callback, InteractorErrorCallback errorCallback) {
+    public void loadWatchNumber(Callback callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
