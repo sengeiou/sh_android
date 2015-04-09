@@ -34,6 +34,7 @@ public class GetMainTimelineInteractor implements Interactor {
     private final UserRepository remoteUserRepository;
     private final SynchronizationRepository synchronizationRepository;
     private Callback callback;
+    private ErrorCallback errorCallback;
 
     @Inject public GetMainTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
@@ -52,8 +53,9 @@ public class GetMainTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadMainTimeline(Callback callback) {
+    public void loadMainTimeline(Callback callback, ErrorCallback errorCallback) {
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -80,7 +82,7 @@ public class GetMainTimelineInteractor implements Interactor {
                 loadRemoteShotsWithEvent(buildParametersWithEvent(remoteVisibleEvent));
             }
         } catch (ShootrException error) {
-            //TODO hanlde network errors in UI
+            notifyError(error);
         }
     }
 
@@ -168,6 +170,14 @@ public class GetMainTimelineInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

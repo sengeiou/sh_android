@@ -73,7 +73,7 @@ public class TimelinePresenterTest {
     public void shouldGetMainTimlelineWhenInitialized() throws Exception {
         presenter.initialize(timelineView);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
     }
 
     @Test
@@ -273,7 +273,7 @@ public class TimelinePresenterTest {
     public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
         eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
     }
 
     @Test
@@ -348,7 +348,7 @@ public class TimelinePresenterTest {
                 ((GetMainTimelineInteractor.Callback) invocation.getArguments()[0]).onLoaded(timeline);
                 return null;
             }
-        }).when(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        }).when(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
     }
 
     private void setupRefreshMainTimelineInteractorCallbacks(final Timeline timeline) {

@@ -67,6 +67,11 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
                     timelineView.hideShots();
                 }
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                timelineView.hideLoading();
+                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
         });
     }
 
