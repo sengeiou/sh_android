@@ -66,7 +66,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
 
         ShotModel shotModel = extractShotFromIntent();
         setupPhotoPicker();
-        setupNewShotBarDelegate();
+        setupNewShotBarDelegate(shotModel);
         initializePresenter(shotModel);
     }
 
@@ -93,12 +93,12 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
           }).build();
     }
 
-    private void setupNewShotBarDelegate() {
+    private void setupNewShotBarDelegate(final ShotModel shotModel) {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
-                    //TODO reply
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .build();
                 startActivity(newShotIntent);
             }

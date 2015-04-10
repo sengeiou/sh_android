@@ -23,7 +23,6 @@ public class PostNewShotPresenter implements Presenter {
     private final PostNewShotInteractor postNewShotInteractor;
 
     private PostNewShotView postNewShotView;
-    private String placeholder;
     private File selectedImageFile;
     private String shotCommentToSend;
     private String currentTextWritten;
@@ -38,11 +37,10 @@ public class PostNewShotPresenter implements Presenter {
         initialize(postNewShotView, null);
     }
 
-    public void initialize(PostNewShotView postNewShotView, String placeholder) {
+    public void initialize(PostNewShotView postNewShotView, String replyToUsername) {
         this.postNewShotView = postNewShotView;
-        this.placeholder = placeholder;
-        if (placeholder != null) {
-            postNewShotView.setPlaceholder(placeholder);
+        if (replyToUsername != null) {
+            postNewShotView.showReplyToUsername(replyToUsername);
         }
     }
 
