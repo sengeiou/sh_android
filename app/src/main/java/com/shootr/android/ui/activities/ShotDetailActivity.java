@@ -94,7 +94,24 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
     }
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton);
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton) {
+            @Override public void openNewShotView() {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(ShotDetailActivity.this) //
+                    //TODO reply
+                  .build();
+                startActivity(newShotIntent);
+            }
+
+            @Override public void openNewShotViewWithImage(File image) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(ShotDetailActivity.this) //
+                    //TODO reply
+                  .withImage(image) //
+                  .build();
+                startActivity(newShotIntent);
+            }
+        };
     }
 
     private void setupActionBar() {

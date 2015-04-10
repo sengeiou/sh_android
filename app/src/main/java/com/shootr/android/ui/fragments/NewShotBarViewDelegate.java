@@ -6,26 +6,21 @@ import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.views.NewShotBarView;
-import java.io.File;
 
-public class NewShotBarViewDelegate implements NewShotBarView {
+public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
-    private Context context;
     private PhotoPickerController photoPickerController;
     private View draftsButton;
 
-    public NewShotBarViewDelegate(Context context, PhotoPickerController photoPickerController, View draftsButton) {
-        this.context = context;
+    public NewShotBarViewDelegate(PhotoPickerController photoPickerController, View draftsButton) {
         this.photoPickerController = photoPickerController;
         this.draftsButton = draftsButton;
         this.setupDraftButtonTransition();
@@ -53,23 +48,8 @@ public class NewShotBarViewDelegate implements NewShotBarView {
         ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
     }
 
-    @Override public void openNewShotView() {
-        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-          .from(context) //
-          .build();
-        context.startActivity(newShotIntent);
-    }
-
     @Override public void pickImage() {
         photoPickerController.pickPhoto();
-    }
-
-    @Override public void openNewShotViewWithImage(File image) {
-        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-          .from(context) //
-          .withImage(image) //
-          .build();
-        context.startActivity(newShotIntent);
     }
 
     @Override public void showDraftsButton() {

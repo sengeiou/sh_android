@@ -1,12 +1,10 @@
 package com.shootr.android.ui.fragments;
 
-import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,15 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-
+import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -33,6 +29,7 @@ import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -55,13 +52,9 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -201,7 +194,22 @@ public class TimelineFragment extends BaseFragment
     //endregion
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton);
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
+            @Override public void openNewShotView() {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .build();
+                startActivity(newShotIntent);
+            }
+
+            @Override public void openNewShotViewWithImage(File image) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .withImage(image) //
+                  .build();
+                startActivity(newShotIntent);
+            }
+        };
     }
 
     public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
