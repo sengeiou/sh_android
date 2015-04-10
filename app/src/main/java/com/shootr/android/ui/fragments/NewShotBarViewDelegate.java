@@ -54,7 +54,9 @@ public class NewShotBarViewDelegate implements NewShotBarView {
     }
 
     @Override public void openNewShotView() {
-        Intent newShotIntent = new Intent(context, PostNewShotActivity.class);
+        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+          .from(context) //
+          .build();
         context.startActivity(newShotIntent);
     }
 
@@ -63,8 +65,10 @@ public class NewShotBarViewDelegate implements NewShotBarView {
     }
 
     @Override public void openNewShotViewWithImage(File image) {
-        Intent newShotIntent = new Intent(context, PostNewShotActivity.class);
-        newShotIntent.putExtra(PostNewShotActivity.EXTRA_PHOTO, image);
+        Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+          .from(context) //
+          .withImage(image) //
+          .build();
         context.startActivity(newShotIntent);
     }
 

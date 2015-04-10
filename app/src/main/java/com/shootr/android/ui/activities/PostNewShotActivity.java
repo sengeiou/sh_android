@@ -51,11 +51,10 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Inject PicassoWrapper picasso;
     @Inject SessionRepository sessionRepository;
+    @Inject PostNewShotPresenter presenter;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
-
-    @Inject PostNewShotPresenter presenter;
     private PhotoPickerController photoPickerController;
 
     @Override
@@ -283,5 +282,36 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static class IntentBuilder {
+
+        private File imageFile;
+        private Context launchingContext;
+
+        public static IntentBuilder from(Context launchingContext) {
+            IntentBuilder intentBuilder = new IntentBuilder();
+            intentBuilder.setLaunchingContext(launchingContext);
+            return intentBuilder;
+        }
+
+        public IntentBuilder setLaunchingContext(Context launchingContext) {
+            this.launchingContext = launchingContext;
+            return this;
+        }
+
+        public IntentBuilder withImage(File imageFile) {
+            this.imageFile = imageFile;
+            return this;
+        }
+
+        public Intent build() {
+            Intent intent = new Intent(launchingContext, PostNewShotActivity.class);
+            if (imageFile != null) {
+                intent.putExtra(EXTRA_PHOTO, imageFile);
+            }
+
+            return intent;
+        }
     }
 }
