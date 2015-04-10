@@ -186,6 +186,10 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         startActivity(intentForUser);
     }
 
+    @Override public void setReplyUsername(String username) {
+        replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
+    }
+
     @Override protected void onResume() {
         super.onResume();
         detailPresenter.resume();
