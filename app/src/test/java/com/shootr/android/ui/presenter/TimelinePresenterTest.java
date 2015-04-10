@@ -4,12 +4,14 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.lang.reflect.Method;
@@ -45,6 +47,7 @@ public class TimelinePresenterTest {
     @Mock RefreshMainTimelineInteractor refreshMainTimelineInteractor;
     @Mock GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
     @Mock Bus bus;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private TimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -54,9 +57,12 @@ public class TimelinePresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new TimelinePresenter(getMainTimelineInteractor, refreshMainTimelineInteractor,
+        presenter = new TimelinePresenter(getMainTimelineInteractor,
+          refreshMainTimelineInteractor,
           getOlderMainTimelineInteractor,
-          shotModelMapper, bus);
+          shotModelMapper,
+          bus,
+          errorMessageFactory);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
         eventChangedReceiver = presenter;
@@ -67,7 +73,8 @@ public class TimelinePresenterTest {
     public void shouldGetMainTimlelineWhenInitialized() throws Exception {
         presenter.initialize(timelineView);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class),
+          anyErrorCallback());
     }
 
     @Test
@@ -223,8 +230,7 @@ public class TimelinePresenterTest {
     public void shouldLoadMoreShotsWhenLastShotVisiblePositionIsLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
 
     @Test
@@ -232,7 +238,7 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
 
     @Test
@@ -249,8 +255,7 @@ public class TimelinePresenterTest {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
     }
     //endregion
 
@@ -259,14 +264,14 @@ public class TimelinePresenterTest {
     public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-        verify(refreshMainTimelineInteractor).refreshMainTimeline(any(RefreshMainTimelineInteractor.Callback.class));
+        verify(refreshMainTimelineInteractor).refreshMainTimeline(anyRefreshCallback(), anyErrorCallback());
     }
 
     @Test
     public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
         eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
     }
 
     @Test
@@ -294,8 +299,20 @@ public class TimelinePresenterTest {
                 ((GetOlderMainTimelineInteractor.Callback) invocation.getArguments()[1]).onLoaded(timeline);
                 return null;
             }
-        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(),
-          any(GetOlderMainTimelineInteractor.Callback.class));
+        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+    }
+
+    private GetOlderMainTimelineInteractor.Callback anyOlderCallback() {
+        return any(GetOlderMainTimelineInteractor.Callback.class);
+    }
+
+    private Interactor.ErrorCallback anyErrorCallback() {
+        return any(
+          Interactor.ErrorCallback.class);
+    }
+
+    private RefreshMainTimelineInteractor.Callback anyRefreshCallback() {
+        return any(RefreshMainTimelineInteractor.Callback.class);
     }
 
     private ShotModel lastShotModel() {
@@ -332,7 +349,7 @@ public class TimelinePresenterTest {
                 ((GetMainTimelineInteractor.Callback) invocation.getArguments()[0]).onLoaded(timeline);
                 return null;
             }
-        }).when(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class));
+        }).when(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
     }
 
     private void setupRefreshMainTimelineInteractorCallbacks(final Timeline timeline) {
@@ -341,6 +358,6 @@ public class TimelinePresenterTest {
                 ((RefreshMainTimelineInteractor.Callback) invocation.getArguments()[0]).onLoaded(timeline);
                 return null;
             }
-        }).when(refreshMainTimelineInteractor).refreshMainTimeline(any(RefreshMainTimelineInteractor.Callback.class));
+        }).when(refreshMainTimelineInteractor).refreshMainTimeline(anyRefreshCallback(), anyErrorCallback());
     }
 }
