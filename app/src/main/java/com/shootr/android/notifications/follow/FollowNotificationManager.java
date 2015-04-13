@@ -7,7 +7,9 @@ import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.PicassoWrapper;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class FollowNotificationManager {
 
     private static final String NOTIFICATION_TAG = "follow";

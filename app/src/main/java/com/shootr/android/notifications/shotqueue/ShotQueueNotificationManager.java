@@ -6,7 +6,9 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.notifications.AndroidNotificationManager;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ShotQueueNotificationManager {
 
     private static final String NOTIFICATION_TAG = "shotqueue";

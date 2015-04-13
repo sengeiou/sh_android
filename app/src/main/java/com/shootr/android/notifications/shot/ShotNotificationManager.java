@@ -10,7 +10,9 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ShotNotificationManager {
 
     public static final int SHOT_NOTIFICATION_ID = 1;
