@@ -145,6 +145,11 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         newShotBarPresenter.newShotFromTextBox();
     }
 
+    @OnClick(R.id.shot_bar_drafts)
+    public void openDrafts() {
+        startActivity(new Intent(this, DraftsActivity.class));
+    }
+    
     @Override public void renderShot(ShotModel shotModel) {
 
         username.setText(getUsernameTitle(shotModel));
