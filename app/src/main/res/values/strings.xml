@@ -192,6 +192,7 @@
     <string name="checkin_confirmation_message">Check In will shoot a notification to your followers.</string>
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
+    <string name="reply_name_pattern">%1$s to %2$s</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
