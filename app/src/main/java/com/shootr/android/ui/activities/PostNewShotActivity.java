@@ -77,13 +77,13 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private void initializePresenterWithIntentExtras(Bundle extras) {
         if (extras != null) {
             String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
-            //TODO usar idshot para pasarselo al interactor
+            Long replyParentId = extras.getLong(EXTRA_REPLY_PARENT_ID, 0L);
             boolean isReply = replyToUsername != null;
             if (isReply) {
-                presenter.initialize(this, replyToUsername);
+                presenter.initializeAsReply(this, replyParentId, replyToUsername);
             }
         } else {
-            presenter.initialize(this);
+            presenter.initializeAsNewShot(this);
         }
     }
 
