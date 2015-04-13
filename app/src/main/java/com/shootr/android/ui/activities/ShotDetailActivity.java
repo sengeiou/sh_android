@@ -147,7 +147,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
 
     @Override public void renderShot(ShotModel shotModel) {
 
-        username.setText(shotModel.getUsername());
+        username.setText(getUsernameTitle(shotModel));
         timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
         String comment = shotModel.getComment();
         if (comment != null) {
@@ -163,6 +163,14 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
             picasso.loadTimelineImage(imageUrl).into(shotImage);
         } else {
             shotImage.setVisibility(View.GONE);
+        }
+    }
+
+    private String getUsernameTitle(ShotModel shotModel) {
+        if (shotModel.isReply()) {
+            return getString(R.string.reply_name_pattern, shotModel.getUsername(), shotModel.getReplyUsername());
+        } else {
+            return shotModel.getUsername();
         }
     }
 
