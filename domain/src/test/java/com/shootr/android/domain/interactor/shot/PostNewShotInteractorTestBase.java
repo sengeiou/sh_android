@@ -57,24 +57,6 @@ public abstract class PostNewShotInteractorTestBase {
         assertUserInfoIsFromUser(userInfo, currentUser());
     }
 
-
-
-    @Test
-    public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
-        setupCurrentUserSession();
-
-        getInteractorForCommonTests().postNewShot(COMMENT_STUB,
-          IMAGE_NULL,
-          new DummyCallback(),
-          new DummyErrorCallback());
-
-        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
-        Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
-        assertThat(eventInfo).isNull();
-    }
-
     @Test
     public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
         setupCurrentUserSession();
@@ -131,6 +113,12 @@ public abstract class PostNewShotInteractorTestBase {
         user.setUsername("currentUsername");
         user.setPhoto("http://avatar.jpg");
         return user;
+    }
+
+    protected Shot captureSentShot() {
+        ArgumentCaptor<Shot> shotCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotSender).sendShot(shotCaptor.capture(), any(File.class));
+        return shotCaptor.getValue();
     }
     //endregion
 

@@ -73,7 +73,7 @@ public abstract class PostNewShotInteractor implements Interactor {
 
     protected void fillShotContextualInfo(Shot shot) {
         fillShotUserInfo(shot);
-        fillShotEventInfo(shot, getEventForShot());
+        fillShotEventInfo(shot);
     }
 
     private void fillShotUserInfo(Shot shot) {
@@ -87,17 +87,7 @@ public abstract class PostNewShotInteractor implements Interactor {
         shot.setUserInfo(userInfo);
     }
 
-    protected void fillShotEventInfo(Shot shot, Event event) {
-        if (event != null) {
-            Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(event.getId());
-            eventInfo.setEventTitle(event.getTitle());
-            eventInfo.setEventTag(event.getTag());
-            shot.setEventInfo(eventInfo);
-        }
-    }
-
-    protected abstract Event getEventForShot();
+    protected abstract void fillShotEventInfo(Shot shot);
 
     private void notifyReadyToSend() {
         postExecutionThread.post(new Runnable() {

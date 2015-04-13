@@ -46,7 +46,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         setupCurrentUserSession();
         setupVisibleEvent();
 
-        getInteractorForCommonTests().postNewShot(COMMENT_STUB,
+        interactor.postNewShotInEvent(COMMENT_STUB,
           IMAGE_NULL,
           new DummyCallback(),
           new DummyErrorCallback());
@@ -56,6 +56,22 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
         assertEventInfoIsFromEvent(eventInfo, visibleEvent());
+    }
+
+    @Test
+    public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
+        setupCurrentUserSession();
+
+        interactor.postNewShotInEvent(COMMENT_STUB,
+          IMAGE_NULL,
+          new DummyCallback(),
+          new DummyErrorCallback());
+
+        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
+        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
+        Shot publishedShot = shotArgumentCaptor.getValue();
+        Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
+        assertThat(eventInfo).isNull();
     }
 
     private void setupVisibleEvent() {

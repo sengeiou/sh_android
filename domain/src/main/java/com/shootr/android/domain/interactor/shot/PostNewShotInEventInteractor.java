@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
@@ -28,8 +29,15 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
         super.postNewShot(comment, image, callback, errorCallback);
     }
 
-    @Override protected Event getEventForShot() {
-        return currentVisibleEvent();
+    @Override protected void fillShotEventInfo(Shot shot) {
+        Event event = currentVisibleEvent();
+        if (event != null) {
+            Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
+            eventInfo.setIdEvent(event.getId());
+            eventInfo.setEventTitle(event.getTitle());
+            eventInfo.setEventTag(event.getTag());
+            shot.setEventInfo(eventInfo);
+        }
     }
 
     private Event currentVisibleEvent() {
