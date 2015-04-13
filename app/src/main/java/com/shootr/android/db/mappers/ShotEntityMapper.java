@@ -20,6 +20,9 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
         shot.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         shot.setType(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
+        shot.setIdShotParent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
+        shot.setIdUserParent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
+        shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
         setSynchronizedfromCursor(c, shot);
         return shot;
     }
@@ -34,6 +37,9 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.EVENT_TITLE, shot.getEventTitle());
         cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
+        cv.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot.getIdShotParent());
+        cv.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot.getIdUserParent());
+        cv.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot.getUserNameParent());
         setSynchronizedtoContentValues(shot,cv);
         return cv;
     }
@@ -54,6 +60,18 @@ public class ShotEntityMapper extends GenericMapper {
         if (type != null) {
             shot.setType(type.intValue());
         }
+        Number idParent = (Number) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT);
+        if (idParent != null) {
+            shot.setIdShotParent(idParent.longValue());
+        }
+        Number idParentUser = (Number) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT);
+        if (idParentUser != null) {
+            shot.setIdUserParent(idParentUser.longValue());
+        }
+        String usernameParentUser = (String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT);
+        if (usernameParentUser != null) {
+            shot.setUserNameParent(usernameParentUser);
+        }
         setSynchronizedfromDto(dto, shot);
         return shot;
     }
@@ -68,6 +86,9 @@ public class ShotEntityMapper extends GenericMapper {
         dto.put(DatabaseContract.ShotTable.EVENT_TITLE, shot == null ? null : shot.getEventTitle());
         dto.put(DatabaseContract.ShotTable.ID_EVENT, shot == null ? null : shot.getIdEvent());
         dto.put(DatabaseContract.ShotTable.TYPE, shot == null ? null : shot.getType());
+        dto.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot == null ? null : shot.getIdShotParent());
+        dto.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot == null ? null : shot.getIdUserParent());
+        dto.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot == null ? null : shot.getUserNameParent());
         setSynchronizedtoDto(shot,dto);
         return dto;
     }

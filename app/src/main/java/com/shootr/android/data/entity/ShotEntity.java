@@ -15,6 +15,10 @@ public class ShotEntity extends Synchronized{
     private String eventTitle;
     private Integer type;
 
+    private Long idShotParent;
+    private Long idUserParent;
+    private String userNameParent;
+
     private UserEntity mUserObject;
 
     public Long getIdShot() {
@@ -87,5 +91,29 @@ public class ShotEntity extends Synchronized{
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
+    }
+
+    public Long getIdShotParent() {
+        return idShotParent;
+    }
+
+    public void setIdShotParent(Long idShotParent) {
+        this.idShotParent = idShotParent;
+    }
+
+    public Long getIdUserParent() {
+        return idUserParent;
+    }
+
+    public void setIdUserParent(Long idUserParent) {
+        this.idUserParent = idUserParent;
+    }
+
+    public String getUserNameParent() {
+        return userNameParent;
+    }
+
+    public void setUserNameParent(String userNameParent) {
+        this.userNameParent = userNameParent;
     }
 }

@@ -43,6 +43,11 @@ public class ShotEntityMapper {
         userInfo.setUsername(user.getUsername());
         userInfo.setAvatar(user.getPhoto());
         shot.setUserInfo(userInfo);
+
+        shot.setParentShotId(shotEntity.getIdShotParent());
+        shot.setParentShotUserId(shotEntity.getIdUserParent());
+        shot.setParentShotUsername(shotEntity.getUserNameParent());
+
         return shot;
     }
 
@@ -80,6 +85,10 @@ public class ShotEntityMapper {
             shotEntity.setEventTitle(eventInfo.getEventTitle());
             shotEntity.setEventTag(eventInfo.getEventTag());
         }
+
+        shotEntity.setIdShotParent(shot.getParentShotId());
+        shotEntity.setIdUserParent(shot.getParentShotUserId());
+        shotEntity.setUserNameParent(shot.getParentShotUsername());
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;
