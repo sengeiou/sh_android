@@ -44,4 +44,12 @@ public class SyncShotRepository implements ShotRepository {
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline, usersFromShots);
     }
+
+    @Override public Shot getShot(Long shotId) {
+        ShotEntity shot = localShotDataSource.getShot(shotId);
+        if (shot == null) {
+            shot = remoteShotDataSource.getShot(shotId);
+        }
+        return shotEntityMapper.transform(shot, remoteUserRepository.getUserById(shot.getIdUser()));
+    }
 }
