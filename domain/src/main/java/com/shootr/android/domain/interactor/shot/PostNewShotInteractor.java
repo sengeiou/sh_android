@@ -9,38 +9,32 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
 import com.shootr.android.domain.service.dagger.Background;
 import java.io.File;
 import java.util.Date;
-import javax.inject.Inject;
 
-public class PostNewShotInteractor implements Interactor {
+public abstract class PostNewShotInteractor implements Interactor {
 
     private final PostExecutionThread postExecutionThread;
     private final InteractorHandler interactorHandler;
     private final SessionRepository sessionRepository;
-    private final EventRepository localEventRepository;
     private final ShotSender shotSender;
     private String comment;
     private File imageFile;
-    private Callback callback;
+    private CompletedCallback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
-      SessionRepository sessionRepository, @Local EventRepository localEventRepository,
-      @Background ShotSender shotSender) {
+    public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
+      SessionRepository sessionRepository, @Background ShotSender shotSender) {
         this.postExecutionThread = postExecutionThread;
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
-        this.localEventRepository = localEventRepository;
         this.shotSender = shotSender;
     }
 
-    public void postNewShot(String comment, File image, Callback callback, ErrorCallback errorCallback) {
+    protected void postNewShot(String comment, File image, CompletedCallback callback, ErrorCallback errorCallback) {
         this.comment = comment;
         this.imageFile = image;
         this.callback = callback;
@@ -77,9 +71,9 @@ public class PostNewShotInteractor implements Interactor {
         return comment;
     }
 
-    private void fillShotContextualInfo(Shot shot) {
+    protected void fillShotContextualInfo(Shot shot) {
         fillShotUserInfo(shot);
-        fillShotEventInfo(shot);
+        fillShotEventInfo(shot, getEventForShot());
     }
 
     private void fillShotUserInfo(Shot shot) {
@@ -93,30 +87,22 @@ public class PostNewShotInteractor implements Interactor {
         shot.setUserInfo(userInfo);
     }
 
-    private void fillShotEventInfo(Shot shot) {
-        Event currentVisibleEvent = currentVisibleEvent();
-        if (currentVisibleEvent != null) {
+    protected void fillShotEventInfo(Shot shot, Event event) {
+        if (event != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(currentVisibleEvent.getId());
-            eventInfo.setEventTitle(currentVisibleEvent.getTitle());
-            eventInfo.setEventTag(currentVisibleEvent.getTag());
+            eventInfo.setIdEvent(event.getId());
+            eventInfo.setEventTitle(event.getTitle());
+            eventInfo.setEventTag(event.getTag());
             shot.setEventInfo(eventInfo);
         }
     }
 
-    private Event currentVisibleEvent() {
-        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
-        } else {
-            return null;
-        }
-    }
+    protected abstract Event getEventForShot();
 
     private void notifyReadyToSend() {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded();
+                callback.onCompleted();
             }
         });
     }
@@ -127,10 +113,5 @@ public class PostNewShotInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
-    }
-
-    public static interface Callback {
-
-        void onLoaded();
     }
 }

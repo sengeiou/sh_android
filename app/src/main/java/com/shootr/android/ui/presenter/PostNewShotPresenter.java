@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInEventInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -20,14 +20,15 @@ public class PostNewShotPresenter implements Presenter {
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final PostNewShotInteractor postNewShotInteractor;
+    private final PostNewShotInEventInteractor postNewShotInteractor;
 
     private PostNewShotView postNewShotView;
     private File selectedImageFile;
     private String shotCommentToSend;
     private String currentTextWritten;
 
-    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, PostNewShotInteractor postNewShotInteractor) {
+    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
+      PostNewShotInEventInteractor postNewShotInteractor) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.postNewShotInteractor = postNewShotInteractor;
@@ -95,8 +96,8 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void startSendingShot() {
-        postNewShotInteractor.postNewShot(shotCommentToSend, selectedImageFile, new PostNewShotInteractor.Callback() {
-            @Override public void onLoaded() {
+        postNewShotInteractor.postNewShotInEvent(shotCommentToSend, selectedImageFile, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
                 postNewShotView.setResultOk();
                 postNewShotView.closeScreen();
             }

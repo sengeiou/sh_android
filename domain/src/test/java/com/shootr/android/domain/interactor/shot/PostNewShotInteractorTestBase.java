@@ -25,38 +25,30 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PostNewShotInteractorTest {
+public abstract class PostNewShotInteractorTestBase {
 
-    private static final Long CURRENT_USER_ID = 1L;
-    private static final Long VISIBLE_EVENT_ID = 1L;
-    private static final String COMMENT_EMPTY = "";
-    private static final String COMMENT_STUB = "comment";
-    private static final File IMAGE_NULL = null;
-    private static final File IMAGE_STUB = new File(".");
-    private static final String EVENT_TITLE_STUB = "title";
-    private static final String EVENT_TAG_STUB = "tag";
+    public static final Long CURRENT_USER_ID = 1L;
+
+    public static final String COMMENT_EMPTY = "";
+    public static final String COMMENT_STUB = "comment";
+    public static final File IMAGE_NULL = null;
+    public static final File IMAGE_STUB = new File(".");
+    public static final String EVENT_TITLE_STUB = "title";
+    public static final String EVENT_TAG_STUB = "tag";
 
     @Mock SessionRepository sessionRepository;
-    @Mock EventRepository localEventRepository;
     @Mock ShotSender shotSender;
 
-    private PostNewShotInteractor interactor;
-
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        InteractorHandler interactorHandler = new TestInteractorHandler();
-        interactor =
-          new PostNewShotInteractor(postExecutionThread, interactorHandler, sessionRepository, localEventRepository,
-            shotSender);
-    }
+    protected abstract PostNewShotInteractor getInteractorForCommonTests();
 
     @Test
     public void shouldSendShotWithCurrentUserInfo() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
+        getInteractorForCommonTests().postNewShot(COMMENT_STUB,
+          IMAGE_NULL,
+          new DummyCallback(),
+          new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
@@ -65,25 +57,16 @@ public class PostNewShotInteractorTest {
         assertUserInfoIsFromUser(userInfo, currentUser());
     }
 
-    @Test
-    public void shouldSendShotWithVisibleEventInfoWhenThereIsVisibleEvent() throws Exception {
-        setupCurrentUserSession();
-        setupVisibleEvent();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
-
-        ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-        verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
-        Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
-        assertEventInfoIsFromEvent(eventInfo, visibleEvent());
-    }
 
     @Test
     public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
+        getInteractorForCommonTests().postNewShot(COMMENT_STUB,
+          IMAGE_NULL,
+          new DummyCallback(),
+          new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
@@ -96,7 +79,10 @@ public class PostNewShotInteractorTest {
     public void shouldSendNullCommentWhenInputCommentIsEmpty() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_EMPTY, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
+        getInteractorForCommonTests().postNewShot(COMMENT_EMPTY,
+          IMAGE_NULL,
+          new DummyCallback(),
+          new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
@@ -108,7 +94,10 @@ public class PostNewShotInteractorTest {
     public void shouldSendShotThroughDispatcher() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShot(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
+        getInteractorForCommonTests().postNewShot(COMMENT_STUB,
+          IMAGE_NULL,
+          new DummyCallback(),
+          new DummyErrorCallback());
 
         verify(shotSender, times(1)).sendShot(any(Shot.class), any(File.class));
     }
@@ -121,7 +110,7 @@ public class PostNewShotInteractorTest {
         assertThat(userInfo.getAvatar()).isEqualTo(user.getPhoto());
     }
 
-    private void assertEventInfoIsFromEvent(Shot.ShotEventInfo eventInfo, Event event) {
+    protected void assertEventInfoIsFromEvent(Shot.ShotEventInfo eventInfo, Event event) {
         assertThat(eventInfo.getIdEvent()).isEqualTo(event.getId());
         assertThat(eventInfo.getEventTitle()).isEqualTo(event.getTitle());
         assertThat(eventInfo.getEventTag()).isEqualTo(event.getTag());
@@ -129,34 +118,14 @@ public class PostNewShotInteractorTest {
     //endregion
 
     //region Setup
-    private void setupCurrentUserSession() {
+    protected void setupCurrentUserSession() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         when(sessionRepository.getCurrentUserId()).thenReturn(currentUser().getIdUser());
     }
-
-    private void setupVisibleEvent() {
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-        when(localEventRepository.getEventById(VISIBLE_EVENT_ID)).thenReturn(visibleEvent());
-    }
-
     //endregion
 
     //region Stubs
-    private Event visibleEvent() {
-        Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
-        event.setTitle(EVENT_TITLE_STUB);
-        event.setTag(EVENT_TAG_STUB);
-        return event;
-    }
-
-    private User currentUserWatching() {
-        User user = currentUser();
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
-        return user;
-    }
-
-    private User currentUser() {
+    protected User currentUser() {
         User user = new User();
         user.setIdUser(CURRENT_USER_ID);
         user.setUsername("currentUsername");
@@ -165,22 +134,14 @@ public class PostNewShotInteractorTest {
     }
     //endregion
 
-    private class DummyCallback implements PostNewShotInteractor.Callback {
+    protected class DummyCallback implements PostNewShotInteractor.CompletedCallback {
 
-        @Override public void onLoaded() {
+        @Override public void onCompleted() {
+            /* no-op */
         }
     }
 
-    private class SpyErrorCallback implements Interactor.ErrorCallback {
-
-        public ShootrException error;
-
-        @Override public void onError(ShootrException error) {
-            this.error = error;
-        }
-    }
-
-    private class DummyErrorCallback implements Interactor.ErrorCallback {
+    protected class DummyErrorCallback implements Interactor.ErrorCallback {
 
         @Override public void onError(ShootrException error) {
         }
