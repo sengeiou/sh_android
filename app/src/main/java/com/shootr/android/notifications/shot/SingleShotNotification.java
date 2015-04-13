@@ -52,7 +52,11 @@ public class SingleShotNotification extends AbstractShotNotification {
     }
 
     public String getTitle() {
-        return shot.getUsername();
+        if (shot.isReply()) {
+            return getResources().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
+        } else {
+            return shot.getUsername();
+        }
     }
 
     @Override
