@@ -193,6 +193,7 @@
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
+    <string name="replies_header_count_pattern">%d replies</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
