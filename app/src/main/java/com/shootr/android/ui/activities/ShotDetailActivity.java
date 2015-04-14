@@ -2,9 +2,9 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -19,11 +19,9 @@ import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.ShotDetailView;
-import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import java.io.File;
-import java.util.Date;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -31,14 +29,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     public static final String EXTRA_SHOT = "shot";
 
-    @InjectView(R.id.shot_avatar) ImageView avatar;
-    @InjectView(R.id.shot_user_name) TextView username;
-    @InjectView(R.id.shot_timestamp) TextView timestamp;
-    @InjectView(R.id.shot_text) ClickableTextView shotText;
-    @InjectView(R.id.shot_image) ImageView shotImage;
-    @InjectView(R.id.shot_event_title) TextView eventTitle;
+    @InjectView(R.id.shot_detail_list) RecyclerView detailList;
     @InjectView(R.id.shot_bar_text) TextView replyPlaceholder;
-    @InjectView(R.id.shot_bar_photo) View replyPhotoButton;
     @InjectView(R.id.shot_bar_drafts) View replyDraftsButton;
 
     @Inject PicassoWrapper picasso;
@@ -48,6 +40,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
+    private ShotDetailWithRepliesAdapter detailAdapter;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -77,6 +70,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         photoPickerController.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setupAdapter() {
+        detailAdapter = new ShotDetailWithRepliesAdapter(picasso, timeFormatter, getResources());
+        detailList.setLayoutManager(new LinearLayoutManager(this));
+        detailList.setAdapter(detailAdapter);
     }
 
     private void setupPhotoPicker() {
@@ -118,13 +117,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         };
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-    }
-
     private ShotModel extractShotFromIntent() {
         return ((ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT));
     }
@@ -134,12 +126,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarPresenter.initialize(this);
     }
 
-    @OnClick(R.id.shot_image)
+    //region Listeners
     public void onImageClick() {
         detailPresenter.imageClick();
     }
 
-    @OnClick(R.id.shot_avatar)
     public void onAvatarClick() {
         detailPresenter.avatarClick();
     }
@@ -153,44 +144,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     public void openDrafts() {
         startActivity(new Intent(this, DraftsActivity.class));
     }
-    
+    //endregion
+
+    //region View methods
     @Override public void renderShot(ShotModel shotModel) {
-
-        username.setText(getUsernameTitle(shotModel));
-        timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
-        String comment = shotModel.getComment();
-        if (comment != null) {
-            shotText.setText(comment);
-            shotText.addLinks();
-        } else {
-            shotText.setVisibility(View.GONE);
-        }
-        showEventTitle(shotModel);
-        picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
-        String imageUrl = shotModel.getImage();
-        if (imageUrl != null) {
-            picasso.loadTimelineImage(imageUrl).into(shotImage);
-        } else {
-            shotImage.setVisibility(View.GONE);
-        }
-    }
-
-    private String getUsernameTitle(ShotModel shotModel) {
-        if (shotModel.isReply()) {
-            return getString(R.string.reply_name_pattern, shotModel.getUsername(), shotModel.getReplyUsername());
-        } else {
-            return shotModel.getUsername();
-        }
-    }
-
-    private void showEventTitle(ShotModel shotModel) {
-        String title = shotModel.getEventTitle();
-        if (title != null) {
-            eventTitle.setText(shotModel.getEventTitle());
-            eventTitle.setVisibility(View.VISIBLE);
-        } else {
-            eventTitle.setVisibility(View.GONE);
-        }
+        detailAdapter.renderMainShot(shotModel);
     }
 
     @Override public void openImage(String imageUrl) {
@@ -219,10 +177,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarPresenter.resume();
     }
 
-    private String getTimestampForDate(Date date) {
-        return timeFormatter.getDateAndTimeDetailed(date.getTime());
-    }
-
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
@@ -242,4 +196,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
     }
+    //endregion
+
 }
