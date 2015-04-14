@@ -31,6 +31,9 @@ public class ShotQueueEntityMapper {
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
+        entity.setIdShotParent(shot.getParentShotId());
+        entity.setIdUserParent(shot.getParentShotUserId());
+        entity.setUserNameParent(shot.getParentShotUsername());
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
@@ -78,6 +81,10 @@ public class ShotQueueEntityMapper {
         if (eventInfo.getIdEvent() != null && eventInfo.getIdEvent() > 0L) {
             shot.setEventInfo(eventInfo);
         }
+
+        shot.setParentShotId(entity.getIdShotParent());
+        shot.setParentShotUserId(entity.getIdUserParent());
+        shot.setParentShotUsername(entity.getUserNameParent());
 
         queuedShot.setShot(shot);
         return queuedShot;

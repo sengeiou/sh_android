@@ -9,4 +9,6 @@ public interface ShotRepository {
     Shot putShot(Shot shot);
 
     List<Shot> getShotsForTimeline(TimelineParameters parameters);
+
+    Shot getShot(Long shotId);
 }

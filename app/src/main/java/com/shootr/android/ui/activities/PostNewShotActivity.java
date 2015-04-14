@@ -36,7 +36,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     public static final int MAX_LENGTH = 140;
 
     private static final String EXTRA_SELECTED_IMAGE = "image";
-    public static final String KEY_PLACEHOLDER = "placeholder";
+    private static final String EXTRA_REPLY_PARENT_ID = "parentId";
+    private static final String EXTRA_REPLY_USERNAME = "parentUsername";
     public static final String EXTRA_PHOTO = "photo";
 
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
@@ -51,11 +52,10 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Inject PicassoWrapper picasso;
     @Inject SessionRepository sessionRepository;
+    @Inject PostNewShotPresenter presenter;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
-
-    @Inject PostNewShotPresenter presenter;
     private PhotoPickerController photoPickerController;
 
     @Override
@@ -68,16 +68,23 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         setContentView(R.layout.activity_new_shot);
         ButterKnife.inject(this);
 
-        String optinalPlaceholder = getIntent().getStringExtra(KEY_PLACEHOLDER);
-        initializePresenter(optinalPlaceholder);
         initializeViews();
-        setTextReceivedFromIntent();
-        openDefaultInputIfAny();
-        clearDefaultInput();
+        setupPhotoIfAny();
+        initializePresenterWithIntentExtras(getIntent().getExtras());
+        setTextReceivedFromIntentIfAny();
     }
 
-    private void initializePresenter(String optinalPlaceholder) {
-        presenter.initialize(this, optinalPlaceholder);
+    private void initializePresenterWithIntentExtras(Bundle extras) {
+        if (extras != null) {
+            String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
+            Long replyParentId = extras.getLong(EXTRA_REPLY_PARENT_ID, 0L);
+            boolean isReply = replyToUsername != null;
+            if (isReply) {
+                presenter.initializeAsReply(this, replyParentId, replyToUsername);
+            }
+        } else {
+            presenter.initializeAsNewShot(this);
+        }
     }
 
     private void initializeViews() {
@@ -106,20 +113,16 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
           }).build();
     }
 
-    private void setTextReceivedFromIntent() {
+    private void setTextReceivedFromIntentIfAny() {
         String sentText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         editTextView.setText(sentText);
     }
 
-    private void openDefaultInputIfAny() {
+    private void setupPhotoIfAny() {
         File inputImageFile = (File) getIntent().getSerializableExtra(EXTRA_PHOTO);
         if (inputImageFile != null) {
             presenter.selectImage(inputImageFile);
         }
-    }
-
-    private void clearDefaultInput() {
-        getIntent().removeExtra(EXTRA_PHOTO);
     }
 
     @OnTextChanged(R.id.new_shot_text)
@@ -264,8 +267,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         photoPickerController.pickPhotoFromGallery();
     }
 
-    @Override public void setPlaceholder(String placeholder) {
-        editTextView.setHint(placeholder);
+    @Override public void showReplyToUsername(String replyToUsername) {
+        editTextView.setHint(getString(R.string.reply_placeholder_pattern, replyToUsername));
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -283,5 +286,47 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static class IntentBuilder {
+
+        private File imageFile;
+        private Context launchingContext;
+        private Long idShotParent;
+        private String replyToUsername;
+
+        public static IntentBuilder from(Context launchingContext) {
+            IntentBuilder intentBuilder = new IntentBuilder();
+            intentBuilder.setLaunchingContext(launchingContext);
+            return intentBuilder;
+        }
+
+        public IntentBuilder setLaunchingContext(Context launchingContext) {
+            this.launchingContext = launchingContext;
+            return this;
+        }
+
+        public IntentBuilder withImage(File imageFile) {
+            this.imageFile = imageFile;
+            return this;
+        }
+
+        public IntentBuilder inReplyTo(Long idShot, String username) {
+            idShotParent = idShot;
+            replyToUsername = username;
+            return this;
+        }
+
+        public Intent build() {
+            Intent intent = new Intent(launchingContext, PostNewShotActivity.class);
+            if (imageFile != null) {
+                intent.putExtra(EXTRA_PHOTO, imageFile);
+            }
+            if (idShotParent != null && replyToUsername != null) {
+                intent.putExtra(EXTRA_REPLY_PARENT_ID, idShotParent);
+                intent.putExtra(EXTRA_REPLY_USERNAME, replyToUsername);
+            }
+            return intent;
+        }
     }
 }

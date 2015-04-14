@@ -11,4 +11,6 @@ public interface ShotDataSource {
     void putShots(List<ShotEntity> shotEntities);
 
     List<ShotEntity> getShotsForTimeline(TimelineParameters parameters);
+
+    ShotEntity getShot(Long shotId);
 }

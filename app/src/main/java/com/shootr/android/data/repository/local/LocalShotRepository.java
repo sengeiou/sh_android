@@ -35,4 +35,13 @@ public class LocalShotRepository implements ShotRepository {
         List<User> usersFromShots = localUserRepository.getUsersByIds(parameters.getAllUserIds());
         return shotEntityMapper.transform(shotsForEvent, usersFromShots);
     }
+
+    @Override public Shot getShot(Long shotId) {
+        ShotEntity shot = localShotDataSource.getShot(shotId);
+        if (shot != null) {
+            return shotEntityMapper.transform(shot, localUserRepository.getUserById(shot.getIdUser()));
+        } else {
+            return null;
+        }
+    }
 }

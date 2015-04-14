@@ -13,6 +13,10 @@ public class Shot {
     private Date publishDate;
     private Long idQueue;
 
+    private Long parentShotId;
+    private Long parentShotUserId;
+    private String parentShotUsername;
+
     public Long getIdShot() {
         return idShot;
     }
@@ -106,6 +110,30 @@ public class Shot {
           ", image='" + image + '\'' +
           ", publishDate=" + publishDate +
           '}';
+    }
+
+    public Long getParentShotId() {
+        return parentShotId;
+    }
+
+    public void setParentShotId(Long parentShotId) {
+        this.parentShotId = parentShotId;
+    }
+
+    public Long getParentShotUserId() {
+        return parentShotUserId;
+    }
+
+    public void setParentShotUserId(Long parentShotUserId) {
+        this.parentShotUserId = parentShotUserId;
+    }
+
+    public String getParentShotUsername() {
+        return parentShotUsername;
+    }
+
+    public void setParentShotUsername(String parentShotUsername) {
+        this.parentShotUsername = parentShotUsername;
     }
 
     public static class ShotEventInfo {

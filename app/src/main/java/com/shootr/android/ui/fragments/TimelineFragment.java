@@ -1,16 +1,10 @@
 package com.shootr.android.ui.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,17 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-
+import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -62,19 +52,14 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-
 import java.io.File;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
   implements TimelineView, NewShotBarView, EventSelectionView, WatchNumberView{
 
-    private static final int REQUEST_NEW_SHOT = 1;
     private static final int REQUEST_SELECT_EVENT = 2;
 
     //region Fields
@@ -87,13 +72,13 @@ public class TimelineFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
 
     @InjectView(R.id.timeline_list) ListView listView;
-    @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_new_text) TextView newShotTextView;
+    @InjectView(R.id.new_shot_bar) View newShotView;
+    @InjectView(R.id.shot_bar_text) TextView newShotTextView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.exit_event_fab) FloatingActionButton exitEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.timeline_drafts) View draftsButton;
+    @InjectView(R.id.shot_bar_drafts) View draftsButton;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -101,6 +86,7 @@ public class TimelineFragment extends BaseFragment
     private View.OnClickListener imageClickListener;
     private PhotoPickerController photoPickerController;
 
+    private NewShotBarView newShotBarViewDelegate;
     private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
@@ -207,6 +193,25 @@ public class TimelineFragment extends BaseFragment
 
     //endregion
 
+    private void setupNewShotBarDelegate() {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
+            @Override public void openNewShotView() {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .build();
+                startActivity(newShotIntent);
+            }
+
+            @Override public void openNewShotViewWithImage(File image) {
+                Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(getActivity()) //
+                  .withImage(image) //
+                  .build();
+                startActivity(newShotIntent);
+            }
+        };
+    }
+
     public void setupWatchNumberBadgeIcon(Context context, LayerDrawable icon) {
         // Reuse drawable if possible
         if (watchersBadgeDrawable == null) {
@@ -237,8 +242,8 @@ public class TimelineFragment extends BaseFragment
         setupListAdapter();
         setupSwipeRefreshLayout();
         setupListScrollListeners();
-        setupDraftButtonTransition();
         setupPhotoPicker();
+        setupNewShotBarDelegate();
     }
 
     private void setupPhotoPicker() {
@@ -323,27 +328,6 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void setupDraftButtonTransition() {
-        LayoutTransition transition = new LayoutTransition();
-        // Disable button appearing and disappearing (button), we will do manually
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            transition.disableTransitionType(LayoutTransition.APPEARING);
-            transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-        } else {
-            transition.setAnimator(LayoutTransition.APPEARING, null);
-            transition.setAnimator(LayoutTransition.DISAPPEARING, null);
-        }
-
-        // Setup text shrinking (when button appears)
-        transition.setDuration(LayoutTransition.CHANGE_APPEARING, 200);
-        transition.setInterpolator(LayoutTransition.CHANGE_APPEARING, new AccelerateDecelerateInterpolator());
-
-        // Setup text expanding (when button disappears)
-        transition.setInterpolator(LayoutTransition.CHANGE_DISAPPEARING, new AccelerateDecelerateInterpolator());
-        transition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-
-        ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
-    }
     //endregion
 
     @OnItemClick(R.id.timeline_list)
@@ -368,17 +352,17 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    @OnClick(R.id.timeline_new_text)
+    @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(R.id.timeline_new_image_camera)
+    @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
         newShotBarPresenter.newShotFromImage();
     }
 
-    @OnClick(R.id.timeline_drafts)
+    @OnClick(R.id.shot_bar_drafts)
     public void openDrafts() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
@@ -438,59 +422,23 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override public void openNewShotView() {
-        Intent newShotIntent = new Intent(getActivity(), PostNewShotActivity.class);
-        startActivityForResult(newShotIntent, REQUEST_NEW_SHOT);
+        newShotBarViewDelegate.openNewShotView();
     }
 
     @Override public void pickImage() {
-        photoPickerController.pickPhoto();
+        newShotBarViewDelegate.pickImage();
     }
 
     @Override public void openNewShotViewWithImage(File image) {
-        Intent newShotIntent = new Intent(getActivity(), PostNewShotActivity.class);
-        newShotIntent.putExtra(PostNewShotActivity.EXTRA_PHOTO, image);
-        startActivityForResult(newShotIntent, REQUEST_NEW_SHOT);
+        newShotBarViewDelegate.openNewShotViewWithImage(image);
     }
 
     @Override public void showDraftsButton() {
-        if (draftsButton.getVisibility() == View.VISIBLE) {
-            return;
-        }
-        draftsButton.setVisibility(View.VISIBLE);
-        draftsButton.setScaleX(0);
-        draftsButton.setScaleY(0);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 0f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 0f, 1f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY);
-        set.setDuration(500);
-        set.setStartDelay(200);
-        set.setInterpolator(new DecelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
-                draftsButton.setScaleX(1f);
-                draftsButton.setScaleY(1f);
-            }
-        });
-        set.start();
+        newShotBarViewDelegate.showDraftsButton();
     }
 
     @Override public void hideDraftsButton() {
-        if (draftsButton.getVisibility() == View.GONE) {
-            return;
-        }
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(draftsButton, "scaleX", 1f, 0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(draftsButton, "scaleY", 1f, 0f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(scaleX, scaleY);
-        set.setDuration(500);
-        set.setInterpolator(new AccelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
-                draftsButton.setVisibility(View.GONE);
-            }
-        });
-        set.start();
+        newShotBarViewDelegate.hideDraftsButton();
     }
 
     @Override public void showCurrentEventTitle(String eventTitle) {

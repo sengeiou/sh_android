@@ -21,7 +21,10 @@ public class ParcelableShotTest {
     private static final Long EVENT_ID = 3L;
     private static final String EVENT_TITLE = "title";
     private static final String EVENT_TAG = "tag";
-    private static final Long QUEUE_ID = 1L;
+    private static final Long QUEUE_ID = 4L;
+    private static final Long PARENT_ID = 5L;
+    private static final Long PARENT_USER_ID = 6L;
+    private static final String PARENT_USERNAME = "username";
     //endregion
 
     @Test
@@ -124,6 +127,14 @@ public class ParcelableShotTest {
         Shot shotFromParcel = createdFromParcel.getShot();
 
         assertThat(shotFromParcel.getIdQueue()).isEqualTo(shotStub.getIdQueue());
+    }
+
+    @Test public void testShotFromParcelableHasParentInfo() throws Exception {
+        Shot shotStub = shotStub();
+
+        shotStub.setParentShotId(PARENT_ID);
+        shotStub.setParentShotUserId(PARENT_USER_ID);
+        shotStub.setParentShotUsername(PARENT_USERNAME);
     }
 
     //region Stubs

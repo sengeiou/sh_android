@@ -20,6 +20,7 @@ public class ShotDetailPresenter implements Presenter {
 
     private void setViewContent(ShotModel shotModel) {
         shotDetailView.renderShot(shotModel);
+        shotDetailView.setReplyUsername(shotModel.getUsername());
     }
 
     public void imageClick() {

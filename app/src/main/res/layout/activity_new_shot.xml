@@ -75,7 +75,7 @@
                   android:background="@color/transparent"
                   android:fontFamily="sans-serif-light"
                   android:gravity="top"
-                  android:hint="@string/activity_timeline_new_text"
+                  android:hint="@string/new_shot_placeholder"
                   android:inputType="text|textCapSentences|textMultiLine"
                   android:padding="16dp" />
 

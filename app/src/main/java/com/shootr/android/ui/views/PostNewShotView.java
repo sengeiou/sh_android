@@ -39,5 +39,5 @@ public interface PostNewShotView extends DataTransferView {
 
     void choosePhotoFromGallery();
 
-    void setPlaceholder(String placeholder);
+    void showReplyToUsername(String replyToUsername);
 }

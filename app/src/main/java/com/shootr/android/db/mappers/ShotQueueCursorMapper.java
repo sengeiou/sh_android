@@ -29,7 +29,11 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setEventTitle(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TITLE)));
         shotQueueEntity.setIdEvent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
         shotQueueEntity.setType(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
-        
+
+        shotQueueEntity.setIdShotParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
+        shotQueueEntity.setIdUserParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
+        shotQueueEntity.setUserNameParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
+
         setSynchronizedfromCursor(cursor, shotQueueEntity);
         return shotQueueEntity;
     }
@@ -49,6 +53,9 @@ public class ShotQueueCursorMapper extends GenericMapper{
         contentValues.put(DatabaseContract.ShotQueueTable.EVENT_TITLE, entity.getEventTitle());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_EVENT, entity.getIdEvent());
         contentValues.put(DatabaseContract.ShotQueueTable.TYPE, entity.getType());
+        contentValues.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, entity.getIdShotParent());
+        contentValues.put(DatabaseContract.ShotTable.ID_USER_PARENT, entity.getIdUserParent());
+        contentValues.put(DatabaseContract.ShotTable.USERNAME_PARENT, entity.getUserNameParent());
         setSynchronizedtoContentValues(entity,contentValues);
         
         return contentValues;

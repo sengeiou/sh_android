@@ -14,7 +14,10 @@ import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MultipleShotNotification extends AbstractShotNotification {
 
@@ -53,12 +56,20 @@ public class MultipleShotNotification extends AbstractShotNotification {
     protected NotificationCompat.InboxStyle getInboxStyleFromShots() {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
         for (ShotModel shot : shots) {
-            String userName = shot.getUsername();
+            String userName = getShotTitle(shot);
             String shotText = getShotText(shot);
             Spannable styledLine = getSpannableLineFromNameAndComment(userName, shotText);
             inbox.addLine(styledLine);
         }
         return inbox;
+    }
+
+    private String getShotTitle(ShotModel shot) {
+        if (shot.isReply()) {
+            return getResources().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
+        } else {
+            return shot.getUsername();
+        }
     }
 
     protected Spannable getSpannableLineFromNameAndComment(String name, String comment) {
@@ -69,12 +80,11 @@ public class MultipleShotNotification extends AbstractShotNotification {
     }
 
     private List<String> getUserNamesFromShots() {
-        List<String> names = new ArrayList<>(shots.size());
+        Set<String> names = new TreeSet<>();
         for (ShotModel shot : shots) {
             String userName = shot.getUsername();
             names.add(userName);
         }
-        Collections.sort(names);
-        return names;
+        return new ArrayList<>(names);
     }
 }

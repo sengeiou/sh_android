@@ -101,7 +101,12 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 ViewHolder vh = (ViewHolder) view.getTag();
                 vh.position = position;
 
-                vh.name.setText(item.getUsername());
+                String usernameTitle = item.getUsername();
+                if (item.isReply()) {
+                    vh.name.setText(getReplyName(item));
+                } else {
+                    vh.name.setText(usernameTitle);
+                }
 
                 String comment = item.getComment();
                 if (comment != null) {
@@ -135,6 +140,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             default:
                 break;
         }
+    }
+
+    private String getReplyName(ShotModel item) {
+        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
     }
 
     protected boolean shouldShowTag() {

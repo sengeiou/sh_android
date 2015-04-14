@@ -32,4 +32,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
         return shotManager.getShotsByParameters(parameters);
     }
+
+    @Override public ShotEntity getShot(Long shotId) {
+        return shotManager.getShotById(shotId);
+    }
 }

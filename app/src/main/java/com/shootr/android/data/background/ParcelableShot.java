@@ -42,6 +42,10 @@ public class ParcelableShot implements Parcelable {
         dest.writeLong(eventInfo != null ? eventInfo.getIdEvent() : 0L);
         dest.writeString(eventInfo != null ? eventInfo.getEventTitle() : null);
         dest.writeString(eventInfo != null ? eventInfo.getEventTag() : null);
+
+        dest.writeLong(shot.getParentShotId()!=null ? shot.getParentShotId() : 0L);
+        dest.writeLong(shot.getParentShotUserId()!=null ? shot.getParentShotUserId() : 0L);
+        dest.writeString(shot.getParentShotUsername() != null ? shot.getParentShotUsername() : "");
     }
 
     public void readFromParcel(Parcel parcel) {
@@ -67,6 +71,19 @@ public class ParcelableShot implements Parcelable {
         eventInfo.setEventTag(parcel.readString());
         if (eventInfo.getIdEvent() != null && eventInfo.getIdEvent() > 0L) {
             shot.setEventInfo(eventInfo);
+        }
+
+        long idShotParent = parcel.readLong();
+        if (idShotParent > 0) {
+            shot.setParentShotId(idShotParent);
+        }
+        long idUserParent = parcel.readLong();
+        if (idUserParent > 0) {
+            shot.setParentShotUserId(idUserParent);
+        }
+        String usernameParent = parcel.readString();
+        if (!usernameParent.isEmpty()) {
+            shot.setParentShotUsername(usernameParent);
         }
     }
 

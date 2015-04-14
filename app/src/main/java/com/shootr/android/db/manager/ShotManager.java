@@ -52,124 +52,20 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<ShotModel> retrieveOldOrNewTimeLineWithUsers(List<ShotEntity> shots, Long currentUserId) {
-        String idShots = "(";
-        String idUsers = "(";
-        for (ShotEntity shot : shots) {
-            idUsers = idUsers.concat(shot.getIdUser() + ",");
-            idShots = idShots.concat(shot.getIdShot() + ",");
-        }
-        idShots = idShots.concat(")");
-        idShots = idShots.replace(",)", ")");
-        idUsers = idUsers.concat(")");
-        idUsers = idUsers.replace(",)", ")");
-        String query = "SELECT "
-          + ShotTable.ID_SHOT
-          +
-          ",b."
-          + ShotTable.ID_USER+","
-          + ShotTable.COMMENT+","
-          + ShotTable.IMAGE+","
-          +"a." + ShotTable.ID_EVENT + ","
-          +"a." + ShotTable.EVENT_TAG + ","
-          +"a." + ShotTable.EVENT_TITLE+ ","
-          + ShotTable.TYPE
-          + ",b."
-          + UserTable.NAME
-          +",b."
-          + UserTable.FAVORITE_TEAM_ID
-          +",b."
-          + UserTable.FAVORITE_TEAM_NAME
-          +
-          ",b."
-          + UserTable.NUM_FOLLOWERS
-          +
-          ",b."
-          + UserTable.NUM_FOLLOWINGS
-          +
-          ",b."
-          + UserTable.BIO
-          +
-          ",b."
-          + UserTable.POINTS
-          +
-          ",b."
-          + UserTable.WEBSITE
-          +
-          ",b."
-          + UserTable.RANK
-          +
-          ",b."
-          + UserTable.PHOTO
-          + ","
-          + UserTable.USER_NAME
-          + ",a."
-          + ShotTable.CSYS_SYNCHRONIZED
-          + ",a."
-          + CSYS_BIRTH
-          + ",a."
-          + ShotTable.CSYS_REVISION
-          + ",a."
-          + ShotTable.CSYS_MODIFIED
-          + ",a."
-          + CSYS_DELETED
-          +
-          " FROM "
-          + SHOT_TABLE
-          + " a "
-          + " INNER JOIN "
-          + UserTable.TABLE
-          + " b "
-          +
-          "ON a."
-          + ShotTable.ID_USER
-          + " = b."
-          + UserTable.ID
-          + " WHERE b."
-          + ShotTable.ID_USER
-          + " IN "
-          + idUsers
-          + " AND "
-          + ShotTable.ID_SHOT
-          + " IN "
-          + idShots
-          + " ORDER BY a."
-          + CSYS_BIRTH
-          + " DESC;";
-        Timber.d("Executing query: %s", query);
-        Cursor cursor = getReadableDatabase().rawQuery(query, null);
-        int count = cursor.getCount();
-        if (count == 0) {
-            return new ArrayList<>(0);
-        }
-        List<ShotModel> shotList = new ArrayList<>(count);
-        cursor.moveToFirst();
-        do {
-
-            ShotEntity shot = shotEntityMapper.fromCursor(cursor);
-            ShotEntityModelMapper shotEntityModelMapper = new ShotEntityModelMapper();
-            UserEntity user = userMapper.fromCursor(cursor);
-            ShotModel shotModel = shotEntityModelMapper.toShotModel(user, shot);
-            if (user != null) {
-                shotList.add(shotModel);
-            } else {
-                Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
-            }
-        } while (cursor.moveToNext());
-
-        cursor.close();
-        return shotList;
-    }
-
-
     public List<ShotEntity> getLatestShotsFromIdUser(Long idUser, Long latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idUser)};
 
         Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,
-            ShotTable.CSYS_BIRTH+" DESC", String.valueOf(latestShotsNumber));
+          getReadableDatabase().query(ShotTable.TABLE,
+            ShotTable.PROJECTION,
+            whereSelection,
+            whereArguments,
+            null,
+            null,
+            ShotTable.CSYS_BIRTH + " DESC",
+            String.valueOf(latestShotsNumber));
 
         ShotEntity shotEntity;
         if (queryResult.getCount() > 0) {
@@ -214,7 +110,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public void insertInSync(){
-        insertInTableSync(SHOT_TABLE,3,1000,0);
+        insertInTableSync(SHOT_TABLE, 3, 1000, 0);
     }
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
@@ -248,5 +144,26 @@ public class ShotManager extends  AbstractManager{
         }
         queryResult.close();
         return resultShots;
+    }
+
+    public ShotEntity getShotById(Long idShot) {
+        String whereClause = ShotTable.ID_SHOT + " = ?";
+        String[] whereArguments = new String[]{String.valueOf(idShot)};
+
+        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
+          ShotTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          null);
+
+        ShotEntity shotEntity = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            shotEntity = shotEntityMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return shotEntity;
     }
 }

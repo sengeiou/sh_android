@@ -3,7 +3,8 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
+import com.shootr.android.domain.interactor.shot.PostNewShotAsReplyInteractor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInEventInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -20,30 +21,44 @@ public class PostNewShotPresenter implements Presenter {
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final PostNewShotInteractor postNewShotInteractor;
+    private final PostNewShotInEventInteractor postNewShotInEventInteractor;
+    private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
 
     private PostNewShotView postNewShotView;
-    private String placeholder;
     private File selectedImageFile;
     private String shotCommentToSend;
     private String currentTextWritten;
+    private boolean isReply;
+    private Long replyParentId;
 
-    @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory, PostNewShotInteractor postNewShotInteractor) {
+    @Inject
+    public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
+      PostNewShotInEventInteractor postNewShotInEventInteractor,
+      PostNewShotAsReplyInteractor postNewShotAsReplyInteractor) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.postNewShotInteractor = postNewShotInteractor;
+        this.postNewShotInEventInteractor = postNewShotInEventInteractor;
+        this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
     }
 
-    public void initialize(PostNewShotView postNewShotView) {
-        initialize(postNewShotView, null);
-    }
-
-    public void initialize(PostNewShotView postNewShotView, String placeholder) {
+    protected void setView(PostNewShotView postNewShotView) {
         this.postNewShotView = postNewShotView;
-        this.placeholder = placeholder;
-        if (placeholder != null) {
-            postNewShotView.setPlaceholder(placeholder);
+    }
+
+    public void initializeAsNewShot(PostNewShotView postNewShotView) {
+        this.setView(postNewShotView);
+    }
+
+    public void initializeAsReply(PostNewShotView postNewShotView, Long replyParentId, String replyToUsername) {
+        this.setView(postNewShotView);
+        if (replyParentId == null || replyToUsername == null) {
+            throw new IllegalArgumentException(String.format("Invalid reply data: parentId=%d username=%s",
+              replyParentId,
+              replyToUsername));
         }
+        this.isReply = true;
+        this.replyParentId = replyParentId;
+        postNewShotView.showReplyToUsername(replyToUsername);
     }
 
     public void textChanged(String currentText) {
@@ -97,16 +112,51 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void startSendingShot() {
-        postNewShotInteractor.postNewShot(shotCommentToSend, selectedImageFile, new PostNewShotInteractor.Callback() {
-            @Override public void onLoaded() {
-                postNewShotView.setResultOk();
-                postNewShotView.closeScreen();
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
-            }
-        });
+        if (!isReply) {
+            postEventShot();
+        } else {
+            postReplyShot();
+        }
+    }
+
+    private void postReplyShot() {
+        postNewShotAsReplyInteractor.postNewShotAsReply(shotCommentToSend,
+          selectedImageFile,
+          replyParentId,
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  onShotSending();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  onShotError();
+              }
+          });
+    }
+
+    private void postEventShot() {
+        postNewShotInEventInteractor.postNewShotInEvent(shotCommentToSend,
+          selectedImageFile,
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  onShotSending();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  onShotError();
+              }
+          });
+    }
+
+    private void onShotSending() {
+        postNewShotView.setResultOk();
+        postNewShotView.closeScreen();
+    }
+
+    private void onShotError() {
+        postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     private void updateCharCounter(String filteredText) {
