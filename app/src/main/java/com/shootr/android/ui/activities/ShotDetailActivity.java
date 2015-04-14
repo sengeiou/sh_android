@@ -3,7 +3,6 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +10,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.android.ui.model.ShotModel;
@@ -27,7 +27,7 @@ import java.util.Date;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ShotDetailActivity extends BaseSignedInActivity implements ShotDetailView, NewShotBarView {
+public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements ShotDetailView, NewShotBarView {
 
     public static final String EXTRA_SHOT = "shot";
 
@@ -55,19 +55,23 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         return intent;
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(!restoreSessionOrLogin()) return;
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_shot_detail;
+    }
 
-        setContainerContent(R.layout.activity_shot_detail);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        toolbarDecorator.hideTitle();
+    }
+
+    @Override protected void initializeViews() {
         ButterKnife.inject(this);
-
-        setupActionBar();
-
-        ShotModel shotModel = extractShotFromIntent();
         setupPhotoPicker();
-        setupNewShotBarDelegate(shotModel);
-        initializePresenter(shotModel);
+        setupNewShotBarDelegate(extractShotFromIntent());
+        setupAdapter();
+    }
+
+    @Override protected void initializePresenter() {
+        initializePresenter(extractShotFromIntent());
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
