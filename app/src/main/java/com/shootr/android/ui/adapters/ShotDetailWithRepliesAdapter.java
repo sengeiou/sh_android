@@ -64,10 +64,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         int insertedItemCount = shotModels.size();
         this.replies = shotModels;
         if (wasEmpty) {
-            Timber.d("inserted %d %d", firstItemInserted, insertedItemCount);
             notifyItemRangeInserted(firstItemInserted, insertedItemCount);
         } else {
-            Timber.d("changed %d %d", firstItemInserted, insertedItemCount);
             notifyItemRangeChanged(firstItemInserted, insertedItemCount);
         }
     }
