@@ -110,7 +110,7 @@ android {
 
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://dataservices.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
-            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://s3-eu-west-1.amazonaws.com/resources.pro.shootr.com/\""
+            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
         }
     }
     compileOptions {
