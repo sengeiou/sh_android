@@ -129,7 +129,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindRepliesHeaderHolder(ShotDetailRepliesHeaderHolder holder) {
         String repliesCountText =
-          holder.itemView.getResources().getString(R.string.replies_header_count_pattern, replies.size());
+          holder.itemView.getResources().getQuantityString(R.plurals.replies_header_count_pattern,
+            replies.size(),
+            replies.size());
         ((TextView) holder.itemView).setText(repliesCountText);
     }
 
