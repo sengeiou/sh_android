@@ -76,7 +76,18 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupAdapter() {
-        detailAdapter = new ShotDetailWithRepliesAdapter(picasso, timeFormatter, getResources(), timeUtils);
+        detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
+          new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+              @Override public void onClick(Long userId) {
+                  onAvatarClick(userId);
+              }
+          }, //
+          new ShotDetailWithRepliesAdapter.ImageClickListener() {
+              @Override public void onClick(ShotModel shot) {
+                  onImageClick(shot);
+              }
+          }, //
+          timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
     }
@@ -130,21 +141,19 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     //region Listeners
-    public void onImageClick() {
-        detailPresenter.imageClick();
+    public void onImageClick(ShotModel shot) {
+        detailPresenter.imageClick(shot);
     }
 
-    public void onAvatarClick() {
-        detailPresenter.avatarClick();
+    public void onAvatarClick(Long userId) {
+        detailPresenter.avatarClick(userId);
     }
 
-    @OnClick(R.id.shot_bar_text)
-    public void onReplyClick() {
+    @OnClick(R.id.shot_bar_text) public void onReplyClick() {
         newShotBarPresenter.newShotFromTextBox();
     }
 
-    @OnClick(R.id.shot_bar_drafts)
-    public void openDrafts() {
+    @OnClick(R.id.shot_bar_drafts) public void openDrafts() {
         startActivity(new Intent(this, DraftsActivity.class));
     }
     //endregion
@@ -204,5 +213,4 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarViewDelegate.hideDraftsButton();
     }
     //endregion
-
 }

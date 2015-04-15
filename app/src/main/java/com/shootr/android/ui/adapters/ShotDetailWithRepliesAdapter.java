@@ -30,6 +30,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private static final int POSITION_REPLIES_HEADER = 1;
 
     private final PicassoWrapper picasso;
+    private final AvatarClickListener avatarClickListener;
+    private final ImageClickListener imageClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
@@ -37,9 +39,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotModel mainShot;
     private List<ShotModel> replies;
 
-    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, TimeFormatter timeFormatter, Resources resources,
+    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
+      ImageClickListener imageClickListener, TimeFormatter timeFormatter, Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
+        this.avatarClickListener = avatarClickListener;
+        this.imageClickListener = imageClickListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -150,7 +155,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             ButterKnife.inject(this, itemView);
         }
 
-        public void bindView(ShotModel shotModel) {
+        public void bindView(final ShotModel shotModel) {
             username.setText(getUsernameTitle(shotModel));
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
@@ -161,10 +166,22 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 shotText.setVisibility(View.GONE);
             }
             showEventTitle(shotModel);
+
             picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    avatarClickListener.onClick(shotModel.getIdUser());
+                }
+            });
+
             String imageUrl = shotModel.getImage();
             if (imageUrl != null) {
                 picasso.loadTimelineImage(imageUrl).into(shotImage);
+                shotImage.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        imageClickListener.onClick(shotModel);
+                    }
+                });
             } else {
                 shotImage.setVisibility(View.GONE);
             }
@@ -215,7 +232,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             ButterKnife.inject(this, itemView);
         }
 
-        public void bindView(ShotModel reply) {
+        public void bindView(final ShotModel reply) {
             this.name.setText(reply.getUsername());
 
             String comment = reply.getComment();
@@ -232,17 +249,35 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             String photo = reply.getPhoto();
             picasso.loadProfilePhoto(photo).into(this.avatar);
-            this.avatar.setTag(this);
-            this.image.setTag(this);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    avatarClickListener.onClick(reply.getIdUser());
+                }
+            });
 
             String imageUrl = reply.getImage();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 this.image.setVisibility(View.VISIBLE);
                 picasso.loadTimelineImage(imageUrl).into(this.image);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        imageClickListener.onClick(reply);
+                    }
+                });
             } else {
                 this.image.setVisibility(View.GONE);
             }
         }
+    }
+
+    public interface AvatarClickListener {
+
+        void onClick(Long userId);
+    }
+
+    public interface ImageClickListener {
+
+        void onClick(ShotModel shot);
     }
     //endregion
 }

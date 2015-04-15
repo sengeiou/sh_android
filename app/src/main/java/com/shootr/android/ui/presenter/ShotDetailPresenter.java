@@ -44,12 +44,12 @@ public class ShotDetailPresenter implements Presenter {
         shotDetailView.setReplyUsername(shotModel.getUsername());
     }
 
-    public void imageClick() {
-        shotDetailView.openImage(shotModel.getImage());
+    public void imageClick(ShotModel shot) {
+        shotDetailView.openImage(shot.getImage());
     }
 
-    public void avatarClick() {
-        shotDetailView.openProfile(shotModel.getIdUser());
+    public void avatarClick(Long userId) {
+        shotDetailView.openProfile(userId);
     }
 
     @Override public void resume() {
