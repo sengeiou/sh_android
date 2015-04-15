@@ -166,4 +166,29 @@ public class ShotManager extends  AbstractManager{
         queryResult.close();
         return shotEntity;
     }
+
+    public List<ShotEntity> getRepliesTo(Long shotParentId) {
+        String whereClause = ShotTable.ID_SHOT_PARENT + " = ?";
+        String[] whereArguments = new String[]{String.valueOf(shotParentId)};
+
+        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
+          ShotTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          null);
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultShots;
+    }
 }

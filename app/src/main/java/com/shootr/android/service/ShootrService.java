@@ -35,6 +35,8 @@ public interface ShootrService {
 
     List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
+    List<ShotEntity> getRepliesToShot(Long shotId) throws IOException;
+
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)

@@ -36,4 +36,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public ShotEntity getShot(Long shotId) {
         return shotManager.getShotById(shotId);
     }
+
+    @Override public List<ShotEntity> getReplies(Long shotId) {
+        return shotManager.getRepliesTo(shotId);
+    }
 }

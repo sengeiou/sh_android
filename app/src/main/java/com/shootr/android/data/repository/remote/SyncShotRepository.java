@@ -46,6 +46,6 @@ public class SyncShotRepository implements ShotRepository {
     }
 
     @Override public List<Shot> getReplies(Long shot) {
-        return null;
+        return shotEntityMapper.transform(remoteShotDataSource.getReplies(shot));
     }
 }

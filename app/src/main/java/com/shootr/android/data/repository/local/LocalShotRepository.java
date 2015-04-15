@@ -40,6 +40,6 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public List<Shot> getReplies(Long shot) {
-        return null;
+        return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 }
