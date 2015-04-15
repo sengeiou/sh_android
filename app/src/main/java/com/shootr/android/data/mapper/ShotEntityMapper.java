@@ -11,7 +11,10 @@ import javax.inject.Singleton;
 @Singleton
 public class ShotEntityMapper {
 
-    @Inject public ShotEntityMapper() {
+    private  final UserAvatarUrlBuilder avatarBuilder;
+
+    @Inject public ShotEntityMapper(UserAvatarUrlBuilder avatarBuilder) {
+        this.avatarBuilder = avatarBuilder;
     }
 
     public Shot transform(ShotEntity shotEntity) {
@@ -32,9 +35,9 @@ public class ShotEntityMapper {
         }
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setAvatar(null);//todo de donde lo saco?
         userInfo.setIdUser(shotEntity.getIdUser());
         userInfo.setUsername(shotEntity.getUsername());
+        userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
 
         shot.setParentShotId(shotEntity.getIdShotParent());
