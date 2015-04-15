@@ -1,26 +1,33 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ShotDetailPresenter implements Presenter {
+public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
     private final ShotModelMapper shotModelMapper;
+    private final Bus bus;
 
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
 
-    @Inject public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
-      ShotModelMapper shotModelMapper) {
+    @Inject
+    public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
+      ShotModelMapper shotModelMapper, @Main Bus bus) {
         this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
         this.shotModelMapper = shotModelMapper;
+        this.bus = bus;
     }
 
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
@@ -52,11 +59,15 @@ public class ShotDetailPresenter implements Presenter {
         shotDetailView.openProfile(userId);
     }
 
-    @Override public void resume() {
+    @Subscribe @Override public void onShotSent(ShotSent.Event event) {
+        this.loadReplies();
+    }
 
+    @Override public void resume() {
+        bus.register(this);
     }
 
     @Override public void pause() {
-
+        bus.unregister(this);
     }
 }

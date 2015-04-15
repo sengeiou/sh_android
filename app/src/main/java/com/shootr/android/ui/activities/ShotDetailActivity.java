@@ -75,6 +75,18 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         photoPickerController.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        detailPresenter.resume();
+        newShotBarPresenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        detailPresenter.pause();
+        newShotBarPresenter.resume();
+    }
+
     private void setupAdapter() {
         detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
           new ShotDetailWithRepliesAdapter.AvatarClickListener() {
@@ -179,18 +191,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void setReplyUsername(String username) {
         replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
-    }
-
-    @Override protected void onResume() {
-        super.onResume();
-        detailPresenter.resume();
-        newShotBarPresenter.resume();
-    }
-
-    @Override protected void onPause() {
-        super.onPause();
-        detailPresenter.pause();
-        newShotBarPresenter.resume();
     }
 
     @Override public void openNewShotView() {

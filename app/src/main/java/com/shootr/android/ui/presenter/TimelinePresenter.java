@@ -125,6 +125,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     }
 
     @Override public void resume() {
+        refresh();
         bus.register(this);
     }
 

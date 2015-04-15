@@ -59,8 +59,17 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public void renderReplies(List<ShotModel> shotModels) {
+        boolean wasEmpty = this.replies.isEmpty();
+        int firstItemInserted = getItemCount();
+        int insertedItemCount = shotModels.size();
         this.replies = shotModels;
-        notifyItemRangeChanged(POSITION_REPLIES_HEADER + 1, getItemCount());
+        if (wasEmpty) {
+            Timber.d("inserted %d %d", firstItemInserted, insertedItemCount);
+            notifyItemRangeInserted(firstItemInserted, insertedItemCount);
+        } else {
+            Timber.d("changed %d %d", firstItemInserted, insertedItemCount);
+            notifyItemRangeChanged(firstItemInserted, insertedItemCount);
+        }
     }
 
     @Override public int getItemViewType(int position) {
