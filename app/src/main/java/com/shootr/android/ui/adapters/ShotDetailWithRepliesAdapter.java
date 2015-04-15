@@ -38,6 +38,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
+    private float itemElevation;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener, TimeFormatter timeFormatter, Resources resources,
@@ -49,6 +50,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.resources = resources;
         this.timeUtils = timeUtils;
         this.replies = new ArrayList<>();
+        this.itemElevation = resources.getDimension(R.dimen.card_elevation);
     }
 
     public void renderMainShot(ShotModel mainShot) {
@@ -87,13 +89,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case TYPE_MAIN_SHOT:
                 itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
-                ViewCompat.setElevation(itemView, 6f);//TODO resources
+                ViewCompat.setElevation(itemView, itemElevation);
                 return new ShotDetailMainViewHolder(itemView);
             case TYPE_REPLIES_HEADER:
                 itemView = layoutInflater.inflate(R.layout.item_list_replies_header, parent, false);
                 return new ShotDetailRepliesHeaderHolder(itemView);
             case TYPE_REPLY:
                 itemView = layoutInflater.inflate(R.layout.item_list_shot_reply, parent, false);
+                ViewCompat.setElevation(itemView, itemElevation);
                 return new ShotDetailReplyHolder(itemView);
             default:
                 throw new IllegalArgumentException(String.format("ItemViewType %d has no ViewHolder associated",
