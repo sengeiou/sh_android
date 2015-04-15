@@ -8,6 +8,7 @@ public class ShotEntity extends Synchronized{
 
     private Long idShot;
     private Long idUser;
+    private String username;
     private String comment;
     private String image;
     private Long idEvent;
@@ -18,8 +19,6 @@ public class ShotEntity extends Synchronized{
     private Long idShotParent;
     private Long idUserParent;
     private String userNameParent;
-
-    private UserEntity mUserObject;
 
     public Long getIdShot() {
         return idShot;
@@ -43,14 +42,6 @@ public class ShotEntity extends Synchronized{
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public UserEntity getUser() {
-        return mUserObject;
-    }
-
-    public void setUser(UserEntity mUser) {
-        this.mUserObject = mUser;
     }
 
     public String getImage() {
@@ -115,5 +106,13 @@ public class ShotEntity extends Synchronized{
 
     public void setUserNameParent(String userNameParent) {
         this.userNameParent = userNameParent;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -87,6 +87,7 @@ public class DatabaseContract {
 
         public static final String ID_SHOT = "idShot";
         public static final String ID_USER = "idUser";
+        public static final String USERNAME = "userName";
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_EVENT = "idEvent";
@@ -99,7 +100,7 @@ public class DatabaseContract {
         public static final String USERNAME_PARENT = "userNameParent";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
+          ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
@@ -199,6 +200,7 @@ public class DatabaseContract {
 
         public static final String ID_SHOT = "idShot";
         public static final String ID_USER = "idUser";
+        public static final String USERNAME = "userName";
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_EVENT = "idEvent";
@@ -212,7 +214,7 @@ public class DatabaseContract {
 
 
         public static final String[] PROJECTION = {
-          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE,
+          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
