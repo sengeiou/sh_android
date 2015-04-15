@@ -2,12 +2,9 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.ConditionVariable;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.db.DatabaseContract;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class ShotQueueCursorMapper extends GenericMapper{
 
@@ -20,8 +17,10 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setIdQueue(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_QUEUE)));
         shotQueueEntity.setFailed(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.FAILED)));
         shotQueueEntity.setImageFile(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE_FILE)));
-        
-        shotQueueEntity.setIdShot(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT)));
+
+        if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT))) {
+            shotQueueEntity.setIdShot(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT)));
+        }
         shotQueueEntity.setIdUser(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER)));
         shotQueueEntity.setComment(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.COMMENT)));
         shotQueueEntity.setImage(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE)));
@@ -30,9 +29,15 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setIdEvent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
         shotQueueEntity.setType(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
 
-        shotQueueEntity.setIdShotParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
-        shotQueueEntity.setIdUserParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
-        shotQueueEntity.setUserNameParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
+        if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT))) {
+            shotQueueEntity.setIdShotParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT)));
+        }
+        if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER_PARENT))) {
+            shotQueueEntity.setIdUserParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER_PARENT)));
+        }
+        if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME_PARENT))) {
+            shotQueueEntity.setUserNameParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME_PARENT)));
+        }
 
         setSynchronizedfromCursor(cursor, shotQueueEntity);
         return shotQueueEntity;
@@ -53,9 +58,9 @@ public class ShotQueueCursorMapper extends GenericMapper{
         contentValues.put(DatabaseContract.ShotQueueTable.EVENT_TITLE, entity.getEventTitle());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_EVENT, entity.getIdEvent());
         contentValues.put(DatabaseContract.ShotQueueTable.TYPE, entity.getType());
-        contentValues.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, entity.getIdShotParent());
-        contentValues.put(DatabaseContract.ShotTable.ID_USER_PARENT, entity.getIdUserParent());
-        contentValues.put(DatabaseContract.ShotTable.USERNAME_PARENT, entity.getUserNameParent());
+        contentValues.put(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT, entity.getIdShotParent());
+        contentValues.put(DatabaseContract.ShotQueueTable.ID_USER_PARENT, entity.getIdUserParent());
+        contentValues.put(DatabaseContract.ShotQueueTable.USERNAME_PARENT, entity.getUserNameParent());
         setSynchronizedtoContentValues(entity,contentValues);
         
         return contentValues;
