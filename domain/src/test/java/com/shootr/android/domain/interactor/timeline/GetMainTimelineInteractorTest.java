@@ -132,8 +132,8 @@ public class GetMainTimelineInteractorTest {
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
         List<Shot> remoteShotsReturned = spyCallback.timelinesReturned.get(1).getShots();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
-        assertThat(remoteShotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+        assertThat(remoteShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
     @Test

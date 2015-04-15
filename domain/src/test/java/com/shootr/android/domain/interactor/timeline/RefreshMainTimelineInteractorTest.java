@@ -68,7 +68,7 @@ public class RefreshMainTimelineInteractorTest {
         interactor.refreshMainTimeline(spyCallback, errorCallback);
         List<Shot> shotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
-        assertThat(shotsReturned).isSortedAccordingTo(new Shot.PublishDateComparator());
+        assertThat(shotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
     @Test

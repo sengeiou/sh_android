@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -19,9 +20,9 @@ public class GetRepliesFromShotInteractor implements Interactor {
     private Long shotId;
     private Callback<List<Shot>> callback;
 
-    @Inject public GetRepliesFromShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local ShotRepository localShotRepository,
-      @Remote ShotRepository remoteShotRepository) {
+    @Inject
+    public GetRepliesFromShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localShotRepository = localShotRepository;
@@ -37,12 +38,17 @@ public class GetRepliesFromShotInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         List<Shot> localReplies = localShotRepository.getReplies(shotId);
         if (!localReplies.isEmpty()) {
-            notifyLoaded(localReplies);
+            notifyLoaded(orderShots(localReplies));
         }
         List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
         if (!updatedReplies.isEmpty()) {
-            notifyLoaded(updatedReplies);
+            notifyLoaded(orderShots(updatedReplies));
         }
+    }
+
+    private List<Shot> orderShots(List<Shot> replies) {
+        Collections.sort(replies, new Shot.NewerBelowComparator());
+        return replies;
     }
 
     private void notifyLoaded(final List<Shot> result) {

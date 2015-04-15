@@ -8,11 +8,11 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PublishDateComparatorTest {
+public class NewerBelowComparatorTest {
 
-    private static final Long DATE_OLDER = 1L;
-    private static final Long DATE_MIDDLE = 2L;
-    private static final Long DATE_NEWER = 3L;
+    private static final Long DATE_OLDER = 1000L;
+    private static final Long DATE_MIDDLE = 2000L;
+    private static final Long DATE_NEWER = 3000L;
 
     @Test
     public void shouldNotBeEqualTwoShotsWithDifferentDates() throws Exception {
@@ -25,16 +25,16 @@ public class PublishDateComparatorTest {
     }
 
     @Test
-    public void shouldOrderListInDescendingDateOrder() throws Exception {
+    public void shouldOrderListInAscendingDateOrder() throws Exception {
         List<Shot> unorderedShotList = unorderedShots();
 
-        Collections.sort(unorderedShotList, new Shot.PublishDateComparator());
+        Collections.sort(unorderedShotList, new Shot.NewerBelowComparator());
 
-        assertThat(unorderedShotList).containsSequence(orderedShotSequence());
+        assertThat(unorderedShotList).containsSequence(orderedShotSequenceWithNewerLast());
     }
 
-    private Shot[] orderedShotSequence() {
-        return new Shot[]{shotWithDate(DATE_NEWER), shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER),};
+    private Shot[] orderedShotSequenceWithNewerLast() {
+        return new Shot[]{shotWithDate(DATE_OLDER), shotWithDate(DATE_MIDDLE), shotWithDate(DATE_NEWER),};
     }
 
     private List<Shot> unorderedShots() {
