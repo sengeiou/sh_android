@@ -82,7 +82,7 @@ public class ShotDtoFactory {
 
     public GenericDto getRepliesOperationDto(Long shotId) {
         FilterDto repliesFilter = and(ShotTable.ID_SHOT_PARENT).isEqualTo(shotId) //
-          .and(ShotTable.CSYS_MODIFIED).greaterThan(0L) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
+          .and(ShotTable.CSYS_MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
           .build();
 
         MetadataDto md = new MetadataDto.Builder() //
@@ -98,5 +98,18 @@ public class ShotDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_REPLIES, op);
+    }
+
+    /**
+     * This method returns a different modified time each time it's called, so that we skip server's cache for the
+     * replies query.
+     *
+     * This is a temporarily (REALLY, I MEAN IT) solution to a problem we are having where requesting replies after
+     * publishing a new one doesn't return it back.
+     *
+     * returns timestamp for 1 day into the future
+     */
+    private long futureModifiedTimeToSkipServerCache() {
+        return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
     }
 }
