@@ -37,7 +37,7 @@ public class SessionHandler {
         if (sessionToken != null && currentUserId > 0) {
             User currentUser = localUserRepository.getUserById(currentUserId);
             if (currentUser != null) {
-                sessionRepository.setCurrentUser(currentUser);
+                sessionRepository.createSession(currentUserId, sessionToken, currentUser);
             }
         }
     }
