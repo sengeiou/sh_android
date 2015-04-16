@@ -15,4 +15,5 @@ public interface ShotDetailView  {
 
     void setReplyUsername(String username);
 
+    void scrollToBottom();
 }

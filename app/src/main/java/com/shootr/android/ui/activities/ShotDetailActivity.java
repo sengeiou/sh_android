@@ -193,6 +193,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
     }
 
+    @Override public void scrollToBottom() {
+        detailList.smoothScrollToPosition(detailAdapter.getItemCount()-1);
+    }
+
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }

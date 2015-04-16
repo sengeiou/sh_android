@@ -21,6 +21,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
+    private List<ShotModel> repliesModels;
 
     @Inject
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
@@ -39,9 +40,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void loadReplies() {
         getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
+
             @Override public void onLoaded(List<Shot> replies) {
-                List<ShotModel> replyModels = shotModelMapper.transform(replies);
-                shotDetailView.renderReplies(replyModels);
+                int previousReplyCount = repliesModels != null ? repliesModels.size() : Integer.MAX_VALUE;
+                int newReplyCount = replies.size();
+                repliesModels = shotModelMapper.transform(replies);
+                shotDetailView.renderReplies(repliesModels);
+                if (previousReplyCount < newReplyCount) {
+                    shotDetailView.scrollToBottom();
+                }
             }
         });
     }
