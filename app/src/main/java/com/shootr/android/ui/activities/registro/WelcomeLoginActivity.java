@@ -71,6 +71,7 @@ public class WelcomeLoginActivity extends BaseToolbarActivity {
 
 //        setupWelcomePage();
         setupLoginPage(savedInstanceState);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
 
