@@ -56,6 +56,14 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
+    @Override public List<ShotEntity> getReplies(Long shotId) {
+        try {
+            return shootrService.getRepliesToShot(shotId);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     private List<ShotEntity> filterSyncShots(List<ShotEntity> shotEntities) {
         notifySyncTrigger(shotEntities);
         List<ShotEntity> filtered = new ArrayList<>();

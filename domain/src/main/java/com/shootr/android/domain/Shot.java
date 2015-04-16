@@ -246,10 +246,17 @@ public class Shot {
         }
     }
 
-    public static class PublishDateComparator implements Comparator<Shot> {
+    public static class NewerAboveComparator implements Comparator<Shot> {
 
         @Override public int compare(Shot s1, Shot s2) {
             return s2.getPublishDate().compareTo(s1.getPublishDate());
+        }
+    }
+
+    public static class NewerBelowComparator implements Comparator<Shot> {
+
+        @Override public int compare(Shot s1, Shot s2) {
+            return s1.getPublishDate().compareTo(s2.getPublishDate());
         }
     }
 }

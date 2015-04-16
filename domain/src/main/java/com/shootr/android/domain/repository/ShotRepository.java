@@ -11,4 +11,6 @@ public interface ShotRepository {
     List<Shot> getShotsForTimeline(TimelineParameters parameters);
 
     Shot getShot(Long shotId);
+
+    List<Shot> getReplies(Long shot);
 }

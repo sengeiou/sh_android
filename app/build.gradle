@@ -101,6 +101,7 @@ android {
 
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.dataservices.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
+            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.tst.shootr.com/\""
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
@@ -109,6 +110,7 @@ android {
 
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://dataservices.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
+            buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
         }
     }
     compileOptions {
@@ -124,7 +126,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.google.android.gms:play-services-base:6.5.87'
 
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.4'

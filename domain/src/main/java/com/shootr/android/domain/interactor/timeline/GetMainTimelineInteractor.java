@@ -134,7 +134,7 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
-        Collections.sort(remoteShots, new Shot.PublishDateComparator());
+        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
     }
 

@@ -135,6 +135,40 @@ public class ParcelableShotTest {
         shotStub.setParentShotId(PARENT_ID);
         shotStub.setParentShotUserId(PARENT_USER_ID);
         shotStub.setParentShotUsername(PARENT_USERNAME);
+
+        ParcelableShot parcelableShot = new ParcelableShot(shotStub);
+
+        Parcel parcel = MockParcel.obtain();
+        parcelableShot.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+
+        ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
+        Shot shotFromParcel = createdFromParcel.getShot();
+
+        assertThat(shotFromParcel.getParentShotId()).isEqualTo(PARENT_ID);
+        assertThat(shotFromParcel.getParentShotUserId()).isEqualTo(PARENT_USER_ID);
+        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo(PARENT_USERNAME);
+    }
+
+    @Test public void testShotFromParcelableKeepsNullParentInfo() throws Exception {
+        Shot shotStub = shotStub();
+
+        shotStub.setParentShotId(null);
+        shotStub.setParentShotUserId(null);
+        shotStub.setParentShotUsername(null);
+
+        ParcelableShot parcelableShot = new ParcelableShot(shotStub);
+
+        Parcel parcel = MockParcel.obtain();
+        parcelableShot.writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+
+        ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
+        Shot shotFromParcel = createdFromParcel.getShot();
+
+        assertThat(shotFromParcel.getParentShotId()).isEqualTo(null);
+        assertThat(shotFromParcel.getParentShotUserId()).isEqualTo(null);
+        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo(null);
     }
 
     //region Stubs

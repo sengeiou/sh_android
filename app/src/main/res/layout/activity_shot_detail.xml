@@ -1,97 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-    <FrameLayout android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      >
+  <FrameLayout android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
 
-        <ScrollView android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-
-            <LinearLayout android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingBottom="16dp"
-              android:paddingTop="16dp">
-
-                <RelativeLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:paddingBottom="16dp"
-                  android:paddingLeft="16dp"
-                  android:paddingRight="16dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
-                      android:layout_width="@dimen/shot_avatar_size"
-                      android:layout_height="@dimen/shot_avatar_size"
-                      android:layout_marginRight="8dp"
-                      android:focusable="false"
-                      android:focusableInTouchMode="false"
-                      android:src="@drawable/ic_contact_picture_default" />
-
-                    <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_alignBottom="@+id/shot_avatar"
-                      android:layout_alignTop="@+id/shot_avatar"
-                      android:layout_toRightOf="@id/shot_avatar"
-                      android:orientation="vertical">
-
-                        <TextView android:id="@+id/shot_user_name"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textColor="@color/material_black"
-                          android:textSize="18sp"
-                          android:textStyle="bold"
-                          tools:text="Ignasi" />
-
-                        <TextView android:id="@+id/shot_timestamp"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textColor="@color/gray_40"
-                          android:textSize="16sp"
-                          tools:text="Tuesday 3 June 10:15" />
-
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <TextView android:id="@+id/shot_event_title"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="@dimen/keyline_1"
-                  android:visibility="gone"
-                  tools:text="Event Title"
-                  tools:visibility="visible" />
-
-                <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_text"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="16dp"
-                  android:paddingRight="16dp"
-                  android:textColor="@color/material_black"
-                  android:textColorLink="@color/links"
-                  android:textSize="16sp"
-                  tools:text="Who's the referee? He is!! Go get him! C'mon!" />
-
-                <ImageView android:id="@+id/shot_image"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="16dp"
-                  android:adjustViewBounds="true"
-                  android:paddingLeft="16dp"
-                  android:paddingRight="16dp"
-                  android:scaleType="fitCenter"
-                  tools:src="@drawable/sample_avatar" />
-            </LinearLayout>
-        </ScrollView>
-
-        <include layout="@layout/include_shadow_above_shot_bar" />
-    </FrameLayout>
-
-    <include layout="@layout/include_new_shot_bar"
+    <android.support.v7.widget.RecyclerView android:id="@+id/shot_detail_list"
       android:layout_width="match_parent"
-      android:layout_height="@dimen/new_shot_height" />
+      android:layout_height="match_parent"
+      android:orientation="vertical" />
+
+    <include layout="@layout/include_shadow_above_shot_bar" />
+  </FrameLayout>
+
+  <include layout="@layout/include_new_shot_bar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/new_shot_height" />
 </LinearLayout>

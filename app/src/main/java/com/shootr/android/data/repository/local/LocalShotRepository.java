@@ -5,23 +5,18 @@ import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.UserRepository;
 import java.util.List;
 import javax.inject.Inject;
 
 public class LocalShotRepository implements ShotRepository {
 
     private final ShotDataSource localShotDataSource;
-    private final UserRepository localUserRepository;
     private final ShotEntityMapper shotEntityMapper;
 
-    @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource, @Local UserRepository localUserRepository,
-      ShotEntityMapper shotEntityMapper) {
+    @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper) {
         this.localShotDataSource = localShotDataSource;
-        this.localUserRepository = localUserRepository;
         this.shotEntityMapper = shotEntityMapper;
     }
 
@@ -32,16 +27,19 @@ public class LocalShotRepository implements ShotRepository {
 
     @Override public List<Shot> getShotsForTimeline(TimelineParameters parameters) {
         List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForTimeline(parameters);
-        List<User> usersFromShots = localUserRepository.getUsersByIds(parameters.getAllUserIds());
-        return shotEntityMapper.transform(shotsForEvent, usersFromShots);
+        return shotEntityMapper.transform(shotsForEvent);
     }
 
     @Override public Shot getShot(Long shotId) {
         ShotEntity shot = localShotDataSource.getShot(shotId);
         if (shot != null) {
-            return shotEntityMapper.transform(shot, localUserRepository.getUserById(shot.getIdUser()));
+            return shotEntityMapper.transform(shot);
         } else {
             return null;
         }
+    }
+
+    @Override public List<Shot> getReplies(Long shot) {
+        return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 }

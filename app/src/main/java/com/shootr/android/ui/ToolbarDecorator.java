@@ -34,6 +34,8 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         supportActionBar = activity.getSupportActionBar();
         setTitle(supportActionBar.getTitle());
         supportActionBar.setDisplayShowTitleEnabled(false);
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
+        supportActionBar.setDisplayShowHomeEnabled(true);
     }
 
     public void setTitle(@StringRes int titleResource) {
@@ -42,7 +44,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void setTitle(CharSequence title) {
         if (title == null) {
-            titleText.setVisibility(View.GONE);
+            hideTitle();
         } else {
             titleText.setVisibility(View.VISIBLE);
             titleText.setText(title);
@@ -63,5 +65,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public ActionBar getActionBar() {
         return supportActionBar;
+    }
+
+    public void hideTitle() {
+        titleText.setVisibility(View.GONE);
     }
 }

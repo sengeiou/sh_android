@@ -9,6 +9,7 @@
     <dimen name="keyline_2_minus_icon">32dp</dimen>
 
     <dimen name="card_elevation">3dp</dimen>
+    <dimen name="reply_card_elevation">2dp</dimen>
 
     <dimen name="shot_avatar_size">52dp</dimen>
 

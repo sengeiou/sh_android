@@ -19,6 +19,8 @@ public class ShotDtoFactory {
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
     private static final String ALIAS_GET_SHOT = "GET_SHOT";
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
+    private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
+    private static final int REPLIES_MAX_ITEMS = 50;
 
     private UtilityDtoFactory utilityDtoFactory;
     ShotEntityMapper shotEntityMapper;
@@ -76,5 +78,38 @@ public class ShotDtoFactory {
         OperationDto op = new OperationDto.Builder().metadata(md).putData(shotEntityMapper.toDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
+    }
+
+    public GenericDto getRepliesOperationDto(Long shotId) {
+        FilterDto repliesFilter = and(ShotTable.ID_SHOT_PARENT).isEqualTo(shotId) //
+          .and(ShotTable.CSYS_MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder() //
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .entity(ShotTable.TABLE)
+          .filter(repliesFilter)
+          .items(REPLIES_MAX_ITEMS)
+          .build();
+
+        OperationDto op = new OperationDto.Builder() //
+          .metadata(md) //
+          .putData(shotEntityMapper.toDto(null)) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_REPLIES, op);
+    }
+
+    /**
+     * This method returns a different modified time each time it's called, so that we skip server's cache for the
+     * replies query.
+     *
+     * This is a temporarily (REALLY, I MEAN IT) solution to a problem we are having where requesting replies after
+     * publishing a new one doesn't return it back.
+     *
+     * returns timestamp for 1 day into the future
+     */
+    private long futureModifiedTimeToSkipServerCache() {
+        return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
     }
 }
