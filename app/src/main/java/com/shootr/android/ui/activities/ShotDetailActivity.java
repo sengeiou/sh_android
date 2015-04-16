@@ -194,7 +194,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void scrollToBottom() {
-        detailList.smoothScrollToPosition(detailAdapter.getItemCount()-1);
+        detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
+    }
+
+    @Override public void renderParent(ShotModel parentShot) {
+        detailAdapter.renderParentShot(parentShot);
     }
 
     @Override public void openNewShotView() {

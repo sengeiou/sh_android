@@ -39,6 +39,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotModel mainShot;
     private List<ShotModel> replies;
     private float itemElevation;
+    private ShotModel parentShot;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener, TimeFormatter timeFormatter, Resources resources,
@@ -55,6 +56,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public void renderMainShot(ShotModel mainShot) {
         this.mainShot = mainShot;
+        notifyItemChanged(POSITION_MAIN_SHOT);
+    }
+
+    public void renderParentShot(ShotModel parentShot) {
+        this.parentShot = parentShot;
         notifyItemChanged(POSITION_MAIN_SHOT);
     }
 
@@ -129,6 +135,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private void bindMainShotViewHolder(ShotDetailMainViewHolder holder) {
         if (mainShot != null) {
             holder.bindView(mainShot);
+            if (parentShot != null) {
+                holder.bindParentView(parentShot);
+            }
         } else {
             Timber.w("Trying to render null main shot");
         }
@@ -148,16 +157,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     //region View holders
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.shot_avatar) ImageView avatar;
-        @InjectView(R.id.shot_user_name) TextView username;
-        @InjectView(R.id.shot_timestamp) TextView timestamp;
-        @InjectView(R.id.shot_text) ClickableTextView shotText;
-        @InjectView(R.id.shot_image) ImageView shotImage;
-        @InjectView(R.id.shot_event_title) TextView eventTitle;
+        @InjectView(R.id.shot_detail_avatar) ImageView avatar;
+        @InjectView(R.id.shot_detail_user_name) TextView username;
+        @InjectView(R.id.shot_detail_timestamp) TextView timestamp;
+        @InjectView(R.id.shot_detail_text) ClickableTextView shotText;
+        @InjectView(R.id.shot_detail_image) ImageView shotImage;
+        @InjectView(R.id.shot_detail_event_title) TextView eventTitle;
+        @InjectView(R.id.shot_detail_parent) View parentView;
+
+        private ShotDetailParentViewHolder parentViewHolder;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            parentViewHolder = new ShotDetailParentViewHolder(parentView);
         }
 
         public void bindView(final ShotModel shotModel) {
@@ -192,6 +205,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             }
         }
 
+        public void bindParentView(ShotModel shotModel) {
+            parentViewHolder.bindView(shotModel);
+        }
+
         private String getUsernameTitle(ShotModel shotModel) {
             if (shotModel.isReply()) {
                 return resources.getString(R.string.reply_name_pattern,
@@ -213,6 +230,69 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 eventTitle.setVisibility(View.VISIBLE);
             } else {
                 eventTitle.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
+
+        @InjectView(R.id.shot_avatar) public ImageView avatar;
+        @InjectView(R.id.shot_user_name) public TextView name;
+        @InjectView(R.id.shot_timestamp) public TextView timestamp;
+        @InjectView(R.id.shot_text) public ClickableTextView text;
+        @InjectView(R.id.shot_image) public ImageView image;
+
+        public ShotDetailParentViewHolder(View itemView) {
+            super(itemView);
+            itemView.setVisibility(View.GONE);
+            ButterKnife.inject(this, itemView);
+        }
+
+        public void bindView(final ShotModel shotModel) {
+            itemView.setVisibility(View.VISIBLE);
+            this.name.setText(getUsernameTitle(shotModel));
+
+            String comment = shotModel.getComment();
+            if (comment != null) {
+                this.text.setVisibility(View.VISIBLE);
+                this.text.setText(comment);
+                this.text.addLinks();
+            } else {
+                this.text.setVisibility(View.GONE);
+            }
+
+            long creationDate = shotModel.getCsysBirth().getTime();
+            this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
+
+            String photo = shotModel.getPhoto();
+            picasso.loadProfilePhoto(photo).into(this.avatar);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    avatarClickListener.onClick(shotModel.getIdUser());
+                }
+            });
+
+            String imageUrl = shotModel.getImage();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                this.image.setVisibility(View.VISIBLE);
+                picasso.loadTimelineImage(imageUrl).into(this.image);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        imageClickListener.onClick(shotModel);
+                    }
+                });
+            } else {
+                this.image.setVisibility(View.GONE);
+            }
+        }
+
+        private String getUsernameTitle(ShotModel shotModel) {
+            if (shotModel.isReply()) {
+                return resources.getString(R.string.reply_name_pattern,
+                  shotModel.getUsername(),
+                  shotModel.getReplyUsername());
+            } else {
+                return shotModel.getUsername();
             }
         }
     }

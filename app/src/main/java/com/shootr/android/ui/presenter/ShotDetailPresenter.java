@@ -10,6 +10,7 @@ import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -34,7 +35,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
         this.shotDetailView = shotDetailView;
         this.shotModel = shotModel;
-        this.setViewContent(shotModel);
+        this.loadShotDetail();
         this.loadReplies();
     }
 
@@ -53,9 +54,27 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    private void setViewContent(ShotModel shotModel) {
+    private void loadShotDetail() {
         shotDetailView.renderShot(shotModel);
         shotDetailView.setReplyUsername(shotModel.getUsername());
+        if (shotModel.isReply()) {
+            this.loadParentShot();
+        }
+    }
+
+    private void loadParentShot() {
+        //TODO interactor
+        shotDetailView.renderParent(mockParent());
+    }
+
+    private ShotModel mockParent() {
+        ShotModel shotModel = new ShotModel();
+        shotModel.setUsername("padre");
+        shotModel.setComment("Hola soy shot padre");
+        shotModel.setIdShot(0L);
+        shotModel.setCsysBirth(new Date());
+        shotModel.setPhoto("http://2.bp.blogspot.com/-qNmjJuVhLqQ/UNig55G5ZeI/AAAAAAAAGMY/MfhFCTOL044/s1600/obama+tweets+1.jpg");
+        return shotModel;
     }
 
     public void imageClick(ShotModel shot) {
