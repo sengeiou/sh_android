@@ -21,7 +21,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:scaleType="centerCrop"
-              android:src="@drawable/drawer_background" />
+              android:src="@color/primary" />
 
             <RelativeLayout android:id="@+id/navdrawer_profile"
               android:layout_width="match_parent"
