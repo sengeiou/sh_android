@@ -293,15 +293,7 @@ public class TimelinePresenterTest {
     }
     //endregion
 
-    private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((GetOlderMainTimelineInteractor.Callback) invocation.getArguments()[1]).onLoaded(timeline);
-                return null;
-            }
-        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
-    }
-
+    //region Matchers
     private GetOlderMainTimelineInteractor.Callback anyOlderCallback() {
         return any(GetOlderMainTimelineInteractor.Callback.class);
     }
@@ -314,7 +306,9 @@ public class TimelinePresenterTest {
     private RefreshMainTimelineInteractor.Callback anyRefreshCallback() {
         return any(RefreshMainTimelineInteractor.Callback.class);
     }
+    //endregion
 
+    //region Stubs
     private ShotModel lastShotModel() {
         ShotModel shotModel = new ShotModel();
         shotModel.setCsysBirth(LAST_SHOT_DATE);
@@ -342,6 +336,17 @@ public class TimelinePresenterTest {
         shot.setUserInfo(new Shot.ShotUserInfo());
         return shot;
     }
+    //endregion
+
+    //region Setups
+    private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((GetOlderMainTimelineInteractor.Callback) invocation.getArguments()[1]).onLoaded(timeline);
+                return null;
+            }
+        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+    }
 
     private void setupGetMainTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer<Void>() {
@@ -360,4 +365,5 @@ public class TimelinePresenterTest {
             }
         }).when(refreshMainTimelineInteractor).refreshMainTimeline(anyRefreshCallback(), anyErrorCallback());
     }
+    //endregion
 }
