@@ -99,6 +99,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   onImageClick(shot);
               }
           }, //
+          new ShotDetailWithRepliesAdapter.OnParentShownListener() {
+              @Override public void onShown() {
+                  detailList.scrollToPosition(0);
+              }
+          }, //
           timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);

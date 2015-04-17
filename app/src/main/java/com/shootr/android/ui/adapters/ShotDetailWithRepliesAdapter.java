@@ -34,6 +34,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
+    private final OnParentShownListener onParentShownListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -42,11 +43,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, TimeFormatter timeFormatter, Resources resources,
+      ImageClickListener imageClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -109,6 +111,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private void showParent() {
         isShowingParent = true;
         notifyItemInserted(0);
+        onParentShownListener.onShown();
     }
 
     private void hideParent() {
@@ -195,6 +198,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         int replyPosition = adapterPositionToReplyPosition(adapterPosition);
         ShotModel shotModel = replies.get(replyPosition);
         holder.bindView(shotModel);
+    }
+
+    public interface OnParentShownListener {
+
+        void onShown();
+
     }
 
     //region View holders
