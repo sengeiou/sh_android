@@ -108,12 +108,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void showParent() {
         isShowingParent = true;
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     private void hideParent() {
         isShowingParent = false;
-        notifyDataSetChanged();
+        notifyItemRemoved(0);
     }
 
     @Override public int getItemCount() {
