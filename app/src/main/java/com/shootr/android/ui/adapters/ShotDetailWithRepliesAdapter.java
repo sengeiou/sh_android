@@ -23,11 +23,10 @@ import timber.log.Timber;
 
 public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_MAIN_SHOT = 0;
-    private static final int TYPE_REPLIES_HEADER = 1;
-    private static final int TYPE_REPLY = 2;
-    private static final int POSITION_MAIN_SHOT = 0;
-    private static final int POSITION_REPLIES_HEADER = 1;
+    private static final int TYPE_PARENT_SHOT = 0;
+    private static final int TYPE_MAIN_SHOT = 1;
+    private static final int TYPE_REPLIES_HEADER = 2;
+    private static final int TYPE_REPLY = 3;
 
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
@@ -35,17 +34,21 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
+    private final OnParentShownListener onParentShownListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
     private float itemElevation;
+    private ShotModel parentShot;
+    private boolean isShowingParent = false;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, TimeFormatter timeFormatter, Resources resources,
+      ImageClickListener imageClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
@@ -55,7 +58,16 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public void renderMainShot(ShotModel mainShot) {
         this.mainShot = mainShot;
-        notifyItemChanged(POSITION_MAIN_SHOT);
+        notifyItemChanged(getPositionMainShot());
+    }
+
+    private boolean hasParent() {
+        return isShowingParent && mainShot != null && mainShot.isReply();
+    }
+
+    public void renderParentShot(ShotModel parentShot) {
+        this.parentShot = parentShot;
+        notifyItemChanged(getPositionParentShot());
     }
 
     public void renderReplies(List<ShotModel> replies) {
@@ -64,18 +76,54 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override public int getItemViewType(int position) {
-        switch (position) {
-            case POSITION_MAIN_SHOT:
-                return TYPE_MAIN_SHOT;
-            case POSITION_REPLIES_HEADER:
-                return TYPE_REPLIES_HEADER;
-            default:
-                return TYPE_REPLY;
+        if (position == getPositionParentShot()) {
+            return TYPE_PARENT_SHOT;
+        } else if (position == getPositionMainShot()) {
+            return TYPE_MAIN_SHOT;
+        } else if (position == getPositionRepliesHeader()) {
+            return TYPE_REPLIES_HEADER;
+        } else {
+            return TYPE_REPLY;
         }
+    }
+
+    private int getPositionParentShot() {
+        return hasParent() ? 0 : -1;
+    }
+
+    private int getPositionMainShot() {
+        return hasParent() ? 1 : 0;
+    }
+
+    private int getPositionRepliesHeader() {
+        return hasParent() ? 2 : 1;
+    }
+
+    private int adapterPositionToReplyPosition(int adapterPosition) {
+        int firstReplyPosition = getPositionRepliesHeader() + 1;
+        return adapterPosition - firstReplyPosition;
+    }
+
+    private boolean isShowingParent() {
+        return isShowingParent;
+    }
+
+    private void showParent() {
+        isShowingParent = true;
+        notifyItemInserted(0);
+        onParentShownListener.onShown();
+    }
+
+    private void hideParent() {
+        isShowingParent = false;
+        notifyItemRemoved(0);
     }
 
     @Override public int getItemCount() {
         int itemCount = 1;
+        if (hasParent()) {
+            itemCount++;
+        }
         if (!replies.isEmpty()) {
             itemCount++;
             itemCount = itemCount + replies.size();
@@ -87,6 +135,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View itemView;
         switch (viewType) {
+            case TYPE_PARENT_SHOT:
+                itemView = layoutInflater.inflate(R.layout.include_shot_detail_parent, parent, false);
+                return new ShotDetailParentViewHolder(itemView);
             case TYPE_MAIN_SHOT:
                 itemView = layoutInflater.inflate(R.layout.include_shot_detail, parent, false);
                 ViewCompat.setElevation(itemView, itemElevation);
@@ -106,6 +157,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
+            case TYPE_PARENT_SHOT:
+                bindParentShotViewHolder((ShotDetailParentViewHolder) holder);
+                break;
             case TYPE_MAIN_SHOT:
                 bindMainShotViewHolder((ShotDetailMainViewHolder) holder);
                 break;
@@ -118,11 +172,17 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    private void bindParentShotViewHolder(ShotDetailParentViewHolder holder) {
+        if (parentShot != null) {
+            holder.bindView(parentShot);
+        } else if (mainShot.isReply()) {
+            holder.showLoading();
+        }
+    }
+
     private void bindRepliesHeaderHolder(ShotDetailRepliesHeaderHolder holder) {
-        String repliesCountText =
-          holder.itemView.getResources().getQuantityString(R.plurals.replies_header_count_pattern,
-            replies.size(),
-            replies.size());
+        String repliesCountText = holder.itemView.getResources()
+          .getQuantityString(R.plurals.replies_header_count_pattern, replies.size(), replies.size());
         ((TextView) holder.itemView).setText(repliesCountText);
     }
 
@@ -140,20 +200,22 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         holder.bindView(shotModel);
     }
 
-    private int adapterPositionToReplyPosition(int adapterPosition) {
-        int firstReplyPosition = POSITION_REPLIES_HEADER + 1;
-        return adapterPosition - firstReplyPosition;
+    public interface OnParentShownListener {
+
+        void onShown();
+
     }
 
     //region View holders
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.shot_avatar) ImageView avatar;
-        @InjectView(R.id.shot_user_name) TextView username;
-        @InjectView(R.id.shot_timestamp) TextView timestamp;
-        @InjectView(R.id.shot_text) ClickableTextView shotText;
-        @InjectView(R.id.shot_image) ImageView shotImage;
-        @InjectView(R.id.shot_event_title) TextView eventTitle;
+        @InjectView(R.id.shot_detail_avatar) ImageView avatar;
+        @InjectView(R.id.shot_detail_user_name) TextView username;
+        @InjectView(R.id.shot_detail_timestamp) TextView timestamp;
+        @InjectView(R.id.shot_detail_text) ClickableTextView shotText;
+        @InjectView(R.id.shot_detail_image) ImageView shotImage;
+        @InjectView(R.id.shot_detail_event_title) TextView eventTitle;
+        @InjectView(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -190,6 +252,23 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 shotImage.setVisibility(View.GONE);
             }
+
+            if (shotModel.isReply()) {
+                parentToggleButton.setVisibility(View.VISIBLE);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        if (isShowingParent()) {
+                            hideParent();
+                            parentToggleButton.setImageResource(R.drawable.ic_arrow_down_24_gray50);
+                        } else {
+                            showParent();
+                            parentToggleButton.setImageResource(R.drawable.ic_arrow_up_24_gray50);
+                        }
+                    }
+                });
+            } else {
+                parentToggleButton.setVisibility(View.GONE);
+            }
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
@@ -213,6 +292,77 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 eventTitle.setVisibility(View.VISIBLE);
             } else {
                 eventTitle.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
+
+        @InjectView(R.id.shot_detail_parent_progress) View progress;
+        @InjectView(R.id.shot_detail_parent_shot) View shot;
+
+        @InjectView(R.id.shot_avatar) public ImageView avatar;
+        @InjectView(R.id.shot_user_name) public TextView name;
+        @InjectView(R.id.shot_timestamp) public TextView timestamp;
+        @InjectView(R.id.shot_text) public ClickableTextView text;
+        @InjectView(R.id.shot_image) public ImageView image;
+
+        public ShotDetailParentViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+        }
+
+        public void showLoading() {
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        public void bindView(final ShotModel shotModel) {
+            shot.setVisibility(View.VISIBLE);
+            progress.setVisibility(View.GONE);
+
+            this.name.setText(getUsernameTitle(shotModel));
+
+            String comment = shotModel.getComment();
+            if (comment != null) {
+                this.text.setVisibility(View.VISIBLE);
+                this.text.setText(comment);
+                this.text.addLinks();
+            } else {
+                this.text.setVisibility(View.GONE);
+            }
+
+            long creationDate = shotModel.getCsysBirth().getTime();
+            this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
+
+            String photo = shotModel.getPhoto();
+            picasso.loadProfilePhoto(photo).into(this.avatar);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    avatarClickListener.onClick(shotModel.getIdUser());
+                }
+            });
+
+            String imageUrl = shotModel.getImage();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                this.image.setVisibility(View.VISIBLE);
+                picasso.loadTimelineImage(imageUrl).into(this.image);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        imageClickListener.onClick(shotModel);
+                    }
+                });
+            } else {
+                this.image.setVisibility(View.GONE);
+            }
+        }
+
+        private String getUsernameTitle(ShotModel shotModel) {
+            if (shotModel.isReply()) {
+                return resources.getString(R.string.reply_name_pattern,
+                  shotModel.getUsername(),
+                  shotModel.getReplyUsername());
+            } else {
+                return shotModel.getUsername();
             }
         }
     }

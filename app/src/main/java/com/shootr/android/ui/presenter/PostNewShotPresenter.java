@@ -27,7 +27,7 @@ public class PostNewShotPresenter implements Presenter {
     private PostNewShotView postNewShotView;
     private File selectedImageFile;
     private String shotCommentToSend;
-    private String currentTextWritten;
+    private String currentTextWritten = "";
     private boolean isReply;
     private Long replyParentId;
 
