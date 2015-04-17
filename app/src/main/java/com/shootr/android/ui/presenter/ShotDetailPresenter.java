@@ -5,6 +5,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
+import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
+    private final GetReplyParentInteractor getReplyParentInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
 
@@ -26,8 +28,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
-      ShotModelMapper shotModelMapper, @Main Bus bus) {
+      GetReplyParentInteractor getReplyParentInteractor, ShotModelMapper shotModelMapper, @Main Bus bus) {
         this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
+        this.getReplyParentInteractor = getReplyParentInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
     }
@@ -63,18 +66,15 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadParentShot() {
-        //TODO interactor
-        shotDetailView.renderParent(mockParent());
-    }
-
-    private ShotModel mockParent() {
-        ShotModel shotModel = new ShotModel();
-        shotModel.setUsername("padre");
-        shotModel.setComment("Hola soy shot padre");
-        shotModel.setIdShot(0L);
-        shotModel.setCsysBirth(new Date());
-        shotModel.setPhoto("http://2.bp.blogspot.com/-qNmjJuVhLqQ/UNig55G5ZeI/AAAAAAAAGMY/MfhFCTOL044/s1600/obama+tweets+1.jpg");
-        return shotModel;
+        getReplyParentInteractor.loadReplyParent(shotModel.getParentShotId(), new Interactor.Callback<Shot>() {
+            @Override public void onLoaded(Shot shot) {
+                if (shot != null) {
+                    shotDetailView.renderParent(shotModelMapper.transform(shot));
+                } else {
+                    //TODO
+                }
+            }
+        });
     }
 
     public void imageClick(ShotModel shot) {

@@ -25,6 +25,7 @@ public class ShotEntityModelMapper {
         shotModel.setType(shot.getType());
         shotModel.setCsysBirth(shot.getCsysBirth());
         shotModel.setReplyUsername(shot.getUserNameParent());
+        shotModel.setParentShotId(shot.getIdShotParent());
         return shotModel;
     }
 

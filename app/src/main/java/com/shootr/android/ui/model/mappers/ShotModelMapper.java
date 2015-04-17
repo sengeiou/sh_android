@@ -30,6 +30,7 @@ public class ShotModelMapper {
         }
 
         shotModel.setReplyUsername(shot.getParentShotUsername());
+        shotModel.setParentShotId(shot.getParentShotId());
 
         return shotModel;
     }

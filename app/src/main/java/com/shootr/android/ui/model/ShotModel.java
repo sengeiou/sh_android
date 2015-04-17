@@ -19,7 +19,7 @@ public class ShotModel implements Serializable{
     private Integer type;
 
     private String replyUsername;
-    private Long replyShotId;
+    private Long parentShotId;
 
     public Long getIdShot() {
         return idShot;
@@ -113,11 +113,11 @@ public class ShotModel implements Serializable{
         return replyUsername != null;
     }
 
-    public Long getReplyShotId() {
-        return replyShotId;
+    public Long getParentShotId() {
+        return parentShotId;
     }
 
-    public void setReplyShotId(Long replyShotId) {
-        this.replyShotId = replyShotId;
+    public void setParentShotId(Long parentShotId) {
+        this.parentShotId = parentShotId;
     }
 }
