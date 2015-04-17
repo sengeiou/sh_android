@@ -70,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="56dp"
+                android:visibility="gone"
                 android:layout_marginRight="56dp"
                 android:text="@string/activity_login_register_facebook"/>
 
@@ -80,6 +81,7 @@
                 android:layout_height="42dp"
                 android:layout_marginLeft="56dp"
                 android:layout_marginRight="56dp"
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:text="@string/activity_login_register_email"/>
 
@@ -91,6 +93,7 @@
                 android:layout_marginLeft="72dp"
                 android:layout_marginRight="72dp"
                 android:layout_marginTop="8dp"
+              android:layout_marginBottom="32dp"
                 android:padding="8dp"
                 android:text="@string/activity_login_signin"/>
 

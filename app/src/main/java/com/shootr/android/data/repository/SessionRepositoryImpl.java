@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository;
 
+import com.crashlytics.android.Crashlytics;
 import com.shootr.android.data.prefs.CurrentUserId;
 import com.shootr.android.data.prefs.LongPreference;
 import com.shootr.android.data.prefs.SessionToken;
@@ -57,6 +58,10 @@ public class SessionRepositoryImpl implements SessionRepository {
         setCurrentUserId(userId);
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);
+        //TODO use some pattern or abstraction, setting these values here directly is quite ugly
+        Crashlytics.setUserIdentifier(String.valueOf(userId));
+        Crashlytics.setUserName(loggedInUser.getUsername());
+        Crashlytics.setUserEmail(loggedInUser.getEmail());
     }
 
     @Override

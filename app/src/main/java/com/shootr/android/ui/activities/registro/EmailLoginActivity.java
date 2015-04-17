@@ -77,7 +77,6 @@ public class EmailLoginActivity extends BaseToolbarActivity {
 
     @Subscribe
     public void onLoginResult(LoginResultEvent event) {
-        setLoading(false);
         UserEntity userEntity = event.getResult();
         User user = userEntityMapper.transform(userEntity, userEntity.getIdUser());
         // Yey!
@@ -106,6 +105,7 @@ public class EmailLoginActivity extends BaseToolbarActivity {
 
 
     private void goToTimeline() {
+        setLoading(false);
         // Launch main activity, and destroy the stack trace
         finish();
         Intent i = new Intent(this,TimelineActivity.class);

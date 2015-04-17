@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import android.os.Handler;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.EventChanged;
@@ -20,6 +21,8 @@ import javax.inject.Inject;
 
 public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventChanged.Receiver {
 
+    private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+
     private final GetMainTimelineInteractor getMainTimelineInteractor;
     private final RefreshMainTimelineInteractor refreshMainTimelineInteractor;
     private final GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
@@ -30,6 +33,10 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     private TimelineView timelineView;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
+
+    private Runnable pollShotsRunnable;
+    private boolean shouldPoll;
+    private Handler pollShotsHanlder;
 
     @Inject public TimelinePresenter(GetMainTimelineInteractor getMainTimelineInteractor,
       RefreshMainTimelineInteractor refreshMainTimelineInteractor,
@@ -50,6 +57,33 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     public void initialize(TimelineView timelineView) {
         this.setView(timelineView);
         this.loadMainTimeline();
+        this.pollShotsHanlder = new Handler();
+        this.pollShotsRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (!shouldPoll) {
+                    return;
+                }
+                refresh();
+                scheduleNextPolling();
+            }
+        };
+    }
+
+    private void startPollingShots() {
+        shouldPoll = true;
+        scheduleNextPolling();
+    }
+
+    private void stopPollingShots() {
+        shouldPoll = false;
+        pollShotsHanlder.removeCallbacks(pollShotsRunnable);
+    }
+
+    private void scheduleNextPolling() {
+        if (shouldPoll) {
+            pollShotsHanlder.postDelayed(pollShotsRunnable, REFRESH_INTERVAL_MILLISECONDS);
+        }
     }
 
     public void loadMainTimeline() {
@@ -127,10 +161,12 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     @Override public void resume() {
         refresh();
         bus.register(this);
+        startPollingShots();
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        stopPollingShots();
     }
 
     @Subscribe

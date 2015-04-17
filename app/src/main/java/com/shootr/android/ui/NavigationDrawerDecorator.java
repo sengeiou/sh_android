@@ -71,7 +71,7 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
         navDrawerItemsListContainer = (ViewGroup) drawerLayout.findViewById(R.id.navdrawer_items_list);
         decoratedContainer = (ViewGroup) inflatedView.findViewById(R.id.navdrawer_content);
         versionText = (TextView) drawerLayout.findViewById(R.id.navdrawer_version);
-        versionText.setText(BuildConfig.VERSION_NAME);
+        versionText.setText("Version: " + BuildConfig.VERSION_NAME);
         populateMenu();
         return decoratedContainer;
     }
@@ -201,7 +201,7 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     public void bindUser(final User currentUser) {
         ButterKnife.inject(this, drawerHeader);
         profileName.setText(currentUser.getName());
-        profileEmail.setText(currentUser.getUsername()+" [email]");
+        profileEmail.setText(currentUser.getUsername());
         picasso.loadProfilePhoto(currentUser.getPhoto()).into(profileAvatar);
         drawerHeader.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
