@@ -11,7 +11,6 @@ import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -25,6 +24,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
     private List<ShotModel> repliesModels;
+    private boolean justSentReply = false;
 
     @Inject
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
@@ -46,12 +46,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
 
             @Override public void onLoaded(List<Shot> replies) {
-                int previousReplyCount = repliesModels != null ? repliesModels.size() : Integer.MAX_VALUE;
+                int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
                 int newReplyCount = replies.size();
                 repliesModels = shotModelMapper.transform(replies);
                 shotDetailView.renderReplies(repliesModels);
-                if (previousReplyCount < newReplyCount) {
+                if (justSentReply && previousReplyCount < newReplyCount) {
                     shotDetailView.scrollToBottom();
+                    justSentReply = false;
                 }
             }
         });
@@ -86,6 +87,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
+        justSentReply = true;
         this.loadReplies();
     }
 
