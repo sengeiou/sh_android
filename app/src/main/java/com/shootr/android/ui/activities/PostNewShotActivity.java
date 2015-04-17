@@ -69,8 +69,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         ButterKnife.inject(this);
 
         initializeViews();
-        setupPhotoIfAny();
         initializePresenterWithIntentExtras(getIntent().getExtras());
+        setupPhotoIfAny();
         setTextReceivedFromIntentIfAny();
     }
 
@@ -81,10 +81,10 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
             boolean isReply = replyToUsername != null;
             if (isReply) {
                 presenter.initializeAsReply(this, replyParentId, replyToUsername);
+                return;
             }
-        } else {
-            presenter.initializeAsNewShot(this);
         }
+        presenter.initializeAsNewShot(this);
     }
 
     private void initializeViews() {

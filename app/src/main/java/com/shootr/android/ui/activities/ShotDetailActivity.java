@@ -142,6 +142,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   .from(ShotDetailActivity.this) //
                     //TODO reply
                   .withImage(image) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .build();
                 startActivity(newShotIntent);
             }
@@ -168,6 +169,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @OnClick(R.id.shot_bar_text) public void onReplyClick() {
         newShotBarPresenter.newShotFromTextBox();
+    }
+
+
+    @OnClick(R.id.shot_bar_photo)
+    public void onStartNewShotWithPhoto() {
+        newShotBarPresenter.newShotFromImage();
     }
 
     @OnClick(R.id.shot_bar_drafts) public void openDrafts() {
