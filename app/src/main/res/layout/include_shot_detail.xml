@@ -3,19 +3,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:background="@color/white"
   android:orientation="vertical"
   android:paddingBottom="16dp"
-  android:background="@color/white"
-  >
-
-  <include
-    android:id="@+id/shot_detail_parent"
-    layout="@layout/item_list_shot" />
-
-  <View android:layout_width="match_parent"
-    android:layout_height="0.5dp"
-    android:layout_marginBottom="16dp"
-    android:background="@color/separator" />
+  android:paddingTop="16dp">
 
     <RelativeLayout android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -39,48 +30,55 @@
           android:orientation="vertical">
 
             <TextView android:id="@+id/shot_detail_user_name"
-              tools:text="Ignasi"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="@color/material_black"
               android:textSize="18sp"
-              android:textStyle="bold" />
+              android:textStyle="bold"
+              tools:text="Ignasi" />
 
             <TextView android:id="@+id/shot_detail_timestamp"
-              tools:text="Tuesday 3 June 10:15"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="@color/gray_40"
-              android:textSize="16sp" />
+              android:textSize="16sp"
+              tools:text="Tuesday 3 June 10:15" />
 
         </LinearLayout>
+
+        <ImageView android:id="@+id/shot_detail_parent_toggle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="8dp"
+          android:layout_alignParentRight="true"
+          android:src="@drawable/ic_arrow_down_24_gray50" />
     </RelativeLayout>
 
     <TextView android:id="@+id/shot_detail_event_title"
-      tools:text="Event Title"
-      tools:visibility="visible"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/keyline_1"
-      android:visibility="gone" />
+      android:visibility="gone"
+      tools:text="Event Title"
+      tools:visibility="visible" />
 
     <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_detail_text"
-      tools:text="Who's the referee? He is!! Go get him! C'mon!"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
       android:textColor="@color/material_black"
       android:textColorLink="@color/links"
-      android:textSize="16sp" />
+      android:textSize="16sp"
+      tools:text="Who's the referee? He is!! Go get him! C'mon!" />
 
     <ImageView android:id="@+id/shot_detail_image"
-      tools:src="@drawable/sample_avatar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
       android:adjustViewBounds="true"
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
-      android:scaleType="fitCenter" />
+      android:scaleType="fitCenter"
+      tools:src="@drawable/sample_avatar" />
 </LinearLayout>
