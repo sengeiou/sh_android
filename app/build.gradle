@@ -33,8 +33,8 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
 def versionMajor = 0
-def versionMinor = 0
-def versionRevision = 307
+def versionMinor = 1
+def versionRevision = 0
 def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
 
 android {
