@@ -222,8 +222,16 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
                   presenter.confirmAccountCreation();
               }
           })
-          .setNegativeButton(R.string.no, null)
+          .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.dontConfirmAccountCreation();
+              }
+          })
           .show();
+    }
+
+    @Override public void focusOnEmailField() {
+        email.requestFocus();
     }
     //endregion
 }

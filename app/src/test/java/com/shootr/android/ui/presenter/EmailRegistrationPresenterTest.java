@@ -16,6 +16,9 @@ public class EmailRegistrationPresenterTest {
 
     public static final String EMAIL_INVALID = "invalidemail";
     private static final String EMAIL_VALID = "email@domain.com";
+    private static final String PASSWORD_VALID = "123456";
+    private static final String USERNAME_VALID = "username";
+    
     @Mock EmailRegistrationView emailRegistrationView;
     @Mock CreateAccountInteractor createAccountInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -43,8 +46,10 @@ public class EmailRegistrationPresenterTest {
         verify(emailRegistrationView).hideCreateButton();
     }
 
-    @Test public void shouldAskForConfirmationIfEmailIsValid() throws Exception {
+    @Test public void shouldAskForConfirmationIfEmailUsernameAndPasswordAreValid() throws Exception {
         when(emailRegistrationView.getEmail()).thenReturn(EMAIL_VALID);
+        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_VALID);
+        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_VALID);
         presenter.setView(emailRegistrationView);
 
         presenter.createAccount();
