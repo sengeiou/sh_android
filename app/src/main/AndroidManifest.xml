@@ -58,6 +58,7 @@
         </activity>
         <activity
             android:name=".ui.activities.registro.EmailRegistrationActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_registration_email">
         </activity>
         <activity
