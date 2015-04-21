@@ -81,7 +81,6 @@
                 android:layout_height="42dp"
                 android:layout_marginLeft="56dp"
                 android:layout_marginRight="56dp"
-                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:text="@string/activity_login_register_email"/>
 

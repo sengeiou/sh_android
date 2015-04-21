@@ -157,6 +157,10 @@ public class WelcomeLoginActivity extends BaseToolbarActivity {
         startActivity(new Intent(mContext, EmailLoginActivity.class));
     }
 
+    @OnClick(R.id.login_btn_email)
+    public void registerWithEmail() {
+        startActivity(new Intent(mContext, EmailRegistrationActivity.class));
+    }
 
     private void changePageToLogin() {
         hideWelcomePage();

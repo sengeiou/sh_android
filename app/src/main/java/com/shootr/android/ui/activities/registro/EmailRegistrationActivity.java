@@ -1,117 +1,36 @@
 package com.shootr.android.ui.activities.registro;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.os.Bundle;
-import android.util.Patterns;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.shootr.android.data.bus.Main;
-import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.squareup.otto.Bus;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
-import com.shootr.android.util.Gravatar;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import javax.inject.Inject;
+import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 
-public class EmailRegistrationActivity extends BaseToolbarActivity {
+public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity {
 
 
-    @InjectView(R.id.email_registro_email_spinner) Spinner mEmailRegistroEmailSpinner;
-    @InjectView(R.id.email_registro_username) EditText mEmailRegistroUsername;
-    @InjectView(R.id.email_registro_password) EditText mEmailRegistroPassword;
-    @InjectView(R.id.email_registro_avatar) ImageView mEmailRegistroAvatar;
+    @InjectView(R.id.registration_email) EditText email;
+    @InjectView(R.id.registration_username) EditText username;
+    @InjectView(R.id.registration_password) EditText password;
 
-    private List<String> emailAccounts;
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
 
-    @Inject @Main Bus bus;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContainerContent(R.layout.activity_registro_email);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_registration_email;
+    }
+
+    @Override protected void initializeViews() {
         ButterKnife.inject(this);
-
-        emailAccounts = getEmailAccounts();
-
-        mEmailRegistroEmailSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, emailAccounts));
-        mEmailRegistroEmailSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (emailAccounts != null) {
-                    loadGravatar(emailAccounts.get(position));
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                /* no-op */
-            }
-        });
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
-    }
-
-    private void loadGravatar(String email) {
-        mEmailRegistroAvatar.setVisibility(View.GONE);
-        String url = new Gravatar().getImageUrl(email);
-        Picasso.with(this).load(url).into(mEmailRegistroAvatar, new Callback() {
-            @Override
-            public void onSuccess() {
-                mEmailRegistroAvatar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError() {
-                mEmailRegistroAvatar.setVisibility(View.GONE);
-            }
-        });
+    @Override protected void initializePresenter() {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.registro_email, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    public List<String> getEmailAccounts() {
-        List<String> emailAccounts = new ArrayList<>();
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
-        for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
-            if (emailPattern.matcher(account.name).matches()) {
-                emailAccounts.add(account.name);
-            }
-        }
-        return emailAccounts;
+    @Override protected boolean requiresUserLogin() {
+        return false;
     }
 }

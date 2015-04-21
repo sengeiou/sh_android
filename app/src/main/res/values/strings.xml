@@ -2,7 +2,7 @@
 <resources>
 
     <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_registro_email">Nueva cuenta</string>
+    <string name="title_activity_registration_email">Create Account</string>
 
     <!-- Time strings -->
     <string name="day_title_today">Today</string>
@@ -193,6 +193,11 @@
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
+    <string name="activity_registration_email_hint">Email</string>
+    <string name="activity_registration_username_hint">Username</string>
+    <string name="activity_registration_password_hint">Password</string>
+    <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the Privacy Policy and agree to the Terms of Service.</string>
+    <string name="registration_create_button_text">Create account</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
