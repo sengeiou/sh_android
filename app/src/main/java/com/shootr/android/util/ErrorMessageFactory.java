@@ -48,6 +48,19 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START, R.string.error_message_event_end_date_before_start);
         codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW, R.string.error_message_event_end_date_before_now);
         codeResourceMap.put(ShootrError.ERROR_CODE_UPDATE_REQUIRED, R.string.error_message_update_required);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE, R.string.error_message_registration_username_duplicated);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL, R.string.error_message_registration_username_empty);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT, R.string.error_message_registration_username_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG, R.string.error_message_registration_username_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_INVALID_CHARACTERS, R.string.error_message_registration_username_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, R.string.error_message_registration_email_existing);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT, R.string.error_message_registration_email_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL, R.string.error_message_registration_email_empty);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL, R.string.error_message_registration_password_null);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT, R.string.error_message_registration_password_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG, R.string.error_message_registration_password_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME, R.string.error_message_registration_password_equals_username);
+        codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS, R.string.error_message_registration_password_invalid);
     }
 
     public String getMessageForError(ShootrError shootrError) {

@@ -35,4 +35,19 @@
     <string name="error_image_upload">Error trying to upload image</string>
     <string name="error_message_update_required">Current version too old</string>
 
+    <!-- Create account -->
+    <string name="error_message_registration_username_duplicated">$Duplicated username</string>
+    <string name="error_message_registration_username_empty">$Username empty</string>
+    <string name="error_message_registration_username_too_short">$Username short</string>
+    <string name="error_message_registration_username_too_long">$Username long</string>
+    <string name="error_message_registration_username_invalid">$Username invalid</string>
+    <string name="error_message_registration_email_existing">$Email existing</string>
+    <string name="error_message_registration_email_invalid">$Email invalid</string>
+    <string name="error_message_registration_email_empty">$Email empty</string>
+    <string name="error_message_registration_password_null">$Password emtpy</string>
+    <string name="error_message_registration_password_too_short">$Password short</string>
+    <string name="error_message_registration_password_too_long">$Password long</string>
+    <string name="error_message_registration_password_equals_username">$Password equals username</string>
+    <string name="error_message_registration_password_invalid">$Password invalid</string>
+
 </resources>

@@ -13,4 +13,10 @@ public interface EmailRegistrationView extends DataTransferView{
     String getUsername();
 
     String getPassword();
+
+    void showEmailError(String errorMessage);
+
+    void showUsernameError(String errorMessage);
+
+    void showPasswordError(String errorMessage);
 }

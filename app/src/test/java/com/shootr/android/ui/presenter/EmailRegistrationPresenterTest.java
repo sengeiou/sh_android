@@ -18,7 +18,7 @@ public class EmailRegistrationPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new EmailRegistrationPresenter(createAccountInteractor);
+        presenter = new EmailRegistrationPresenter(createAccountInteractor, errorMessageFactory);
     }
 
     @Test public void shouldShowViewLoadingWhenOnCreateAccountCalled() throws Exception {

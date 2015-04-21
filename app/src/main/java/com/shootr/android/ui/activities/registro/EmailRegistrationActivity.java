@@ -59,7 +59,6 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String message) {
-        //TODO
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
@@ -81,5 +80,17 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public String getPassword() {
         return password.getText().toString();
+    }
+
+    @Override public void showEmailError(String errorMessage) {
+        email.setError(errorMessage);
+    }
+
+    @Override public void showUsernameError(String errorMessage) {
+        username.setError(errorMessage);
+    }
+
+    @Override public void showPasswordError(String errorMessage) {
+        password.setError(errorMessage);
     }
 }
