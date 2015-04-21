@@ -6,10 +6,10 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.CreateAccountInteractor;
 import com.shootr.android.domain.validation.CreateUserValidator;
-import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.views.EmailRegistrationView;
 import com.shootr.android.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -35,7 +35,20 @@ public class EmailRegistrationPresenter implements Presenter {
         this.setView(emailRegistrationView);
     }
 
-    public void onCreateAccount() {
+    //region Interaction methods
+    public void usernameFocusRemoved() {
+        validateField(CreateUserValidator.FIELD_USERNAME);
+    }
+
+    public void emailFocusRemoved() {
+        validateField(CreateUserValidator.FIELD_EMAIL);
+    }
+
+    public void passwordFocusRemoved() {
+        validateField(CreateUserValidator.FIELD_PASSWORD);
+    }
+
+    public void createAccount() {
         showViewLoading();
         String email = emailRegistrationView.getEmail();
         String username = emailRegistrationView.getUsername();
@@ -54,6 +67,7 @@ public class EmailRegistrationPresenter implements Presenter {
               }
           });
     }
+    //endregion
 
     //region Error handling
     private void accountCreationError(ShootrException error) {
@@ -109,6 +123,20 @@ public class EmailRegistrationPresenter implements Presenter {
     }
     //endregion
 
+    private void validateField(int field) {
+        String email = emailRegistrationView.getEmail();
+        String username = emailRegistrationView.getUsername();
+        String password = emailRegistrationView.getPassword();
+        List<FieldValidationError> errors = new CreateUserValidator().validate(email, username, password);
+        List<FieldValidationError> fieldErrors = new ArrayList<>();
+        for (FieldValidationError error : errors) {
+            if (error.getField() == field) {
+                fieldErrors.add(error);
+            }
+        }
+        showValidationErrors(fieldErrors);
+    }
+
     private void showViewLoading() {
         emailRegistrationView.showLoading();
         emailRegistrationView.hideCreateButton();
@@ -124,6 +152,5 @@ public class EmailRegistrationPresenter implements Presenter {
     }
 
     @Override public void pause() {
-
     }
 }

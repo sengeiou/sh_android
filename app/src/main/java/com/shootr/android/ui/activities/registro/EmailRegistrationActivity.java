@@ -7,6 +7,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
@@ -56,9 +57,32 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @OnClick(R.id.registration_create_button) //
     public void onCreateAccountClick() {
-        presenter.onCreateAccount();
+        presenter.createAccount();
     }
 
+    @OnFocusChange(R.id.registration_email)
+    public void onEmailFieldFocusChanged(boolean hasFocus) {
+        if (!hasFocus) {
+            presenter.emailFocusRemoved();
+        }
+    }
+
+    @OnFocusChange(R.id.registration_username)
+    public void onUsernameFieldFocusChanged(boolean hasFocus) {
+        if (!hasFocus) {
+            presenter.usernameFocusRemoved();
+        }
+    }
+
+    @OnFocusChange(R.id.registration_password)
+    public void onPasswordFieldFocusChanged(boolean hasFocus) {
+        if (!hasFocus) {
+            presenter.passwordFocusRemoved();
+        }
+    }
+
+
+    //region View methods
     @Override public void showLoading() {
         progress.setVisibility(View.VISIBLE);
     }
@@ -102,4 +126,5 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Override public void showPasswordError(String errorMessage) {
         password.setError(errorMessage);
     }
+    //endregion
 }

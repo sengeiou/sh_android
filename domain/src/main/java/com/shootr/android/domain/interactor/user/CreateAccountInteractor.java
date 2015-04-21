@@ -48,7 +48,7 @@ public class CreateAccountInteractor implements Interactor {
 
 
     private boolean validateUserAndPassword(User user, String password) {
-        List<FieldValidationError> validationErrors = new CreateUserValidator().validate(user, password);
+        List<FieldValidationError> validationErrors = new CreateUserValidator().validate(user.getEmail(), user.getUsername(), password);
         if (validationErrors.isEmpty()) {
             return true;
         } else {

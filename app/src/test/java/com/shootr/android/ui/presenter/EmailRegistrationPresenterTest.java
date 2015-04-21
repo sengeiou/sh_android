@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.user.CreateAccountInteractor;
 import com.shootr.android.ui.views.EmailRegistrationView;
+import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,6 +14,7 @@ public class EmailRegistrationPresenterTest {
 
     @Mock EmailRegistrationView emailRegistrationView;
     @Mock CreateAccountInteractor createAccountInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private EmailRegistrationPresenter presenter;
 
@@ -24,7 +26,7 @@ public class EmailRegistrationPresenterTest {
     @Test public void shouldShowViewLoadingWhenOnCreateAccountCalled() throws Exception {
         presenter.setView(emailRegistrationView);
 
-        presenter.onCreateAccount();
+        presenter.createAccount();
 
         verify(emailRegistrationView).showLoading();
     }
@@ -32,7 +34,7 @@ public class EmailRegistrationPresenterTest {
     @Test public void shouldHideCreateButtonWhenOnCreateAccountCalled() throws Exception {
         presenter.setView(emailRegistrationView);
 
-        presenter.onCreateAccount();
+        presenter.createAccount();
 
         verify(emailRegistrationView).hideCreateButton();
     }

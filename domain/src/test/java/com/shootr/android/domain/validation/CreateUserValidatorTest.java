@@ -1,6 +1,5 @@
 package com.shootr.android.domain.validation;
 
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
 import java.util.List;
 import org.junit.Test;
@@ -23,41 +22,35 @@ public class CreateUserValidatorTest {
     private static final String USERNAME_WITH_INVALID_CHARACTERS = "Us er ñame ¬~#@|(/&%$·";
     private static final String PASSWORD_WITH_INVALID_CHARACTERS = "pass ¬~#@|(/&%$·";
     private static final String PASSWORD_VALID = "123456";
+    private static final String EMAIL_STUB = "test@test.com";
+    public static final String EMAIL_WITH_PLUS_SIGN = "email+plus@domain.com";
     //endregion
 
     //region Username
     @Test public void shouldReturnUsernameNullErrorIfUsernameIsNull() {
-        User user = userWithNullUsername();
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_NULL, PASSWORD_STUB);
 
         assertThat(errors).contains(usernameIsNullError());
     }
 
     @Test public void shouldReturnUsernameTooShortErrorIfLessThanThreeCharacters() {
-        User user = userWithShortUsername();
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_SMALLER_THAN_MINIMUM, PASSWORD_STUB);
 
         assertThat(errors).contains(usernameTooShortError());
     }
 
     @Test public void shouldReturnusernameTooLongErrorIfMoreThanTwentyCharacters() {
-        User user = userWithLongUsername();
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_LONGER_THAN_MAXIMUM, PASSWORD_STUB);
 
         assertThat(errors).contains(usernameTooLongError());
     }
 
     @Test public void shouldReturnUsernameInvalidCharacterErrorIfUsernameHasInvalidCharacters() {
-        User user = userWithInvalidCharactersInUsername();
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_WITH_INVALID_CHARACTERS, PASSWORD_STUB);
 
         assertThat(errors).contains(usernameHasInvalidCharactersError());
     }
@@ -65,28 +58,23 @@ public class CreateUserValidatorTest {
 
     //region Email
     @Test public void shouldReturnEmailInvalidFormatErrorIfEmailHasInvalidFormat() throws Exception {
-        User user = userWithInvalidEmail();
-
-        List<FieldValidationError> errors = new CreateUserValidator().validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = new CreateUserValidator().validate(EMAIL_INVALID_FORMAT,
+          USERNAME_STUB,
+          PASSWORD_STUB);
 
         assertThat(errors).contains(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
           CreateUserValidator.FIELD_EMAIL));
     }
 
     @Test public void shouldReturnEmailNullErrorIfEmailIsNull() throws Exception {
-        User user = userWithNullEmail();
-
-        List<FieldValidationError> errors = new CreateUserValidator().validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = new CreateUserValidator().validate(EMAIL_NULL, USERNAME_STUB, PASSWORD_STUB);
 
         assertThat(errors).contains(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL,
           CreateUserValidator.FIELD_EMAIL));
     }
 
     @Test public void shouldNotReturnEmailInvalidErrorIfEmailContainsPlusSign() throws Exception {
-        User user = new User();
-        user.setEmail("email+plus@domain.com");
-
-        List<FieldValidationError> errors = new CreateUserValidator().validate(user, PASSWORD_STUB);
+        List<FieldValidationError> errors = new CreateUserValidator().validate(EMAIL_WITH_PLUS_SIGN, USERNAME_STUB, PASSWORD_STUB);
 
         assertThat(errors).doesNotContain(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
           CreateUserValidator.FIELD_EMAIL));
@@ -96,47 +84,43 @@ public class CreateUserValidatorTest {
 
     //region Password
     @Test public void shouldReturnPasswordNullErrorIfPasswordIsNull() throws Exception {
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_NULL);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_NULL);
 
         assertThat(errors).contains(passwordIsNullError());
     }
 
     @Test public void shouldReturnPasswordIsTooLongErrorIfMoreThanTwentyCharacters() throws Exception {
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_TOO_LONG);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_TOO_LONG);
 
         assertThat(errors).contains(passwordTooLongError());
     }
 
     @Test public void shouldReturnPasswordIsTooShortErrorIfLessThanSixCharacters() throws Exception {
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_TOO_SHORT);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_TOO_SHORT);
 
         assertThat(errors).contains(passwordTooShortError());
     }
 
     @Test public void shouldReturnPasswordEqualsUsernameErrorIfIsEqualToUsername() throws Exception {
-
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), USERNAME_STUB);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, USERNAME_STUB);
 
         assertThat(errors).contains(passwordIsEqualToUsernameError());
     }
 
     @Test public void shouldReturnPasswordHasNotValidCharactersErrorIfContainsInvalidCharacters() throws Exception {
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_WITH_INVALID_CHARACTERS);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_WITH_INVALID_CHARACTERS);
 
         assertThat(errors).contains(passwordHasInvalidCharactersError());
     }
 
     @Test public void shouldNotReturnPasswordInvalidErrorIfPasswordHasValidCharaters() throws Exception {
         CreateUserValidator validator = new CreateUserValidator();
-        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_VALID);
+        List<FieldValidationError> errors = validator.validate(EMAIL_STUB, USERNAME_STUB, PASSWORD_VALID);
 
         assertThat(errors).doesNotContain(passwordHasInvalidCharactersError());
     }
@@ -187,50 +171,6 @@ public class CreateUserValidatorTest {
     private FieldValidationError usernameTooShortError() {
         return new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT,
           CreateUserValidator.FIELD_USERNAME);
-    }
-    //endregion
-
-    //region User constructors
-    private User userWithInvalidCharactersInUsername() {
-        User user = new User();
-        user.setUsername(USERNAME_WITH_INVALID_CHARACTERS);
-        return user;
-    }
-
-    private User userStub() {
-        User user = new User();
-        user.setUsername(USERNAME_STUB);
-        return user;
-    }
-
-    private User userWithNullEmail() {
-        User user = new User();
-        user.setEmail(EMAIL_NULL);
-        return user;
-    }
-
-    private User userWithInvalidEmail() {
-        User user = new User();
-        user.setEmail(EMAIL_INVALID_FORMAT);
-        return user;
-    }
-
-    private User userWithLongUsername() {
-        User user = new User();
-        user.setUsername(USERNAME_LONGER_THAN_MAXIMUM);
-        return user;
-    }
-
-    private User userWithNullUsername() {
-        User user = new User();
-        user.setUsername(USERNAME_NULL);
-        return user;
-    }
-
-    private User userWithShortUsername() {
-        User user = new User();
-        user.setUsername(USERNAME_SMALLER_THAN_MINIMUM);
-        return user;
     }
     //endregion
 }

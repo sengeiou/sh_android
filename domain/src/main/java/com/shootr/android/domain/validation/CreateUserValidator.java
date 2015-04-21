@@ -1,6 +1,5 @@
 package com.shootr.android.domain.validation;
 
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,26 +31,25 @@ public class CreateUserValidator {
         fieldValidationErrors = new ArrayList<>();
     }
 
-    public List<FieldValidationError> validate(User user, String password) {
-        validateEmail(user);
-        validateUsername(user);
-        validatePassword(user, password);
+    public List<FieldValidationError> validate(String email, String username, String password) {
+        validateEmail(email);
+        validateUsername(username);
+        validatePassword(username, password);
         return fieldValidationErrors;
     }
 
-    private void validateEmail(User user) {
-        validateEmailIsNotNull(user);
-        validateEmailFormat(user);
+    private void validateEmail(String email) {
+        validateEmailIsNotNull(email);
+        validateEmailFormat(email);
     }
 
-    private void validateEmailIsNotNull(User user) {
-        if (user.getEmail() == null) {
+    private void validateEmailIsNotNull(String email) {
+        if (email == null) {
             addError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL, CreateUserValidator.FIELD_EMAIL);
         }
     }
 
-    private void validateEmailFormat(User user) {
-        String email = user.getEmail();
+    private void validateEmailFormat(String email) {
         if (email != null) {
             Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
             boolean hasEmailFormat = emailPattern.matcher(email).matches();
@@ -62,15 +60,14 @@ public class CreateUserValidator {
     }
 
     //region Username
-    private void validateUsername(User user) {
-        validateUsernameIsNotNull(user);
-        validateUsernameHasMoreThanThreeCharacters(user);
-        validateUsernameHasLessThanTwentyCharacters(user);
-        validateUsernameHasTheCorrectFormat(user);
+    private void validateUsername(String username) {
+        validateUsernameIsNotNull(username);
+        validateUsernameHasMoreThanThreeCharacters(username);
+        validateUsernameHasLessThanTwentyCharacters(username);
+        validateUsernameHasTheCorrectFormat(username);
     }
 
-    private void validateUsernameHasTheCorrectFormat(User user) {
-        String username = user.getUsername();
+    private void validateUsernameHasTheCorrectFormat(String username) {
         if(username != null) {
             Pattern usernamePattern = Pattern.compile(USERNAME_PATTERN);
             boolean hasUsernameFormat = usernamePattern.matcher(username).matches();
@@ -80,33 +77,30 @@ public class CreateUserValidator {
         }
     }
 
-    private void validateUsernameIsNotNull(User user) {
-        String username = user.getUsername();
+    private void validateUsernameIsNotNull(String username) {
         if (username == null) {
             addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL, FIELD_USERNAME);
         }
     }
 
-    private void validateUsernameHasMoreThanThreeCharacters(User user) {
-        String username = user.getUsername();
+    private void validateUsernameHasMoreThanThreeCharacters(String username) {
         if (username != null && username.length() < USERNAME_MINIMUM_LENGTH) {
             addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT, FIELD_USERNAME);
         }
     }
 
-    private void validateUsernameHasLessThanTwentyCharacters(User user) {
-        String username = user.getUsername();
+    private void validateUsernameHasLessThanTwentyCharacters(String username) {
         if (username != null && username.length() > USERNAME_MAXIMUM_LENGTH) {
             addError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG, FIELD_USERNAME);
         }
     }
     //endregion
 
-    private void validatePassword(User user, String password) {
+    private void validatePassword(String username, String password) {
         validatePasswordNotNull(password);
         validatePasswordHasLesThanTwentyCharacters(password);
         validatePasswordHasMoreThanSixCharacters(password);
-        validatePasswordIsDifferentFromUsername(user, password);
+        validatePasswordIsDifferentFromUsername(username, password);
         validatePassWordHasNotInvalidCharacters(password);
     }
 
@@ -120,8 +114,8 @@ public class CreateUserValidator {
         }
     }
 
-    private void validatePasswordIsDifferentFromUsername(User user, String password) {
-        if(user.getUsername()!=null && user.getUsername().equals(password)){
+    private void validatePasswordIsDifferentFromUsername(String username, String password) {
+        if(username!=null && username.equals(password)){
             addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME, FIELD_PASSWORD);
         }
     }
