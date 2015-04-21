@@ -104,15 +104,18 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public String getEmail() {
-        return email.getText().toString();
+        String email = this.email.getText().toString();
+        return !email.isEmpty() ? email : null;
     }
 
     @Override public String getUsername() {
-        return username.getText().toString();
+        String username = this.username.getText().toString();
+        return !username.isEmpty() ? username : null;
     }
 
     @Override public String getPassword() {
-        return password.getText().toString();
+        String password = this.password.getText().toString();
+        return !password.isEmpty() ? password : null;
     }
 
     @Override public void showEmailError(String errorMessage) {

@@ -38,9 +38,10 @@ public class CreateUserValidator {
         return fieldValidationErrors;
     }
 
+    //region Email
     private void validateEmail(String email) {
-        validateEmailIsNotNull(email);
         validateEmailFormat(email);
+        validateEmailIsNotNull(email);
     }
 
     private void validateEmailIsNotNull(String email) {
@@ -58,13 +59,14 @@ public class CreateUserValidator {
             }
         }
     }
+    //endregion
 
     //region Username
     private void validateUsername(String username) {
-        validateUsernameIsNotNull(username);
+        validateUsernameHasTheCorrectFormat(username);
         validateUsernameHasMoreThanThreeCharacters(username);
         validateUsernameHasLessThanTwentyCharacters(username);
-        validateUsernameHasTheCorrectFormat(username);
+        validateUsernameIsNotNull(username);
     }
 
     private void validateUsernameHasTheCorrectFormat(String username) {
@@ -96,12 +98,13 @@ public class CreateUserValidator {
     }
     //endregion
 
+    //region Password
     private void validatePassword(String username, String password) {
-        validatePasswordNotNull(password);
+        validatePassWordHasNotInvalidCharacters(password);
+        validatePasswordIsDifferentFromUsername(username, password);
         validatePasswordHasLesThanTwentyCharacters(password);
         validatePasswordHasMoreThanSixCharacters(password);
-        validatePasswordIsDifferentFromUsername(username, password);
-        validatePassWordHasNotInvalidCharacters(password);
+        validatePasswordNotNull(password);
     }
 
     private void validatePassWordHasNotInvalidCharacters(String password) {
@@ -137,6 +140,7 @@ public class CreateUserValidator {
             addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL, FIELD_PASSWORD);
         }
     }
+    //endregion
 
     private void addError(String code, int field) {
         fieldValidationErrors.add(new FieldValidationError(code, field));
