@@ -1,21 +1,31 @@
 package com.shootr.android.ui.activities.registro;
 
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
+import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
+import com.shootr.android.ui.views.EmailRegistrationView;
+import javax.inject.Inject;
 
-public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity {
-
+public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
     @InjectView(R.id.registration_email) EditText email;
     @InjectView(R.id.registration_username) EditText username;
     @InjectView(R.id.registration_password) EditText password;
+    @InjectView(R.id.registration_create_button) View createButton;
+    @InjectView(R.id.registration_create_progress) View progress;
 
+    @Inject EmailRegistrationPresenter presenter;
+
+    //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-
+        /* no-op */
     }
 
     @Override protected int getLayoutResource() {
@@ -27,10 +37,37 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected void initializePresenter() {
-
+        presenter.initialize(this);
     }
 
     @Override protected boolean requiresUserLogin() {
         return false;
+    }
+    //endregion
+
+    @OnClick(R.id.registration_create_button) //
+    public void onCreateAccountClick() {
+        presenter.onCreateAccount();
+    }
+
+    @Override public void showLoading() {
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        progress.setVisibility(View.GONE);
+    }
+
+    @Override public void showError(String message) {
+        //TODO
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override public void showCreateButton() {
+        createButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideCreateButton() {
+        createButton.setVisibility(View.INVISIBLE);
     }
 }
