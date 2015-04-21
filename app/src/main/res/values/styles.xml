@@ -130,8 +130,11 @@
     </style>
 
     <style name="LoginEmailButton">
-        <item name="android:background">@drawable/btn_gray</item>
-        <item name="android:textColor">@color/gray_30</item>
+        <item name="android:background">@drawable/background_btn_login</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/gray_40</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="LoginSessionButton">
