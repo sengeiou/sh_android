@@ -2,9 +2,15 @@ package com.shootr.android.ui.activities.registro;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,6 +21,8 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
@@ -24,6 +32,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @InjectView(R.id.registration_password) EditText password;
     @InjectView(R.id.registration_create_button) View createButton;
     @InjectView(R.id.registration_create_progress) View progress;
+    @InjectView(R.id.registration_legal_disclaimer) TextView disclaimer;
 
     @Inject EmailRegistrationPresenter presenter;
 
@@ -38,6 +47,54 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override protected void initializeViews() {
         ButterKnife.inject(this);
+        setupDisclaimerLinks();
+    }
+
+    private void setupDisclaimerLinks() {
+        String originalDisclaimerText = getString(R.string.activity_registration_legal_disclaimer);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(originalDisclaimerText);
+
+        String termsPatternText = "\\(terms-of-service\\)";
+        String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
+        final View.OnClickListener termsClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Toast.makeText(EmailRegistrationActivity.this, "Terms of Service", Toast.LENGTH_SHORT).show();
+            }
+        };
+        replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
+
+        String privacyPatternText = "\\(privacy-policy\\)";
+        String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
+        final View.OnClickListener privacyClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Toast.makeText(EmailRegistrationActivity.this, "Privacy Policy", Toast.LENGTH_SHORT).show();
+            }
+        };
+        replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
+
+        disclaimer.setText(spannableStringBuilder);
+        disclaimer.setMovementMethod(new LinkMovementMethod());
+    }
+
+    private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder, String patternText,
+      String replaceText, final View.OnClickListener onClick) {
+        Pattern termsPattern = Pattern.compile(patternText);
+        Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
+        if (termsMatcher.find()) {
+            int termsStart = termsMatcher.start();
+            int termsEnd = termsMatcher.end();
+            spannableBuilder.replace(termsStart, termsEnd, replaceText);
+
+            CharacterStyle termsSpan = new ClickableSpan() {
+                @Override public void onClick(View widget) {
+                    onClick.onClick(widget);
+                }
+            };
+            spannableBuilder.setSpan(termsSpan,
+              termsStart,
+              termsStart + replaceText.length(),
+              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
     @Override protected void initializePresenter() {

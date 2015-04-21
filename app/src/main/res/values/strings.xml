@@ -196,7 +196,9 @@
     <string name="activity_registration_email_hint">Email</string>
     <string name="activity_registration_username_hint">Username</string>
     <string name="activity_registration_password_hint">Password</string>
-    <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the Privacy Policy and agree to the Terms of Service.</string>
+    <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the (privacy-policy) and agree to the (terms-of-service).</string>
+    <string name="activity_registration_legal_disclaimer_privacy_policy">Privacy Policy</string>
+    <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
     <string name="registration_create_button_text">Create account</string>
     <string name="account_confirmation_title">Is this correct?</string>
 
