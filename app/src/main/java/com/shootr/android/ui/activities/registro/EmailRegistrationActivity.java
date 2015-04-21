@@ -70,4 +70,16 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Override public void hideCreateButton() {
         createButton.setVisibility(View.INVISIBLE);
     }
+
+    @Override public String getEmail() {
+        return email.getText().toString();
+    }
+
+    @Override public String getUsername() {
+        return username.getText().toString();
+    }
+
+    @Override public String getPassword() {
+        return password.getText().toString();
+    }
 }

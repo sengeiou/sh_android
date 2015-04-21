@@ -7,4 +7,10 @@ public interface EmailRegistrationView extends DataTransferView{
     void showCreateButton();
 
     void hideCreateButton();
+
+    String getEmail();
+
+    String getUsername();
+
+    String getPassword();
 }
