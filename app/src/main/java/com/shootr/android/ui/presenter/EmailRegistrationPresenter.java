@@ -37,15 +37,21 @@ public class EmailRegistrationPresenter implements Presenter {
 
     //region Interaction methods
     public void usernameFocusRemoved() {
-        validateField(CreateUserValidator.FIELD_USERNAME);
+        if(emailRegistrationView.getUsername() != null) {
+            validateField(CreateUserValidator.FIELD_USERNAME);
+        }
     }
 
     public void emailFocusRemoved() {
-        validateField(CreateUserValidator.FIELD_EMAIL);
+        if(emailRegistrationView.getEmail() != null) {
+            validateField(CreateUserValidator.FIELD_EMAIL);
+        }
     }
 
     public void passwordFocusRemoved() {
-        validateField(CreateUserValidator.FIELD_PASSWORD);
+        if(emailRegistrationView.getPassword() != null) {
+            validateField(CreateUserValidator.FIELD_PASSWORD);
+        }
     }
 
     public void createAccount() {
