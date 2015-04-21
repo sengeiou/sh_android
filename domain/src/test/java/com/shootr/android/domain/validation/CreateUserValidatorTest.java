@@ -81,6 +81,17 @@ public class CreateUserValidatorTest {
         assertThat(errors).contains(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL,
           CreateUserValidator.FIELD_EMAIL));
     }
+
+    @Test public void shouldNotReturnEmailInvalidErrorIfEmailContainsPlusSign() throws Exception {
+        User user = new User();
+        user.setEmail("email+plus@domain.com");
+
+        List<FieldValidationError> errors = new CreateUserValidator().validate(user, PASSWORD_STUB);
+
+        assertThat(errors).doesNotContain(new FieldValidationError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT,
+          CreateUserValidator.FIELD_EMAIL));
+    }
+
     //endregion
 
     //region Password
