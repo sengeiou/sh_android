@@ -43,15 +43,6 @@ public class WelcomeLoginActivity extends BaseToolbarActivity {
     @InjectView(R.id.welcome_arrow_right) View mArrowRight;
     @InjectView(R.id.welcome_indicators) WelcomeIndicator mIndicator;
 
-    // Login views
-    @InjectView(R.id.login_icon) ImageView mLoginIcon;
-    @InjectView(R.id.login_btn_facebook) TextView mTitle;
-//    @InjectView(R.id.login_subtitle) TextView mSubtitle;
-//    @InjectView(R.id.login_btn_facebook) LoginButton mButtonFacebook;
-    @InjectView(R.id.login_btn_email) Button mButtonEmail;
-    @InjectView(R.id.login_btn_login) TextView mButtonLogin;
-
-
     private Context mContext = this;
     private WelcomePagerAdapter mAdapter;
 //    private UiLifecycleHelper uiHelper;
