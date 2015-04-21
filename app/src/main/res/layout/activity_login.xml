@@ -74,15 +74,16 @@
                 android:layout_marginRight="56dp"
                 android:text="@string/activity_login_register_facebook"/>
 
-            <Button
+            <TextView
                 android:id="@+id/login_btn_email"
+
                 style="@style/LoginEmailButton"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginLeft="56dp"
-                android:layout_marginRight="56dp"
-                android:visibility="gone"
+                android:layout_marginLeft="@dimen/keyline_2"
+                android:layout_marginRight="@dimen/keyline_2"
                 android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/activity_login_register_email"/>
 
             <TextView

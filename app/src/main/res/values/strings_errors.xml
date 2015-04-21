@@ -35,4 +35,19 @@
     <string name="error_image_upload">Error trying to upload image</string>
     <string name="error_message_update_required">Current version too old</string>
 
+    <!-- Create account -->
+    <string name="error_message_registration_username_duplicated">Username already in use</string>
+    <string name="error_message_registration_username_empty">3 to 20 characters</string>
+    <string name="error_message_registration_username_too_short">3 to 20 characters</string>
+    <string name="error_message_registration_username_too_long">3 to 20 characters</string>
+    <string name="error_message_registration_username_invalid">Invalid characters</string>
+    <string name="error_message_registration_email_existing">Email already in use</string>
+    <string name="error_message_registration_email_invalid">Invalid Email</string>
+    <string name="error_message_registration_email_empty">Enter your email</string>
+    <string name="error_message_registration_password_null">6 to 20 characters</string>
+    <string name="error_message_registration_password_too_short">6 to 20 characters</string>
+    <string name="error_message_registration_password_too_long">6 to 20 characters</string>
+    <string name="error_message_registration_password_equals_username">Password and username must not match</string>
+    <string name="error_message_registration_password_invalid">Invalid characters</string>
+
 </resources>

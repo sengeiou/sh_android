@@ -1,0 +1,114 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+        <com.shootr.android.ui.widgets.FloatLabelLayout android:id="@+id/registration_email_label"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginTop="16dp"
+          app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+
+            <AutoCompleteTextView android:id="@+id/registration_email"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/activity_registration_email_hint"
+              android:imeOptions="actionNext"
+              android:inputType="textEmailAddress"
+              android:lines="1"
+              android:nextFocusDown="@+id/registration_username"
+              android:singleLine="true" />
+
+        </com.shootr.android.ui.widgets.FloatLabelLayout>
+
+        <com.shootr.android.ui.widgets.FloatLabelLayout android:id="@+id/registration_username_label"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/registration_email_label"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginTop="16dp"
+          app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+
+            <EditText android:id="@+id/registration_username"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/activity_registration_username_hint"
+              android:imeOptions="actionNext"
+              android:inputType="textNoSuggestions"
+              android:lines="1"
+              android:maxLength="20"
+              android:nextFocusDown="@+id/profile_edit_username"
+              android:singleLine="true" />
+
+        </com.shootr.android.ui.widgets.FloatLabelLayout>
+
+        <com.shootr.android.ui.widgets.FloatLabelLayout android:id="@+id/registration_password_label"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/registration_username_label"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginTop="16dp"
+          app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+
+            <EditText android:id="@+id/registration_password"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:fontFamily="sans-serif"
+              android:hint="@string/activity_registration_password_hint"
+              android:imeOptions="actionDone"
+              android:inputType="textPassword"
+              android:lines="1"
+              android:maxLength="20"
+              android:singleLine="true" />
+
+        </com.shootr.android.ui.widgets.FloatLabelLayout>
+
+        <FrameLayout android:id="@+id/registration_create_button_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:layout_below="@+id/registration_password_label"
+          android:animateLayoutChanges="true"
+          android:paddingRight="16dp">
+
+            <TextView android:id="@+id/registration_create_button"
+              style="@style/BorderlessButton.Primary"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="?selectableItemBackground"
+              android:clickable="true"
+              android:text="@string/registration_create_button_text"
+              android:textSize="14sp" />
+
+            <ProgressBar android:id="@+id/registration_create_progress"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:indeterminate="true"
+              android:visibility="gone" />
+
+        </FrameLayout>
+
+        <TextView android:id="@+id/registration_legal_disclaimer"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/registration_create_button_container"
+          android:layout_gravity="bottom"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginTop="32dp"
+          android:gravity="center_horizontal"
+          android:text="@string/activity_registration_legal_disclaimer"
+          android:textColor="@color/gray_50"
+          android:textSize="14sp" />
+
+    </RelativeLayout>
+
+</ScrollView>

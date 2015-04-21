@@ -105,14 +105,13 @@ public class TimelineDtoFactory {
     }
 
     public GenericDto getTimelineOperationDto(final TimelineParameters parameters) {
-        FilterDto timelineFilter = and(or(ShotTable.ID_USER).isIn(parameters.getAllUserIds())).and(ShotTable.ID_EVENT)
-          .isEqualTo(parameters.getEventId())
-          .and(ShotTable.TYPE)
-          .isNotEqualTo(null)
-          .and(ShotTable.CSYS_MODIFIED)
-          .greaterThan(parameters.getSinceDate())
-          .and(ShotTable.CSYS_DELETED)
-          .isEqualTo(null)
+        FilterDto timelineFilter = and( //
+          or(ShotTable.ID_USER).isIn(parameters.getAllUserIds()) //
+        ) //
+          .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
+          .and(ShotTable.TYPE).isNotEqualTo(null) //
+          .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
+          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED)
           .matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
               @Override public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
@@ -125,14 +124,18 @@ public class TimelineDtoFactory {
           })
           .build();
 
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(ShotTable.TABLE)
-          .items(parameters.getLimit())
-          .totalItems(parameters.getLimit())
-          .filter(timelineFilter)
+        MetadataDto md = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(ShotTable.TABLE) //
+          .items(parameters.getLimit()) //
+          .totalItems(parameters.getLimit()) //
+          .filter(timelineFilter) //
           .build();
 
-        OperationDto op = new Builder().metadata(md).putData(shotEntityMapper.toDto(null)).build();
+        OperationDto op = new Builder() //
+          .metadata(md) //
+          .putData(shotEntityMapper.toDto(null)) //
+          .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, op);
     }

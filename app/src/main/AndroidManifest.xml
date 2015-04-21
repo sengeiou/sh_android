@@ -56,14 +56,11 @@
           android:launchMode="singleTop"
           android:theme="@style/ShootrTheme.NoActionBar">
         </activity>
-        <!--<activity
-            android:name=".ui.activities.registro.EmailRegistrationActivity"
-            android:label="@string/title_activity_registro_email">
-        </activity>
         <activity
-            android:name=".ui.activities.registro.FacebookRegistroActivity"
-            android:label="@string/title_activity_registro_email">
-        </activity>-->
+            android:name=".ui.activities.registro.EmailRegistrationActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:label="@string/title_activity_registration_email">
+        </activity>
         <activity
           android:name=".ui.activities.registro.EmailLoginActivity"
           android:label="@string/title_activity_login_email">
