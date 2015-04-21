@@ -31,12 +31,16 @@ public abstract class BaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         injectDependencies();
         setupUpdateWarning();
-        if (sessionHandler.hasSession()) {
+        if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews();
         } else {
             redirectToLogin();
         }
+    }
+
+    protected boolean requiresUserLogin() {
+        return true;
     }
 
     @Override protected void onPostCreate(Bundle savedInstanceState) {
