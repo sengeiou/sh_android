@@ -104,10 +104,9 @@
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp"
           android:layout_marginTop="32dp"
-          android:fontFamily="sans-serif-light"
           android:gravity="center_horizontal"
           android:text="@string/activity_registration_legal_disclaimer"
-          android:textColor="@color/gray_30"
+          android:textColor="@color/gray_50"
           android:textSize="14sp" />
 
     </RelativeLayout>
