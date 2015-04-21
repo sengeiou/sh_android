@@ -1,5 +1,7 @@
 package com.shootr.android.ui.activities.registro;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -128,6 +130,18 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void showPasswordError(String errorMessage) {
         password.setError(errorMessage);
+    }
+
+    @Override public void askEmailConfirmation() {
+        new AlertDialog.Builder(this).setTitle(getString(R.string.account_confirmation_title))
+          .setMessage(getEmail())
+          .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmAccountCreation();
+              }
+          })
+          .setNegativeButton(R.string.no, null)
+          .show();
     }
     //endregion
 }

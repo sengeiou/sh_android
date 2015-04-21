@@ -49,6 +49,12 @@ public class EmailRegistrationPresenter implements Presenter {
     }
 
     public void createAccount() {
+        if(validateField(CreateUserValidator.FIELD_EMAIL)) {
+            emailRegistrationView.askEmailConfirmation();
+        }
+    }
+
+    public void confirmAccountCreation() {
         showViewLoading();
         String email = emailRegistrationView.getEmail();
         String username = emailRegistrationView.getUsername();
@@ -123,7 +129,7 @@ public class EmailRegistrationPresenter implements Presenter {
     }
     //endregion
 
-    private void validateField(int field) {
+    private Boolean validateField(int field) {
         String email = emailRegistrationView.getEmail();
         String username = emailRegistrationView.getUsername();
         String password = emailRegistrationView.getPassword();
@@ -135,6 +141,7 @@ public class EmailRegistrationPresenter implements Presenter {
             }
         }
         showValidationErrors(fieldErrors);
+        return fieldErrors.size()==0;
     }
 
     private void showViewLoading() {

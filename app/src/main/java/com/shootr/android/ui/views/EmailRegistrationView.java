@@ -19,4 +19,7 @@ public interface EmailRegistrationView extends DataTransferView{
     void showUsernameError(String errorMessage);
 
     void showPasswordError(String errorMessage);
+
+    void askEmailConfirmation();
+
 }
