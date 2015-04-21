@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities.registro;
 
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,6 +45,14 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         return false;
     }
     //endregion
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @OnClick(R.id.registration_create_button) //
     public void onCreateAccountClick() {
