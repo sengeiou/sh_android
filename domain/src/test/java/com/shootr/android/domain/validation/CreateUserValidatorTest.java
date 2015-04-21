@@ -22,6 +22,7 @@ public class CreateUserValidatorTest {
     private static final String USERNAME_STUB = "john_doe";
     private static final String USERNAME_WITH_INVALID_CHARACTERS = "Us er ñame ¬~#@|(/&%$·";
     private static final String PASSWORD_WITH_INVALID_CHARACTERS = "pass ¬~#@|(/&%$·";
+    private static final String PASSWORD_VALID = "123456";
     //endregion
 
     //region Username
@@ -116,12 +117,19 @@ public class CreateUserValidatorTest {
     }
 
     @Test public void shouldReturnPasswordHasNotValidCharactersErrorIfContainsInvalidCharacters() throws Exception {
-
         CreateUserValidator validator = new CreateUserValidator();
         List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_WITH_INVALID_CHARACTERS);
 
         assertThat(errors).contains(passwordHasInvalidCharactersError());
     }
+
+    @Test public void shouldNotReturnPasswordInvalidErrorIfPasswordHasValidCharaters() throws Exception {
+        CreateUserValidator validator = new CreateUserValidator();
+        List<FieldValidationError> errors = validator.validate(userStub(), PASSWORD_VALID);
+
+        assertThat(errors).doesNotContain(passwordHasInvalidCharactersError());
+    }
+
     //endregion
 
     //region Expected error constructors
