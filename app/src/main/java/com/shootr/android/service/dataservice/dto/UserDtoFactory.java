@@ -4,6 +4,7 @@ import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
@@ -45,6 +46,8 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
+    private static final String USER_SIGN_IN = "UserSignIn";
+    private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -253,5 +256,17 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
+    }
+
+    public GenericDto getCreateAccountOperationDto(UserCreateAccountEntity userCreateAccountEntity) {
+        MetadataDto metadataDto = new MetadataDto.Builder().entity(USER_SIGN_IN)
+          .putKey(UserTable.ID, null)
+          .operation(ServiceConstants.OPERATION_CREATE)
+          .build();
+
+        Map<String, Object> userCreateAccountEntityMap = userMapper.toDto(userCreateAccountEntity);
+        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
     }
 }

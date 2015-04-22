@@ -25,10 +25,12 @@ public class ShootrUserServiceTest {
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock CheckinGateway checkinGateway;
+    @Mock CreateAccountGateway createAccountGateway;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway);
+        shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
+          createAccountGateway);
     }
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedIn() throws Exception {

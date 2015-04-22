@@ -3,6 +3,7 @@ package com.shootr.android.service.dataservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -501,6 +502,11 @@ public class ShootrDataService implements ShootrService {
         GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
         GenericDto responseDto = postRequest(checkinDto);
         // We are done... right? Any errors should have been thrown already. I'm not expecting any value
+    }
+
+    @Override public void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException{
+        GenericDto createAccountDto = userDtoFactory.getCreateAccountOperationDto(userCreateAccountEntity);
+        GenericDto responseDto = postRequest(createAccountDto);
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
