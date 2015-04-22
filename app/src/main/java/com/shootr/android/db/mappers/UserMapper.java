@@ -136,7 +136,7 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
-    public  Map<String, Object> toDto(UserCreateAccountEntity userCreateAccountEntity) {
+    public  Map<String, Object> toCreateAccountDto(UserCreateAccountEntity userCreateAccountEntity) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.EMAIL, userCreateAccountEntity == null ? null : userCreateAccountEntity.getEmail());
         dto.put(UserTable.SESSION_TOKEN, userCreateAccountEntity == null ? null : userCreateAccountEntity.getSessionToken());
