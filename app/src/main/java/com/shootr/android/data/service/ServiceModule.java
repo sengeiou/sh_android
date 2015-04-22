@@ -19,4 +19,8 @@ public class ServiceModule {
     @Provides CreateAccountGateway provideCreateAccountGateway(DataserviceCreateAccountGateway dataserviceCreateAccountGateway) {
         return dataserviceCreateAccountGateway;
     }
+
+    @Provides LoginGateway provideCheckinGateway(DataserviceLoginGateway dataserviceLoginGateway) {
+        return dataserviceLoginGateway;
+    }
 }

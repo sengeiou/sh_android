@@ -1,10 +1,8 @@
 package com.shootr.android.data.service;
 
 import com.shootr.android.data.entity.UserCreateAccountEntity;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.service.user.CreateAccountGateway;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.util.SecurityUtils;
 import java.io.IOException;
 import javax.inject.Inject;
 
