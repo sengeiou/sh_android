@@ -264,7 +264,7 @@ public class UserDtoFactory {
           .operation(ServiceConstants.OPERATION_CREATE)
           .build();
 
-        Map<String, Object> userCreateAccountEntityMap = userMapper.toDto(userCreateAccountEntity);
+        Map<String, Object> userCreateAccountEntityMap = userMapper.toCreateAccountDto(userCreateAccountEntity);
         OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
