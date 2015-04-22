@@ -2,6 +2,7 @@ package com.shootr.android.data.service;
 
 import com.shootr.android.domain.service.user.CheckinGateway;
 import com.shootr.android.domain.service.user.CreateAccountGateway;
+import com.shootr.android.domain.service.user.LoginGateway;
 import dagger.Module;
 import dagger.Provides;
 

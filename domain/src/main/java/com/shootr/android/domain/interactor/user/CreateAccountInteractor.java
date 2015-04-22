@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.User;
+import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -8,6 +8,7 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import com.shootr.android.domain.validation.CreateUserValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -18,12 +19,13 @@ public class CreateAccountInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
+    private final ShootrUserService shootrUserService;
+
     private String email;
     private String username;
     private String password;
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
-    private final ShootrUserService shootrUserService;
 
     @Inject public CreateAccountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       ShootrUserService shootrUserService) {
@@ -43,23 +45,21 @@ public class CreateAccountInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        User user = createUserFromParameters();
-
-        if (validateUserAndPassword(user, password)) {
-            try{
-                shootrUserService.createAccount(user.getUsername(), user.getEmail(),password);
+        if (validateInput()) {
+            try {
+                shootrUserService.createAccount(username, email, password);
+                shootrUserService.performLogin(username,password);
                 notifyLoaded();
-            }catch (ShootrException shootrException){
+            } catch (ShootrException shootrException) {
                 handleServerError(shootrException);
             }
         }
     }
 
 
-    private boolean validateUserAndPassword(User user, String password) {
-        List<FieldValidationError> validationErrors = new CreateUserValidator().validate(user.getEmail(),
-          user.getUsername(),
-          password);
+
+    private boolean validateInput() {
+        List<FieldValidationError> validationErrors = new CreateUserValidator().validate(email, username, password);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
@@ -82,13 +82,6 @@ public class CreateAccountInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
-    }
-
-    private User createUserFromParameters() {
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        return user;
     }
 
     private void handleServerError(ShootrException e) {
