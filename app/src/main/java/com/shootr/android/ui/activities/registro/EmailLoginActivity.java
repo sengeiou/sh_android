@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities.registro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -15,6 +16,7 @@ import com.dd.CircularProgressButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
+import com.shootr.android.ui.activities.TimelineActivity;
 import com.shootr.android.ui.presenter.EmailLoginPresenter;
 import com.shootr.android.ui.views.EmailLoginView;
 import java.util.ArrayList;
@@ -66,7 +68,10 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     public void goToTimeline(){
-        Toast.makeText(this, "YAY!", Toast.LENGTH_SHORT).show();
+        finish();
+        Intent i = new Intent(this,TimelineActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 
     @Override public String getUsernameOrEmail() {
@@ -85,6 +90,20 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         if(loginButton.getProgress()==BUTTON_ERROR){
             loginButton.setProgress(BUTTON_NORMAL);
         }
+    }
+
+    @Override public void setLoginButtonLoading(boolean loading) {
+        loginButton.setIndeterminateProgressMode(true);
+        loginButton.setProgress(loading ? BUTTON_LOADING : BUTTON_NORMAL);
+    }
+
+    @Override public void emailButtonShowsError() {
+        setLoginButtonLoading(false);
+        loginButton.setProgress(BUTTON_ERROR);
+    }
+
+    @Override public void emailButtonPrintsError() {
+        loginButton.setError(getString(R.string.activity_login_email_error_credentials));
     }
 
     @Override public void emailButtonIsEnabled() {

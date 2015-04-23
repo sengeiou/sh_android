@@ -13,4 +13,10 @@ public interface EmailLoginView {
     void emailButtonIsEnabled();
 
     void emailButtonLoginStateHasChanged();
+
+    void setLoginButtonLoading(boolean b);
+
+    void emailButtonShowsError();
+
+    void emailButtonPrintsError();
 }
