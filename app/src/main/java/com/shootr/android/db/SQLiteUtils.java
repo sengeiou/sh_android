@@ -23,7 +23,7 @@ public class SQLiteUtils {
             + UserTable.EMAIL + " VARCHAR(255),"
             + UserTable.NAME + " VARCHAR(255),"
             + UserTable.PHOTO + " VARCHAR(1024) NULL,"
-            + UserTable.POINTS+" INT NOT NULL,"
+            + UserTable.POINTS+" INT NULL,"
             + UserTable.NUM_FOLLOWINGS+" INT NOT NULL,"
             + UserTable.NUM_FOLLOWERS+" INT NOT NULL,"
             + UserTable.WEBSITE+" VARCHAR(255),"

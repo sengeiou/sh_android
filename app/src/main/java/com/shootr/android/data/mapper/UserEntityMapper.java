@@ -36,7 +36,13 @@ public class UserEntityMapper {
         user.setFollowing(isFollowing);
 
         user.setStatus(userEntity.getStatus());
-        user.setCheckedIn(userEntity.getCheckIn() == 1);
+
+        if(userEntity.getCheckIn() == null){
+            user.setCheckedIn(false);
+        }else{
+            user.setCheckedIn(userEntity.getCheckIn() == 1);
+        }
+
 
         return user;
     }
@@ -84,5 +90,9 @@ public class UserEntityMapper {
 
     public User transform(UserEntity user, Long idCurrentUser) {
         return transform(user, idCurrentUser, false, false);
+    }
+
+    public User transform(UserEntity user) {
+        return transform(user, -1L, false, false);
     }
 }

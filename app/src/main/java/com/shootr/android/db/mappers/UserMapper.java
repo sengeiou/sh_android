@@ -2,9 +2,10 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.shootr.android.data.entity.UserCreateAccountEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
-import com.shootr.android.data.entity.UserEntity;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
@@ -135,7 +136,24 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
+    public  Map<String, Object> toCreateAccountDto(UserCreateAccountEntity userCreateAccountEntity) {
+        Map<String, Object> dto = new HashMap<>();
+        dto.put(UserTable.EMAIL, userCreateAccountEntity == null ? null : userCreateAccountEntity.getEmail());
+        dto.put(UserTable.SESSION_TOKEN, userCreateAccountEntity == null ? null : userCreateAccountEntity.getSessionToken());
+        dto = fillDtoWithCommonFieldsForAccountCreation(dto, userCreateAccountEntity);
+        return dto;
+    }
 
+    public Map<String,Object> fillDtoWithCommonFieldsForAccountCreation(Map<String, Object> dto, UserCreateAccountEntity userCreateAccountEntity){
+        dto.put(UserTable.ID, userCreateAccountEntity == null ? null : userCreateAccountEntity.getIdUser());
+        dto.put(UserTable.USER_NAME, userCreateAccountEntity == null ? null : userCreateAccountEntity.getUserName());
+        dto.put(UserTable.NAME, userCreateAccountEntity == null ? null : userCreateAccountEntity.getName());
+        dto.put(UserTable.SESSION_TOKEN, userCreateAccountEntity == null ? null : userCreateAccountEntity.getSessionToken());
+        dto.put(UserTable.EMAIL, userCreateAccountEntity == null ? null : userCreateAccountEntity.getEmail());
+        dto.put(UserTable.PASSWORD, userCreateAccountEntity == null ? null : userCreateAccountEntity.getHashedPassword());
+        setSynchronizedtoDto(userCreateAccountEntity, dto);
+        return dto;
+    }
 
 
     public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
