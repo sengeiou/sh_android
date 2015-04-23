@@ -1,6 +1,8 @@
 package com.shootr.android.ui.presenter;
 
-import android.text.TextUtils;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.PerformEmailLoginInteractor;
 import com.shootr.android.ui.views.EmailLoginView;
 import javax.inject.Inject;
 
@@ -8,7 +10,10 @@ public class EmailLoginPresenter implements Presenter {
 
     private EmailLoginView emailLoginView;
 
-    @Inject public EmailLoginPresenter() {
+    private final PerformEmailLoginInteractor emailLoginInteractor;
+
+    @Inject public EmailLoginPresenter(PerformEmailLoginInteractor emailLoginInteractor) {
+        this.emailLoginInteractor = emailLoginInteractor;
     }
 
     protected void setView(EmailLoginView emailLoginView){
@@ -20,7 +25,30 @@ public class EmailLoginPresenter implements Presenter {
     }
 
     public void attempLogin(){
-        emailLoginView.goToTimeline();
+        emailLoginView.setLoginButtonLoading(true);
+        emailLoginInteractor.attempLogin(emailLoginView.getUsernameOrEmail(),
+          emailLoginView.getPassword(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  emailLoginView.goToTimeline();
+              }
+          },
+          new Interactor.ErrorCallback() {
+
+              @Override public void onError(ShootrException error) {
+                  stopLoadingLoginButton();
+                  showErrorsInEmailLoginButton();
+              }
+          });
+    }
+
+    private void stopLoadingLoginButton() {
+        emailLoginView.emailButtonIsDisabled();
+        emailLoginView.emailButtonShowsError();
+    }
+
+    private void showErrorsInEmailLoginButton() {
+        emailLoginView.emailButtonPrintsError();
     }
 
     @Override public void resume() {
@@ -42,6 +70,5 @@ public class EmailLoginPresenter implements Presenter {
             emailLoginView.emailButtonIsEnabled();
             emailLoginView.emailButtonLoginStateHasChanged();
         }
-
     }
 }
