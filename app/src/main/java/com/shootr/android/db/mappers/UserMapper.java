@@ -159,7 +159,11 @@ public class UserMapper extends GenericMapper {
     public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
         UserEntity user = new UserEntity();
         user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
-        user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
+        if (!c.isNull(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID))) {
+            user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
+        } else {
+            user.setFavoriteTeamId(null);
+        }
         user.setFavoriteTeamName(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_NAME)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
