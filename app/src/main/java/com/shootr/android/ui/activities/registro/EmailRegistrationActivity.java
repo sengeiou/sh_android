@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
@@ -113,6 +114,12 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
             spannableBuilder.replace(termsStart, termsEnd, replaceText);
 
             CharacterStyle termsSpan = new ClickableSpan() {
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                }
+
                 @Override public void onClick(View widget) {
                     onClick.onClick(widget);
                 }
