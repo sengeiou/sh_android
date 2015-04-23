@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -8,7 +7,6 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import com.shootr.android.domain.validation.CreateUserValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -48,15 +46,13 @@ public class CreateAccountInteractor implements Interactor {
         if (validateInput()) {
             try {
                 shootrUserService.createAccount(username, email, password);
-                shootrUserService.performLogin(username,password);
+                shootrUserService.performLogin(username, password);
                 notifyLoaded();
             } catch (ShootrException shootrException) {
                 handleServerError(shootrException);
             }
         }
     }
-
-
 
     private boolean validateInput() {
         List<FieldValidationError> validationErrors = new CreateUserValidator().validate(email, username, password);
