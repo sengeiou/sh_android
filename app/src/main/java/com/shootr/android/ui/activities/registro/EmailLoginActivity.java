@@ -7,7 +7,6 @@ import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -82,32 +81,30 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         return password.getText().toString();
     }
 
-    @Override public void emailButtonIsDisabled() {
-        loginButton.setEnabled(false);
-    }
-
-    @Override public void emailButtonLoginStateHasChanged() {
-        if(loginButton.getProgress()==BUTTON_ERROR){
-            loginButton.setProgress(BUTTON_NORMAL);
-        }
-    }
-
-    @Override public void setLoginButtonLoading(boolean loading) {
+    @Override public void showLoading() {
         loginButton.setIndeterminateProgressMode(true);
-        loginButton.setProgress(loading ? BUTTON_LOADING : BUTTON_NORMAL);
+        loginButton.setProgress(BUTTON_LOADING);
     }
 
-    @Override public void emailButtonShowsError() {
-        setLoginButtonLoading(false);
+    @Override public void hideLoading() {
+        loginButton.setProgress(BUTTON_NORMAL);
+    }
+
+    @Override public void showError(String errorMessage) {
+        loginButton.setErrorText(errorMessage);
         loginButton.setProgress(BUTTON_ERROR);
     }
 
-    @Override public void emailButtonPrintsError() {
-        loginButton.setError(getString(R.string.activity_login_email_error_credentials));
+    @Override public void disableLoginButton() {
+        loginButton.setEnabled(false);
     }
 
-    @Override public void emailButtonIsEnabled() {
+    @Override public void enableLoginButton() {
         loginButton.setEnabled(true);
+    }
+
+    @Override public void hideError() {
+        loginButton.setProgress(BUTTON_NORMAL);
     }
 
     @Override protected boolean requiresUserLogin() {
