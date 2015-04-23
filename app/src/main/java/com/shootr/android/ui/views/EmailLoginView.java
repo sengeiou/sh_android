@@ -1,6 +1,8 @@
 package com.shootr.android.ui.views;
 
-public interface EmailLoginView {
+import com.shootr.android.ui.views.base.DataTransferView;
+
+public interface EmailLoginView extends DataTransferView {
 
     void goToTimeline();
 
@@ -8,15 +10,9 @@ public interface EmailLoginView {
 
     String getPassword();
 
-    void emailButtonIsDisabled();
+    void disableLoginButton();
 
-    void emailButtonIsEnabled();
+    void enableLoginButton();
 
-    void emailButtonLoginStateHasChanged();
-
-    void setLoginButtonLoading(boolean b);
-
-    void emailButtonShowsError();
-
-    void emailButtonPrintsError();
+    void hideError();
 }
