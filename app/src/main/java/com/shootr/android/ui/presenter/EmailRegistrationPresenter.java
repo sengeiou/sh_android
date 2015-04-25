@@ -38,19 +38,19 @@ public class EmailRegistrationPresenter implements Presenter {
     //region Interaction methods
     public void usernameFocusRemoved() {
         if(emailRegistrationView.getUsername() != null) {
-            validateField(CreateUserValidator.FIELD_USERNAME);
+            validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME);
         }
     }
 
     public void emailFocusRemoved() {
         if(emailRegistrationView.getEmail() != null) {
-            validateField(CreateUserValidator.FIELD_EMAIL);
+            validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL);
         }
     }
 
     public void passwordFocusRemoved() {
         if(emailRegistrationView.getPassword() != null) {
-            validateField(CreateUserValidator.FIELD_PASSWORD);
+            validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD);
         }
     }
 
@@ -137,22 +137,22 @@ public class EmailRegistrationPresenter implements Presenter {
 
     private Boolean validateAllFieldsBeforeCreationAttemptOrShowErrors() {
         boolean validationSuccessful = true;
-        if (!validateField(CreateUserValidator.FIELD_EMAIL)) {
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL)) {
             emailRegistrationView.focusOnEmailField();
             validationSuccessful = false;
         }
-        if (!validateField(CreateUserValidator.FIELD_USERNAME)) {
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME)) {
             emailRegistrationView.focusOnUsernameField();
             validationSuccessful = false;
         }
-        if (!validateField(CreateUserValidator.FIELD_PASSWORD)) {
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD)) {
             emailRegistrationView.focusOnPasswordField();
             validationSuccessful = false;
         }
         return validationSuccessful;
     }
 
-    private Boolean validateField(int field) {
+    private Boolean validateFieldOrShowError(int field) {
         String email = emailRegistrationView.getEmail();
         String username = emailRegistrationView.getUsername();
         String password = emailRegistrationView.getPassword();
