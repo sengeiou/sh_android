@@ -42,7 +42,6 @@ public class EmailLoginPresenter implements Presenter {
               }
           },
           new Interactor.ErrorCallback() {
-
               @Override public void onError(ShootrException error) {
                   emailLoginView.hideLoading();
                   showErrorInView(error);

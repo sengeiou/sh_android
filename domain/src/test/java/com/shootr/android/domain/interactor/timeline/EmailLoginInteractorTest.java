@@ -43,7 +43,6 @@ public class EmailLoginInteractorTest {
 
     @Test
     public void shouldHadleServerErrorWhenAttempLoginWithInvalidCredentials(){
-        //TODO: Se llama al error callback
         doThrow(new ShootrException(){}).when(shootrUserService).performLogin(anyString(), anyString());
         interactor.attempLogin(FAKE_USER_STUB, FAKE_PASSWORD_STUB, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
@@ -51,7 +50,6 @@ public class EmailLoginInteractorTest {
 
     @Test
     public void shouldCallbackCompletedWhenLoginReturnsCorrectResult(){
-        //TODO: Se llama al error callback
         doNothing().when(shootrUserService).performLogin(anyString(),anyString());
         interactor.attempLogin(USERNAME_STUB, PASSWORD_STUB, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();
