@@ -55,7 +55,7 @@ public class EmailRegistrationPresenter implements Presenter {
     }
 
     public void createAccount() {
-        if (validateAllFields()) {
+        if (validateAllFieldsBeforeCreationAttemptOrShowErrors()) {
             emailRegistrationView.askEmailConfirmation();
         }
     }
@@ -135,10 +135,21 @@ public class EmailRegistrationPresenter implements Presenter {
     }
     //endregion
 
-    private Boolean validateAllFields() {
-        return validateField(CreateUserValidator.FIELD_EMAIL)
-          && validateField(CreateUserValidator.FIELD_USERNAME)
-          && validateField(CreateUserValidator.FIELD_PASSWORD);
+    private Boolean validateAllFieldsBeforeCreationAttemptOrShowErrors() {
+        boolean validationSuccessful = true;
+        if (!validateField(CreateUserValidator.FIELD_EMAIL)) {
+            emailRegistrationView.focusOnEmailField();
+            validationSuccessful = false;
+        }
+        if (!validateField(CreateUserValidator.FIELD_USERNAME)) {
+            emailRegistrationView.focusOnUsernameField();
+            validationSuccessful = false;
+        }
+        if (!validateField(CreateUserValidator.FIELD_PASSWORD)) {
+            emailRegistrationView.focusOnPasswordField();
+            validationSuccessful = false;
+        }
+        return validationSuccessful;
     }
 
     private Boolean validateField(int field) {
