@@ -72,7 +72,7 @@ public class ShootrUserService {
                 remoteEventRepository.getEventById(visibleEventId);
             }
             remoteUserRepository.getPeople();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new LoginException(e);
         }
     }

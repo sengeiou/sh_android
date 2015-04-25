@@ -103,4 +103,8 @@ public class ErrorMessageFactory {
             return getUnknownErrorMessage();
         }
     }
+
+    public String getLoginCredentialsError(){
+        return context.getString(R.string.error_login_credentials_invalid);
+    }
 }
