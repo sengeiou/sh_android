@@ -103,7 +103,7 @@ public class EmailRegistrationPresenter implements Presenter {
                     showViewEmailError(errorMessage);
                     break;
                 case CreateUserValidator.FIELD_USERNAME:
-                    showViewUsernameDateError(errorMessage);
+                    showViewUsernameError(errorMessage);
                     break;
                 case CreateUserValidator.FIELD_PASSWORD:
                     showViewPasswordError(errorMessage);
@@ -118,7 +118,7 @@ public class EmailRegistrationPresenter implements Presenter {
         emailRegistrationView.showEmailError(errorMessage);
     }
 
-    private void showViewUsernameDateError(String errorMessage) {
+    private void showViewUsernameError(String errorMessage) {
         emailRegistrationView.showUsernameError(errorMessage);
     }
 
