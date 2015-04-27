@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import android.support.annotation.Nullable;
+
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
@@ -23,9 +24,12 @@ import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class EventDetailPresenter implements Presenter, CommunicationPresenter {

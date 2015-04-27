@@ -8,7 +8,6 @@ import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
-import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
@@ -22,16 +21,10 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class EventDetailPresenterTest {
 
@@ -60,7 +53,7 @@ public class EventDetailPresenterTest {
     }
 
     @Test public void shouldShowCheckinWhenUserWatchingEventAndNotCheckedIn(){
-        
+
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[3];
