@@ -77,6 +77,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.loadCheckinStatus();
     }
 
+    protected void setView(EventDetailView eventDetailView){
+        this.eventDetailView = eventDetailView;
+    }
+
     private void loadCheckinStatus() {
         if(isCurrentUserWatchingThisEvent) {
             getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
