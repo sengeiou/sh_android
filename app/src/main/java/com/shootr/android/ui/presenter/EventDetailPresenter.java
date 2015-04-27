@@ -48,6 +48,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
+    private Boolean isCurrentUserWatchingThisEvent;
+    private Boolean hasUserCheckdIn;
+
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
@@ -62,6 +65,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.eventModelMapper = eventModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
+        this.isCurrentUserWatchingThisEvent = false;
+        this.hasUserCheckdIn = false;
     }
     //endregion
 
@@ -73,13 +78,23 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void loadCheckinStatus() {
-        getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
-            @Override public void onLoaded(Boolean currentCheckIn) {
-                if (!currentCheckIn) {
-                    eventDetailView.showCheckin();
+        if(isCurrentUserWatchingThisEvent) {
+            getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
+                @Override
+                public void onLoaded(Boolean currentCheckIn) {
+                    if (!currentCheckIn) {
+                        hasUserCheckdIn = true;
+                        updateCheckinVisibility();
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+    private void updateCheckinVisibility(){
+        if(hasUserCheckdIn==false && isCurrentUserWatchingThisEvent==true){
+            eventDetailView.showCheckin();
+        }
     }
 
     //region Edit status
@@ -171,6 +186,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
+            updateCheckinVisibility();
         }
         this.hideViewLoading();
     }
@@ -242,6 +258,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         if (currentUserWatch != null) {
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+            isCurrentUserWatchingThisEvent = true;
         }
     }
 
