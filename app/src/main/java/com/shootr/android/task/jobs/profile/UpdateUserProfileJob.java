@@ -192,7 +192,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateTeam() {
         Long teamId = updatedUserModel.getFavoriteTeamId();
-        if (teamId <= 0) {
+        if (teamId != null && teamId <= 0) {
             updatedUserModel.setFavoriteTeamId(null);
             teamId = null;
         }
