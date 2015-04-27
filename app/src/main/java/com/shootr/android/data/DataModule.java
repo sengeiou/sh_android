@@ -30,7 +30,6 @@ import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.notifications.gcm.GCMIntentService;
 import com.shootr.android.service.ApiModule;
-import com.shootr.android.sync.ShootrSyncAdapter;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -94,7 +93,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
-    GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class,
+    GetFollowingsJob.class, GetUserInfoJob.class, GetUsersFollowsJob.class,
     GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLatestShotsJob.class,
 
     LoginUserJob.class,

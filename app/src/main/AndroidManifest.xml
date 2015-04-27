@@ -201,35 +201,6 @@
           android:value="@string/facebookID"
           />
 
-        <!-- Sync adapter -->
-
-        <service android:name=".sync.ShootrAccountService">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
-            </intent-filter>
-            <meta-data
-              android:name="android.accounts.AccountAuthenticator"
-              android:resource="@xml/authenticator"/>
-        </service>
-
-        <provider
-          android:name="com.shootr.android.db.provider.ShootrContentProvider"
-          android:authorities="${applicationId}.db.provider"
-          android:exported="false"
-          android:syncable="true"/>
-
-        <service
-          android:name="com.shootr.android.sync.SyncService"
-          android:exported="true"
-          android:process=":sync">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
-            <meta-data
-              android:name="android.content.SyncAdapter"
-              android:resource="@xml/syncadapter"/>
-        </service>
-
         <receiver android:name=".notifications.gcm.GCMBroadcastReceiver"
           android:exported="true"
           android:permission="com.google.android.c2dm.permission.SEND" >
