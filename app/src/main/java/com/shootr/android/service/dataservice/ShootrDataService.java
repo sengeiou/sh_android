@@ -1,27 +1,28 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
-import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.EventEntityMapper;
-import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.db.mappers.TeamMapper;
-import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
+import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.db.mappers.DeviceMapper;
+import com.shootr.android.db.mappers.EventEntityMapper;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.ShotEntityMapper;
+import com.shootr.android.db.mappers.TeamMapper;
+import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
-import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
@@ -34,18 +35,20 @@ import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.SecurityUtils;
-import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class ShootrDataService implements ShootrService {
@@ -300,12 +303,6 @@ public class ShootrDataService implements ShootrService {
         }
         return null;
     }
-
-    private boolean checkIfMetadataContainsItems(OperationDto op) {
-        return op.getMetadata().getTotalItems() != null &&
-                op.getMetadata().getTotalItems() > 0;
-    }
-
 
     @Override
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
