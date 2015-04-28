@@ -357,9 +357,15 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        Map<String,Object> dataItem = ops[0].getData()[0];
-        FollowEntity followReceived = followMapper.fromDto(dataItem);
-        return followReceived;
+        if(ops[0] != null){
+            if(ops[0].getData() != null && ops[0].getData().length > 0){
+                Map<String,Object> dataItem = ops[0].getData()[0];
+                FollowEntity followReceived = followMapper.fromDto(dataItem);
+                return followReceived;
+            }
+
+        }
+        return null;
     }
 
 
