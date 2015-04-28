@@ -38,24 +38,24 @@ public class EmailRegistrationPresenter implements Presenter {
     //region Interaction methods
     public void usernameFocusRemoved() {
         if(emailRegistrationView.getUsername() != null) {
-            validateField(CreateUserValidator.FIELD_USERNAME);
+            validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME);
         }
     }
 
     public void emailFocusRemoved() {
         if(emailRegistrationView.getEmail() != null) {
-            validateField(CreateUserValidator.FIELD_EMAIL);
+            validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL);
         }
     }
 
     public void passwordFocusRemoved() {
         if(emailRegistrationView.getPassword() != null) {
-            validateField(CreateUserValidator.FIELD_PASSWORD);
+            validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD);
         }
     }
 
     public void createAccount() {
-        if (validateAllFields()) {
+        if (validateAllFieldsBeforeCreationAttemptOrShowErrors()) {
             emailRegistrationView.askEmailConfirmation();
         }
     }
@@ -103,7 +103,7 @@ public class EmailRegistrationPresenter implements Presenter {
                     showViewEmailError(errorMessage);
                     break;
                 case CreateUserValidator.FIELD_USERNAME:
-                    showViewUsernameDateError(errorMessage);
+                    showViewUsernameError(errorMessage);
                     break;
                 case CreateUserValidator.FIELD_PASSWORD:
                     showViewPasswordError(errorMessage);
@@ -118,7 +118,7 @@ public class EmailRegistrationPresenter implements Presenter {
         emailRegistrationView.showEmailError(errorMessage);
     }
 
-    private void showViewUsernameDateError(String errorMessage) {
+    private void showViewUsernameError(String errorMessage) {
         emailRegistrationView.showUsernameError(errorMessage);
     }
 
@@ -135,13 +135,24 @@ public class EmailRegistrationPresenter implements Presenter {
     }
     //endregion
 
-    private Boolean validateAllFields() {
-        return validateField(CreateUserValidator.FIELD_EMAIL)
-          && validateField(CreateUserValidator.FIELD_USERNAME)
-          && validateField(CreateUserValidator.FIELD_PASSWORD);
+    private Boolean validateAllFieldsBeforeCreationAttemptOrShowErrors() {
+        boolean validationSuccessful = true;
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL)) {
+            emailRegistrationView.focusOnEmailField();
+            validationSuccessful = false;
+        }
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME)) {
+            emailRegistrationView.focusOnUsernameField();
+            validationSuccessful = false;
+        }
+        if (!validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD)) {
+            emailRegistrationView.focusOnPasswordField();
+            validationSuccessful = false;
+        }
+        return validationSuccessful;
     }
 
-    private Boolean validateField(int field) {
+    private Boolean validateFieldOrShowError(int field) {
         String email = emailRegistrationView.getEmail();
         String username = emailRegistrationView.getUsername();
         String password = emailRegistrationView.getPassword();

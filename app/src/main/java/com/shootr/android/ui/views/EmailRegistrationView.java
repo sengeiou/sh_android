@@ -24,5 +24,9 @@ public interface EmailRegistrationView extends DataTransferView{
 
     void focusOnEmailField();
 
+    void focusOnPasswordField();
+
+    void focusOnUsernameField();
+
     void navigateToMainScreen();
 }

@@ -213,17 +213,14 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void showEmailError(String errorMessage) {
         email.setError(errorMessage);
-        email.requestFocus();
     }
 
     @Override public void showUsernameError(String errorMessage) {
         username.setError(errorMessage);
-        username.requestFocus();
     }
 
     @Override public void showPasswordError(String errorMessage) {
         password.setError(errorMessage);
-        password.requestFocus();
     }
 
     @Override public void askEmailConfirmation() {
@@ -244,6 +241,14 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void focusOnEmailField() {
         email.requestFocus();
+    }
+
+    @Override public void focusOnPasswordField() {
+        password.requestFocus();
+    }
+
+    @Override public void focusOnUsernameField() {
+        username.requestFocus();
     }
 
     @Override public void navigateToMainScreen() {
