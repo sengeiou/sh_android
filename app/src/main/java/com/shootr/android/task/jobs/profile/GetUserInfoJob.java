@@ -66,7 +66,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
             FollowEntity followFromService = null;
             if(!isMe){
                 followFromService = getFolloFromService();
-                if(followFromService.getIdUser()!=null) {
+                if(followFromService!=null && followFromService.getIdUser()!=null) {
                     followManager.saveFollowFromServer(followFromService);
                 }
             }

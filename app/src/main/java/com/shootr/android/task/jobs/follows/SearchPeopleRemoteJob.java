@@ -54,7 +54,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
 
     @Override protected void run() throws SQLException, IOException {
         PaginatedResult<List<UserEntity>> searchResults = getSearchFromServer();
-        postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
+        if(searchResults!=null){
+            postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
+        }
     }
 
     public List<UserModel> getUserVOs(List<UserEntity> users){

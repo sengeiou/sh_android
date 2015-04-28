@@ -134,9 +134,12 @@ public class DatabaseContract {
         public static final String MODEL = "model";
         public static final String OS_VERSION = "osVer";
         public static final String PLATFORM = "platform";
+        public static final String STATUS = "status";
+        public static final String LOCALE = "locale";
+        public static final String APP_VERSION = "appVer";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, MODEL, PLATFORM, OS_VERSION, CSYS_BIRTH, CSYS_MODIFIED,
+          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION, APP_VERSION, LOCALE, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
