@@ -14,6 +14,7 @@ import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ShootrTimelineService {
@@ -45,7 +46,7 @@ public class ShootrTimelineService {
                     .since(eventRefreshDateSince) //
                     .build();
             List<Shot> shotsForEvent = remoteShotRepository.getShotsForTimeline(eventTimelineParameters);
-            resultTimelines.add(buildTimeline(eventTimelineParameters, shotsForEvent));
+            resultTimelines.add(buildSortedTimeline(eventTimelineParameters, shotsForEvent));
         }
 
         Long activityRefreshDateSince = synchronizationRepository.getActivityTimelineRefreshDate();
@@ -55,16 +56,21 @@ public class ShootrTimelineService {
                 .since(activityRefreshDateSince) //
                 .build();
         List<Shot> shotsForActivity = remoteShotRepository.getShotsForTimeline(activityTimelineParameters);
-        resultTimelines.add(buildTimeline(activityTimelineParameters, shotsForActivity));
+        resultTimelines.add(buildSortedTimeline(activityTimelineParameters, shotsForActivity));
 
         return resultTimelines;
     }
 
-    private Timeline buildTimeline(TimelineParameters timelineParameters, List<Shot> shotsForEvent) {
+    private Timeline buildSortedTimeline(TimelineParameters timelineParameters, List<Shot> shots) {
         Timeline timeline = new Timeline();
-        timeline.setShots(shotsForEvent);
+        timeline.setShots(sortByPublishDate(shots));
         timeline.setParameters(timelineParameters);
         return timeline;
+    }
+
+    private List<Shot> sortByPublishDate(List<Shot> remoteShots) {
+        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
+        return remoteShots;
     }
 
     private List<Long> getPeopleIds() {

@@ -22,6 +22,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,9 @@ import static org.mockito.Mockito.when;
 
 public class ShootrTimelineServiceTest {
 
+    private static final Long DATE_OLDER = 1L;
+    private static final Long DATE_MIDDLE = 2L;
+    private static final Long DATE_NEWER = 3L;
 
     private static final Long VISIBLE_EVENT_ID = 1L;
     private static final Long VISIBLE_EVENT_AUTHOR = 2L;
@@ -115,6 +120,19 @@ public class ShootrTimelineServiceTest {
         assertThat(timelineParameters).hasNoEventId().hasNoEventAuthorId();
     }
 
+    @Test
+    public void shouldReturnTwoTimelinesShotsInOrderWithPublishDateComparatorWhenEventVisible() throws Exception {
+        setupVisibleEvent();
+        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+
+        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
+        List<Shot> firstTimelineShots = timelinesResult.get(0).getShots();
+        List<Shot> secondTimelineShots = timelinesResult.get(1).getShots();
+
+        assertThat(firstTimelineShots).isSortedAccordingTo(new Shot.NewerAboveComparator());
+        assertThat(secondTimelineShots).isSortedAccordingTo(new Shot.NewerAboveComparator());
+    }
+
     //region Setups and stubs
     private void setupVisibleEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
@@ -140,6 +158,16 @@ public class ShootrTimelineServiceTest {
         event.setId(VISIBLE_EVENT_ID);
         event.setAuthorId(VISIBLE_EVENT_AUTHOR);
         return event;
+    }
+
+    private List<Shot> unorderedShots() {
+        return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
+    }
+
+    private Shot shotWithDate(Long date) {
+        Shot shot = new Shot();
+        shot.setPublishDate(new Date(date));
+        return shot;
     }
     //endregion
 }
