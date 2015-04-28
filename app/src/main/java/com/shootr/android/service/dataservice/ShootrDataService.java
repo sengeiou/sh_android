@@ -120,7 +120,6 @@ public class ShootrDataService implements ShootrService {
             GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
             GenericDto responseDto = postRequest(requestDto);
             OperationDto[] ops = responseDto.getOps();
-
             if (ops == null || ops.length < 1) {
                 Timber.e("Received 0 operations");
             } else if (ops[0]!=null) {
@@ -129,7 +128,6 @@ public class ShootrDataService implements ShootrService {
                     UserEntity user = userMapper.fromDto(d);
                     following.add(user);
                 }
-
             }
         }
 
