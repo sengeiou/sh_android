@@ -5,7 +5,6 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -30,13 +29,12 @@ import org.mockito.Spy;
 import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GetMainTimelineInteractorTest {
+public class GetEventTimelineInteractorTest {
 
     private static final Long ID_SHOT_WITHOUT_EVENT = 1L;
     private static final Long VISIBLE_EVENT_ID = 2L;
@@ -50,16 +48,14 @@ public class GetMainTimelineInteractorTest {
     private static final Long DATE_NEWER = 3000L;
 
     @Mock ShotRepository localShotRepository;
-    @Mock ShotRepository remoteShotRepository;
     @Mock UserRepository localUserRepository;
-    @Mock UserRepository remoteUserRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock EventRepository eventRepository;
     @Mock SessionRepository sessionRepository;
     @Mock SynchronizationRepository synchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
 
-    private GetMainTimelineInteractor interactor;
+    private GetEventTimelineInteractor interactor;
 
     @Before
     public void setUp() throws Exception {
@@ -68,32 +64,45 @@ public class GetMainTimelineInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         when(localUserRepository.getPeople()).thenReturn(people());
-        when(remoteUserRepository.getPeople()).thenReturn(people());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetMainTimelineInteractor(interactorHandler,
+        interactor = new GetEventTimelineInteractor(interactorHandler,
           postExecutionThread,
           sessionRepository,
           localShotRepository,
-          remoteShotRepository,
-          remoteUserRepository,
-          eventRepository,
-          localUserRepository,
-          synchronizationRepository);
+                eventRepository,
+          localUserRepository
+        );
     }
 
     @Test
-    public void shouldRetrieveTimelineWithoutEventIdAndAuthorWhenNoEventVisible() throws Exception {
+    public void shouldNotRetrieveTimelineWhenNoEventVisible() throws Exception {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
-        when(remoteUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
 
-        interactor.loadMainTimeline(spyCallback, errorCallback);
+        interactor.loadEventTimeline(spyCallback, errorCallback);
+
+        verify(localShotRepository, never()).getShotsForTimeline(any(TimelineParameters.class));
+    }
+
+    @Test
+    public void shouldRetrieveTimelineWithEventIdAndAuthorWhenEventVisible() throws Exception {
+        setupVisibleEvent();
+
+        interactor.loadEventTimeline(spyCallback, errorCallback);
 
         TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
-        assertThat(localParameters).hasNoEventId().hasNoEventAuthorId();
+        assertThat(localParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
+    }
 
-        TimelineParameters remoteParameters = captureTimelineParametersFromRepositoryCall(remoteShotRepository);
-        assertThat(remoteParameters).hasNoEventId().hasNoEventAuthorId();
+    @Test
+    public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
+        setupVisibleEvent();
+        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadEventTimeline(spyCallback, errorCallback);
+        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
     private User currentUserNotWatching() {
@@ -110,58 +119,6 @@ public class GetMainTimelineInteractorTest {
         return user;
     }
 
-    @Test
-    public void shouldRetrieveTimelineWithEventIdAndAuthorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-
-        interactor.loadMainTimeline(spyCallback, errorCallback);
-
-        TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
-        assertThat(localParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
-        TimelineParameters remoteParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
-        assertThat(remoteParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
-    }
-
-    @Test
-    public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupVisibleEvent();
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
-        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
-
-        interactor.loadMainTimeline(spyCallback, errorCallback);
-        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
-        List<Shot> remoteShotsReturned = spyCallback.timelinesReturned.get(1).getShots();
-
-        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
-        assertThat(remoteShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
-    }
-
-    @Test
-    public void shouldUpdateLastRefreshDateWithNewestShotPublishDateFromRemoteRepo() throws Exception {
-        setupVisibleEvent();
-        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
-
-        interactor.loadMainTimeline(spyCallback, errorCallback);
-
-        ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
-        verify(synchronizationRepository).putTimelineLastRefresh(captor.capture());
-        Long updatedRefreshDate = captor.getValue();
-
-        assertThat(updatedRefreshDate).isEqualTo(DATE_NEWER);
-    }
-
-    @Test
-    public void shouldCallbackShotsOnceIfRemoteUserRepositoryFails() throws Exception {
-        setupVisibleEvent();
-        when(remoteUserRepository.getUserById(anyLong())).thenThrow(new RepositoryException("Test exception"));
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
-        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
-
-        interactor.loadMainTimeline(spyCallback, errorCallback);
-
-        verify(spyCallback, times(1)).onLoaded(any(Timeline.class));
-    }
-
     private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
@@ -173,7 +130,6 @@ public class GetMainTimelineInteractorTest {
     }
 
     private void setupVisibleEvent() {
-        when(remoteUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
         when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
     }
@@ -236,7 +192,7 @@ public class GetMainTimelineInteractorTest {
         return captor.getValue();
     }
 
-    static class SpyCallback implements GetMainTimelineInteractor.Callback {
+    static class SpyCallback implements Interactor.Callback<Timeline> {
 
         public List<Timeline> timelinesReturned = new ArrayList<>();
 
