@@ -16,6 +16,7 @@ import com.squareup.otto.Bus;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -24,11 +25,12 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class EventDetailPresenterTest {
 
+    private static final long EVENT_ID_STUB = 1L;
     private EventDetailPresenter presenter;
 
     @Mock Bus bus;
@@ -53,85 +55,75 @@ public class EventDetailPresenterTest {
         presenter.setView(eventDetailView);
     }
 
-    @Test public void shouldShowCheckinWhenUserWatchingEventAndNotCheckedIn(){
-
+    @Test public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn(){
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                EventInfo eventInfo = new EventInfo();
-                eventInfo.setCurrentUserWatching(new User());
-                callback.onLoaded(eventInfo);
+                VisibleEventInfoInteractor.Callback callback = (VisibleEventInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(eventInfoWithUserWatching());
                 return null;
             }
         }).when(eventInfoInteractor).obtainEventInfo(anyLong(), any(VisibleEventInfoInteractor.Callback.class));
 
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                User user = new User();
-                user.setCheckedIn(false);
-                callback.onLoaded(user);
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[1];
+                callback.onLoaded(false);
                 return null;
             }
-        }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
+        }).when(getCheckinStatusInteractor).loadCheckinStatus(Matchers.<Interactor.Callback<Boolean>>any());
 
-        presenter.renderCurrentUserWatching(user);
-        presenter.updateCheckinVisibility();
+        presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
         verify(eventDetailView).showCheckin();
     }
 
-    @Test public void shouldNotShowCheckinWhenUserWatchingEventAndCheckedIn(){
-
+    @Test public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn(){
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                EventInfo eventInfo = new EventInfo();
-                eventInfo.setCurrentUserWatching(new User());
-                callback.onLoaded(eventInfo);
+                VisibleEventInfoInteractor.Callback callback = (VisibleEventInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(eventInfoWithUserWatching());
                 return null;
             }
         }).when(eventInfoInteractor).obtainEventInfo(anyLong(), any(VisibleEventInfoInteractor.Callback.class));
 
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                User user = new User();
-                callback.onLoaded(user);
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
+                callback.onLoaded(true);
                 return null;
             }
-        }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
+        }).when(getCheckinStatusInteractor).loadCheckinStatus(Matchers.<Interactor.Callback<Boolean>>any());
 
-        presenter.renderCurrentUserWatching(user);
-        presenter.updateCheckinVisibility();
+        presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView, times(1)).showCheckin();
+        verify(eventDetailView, never()).showCheckin();
     }
 
-    @Test public void shouldNotShowCheckinWhenUserNotWatchingEventAndNotCheckedIn(){
-
+    @Test public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn(){
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                EventInfo eventInfo = new EventInfo();
-                callback.onLoaded(eventInfo);
+                VisibleEventInfoInteractor.Callback callback = (VisibleEventInfoInteractor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(eventInfoWithUserWatching());
                 return null;
             }
         }).when(eventInfoInteractor).obtainEventInfo(anyLong(), any(VisibleEventInfoInteractor.Callback.class));
 
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[0];
-                User user = new User();
-                user.setCheckedIn(false);
-                callback.onLoaded(user);
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
+                callback.onLoaded(true);
                 return null;
             }
-        }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
+        }).when(getCheckinStatusInteractor).loadCheckinStatus(Matchers.<Interactor.Callback<Boolean>>any());
 
-        presenter.renderCurrentUserWatching(user);
-        presenter.updateCheckinVisibility();
+        presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView, times(1)).showCheckin();
+        verify(eventDetailView, never()).showCheckin();
+    }
+
+    private EventInfo eventInfoWithUserWatching() {
+        EventInfo eventInfo = new EventInfo();
+        eventInfo.setCurrentUserWatching(new User());
+        return eventInfo;
     }
 }

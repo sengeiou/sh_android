@@ -99,7 +99,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         }
     }
 
-    public void updateCheckinVisibility(){
+    private void updateCheckinVisibility(){
         if(hasUserCheckdIn==false && isCurrentUserWatchingThisEvent==true){
             eventDetailView.showCheckin();
         }
@@ -262,7 +262,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         eventDetailView.setWatchers(watcherModels);
     }
 
-    public void renderCurrentUserWatching(User currentUserWatch) {
+    private void renderCurrentUserWatching(User currentUserWatch) {
         if (currentUserWatch != null) {
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
