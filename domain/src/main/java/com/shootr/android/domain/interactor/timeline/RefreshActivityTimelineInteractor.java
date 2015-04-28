@@ -28,7 +28,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         this.shootrTimelineService = shootrTimelineService;
     }
 
-    public void refreshMainTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void refreshActivityTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);

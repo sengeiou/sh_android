@@ -18,7 +18,6 @@ import com.shootr.android.domain.repository.UserRepository;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -28,11 +27,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -79,7 +76,7 @@ public class GetActivityTimelineInteractorTest {
         setupVisibleEvent();
         when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
 
-        interactor.loadEventTimeline(spyCallback, errorCallback);
+        interactor.loadActivityTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());

@@ -53,7 +53,7 @@ public class RefreshEventTimelineInteractorTest {
     public void shouldCallbackEventTimelineWhenServiceReturnsTimelineForEvent() throws Exception {
         when(shootrTimelineService.refreshTimelines()).thenReturn(Arrays.asList(timelineForEvent(), timelineForActivity()));
 
-        interactor.refreshMainTimeline(spyCallback, errorCallback);
+        interactor.refreshEventTimeline(spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForEvent());
     }
@@ -62,7 +62,7 @@ public class RefreshEventTimelineInteractorTest {
     public void shouldCallbackErrorWhenServiceDontReturnTimelineForEvent() throws Exception {
         when(shootrTimelineService.refreshTimelines()).thenReturn(Collections.singletonList(timelineForActivity()));
 
-        interactor.refreshMainTimeline(spyCallback, errorCallback);
+        interactor.refreshEventTimeline(spyCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
@@ -71,7 +71,7 @@ public class RefreshEventTimelineInteractorTest {
     public void shouldNotCallbackResultWhenServiceDontReturnsTimelineForEvent() throws Exception {
         when(shootrTimelineService.refreshTimelines()).thenReturn(Collections.singletonList(timelineForActivity()));
 
-        interactor.refreshMainTimeline(spyCallback, errorCallback);
+        interactor.refreshEventTimeline(spyCallback, errorCallback);
 
         verify(spyCallback, never()).onLoaded(any(Timeline.class));
     }

@@ -48,7 +48,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadEventTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadActivityTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
