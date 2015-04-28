@@ -32,7 +32,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.FollowTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TablesSync.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.CreateDeviceTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.DeviceTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TeamTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.EventTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotQueueTable.TABLE);

@@ -120,13 +120,13 @@ public class DatabaseContract {
         };
     }
 
-    public static final class CreateDeviceTable implements SyncColumns {
+    public static final class DeviceTable implements SyncColumns {
 
-        private CreateDeviceTable() {
+        private DeviceTable() {
 
         }
 
-        public static final String TABLE = "CreateDevice";
+        public static final String TABLE = "Device";
         public static final String ID_DEVICE = "idDevice";
         public static final String ID_USER = "idUser";
         public static final String TOKEN = "token";
