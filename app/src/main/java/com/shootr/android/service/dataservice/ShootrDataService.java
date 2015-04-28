@@ -138,11 +138,13 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for(Map<String,Object> d:data){
-                UserEntity user = userMapper.fromDto(d);
-                users.add(user);
+        }else if (ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for(Map<String,Object> d:data){
+                    UserEntity user = userMapper.fromDto(d);
+                    users.add(user);
+                }
             }
         }
         return users;
@@ -155,12 +157,14 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for(Map<String,Object> d:data){
-                UserEntity user = userMapper.fromDto(d);
-                if(user.getCsysDeleted()==null){
-                    followers.add(user);
+        }else if (ops[0] != null) {
+            if(ops[0].getData() != null){
+                Map<String, Object>[] data = ops[0].getData();
+                for(Map<String,Object> d:data){
+                    UserEntity user = userMapper.fromDto(d);
+                    if(user.getCsysDeleted()==null){
+                        followers.add(user);
+                    }
                 }
             }
         }
@@ -174,9 +178,12 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object> data = ops[0].getData()[0];
-            return shotEntityMapper.fromDto(data);
+        }else if(ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object> data = ops[0].getData()[0];
+                return shotEntityMapper.fromDto(data);
+            }
+
         }
         return null;
     }
@@ -189,11 +196,13 @@ public class ShootrDataService implements ShootrService {
         List<ShotEntity> resultShots = new ArrayList<>();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                resultShots.add(shot);
+        }else if(ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> aData : data) {
+                    ShotEntity shot = shotEntityMapper.fromDto(aData);
+                    resultShots.add(shot);
+                }
             }
         }
         return resultShots;
@@ -208,12 +217,15 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                newerShots.add(shot);
+        }else if(ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> aData : data) {
+                    ShotEntity shot = shotEntityMapper.fromDto(aData);
+                    newerShots.add(shot);
+                }
             }
+
         }
         return newerShots;
     }
@@ -227,12 +239,15 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                olderShots.add(shot);
+        }else if(ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> aData : data) {
+                    ShotEntity shot = shotEntityMapper.fromDto(aData);
+                    olderShots.add(shot);
+                }
             }
+
         }
         return olderShots;
     }
@@ -245,11 +260,13 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                shots.add(shot);
+        }else if (ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> aData : data) {
+                    ShotEntity shot = shotEntityMapper.fromDto(aData);
+                    shots.add(shot);
+                }
             }
         }
         return shots;
@@ -262,12 +279,15 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                shots.add(shot);
+        }else if (ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> aData : data) {
+                    ShotEntity shot = shotEntityMapper.fromDto(aData);
+                    shots.add(shot);
+                }
             }
+
         }
         return shots;
     }
@@ -278,9 +298,11 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            return shotEntityMapper.fromDto(dataItem);
+        }else if (ops[0].getMetadata() != null) {
+            if(ops[0].getMetadata().getTotalItems() > 0){
+                Map<String, Object> dataItem = ops[0].getData()[0];
+                return shotEntityMapper.fromDto(dataItem);
+            }
         }
         return null;
     }
