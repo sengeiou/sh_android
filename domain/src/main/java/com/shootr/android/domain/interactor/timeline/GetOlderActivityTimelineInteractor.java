@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
@@ -15,36 +14,36 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 
-public class GetOlderMainTimelineInteractor implements Interactor {
+public class GetOlderActivityTimelineInteractor implements Interactor {
 
     private final SessionRepository sessionRepository;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository remoteShotRepository;
-    private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
 
     private Long currentOldestDate;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetOlderMainTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
+                                                      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+                                                      @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderMainTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
+    public void loadOlderActivityTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -63,14 +62,11 @@ public class GetOlderMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildTimelineParameters() {
-        TimelineParameters.Builder timelineParametersBuilder =
-          TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId());
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            timelineParametersBuilder.forEvent(visibleEvent);
-        }
-        timelineParametersBuilder.maxDate(currentOldestDate);
-        return timelineParametersBuilder.build();
+        return TimelineParameters.builder() //
+                .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+                .forActivity() //
+                .maxDate(currentOldestDate) //
+                .build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
@@ -96,14 +92,6 @@ public class GetOlderMainTimelineInteractor implements Interactor {
         Timeline timeline = new Timeline();
         timeline.setShots(shots);
         return timeline;
-    }
-
-    private Event getVisibleEvent() {
-        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
-        }
-        return null;
     }
 
     private void notifyLoaded(final Timeline timeline) {
