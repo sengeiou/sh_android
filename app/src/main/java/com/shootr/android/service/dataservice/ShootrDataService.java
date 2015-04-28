@@ -112,21 +112,24 @@ public class ShootrDataService implements ShootrService {
 
     @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
         List<UserEntity> following = new ArrayList<>();
-        boolean includeDeleted = lastModifiedDate > 0L;
-        GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
+        if(idUser!=null){
+            boolean includeDeleted = lastModifiedDate > 0L;
+            GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
+            GenericDto responseDto = postRequest(requestDto);
+            OperationDto[] ops = responseDto.getOps();
 
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else if (ops[0].getMetadata().getTotalItems() > 0) {
+            if (ops == null || ops.length < 1) {
+                Timber.e("Received 0 operations");
+            } else if (ops[0]!=null) {
+                Map<String, Object>[] data = ops[0].getData();
+                for (Map<String, Object> d : data) {
+                    UserEntity user = userMapper.fromDto(d);
+                    following.add(user);
+                }
 
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> d : data) {
-                UserEntity user = userMapper.fromDto(d);
-                following.add(user);
             }
         }
+
         return following;
     }
 
@@ -291,12 +294,18 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata().getTotalItems() > 0) {
+        }else if (ops[0].getMetadata()!=null) {
             Map<String, Object> dataItem = ops[0].getData()[0];
             return userMapper.fromDto(dataItem);
         }
         return null;
     }
+
+    private boolean checkIfMetadataContainsItems(OperationDto op) {
+        return op.getMetadata().getTotalItems() != null &&
+                op.getMetadata().getTotalItems() > 0;
+    }
+
 
     @Override
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
@@ -309,15 +318,19 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
         }else{
             MetadataDto metadata = ops[0].getMetadata();
-            Long items = metadata.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                users.add(userMapper.fromDto(dataItem));
+            if(metadata!=null){
+                Long items = metadata.getItems();
+                for (int i = 0; i < items; i++) {
+                    Map<String, Object> dataItem = ops[0].getData()[i];
+                    users.add(userMapper.fromDto(dataItem));
+                }
+                if(metadata.getTotalItems()!=null){
+                    int totalItems = metadata.getTotalItems().intValue();
+                    return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT)
+                            .setPageOffset(pageOffset)
+                            .setTotalItems(totalItems);
+                }
             }
-            int totalItems = metadata.getTotalItems().intValue();
-            return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT)
-              .setPageOffset(pageOffset)
-              .setTotalItems(totalItems);
         }
         return null;
     }
