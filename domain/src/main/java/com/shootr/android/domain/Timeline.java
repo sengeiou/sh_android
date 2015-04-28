@@ -22,4 +22,28 @@ public class Timeline {
     public TimelineParameters getParameters() {
         return parameters;
     }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Timeline timeline = (Timeline) o;
+
+        if (!shots.equals(timeline.shots)) return false;
+        return !(parameters != null ? !parameters.equals(timeline.parameters) : timeline.parameters != null);
+
+    }
+
+    @Override public int hashCode() {
+        int result = shots.hashCode();
+        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        return result;
+    }
+
+    @Override public String toString() {
+        return "Timeline{" +
+                "shots=" + shots +
+                ", parameters=" + parameters +
+                '}';
+    }
 }
