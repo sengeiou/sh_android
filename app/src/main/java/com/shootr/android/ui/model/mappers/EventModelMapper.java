@@ -4,7 +4,7 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.util.EventTimeFormatter;
-import com.shootr.android.util.TimeFormatter;
+
 import javax.inject.Inject;
 
 public class EventModelMapper {

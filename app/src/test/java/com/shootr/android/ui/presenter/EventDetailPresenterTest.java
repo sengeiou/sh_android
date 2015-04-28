@@ -1,5 +1,8 @@
 package com.shootr.android.ui.presenter;
 
+import android.content.SharedPreferences;
+
+import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.Interactor;
@@ -8,10 +11,12 @@ import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
+import com.shootr.android.util.EventTimeFormatter;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
@@ -21,6 +26,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -33,21 +41,41 @@ public class EventDetailPresenterTest {
     private static final long EVENT_ID_STUB = 1L;
     private EventDetailPresenter presenter;
 
-    @Mock Bus bus;
-    @Mock VisibleEventInfoInteractor eventInfoInteractor;
-    @Mock UpdateStatusInteractor watchingStatusInteractor;
-    @Mock ChangeEventPhotoInteractor changeEventPhotoInteractor;
-    @Mock GetCheckinStatusInteractor getCheckinStatusInteractor;
-    @Mock PerformCheckinInteractor performCheckinInteractor;
-    @Mock EventModelMapper eventModelMapper;
-    @Mock UserModelMapper userModelMapper;
-    @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock EventDetailView eventDetailView;
+    @Mock
+    Bus bus;
+    @Mock
+    VisibleEventInfoInteractor eventInfoInteractor;
+    @Mock
+    UpdateStatusInteractor watchingStatusInteractor;
+    @Mock
+    ChangeEventPhotoInteractor changeEventPhotoInteractor;
+    @Mock
+    GetCheckinStatusInteractor getCheckinStatusInteractor;
+    @Mock
+    PerformCheckinInteractor performCheckinInteractor;
 
-    @Mock User user;
+    @Mock
+    ErrorMessageFactory errorMessageFactory;
+    @Mock
+    EventDetailView eventDetailView;
 
-    @Before public void setUp(){
+    @Mock
+    EventTimeFormatter timeFormatter;
+
+    @Mock
+    SessionRepository sessionRepository;
+
+    private EventModelMapper eventModelMapper;
+    private UserModelMapper userModelMapper;
+
+    @Mock SharedPreferences sharedPreferences;
+
+    @Before
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
+        eventModelMapper = new EventModelMapper(new EventTimeFormatter(), sessionRepository);
+        userModelMapper= new UserModelMapper();
+
         presenter = new EventDetailPresenter(bus, eventInfoInteractor, watchingStatusInteractor,
                 changeEventPhotoInteractor, getCheckinStatusInteractor, performCheckinInteractor,
                 eventModelMapper, userModelMapper, errorMessageFactory);
@@ -55,7 +83,8 @@ public class EventDetailPresenterTest {
         presenter.setView(eventDetailView);
     }
 
-    @Test public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn(){
+    @Test
+    public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
         setupCheckinStatusCallbacks(false);
 
@@ -64,7 +93,8 @@ public class EventDetailPresenterTest {
         verify(eventDetailView).showCheckin();
     }
 
-    @Test public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn(){
+    @Test
+    public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
         setupCheckinStatusCallbacks(true);
 
@@ -73,7 +103,8 @@ public class EventDetailPresenterTest {
         verify(eventDetailView, never()).showCheckin();
     }
 
-    @Test public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn(){
+    @Test
+    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserNotWatching());
         setupCheckinStatusCallbacks(false);
 
@@ -82,7 +113,8 @@ public class EventDetailPresenterTest {
         verify(eventDetailView, never()).showCheckin();
     }
 
-    @Test public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
+    @Test
+    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserNotWatching());
         setupCheckinStatusCallbacks(false);
 
@@ -94,7 +126,8 @@ public class EventDetailPresenterTest {
     //region Setups and stubs
     private void setupEventInfoCallbacks(final EventInfo eventInfo) {
         doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
                 VisibleEventInfoInteractor.Callback callback = (VisibleEventInfoInteractor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(eventInfo);
                 return null;
@@ -104,8 +137,9 @@ public class EventDetailPresenterTest {
 
     private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
         doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[1];
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
                 callback.onLoaded(isCheckedIn);
                 return null;
             }
@@ -114,14 +148,37 @@ public class EventDetailPresenterTest {
 
     private EventInfo eventInfoWithUserNotWatching() {
         EventInfo eventInfo = new EventInfo();
+        Event event = eventWithStartAndEndDate();
+        User user = userWithIdUser();
+        event.setAuthorId(user.getIdUser());
+        eventInfo.setEvent(event);
+        eventInfo.setWatchers(new ArrayList<User>());
         eventInfo.setCurrentUserWatching(null);
         return eventInfo;
     }
 
+    private Event eventWithStartAndEndDate() {
+        Event event = new Event();
+        event.setStartDate(new Date());
+        event.setEndDate(new Date());
+        return event;
+    }
+
+    private User userWithIdUser() {
+        User user = new User();
+        user.setIdUser(1L);
+        return user;
+    }
+
     private EventInfo eventInfoWithUserWatching() {
         EventInfo eventInfo = new EventInfo();
-        eventInfo.setCurrentUserWatching(new User());
+        Event event = eventWithStartAndEndDate();
+        User user = userWithIdUser();
+        event.setAuthorId(user.getIdUser());
+        eventInfo.setEvent(event);
+        eventInfo.setWatchers(new ArrayList<User>());
+        eventInfo.setCurrentUserWatching(user);
         return eventInfo;
     }
-    //endregion
+//endregion
 }
