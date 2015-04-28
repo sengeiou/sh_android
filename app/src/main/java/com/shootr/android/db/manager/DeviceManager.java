@@ -1,7 +1,7 @@
 package com.shootr.android.db.manager;
 
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.android.db.DatabaseContract.DeviceTable;
+import com.shootr.android.db.DatabaseContract.CreateDeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.data.entity.DeviceEntity;
 import javax.inject.Inject;
@@ -30,6 +30,6 @@ public class DeviceManager extends AbstractManager {
     }
 
     public void insertInSync() {
-        insertInTableSync(DeviceTable.TABLE, 4, 0, 0);
+        insertInTableSync(CreateDeviceTable.TABLE, 4, 0, 0);
     }
 }

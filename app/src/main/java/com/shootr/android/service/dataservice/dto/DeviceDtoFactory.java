@@ -1,7 +1,7 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.ServiceConstants;
-import com.shootr.android.db.DatabaseContract.DeviceTable;
+import com.shootr.android.db.DatabaseContract.CreateDeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -26,8 +26,8 @@ public class DeviceDtoFactory {
     public GenericDto getUpdateDeviceOperationDto(DeviceEntity device) {
         MetadataDto md = new MetadataDto.Builder()
           .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
-          .entity(DeviceTable.TABLE)
-          .putKey(DeviceTable.UNIQUE_DEVICE_ID, device.getUniqueDevideID())
+          .entity(CreateDeviceTable.TABLE)
+          .putKey(CreateDeviceTable.UNIQUE_DEVICE_ID, device.getUniqueDevideID())
           .build();
 
         OperationDto op = new OperationDto.Builder()

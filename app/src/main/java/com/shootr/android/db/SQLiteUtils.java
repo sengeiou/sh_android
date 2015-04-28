@@ -1,6 +1,6 @@
 package com.shootr.android.db;
 
-import com.shootr.android.db.DatabaseContract.DeviceTable;
+import com.shootr.android.db.DatabaseContract.CreateDeviceTable;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
@@ -105,13 +105,13 @@ public class SQLiteUtils {
             + TablesSync.FREQUENCY+" INT NULL, " +
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
-    public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
-            + DeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"
-            + DeviceTable.ID_USER+" INT NOT NULL,"
-            + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
-            + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
-            + DeviceTable.MODEL+" VARCHAR(255) NULL,"
-            + DeviceTable.OS_VERSION+" VARCHAR(255),"
+    public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ CreateDeviceTable.TABLE +" ("
+            + CreateDeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"
+            + CreateDeviceTable.ID_USER+" INT NOT NULL,"
+            + CreateDeviceTable.TOKEN+" VARCHAR(255) NULL,"
+            + CreateDeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
+            + CreateDeviceTable.MODEL+" VARCHAR(255) NULL,"
+            + CreateDeviceTable.OS_VERSION+" VARCHAR(255),"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"

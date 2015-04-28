@@ -120,9 +120,9 @@ public class DatabaseContract {
         };
     }
 
-    public static final class DeviceTable implements SyncColumns {
+    public static final class CreateDeviceTable implements SyncColumns {
 
-        private DeviceTable() {
+        private CreateDeviceTable() {
 
         }
 
