@@ -111,6 +111,12 @@ public class TimelineParameters {
             return this;
         }
 
+        public Builder forActivity() {
+            parameters.eventId = null;
+            parameters.eventAuthorId = null;
+            return this;
+        }
+
         public Builder since(Long sinceDate) {
             parameters.sinceDate = sinceDate;
             return this;

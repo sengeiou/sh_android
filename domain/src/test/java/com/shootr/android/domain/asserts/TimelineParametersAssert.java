@@ -138,7 +138,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
      * @return this assertion object.
      * @throws AssertionError - if the actual TimelineParameters's sinceDate is not equal to the given one.
      */
-    public TimelineParametersAssert hasSinceDate(java.util.Date sinceDate) {
+    public TimelineParametersAssert hasSinceDate(Long sinceDate) {
         // check that actual TimelineParameters we want to make assertions on is not null.
         isNotNull();
 

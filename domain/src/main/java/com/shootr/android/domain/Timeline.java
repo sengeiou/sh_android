@@ -5,6 +5,7 @@ import java.util.List;
 public class Timeline {
 
     private List<Shot> shots;
+    private TimelineParameters parameters;
 
     public List<Shot> getShots() {
         return shots;
@@ -12,5 +13,13 @@ public class Timeline {
 
     public void setShots(List<Shot> shots) {
         this.shots = shots;
+    }
+
+    public void setParameters(TimelineParameters parameters) {
+        this.parameters = parameters;
+    }
+
+    public TimelineParameters getParameters() {
+        return parameters;
     }
 }
