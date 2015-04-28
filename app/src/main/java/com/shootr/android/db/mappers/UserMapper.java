@@ -34,34 +34,36 @@ public class UserMapper extends GenericMapper {
 
     public  ContentValues toContentValues(UserEntity u) {
         ContentValues cv = new ContentValues();
-        String sessionToken = u.getSessionToken();
-        String email = u.getEmail();
-        if (sessionToken != null) {
-            cv.put(UserTable.SESSION_TOKEN, sessionToken);
+        if(u != null){
+            String sessionToken = u.getSessionToken();
+            String email = u.getEmail();
+            if (sessionToken != null) {
+                cv.put(UserTable.SESSION_TOKEN, sessionToken);
+            }
+            if (email != null) {
+                cv.put(UserTable.EMAIL, email);
+            }
+            cv.put(UserTable.ID, u.getIdUser());
+            cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
+            cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
+            cv.put(UserTable.USER_NAME, u.getUserName());
+            cv.put(UserTable.NAME, u.getName());
+            cv.put(UserTable.PHOTO, u.getPhoto());
+            cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
+            cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
+            cv.put(UserTable.POINTS, u.getPoints());
+            cv.put(UserTable.RANK, u.getRank());
+            cv.put(UserTable.BIO, u.getBio());
+            cv.put(UserTable.WEBSITE, u.getWebsite());
+            cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
+            cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
+            cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
+            cv.put(UserTable.EVENT_ID, u.getIdEvent());
+            cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
+            cv.put(UserTable.STATUS, u.getStatus());
+            cv.put(UserTable.CHECK_IN, u.getCheckIn());
+            setSynchronizedtoContentValues(u, cv);
         }
-        if (email != null) {
-            cv.put(UserTable.EMAIL, email);
-        }
-        cv.put(UserTable.ID, u.getIdUser());
-        cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
-        cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
-        cv.put(UserTable.USER_NAME, u.getUserName());
-        cv.put(UserTable.NAME, u.getName());
-        cv.put(UserTable.PHOTO, u.getPhoto());
-        cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
-        cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
-        cv.put(UserTable.POINTS, u.getPoints());
-        cv.put(UserTable.RANK, u.getRank());
-        cv.put(UserTable.BIO, u.getBio());
-        cv.put(UserTable.WEBSITE, u.getWebsite());
-        cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
-        cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
-        cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
-        cv.put(UserTable.EVENT_ID, u.getIdEvent());
-        cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
-        cv.put(UserTable.STATUS, u.getStatus());
-        cv.put(UserTable.CHECK_IN, u.getCheckIn());
-        setSynchronizedtoContentValues(u, cv);
         return cv;
     }
 
