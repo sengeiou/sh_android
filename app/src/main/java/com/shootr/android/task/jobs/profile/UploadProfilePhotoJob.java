@@ -4,6 +4,7 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.data.entity.UserEntity;
@@ -31,12 +32,13 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final ImageResizer imageResizer;
     private final UserEntityModelMapper userModelMapper;
     private final TimeUtils timeUtils;
+    private final UserEntityMapper userEntityMapper;
 
     private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
-      UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
-      TimeUtils timeUtils) {
+                                         UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
+                                         TimeUtils timeUtils, UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.photoService = photoService;
@@ -45,6 +47,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         this.imageResizer = imageResizer;
         this.userModelMapper = userModelMapper;
         this.timeUtils = timeUtils;
+        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(File photoFile) {
@@ -67,6 +70,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         userManager.saveUser(currentUserEntity);
         currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
         userManager.saveUser(currentUserEntity);
+        sessionRepository.setCurrentUser(userEntityMapper.transform(currentUserEntity, currentUserEntity.getIdUser()));
         return currentUserEntity;
     }
 
