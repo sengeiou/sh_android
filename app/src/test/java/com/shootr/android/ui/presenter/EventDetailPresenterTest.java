@@ -82,6 +82,15 @@ public class EventDetailPresenterTest {
         verify(eventDetailView, never()).showCheckin();
     }
 
+    @Test public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
+        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
+        setupCheckinStatusCallbacks(false);
+
+        presenter.initialize(eventDetailView, EVENT_ID_STUB);
+
+        verify(eventDetailView, never()).showCheckin();
+    }
+
     //region Setups and stubs
     private void setupEventInfoCallbacks(final EventInfo eventInfo) {
         doAnswer(new Answer() {
