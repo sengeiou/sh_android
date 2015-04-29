@@ -53,7 +53,6 @@ public class NewEventPresenter implements Presenter {
     private String currentTitle;
     private boolean notifyCreation;
 
-    private static int MIDNIGHT = 0;
     private static int TWENTY_THREE = 23;
 
     //region Initialization
@@ -129,7 +128,7 @@ public class NewEventPresenter implements Presenter {
 
     private int nextAbsoluteHour(int baseHour){
         if(baseHour == TWENTY_THREE){
-            return MIDNIGHT;
+            return TWENTY_THREE;
         }else{
             return baseHour + 1;
         }
