@@ -53,6 +53,8 @@ public class NewEventPresenter implements Presenter {
     private String currentTitle;
     private boolean notifyCreation;
 
+    private static int TWENTY_THREE = 23;
+
     //region Initialization
     @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
       CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
@@ -119,7 +121,16 @@ public class NewEventPresenter implements Presenter {
     private void roundDateUp(MutableDateTime currentDateTime) {
         if (currentDateTime.getMinuteOfHour() != 0) {
             currentDateTime.setMinuteOfHour(0);
-            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay() + 1);
+            currentDateTime.setHourOfDay(nextAbsoluteHour(currentDateTime.getHourOfDay()));
+
+        }
+    }
+
+    private int nextAbsoluteHour(int baseHour){
+        if(baseHour == TWENTY_THREE){
+            return TWENTY_THREE;
+        }else{
+            return baseHour + 1;
         }
     }
 
