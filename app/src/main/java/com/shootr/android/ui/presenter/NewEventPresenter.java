@@ -122,16 +122,16 @@ public class NewEventPresenter implements Presenter {
     private void roundDateUp(MutableDateTime currentDateTime) {
         if (currentDateTime.getMinuteOfHour() != 0) {
             currentDateTime.setMinuteOfHour(0);
-            setCurrentHourOfDay(currentDateTime);
+            currentDateTime.setHourOfDay(nextAbsoluteHour(currentDateTime.getHourOfDay()));
 
         }
     }
 
-    private void setCurrentHourOfDay(MutableDateTime currentDateTime) {
-        if(currentDateTime.getHourOfDay()!= TWENTY_THREE){
-            currentDateTime.setHourOfDay(currentDateTime.getHourOfDay() + 1);
-        } else {
-            currentDateTime.setHourOfDay(MIDNIGHT);
+    private int nextAbsoluteHour(int baseHour){
+        if(baseHour == TWENTY_THREE){
+            return MIDNIGHT;
+        }else{
+            return baseHour + 1;
         }
     }
 
