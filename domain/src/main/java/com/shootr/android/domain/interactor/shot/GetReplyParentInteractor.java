@@ -4,7 +4,6 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import javax.inject.Inject;
@@ -13,16 +12,16 @@ public class GetReplyParentInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final ShotRepository syncShotRepository;
+    private final ShotRepository remoteShotRepository;
     private Long parentId;
     private Callback<Shot> callback;
 
     @Inject
     public GetReplyParentInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository syncShotRepository) {
+      @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.syncShotRepository = syncShotRepository;
+        this.remoteShotRepository = remoteShotRepository;
     }
 
     public void loadReplyParent(Long parentId, Callback<Shot> callback) {
@@ -32,7 +31,7 @@ public class GetReplyParentInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        Shot replyParent = syncShotRepository.getShot(parentId);
+        Shot replyParent = remoteShotRepository.getShot(parentId);
 
         notifyLoaded(replyParent);
     }
