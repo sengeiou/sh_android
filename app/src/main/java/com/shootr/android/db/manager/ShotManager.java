@@ -191,4 +191,35 @@ public class ShotManager extends  AbstractManager{
         queryResult.close();
         return resultShots;
     }
+
+    public Long getLastModifiedDateForEvent(Long eventId) {
+        String whereClause = ShotTable.ID_EVENT + " = ?";
+        String[] whereArguments = new String[]{String.valueOf(eventId)};
+        String order = ShotTable.CSYS_MODIFIED + " desc";
+
+        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null, order, "1");
+
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
+            return lastShot.getCsysModified().getTime();
+        } else {
+            return 0L;
+        }
+    }
+
+    public Long getLastModifiedDateForActivity() {
+        String whereClause = ShotTable.ID_EVENT + " IS NULL";
+        String order = ShotTable.CSYS_MODIFIED + " desc";
+
+        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null, order, "1");
+
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
+            return lastShot.getCsysModified().getTime();
+        } else {
+            return 0L;
+        }
+    }
 }
