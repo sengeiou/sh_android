@@ -1,11 +1,11 @@
 package com.shootr.android.ui.presenter;
 
 import android.support.annotation.Nullable;
+
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
@@ -23,9 +23,12 @@ import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class EventDetailPresenter implements Presenter, CommunicationPresenter {
@@ -48,11 +51,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
+    private Boolean isCurrentUserWatchingThisEvent;
+    private Boolean hasUserCheckdIn;
+
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-      GetCheckinStatusInteractor getCheckinStatusInteractor, PerformCheckinInteractor performCheckinInteractor,
-      EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+        UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
+        GetCheckinStatusInteractor getCheckinStatusInteractor, PerformCheckinInteractor performCheckinInteractor,
+        EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingStatusInteractor = watchingStatusInteractor;
@@ -66,20 +72,35 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     public void initialize(EventDetailView eventDetailView, long idEvent) {
-        this.eventDetailView = eventDetailView;
+        setView(eventDetailView);
         this.idEvent = idEvent;
         this.loadEventInfo();
         this.loadCheckinStatus();
     }
 
-    private void loadCheckinStatus() {
+    protected void setView(EventDetailView eventDetailView){
+        this.eventDetailView = eventDetailView;
+    }
+
+    public void loadCheckinStatus() {
         getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
-            @Override public void onLoaded(Boolean currentCheckIn) {
+            @Override
+            public void onLoaded(Boolean currentCheckIn) {
+                hasUserCheckdIn = currentCheckIn;
                 if (!currentCheckIn) {
-                    eventDetailView.showCheckin();
+                    updateCheckinVisibility();
                 }
             }
         });
+    }
+
+    private void updateCheckinVisibility(){
+        if(isCurrentUserWatchingThisEvent != null && hasUserCheckdIn != null){
+            if(!hasUserCheckdIn && isCurrentUserWatchingThisEvent){
+                eventDetailView.showCheckin();
+            }
+        }
+
     }
 
     //region Edit status
@@ -93,12 +114,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void updateWatchStatus(String statusText) {
         watchingStatusInteractor.updateStatus(
-          statusText,
-          new UpdateStatusInteractor.Callback() {
-              @Override public void onLoaded(User currentUser) {
-                  renderCurrentUserWatching(currentUser);
-              }
-          });
+                statusText,
+                new UpdateStatusInteractor.Callback() {
+                    @Override public void onLoaded(User currentUser) {
+                        renderCurrentUserWatching(currentUser);
+                    }
+                });
     }
     //endregion
 
@@ -126,20 +147,22 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
         changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
-          new ChangeEventPhotoInteractor.Callback() {
-              @Override public void onLoaded(Event event) {
-                  renderEventInfo(event);
-                  eventDetailView.hideLoadingPictureUpload();
-                  eventDetailView.showEditPicture(event.getPicture());
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  eventDetailView.showEditPicture(eventModel.getPicture());
-                  eventDetailView.hideLoadingPictureUpload();
-                  showImageUploadError();
-                  Timber.e(error, "Error changing event photo");
-              }
-          });
+                new ChangeEventPhotoInteractor.Callback() {
+                    @Override
+                    public void onLoaded(Event event) {
+                        renderEventInfo(event);
+                        eventDetailView.hideLoadingPictureUpload();
+                        eventDetailView.showEditPicture(event.getPicture());
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override
+                    public void onError(ShootrException error) {
+                        eventDetailView.showEditPicture(eventModel.getPicture());
+                        eventDetailView.hideLoadingPictureUpload();
+                        showImageUploadError();
+                        Timber.e(error, "Error changing event photo");
+                    }
+                });
     }
     //endregion
 
@@ -153,9 +176,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.getEventInfo();
     }
 
-    private void getEventInfo() {
+    public void getEventInfo() {
         eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
-            @Override public void onLoaded(EventInfo eventInfo) {
+            @Override
+            public void onLoaded(EventInfo eventInfo) {
                 onEventInfoLoaded(eventInfo);
             }
         });
@@ -169,8 +193,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
+            isCurrentUserWatchingEvent(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
+            updateCheckinVisibility();
         }
         this.hideViewLoading();
     }
@@ -217,7 +243,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoClick() {
         if (eventModel.amIAuthor() && eventModel.getPicture() == null) {
-                editEventPhoto();
+            editEventPhoto();
         } else {
             zoomPhoto();
         }
@@ -227,11 +253,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         eventDetailView.zoomPhoto(eventModel.getPicture());
     }
 
-    @Subscribe
-    public void onNewWatchDetected(WatchUpdateRequest.Event event) {
-        this.getEventInfo();
-    }
-
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
@@ -239,10 +260,18 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        if (currentUserWatch != null) {
+        if (isCurrentUserWatchingEvent(currentUserWatch)) {
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
+    }
+
+    private boolean isCurrentUserWatchingEvent(User currentUserWatch) {
+        if(currentUserWatch != null){
+            isCurrentUserWatchingThisEvent = true;
+            return isCurrentUserWatchingThisEvent;
+        }
+        return false;
     }
 
     private void renderEventInfo(Event event) {
