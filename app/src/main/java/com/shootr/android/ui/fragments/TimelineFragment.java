@@ -283,6 +283,8 @@ public class TimelineFragment extends BaseFragment
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
+        footerProgress.setVisibility(View.GONE);
+
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
