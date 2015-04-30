@@ -16,7 +16,7 @@ public class UserEntityMapper {
             return null;
         }
         User user = new User();
-        user.setIdUser(userEntity.getIdUser());
+        user.setIdUser(userEntity.getIdUser().toString());
         user.setFavoriteTeamName(userEntity.getFavoriteTeamName());
         user.setFavoriteTeamId(userEntity.getFavoriteTeamId());
         user.setUsername(userEntity.getUserName());
@@ -52,7 +52,7 @@ public class UserEntityMapper {
             return null;
         }
         UserEntity userEntity = new UserEntity();
-        userEntity.setIdUser(user.getIdUser());
+        userEntity.setIdUser(Long.parseLong(user.getIdUser()));
         userEntity.setFavoriteTeamId(user.getFavoriteTeamId());
         userEntity.setFavoriteTeamName(user.getFavoriteTeamName());
         //TODO userEntity.setSessionToken();

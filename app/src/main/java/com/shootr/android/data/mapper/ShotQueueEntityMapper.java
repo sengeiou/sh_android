@@ -30,12 +30,12 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = queuedShot.getShot();
-        entity.setIdShot(shot.getIdShot());
+        entity.setIdShot(Long.parseLong(shot.getIdShot()));
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
-        entity.setIdShotParent(shot.getParentShotId());
-        entity.setIdUserParent(shot.getParentShotUserId());
+        entity.setIdShotParent(Long.parseLong(shot.getParentShotId()));
+        entity.setIdUserParent(Long.parseLong(shot.getParentShotUserId()));
         entity.setUserNameParent(shot.getParentShotUsername());
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
@@ -65,7 +65,7 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = new Shot();
-        shot.setIdShot(entity.getIdShot());
+        shot.setIdShot(entity.getIdShot().toString());
         shot.setComment(entity.getComment());
         shot.setImage(entity.getImage());
         shot.setPublishDate(entity.getCsysBirth());
@@ -86,8 +86,8 @@ public class ShotQueueEntityMapper {
             shot.setEventInfo(eventInfo);
         }
 
-        shot.setParentShotId(entity.getIdShotParent());
-        shot.setParentShotUserId(entity.getIdUserParent());
+        shot.setParentShotId(entity.getIdShotParent().toString());
+        shot.setParentShotUserId(entity.getIdUserParent().toString());
         shot.setParentShotUsername(entity.getUserNameParent());
 
         queuedShot.setShot(shot);

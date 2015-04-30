@@ -22,7 +22,7 @@ public class ShotEntityMapper {
             return null;
         }
         Shot shot = new Shot();
-        shot.setIdShot(shotEntity.getIdShot());
+        shot.setIdShot(shotEntity.getIdShot().toString());
         shot.setComment(shotEntity.getComment());
         shot.setImage(shotEntity.getImage());
         shot.setPublishDate(shotEntity.getCsysBirth());
@@ -40,8 +40,8 @@ public class ShotEntityMapper {
         userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
 
-        shot.setParentShotId(shotEntity.getIdShotParent());
-        shot.setParentShotUserId(shotEntity.getIdUserParent());
+        shot.setParentShotId(shotEntity.getIdShotParent().toString());
+        shot.setParentShotUserId(shotEntity.getIdUserParent().toString());
         shot.setParentShotUsername(shotEntity.getUserNameParent());
 
         return shot;
@@ -63,7 +63,7 @@ public class ShotEntityMapper {
             throw new IllegalArgumentException("Shot can't be null");
         }
         ShotEntity shotEntity = new ShotEntity();
-        shotEntity.setIdShot(shot.getIdShot());
+        shotEntity.setIdShot(Long.parseLong(shot.getIdShot()));
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
@@ -75,8 +75,8 @@ public class ShotEntityMapper {
             shotEntity.setEventTag(eventInfo.getEventTag());
         }
 
-        shotEntity.setIdShotParent(shot.getParentShotId());
-        shotEntity.setIdUserParent(shot.getParentShotUserId());
+        shotEntity.setIdShotParent(Long.parseLong(shot.getParentShotId()));
+        shotEntity.setIdUserParent(Long.parseLong(shot.getParentShotUserId()));
         shotEntity.setUserNameParent(shot.getParentShotUsername());
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);

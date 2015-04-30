@@ -17,8 +17,8 @@ public class EventEntityMapper {
             return null;
         }
         Event event = new Event();
-        event.setId(eventEntity.getIdEvent());
-        event.setAuthorId(eventEntity.getIdUser());
+        event.setId(eventEntity.getIdEvent().toString());
+        event.setAuthorId(eventEntity.getIdUser().toString());
         event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
         event.setEndDate(eventEntity.getEndDate());
@@ -39,8 +39,8 @@ public class EventEntityMapper {
 
     public EventEntity transform(Event event) {
         EventEntity eventEntity = new EventEntity();
-        eventEntity.setIdEvent(event.getId());
-        eventEntity.setIdUser(event.getAuthorId());
+        eventEntity.setIdEvent(Long.parseLong(event.getId()));
+        eventEntity.setIdUser(Long.parseLong(event.getAuthorId()));
         eventEntity.setTitle(event.getTitle());
         eventEntity.setBeginDate(event.getStartDate());
         eventEntity.setEndDate(event.getEndDate());
@@ -52,4 +52,5 @@ public class EventEntityMapper {
         eventEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return eventEntity;
     }
+
 }
