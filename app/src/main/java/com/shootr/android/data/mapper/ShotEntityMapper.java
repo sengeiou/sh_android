@@ -28,14 +28,14 @@ public class ShotEntityMapper {
         shot.setPublishDate(shotEntity.getCsysBirth());
         if (shotEntity.getIdEvent() != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(shotEntity.getIdEvent());
+            eventInfo.setIdEvent(shotEntity.getIdEvent().toString());
             eventInfo.setEventTitle(shotEntity.getEventTitle());
             eventInfo.setEventTag(shotEntity.getEventTag());
             shot.setEventInfo(eventInfo);
         }
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(shotEntity.getIdUser());
+        userInfo.setIdUser(shotEntity.getIdUser().toString());
         userInfo.setUsername(shotEntity.getUsername());
         userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
@@ -67,10 +67,10 @@ public class ShotEntityMapper {
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
-        shotEntity.setIdUser(shot.getUserInfo().getIdUser());
+        shotEntity.setIdUser(Long.parseLong(shot.getUserInfo().getIdUser()));
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            shotEntity.setIdEvent(eventInfo.getIdEvent());
+            shotEntity.setIdEvent(Long.parseLong(eventInfo.getIdEvent()));
             shotEntity.setEventTitle(eventInfo.getEventTitle());
             shotEntity.setEventTag(eventInfo.getEventTag());
         }

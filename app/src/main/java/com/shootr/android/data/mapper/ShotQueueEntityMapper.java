@@ -40,12 +40,12 @@ public class ShotQueueEntityMapper {
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            entity.setIdEvent(eventInfo.getIdEvent());
+            entity.setIdEvent(Long.parseLong(eventInfo.getIdEvent()));
             entity.setEventTitle(eventInfo.getEventTitle());
             entity.setEventTag(eventInfo.getEventTag());
         }
 
-        entity.setIdUser(shot.getUserInfo().getIdUser());
+        entity.setIdUser(Long.parseLong(shot.getUserInfo().getIdUser()));
         entity.setUsername(shot.getUserInfo().getUsername());
 
         entity.setType(ShotEntity.TYPE_COMMENT);
@@ -73,16 +73,16 @@ public class ShotQueueEntityMapper {
         shot.setIdQueue(entity.getIdQueue());
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(entity.getIdUser());
+        userInfo.setIdUser(entity.getIdUser().toString());
         userInfo.setUsername(entity.getUsername());
         userInfo.setAvatar(avatarBuilder.thumbnail(entity.getIdUser()));
         shot.setUserInfo(userInfo);
 
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(entity.getIdEvent());
+        eventInfo.setIdEvent(entity.getIdEvent().toString());
         eventInfo.setEventTitle(entity.getEventTitle());
         eventInfo.setEventTag(entity.getEventTag());
-        if (eventInfo.getIdEvent() != null && eventInfo.getIdEvent() > 0L) {
+        if (eventInfo.getIdEvent() != null && Long.parseLong(eventInfo.getIdEvent()) > 0L) {
             shot.setEventInfo(eventInfo);
         }
 

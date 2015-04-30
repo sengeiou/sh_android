@@ -28,7 +28,7 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setVisibleEventId(userEntity.getIdEvent());
+        user.setVisibleEventId(userEntity.getIdEvent().toString());
         user.setVisibleEventTitle(userEntity.getEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));
@@ -66,7 +66,7 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        userEntity.setIdEvent(user.getVisibleEventId());
+        userEntity.setIdEvent(Long.parseLong(user.getVisibleEventId()));
         userEntity.setEventTitle(user.getVisibleEventTitle());
 
         userEntity.setStatus(user.getStatus());

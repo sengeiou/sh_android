@@ -13,7 +13,7 @@ public class TeamModelMapper {
 
     public TeamModel transform(TeamEntity teamEntity) {
         TeamModel teamModel = new TeamModel();
-        teamModel.setIdTeam(teamEntity.getIdTeam());
+        teamModel.setIdTeam(teamEntity.getIdTeam().toString());
         teamModel.setName(teamEntity.getClubName());
         return teamModel;
     }
