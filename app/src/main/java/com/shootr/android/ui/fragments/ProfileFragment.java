@@ -108,7 +108,7 @@ public class ProfileFragment extends BaseFragment {
     //endregion
 
     // Args
-    Long idUser;
+    String idUser;
 
     UserModel user;
     private View.OnClickListener avatarClickListener;
@@ -117,7 +117,7 @@ public class ProfileFragment extends BaseFragment {
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
 
-    public static ProfileFragment newInstance(Long idUser) {
+    public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
         //TODO  pasar idUser
@@ -157,7 +157,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void injectArguments() {
         Bundle arguments = getArguments();
-        idUser = (Long) arguments.getSerializable(ARGUMENT_USER);
+        idUser = (String) arguments.getSerializable(ARGUMENT_USER);
     }
 
     @Override
@@ -349,7 +349,7 @@ public class ProfileFragment extends BaseFragment {
         Context context = getActivity();
 
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser);
+        job.init(Long.valueOf(idUser));
         jobManager.addJobInBackground(job);
 
         loadLatestShots();
@@ -359,7 +359,7 @@ public class ProfileFragment extends BaseFragment {
     public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(idUser, followType);
+        job2.init(Long.valueOf(idUser), followType);
         jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserOnlineJob job =
@@ -511,14 +511,14 @@ public class ProfileFragment extends BaseFragment {
         if (idUser == null) {
             return;
         }
-        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
+        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), Long.valueOf(idUser), followType), 677);
     }
 
     private void loadLatestShots() {
         GetLatestShotsJob getLatestShotsJob =
           ShootrApplication.get(getActivity()).getObjectGraph().get(GetLatestShotsJob.class);
 
-        getLatestShotsJob.init(idUser);
+        getLatestShotsJob.init(Long.valueOf(idUser));
 
         jobManager.addJobInBackground(getLatestShotsJob);
     }

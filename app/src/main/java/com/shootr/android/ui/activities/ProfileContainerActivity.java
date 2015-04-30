@@ -18,7 +18,7 @@ import timber.log.Timber;
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
     public static final String EXTRA_USER = "user";
-    Long idUser;
+    String idUser;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
@@ -37,7 +37,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setupActionBar();
 
         if (savedInstanceState == null) {
-            idUser = (Long) getIntent().getSerializableExtra(EXTRA_USER);
+            idUser = (String) getIntent().getSerializableExtra(EXTRA_USER);
             if (idUser == null) {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();

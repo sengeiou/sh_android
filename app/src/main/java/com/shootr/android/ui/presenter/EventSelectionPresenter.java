@@ -70,8 +70,8 @@ public class EventSelectionPresenter implements Presenter {
         });
     }
 
-    public void onEventSelected(Long eventId) {
-        selectEventInteractor.selectEvent(eventId, new SelectEventInteractor.Callback() {
+    public void onEventSelected(String eventId) {
+        selectEventInteractor.selectEvent(Long.valueOf(eventId), new SelectEventInteractor.Callback() {
             @Override public void onLoaded(Long selectedEventId) {
                 onEventChanged(selectedEventId);
             }

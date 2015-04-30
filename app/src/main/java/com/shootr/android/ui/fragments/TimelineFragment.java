@@ -125,7 +125,7 @@ public class TimelineFragment extends BaseFragment
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
-            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            String idEventSelected = data.getStringExtra(EventsListActivity.KEY_EVENT_ID);
             eventSelectionPresenter.onEventSelected(idEventSelected);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
