@@ -48,7 +48,7 @@ public class NewEventPresenter implements Presenter {
     private String preloadedTitle;
     private long preloadedStartDate;
     private EndDate preloadedEndDate;
-    private Long preloadedEventId;
+    private String preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
     private boolean notifyCreation;
@@ -220,11 +220,11 @@ public class NewEventPresenter implements Presenter {
         sendEvent(null);
     }
 
-    private void editEvent(Long preloadedEventId) {
+    private void editEvent(String preloadedEventId) {
         sendEvent(preloadedEventId);
     }
 
-    private void sendEvent(Long preloadedEventId) {
+    private void sendEvent(String preloadedEventId) {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         long endTimestamp = realDateFromFakeTimezone(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         String title = filterTitle(newEventView.getEventTitle());

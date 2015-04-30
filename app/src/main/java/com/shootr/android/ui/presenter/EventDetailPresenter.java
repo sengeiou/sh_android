@@ -130,7 +130,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void editEventInfo() {
-        Long idEvent = eventModel.getIdEvent();
+        String idEvent = eventModel.getIdEvent();
         eventDetailView.navigateToEditEvent(idEvent);
     }
 

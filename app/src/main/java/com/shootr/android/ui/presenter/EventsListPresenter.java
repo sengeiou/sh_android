@@ -82,7 +82,7 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         });
     }
 
-    public void eventCreated(long eventId) {
+    public void eventCreated(String eventId) {
         eventsListView.closeScrenWithEventResult(eventId);
     }
 

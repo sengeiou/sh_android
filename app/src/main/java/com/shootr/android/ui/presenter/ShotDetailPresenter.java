@@ -67,7 +67,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadParentShot() {
-        getReplyParentInteractor.loadReplyParent(shotModel.getParentShotId(), new Interactor.Callback<Shot>() {
+        getReplyParentInteractor.loadReplyParent(Long.parseLong(shotModel.getParentShotId()), new Interactor.Callback<Shot>() {
             @Override public void onLoaded(Shot shot) {
                 if (shot != null) {
                     shotDetailView.renderParent(shotModelMapper.transform(shot));
@@ -82,7 +82,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         shotDetailView.openImage(shot.getImage());
     }
 
-    public void avatarClick(Long userId) {
+    public void avatarClick(String userId) {
         shotDetailView.openProfile(userId);
     }
 

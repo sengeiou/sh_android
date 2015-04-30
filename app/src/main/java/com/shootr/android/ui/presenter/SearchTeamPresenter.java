@@ -65,7 +65,7 @@ public class SearchTeamPresenter implements Presenter, CommunicationPresenter {
 
     public void selectTeam(TeamModel selectedTeam) {
         String teamName = selectedTeam.getName();
-        Long teamId = selectedTeam.getIdTeam();
+        String teamId = selectedTeam.getIdTeam();
         searchTeamView.deliverSelectedTeam(teamName, teamId);
     }
 
