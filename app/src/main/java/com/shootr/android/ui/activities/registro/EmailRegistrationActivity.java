@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -55,7 +56,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         return R.layout.activity_registration_email;
     }
 
-    @Override protected void initializeViews() {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         setupDisclaimerLinks();
         setupSuggestedEmails();

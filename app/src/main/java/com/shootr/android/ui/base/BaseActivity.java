@@ -33,7 +33,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         setupUpdateWarning();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
-            initializeViews();
+            initializeViews(savedInstanceState);
         } else {
             redirectToLogin();
         }
@@ -58,7 +58,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @LayoutRes protected abstract int getLayoutResource();
 
-    protected abstract void initializeViews();
+    protected abstract void initializeViews(Bundle savedInstanceState);
 
     protected abstract void initializePresenter();
 

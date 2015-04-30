@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities.registro;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -41,7 +42,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         /* no-op */
     }
 
-    @Override protected  void initializeViews(){
+    @Override protected  void initializeViews(Bundle savedInstanceState){
         ButterKnife.inject(this);
         setupSuggestedEmails();
     }

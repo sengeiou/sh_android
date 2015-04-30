@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.os.Bundle;
 import com.shootr.android.R;
 import com.shootr.android.ui.NavigationDrawerDecorator;
 
@@ -13,7 +14,7 @@ public class PeopleActivity extends BaseNavDrawerToolbarActivity {
         return R.layout.activity_people;
     }
 
-    @Override protected void initializeViews() {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         /* no-op: Framgent in the layout */
     }
 
