@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Shot {
 
-    private Long idShot;
+    private String idShot;
     private String comment;
     private String image;
     private ShotUserInfo userInfo;
@@ -13,15 +13,15 @@ public class Shot {
     private Date publishDate;
     private Long idQueue;
 
-    private Long parentShotId;
-    private Long parentShotUserId;
+    private String parentShotId;
+    private String parentShotUserId;
     private String parentShotUsername;
 
-    public Long getIdShot() {
+    public String getIdShot() {
         return idShot;
     }
 
-    public void setIdShot(Long idShot) {
+    public void setIdShot(String idShot) {
         this.idShot = idShot;
     }
 
@@ -112,19 +112,19 @@ public class Shot {
           '}';
     }
 
-    public Long getParentShotId() {
+    public String getParentShotId() {
         return parentShotId;
     }
 
-    public void setParentShotId(Long parentShotId) {
+    public void setParentShotId(String parentShotId) {
         this.parentShotId = parentShotId;
     }
 
-    public Long getParentShotUserId() {
+    public String getParentShotUserId() {
         return parentShotUserId;
     }
 
-    public void setParentShotUserId(Long parentShotUserId) {
+    public void setParentShotUserId(String parentShotUserId) {
         this.parentShotUserId = parentShotUserId;
     }
 

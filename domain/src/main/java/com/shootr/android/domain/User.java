@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class User {
 
-    private Long idUser;
+    private String idUser;
     private String favoriteTeamName;
     private Long favoriteTeamId;
     private String username;
@@ -26,11 +26,11 @@ public class User {
     private boolean isFollower;
     private boolean isMe;
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 

@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Event {
 
-    private Long id;
-    private Long authorId;
+    private String id;
+    private String authorId;
     private String authorUsername;
     private String title;
     private String picture;
@@ -41,11 +41,11 @@ public class Event {
         this.endDate = endDate;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,11 +57,11 @@ public class Event {
         this.picture = picture;
     }
 
-    public Long getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
