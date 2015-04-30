@@ -82,7 +82,11 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-        Long wantedEventId = Long.parseLong(getWantedEventId(currentUser));
+        Long wantedEventId = null;
+
+        if(getWantedEventId(currentUser) != "null"){
+            wantedEventId = Long.parseLong(getWantedEventId(currentUser));
+        }
 
         if (wantedEventId!=null && wantedEventId > 0) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);

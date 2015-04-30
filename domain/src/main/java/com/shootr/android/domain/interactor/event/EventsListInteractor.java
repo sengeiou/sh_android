@@ -37,8 +37,8 @@ public class EventsListInteractor implements Interactor {
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
 
         String eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (eventWatchingId != null) {
-            Event visibleEvent = localEventRepository.getEventById(Long.parseLong(eventWatchingId));
+        if (eventWatchingId != "null") {
+            Event visibleEvent = localEventRepository.getEventById(Long.valueOf(eventWatchingId));
             if (visibleEvent != null) {
                 eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
             }

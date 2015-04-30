@@ -118,13 +118,13 @@ public class GetMainTimelineInteractor implements Interactor {
 
     private TimelineParameters buildParametersWithoutEvent() {
         Long currentUserId = sessionRepository.getCurrentUserId();
-        return TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId.toString()).build();
+        return TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId).build();
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
         Long currentUserId = sessionRepository.getCurrentUserId();
         return TimelineParameters.builder()
-          .forUsers(getPeopleIds(), currentUserId.toString())
+          .forUsers(getPeopleIds(), currentUserId)
           .forEvent(event)
           .build();
     }
@@ -140,10 +140,10 @@ public class GetMainTimelineInteractor implements Interactor {
         return remoteShots;
     }
 
-    private List<String> getPeopleIds() {
-        List<String> ids = new ArrayList<>();
+    private List<Long> getPeopleIds() {
+        List<Long> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
-            ids.add(user.getIdUser());
+            ids.add(Long.valueOf(user.getIdUser()));
         }
         return ids;
     }
@@ -151,7 +151,7 @@ public class GetMainTimelineInteractor implements Interactor {
     private Event getVisibleEventFromRepository(UserRepository userRepository) {
         Long currentUserId = sessionRepository.getCurrentUserId();
         String visibleEventId = userRepository.getUserById(currentUserId).getVisibleEventId();
-        if (visibleEventId != null) {
+        if (visibleEventId != "null") {
             return localEventRepository.getEventById(Long.parseLong(visibleEventId));
         }
         return null;
@@ -179,7 +179,8 @@ public class GetMainTimelineInteractor implements Interactor {
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 errorCallback.onError(error);
             }
         });
