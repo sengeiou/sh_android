@@ -138,7 +138,7 @@ public class Shot {
 
     public static class ShotEventInfo {
 
-        private Long idEvent;
+        private String idEvent;
         private String eventTitle;
         private String eventTag;
 
@@ -158,11 +158,11 @@ public class Shot {
             this.eventTitle = eventTitle;
         }
 
-        public Long getIdEvent() {
+        public String getIdEvent() {
             return idEvent;
         }
 
-        public void setIdEvent(Long idEvent) {
+        public void setIdEvent(String idEvent) {
             this.idEvent = idEvent;
         }
 

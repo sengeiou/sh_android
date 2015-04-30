@@ -17,7 +17,7 @@ public class User {
     private String bio;
     private Long points;
 
-    private Long visibleEventId;
+    private String visibleEventId;
     private String visibleEventTitle;
     private String status;
     private Boolean checkedIn;
@@ -163,11 +163,11 @@ public class User {
         this.email = email;
     }
 
-    public Long getVisibleEventId() {
+    public String getVisibleEventId() {
         return visibleEventId;
     }
 
-    public void setVisibleEventId(Long visibleEventId) {
+    public void setVisibleEventId(String visibleEventId) {
         this.visibleEventId = visibleEventId;
     }
 
