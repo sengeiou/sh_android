@@ -17,7 +17,7 @@ public class GetRepliesFromShotInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
-    private Long shotId;
+    private String shotId;
     private Callback<List<Shot>> callback;
 
     @Inject
@@ -29,18 +29,18 @@ public class GetRepliesFromShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplies(Long shotId, Callback<List<Shot>> callback) {
+    public void loadReplies(String shotId, Callback<List<Shot>> callback) {
         this.shotId = shotId;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        List<Shot> localReplies = localShotRepository.getReplies(shotId);
+        List<Shot> localReplies = localShotRepository.getReplies(Long.parseLong(shotId));
         if (!localReplies.isEmpty()) {
             notifyLoaded(orderShots(localReplies));
         }
-        List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
+        List<Shot> updatedReplies = remoteShotRepository.getReplies(Long.parseLong(shotId));
         if (!updatedReplies.isEmpty()) {
             notifyLoaded(orderShots(updatedReplies));
         }

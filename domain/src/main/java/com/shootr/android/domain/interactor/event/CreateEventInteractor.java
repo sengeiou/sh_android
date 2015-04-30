@@ -24,7 +24,7 @@ public class CreateEventInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final EventRepository remoteEventRepository;
 
-    private Long idEvent;
+    private String idEvent;
     private String title;
     private long startDate;
     private long endDate;
@@ -41,7 +41,7 @@ public class CreateEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void sendEvent(Long idEvent, String title, long startDate, long endDate, String timezoneId,
+    public void sendEvent(String idEvent, String title, long startDate, long endDate, String timezoneId,
       boolean notifyCreation, Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
@@ -72,7 +72,7 @@ public class CreateEventInteractor implements Interactor {
         if (isNewEvent()) {
             event = new Event();
         } else {
-            event = remoteEventRepository.getEventById(idEvent);
+            event = remoteEventRepository.getEventById(Long.parseLong(idEvent));
         }
         event.setTitle(title);
         Long currentUserId = sessionRepository.getCurrentUserId();
