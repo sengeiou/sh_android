@@ -46,7 +46,7 @@ public class ShootrUserService {
 
         try {
             String idUser = currentUser.getIdUser();
-            checkinGateway.performCheckin(Long.parseLong(idUser), Long.parseLong(visibleEventId));
+            checkinGateway.performCheckin(Long.valueOf(idUser), Long.valueOf(visibleEventId));
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
@@ -69,8 +69,8 @@ public class ShootrUserService {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
             storeSession(loginResult);
             String visibleEventId = loginResult.getUser().getVisibleEventId();
-            if(visibleEventId !=null){
-                remoteEventRepository.getEventById(Long.parseLong(visibleEventId));
+            if(visibleEventId != "null"){
+                remoteEventRepository.getEventById(Long.valueOf(visibleEventId));
             }
             remoteUserRepository.getPeople();
         } catch (IOException e) {
@@ -82,7 +82,7 @@ public class ShootrUserService {
         String idUser = loginResult.getUser().getIdUser();
         String sessionToken = loginResult.getSessionToken();
         User user = loginResult.getUser();
-        sessionRepository.createSession(Long.parseLong(idUser), sessionToken, user);
+        sessionRepository.createSession(Long.valueOf(idUser), sessionToken, user);
         localUserRepository.putUser(loginResult.getUser());
     }
 
