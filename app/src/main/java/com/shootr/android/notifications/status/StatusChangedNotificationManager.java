@@ -30,6 +30,6 @@ public class StatusChangedNotificationManager {
     public void sendWatchRequestNotification(UserModel userWatchingModel, String newStatus) {
         StatusChangedNotification watchRequestNotification =
           new StatusChangedNotification(context, notificationBuilderFactory, picasso, userWatchingModel, newStatus);
-        androidNotificationManager.notify(watchRequestNotification, NOTIFICATION_TAG, userWatchingModel.getIdUser().intValue());
+        androidNotificationManager.notify(watchRequestNotification, NOTIFICATION_TAG, Integer.parseInt(userWatchingModel.getIdUser()));
     }
 }
