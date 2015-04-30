@@ -26,6 +26,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject SessionHandler sessionHandler;
 
     private UpdateWarning.Receiver updateWarningReceiver;
+    private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,8 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void injectDependencies() {
-        getObjectGraph().inject(this);
+        activityGraph = getObjectGraph();
+        activityGraph.inject(this);
     }
 
     protected void createLayout() {
@@ -70,6 +72,15 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override protected void onPause() {
         super.onPause();
         bus.unregister(updateWarningReceiver);
+    }
+
+    @Override protected void onDestroy() {
+        activityGraph = null;
+        super.onDestroy();
+    }
+
+    public void inject(Object object) {
+        activityGraph.inject(object);
     }
 
     protected ObjectGraph getObjectGraph() {
