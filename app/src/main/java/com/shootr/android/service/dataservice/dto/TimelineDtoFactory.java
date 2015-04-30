@@ -108,7 +108,7 @@ public class TimelineDtoFactory {
         FilterDto timelineFilter = and( //
           or(ShotTable.ID_USER).isIn(parameters.getAllUserIds()) //
         ) //
-          .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
+          .and(ShotTable.ID_EVENT).isEqualTo(Long.valueOf(parameters.getEventId())) //
           .and(ShotTable.TYPE).isNotEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
