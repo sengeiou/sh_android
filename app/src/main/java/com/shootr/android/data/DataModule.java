@@ -52,7 +52,6 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
-import com.shootr.android.ui.fragments.TimelineFragment;
 import com.shootr.android.ui.fragments.UserFollowsFragment;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
@@ -104,7 +103,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
 
-    TimelineJob.class, TimelineFragment.class,
+    TimelineJob.class,
 
     GCMRegistrationJob.class,
 

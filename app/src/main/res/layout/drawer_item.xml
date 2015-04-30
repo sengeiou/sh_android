@@ -13,7 +13,7 @@
       android:layout_width="24dp"
       android:layout_height="24dp"
       android:layout_marginRight="32dp"
-      tools:src="@drawable/ic_drawer_timeline_mask" />
+      tools:src="@drawable/ic_drawer_activity_mask" />
     <!--android:tint="@color/drawer_text"-->
 
     <CheckedTextView android:id="@+id/drawer_item_text"
