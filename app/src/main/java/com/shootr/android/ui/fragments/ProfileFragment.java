@@ -487,7 +487,7 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.profile_watching_container)
     public void onWatchingClick() {
-        startActivity(EventDetailActivity.getIntent(getActivity(), user.getEventWatchingId()));
+        startActivity(EventDetailActivity.getIntent(getActivity(), Long.parseLong(user.getEventWatchingId())));
     }
 
     public void followUser() {

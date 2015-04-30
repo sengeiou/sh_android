@@ -179,7 +179,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
         GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(userVO.getIdUser(),followType);
+        job2.init(Long.parseLong(userVO.getIdUser()),followType);
         jobManager.addJobInBackground(job2);
 
         //Al instante
@@ -277,7 +277,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             userModel.setName(bundleUser.getString("NAME"));
             userModel.setFavoriteTeamName(bundleUser.getString("FAVORITE_TEAM"));
             userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
-            userModel.setIdUser(bundleUser.getLong("ID_USER"));
+            userModel.setIdUser(bundleUser.getString("ID_USER"));
             List<UserModel> userModels = getAdapter().getItems();
             for(UserModel userM: userModels){
                 if(userM.getIdUser().equals(userModel.getIdUser())){
