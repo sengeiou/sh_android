@@ -39,13 +39,14 @@ public class ShootrUserService {
         if (currentUser.isCheckedIn()) {
             throw new InvalidCheckinException("Can't perform checkin if already checked-in");
         }
-        Long visibleEventId = currentUser.getVisibleEventId();
+        String visibleEventId = currentUser.getVisibleEventId();
         if (visibleEventId == null) {
             throw new InvalidCheckinException("Can't perform checkin without visible event");
         }
 
         try {
-            checkinGateway.performCheckin(currentUser.getIdUser(), visibleEventId);
+            String idUser = currentUser.getIdUser();
+            checkinGateway.performCheckin(Long.parseLong(idUser), Long.parseLong(visibleEventId));
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
@@ -67,9 +68,9 @@ public class ShootrUserService {
         try {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
             storeSession(loginResult);
-            Long visibleEventId = loginResult.getUser().getVisibleEventId();
+            String visibleEventId = loginResult.getUser().getVisibleEventId();
             if(visibleEventId !=null){
-                remoteEventRepository.getEventById(visibleEventId);
+                remoteEventRepository.getEventById(Long.parseLong(visibleEventId));
             }
             remoteUserRepository.getPeople();
         } catch (IOException e) {
@@ -78,7 +79,10 @@ public class ShootrUserService {
     }
 
     private void storeSession(LoginResult loginResult) {
-        sessionRepository.createSession(loginResult.getUser().getIdUser(), loginResult.getSessionToken(), loginResult.getUser());
+        String idUser = loginResult.getUser().getIdUser();
+        String sessionToken = loginResult.getSessionToken();
+        User user = loginResult.getUser();
+        sessionRepository.createSession(Long.parseLong(idUser), sessionToken, user);
         localUserRepository.putUser(loginResult.getUser());
     }
 
