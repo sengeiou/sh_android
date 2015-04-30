@@ -32,7 +32,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     private final UserRepository localUserRepository;
 
     private Long currentOldestDate;
-    private Callback callback;
+    private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetOlderEventTimelineInteractor(InteractorHandler interactorHandler,
@@ -46,7 +46,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderEventTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
+    public void loadOlderEventTimeline(Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -122,9 +122,5 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         });
     }
 
-    public interface Callback {
-
-        void onLoaded(Timeline timeline);
-    }
     //endregion
 }

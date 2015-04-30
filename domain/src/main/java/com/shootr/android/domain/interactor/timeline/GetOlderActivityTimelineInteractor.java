@@ -30,7 +30,7 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     private final UserRepository localUserRepository;
 
     private Long currentOldestDate;
-    private Callback callback;
+    private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
@@ -43,7 +43,7 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderActivityTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
+    public void loadOlderActivityTimeline(Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -108,11 +108,6 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
-    }
-
-    public interface Callback {
-
-        void onLoaded(Timeline timeline);
     }
     //endregion
 }
