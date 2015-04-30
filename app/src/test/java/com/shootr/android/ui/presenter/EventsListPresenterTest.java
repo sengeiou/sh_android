@@ -1,0 +1,118 @@
+package com.shootr.android.ui.presenter;
+
+import com.shootr.android.domain.Event;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.EventsListInteractor;
+import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.util.ErrorMessageFactory;
+import com.shootr.android.util.EventTimeFormatter;
+import com.squareup.otto.Bus;
+import java.util.Date;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
+
+public class EventsListPresenterTest {
+
+    private static final Long SELECTED_EVENT_ID = 1L;
+    private static final String SELECTED_EVENT_TITLE = "title";
+
+    @Mock Bus bus;
+    @Mock EventsListInteractor eventsListInteractor;
+    @Mock EventsSearchInteractor eventsSearchInteractor;
+    @Mock SelectEventInteractor selectEventInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock SessionRepository sessionRepository;
+    @Mock EventsListView eventsListView;
+
+    private EventsListPresenter presenter;
+
+    @Before public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        EventModelMapper eventModelMapper = new EventModelMapper(new EventTimeFormatter(), sessionRepository);
+        EventResultModelMapper eventResultModelMapper =
+          new EventResultModelMapper(eventModelMapper);
+        presenter = new EventsListPresenter(bus,
+          eventsListInteractor,
+          eventsSearchInteractor, selectEventInteractor, eventResultModelMapper, eventModelMapper, errorMessageFactory);
+        presenter.setView(eventsListView);
+    }
+
+    @Test public void shouldLoadEventListOnInitialized() throws Exception {
+        presenter.initialize(eventsListView);
+
+        verify(eventsListInteractor).loadEvents();
+    }
+
+    @Test public void shouldSelectEventWithInteractorWhenEventSelected() throws Exception {
+        presenter.selectEvent(selectedEventModel());
+
+        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldNavigateToEventTimelineWhenEventSelectedIfSelectEventInteractorCallbacksEventId() throws Exception {
+        setupSelectEventInteractorCallbacksEvent();
+
+        presenter.selectEvent(selectedEventModel());
+
+        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+    }
+
+    @Test public void shouldSelectEventWithInteractorWhenNewEventCreated() throws Exception {
+        presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+
+        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), any(Interactor.Callback.class));
+    }
+
+    @Test public void shouldNavigateToEventTimelineWhenNewEventCreatedIfSelectEventInteractorCallbacksEventId() throws Exception {
+        setupSelectEventInteractorCallbacksEvent();
+
+        presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+
+        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+    }
+
+    //TODO search tests
+
+    private void setupSelectEventInteractorCallbacksEvent() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<Event> callback = (Interactor.Callback<Event>) invocation.getArguments()[1];
+                callback.onLoaded(selectedEvent());
+                return null;
+            }
+        }).when(selectEventInteractor).selectEvent(anyLong(), any(Interactor.Callback.class));
+    }
+
+    private EventModel selectedEventModel() {
+        EventModel eventModel = new EventModel();
+        eventModel.setIdEvent(SELECTED_EVENT_ID);
+        eventModel.setTitle(SELECTED_EVENT_TITLE);
+        return eventModel;
+    }
+
+    private Event selectedEvent() {
+        Event event = new Event();
+        event.setId(SELECTED_EVENT_ID);
+        event.setTitle(SELECTED_EVENT_TITLE);
+        event.setStartDate(new Date());
+        event.setEndDate(new Date());
+        event.setAuthorId(1L);
+        return event;
+    }
+}

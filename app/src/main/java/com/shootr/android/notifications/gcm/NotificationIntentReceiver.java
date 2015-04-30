@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
-import com.shootr.android.ui.activities.TimelineActivity;
 import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
@@ -26,10 +26,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         if (action.equals(ACTION_DISCARD_SHOT_NOTIFICATION)) {
             notificationManager.clearShotNotifications();
         }else if (action.equals(ACTION_OPEN_SHOT_NOTIFICATION)) {
-            context.startActivity(new Intent(context, TimelineActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            context.startActivity(new Intent(context, EventsListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             notificationManager.clearShotNotifications();
         } else if (action.equals(ACTION_OPEN_STATUS_CHANGED)) {
-            context.startActivity(new Intent(context, TimelineActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            context.startActivity(new Intent(context, EventsListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }else if(action.equals(ACTION_OPEN_PROFILE)){
             Long idUser = intent.getExtras().getLong(ProfileContainerActivity.EXTRA_USER);
             context.startActivity(

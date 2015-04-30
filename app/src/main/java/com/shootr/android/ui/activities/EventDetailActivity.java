@@ -314,7 +314,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
             String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
-            Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            Long idEventEdited = data.getLongExtra(NewEventActivity.KEY_EVENT_ID, 0L);
             presenter.resultFromEditEventInfo(idEventEdited);
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
@@ -462,7 +462,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToEditEvent(Long idEvent) {
-        Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(EventsListActivity.KEY_EVENT_ID, idEvent);
+        Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(NewEventActivity.KEY_EVENT_ID, idEvent);
         startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
     }
 

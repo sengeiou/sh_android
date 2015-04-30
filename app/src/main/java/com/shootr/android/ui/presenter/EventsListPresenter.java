@@ -6,9 +6,11 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
@@ -27,23 +29,32 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
+    private final SelectEventInteractor selectEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
+    private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
 
     @Inject public EventsListPresenter(@Main Bus bus, EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
+      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
+        this.selectEventInteractor = selectEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
+        this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
 
-    public void initialize(EventsListView eventsListView) {
+    protected void setView(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
+    }
+
+    public void initialize(EventsListView eventsListView) {
+        this.setView(eventsListView);
         this.loadDefaultEventList();
     }
 
@@ -53,7 +64,19 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     }
 
     public void selectEvent(EventModel event) {
-        eventsListView.closeScrenWithEventResult(event.getIdEvent());
+        selectEvent(event.getIdEvent(), event.getTitle());
+    }
+
+    private void selectEvent(Long idEvent, String eventTitle) {
+        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
+            @Override public void onLoaded(Event selectedEvent) {
+                onEventSelected(eventModelMapper.transform(selectedEvent));
+            }
+        });
+    }
+
+    private void onEventSelected(EventModel selectedEvent) {
+        eventsListView.navigateToEventTimeline(selectedEvent.getIdEvent(), selectedEvent.getTitle());
     }
 
     private void loadDefaultEventList() {
@@ -74,16 +97,15 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
             }
-        },
-        new Interactor.ErrorCallback() {
+        }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
         });
     }
 
-    public void eventCreated(long eventId) {
-        eventsListView.closeScrenWithEventResult(eventId);
+    public void eventCreated(Long eventId, String eventTitle) {
+        selectEvent(eventId, eventTitle);
     }
 
     private void onSearchResults(EventSearchResultList eventSearchResultList) {

@@ -16,7 +16,7 @@ import com.dd.CircularProgressButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.android.ui.activities.TimelineActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.presenter.EmailLoginPresenter;
 import com.shootr.android.ui.views.EmailLoginView;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     public void goToTimeline(){
         finish();
-        Intent i = new Intent(this,TimelineActivity.class);
+        Intent i = new Intent(this, EventsListActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }

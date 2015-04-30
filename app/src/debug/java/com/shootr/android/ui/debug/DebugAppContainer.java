@@ -32,7 +32,7 @@ import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
-import com.shootr.android.ui.activities.TimelineActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -65,6 +65,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EventListener;
 import java.util.Set;
 import java.util.TimeZone;
 import javax.inject.Inject;
@@ -697,7 +698,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void relaunch() {
-        Intent newApp = new Intent(app, TimelineActivity.class);
+        Intent newApp = new Intent(app, EventsListActivity.class);
         newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ShootrApplication.get(app).buildObjectGraphAndInject();

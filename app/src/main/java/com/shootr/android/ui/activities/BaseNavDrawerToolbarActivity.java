@@ -49,8 +49,8 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
             @Override public void goToNavDrawerItem(int itemId) {
                 Intent intent = null;
                 switch (itemId) {
-                    case NavigationDrawerDecorator.NAVDRAWER_ITEM_TIMELINE:
-                        intent = new Intent(BaseNavDrawerToolbarActivity.this, TimelineActivity.class);
+                    case NavigationDrawerDecorator.NAVDRAWER_ITEM_EVENTS:
+                        intent = new Intent(BaseNavDrawerToolbarActivity.this, EventsListActivity.class);
                         break;
                     case NavigationDrawerDecorator.NAVDRAWER_ITEM_PEOPLE:
                         intent = new Intent(BaseNavDrawerToolbarActivity.this, PeopleActivity.class);

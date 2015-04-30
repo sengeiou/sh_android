@@ -239,7 +239,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void eventCreated(Event event) {
-        newEventView.closeScreenWithResult(event.getId());
+        newEventView.closeScreenWithResult(event.getId(), event.getTitle());
     }
 
     private void eventCreationError(ShootrException error) {

@@ -3,23 +3,25 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
+import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
+import com.shootr.android.ui.NavigationDrawerDecorator;
+
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
@@ -28,9 +30,11 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListActivity extends BaseSignedInActivity implements EventsListView {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
-    public static final String KEY_EVENT_ID = "event";
+public class EventsListActivity extends BaseNavDrawerToolbarActivity implements EventsListView {
+
     private static final String KEY_SEARCH_QUERY = "search";
     public static final int REQUEST_NEW_EVENT = 1;
 
@@ -39,32 +43,24 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @InjectView(R.id.events_empty) View emptyView;
     @InjectView(R.id.events_loading) View loadingView;
 
+
     @Inject EventsListPresenter presenter;
     @Inject PicassoWrapper picasso;
+    @Inject JobManager jobManager;
 
     private EventsListAdapter adapter;
     private SearchView searchView;
     private String restoredQuery;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) {
-            return;
-        }
-        setContainerContent(R.layout.activity_events_list);
-        setupActionbar();
-        initializeViews();
-
-        initializePresenter(savedInstanceState);
+    @Override protected int getNavDrawerItemId() {
+        return NavigationDrawerDecorator.NAVDRAWER_ITEM_EVENTS;
     }
 
-    private void setupActionbar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_events_list;
     }
 
-    private void initializeViews() {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
@@ -79,15 +75,24 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         });
     }
 
-    private void initializePresenter(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
+    @Override protected void initializePresenter() {
+        //TODO
+        /*if (savedInstanceState != null) {
             restoredQuery = savedInstanceState.getString(KEY_SEARCH_QUERY);
             if (restoredQuery != null) {
                 presenter.initialize(this, restoredQuery);
                 return;
             }
-        }
+        }*/
         presenter.initialize(this);
+
+        //TODO well... the method's name is a lie right now. GCM Registration should be done from the actual presenter I guess
+        startGCMRegistration();
+    }
+
+    @Deprecated private void startGCMRegistration() {
+        GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
+        jobManager.addJobInBackground(job);
     }
 
     @OnClick(R.id.events_add_event)
@@ -128,16 +133,6 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         }
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override protected void onResume() {
         super.onResume();
         presenter.resume();
@@ -150,17 +145,17 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
+        //outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_EVENT && resultCode == RESULT_OK) {
-            long eventId = data.getLongExtra(KEY_EVENT_ID, 0L);
-            presenter.eventCreated(eventId);
+            long eventId = data.getLongExtra(NewEventActivity.KEY_EVENT_ID, 0L);
+            String title = data.getStringExtra(NewEventActivity.KEY_EVENT_TITLE);
+            presenter.eventCreated(eventId, title);
         }
     }
-
     //endregion
 
     //region View methods
@@ -180,16 +175,13 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         eventsList.setVisibility(View.GONE);
     }
 
-    @Override public void closeScrenWithEventResult(Long idEvent) {
-        Intent resultIntent = getIntent();
-        resultIntent.putExtra(KEY_EVENT_ID, idEvent);
-        setResult(RESULT_OK, resultIntent);
-        finish();
-    }
-
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
+
+    @Override public void navigateToEventTimeline(Long idEvent, String title) {
+        startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
     }
 
     @Override public void showEmpty() {

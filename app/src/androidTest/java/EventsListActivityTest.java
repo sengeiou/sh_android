@@ -1,7 +1,7 @@
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class TimelineActivityTest {
+public class EventsListActivityTest {
 
     @Test @Ignore
     public void shouldBeLauncherActivity() throws Exception {
