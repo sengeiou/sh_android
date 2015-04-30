@@ -9,11 +9,11 @@ public class TimelineParameters {
     private static final Integer DEFAULT_LIMIT = 100;
     public static final long DEFAULT_SINCE_DATE = 0L;
 
-    private List<String> userIds;
+    private List<Long> userIds;
 
     private String eventId;
 
-    private String eventAuthorId;
+    private Long eventAuthorId;
 
     private Long sinceDate;
 
@@ -27,7 +27,7 @@ public class TimelineParameters {
         /* private constructor, use builder */
     }
 
-    public List<String> getUserIds() {
+    public List<Long> getUserIds() {
         return userIds;
     }
 
@@ -35,7 +35,7 @@ public class TimelineParameters {
         return eventId;
     }
 
-    public String getEventAuthorId() {
+    public Long getEventAuthorId() {
         return eventAuthorId;
     }
 
@@ -47,12 +47,12 @@ public class TimelineParameters {
         return maxDate;
     }
 
-    public List<String> getAllUserIds() {
+    public List<Long> getAllUserIds() {
         //TODO cache this
         if (getEventAuthorId() == null) {
             return getUserIds();
         } else {
-            ArrayList<String> ids = new ArrayList<>(getUserIds());
+            ArrayList<Long> ids = new ArrayList<>(getUserIds());
             ids.add(getEventAuthorId());
             return ids;
         }
@@ -83,23 +83,23 @@ public class TimelineParameters {
             parameters.sinceDate = DEFAULT_SINCE_DATE;
         }
 
-        public Builder forUsers(List<String> userIds) {
+        public Builder forUsers(List<Long> userIds) {
             parameters.userIds = userIds;
             return this;
         }
 
-        public Builder forUsers(List<String> userIds, String... moreUserIds) {
+        public Builder forUsers(List<Long> userIds, Long... moreUserIds) {
             parameters.userIds = userIds;
             parameters.userIds.addAll(Arrays.asList(moreUserIds));
             return this;
         }
 
-        public Builder forUsers(String... userIds) {
+        public Builder forUsers(Long... userIds) {
             parameters.userIds = Arrays.asList(userIds);
             return this;
         }
 
-        public Builder forEvent(String eventId, String eventAuthorId) {
+        public Builder forEvent(String eventId, Long eventAuthorId) {
             parameters.eventId = eventId;
             parameters.eventAuthorId = eventAuthorId;
             return this;
@@ -107,7 +107,7 @@ public class TimelineParameters {
 
         public Builder forEvent(Event event) {
             parameters.eventId = event.getId();
-            parameters.eventAuthorId = event.getAuthorId();
+            parameters.eventAuthorId = Long.valueOf(event.getAuthorId());
             return this;
         }
 
