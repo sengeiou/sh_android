@@ -54,7 +54,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     @Override public long getItemId(int position) {
-        return getItem(position).getIdUser();
+        return Long.parseLong(getItem(position).getIdUser());
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {

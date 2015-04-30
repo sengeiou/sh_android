@@ -427,7 +427,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public interface AvatarClickListener {
 
-        void onClick(Long userId);
+        void onClick(String userId);
     }
 
     public interface ImageClickListener {
