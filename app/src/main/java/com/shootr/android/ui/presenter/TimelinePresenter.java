@@ -16,7 +16,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventChanged.Receiver {
+public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 

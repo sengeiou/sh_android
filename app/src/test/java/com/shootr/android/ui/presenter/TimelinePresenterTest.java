@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.ShotModel;
@@ -46,7 +45,6 @@ public class TimelinePresenterTest {
 
     private TimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
-    private EventChanged.Receiver eventChangedReceiver;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -54,7 +52,6 @@ public class TimelinePresenterTest {
         presenter = new TimelinePresenter(timelineInteractorsWrapper, shotModelMapper, bus, errorMessageFactory);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
-        eventChangedReceiver = presenter;
     }
 
     //region Load timeline
@@ -232,32 +229,13 @@ public class TimelinePresenterTest {
         verify(timelineInteractorsWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
-        eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
-
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class),
-          anyErrorCallback());
-    }
-
-    @Test
-    public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
+    @Test public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
 
         Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
-
-    @Test
-    public void shouldEventChangedReceiverHaveSubscribeAnnotation() throws Exception {
-        String receiverMethodName = EventChanged.Receiver.class.getDeclaredMethods()[0].getName();
-
-        Method receiverDeclaredMethod = eventChangedReceiver.getClass().getMethod(receiverMethodName, EventChanged.Event.class);
-        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
-        assertThat(annotationPresent).isTrue();
-    }
-    //endregion
 
     //region Matchers
     private Interactor.ErrorCallback anyErrorCallback() {
