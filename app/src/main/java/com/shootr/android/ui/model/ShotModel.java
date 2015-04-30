@@ -6,12 +6,12 @@ import java.util.Date;
 public class ShotModel implements Serializable{
 
     //Shot attributes
-    private Long idShot;
+    private String idShot;
     private String comment;
     private String image;
     private Date csysBirth;
     //User attributes
-    private Long idUser;
+    private String idUser;
     private String userName;
     private String photo;
     private String eventTag;
@@ -19,13 +19,13 @@ public class ShotModel implements Serializable{
     private Integer type;
 
     private String replyUsername;
-    private Long parentShotId;
+    private String parentShotId;
 
-    public Long getIdShot() {
+    public String getIdShot() {
         return idShot;
     }
 
-    public void setIdShot(Long idShot) {
+    public void setIdShot(String idShot) {
         this.idShot = idShot;
     }
 
@@ -45,11 +45,11 @@ public class ShotModel implements Serializable{
         this.csysBirth = csysBirth;
     }
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
@@ -113,11 +113,11 @@ public class ShotModel implements Serializable{
         return replyUsername != null;
     }
 
-    public Long getParentShotId() {
+    public String getParentShotId() {
         return parentShotId;
     }
 
-    public void setParentShotId(Long parentShotId) {
+    public void setParentShotId(String parentShotId) {
         this.parentShotId = parentShotId;
     }
 }

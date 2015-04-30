@@ -3,11 +3,11 @@ package com.shootr.android.ui.model;
 
 public class EventModel {
 
-    private Long idEvent;
-    private Long authorId;
+    private String idEvent;
+    private String authorId;
     private String authorUsername;
-    private Long localTeamId;
-    private Long visitorTeamId;
+    private String localTeamId;
+    private String visitorTeamId;
     private String datetime;
     private String title;
     private String picture;
@@ -17,11 +17,11 @@ public class EventModel {
     private long endDate;
     private boolean amIAuthor;
 
-    public Long getIdEvent() {
+    public String getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(Long idEvent) {
+    public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
     }
 
@@ -41,19 +41,19 @@ public class EventModel {
         this.title = title;
     }
 
-    public Long getVisitorTeamId() {
+    public String getVisitorTeamId() {
         return visitorTeamId;
     }
 
-    public void setVisitorTeamId(Long visitorTeamId) {
+    public void setVisitorTeamId(String visitorTeamId) {
         this.visitorTeamId = visitorTeamId;
     }
 
-    public Long getLocalTeamId() {
+    public String getLocalTeamId() {
         return localTeamId;
     }
 
-    public void setLocalTeamId(Long localTeamId) {
+    public void setLocalTeamId(String localTeamId) {
         this.localTeamId = localTeamId;
     }
 
@@ -122,11 +122,11 @@ public class EventModel {
         this.timezone = timezone;
     }
 
-    public Long getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
