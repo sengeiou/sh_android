@@ -29,7 +29,7 @@ public class DataserviceLoginGateway implements LoginGateway {
             String sessionToken = loggedInUserEntity.getSessionToken();
             return new LoginResult(loggedInUser, sessionToken);
         } catch (ServerException e) {
-            if (ServerException.G025.equals(e.getErrorCode())) {
+            if (ServerException.G026.equals(e.getErrorCode())) {
                 throw new LoginException(e);
             } else {
                 throw new ServerCommunicationException(e);

@@ -157,6 +157,10 @@ public class ServerException extends IOException {
      */
     public static final String G025 = "G025";
     /**
+     * G025 - ERROR_HOOK_USER_CREDENTIALS
+     */
+    public static final String G026 = "G026";
+    /**
      * PS000 - ERROR_LOADING_POLICY_FILES
      */
     public static final String PS000 = "PS000";
