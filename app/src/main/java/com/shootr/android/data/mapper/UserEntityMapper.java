@@ -16,7 +16,7 @@ public class UserEntityMapper {
             return null;
         }
         User user = new User();
-        user.setIdUser(userEntity.getIdUser().toString());
+        user.setIdUser(String.valueOf(userEntity.getIdUser()));
         user.setFavoriteTeamName(userEntity.getFavoriteTeamName());
         user.setFavoriteTeamId(userEntity.getFavoriteTeamId());
         user.setUsername(userEntity.getUserName());
@@ -28,7 +28,7 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setVisibleEventId(userEntity.getIdEvent().toString());
+        user.setVisibleEventId(String.valueOf(userEntity.getIdEvent()));
         user.setVisibleEventTitle(userEntity.getEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));
@@ -52,7 +52,7 @@ public class UserEntityMapper {
             return null;
         }
         UserEntity userEntity = new UserEntity();
-        userEntity.setIdUser(Long.parseLong(user.getIdUser()));
+        userEntity.setIdUser(Long.valueOf(user.getIdUser()));
         userEntity.setFavoriteTeamId(user.getFavoriteTeamId());
         userEntity.setFavoriteTeamName(user.getFavoriteTeamName());
         //TODO userEntity.setSessionToken();
@@ -66,7 +66,13 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        userEntity.setIdEvent(Long.parseLong(user.getVisibleEventId()));
+        String visibleEventId = user.getVisibleEventId();
+        if(visibleEventId != "null"){
+            userEntity.setIdEvent(Long.valueOf(visibleEventId));
+        }else{
+            userEntity.setIdEvent(null);
+        }
+
         userEntity.setEventTitle(user.getVisibleEventTitle());
 
         userEntity.setStatus(user.getStatus());

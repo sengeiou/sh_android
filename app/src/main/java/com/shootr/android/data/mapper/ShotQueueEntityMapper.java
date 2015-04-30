@@ -30,22 +30,22 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = queuedShot.getShot();
-        entity.setIdShot(Long.parseLong(shot.getIdShot()));
+        entity.setIdShot(Long.valueOf(shot.getIdShot()));
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
-        entity.setIdShotParent(Long.parseLong(shot.getParentShotId()));
-        entity.setIdUserParent(Long.parseLong(shot.getParentShotUserId()));
+        entity.setIdShotParent(Long.valueOf(shot.getParentShotId()));
+        entity.setIdUserParent(Long.valueOf(shot.getParentShotUserId()));
         entity.setUserNameParent(shot.getParentShotUsername());
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            entity.setIdEvent(Long.parseLong(eventInfo.getIdEvent()));
+            entity.setIdEvent(Long.valueOf(eventInfo.getIdEvent()));
             entity.setEventTitle(eventInfo.getEventTitle());
             entity.setEventTag(eventInfo.getEventTag());
         }
 
-        entity.setIdUser(Long.parseLong(shot.getUserInfo().getIdUser()));
+        entity.setIdUser(Long.valueOf(shot.getUserInfo().getIdUser()));
         entity.setUsername(shot.getUserInfo().getUsername());
 
         entity.setType(ShotEntity.TYPE_COMMENT);
@@ -65,7 +65,7 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = new Shot();
-        shot.setIdShot(entity.getIdShot().toString());
+        shot.setIdShot(String.valueOf(entity.getIdShot()));
         shot.setComment(entity.getComment());
         shot.setImage(entity.getImage());
         shot.setPublishDate(entity.getCsysBirth());
@@ -73,21 +73,21 @@ public class ShotQueueEntityMapper {
         shot.setIdQueue(entity.getIdQueue());
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(entity.getIdUser().toString());
+        userInfo.setIdUser(String.valueOf(entity.getIdUser()));
         userInfo.setUsername(entity.getUsername());
         userInfo.setAvatar(avatarBuilder.thumbnail(entity.getIdUser()));
         shot.setUserInfo(userInfo);
 
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(entity.getIdEvent().toString());
+        eventInfo.setIdEvent(String.valueOf(entity.getIdEvent()));
         eventInfo.setEventTitle(entity.getEventTitle());
         eventInfo.setEventTag(entity.getEventTag());
-        if (eventInfo.getIdEvent() != null && Long.parseLong(eventInfo.getIdEvent()) > 0L) {
+        if (eventInfo.getIdEvent() != null && Long.valueOf(eventInfo.getIdEvent()) > 0L) {
             shot.setEventInfo(eventInfo);
         }
 
-        shot.setParentShotId(entity.getIdShotParent().toString());
-        shot.setParentShotUserId(entity.getIdUserParent().toString());
+        shot.setParentShotId(String.valueOf(entity.getIdShotParent()));
+        shot.setParentShotUserId(String.valueOf(entity.getIdUserParent()));
         shot.setParentShotUsername(entity.getUserNameParent());
 
         queuedShot.setShot(shot);

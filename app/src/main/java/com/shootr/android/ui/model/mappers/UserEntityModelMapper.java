@@ -12,7 +12,7 @@ public class UserEntityModelMapper {
         userModel.setIdUser(user.getIdUser().toString());
         userModel.setBio(user.getBio());
         userModel.setUsername(user.getUserName());
-        userModel.setFavoriteTeamId(user.getFavoriteTeamId().toString());
+        userModel.setFavoriteTeamId(null);
         userModel.setPoints(user.getPoints());
         userModel.setFavoriteTeamName(user.getFavoriteTeamName());
         userModel.setName(user.getName());

@@ -13,7 +13,7 @@ public class UserModelMapper {
         userModel.setIdUser(user.getIdUser());
         userModel.setBio(user.getBio());
         userModel.setUsername(user.getUsername());
-        userModel.setFavoriteTeamId(user.getFavoriteTeamId().toString());
+        userModel.setFavoriteTeamId(null);
         userModel.setPoints(user.getPoints());
         userModel.setFavoriteTeamName(user.getFavoriteTeamName());
         userModel.setName(user.getName());
@@ -22,7 +22,7 @@ public class UserModelMapper {
         userModel.setPhoto(user.getPhoto());
         userModel.setRelationship(user.isMe() ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(user));
         userModel.setWebsite(user.getWebsite());
-        userModel.setEventWatchingId(user.getVisibleEventId().toString());
+        userModel.setEventWatchingId(user.getVisibleEventId());
         userModel.setEventWatchingTitle(user.getVisibleEventTitle());
         userModel.setStatus(user.getStatus());
         return userModel;

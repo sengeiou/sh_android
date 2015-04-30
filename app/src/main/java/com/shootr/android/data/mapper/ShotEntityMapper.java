@@ -22,26 +22,26 @@ public class ShotEntityMapper {
             return null;
         }
         Shot shot = new Shot();
-        shot.setIdShot(shotEntity.getIdShot().toString());
+        shot.setIdShot(String.valueOf(shotEntity.getIdShot()));
         shot.setComment(shotEntity.getComment());
         shot.setImage(shotEntity.getImage());
         shot.setPublishDate(shotEntity.getCsysBirth());
         if (shotEntity.getIdEvent() != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(shotEntity.getIdEvent().toString());
+            eventInfo.setIdEvent(String.valueOf(shotEntity.getIdEvent()));
             eventInfo.setEventTitle(shotEntity.getEventTitle());
             eventInfo.setEventTag(shotEntity.getEventTag());
             shot.setEventInfo(eventInfo);
         }
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(shotEntity.getIdUser().toString());
+        userInfo.setIdUser(String.valueOf(shotEntity.getIdUser()));
         userInfo.setUsername(shotEntity.getUsername());
         userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
 
-        shot.setParentShotId(shotEntity.getIdShotParent().toString());
-        shot.setParentShotUserId(shotEntity.getIdUserParent().toString());
+        shot.setParentShotId(String.valueOf(shotEntity.getIdShotParent()));
+        shot.setParentShotUserId(String.valueOf(shotEntity.getIdUserParent()));
         shot.setParentShotUsername(shotEntity.getUserNameParent());
 
         return shot;
@@ -63,20 +63,20 @@ public class ShotEntityMapper {
             throw new IllegalArgumentException("Shot can't be null");
         }
         ShotEntity shotEntity = new ShotEntity();
-        shotEntity.setIdShot(Long.parseLong(shot.getIdShot()));
+        shotEntity.setIdShot(Long.valueOf(shot.getIdShot()));
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
-        shotEntity.setIdUser(Long.parseLong(shot.getUserInfo().getIdUser()));
+        shotEntity.setIdUser(Long.valueOf(shot.getUserInfo().getIdUser()));
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            shotEntity.setIdEvent(Long.parseLong(eventInfo.getIdEvent()));
+            shotEntity.setIdEvent(Long.valueOf(eventInfo.getIdEvent()));
             shotEntity.setEventTitle(eventInfo.getEventTitle());
             shotEntity.setEventTag(eventInfo.getEventTag());
         }
 
-        shotEntity.setIdShotParent(Long.parseLong(shot.getParentShotId()));
-        shotEntity.setIdUserParent(Long.parseLong(shot.getParentShotUserId()));
+        shotEntity.setIdShotParent(Long.valueOf(shot.getParentShotId()));
+        shotEntity.setIdUserParent(Long.valueOf(shot.getParentShotUserId()));
         shotEntity.setUserNameParent(shot.getParentShotUsername());
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
