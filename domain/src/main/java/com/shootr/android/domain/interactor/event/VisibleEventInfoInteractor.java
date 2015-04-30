@@ -30,7 +30,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final EventRepository localEventRepository;
     private final SessionRepository sessionRepository;
 
-    private long idEventWanted;
+    private Long idEventWanted;
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
@@ -82,7 +82,7 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-        Long wantedEventId = getWantedEventId(currentUser);
+        Long wantedEventId = Long.parseLong(getWantedEventId(currentUser));
 
         if (wantedEventId!=null && wantedEventId > 0) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
@@ -104,11 +104,11 @@ public class VisibleEventInfoInteractor implements Interactor {
         return watchesFromPeople;
     }
 
-    private Long getWantedEventId(User currentUser) {
+    private String getWantedEventId(User currentUser) {
         if (idEventWanted > 0) {
-            return idEventWanted;
+            return idEventWanted.toString();
         } else {
-            return currentUser.getVisibleEventId();
+            return currentUser.getVisibleEventId().toString();
         }
     }
 

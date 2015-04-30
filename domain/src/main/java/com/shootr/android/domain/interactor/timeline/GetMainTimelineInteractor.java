@@ -117,12 +117,14 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildParametersWithoutEvent() {
-        return TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()).build();
+        Long currentUserId = sessionRepository.getCurrentUserId();
+        return TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId.toString()).build();
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
+        Long currentUserId = sessionRepository.getCurrentUserId();
         return TimelineParameters.builder()
-          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId())
+          .forUsers(getPeopleIds(), currentUserId.toString())
           .forEvent(event)
           .build();
     }
@@ -138,8 +140,8 @@ public class GetMainTimelineInteractor implements Interactor {
         return remoteShots;
     }
 
-    private List<Long> getPeopleIds() {
-        List<Long> ids = new ArrayList<>();
+    private List<String> getPeopleIds() {
+        List<String> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
             ids.add(user.getIdUser());
         }
@@ -147,9 +149,10 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEventFromRepository(UserRepository userRepository) {
-        Long visibleEventId = userRepository.getUserById(sessionRepository.getCurrentUserId()).getVisibleEventId();
+        Long currentUserId = sessionRepository.getCurrentUserId();
+        String visibleEventId = userRepository.getUserById(currentUserId).getVisibleEventId();
         if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
+            return localEventRepository.getEventById(Long.parseLong(visibleEventId));
         }
         return null;
     }

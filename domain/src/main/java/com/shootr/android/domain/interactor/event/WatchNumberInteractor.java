@@ -40,7 +40,7 @@ public class WatchNumberInteractor implements Interactor{
     }
 
     @Override public void execute() throws Throwable {
-        Long currentVisibleEventId = getCurrentVisibleEventId();
+        String currentVisibleEventId = getCurrentVisibleEventId();
         if (currentVisibleEventId == null) {
             notifyLoaded(NO_EVENT);
             return;
@@ -50,7 +50,7 @@ public class WatchNumberInteractor implements Interactor{
         notifyLoaded(watchers.size());
     }
 
-    protected List<User> filterUsersWatchingEvent(List<User> people, Long idEvent) {
+    protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idEvent.equals(user.getVisibleEventId())) {
@@ -68,7 +68,7 @@ public class WatchNumberInteractor implements Interactor{
         });
     }
 
-    protected Long getCurrentVisibleEventId() {
+    protected String getCurrentVisibleEventId() {
         User currentUser = sessionRepository.getCurrentUser();
         return currentUser.getVisibleEventId();
     }

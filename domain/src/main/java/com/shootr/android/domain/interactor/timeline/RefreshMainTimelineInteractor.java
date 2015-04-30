@@ -83,7 +83,8 @@ public class RefreshMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildTimelineParameters() {
-        TimelineParameters.Builder timelineParametersBuilder = TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId());
+        Long currentUserId = sessionRepository.getCurrentUserId();
+        TimelineParameters.Builder timelineParametersBuilder = TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId.toString());
         Event visibleEvent = getVisibleEvent();
         if (visibleEvent != null) {
             timelineParametersBuilder.forEvent(visibleEvent);
@@ -93,8 +94,8 @@ public class RefreshMainTimelineInteractor implements Interactor {
         return timelineParametersBuilder.build();
     }
 
-    private List<Long> getPeopleIds() {
-        List<Long> ids = new ArrayList<>();
+    private List<String> getPeopleIds() {
+        List<String> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
             ids.add(user.getIdUser());
         }
@@ -114,9 +115,9 @@ public class RefreshMainTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEvent() {
-        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
+        String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
         if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
+            return localEventRepository.getEventById(Long.parseLong(visibleEventId));
         }
         return null;
     }

@@ -75,7 +75,8 @@ public class CreateEventInteractor implements Interactor {
             event = remoteEventRepository.getEventById(idEvent);
         }
         event.setTitle(title);
-        event.setAuthorId(sessionRepository.getCurrentUserId());
+        Long currentUserId = sessionRepository.getCurrentUserId();
+        event.setAuthorId(currentUserId.toString());
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));
         event.setEndDate(new Date(endDate));
