@@ -23,7 +23,7 @@ public class SelectEventInteractor implements Interactor {
     private final SessionRepository sessionRepository;
 
     private Long idSelectedEvent;
-    private Callback callback;
+    private Callback<Event> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
@@ -38,7 +38,7 @@ public class SelectEventInteractor implements Interactor {
     }
     //endregion
 
-    public void selectEvent(Long idEvent, Callback callback) {
+    public void selectEvent(Long idEvent, Callback<Event> callback) {
         this.idSelectedEvent = idEvent;
         this.callback = callback;
         interactorHandler.execute(this);
@@ -46,19 +46,20 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
-        if (isSelectingCurrentVisibleEvent(currentUser)) {
-            return;
-        }
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
 
-        User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
+        if (isSelectingCurrentVisibleEvent(currentUser)) {
+            notifyLoaded(selectedEvent);
+        } else {
+            User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
 
-        deleteCheckin(updatedUser);
+            deleteCheckin(updatedUser);
 
-        sessionRepository.setCurrentUser(updatedUser);
-        localUserRepository.putUser(updatedUser);
-        notifyLoaded(idSelectedEvent);
-        remoteUserRepository.putUser(updatedUser);
+            sessionRepository.setCurrentUser(updatedUser);
+            localUserRepository.putUser(updatedUser);
+            notifyLoaded(selectedEvent);
+            remoteUserRepository.putUser(updatedUser);
+        }
     }
 
     private void deleteCheckin(User updatedUser) {
@@ -76,16 +77,11 @@ public class SelectEventInteractor implements Interactor {
         return currentUser;
     }
 
-    private void notifyLoaded(final Long selectedEventId) {
+    private void notifyLoaded(final Event selectedEvent) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(selectedEventId);
+                callback.onLoaded(selectedEvent);
             }
         });
-    }
-
-    public interface Callback {
-
-        void onLoaded(Long selectedEventId);
     }
 }
