@@ -149,7 +149,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
         updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
-        updatedUserEntity.setFavoriteTeamId(updatedUserModel.getFavoriteTeamId());
+        updatedUserEntity.setFavoriteTeamId(Long.parseLong(updatedUserModel.getFavoriteTeamId()));
         updatedUserEntity.setFavoriteTeamName(updatedUserModel.getFavoriteTeamName());
         return updatedUserEntity;
     }
@@ -191,7 +191,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     }
 
     private void validateTeam() {
-        Long teamId = updatedUserModel.getFavoriteTeamId();
+        Long teamId = Long.parseLong(updatedUserModel.getFavoriteTeamId());
         if (teamId != null && teamId <= 0) {
             updatedUserModel.setFavoriteTeamId(null);
             teamId = null;
