@@ -605,6 +605,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
+        return idUser != null && idUser.equals(String.valueOf(sessionRepository.getCurrentUserId()));
     }
 }

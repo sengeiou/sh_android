@@ -114,7 +114,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
-        List<String> userIds = parameters.getAllUserIds();
+        List<Long> userIds = parameters.getAllUserIds();
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + (parameters.getEventId() != null ? " = ?" : " IS NULL");
         //TODO since & max
