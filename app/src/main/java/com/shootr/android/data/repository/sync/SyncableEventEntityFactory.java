@@ -23,7 +23,7 @@ public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, Eve
     }
 
     @Override protected EventEntity currentEntity(Event event) {
-        return localEventDataSource.getEventById(event.getId());
+        return localEventDataSource.getEventById(Long.parseLong(event.getId()));
     }
 
     @Override protected EventEntity updateValues(EventEntity currentEntity, Event event) {

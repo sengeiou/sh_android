@@ -21,7 +21,7 @@ public class SyncableUserEntityFactory extends SyncableEntityFactory<User, UserE
     }
 
     @Override protected UserEntity currentEntity(User user) {
-        return localUserDataSource.getUser(user.getIdUser());
+        return localUserDataSource.getUser(Long.parseLong(user.getIdUser()));
     }
 
     @Override protected UserEntity updateValues(UserEntity currentEntity, User user) {
