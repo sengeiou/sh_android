@@ -20,7 +20,7 @@ public class EventEntityModelMapper {
         EventModel eventModel = new EventModel();
         eventModel.setTitle(eventEntity.getTitle());
         eventModel.setDatetime(timeFormatter.getDateAndTimeTextRelative(eventEntity.getBeginDate().getTime()));
-        eventModel.setIdEvent(eventEntity.getIdEvent());
+        eventModel.setIdEvent(eventEntity.getIdEvent().toString());
         eventModel.setLocalTeamId(eventEntity.getIdLocalTeam());
         eventModel.setVisitorTeamId(eventEntity.getIdVisitorTeam());
         return eventModel;
