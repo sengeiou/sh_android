@@ -193,7 +193,7 @@ public class Shot {
 
     public static class ShotUserInfo {
 
-        private Long idUser;
+        private String idUser;
         private String username;
         private String avatar;
 
@@ -213,11 +213,11 @@ public class Shot {
             this.username = username;
         }
 
-        public Long getIdUser() {
+        public String getIdUser() {
             return idUser;
         }
 
-        public void setIdUser(Long idUser) {
+        public void setIdUser(String idUser) {
             this.idUser = idUser;
         }
 
