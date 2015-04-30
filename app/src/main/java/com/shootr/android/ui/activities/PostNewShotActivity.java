@@ -292,7 +292,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
         private File imageFile;
         private Context launchingContext;
-        private Long idShotParent;
+        private String idShotParent;
         private String replyToUsername;
 
         public static IntentBuilder from(Context launchingContext) {
@@ -311,7 +311,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
             return this;
         }
 
-        public IntentBuilder inReplyTo(Long idShot, String username) {
+        public IntentBuilder inReplyTo(String idShot, String username) {
             idShotParent = idShot;
             replyToUsername = username;
             return this;

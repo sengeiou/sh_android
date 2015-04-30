@@ -231,7 +231,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         endDateErrorView.setText(errorMessage);
     }
 
-    @Override public void closeScreenWithResult(Long eventId) {
+    @Override public void closeScreenWithResult(String eventId) {
         setResult(RESULT_OK, new Intent().putExtra(EventsListActivity.KEY_EVENT_ID, eventId));
         finish();
     }

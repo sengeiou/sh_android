@@ -120,7 +120,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         ButterKnife.inject(this);
         headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
-            @Override public void onProfile(Long idUser) {
+            @Override public void onProfile(String idUser) {
                 navigateToUserProfile(idUser);
             }
         });
@@ -207,8 +207,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
     //endregion
 
-    private void navigateToUserProfile(Long idUser) {
-        Intent intent = ProfileContainerActivity.getIntent(this, idUser);
+    private void navigateToUserProfile(String idUser) {
+        Intent intent = ProfileContainerActivity.getIntent(this, idUser.toString());
         startActivity(intent);
     }
 
@@ -461,12 +461,12 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
-    @Override public void navigateToEditEvent(Long idEvent) {
+    @Override public void navigateToEditEvent(String idEvent) {
         Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(EventsListActivity.KEY_EVENT_ID, idEvent);
         startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
     }
 
-    @Override public void navigateToUser(Long userId) {
+    @Override public void navigateToUser(String userId) {
         Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
         startActivity(userProfileIntent);
     }

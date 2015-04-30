@@ -37,9 +37,9 @@ public interface EventDetailView extends LoadDataView {
 
     void navigateToEditStatus(EventModel eventModel, String currentStatus);
 
-    void navigateToEditEvent(Long idEvent);
+    void navigateToEditEvent(String idEvent);
 
-    void navigateToUser(Long userId);
+    void navigateToUser(String userId);
 
     void showContent();
 

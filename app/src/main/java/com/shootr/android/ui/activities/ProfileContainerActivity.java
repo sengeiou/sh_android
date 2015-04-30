@@ -20,7 +20,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
     public static final String EXTRA_USER = "user";
     Long idUser;
 
-    public static Intent getIntent(Context context, Long idUser) {
+    public static Intent getIntent(Context context, String idUser) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
         i.putExtra(EXTRA_USER, idUser);
         return i;

@@ -11,7 +11,7 @@ public interface ShotDetailView  {
 
     void openImage(String imageUrl);
 
-    void openProfile(Long idUser);
+    void openProfile(String idUser);
 
     void setReplyUsername(String username);
 

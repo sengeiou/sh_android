@@ -8,13 +8,13 @@ public interface EventsListView extends LoadDataView {
 
     void renderEvents(List<EventResultModel> events);
 
-    void setCurrentVisibleEventId(Long eventId);
+    void setCurrentVisibleEventId(String eventId);
 
     void showContent();
 
     void hideContent();
 
-    void closeScrenWithEventResult(Long idEvent);
+    void closeScrenWithEventResult(String idEvent);
 
     void hideKeyboard();
 }

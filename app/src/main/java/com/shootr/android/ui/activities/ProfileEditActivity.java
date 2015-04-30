@@ -114,7 +114,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         if (requestCode == REQUEST_SEARCH_TEAM && resultCode == RESULT_OK) {
             String teamName = data.getStringExtra(EXTRA_TEAM_NAME);
             long teamId = data.getLongExtra(EXTRA_TEAM_ID, 0);
-            presenter.changeTeam(teamId, teamName);
+            presenter.changeTeam(String.valueOf(teamId), teamName);
         }
     }
 

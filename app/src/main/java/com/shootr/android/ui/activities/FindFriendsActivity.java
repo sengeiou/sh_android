@@ -337,7 +337,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         GetFollowUnFollowUserOfflineJob jobOffline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        jobOffline.init(userVO.getIdUser(), followType);
+        jobOffline.init(Long.parseLong(userVO.getIdUser()), followType);
         jobManager.addJobInBackground(jobOffline);
 
         GetFollowUnfollowUserOnlineJob

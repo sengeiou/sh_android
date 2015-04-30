@@ -201,7 +201,7 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         }
     }
 
-    @Override public void deliverSelectedTeam(String teamName, Long teamId) {
+    @Override public void deliverSelectedTeam(String teamName, String teamId) {
         Intent data = new Intent();
         data.putExtra(ProfileEditActivity.EXTRA_TEAM_NAME, teamName);
         data.putExtra(ProfileEditActivity.EXTRA_TEAM_ID, teamId);

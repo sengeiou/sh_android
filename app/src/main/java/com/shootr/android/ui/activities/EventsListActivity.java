@@ -157,7 +157,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_EVENT && resultCode == RESULT_OK) {
             long eventId = data.getLongExtra(KEY_EVENT_ID, 0L);
-            presenter.eventCreated(eventId);
+            presenter.eventCreated(String.valueOf(eventId));
         }
     }
 
@@ -168,7 +168,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentVisibleEventId(Long eventId) {
+    @Override public void setCurrentVisibleEventId(String eventId) {
         adapter.setCurrentVisibleEvent(eventId);
     }
 
@@ -180,7 +180,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         eventsList.setVisibility(View.GONE);
     }
 
-    @Override public void closeScrenWithEventResult(Long idEvent) {
+    @Override public void closeScrenWithEventResult(String idEvent) {
         Intent resultIntent = getIntent();
         resultIntent.putExtra(KEY_EVENT_ID, idEvent);
         setResult(RESULT_OK, resultIntent);
