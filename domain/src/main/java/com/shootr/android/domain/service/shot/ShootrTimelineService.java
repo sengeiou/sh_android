@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ShootrTimelineService {
 
     private final SessionRepository sessionRepository;
@@ -25,7 +27,7 @@ public class ShootrTimelineService {
     private final ShotRepository remoteShotRepository;
     private final SynchronizationRepository synchronizationRepository;
 
-    public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository, SynchronizationRepository synchronizationRepository) {
+    @Inject public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository, SynchronizationRepository synchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
