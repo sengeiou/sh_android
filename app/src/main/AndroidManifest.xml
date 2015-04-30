@@ -35,8 +35,8 @@
 
 
         <activity
-          android:name=".ui.activities.TimelineActivity"
-          android:label="@string/app_name"
+          android:name=".ui.activities.EventsListActivity"
+          android:label="@string/drawer_events_title"
           android:launchMode="singleTask"
           >
             <intent-filter>
@@ -45,6 +45,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+      <activity
+        android:name="com.shootr.android.ui.activities.ActivityTimelineActivity"
+        android:label="@string/drawer_activity_title">
+      </activity>
 
       <activity
         android:name="com.shootr.android.ui.activities.EventTimelineActivity">
@@ -87,13 +92,13 @@
         <activity android:name=".ui.activities.ProfileContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.TimelineActivity" />
+              android:value=".ui.activities.EventsListActivity" />
         </activity>
 
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.TimelineActivity" />
+              android:value=".ui.activities.EventsListActivity" />
         </activity>
 
         <activity
@@ -103,7 +108,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.TimelineActivity" />
+              android:value=".ui.activities.EventsListActivity" />
         </activity>
 
         <activity
@@ -113,7 +118,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.TimelineActivity" />
+              android:value=".ui.activities.EventsListActivity" />
         </activity>
 
         <activity
@@ -144,11 +149,11 @@
 
         <activity
           android:name="com.shootr.android.ui.activities.ShotDetailActivity"
-          android:parentActivityName="com.shootr.android.ui.activities.TimelineActivity"
+          android:parentActivityName=".ui.activities.EventTimelineActivity"
           >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.TimelineActivity" />
+              android:value=".ui.activities.EventTimelineActivity" />
         </activity>
 
         <activity
@@ -158,21 +163,12 @@
         </activity>
 
         <activity
-          android:name="com.shootr.android.ui.activities.EventsListActivity"
-          android:label="@string/activity_event_list_title"
-          android:theme="@style/ShootrTheme" >
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventDetailActivity" />
-          </activity>
-
-        <activity
           android:name="com.shootr.android.ui.activities.NewEventActivity"
           android:label="@string/activity_new_event_title"
           android:theme="@style/ShootrTheme.Closable" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.EventsListActivity" />
+              android:value=".ui.activities.EventsListActivity" />
           </activity>
 
         <activity

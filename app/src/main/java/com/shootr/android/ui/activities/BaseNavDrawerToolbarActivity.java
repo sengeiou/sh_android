@@ -52,6 +52,9 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
                     case NavigationDrawerDecorator.NAVDRAWER_ITEM_EVENTS:
                         intent = new Intent(BaseNavDrawerToolbarActivity.this, EventsListActivity.class);
                         break;
+                    case NavigationDrawerDecorator.NAVDRAWER_ITEM_ACTIVITY:
+                        intent = new Intent(BaseNavDrawerToolbarActivity.this, ActivityTimelineActivity.class);
+                        break;
                     case NavigationDrawerDecorator.NAVDRAWER_ITEM_PEOPLE:
                         intent = new Intent(BaseNavDrawerToolbarActivity.this, PeopleActivity.class);
                         break;

@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.ActivityTimelineActivity;
 import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EditStatusActivity;
@@ -51,6 +52,7 @@ import javax.inject.Singleton;
                 PhotoViewActivity.class,
                 TimelineActivity.class,
                 EventTimelineActivity.class,
+                ActivityTimelineActivity.class,
                 PeopleActivity.class,
                 PeopleFragment.class,
                 WatchersView.class,
