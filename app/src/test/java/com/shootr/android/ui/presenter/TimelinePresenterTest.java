@@ -5,11 +5,9 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.presenter.interactorwrapper.TimelineInteractorsWrapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -40,12 +38,9 @@ public class TimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
-    private static final EventChanged.Event EVENT_CHANGED_EVENT = null;
 
     @Mock TimelineView timelineView;
-    @Mock GetMainTimelineInteractor getMainTimelineInteractor;
-    @Mock RefreshMainTimelineInteractor refreshMainTimelineInteractor;
-    @Mock GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
+    @Mock TimelineInteractorsWrapper timelineInteractorsWrapper;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
 
@@ -53,170 +48,145 @@ public class TimelinePresenterTest {
     private ShotSent.Receiver shotSentReceiver;
     private EventChanged.Receiver eventChangedReceiver;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new TimelinePresenter(getMainTimelineInteractor,
-          refreshMainTimelineInteractor,
-          getOlderMainTimelineInteractor,
-          shotModelMapper,
-          bus,
-          errorMessageFactory);
+        presenter = new TimelinePresenter(timelineInteractorsWrapper, shotModelMapper, bus, errorMessageFactory);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
         eventChangedReceiver = presenter;
     }
 
-    //region Get main timeline
-    @Test
-    public void shouldGetMainTimlelineWhenInitialized() throws Exception {
+    //region Load timeline
+    @Test public void shouldLoadTimlelineWhenInitialized() throws Exception {
         presenter.initialize(timelineView);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class),
-          anyErrorCallback());
+        verify(timelineInteractorsWrapper).loadTimeline(anyCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldRenderTimelineShotsInViewWhenGetMainTimelineResponsShots() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         verify(timelineView).setShots(anyListOf(ShotModel.class));
     }
 
-    @Test
-    public void shouldShowShotsInViewWhenGetMainTimelineRespondsShots() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         verify(timelineView).showShots();
     }
 
-    @Test
-    public void shouldShowLoadingViewWhenLoadMainTimeline() throws Exception {
-        presenter.loadMainTimeline();
+    @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
+        presenter.loadTimeline();
 
         verify(timelineView, times(1)).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingViewWhenGetMainTimelineRespondsShots() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
-        presenter.loadMainTimeline();
-
-        verify(timelineView, times(1)).hideLoading();
-    }
-
-    @Test
-    public void shouldHideLoadingViewWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
-
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         verify(timelineView, times(1)).hideLoading();
     }
 
-    @Test
-    public void shouldShowEmptyViewWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
+
+        verify(timelineView, times(1)).hideLoading();
+    }
+
+    @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadTimeline();
 
         verify(timelineView).showEmpty();
     }
 
-    @Test
-    public void shouldHideEmtpyViewWhenGetMainTimelineRespondsShots() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         verify(timelineView).hideEmpty();
     }
 
-    @Test
-    public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+    @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         verify(timelineView).hideShots();
     }
 
-    @Test
-    public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
-        setupGetMainTimelineInteractorCallbacks(emptyTimeline());
+    @Test public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
 
-        presenter.loadMainTimeline();
+        presenter.loadTimeline();
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
         verify(timelineView).setShots(captor.capture());
         List renderedShotList = captor.<List<ShotModel>>getValue();
         assertThat(renderedShotList).isEmpty();
     }
-
     //endregion
 
     //region Refresh main timeline
-    @Test
-    public void shouldAddNewShotsWhenRefreshMainTimelineRespondsShots() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldAddNewShotsWhenRefreshTimelineRespondsShots() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
         verify(timelineView).addNewShots(anyListOf(ShotModel.class));
     }
 
-    @Test
-    public void shouldNotAddNewShotsWhenRefreshMainTimelineRespondsEmptyShotList() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(emptyTimeline());
+    @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(emptyTimeline());
 
         presenter.refresh();
 
         verify(timelineView, never()).addNewShots(anyListOf(ShotModel.class));
     }
 
-    @Test
-    public void shouldShowLoadingWhenRefresh() throws Exception {
+    @Test public void shouldShowLoadingWhenRefreshTimeline() throws Exception {
         presenter.refresh();
 
         verify(timelineView, times(1)).showLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenRefreshMainTimelineRespondsShots() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
         verify(timelineView).hideLoading();
     }
 
-    @Test
-    public void shouldHideLoadingWhenRefreshMainTimelineRespondsEmptyShotList() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(emptyTimeline());
+    @Test public void shouldHideLoadingWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(emptyTimeline());
 
         presenter.refresh();
 
         verify(timelineView).hideLoading();
     }
 
-    @Test
-    public void shouldHideEmptyIfReceivedShotsWhenRefreshing() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
         verify(timelineView).hideEmpty();
     }
 
-    @Test
-    public void shouldShowShotsIfReceivedShotsWhenRefreshing() throws Exception {
-        setupRefreshMainTimelineInteractorCallbacks(timelineWithShots());
+    @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
@@ -226,52 +196,48 @@ public class TimelinePresenterTest {
     //endregion
 
     //region Older shots
-    @Test
-    public void shouldLoadMoreShotsWhenLastShotVisiblePositionIsLastShot() throws Exception {
+    @Test public void shouldObtainOlderTimelineWhenShowingLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+        verify(timelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldLoadOlderShotsOnceWhenShowinLastShotTwiceWithoutCallbackExecuted() throws Exception {
+    @Test public void shouldObtainOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+        verify(timelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
+    @Test public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
         verify(timelineView).showLoadingOldShots();
     }
 
-    @Test
-    public void shouldLoadOlderShotsOnlyOnceWhenCallbacksEmptyList() throws Exception {
+    @Test public void shouldObtainOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {
         setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
 
         presenter.showingLastShot(lastShotModel());
         presenter.showingLastShot(lastShotModel());
 
-        verify(getOlderMainTimelineInteractor, times(1)).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+        verify(timelineInteractorsWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
     //endregion
 
-    //region Events
-    @Test
-    public void shouldRefreshTimelineWhenShotSent() throws Exception {
+    //region Bus events
+    @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
-        verify(refreshMainTimelineInteractor).refreshMainTimeline(anyRefreshCallback(), anyErrorCallback());
+        verify(timelineInteractorsWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
 
     @Test
     public void shouldReloadMainTimelineWhenEventChanged() throws Exception {
         eventChangedReceiver.onEventChanged(EVENT_CHANGED_EVENT);
 
-        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
+        verify(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class),
+          anyErrorCallback());
     }
 
     @Test
@@ -294,17 +260,12 @@ public class TimelinePresenterTest {
     //endregion
 
     //region Matchers
-    private GetOlderMainTimelineInteractor.Callback anyOlderCallback() {
-        return any(GetOlderMainTimelineInteractor.Callback.class);
-    }
-
     private Interactor.ErrorCallback anyErrorCallback() {
-        return any(
-          Interactor.ErrorCallback.class);
+        return any(Interactor.ErrorCallback.class);
     }
 
-    private RefreshMainTimelineInteractor.Callback anyRefreshCallback() {
-        return any(RefreshMainTimelineInteractor.Callback.class);
+    public Interactor.Callback<Timeline> anyCallback() {
+        return any(Interactor.Callback.class);
     }
     //endregion
 
@@ -342,28 +303,28 @@ public class TimelinePresenterTest {
     private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((GetOlderMainTimelineInteractor.Callback) invocation.getArguments()[1]).onLoaded(timeline);
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[1]).onLoaded(timeline);
                 return null;
             }
-        }).when(getOlderMainTimelineInteractor).loadOlderMainTimeline(anyLong(), anyOlderCallback(), anyErrorCallback());
+        }).when(timelineInteractorsWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
     }
 
-    private void setupGetMainTimelineInteractorCallbacks(final Timeline timeline) {
+    private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer<Void>() {
             @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-                ((GetMainTimelineInteractor.Callback) invocation.getArguments()[0]).onLoaded(timeline);
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[0]).onLoaded(timeline);
                 return null;
             }
-        }).when(getMainTimelineInteractor).loadMainTimeline(any(GetMainTimelineInteractor.Callback.class), anyErrorCallback());
+        }).when(timelineInteractorsWrapper).loadTimeline(anyCallback(), anyErrorCallback());
     }
 
-    private void setupRefreshMainTimelineInteractorCallbacks(final Timeline timeline) {
+    private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer<Void>() {
             @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-                ((RefreshMainTimelineInteractor.Callback) invocation.getArguments()[0]).onLoaded(timeline);
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[0]).onLoaded(timeline);
                 return null;
             }
-        }).when(refreshMainTimelineInteractor).refreshMainTimeline(anyRefreshCallback(), anyErrorCallback());
+        }).when(timelineInteractorsWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
     //endregion
 }
