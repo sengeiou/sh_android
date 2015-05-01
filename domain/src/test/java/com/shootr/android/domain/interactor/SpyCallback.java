@@ -5,11 +5,23 @@ import java.util.List;
 
 public class SpyCallback<Result> implements Interactor.Callback<Result>{
 
-    public List<Result> results = new ArrayList<>();
-    public Result lastResult;
+    private List<Result> results = new ArrayList<>();
+    private Result lastResult;
 
     @Override public void onLoaded(Result result) {
         this.lastResult = result;
-        results.add(result);
+        this.results.add(result);
+    }
+
+    public List<Result> results() {
+        return results;
+    }
+
+    public Result lastResult() {
+        return lastResult;
+    }
+
+    public Result firstResult() {
+        return results.get(0);
     }
 }
