@@ -1,15 +1,15 @@
 package com.shootr.android.data.repository;
 
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 
 import javax.inject.Inject;
 
-public class DatabaseSynchronizationRepository implements SynchronizationRepository {
+public class DatabaseTimelineSynchronizationRepository implements TimelineSynchronizationRepository {
 
     private final ShotManager shotManager;
 
-    @Inject public DatabaseSynchronizationRepository(ShotManager shotManager) {
+    @Inject public DatabaseTimelineSynchronizationRepository(ShotManager shotManager) {
         this.shotManager = shotManager;
     }
 

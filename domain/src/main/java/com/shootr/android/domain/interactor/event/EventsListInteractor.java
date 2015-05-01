@@ -5,10 +5,11 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.EventListSynchronizationRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ public class EventsListInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final EventSearchRepository remoteEventSearchRepository;
     private final EventSearchRepository localEventSearchRepository;
-    private final SynchronizationRepository synchronizationRepository;
+    private final EventListSynchronizationRepository timelineSynchronizationRepository;
     private final TimeUtils timeUtils;
 
     private Callback<List<EventSearchResult>> callback;
@@ -29,13 +30,13 @@ public class EventsListInteractor implements Interactor {
 
     @Inject public EventsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote EventSearchRepository remoteEventSearchRepository,
-      @Local EventSearchRepository localEventSearchRepository, SynchronizationRepository synchronizationRepository,
+      @Local EventSearchRepository localEventSearchRepository, EventListSynchronizationRepository eventListSynchronizationRepository,
       TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteEventSearchRepository = remoteEventSearchRepository;
         this.localEventSearchRepository = localEventSearchRepository;
-        this.synchronizationRepository = synchronizationRepository;
+        this.timelineSynchronizationRepository = eventListSynchronizationRepository;
         this.timeUtils = timeUtils;
     }
 
@@ -53,7 +54,7 @@ public class EventsListInteractor implements Interactor {
         if (localEvents.isEmpty() || minimumRefreshTimePassed(currentTime)) {
             try {
                 refreshEvents();
-                synchronizationRepository.setEventsRefreshDate(currentTime);
+                timelineSynchronizationRepository.setEventsRefreshDate(currentTime);
             } catch (ShootrException error) {
                 notifyError(error);
             }
@@ -68,7 +69,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     private boolean minimumRefreshTimePassed(Long currentTime) {
-        Long eventsLastRefreshDate = synchronizationRepository.getEventsRefreshDate();
+        Long eventsLastRefreshDate = timelineSynchronizationRepository.getEventsRefreshDate();
         Long minimumTimeToRefresh = eventsLastRefreshDate + REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS;
         return minimumTimeToRefresh < currentTime;
     }

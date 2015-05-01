@@ -8,29 +8,23 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,7 +43,7 @@ public class ShootrTimelineServiceTest {
     @Mock EventRepository localEventRepository;
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
-    @Mock SynchronizationRepository synchronizationRepository;
+    @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Captor ArgumentCaptor<List<TimelineParameters>> timelineParametersCaptor;
 
@@ -58,7 +52,8 @@ public class ShootrTimelineServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrTimelineService = new ShootrTimelineService(sessionRepository, localEventRepository, localUserRepository, remoteShotRepository, synchronizationRepository);
+        shootrTimelineService = new ShootrTimelineService(sessionRepository, localEventRepository, localUserRepository, remoteShotRepository,
+          timelineSynchronizationRepository);
     }
 
     @Test
@@ -74,7 +69,7 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnFirstTimelinehWithEventRefreshDateWhenEventVisible() throws Exception {
         setupVisibleEvent();
-        when(synchronizationRepository.getEventTimelineRefreshDate(VISIBLE_EVENT_ID)).thenReturn(VISIBLE_EVENT_REFRESH_DATE);
+        when(timelineSynchronizationRepository.getEventTimelineRefreshDate(VISIBLE_EVENT_ID)).thenReturn(VISIBLE_EVENT_REFRESH_DATE);
 
         List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
         TimelineParameters timelineParameters = timelinesResult.get(0).getParameters();

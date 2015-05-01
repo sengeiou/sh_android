@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.dagger;
 
-import com.shootr.android.data.repository.DatabaseSynchronizationRepository;
+import com.shootr.android.data.repository.DatabaseTimelineSynchronizationRepository;
 import com.shootr.android.data.repository.ShotQueueRepositoryImpl;
 import com.shootr.android.data.repository.datasource.shot.DatabaseShotDataSource;
 import com.shootr.android.data.repository.datasource.shot.ServiceShotDatasource;
@@ -10,7 +10,7 @@ import com.shootr.android.data.repository.remote.SyncShotRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.service.ShotQueueRepository;
 import dagger.Module;
 import dagger.Provides;
@@ -45,8 +45,8 @@ public class ShotRepositoryModule {
         return shotQueueRepository;
     }
 
-    @Provides @Singleton SynchronizationRepository provideSynchronizationRepository(
-      DatabaseSynchronizationRepository databaseSynchronizationRepository) {
+    @Provides @Singleton TimelineSynchronizationRepository provideTimelineSynchronizationRepository(
+      DatabaseTimelineSynchronizationRepository databaseSynchronizationRepository) {
         return databaseSynchronizationRepository;
     }
 }

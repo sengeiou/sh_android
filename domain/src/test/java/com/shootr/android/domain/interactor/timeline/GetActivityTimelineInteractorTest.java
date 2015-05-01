@@ -13,7 +13,7 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class GetActivityTimelineInteractorTest {
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock EventRepository eventRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock SynchronizationRepository synchronizationRepository;
+    @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
 
     private GetActivityTimelineInteractor interactor;

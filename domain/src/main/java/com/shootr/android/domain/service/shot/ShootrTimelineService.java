@@ -10,7 +10,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.SynchronizationRepository;
+import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -25,14 +25,14 @@ public class ShootrTimelineService {
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
-    private final SynchronizationRepository synchronizationRepository;
+    private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
-    @Inject public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository, SynchronizationRepository synchronizationRepository) {
+    @Inject public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
-        this.synchronizationRepository = synchronizationRepository;
+        this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
     public List<Timeline> refreshTimelines() {
@@ -40,7 +40,7 @@ public class ShootrTimelineService {
 
         Event visibleEvent = getVisibleEvent();
         if (visibleEvent != null) {
-            Long eventRefreshDateSince = synchronizationRepository.getEventTimelineRefreshDate(visibleEvent.getId());
+            Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(visibleEvent.getId());
 
             TimelineParameters eventTimelineParameters = TimelineParameters.builder() //
                     .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
@@ -51,7 +51,7 @@ public class ShootrTimelineService {
             resultTimelines.add(buildSortedTimeline(eventTimelineParameters, shotsForEvent));
         }
 
-        Long activityRefreshDateSince = synchronizationRepository.getActivityTimelineRefreshDate();
+        Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
         TimelineParameters activityTimelineParameters = TimelineParameters.builder() //
                 .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
                 .forActivity() //
