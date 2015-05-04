@@ -45,11 +45,9 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "User";
+        public static final String TABLE = "UserMongo";
 
         public static final String ID = "idUser";
-        public static final String FAVORITE_TEAM_ID = "idFavoriteTeam";
-        public static final String FAVORITE_TEAM_NAME = "favoriteTeamName";
         public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
         public static final String PASSWORD = "password"; // Only used for Login request, never in Database
@@ -67,12 +65,14 @@ public class DatabaseContract {
         public static final String EMAIL_NORMALIZED = "emailNormalized";
         public static final String EVENT_ID = "idEvent";
         public static final String EVENT_TITLE = "eventTitle";
+        public static final String EVENT_BEGIN_DATE = "eventBeginDate";
         public static final String STATUS = "status";
         public static final String CHECK_IN = "checkIn";
 
         public static final String[] PROJECTION = {
-          ID, FAVORITE_TEAM_ID, FAVORITE_TEAM_NAME, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, CHECK_IN, EVENT_ID, EVENT_TITLE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, CHECK_IN, EVENT_ID, EVENT_TITLE,
+          EVENT_BEGIN_DATE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }
@@ -83,7 +83,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "Shot";
+        public static final String TABLE = "ShotMongo";
 
         public static final String ID_SHOT = "idShot";
         public static final String ID_USER = "idUser";
@@ -126,41 +126,23 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "Device";
+        public static final String TABLE = "DeviceMongo";
         public static final String ID_DEVICE = "idDevice";
         public static final String ID_USER = "idUser";
         public static final String TOKEN = "token";
+        public static final String ID_PUSH_ENGINE = "idPushEngine";
         public static final String UNIQUE_DEVICE_ID = "uniqueDeviceID";
+        public static final String STATUS = "status";
         public static final String MODEL = "model";
         public static final String OS_VERSION = "osVer";
         public static final String PLATFORM = "platform";
-        public static final String STATUS = "status";
-        public static final String LOCALE = "locale";
         public static final String APP_VERSION = "appVer";
+        public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION, APP_VERSION, LOCALE, CSYS_BIRTH, CSYS_MODIFIED,
-          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
-        };
-    }
-
-    public static final class TeamTable implements SyncColumns {
-
-        private TeamTable() {
-
-        }
-
-        public static final String TABLE = "Team";
-        public static final String ID_TEAM = "idTeam";
-        public static final String POPULARITY = "popularity";
-        public static final String CLUB_NAME = "clubName";
-        public static final String OFFICIAL_NAME = "officialName";
-        public static final String SHORT_NAME = "shortName";
-        public static final String TLA_NAME = "tlaName";
-
-        public static final String[] PROJECTION = {
-          ID_TEAM, POPULARITY, CLUB_NAME, OFFICIAL_NAME, SHORT_NAME, TLA_NAME, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED,
-          CSYS_REVISION, CSYS_SYNCHRONIZED
+          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
+          APP_VERSION, LOCALE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          CSYS_SYNCHRONIZED
         };
     }
 
@@ -170,9 +152,10 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "Event";
+        public static final String TABLE = "EventMongo";
         public static final String ID_EVENT = "idEvent";
         public static final String ID_USER = "idUser";
+        public static final String ID_USER_EVENT = "idUserEvent";
         public static final String USERNAME = "userName";
         public static final String BEGIN_DATE = "beginDate";
         public static final String END_DATE = "endDate";
@@ -183,10 +166,14 @@ public class DatabaseContract {
         public static final String PHOTO = "photo";
         public static final String TAG = "tag";
         public static final String NOTIFY_CREATION = "notifyCreation";
+        public static final String LAST_UPDATED_USER = "lastUpdatedUser";
+        public static final String STATUS = "status";
+        public static final String TOTAL_WATCHERS = "totalWatchers";
 
         public static final String[] PROJECTION = {
-          ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
-          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+          ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM,
+          ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER, STATUS,
+          TOTAL_WATCHERS,CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 
