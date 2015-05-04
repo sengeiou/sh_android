@@ -33,6 +33,7 @@ import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class EventsListPresenterTest {
@@ -116,6 +117,21 @@ public class EventsListPresenterTest {
         presenter.loadDefaultEventList();
 
         verify(eventsListView).showLoading();
+    }
+
+    @Test public void shouldLoadEventListOnceWhenInitializedAndResumed() throws Exception {
+        presenter.initialize(eventsListView);
+        presenter.resume();
+
+        verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
+        presenter.initialize(eventsListView);
+        presenter.pause();
+        presenter.resume();
+
+        verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
     //TODO search tests

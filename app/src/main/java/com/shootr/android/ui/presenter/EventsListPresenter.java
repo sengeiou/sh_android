@@ -1,24 +1,22 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrValidationException;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
+import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -32,6 +30,7 @@ public class EventsListPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
+    private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
       EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
@@ -162,10 +161,13 @@ public class EventsListPresenter implements Presenter {
 
     //region Lifecycle
     @Override public void resume() {
-        this.loadDefaultEventList();
+        if (hasBeenPaused) {
+            this.loadDefaultEventList();
+        }
     }
 
     @Override public void pause() {
+        hasBeenPaused = true;
     }
     //endregion
 }
