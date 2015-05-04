@@ -79,11 +79,14 @@ public class UserMapper extends GenericMapper {
           dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
         user.setNumFollowings(
           dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
-        user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
+        if(dto.get(UserTable.POINTS)!= null){
+            user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
+        }
         user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String.valueOf(dto.get(UserTable.WEBSITE))) : null);
         user.setBio(dto.containsKey(UserTable.BIO) ? (String.valueOf(dto.get(UserTable.BIO))) : null);
-        user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
-
+        if(dto.get(UserTable.RANK) != null){
+            user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
+        }
         String eventId = String.valueOf(dto.get(UserTable.EVENT_ID));
         if (eventId != null) {
             user.setIdEvent(eventId);
