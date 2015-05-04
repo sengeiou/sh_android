@@ -20,7 +20,6 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_FOLLOW);
         db.execSQL(SQLiteUtils.CREATE_TABLE_TABLESSYNC);
         db.execSQL(SQLiteUtils.CREATE_TABLE_DEVICE);
-        db.execSQL(SQLiteUtils.CREATE_TABLE_TEAM);
         db.execSQL(SQLiteUtils.CREATE_TABLE_EVENT);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT_QUEUE);
 
@@ -33,7 +32,6 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.FollowTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TablesSync.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.DeviceTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TeamTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.EventTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotQueueTable.TABLE);
         onCreate(db);

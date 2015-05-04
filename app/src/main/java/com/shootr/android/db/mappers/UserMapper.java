@@ -45,8 +45,6 @@ public class UserMapper extends GenericMapper {
                 cv.put(UserTable.EMAIL, email);
             }
             cv.put(UserTable.ID, u.getIdUser());
-            cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
-            cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
             cv.put(UserTable.USER_NAME, u.getUserName());
             cv.put(UserTable.NAME, u.getName());
             cv.put(UserTable.PHOTO, u.getPhoto());
@@ -71,11 +69,6 @@ public class UserMapper extends GenericMapper {
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  (String.valueOf(dto.get(UserTable.ID))) : null);
-        user.setFavoriteTeamId(
-          dto.containsKey(UserTable.FAVORITE_TEAM_ID) && dto.get(UserTable.FAVORITE_TEAM_ID) != null
-            ? (String.valueOf(dto.get(UserTable.FAVORITE_TEAM_ID))) : null);
-        user.setFavoriteTeamName(
-          dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String.valueOf(dto.get(UserTable.FAVORITE_TEAM_NAME))) : null);
         user.setSessionToken(
           dto.containsKey(UserTable.SESSION_TOKEN) ? (String.valueOf(dto.get(UserTable.SESSION_TOKEN))) : null);
         user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String.valueOf(dto.get(UserTable.USER_NAME))) : null);
@@ -120,8 +113,6 @@ public class UserMapper extends GenericMapper {
 
     public Map<String, Object> fillDtoWithCommonFields(Map<String, Object> dto, UserEntity user){
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
-        dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
@@ -162,12 +153,6 @@ public class UserMapper extends GenericMapper {
     public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
         UserEntity user = new UserEntity();
         user.setIdUser(c.getString(c.getColumnIndex(UserTable.ID)));
-        if (!c.isNull(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID))) {
-            user.setFavoriteTeamId(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
-        } else {
-            user.setFavoriteTeamId(null);
-        }
-        user.setFavoriteTeamName(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_NAME)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));

@@ -43,7 +43,6 @@ import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
-import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
@@ -60,7 +59,6 @@ import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
-import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -102,7 +100,7 @@ import static android.content.Context.MODE_PRIVATE;
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
-    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
+    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
     TimelineJob.class, TimelineFragment.class,
 
@@ -119,8 +117,6 @@ import static android.content.Context.MODE_PRIVATE;
     EditInfoPresenter.class,
 
     ProfileEditPresenter.class,
-
-    SearchTeamPresenter.class,
 
     PostNewShotPresenter.class,
 

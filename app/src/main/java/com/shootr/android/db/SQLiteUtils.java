@@ -6,7 +6,6 @@ import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
-import com.shootr.android.db.DatabaseContract.TeamTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 
 public class SQLiteUtils {
@@ -16,8 +15,6 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS " + UserTable.TABLE + " ("
             + UserTable.ID + " INT NOT NULL PRIMARY KEY,"
-            + UserTable.FAVORITE_TEAM_ID + " INT NULL,"
-            + UserTable.FAVORITE_TEAM_NAME+" VARCHAR(255),"
             + UserTable.SESSION_TOKEN + " VARCHAR(255),"
             + UserTable.USER_NAME + " VARCHAR(255),"
             + UserTable.EMAIL + " VARCHAR(255),"
@@ -117,18 +114,6 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
-
-    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+ TeamTable.TABLE+" ("
-            + TeamTable.ID_TEAM+" INT NOT NULL PRIMARY KEY,"
-            + TeamTable.CLUB_NAME+" VARCHAR(255) NOT NULL,"
-            + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
-            + TeamTable.SHORT_NAME+" VARCHAR(255),"
-            + TeamTable.TLA_NAME+" VARCHAR(255),"
-            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED+ "DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_EVENT = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventTable.TABLE+" ("
             + DatabaseContract.EventTable.ID_EVENT +" INT NOT NULL PRIMARY KEY,"

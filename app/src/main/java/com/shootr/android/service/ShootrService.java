@@ -63,8 +63,6 @@ public interface ShootrService {
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
-    List<TeamEntity> searchTeams(String queryText) throws IOException;
-
     List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)
       throws IOException;
 

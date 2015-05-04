@@ -6,14 +6,12 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.exception.ShootrError;
@@ -27,7 +25,6 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
-import com.shootr.android.service.dataservice.dto.TeamDtoFactory;
 import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -66,14 +63,13 @@ public class ShootrDataService implements ShootrService {
     private final ShotDtoFactory shotDtoFactory;
     private final EventDtoFactory eventDtoFactory;
     private final DeviceDtoFactory deviceDtoFactory;
-    private final TeamDtoFactory teamDtoFactory;
 
     private final UserMapper userMapper;
     private final FollowMapper followMapper;
     private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
-    private final TeamMapper teamMapper;
+
     private final TimeUtils timeUtils;
 
     private final VersionUpdater versionUpdater;
@@ -81,13 +77,12 @@ public class ShootrDataService implements ShootrService {
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
-      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, EventEntityMapper eventEntityMapper, TeamMapper teamMapper, TimeUtils timeUtils,
+      UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
+      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, EventEntityMapper eventEntityMapper, TimeUtils timeUtils,
       VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
-        this.teamDtoFactory = teamDtoFactory;
         this.eventDtoFactory = eventDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
@@ -98,7 +93,6 @@ public class ShootrDataService implements ShootrService {
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
         this.eventEntityMapper = eventEntityMapper;
-        this.teamMapper = teamMapper;
 
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
@@ -492,24 +486,6 @@ public class ShootrDataService implements ShootrService {
             return userMapper.fromDto(resultDto);
         }
         return null;
-    }
-
-    @Override public List<TeamEntity> searchTeams(String queryText) throws IOException {
-        List<TeamEntity> teamsFound = new ArrayList<>();
-        GenericDto requestDto = teamDtoFactory.searchTeamsOperation(queryText);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
-            Timber.e("Received 0 operations");
-        }else{
-            MetadataDto metadata = ops[0].getMetadata();
-            Long items = metadata.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                teamsFound.add(teamMapper.fromDto(dataItem));
-            }
-        }
-        return teamsFound;
     }
 
     @Override public List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)

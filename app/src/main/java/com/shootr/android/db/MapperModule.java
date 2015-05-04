@@ -11,7 +11,6 @@ import dagger.Provides;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
-import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import javax.inject.Singleton;
 
@@ -20,7 +19,6 @@ import javax.inject.Singleton;
   library = true,
   injects = {
     TeamModelMapper.class,
-    TeamMapper.class,
     WatchingRequestModelMapper.class, EventResultModelMapper.class
   }
 )
@@ -52,10 +50,6 @@ public class MapperModule {
 
     @Provides EventEntityMapper provideEntityMapper() {
         return new EventEntityMapper();
-    }
-
-    @Provides TeamMapper provideTeamMapper() {
-        return new TeamMapper();
     }
 
 }
