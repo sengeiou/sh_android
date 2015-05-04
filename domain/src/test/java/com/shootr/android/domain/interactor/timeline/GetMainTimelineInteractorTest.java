@@ -98,15 +98,15 @@ public class GetMainTimelineInteractorTest {
 
     private User currentUserNotWatching() {
         User user = new User();
-        user.setIdUser(ID_CURRENT_USER);
+        user.setIdUser(String.valueOf(ID_CURRENT_USER));
         user.setVisibleEventId(null);
         return user;
     }
 
     private User currentUserWatching() {
         User user = new User();
-        user.setIdUser(ID_CURRENT_USER);
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setIdUser(String.valueOf(ID_CURRENT_USER));
+        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
         return user;
     }
 
@@ -195,7 +195,7 @@ public class GetMainTimelineInteractorTest {
 
     private Shot shotFromAuthor() {
         Shot shot = new Shot();
-        shot.setIdShot(ID_SHOT_FROM_AUTHOR);
+        shot.setIdShot(String.valueOf(ID_SHOT_FROM_AUTHOR));
         return shot;
     }
 
@@ -209,21 +209,21 @@ public class GetMainTimelineInteractorTest {
 
     private Shot shotWithEvent() {
         Shot shot = new Shot();
-        shot.setIdShot(ID_SHOT_WITH_EVENT);
+        shot.setIdShot(String.valueOf(ID_SHOT_WITH_EVENT));
         shot.setEventInfo(visibleEventInfo());
         return shot;
     }
 
     private Shot.ShotEventInfo visibleEventInfo() {
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(VISIBLE_EVENT_ID);
+        eventInfo.setIdEvent(String.valueOf(VISIBLE_EVENT_ID));
         return eventInfo;
     }
 
     private Event visibleEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
-        event.setAuthorId(EVENT_AUTHOR_ID);
+        event.setId(String.valueOf(VISIBLE_EVENT_ID));
+        event.setAuthorId(String.valueOf(EVENT_AUTHOR_ID));
         return event;
     }
 

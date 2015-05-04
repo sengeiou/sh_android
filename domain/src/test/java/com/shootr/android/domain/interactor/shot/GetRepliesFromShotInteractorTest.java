@@ -49,7 +49,7 @@ public class GetRepliesFromShotInteractorTest {
     @Test public void shouldCallbackLocalRepliesInOrderNewerBelow() throws Exception {
         when(localShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(unorderedShots());
 
-        interactor.loadReplies(ANY_SHOT_ID, spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
 
         assertThat(spyCallback.lastResult).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
@@ -57,7 +57,7 @@ public class GetRepliesFromShotInteractorTest {
     @Test public void shouldCallbackRemoteRepliesInOrderNewerBelow() throws Exception {
         when(remoteShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(unorderedShots());
 
-        interactor.loadReplies(ANY_SHOT_ID, spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
 
         assertThat(spyCallback.lastResult).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
@@ -66,7 +66,7 @@ public class GetRepliesFromShotInteractorTest {
         when(localShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(new ArrayList<Shot>());
         when(remoteShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(new ArrayList<Shot>());
 
-        interactor.loadReplies(ANY_SHOT_ID, spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
 
         verify(spyCallback, never()).onLoaded(anyListOf(Shot.class));
     }

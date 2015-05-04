@@ -205,7 +205,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected idUser of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    Long actualIdUser = actual.getIdUser();
+    Long actualIdUser = Long.valueOf(actual.getIdUser());
     if (!Objects.areEqual(actualIdUser, idUser)) {
       failWithMessage(assertjErrorMessage, actual, idUser, actualIdUser);
     }
@@ -425,7 +425,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected visibleEventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    Long actualVisibleEventId = actual.getVisibleEventId();
+    Long actualVisibleEventId = Long.valueOf(actual.getVisibleEventId());
     if (!Objects.areEqual(actualVisibleEventId, visibleEventId)) {
       failWithMessage(assertjErrorMessage, actual, visibleEventId, actualVisibleEventId);
     }

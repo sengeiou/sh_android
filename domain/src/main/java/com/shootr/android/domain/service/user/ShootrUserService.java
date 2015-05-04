@@ -69,7 +69,7 @@ public class ShootrUserService {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
             storeSession(loginResult);
             String visibleEventId = loginResult.getUser().getVisibleEventId();
-            if(visibleEventId != "null"){
+            if(visibleEventId != null && visibleEventId != "null"){
                 remoteEventRepository.getEventById(Long.valueOf(visibleEventId));
             }
             remoteUserRepository.getPeople();

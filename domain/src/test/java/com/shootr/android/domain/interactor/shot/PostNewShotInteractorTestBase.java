@@ -102,14 +102,14 @@ public abstract class PostNewShotInteractorTestBase {
     //region Setup
     protected void setupCurrentUserSession() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
-        when(sessionRepository.getCurrentUserId()).thenReturn(currentUser().getIdUser());
+        when(sessionRepository.getCurrentUserId()).thenReturn(Long.valueOf(currentUser().getIdUser()));
     }
     //endregion
 
     //region Stubs
     protected User currentUser() {
         User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
+        user.setIdUser(String.valueOf(CURRENT_USER_ID));
         user.setUsername("currentUsername");
         user.setPhoto("http://avatar.jpg");
         return user;

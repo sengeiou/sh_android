@@ -24,7 +24,7 @@ public class ShootrUserServiceTest {
 
     private static final Long CURRENT_USER_ID = 1L;
     private static final Long VISIBLE_EVENT_ID = 2L;
-    public static final Long NO_VISIBLE_EVENT = null;
+    public static final String NO_VISIBLE_EVENT = null;
     private static final String USERNAME_OR_EMAIL_STUB = "username_or_email";
     private static final String PASSWORD_STUB = "password";
 
@@ -115,13 +115,13 @@ public class ShootrUserServiceTest {
 
     private User currentUserWithoutEvents() {
         User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
+        user.setIdUser(String.valueOf(CURRENT_USER_ID));
         return user;
     }
 
     private LoginResult loginResultWithEvent() {
         User user = currentUser();
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -150,8 +150,8 @@ public class ShootrUserServiceTest {
 
     private User currentUser() {
         User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setIdUser(String.valueOf(CURRENT_USER_ID));
+        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
         return user;
     }
 }

@@ -84,7 +84,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected eventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Long actualEventId = actual.getEventId();
+        Long actualEventId = Long.valueOf(actual.getEventId());
         if (!Objects.areEqual(actualEventId, eventId)) {
             failWithMessage(assertjErrorMessage, actual, eventId, actualEventId);
         }

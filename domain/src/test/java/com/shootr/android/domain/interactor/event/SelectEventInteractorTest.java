@@ -9,8 +9,7 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.utils.TimeUtils;
-import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,16 +18,12 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static com.shootr.android.domain.asserts.UserAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -168,14 +163,14 @@ public class SelectEventInteractorTest {
 
     private User currentUserWatchingOldEvent() {
         User user = currentUser();
-        user.setVisibleEventId(OLD_EVENT_ID);
+        user.setVisibleEventId(String.valueOf(OLD_EVENT_ID));
         user.setVisibleEventTitle(OLD_EVENT_TITLE);
         return user;
     }
 
     private User currentUserWatchingNewEvent() {
         User user = currentUser();
-        user.setVisibleEventId(NEW_EVENT_ID);
+        user.setVisibleEventId(String.valueOf(NEW_EVENT_ID));
         return user;
     }
     //endregion
@@ -183,21 +178,21 @@ public class SelectEventInteractorTest {
     //region Stub data
     private Event newEvent() {
         Event event = new Event();
-        event.setId(NEW_EVENT_ID);
+        event.setId(String.valueOf(NEW_EVENT_ID));
         event.setTitle(NEW_EVENT_TITLE);
         return event;
     }
 
     private Event oldEvent() {
         Event event = new Event();
-        event.setId(OLD_EVENT_ID);
+        event.setId(String.valueOf(OLD_EVENT_ID));
         event.setTitle(OLD_EVENT_TITLE);
         return event;
     }
 
     private User currentUser() {
         User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
+        user.setIdUser(String.valueOf(CURRENT_USER_ID));
         return user;
     }
     //endregion
