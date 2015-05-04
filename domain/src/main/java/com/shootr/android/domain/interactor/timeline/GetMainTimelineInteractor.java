@@ -151,8 +151,8 @@ public class GetMainTimelineInteractor implements Interactor {
     private Event getVisibleEventFromRepository(UserRepository userRepository) {
         Long currentUserId = sessionRepository.getCurrentUserId();
         String visibleEventId = userRepository.getUserById(currentUserId).getVisibleEventId();
-        if (visibleEventId != "null") {
-            return localEventRepository.getEventById(Long.parseLong(visibleEventId));
+        if (visibleEventId != null && visibleEventId != "null") {
+            return localEventRepository.getEventById(Long.valueOf(visibleEventId));
         }
         return null;
     }

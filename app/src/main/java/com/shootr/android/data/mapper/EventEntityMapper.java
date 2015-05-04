@@ -13,10 +13,10 @@ public class EventEntityMapper {
     }
 
     public Event transform(EventEntity eventEntity) {
-        if (eventEntity == null) {
-            return null;
-        }
         Event event = new Event();
+        if (eventEntity == null) {
+            return event;
+        }
         event.setId(String.valueOf(eventEntity.getIdEvent()));
         event.setAuthorId(String.valueOf(eventEntity.getIdUser()));
         event.setTitle(eventEntity.getTitle());
@@ -39,7 +39,12 @@ public class EventEntityMapper {
 
     public EventEntity transform(Event event) {
         EventEntity eventEntity = new EventEntity();
-        eventEntity.setIdEvent(Long.valueOf(event.getId()));
+        String eventId = event.getId();
+        if(eventId != null){
+            eventEntity.setIdEvent(Long.valueOf(eventId));
+        } else{
+            eventEntity.setIdEvent(null);
+        }
         eventEntity.setIdUser(Long.valueOf(event.getAuthorId()));
         eventEntity.setTitle(event.getTitle());
         eventEntity.setBeginDate(event.getStartDate());

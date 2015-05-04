@@ -86,7 +86,7 @@ public class ParcelableShot implements Parcelable {
             shot.setParentShotUserId(String.valueOf(idUserParent));
         }
         String usernameParent = parcel.readString();
-        if (!usernameParent.isEmpty()) {
+        if (usernameParent != null) {
             shot.setParentShotUsername(usernameParent);
         }
     }

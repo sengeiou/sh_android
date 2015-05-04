@@ -67,7 +67,7 @@ public class UserEntityMapper {
         userEntity.setBio(user.getBio());
 
         String visibleEventId = user.getVisibleEventId();
-        if(visibleEventId != "null"){
+        if(visibleEventId !=  null){
             userEntity.setIdEvent(Long.valueOf(visibleEventId));
         }else{
             userEntity.setIdEvent(null);

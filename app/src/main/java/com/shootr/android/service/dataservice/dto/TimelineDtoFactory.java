@@ -12,6 +12,8 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.OperationDto.Builder;
+import com.shootr.android.util.LongIdUtils;
+
 import java.util.List;
 import javax.inject.Inject;
 
@@ -105,10 +107,11 @@ public class TimelineDtoFactory {
     }
 
     public GenericDto getTimelineOperationDto(final TimelineParameters parameters) {
+        LongIdUtils longIdUtils = new LongIdUtils();
         FilterDto timelineFilter = and( //
           or(ShotTable.ID_USER).isIn(parameters.getAllUserIds()) //
         ) //
-          .and(ShotTable.ID_EVENT).isEqualTo(Long.valueOf(parameters.getEventId())) //
+          .and(ShotTable.ID_EVENT).isEqualTo(longIdUtils.transformIdFromStringtoLong(parameters.getEventId())) //
           .and(ShotTable.TYPE).isNotEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //

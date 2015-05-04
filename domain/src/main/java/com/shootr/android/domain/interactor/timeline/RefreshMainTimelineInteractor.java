@@ -116,8 +116,8 @@ public class RefreshMainTimelineInteractor implements Interactor {
 
     private Event getVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != "null") {
-            return localEventRepository.getEventById(Long.parseLong(visibleEventId));
+        if (visibleEventId != null && visibleEventId != "null") {
+            return localEventRepository.getEventById(Long.valueOf(visibleEventId));
         }
         return null;
     }
