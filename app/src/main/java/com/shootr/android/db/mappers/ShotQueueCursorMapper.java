@@ -19,22 +19,22 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setImageFile(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE_FILE)));
 
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT))) {
-            shotQueueEntity.setIdShot(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT)));
+            shotQueueEntity.setIdShot(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT)));
         }
-        shotQueueEntity.setIdUser(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER)));
+        shotQueueEntity.setIdUser(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER)));
         shotQueueEntity.setUsername(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME)));
         shotQueueEntity.setComment(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.COMMENT)));
         shotQueueEntity.setImage(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE)));
         shotQueueEntity.setEventTag(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TAG)));
         shotQueueEntity.setEventTitle(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TITLE)));
-        shotQueueEntity.setIdEvent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
+        shotQueueEntity.setIdEvent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
         shotQueueEntity.setType(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
 
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT))) {
-            shotQueueEntity.setIdShotParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT)));
+            shotQueueEntity.setIdShotParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT)));
         }
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER_PARENT))) {
-            shotQueueEntity.setIdUserParent(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER_PARENT)));
+            shotQueueEntity.setIdUserParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_USER_PARENT)));
         }
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME_PARENT))) {
             shotQueueEntity.setUserNameParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME_PARENT)));

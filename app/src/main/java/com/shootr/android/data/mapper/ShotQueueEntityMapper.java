@@ -31,25 +31,25 @@ public class ShotQueueEntityMapper {
 
         Shot shot = queuedShot.getShot();
         String idShot = shot.getIdShot();
-        entity.setIdShot(idShot != null && idShot != "null"? Long.valueOf(idShot) : null);
+        entity.setIdShot(idShot != null && idShot != "null"? idShot : null);
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
         String parentShotId = shot.getParentShotId();
-        entity.setIdShotParent(parentShotId != null && parentShotId != "null"? Long.valueOf(parentShotId) : null);
+        entity.setIdShotParent(parentShotId != null && parentShotId != "null"? parentShotId : null);
         String parentShotUserId = shot.getParentShotUserId();
-        entity.setIdUserParent(parentShotUserId!= null && parentShotUserId != "null"? Long.valueOf(parentShotUserId) : null);
+        entity.setIdUserParent(parentShotUserId!= null && parentShotUserId != "null"? parentShotUserId : null);
         String parentShotUsername = shot.getParentShotUsername();
         entity.setUserNameParent(parentShotUsername != "" ? parentShotUsername : null);
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            entity.setIdEvent(Long.valueOf(eventInfo.getIdEvent()));
+            entity.setIdEvent(eventInfo.getIdEvent());
             entity.setEventTitle(eventInfo.getEventTitle());
             entity.setEventTag(eventInfo.getEventTag());
         }
 
-        entity.setIdUser(Long.valueOf(shot.getUserInfo().getIdUser()));
+        entity.setIdUser(shot.getUserInfo().getIdUser());
         entity.setUsername(shot.getUserInfo().getUsername());
 
         entity.setType(ShotEntity.TYPE_COMMENT);
@@ -90,9 +90,9 @@ public class ShotQueueEntityMapper {
             shot.setEventInfo(eventInfo);
         }
 
-        Long idShotParent = entity.getIdShotParent();
+        String idShotParent = entity.getIdShotParent();
         shot.setParentShotId(idShotParent != null ? String.valueOf(idShotParent) : null);
-        Long idUserParent = entity.getIdUserParent();
+        String idUserParent = entity.getIdUserParent();
         shot.setParentShotUserId(idUserParent != null ? String.valueOf(idUserParent) : null);
         String userNameParent = entity.getUserNameParent();
         shot.setParentShotUsername(userNameParent != "" ? userNameParent: null);

@@ -20,9 +20,9 @@ public class DatabaseUserDataSource implements UserDataSource {
         this.userManager = userManager;
     }
 
-    @Override public List<UserEntity> getFollowing(Long userId) {
+    @Override public List<UserEntity> getFollowing(String userId) {
         try {
-            List<Long> usersFollowingIds = followManager.getUserFollowingIds(userId);
+            List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
             return userManager.getUsersByIds(usersFollowingIds);
         } catch (SQLException e) {
             throw new RepositoryException(e);
@@ -39,15 +39,15 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userEntities;
     }
 
-    @Override public UserEntity getUser(Long id) {
+    @Override public UserEntity getUser(String id) {
         return userManager.getUserByIdUser(id);
     }
 
-    @Override public List<UserEntity> getUsers(List<Long> userIds) {
+    @Override public List<UserEntity> getUsers(List<String> userIds) {
         return userManager.getUsersByIds(userIds);
     }
 
-    @Override public boolean isFollower(Long from, Long who) {
+    @Override public boolean isFollower(String from, String who) {
         if (from == null || who == null) {
             return false;
         }
@@ -55,7 +55,7 @@ public class DatabaseUserDataSource implements UserDataSource {
         return follow != null;
     }
 
-    @Override public boolean isFollowing(Long who, Long to) {
+    @Override public boolean isFollowing(String who, String to) {
         if (who == null | to == null) {
             return false;
         }

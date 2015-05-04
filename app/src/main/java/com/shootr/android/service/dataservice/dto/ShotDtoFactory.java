@@ -62,7 +62,7 @@ public class ShotDtoFactory {
 
     }
 
-    public GenericDto getLatestShotsFromIdUser(Long idUser, Long latestShotNumber) {
+    public GenericDto getLatestShotsFromIdUser(String idUser, Long latestShotNumber) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }

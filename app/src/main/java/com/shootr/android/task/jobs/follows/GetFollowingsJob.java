@@ -75,7 +75,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user:users){
-            Long currentUserId = sessionRepository.getCurrentUserId();
+            String currentUserId = sessionRepository.getCurrentUserId();
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
             boolean isMe = user.getIdUser().equals(currentUserId);
             userVOs.add(userModelMapper.toUserModel(user, follow, isMe));

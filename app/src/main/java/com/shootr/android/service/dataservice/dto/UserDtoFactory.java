@@ -62,7 +62,7 @@ public class UserDtoFactory {
         this.followMapper = followMapper;
     }
 
-    public GenericDto getCheckinOperationDto(Long idUser, Long idEvent) {
+    public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
           .putKey(UserTable.ID, idUser)
           .putKey(UserTable.EVENT_ID, idEvent)
@@ -115,7 +115,7 @@ public class UserDtoFactory {
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 
-        Map<String,Object>[] data = new HashMap[1];
+        Map<String, Object>[] data = new HashMap[1];
         data[0] = followMapper.toDto(follow);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
@@ -128,27 +128,27 @@ public class UserDtoFactory {
         if(follow.getFollowedUser() == null){
             throw new IllegalArgumentException("IdUser who is followed by, can't be null");
         }
-        Map<String,Object> keys = new ArrayMap<>();
+        Map<String, Object> keys = new ArrayMap<>();
         keys.put(FollowTable.ID_USER, follow.getIdUser());
         keys.put(FollowTable.ID_FOLLOWED_USER,follow.getFollowedUser());
         MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_DELETE, "Follow",true,1L,0L,1L,keys);
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 
-        Map<String,Object>[] data = new HashMap[1];
+        Map<String, Object>[] data = new HashMap[1];
         data[0] = followMapper.toDto(follow);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UNFOLLOW_USER, op);
     }
 
-    public GenericDto getFollowUserDtoByIdUser(Long idFromUser, Long idToUser){
+    public GenericDto getFollowUserDtoByIdUser(String idFromUser, String idToUser){
         if(idFromUser == null){
             throw new IllegalArgumentException("IdUser who follow to, can't be null");
         }
         if(idToUser == null){
             throw new IllegalArgumentException("IdUser who is followed by, can't be null");
         }
-        Map<String,Object> keys = new ArrayMap<>(2);
+        Map<String, Object> keys = new ArrayMap<>(2);
         keys.put(FollowTable.ID_USER, idFromUser);
         keys.put(FollowTable.ID_FOLLOWED_USER, idToUser);
 
@@ -156,13 +156,13 @@ public class UserDtoFactory {
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 
-        Map<String,Object>[] data = new HashMap[1];
+        Map<String, Object>[] data = new HashMap[1];
         data[0] = followMapper.toDto(null);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
     }
 
-    public GenericDto getFollowingsOperationDto(Long idUserFollowing, Long offset,Long date, boolean includeDeleted) {
+    public GenericDto getFollowingsOperationDto(String idUserFollowing, Long offset,Long date, boolean includeDeleted) {
 
         OperationDto od = new OperationDto();
         FilterDto filter = and(orModifiedOrDeletedAfter(date), or(ID_USER_FOLLOWING).isEqualTo(idUserFollowing)).build();
@@ -178,7 +178,7 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWING, od);
     }
 
-    public GenericDto getFollowersOperationDto(Long idUserWhoFollow, Long offset,Long date, boolean includeDeleted) {
+    public GenericDto getFollowersOperationDto(String idUserWhoFollow, Long offset,Long date, boolean includeDeleted) {
 
         OperationDto od = new OperationDto();
         FilterDto filter = and(orModifiedOrDeletedAfter(date), or(ID_USER_WHO_IS_FOLLOWED).isEqualTo(idUserWhoFollow)).build();
@@ -193,19 +193,19 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWERS, od);
     }
 
-    public GenericDto getUserByUserId(Long userId){
+    public GenericDto getUserByUserId(String userId){
         OperationDto od  = new OperationDto();
-        Map<String,Object> key = new HashMap<>();
+        Map<String, Object> key = new HashMap<>();
         key.put(UserTable.ID,userId);
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE,true,null,0L,1L,key);
         od.setMetadata(md);
-        Map<String,Object>[] array = new HashMap[1];
+        Map<String, Object>[] array = new HashMap[1];
         array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
     }
 
-    public GenericDto getUsersOperationDto(List<Long> userIds) {
+    public GenericDto getUsersOperationDto(List<String> userIds) {
         FilterDto filter = orIsNotDeleted()
           .or(UserTable.CSYS_MODIFIED).greaterThan(0L)
           .or(UserTable.ID).isIn(userIds).build();

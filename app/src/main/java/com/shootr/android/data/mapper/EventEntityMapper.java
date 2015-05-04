@@ -41,11 +41,11 @@ public class EventEntityMapper {
         EventEntity eventEntity = new EventEntity();
         String eventId = event.getId();
         if(eventId != null){
-            eventEntity.setIdEvent(Long.valueOf(eventId));
+            eventEntity.setIdEvent(eventId);
         } else{
             eventEntity.setIdEvent(null);
         }
-        eventEntity.setIdUser(Long.valueOf(event.getAuthorId()));
+        eventEntity.setIdUser(event.getAuthorId());
         eventEntity.setTitle(event.getTitle());
         eventEntity.setBeginDate(event.getStartDate());
         eventEntity.setEndDate(event.getEndDate());

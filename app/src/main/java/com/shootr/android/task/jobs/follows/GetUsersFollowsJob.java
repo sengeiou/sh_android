@@ -27,7 +27,7 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     private static final int PRIORITY = 5;
 
     ShootrService service;
-    private Long idUserToRetrieveFollowsFrom;
+    private String idUserToRetrieveFollowsFrom;
     FollowManager followManager;
     private Integer followType;
     private UserEntityModelMapper userModelMapper;
@@ -42,7 +42,7 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
         this.sessionRepository = sessionRepository;
     }
 
-    public void init(Long userId, Integer followType) {
+    public void init(String userId, Integer followType) {
         this.idUserToRetrieveFollowsFrom = userId;
         this.followType = followType;
     }
@@ -57,7 +57,7 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user: users){
 
-            Long idUser = user.getIdUser();
+            String idUser = user.getIdUser();
             FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
             boolean isMe = idUser.equals(sessionRepository.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));

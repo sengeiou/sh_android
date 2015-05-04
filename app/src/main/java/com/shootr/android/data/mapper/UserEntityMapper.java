@@ -11,7 +11,7 @@ public class UserEntityMapper {
     @Inject public UserEntityMapper() {
     }
 
-    public User transform(UserEntity userEntity, Long currentUserId, boolean isFollower, boolean isFollowing) {
+    public User transform(UserEntity userEntity, String currentUserId, boolean isFollower, boolean isFollowing) {
         if (userEntity == null) {
             return null;
         }
@@ -52,7 +52,7 @@ public class UserEntityMapper {
             return null;
         }
         UserEntity userEntity = new UserEntity();
-        userEntity.setIdUser(Long.valueOf(user.getIdUser()));
+        userEntity.setIdUser(user.getIdUser());
         userEntity.setFavoriteTeamId(user.getFavoriteTeamId());
         userEntity.setFavoriteTeamName(user.getFavoriteTeamName());
         //TODO userEntity.setSessionToken();
@@ -68,7 +68,7 @@ public class UserEntityMapper {
 
         String visibleEventId = user.getVisibleEventId();
         if(visibleEventId !=  null){
-            userEntity.setIdEvent(Long.valueOf(visibleEventId));
+            userEntity.setIdEvent(visibleEventId);
         }else{
             userEntity.setIdEvent(null);
         }
@@ -94,11 +94,11 @@ public class UserEntityMapper {
         return userEntities;
     }
 
-    public User transform(UserEntity user, Long idCurrentUser) {
+    public User transform(UserEntity user, String idCurrentUser) {
         return transform(user, idCurrentUser, false, false);
     }
 
     public User transform(UserEntity user) {
-        return transform(user, -1L, false, false);
+        return transform(user, "-1L", false, false);
     }
 }

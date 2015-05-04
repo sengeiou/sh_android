@@ -16,7 +16,7 @@ public class ServiceUserDataSource implements UserDataSource {
         this.service = service;
     }
 
-    @Override public List<UserEntity> getFollowing(Long userId) {
+    @Override public List<UserEntity> getFollowing(String userId) {
         try {
             return service.getFollowing(userId, 0L);
         } catch (IOException e) {
@@ -36,7 +36,7 @@ public class ServiceUserDataSource implements UserDataSource {
         throw new RuntimeException("Method not implemented");
     }
 
-    @Override public UserEntity getUser(Long id) {
+    @Override public UserEntity getUser(String id) {
         try {
             return service.getUserByIdUser(id);
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getUsers(List<Long> userIds) {
+    @Override public List<UserEntity> getUsers(List<String> userIds) {
         try {
             return service.getUsersById(userIds);
         } catch (IOException e) {
@@ -52,11 +52,11 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public boolean isFollower(Long from, Long who) {
+    @Override public boolean isFollower(String from, String who) {
         throw new RuntimeException("Method not implemented for service.");
     }
 
-    @Override public boolean isFollowing(Long who, Long to) {
+    @Override public boolean isFollowing(String who, String to) {
         throw new RuntimeException("Method not implemented for service.");
     }
 

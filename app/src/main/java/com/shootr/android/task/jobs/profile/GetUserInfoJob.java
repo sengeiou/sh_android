@@ -30,7 +30,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     FollowManager followManager;
     private SessionRepository sessionRepository;
 
-    private Long userId;
+    private String userId;
     private UserEntityModelMapper userVOMapper;
 
     @Inject public GetUserInfoJob(Application application, @Main Bus bus, ShootrService service, NetworkUtil networkUtil1,
@@ -43,13 +43,13 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
         this.userVOMapper = userVOMapper;
     }
 
-    public void init(Long userId) {
+    public void init(String userId) {
         this.userId = userId;
     }
 
     @Override public void run() throws SQLException, IOException {
         UserEntity userFromLocalDatabase = getUserFromDatabase();
-        Long idCurrentUser = sessionRepository.getCurrentUserId();
+        String idCurrentUser = sessionRepository.getCurrentUserId();
         FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,userId);
         UserModel userVO = null;
         if (userFromLocalDatabase != null) {

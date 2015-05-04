@@ -15,7 +15,7 @@ public class ServiceEventDataSource implements EventDataSource {
         this.service = service;
     }
 
-    @Override public EventEntity getEventById(Long idEvent) {
+    @Override public EventEntity getEventById(String idEvent) {
         try {
             return service.getEventById(idEvent);
         } catch (IOException e) {

@@ -29,7 +29,7 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
         this.sessionRepository = sessionRepository;
     }
 
-    public List<Long> getFollowingIds() throws SQLException {
+    public List<String> getFollowingIds() throws SQLException {
         return followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
     }
 

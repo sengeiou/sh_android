@@ -12,17 +12,17 @@ public class ShotEntityMapper extends GenericMapper {
 
     public ShotEntity fromCursor(Cursor c) {
         ShotEntity shot = new ShotEntity();
-        shot.setIdShot(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT)));
-        shot.setIdUser(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER)));
+        shot.setIdShot(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT)));
+        shot.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER)));
         shot.setUsername(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME)));
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
         shot.setEventTag(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TAG)));
         shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
-        shot.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
+        shot.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         shot.setType(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
-        shot.setIdShotParent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
-        shot.setIdUserParent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
+        shot.setIdShotParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
+        shot.setIdUserParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
         shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
         setSynchronizedfromCursor(c, shot);
         return shot;
@@ -48,8 +48,8 @@ public class ShotEntityMapper extends GenericMapper {
 
     public ShotEntity fromDto(Map<String, Object> dto) {
         ShotEntity shot = new ShotEntity();
-        shot.setIdShot(((Number) dto.get(DatabaseContract.ShotTable.ID_SHOT)).longValue());
-        shot.setIdUser(((Number) dto.get(DatabaseContract.ShotTable.ID_USER)).longValue());
+        shot.setIdShot(String.valueOf(dto.get(DatabaseContract.ShotTable.ID_SHOT)));
+        shot.setIdUser((String.valueOf(dto.get(DatabaseContract.ShotTable.ID_USER))));
         shot.setUsername(((String) dto.get(DatabaseContract.ShotTable.USERNAME)));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
@@ -57,7 +57,7 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
         Number idEvent = (Number) dto.get(DatabaseContract.ShotTable.ID_EVENT);
         if (idEvent != null) {
-            shot.setIdEvent(idEvent.longValue());
+            shot.setIdEvent(String.valueOf(idEvent));
         }
         Number type = (Number) dto.get(DatabaseContract.ShotTable.TYPE);
         if (type != null) {
@@ -65,11 +65,11 @@ public class ShotEntityMapper extends GenericMapper {
         }
         Number idParent = (Number) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT);
         if (idParent != null) {
-            shot.setIdShotParent(idParent.longValue());
+            shot.setIdShotParent(String.valueOf(idParent));
         }
         Number idParentUser = (Number) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT);
         if (idParentUser != null) {
-            shot.setIdUserParent(idParentUser.longValue());
+            shot.setIdUserParent(String.valueOf(idParentUser));
         }
         String usernameParentUser = (String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT);
         if (usernameParentUser != null) {
@@ -79,8 +79,8 @@ public class ShotEntityMapper extends GenericMapper {
         return shot;
     }
 
-    public  Map<String, Object> toDto(ShotEntity shot) {
-        Map<String,Object> dto = new HashMap<>();
+    public Map<String, Object> toDto(ShotEntity shot) {
+        Map<String, Object> dto = new HashMap<>();
         dto.put(DatabaseContract.ShotTable.ID_SHOT, shot == null ? null : shot.getIdShot());
         dto.put(DatabaseContract.ShotTable.ID_USER, shot == null ? null : shot.getIdUser());
         dto.put(DatabaseContract.ShotTable.USERNAME, shot == null ? null : shot.getUsername());

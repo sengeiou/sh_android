@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
-    List<UserEntity> getFollowing(Long userId);
+    List<UserEntity> getFollowing(String userId);
 
     UserEntity putUser(UserEntity userEntity);
 
     List<UserEntity> putUsers(List<UserEntity> userEntities);
 
-    UserEntity getUser(Long id);
+    UserEntity getUser(String id);
 
-    List<UserEntity> getUsers(List<Long> userIds);
+    List<UserEntity> getUsers(List<String> userIds);
 
-    boolean isFollower(Long from, Long who);
+    boolean isFollower(String from, String who);
 
-    boolean isFollowing(Long who, Long to);
+    boolean isFollowing(String who, String to);
 }

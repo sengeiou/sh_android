@@ -12,11 +12,11 @@ public interface SessionRepository {
 
     public void setSessionToken(String sessionToken);
 
-    public long getCurrentUserId();
+    public String getCurrentUserId();
 
-    public void setCurrentUserId(long currentUserId);
+    public void setCurrentUserId(String currentUserId);
 
-    public void createSession(long userId, String sessionToken, User loggedInUser);
+    public void createSession(String userId, String sessionToken, User loggedInUser);
 
     public void destroySession();
 }

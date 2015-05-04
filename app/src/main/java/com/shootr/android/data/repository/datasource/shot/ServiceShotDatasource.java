@@ -76,7 +76,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     private void notifySyncTrigger(List<ShotEntity> newShots) {
-        long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         for (ShotEntity newShot : newShots) {
             if ((newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC
               || newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW)

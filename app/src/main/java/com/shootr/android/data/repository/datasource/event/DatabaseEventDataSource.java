@@ -13,7 +13,7 @@ public class DatabaseEventDataSource implements EventDataSource {
         this.eventManager = eventManager;
     }
 
-    @Override public EventEntity getEventById(Long idEvent) {
+    @Override public EventEntity getEventById(String idEvent) {
         return eventManager.getEventById(idEvent);
     }
 

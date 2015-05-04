@@ -24,7 +24,7 @@ public class TeamMapper extends GenericMapper {
 
     public TeamEntity fromDto(Map<String, Object> dto) {
         TeamEntity team = new TeamEntity();
-        team.setIdTeam(dto.get(TeamTable.ID_TEAM) == null ? null : ((Number)dto.get(TeamTable.ID_TEAM)).longValue());
+        team.setIdTeam(dto.get(TeamTable.ID_TEAM) == null ? null : String.valueOf(dto.get(TeamTable.ID_TEAM)));
         team.setPopularity(dto.get(TeamTable.POPULARITY) == null ? null : ((Number)dto.get(TeamTable.ID_TEAM)).intValue());
         team.setClubName(dto.get(TeamTable.CLUB_NAME) == null ? null : (String)dto.get(TeamTable.CLUB_NAME));
         team.setOfficialName(dto.get(TeamTable.OFFICIAL_NAME) == null ? null : (String) dto.get(TeamTable.OFFICIAL_NAME));
@@ -34,8 +34,8 @@ public class TeamMapper extends GenericMapper {
         return team;
     }
 
-    public  Map<String, Object> toDto(TeamEntity team) {
-        Map<String,Object> dto = new HashMap<>();
+    public Map<String, Object> toDto(TeamEntity team) {
+        Map<String, Object> dto = new HashMap<>();
         dto.put(TeamTable.ID_TEAM, team == null ? null : team.getIdTeam());
         dto.put(TeamTable.POPULARITY, team == null ? null : team.getPopularity());
         dto.put(TeamTable.TLA_NAME, team == null ? null : team.getTlaName());

@@ -19,7 +19,7 @@ public class LocalEventRepository implements EventRepository {
         this.eventEntityMapper = eventEntityMapper;
     }
 
-    @Override public Event getEventById(Long idEvent) {
+    @Override public Event getEventById(String idEvent) {
         EventEntity eventEntity = localEventDataSource.getEventById(idEvent);
         return eventEntityMapper.transform(eventEntity);
     }

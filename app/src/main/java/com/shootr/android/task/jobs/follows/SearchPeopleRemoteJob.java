@@ -62,9 +62,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
-            Long idUser = u.getIdUser();
+            String idUser = u.getIdUser();
             String idUserSessionRepository = sessionRepository.getCurrentUser().getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(Long.parseLong(idUserSessionRepository), idUser);
+            FollowEntity follow = followManager.getFollowByUserIds(idUserSessionRepository, idUser);
             //before doing this UPDATE FOLLOWS
             boolean isMe = idUser.equals(sessionRepository.getCurrentUser().getIdUser());
             userVOs.add(userModelMapper.toUserModel(u,follow,isMe));

@@ -2,10 +2,11 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
+
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,47 +70,47 @@ public class UserMapper extends GenericMapper {
 
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
-        user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
+        user.setIdUser(dto.containsKey(UserTable.ID) ?  (String.valueOf(dto.get(UserTable.ID))) : null);
         user.setFavoriteTeamId(
           dto.containsKey(UserTable.FAVORITE_TEAM_ID) && dto.get(UserTable.FAVORITE_TEAM_ID) != null
-            ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue() : null);
+            ? (String.valueOf(dto.get(UserTable.FAVORITE_TEAM_ID))) : null);
         user.setFavoriteTeamName(
-          dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
+          dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String.valueOf(dto.get(UserTable.FAVORITE_TEAM_NAME))) : null);
         user.setSessionToken(
-          dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
-        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? ((String) dto.get(UserTable.USER_NAME)) : null);
-        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
-        user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
-        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
+          dto.containsKey(UserTable.SESSION_TOKEN) ? (String.valueOf(dto.get(UserTable.SESSION_TOKEN))) : null);
+        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String.valueOf(dto.get(UserTable.USER_NAME))) : null);
+        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String.valueOf(dto.get(UserTable.EMAIL))) : null);
+        user.setName(dto.containsKey(UserTable.NAME) ? (String.valueOf(dto.get(UserTable.NAME))) : null);
+        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String.valueOf(dto.get(UserTable.PHOTO))) : null);
         user.setNumFollowers(
           dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
         user.setNumFollowings(
           dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
         user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
-        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? ((String) dto.get(UserTable.WEBSITE)) : null);
-        user.setBio(dto.containsKey(UserTable.BIO) ? ((String) dto.get(UserTable.BIO)) : null);
+        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String.valueOf(dto.get(UserTable.WEBSITE))) : null);
+        user.setBio(dto.containsKey(UserTable.BIO) ? (String.valueOf(dto.get(UserTable.BIO))) : null);
         user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
 
-        Number eventId = (Number) dto.get(UserTable.EVENT_ID);
+        String eventId = String.valueOf(dto.get(UserTable.EVENT_ID));
         if (eventId != null) {
-            user.setIdEvent(eventId.longValue());
+            user.setIdEvent(eventId);
         }
 
-        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? ((String) dto.get(UserTable.EVENT_TITLE)) : null);
-        user.setStatus(dto.containsKey(UserTable.STATUS) ? ((String) dto.get(UserTable.STATUS)) : null);
+        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? (String.valueOf(dto.get(UserTable.EVENT_TITLE))) : null);
+        user.setStatus(dto.containsKey(UserTable.STATUS) ? ((String.valueOf(dto.get(UserTable.STATUS)))) : null);
         user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
         setSynchronizedfromDto(dto,user);
         return user;
     }
 
     //TODO bad smell: nombre de método ofuscado
-    public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
+    public Map<String, Object> reqRestUsersToDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
         return fillDtoWithCommonFields(dto, user);
     }
 
 
-    public  Map<String, Object> toDto(UserEntity user) {
+    public Map<String, Object> toDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
         dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
@@ -117,7 +118,7 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
-    public Map<String,Object> fillDtoWithCommonFields(Map<String, Object> dto, UserEntity user){
+    public Map<String, Object> fillDtoWithCommonFields(Map<String, Object> dto, UserEntity user){
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
         dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
@@ -138,7 +139,7 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
-    public  Map<String, Object> toCreateAccountDto(UserCreateAccountEntity userCreateAccountEntity) {
+    public Map<String, Object> toCreateAccountDto(UserCreateAccountEntity userCreateAccountEntity) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.EMAIL, userCreateAccountEntity == null ? null : userCreateAccountEntity.getEmail());
         dto.put(UserTable.SESSION_TOKEN, userCreateAccountEntity == null ? null : userCreateAccountEntity.getSessionToken());
@@ -146,7 +147,7 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
-    public Map<String,Object> fillDtoWithCommonFieldsForAccountCreation(Map<String, Object> dto, UserCreateAccountEntity userCreateAccountEntity){
+    public Map<String, Object> fillDtoWithCommonFieldsForAccountCreation(Map<String, Object> dto, UserCreateAccountEntity userCreateAccountEntity){
         dto.put(UserTable.ID, userCreateAccountEntity == null ? null : userCreateAccountEntity.getIdUser());
         dto.put(UserTable.USER_NAME, userCreateAccountEntity == null ? null : userCreateAccountEntity.getUserName());
         dto.put(UserTable.NAME, userCreateAccountEntity == null ? null : userCreateAccountEntity.getName());
@@ -160,9 +161,9 @@ public class UserMapper extends GenericMapper {
 
     public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
         UserEntity user = new UserEntity();
-        user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
+        user.setIdUser(c.getString(c.getColumnIndex(UserTable.ID)));
         if (!c.isNull(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID))) {
-            user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
+            user.setFavoriteTeamId(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
         } else {
             user.setFavoriteTeamId(null);
         }
@@ -176,7 +177,7 @@ public class UserMapper extends GenericMapper {
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
-        user.setIdEvent(c.getLong(c.getColumnIndex(UserTable.EVENT_ID)));
+        user.setIdEvent(c.getString(c.getColumnIndex(UserTable.EVENT_ID)));
         user.setEventTitle(c.getString(c.getColumnIndex(UserTable.EVENT_TITLE)));
         user.setStatus(c.getString(c.getColumnIndex(UserTable.STATUS)));
         user.setCheckIn(c.getInt(c.getColumnIndex(UserTable.CHECK_IN)));
