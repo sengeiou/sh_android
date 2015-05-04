@@ -204,6 +204,7 @@
     <string name="error_login_credentials_invalid">ID OR PASSWORD ARE NOT VALID</string>
     <string name="drawer_events_title">Events</string>
     <string name="drawer_activity_title">Activity</string>
+    <string name="activity_empty">No Activity</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">

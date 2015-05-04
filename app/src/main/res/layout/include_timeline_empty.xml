@@ -12,6 +12,7 @@
   tools:showIn="@layout/fragment_timeline">
 
     <TextView
+      android:id="@+id/timeline_empty_title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/activity_timeline_empty_title"
@@ -19,6 +20,7 @@
       android:textSize="20sp" />
 
     <TextView
+      android:id="@+id/timeline_subtitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"

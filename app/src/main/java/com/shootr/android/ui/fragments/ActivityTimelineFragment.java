@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,6 +43,7 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @InjectView(R.id.timeline_empty) View emptyView;
+    @InjectView(R.id.timeline_empty_title) TextView emptyViewTitle;
 
     @Deprecated private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
@@ -222,6 +224,7 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
     }
 
     @Override public void showEmpty() {
+        emptyViewTitle.setText(R.string.activity_empty);
         emptyView.setVisibility(View.VISIBLE);
     }
 
