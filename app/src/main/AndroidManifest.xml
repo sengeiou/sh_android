@@ -36,12 +36,11 @@
 
         <activity
           android:name=".ui.activities.EventsListActivity"
-          android:label="@string/drawer_events_title"
+          android:label="@string/app_name"
           android:launchMode="singleTask"
           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

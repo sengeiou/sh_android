@@ -63,6 +63,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
+        overrideDefaultTitle();
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
@@ -85,6 +86,10 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
                 presenter.refresh();
             }
         });
+    }
+
+    private void overrideDefaultTitle() {
+        getToolbarDecorator().setTitle(R.string.drawer_events_title);
     }
 
     @Override protected void initializePresenter() {
