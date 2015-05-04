@@ -185,7 +185,7 @@ public class ShootrPhotoService implements PhotoService {
 
     private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
         ShootrPhotoUploadError
-          shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
+        shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
         Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.getErrorCode(),
           shootrError.getMessage());
