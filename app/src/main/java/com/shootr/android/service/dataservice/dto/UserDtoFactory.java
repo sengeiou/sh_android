@@ -34,8 +34,8 @@ public class UserDtoFactory {
     public static final int FOLLOW_TYPE = 0;
     public static final int UNFOLLOW_TYPE = 1;
 
-    private static final String ENTITY_LOGIN = "Login";
-    private static final String ENTITY_CHECKIN = "CheckIn";
+    private static final String ENTITY_LOGIN = "LoginMongo";
+    private static final String ENTITY_CHECKIN = "CheckInMongo";
     private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
@@ -46,7 +46,7 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
-    private static final String USER_SIGN_IN = "UserSignIn";
+    private static final String USER_SIGN_IN = "UserSignInMongo";
     private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
 
     private UtilityDtoFactory utilityDtoFactory;

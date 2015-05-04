@@ -65,14 +65,13 @@ public class DatabaseContract {
         public static final String EMAIL_NORMALIZED = "emailNormalized";
         public static final String EVENT_ID = "idEvent";
         public static final String EVENT_TITLE = "eventTitle";
-        public static final String EVENT_BEGIN_DATE = "eventBeginDate";
         public static final String STATUS = "status";
         public static final String CHECK_IN = "checkIn";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, STATUS, CHECK_IN, EVENT_ID, EVENT_TITLE,
-          EVENT_BEGIN_DATE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
+          CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
     }
@@ -140,7 +139,7 @@ public class DatabaseContract {
         public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE, ID_USER, TOKEN, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
+          ID_DEVICE, ID_USER, TOKEN, ID_PUSH_ENGINE, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
           APP_VERSION, LOCALE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
