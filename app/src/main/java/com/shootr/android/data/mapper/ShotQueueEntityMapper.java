@@ -30,13 +30,17 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = queuedShot.getShot();
-        entity.setIdShot(Long.valueOf(shot.getIdShot()));
+        String idShot = shot.getIdShot();
+        entity.setIdShot(idShot != null && idShot != "null"? Long.valueOf(idShot) : null);
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
-        entity.setIdShotParent(Long.valueOf(shot.getParentShotId()));
-        entity.setIdUserParent(Long.valueOf(shot.getParentShotUserId()));
-        entity.setUserNameParent(shot.getParentShotUsername());
+        String parentShotId = shot.getParentShotId();
+        entity.setIdShotParent(parentShotId != null && parentShotId != "null"? Long.valueOf(parentShotId) : null);
+        String parentShotUserId = shot.getParentShotUserId();
+        entity.setIdUserParent(parentShotUserId!= null && parentShotUserId != "null"? Long.valueOf(parentShotUserId) : null);
+        String parentShotUsername = shot.getParentShotUsername();
+        entity.setUserNameParent(parentShotUsername != "" ? parentShotUsername : null);
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
@@ -86,9 +90,12 @@ public class ShotQueueEntityMapper {
             shot.setEventInfo(eventInfo);
         }
 
-        shot.setParentShotId(String.valueOf(entity.getIdShotParent()));
-        shot.setParentShotUserId(String.valueOf(entity.getIdUserParent()));
-        shot.setParentShotUsername(entity.getUserNameParent());
+        Long idShotParent = entity.getIdShotParent();
+        shot.setParentShotId(idShotParent != null ? String.valueOf(idShotParent) : null);
+        Long idUserParent = entity.getIdUserParent();
+        shot.setParentShotUserId(idUserParent != null ? String.valueOf(idUserParent) : null);
+        String userNameParent = entity.getUserNameParent();
+        shot.setParentShotUsername(userNameParent != "" ? userNameParent: null);
 
         queuedShot.setShot(shot);
         return queuedShot;

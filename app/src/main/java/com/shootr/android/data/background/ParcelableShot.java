@@ -53,7 +53,7 @@ public class ParcelableShot implements Parcelable {
 
     public void readFromParcel(Parcel parcel) {
         long idShot = parcel.readLong();
-        shot.setIdShot(String.valueOf(idShot > 0 ? idShot : null));
+        shot.setIdShot(idShot > 0? String.valueOf(idShot) : null);
         shot.setComment(parcel.readString());
         shot.setImage(parcel.readString());
         shot.setPublishDate(new Date(parcel.readLong()));
@@ -61,7 +61,7 @@ public class ParcelableShot implements Parcelable {
         shot.setIdQueue(idQueued > 0 ? idQueued : null);
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(parcel.readString());
+        userInfo.setIdUser(String.valueOf(parcel.readLong()));
         userInfo.setUsername(parcel.readString());
         userInfo.setAvatar(parcel.readString());
         if (userInfo.getIdUser() != null && Long.valueOf(userInfo.getIdUser()) > 0L) {
