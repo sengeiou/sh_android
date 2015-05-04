@@ -59,6 +59,10 @@ public class EventsListPresenter implements Presenter {
         this.search(initialQuery);
     }
 
+    public void refresh() {
+        this.loadDefaultEventList();
+    }
+
     public void selectEvent(EventModel event) {
         selectEvent(event.getIdEvent(), event.getTitle());
     }

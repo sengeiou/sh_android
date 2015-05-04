@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -39,6 +40,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
     public static final int REQUEST_NEW_EVENT = 1;
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
+    @InjectView(R.id.events_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
     @InjectView(R.id.events_empty) View emptyView;
     @InjectView(R.id.events_loading) View loadingView;
@@ -71,6 +73,16 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         adapter.setOnEventClickListener(new EventsListAdapter.OnEventClickListener() {
             @Override public void onEventClick(EventModel event) {
                 presenter.selectEvent(event);
+            }
+        });
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
+          R.color.refresh_2,
+          R.color.refresh_3,
+          R.color.refresh_4);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                presenter.refresh();
             }
         });
     }
@@ -203,6 +215,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
 
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override public void showError(String message) {
