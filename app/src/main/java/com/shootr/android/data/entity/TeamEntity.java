@@ -2,18 +2,18 @@ package com.shootr.android.data.entity;
 
 public class TeamEntity extends Synchronized {
 
-    private Long idTeam;
+    private String idTeam;
     private Integer popularity;
     private String clubName;
     private String officialName;
     private String shortName;
     private String tlaName;
 
-    public Long getIdTeam() {
+    public String getIdTeam() {
         return idTeam;
     }
 
-    public void setIdTeam(Long idTeam) {
+    public void setIdTeam(String idTeam) {
         this.idTeam = idTeam;
     }
 

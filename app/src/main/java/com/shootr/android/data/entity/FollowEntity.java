@@ -8,22 +8,22 @@ public class FollowEntity extends Synchronized{
     public static final int RELATIONSHIP_FOLLOWER = 3;
     public static final int RELATIONSHIP_BOTH = 4;
 
-    private Long mIdUser;
-    private Long mFollowedUser;
+    private String mIdUser;
+    private String mFollowedUser;
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return mIdUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         mIdUser = idUser;
     }
 
-    public Long getFollowedUser() {
+    public String getFollowedUser() {
         return mFollowedUser;
     }
 
-    public void setFollowedUser(Long followedUser) {
+    public void setFollowedUser(String followedUser) {
         mFollowedUser = followedUser;
     }
 }

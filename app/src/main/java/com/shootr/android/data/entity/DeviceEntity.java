@@ -2,27 +2,27 @@ package com.shootr.android.data.entity;
 
 public class DeviceEntity extends Synchronized {
 
-    private Long idDevice;
-    private Long idUser;
+    private String idDevice;
+    private String idUser;
     private Integer platform;
     private String token;
     private String uniqueDevideID;
     private String model;
     private String osVer;
 
-    public Long getIdDevice() {
+    public String getIdDevice() {
         return idDevice;
     }
 
-    public void setIdDevice(Long idDevice) {
+    public void setIdDevice(String idDevice) {
         this.idDevice = idDevice;
     }
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 

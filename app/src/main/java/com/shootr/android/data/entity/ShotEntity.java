@@ -6,33 +6,33 @@ public class ShotEntity extends Synchronized{
     public static final int TYPE_TRIGGER_SYNC = 1;
     public static final int TYPE_TRIGGER_SYNC_NOT_SHOW = 2;
 
-    private Long idShot;
-    private Long idUser;
+    private String idShot;
+    private String idUser;
     private String username;
     private String comment;
     private String image;
-    private Long idEvent;
+    private String idEvent;
     private String eventTag;
     private String eventTitle;
     private Integer type;
 
-    private Long idShotParent;
-    private Long idUserParent;
+    private String idShotParent;
+    private String idUserParent;
     private String userNameParent;
 
-    public Long getIdShot() {
+    public String getIdShot() {
         return idShot;
     }
 
-    public void setIdShot(Long idShot) {
+    public void setIdShot(String idShot) {
         this.idShot = idShot;
     }
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
@@ -52,11 +52,11 @@ public class ShotEntity extends Synchronized{
         this.image = image;
     }
 
-    public Long getIdEvent() {
+    public String getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(Long idEvent) {
+    public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
     }
 
@@ -84,19 +84,19 @@ public class ShotEntity extends Synchronized{
         this.eventTitle = eventTitle;
     }
 
-    public Long getIdShotParent() {
+    public String getIdShotParent() {
         return idShotParent;
     }
 
-    public void setIdShotParent(Long idShotParent) {
+    public void setIdShotParent(String idShotParent) {
         this.idShotParent = idShotParent;
     }
 
-    public Long getIdUserParent() {
+    public String getIdUserParent() {
         return idUserParent;
     }
 
-    public void setIdUserParent(Long idUserParent) {
+    public void setIdUserParent(String idUserParent) {
         this.idUserParent = idUserParent;
     }
 
