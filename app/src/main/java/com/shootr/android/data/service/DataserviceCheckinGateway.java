@@ -13,7 +13,7 @@ public class DataserviceCheckinGateway implements CheckinGateway {
         this.shootrService = shootrService;
     }
 
-    @Override public void performCheckin(Long idUser, Long idEvent) throws IOException {
+    @Override public void performCheckin(String idUser, String idEvent) throws IOException {
         shootrService.performCheckin(idUser, idEvent);
     }
 }

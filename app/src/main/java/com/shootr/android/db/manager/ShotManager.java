@@ -52,7 +52,7 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<ShotEntity> getLatestShotsFromIdUser(Long idUser, Long latestShotsNumber) {
+    public List<ShotEntity> getLatestShotsFromIdUser(String idUser, Long latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idUser)};
@@ -114,7 +114,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
-        List<Long> userIds = parameters.getAllUserIds();
+        List<String> userIds = parameters.getAllUserIds();
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + (parameters.getEventId() != null ? " = ?" : " IS NULL");
         //TODO since & max

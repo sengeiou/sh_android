@@ -96,7 +96,7 @@ public class UserManager extends AbstractManager {
     /**
      * Retrieve User by idUser
      */
-    public UserEntity getUserByIdUser(Long idUser) {
+    public UserEntity getUserByIdUser(String idUser) {
         UserEntity resUser = null;
         String args = UserTable.ID + "=?";
         String[] argsString = new String[] { String.valueOf(idUser) };
@@ -114,7 +114,7 @@ public class UserManager extends AbstractManager {
         insertInTableSync(USER_TABLE,1,0,0);
     }
 
-    public List<UserEntity> getUsersByIds(List<Long> usersIds) {
+    public List<UserEntity> getUsersByIds(List<String> usersIds) {
         int userIdsSize = usersIds.size();
         List<UserEntity> result = new ArrayList<>(userIdsSize);
         if (userIdsSize == 0) {
@@ -141,7 +141,7 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
-    public List<UserEntity> getUsersWatchingSomething(List<Long> usersIds) {
+    public List<UserEntity> getUsersWatchingSomething(List<String> usersIds) {
         int userIdsSize = usersIds.size();
         List<UserEntity> result = new ArrayList<>(userIdsSize);
 

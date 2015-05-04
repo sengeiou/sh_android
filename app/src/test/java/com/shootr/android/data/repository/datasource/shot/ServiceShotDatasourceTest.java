@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 public class ServiceShotDatasourceTest {
 
     private static final TimelineParameters TIMELINE_PARAMETERS_STUB = null;
-    private static final Long ID_USER_STUB = 1L;
+    private static final String ID_USER_STUB = 1L;
     private static final Date DATE_NEWER = new Date(2000);
     private static final Date DATE_OLDER = new Date(1000);
 

@@ -25,7 +25,7 @@ public class EventManager extends AbstractManager{
         this.timeUtils = timeUtils;
     }
 
-    public EventEntity getEventById(Long eventid) {
+    public EventEntity getEventById(String eventid) {
         String whereSelection = DatabaseContract.EventTable.ID_EVENT + " = ?";
         String[] whereArguments = new String[] { String.valueOf(eventid) };
 

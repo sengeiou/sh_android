@@ -11,11 +11,11 @@ public class UserAvatarUrlBuilder {
     @Inject public UserAvatarUrlBuilder() {
     }
 
-    public String thumbnail(Long userId) {
+    public String thumbnail(String userId) {
         return getUrl(userId, SIZE_THUMBNAIL);
     }
 
-    private String getUrl(Long userId, String size) {
+    private String getUrl(String userId, String size) {
         return String.format(URL_PATTERN, userId, size);
     }
 }

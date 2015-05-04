@@ -9,7 +9,7 @@ import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.TimelineParameters;
-import com.shootr.android.service.PaginatedResult;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +18,13 @@ public interface ShootrService {
 
     UserEntity login(String id, String password) throws IOException;
 
-    List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws  IOException;
+    List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
 
-    List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
+    List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException;
 
-    List<UserEntity> getUsersById(List<Long> userIds) throws IOException;
+    List<UserEntity> getUsersById(List<String> userIds) throws IOException;
 
-    UserEntity getUserByIdUser(Long idUser) throws IOException;
+    UserEntity getUserByIdUser(String idUser) throws IOException;
 
     ShotEntity getShotById(String idShot) throws IOException;
 
@@ -43,7 +43,7 @@ public interface ShootrService {
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
 
-    FollowEntity getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws  IOException;
+    FollowEntity getFollowByIdUserFollowed(String currentUserId, String idUser) throws  IOException;
 
     DeviceEntity updateDevice(DeviceEntity device) throws IOException;
 
@@ -57,18 +57,18 @@ public interface ShootrService {
 
     List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
 
-    EventEntity getEventById(Long idEvent) throws IOException;
+    EventEntity getEventById(String idEvent) throws IOException;
 
-    List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
+    List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
     List<TeamEntity> searchTeams(String queryText) throws IOException;
 
-    List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+    List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)
       throws IOException;
 
-    void performCheckin(Long idUser, Long idEvent) throws IOException;
+    void performCheckin(String idUser, String idEvent) throws IOException;
 
     void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
 }

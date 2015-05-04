@@ -113,7 +113,7 @@ public class ShootrDataService implements ShootrService {
         return userMapper.fromDto(data[0]);
     }
 
-    @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
+    @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
         List<UserEntity> following = new ArrayList<>();
         boolean includeDeleted = lastModifiedDate > 0L;
         GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
@@ -131,7 +131,7 @@ public class ShootrDataService implements ShootrService {
         return following;
     }
 
-    @Override public List<UserEntity> getUsersById(List<Long> userIds) throws IOException{
+    @Override public List<UserEntity> getUsersById(List<String> userIds) throws IOException{
         List<UserEntity> users = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getUsersOperationDto(userIds);
         GenericDto responseDto = postRequest(requestDto);
@@ -141,7 +141,7 @@ public class ShootrDataService implements ShootrService {
         }else if (ops[0].getMetadata() != null) {
             if(ops[0].getMetadata().getTotalItems() > 0){
                 Map<String, Object>[] data = ops[0].getData();
-                for(Map<String,Object> d:data){
+                for(Map<String, Object> d:data){
                     UserEntity user = userMapper.fromDto(d);
                     users.add(user);
                 }
@@ -150,7 +150,7 @@ public class ShootrDataService implements ShootrService {
         return users;
     }
 
-    @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
+    @Override public List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws IOException {
         List<UserEntity> followers = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getFollowersOperationDto(idUserFollowed, 0L, lastModifiedDate, false);
         GenericDto responseDto = postRequest(requestDto);
@@ -160,7 +160,7 @@ public class ShootrDataService implements ShootrService {
         }else if (ops[0] != null) {
             if(ops[0].getData() != null){
                 Map<String, Object>[] data = ops[0].getData();
-                for(Map<String,Object> d:data){
+                for(Map<String, Object> d:data){
                     UserEntity user = userMapper.fromDto(d);
                     if(user.getCsysDeleted()==null){
                         followers.add(user);
@@ -308,7 +308,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public UserEntity getUserByIdUser(Long idUser) throws IOException {
+    public UserEntity getUserByIdUser(String idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -349,7 +349,7 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public FollowEntity getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
+    @Override public FollowEntity getFollowByIdUserFollowed(String idCurrentUser,String idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -359,7 +359,7 @@ public class ShootrDataService implements ShootrService {
         }
         if(ops[0] != null){
             if(ops[0].getData() != null && ops[0].getData().length > 0){
-                Map<String,Object> dataItem = ops[0].getData()[0];
+                Map<String, Object> dataItem = ops[0].getData()[0];
                 FollowEntity followReceived = followMapper.fromDto(dataItem);
                 return followReceived;
             }
@@ -396,7 +396,7 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        Map<String,Object> dataItem = ops[0].getData()[0];
+        Map<String, Object> dataItem = ops[0].getData()[0];
         FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
     }
@@ -409,7 +409,7 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        Map<String,Object> dataItem = ops[0].getData()[0];
+        Map<String, Object> dataItem = ops[0].getData()[0];
         FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
     }
@@ -447,7 +447,7 @@ public class ShootrDataService implements ShootrService {
         return eventsReceived;
     }
 
-    @Override public EventEntity getEventById(Long idEvent) throws IOException {
+    @Override public EventEntity getEventById(String idEvent) throws IOException {
         GenericDto requestDto = eventDtoFactory.getEventById(idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -463,7 +463,7 @@ public class ShootrDataService implements ShootrService {
 
     }
 
-    @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
+    @Override public List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException {
         List<ShotEntity> shotEntities = new ArrayList<>();
         GenericDto requestDto = shotDtoFactory.getLatestShotsFromIdUser(idUser, latestShotNumber);
         GenericDto responseDto = postRequest(requestDto);
@@ -474,7 +474,7 @@ public class ShootrDataService implements ShootrService {
             MetadataDto md = ops[0].getMetadata();
             Long items = md.getItems();
             for(int i = 0; i< items; i++){
-                Map<String,Object> dataItem = ops[0].getData()[i];
+                Map<String, Object> dataItem = ops[0].getData()[i];
                 shotEntities.add(shotEntityMapper.fromDto(dataItem));
             }
         }
@@ -512,7 +512,7 @@ public class ShootrDataService implements ShootrService {
         return teamsFound;
     }
 
-    @Override public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+    @Override public List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)
       throws IOException {
         List<EventSearchEntity> eventSearchResults = new ArrayList<>();
         GenericDto requestDto = eventDtoFactory.getSearchEventDto(query, eventsWatchesCounts);
@@ -531,7 +531,7 @@ public class ShootrDataService implements ShootrService {
         return eventSearchResults;
     }
 
-    @Override public void performCheckin(Long idUser, Long idEvent) throws IOException {
+    @Override public void performCheckin(String idUser, String idEvent) throws IOException {
         GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
         GenericDto responseDto = postRequest(checkinDto);
         // We are done... right? Any errors should have been thrown already. I'm not expecting any value

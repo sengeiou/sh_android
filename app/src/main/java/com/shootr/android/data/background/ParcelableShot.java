@@ -57,8 +57,8 @@ public class ParcelableShot implements Parcelable {
         shot.setComment(parcel.readString());
         shot.setImage(parcel.readString());
         shot.setPublishDate(new Date(parcel.readLong()));
-        long idQueued = parcel.readLong();
-        shot.setIdQueue(idQueued > 0 ? idQueued : null);
+        Long idQueued = parcel.readLong();
+        shot.setIdQueue(idQueued != 0 ? idQueued : null);
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(String.valueOf(parcel.readLong()));
