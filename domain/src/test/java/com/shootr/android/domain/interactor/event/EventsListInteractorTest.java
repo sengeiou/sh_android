@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -12,7 +13,10 @@ import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.utils.TimeUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -41,8 +45,10 @@ public class EventsListInteractorTest {
     @Mock EventSearchRepository remoteEventSearchRepository;
     @Mock EventSearchRepository localEventSearchRepository;
     @Mock EventListSynchronizationRepository eventListSynchronizationRepository;
+    @Mock SessionRepository sessionRepository;
+    @Mock UserRepository localUserRepository;
     @Mock TimeUtils timeUtils;
-    @Spy SpyCallback<List<EventSearchResult>> spyCallback = new SpyCallback<>();
+    @Spy SpyCallback<EventSearchResultList> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback dummyErrorCallback;
 
     private EventsListInteractor interactor;
@@ -57,6 +63,8 @@ public class EventsListInteractorTest {
           remoteEventSearchRepository,
           localEventSearchRepository,
           eventListSynchronizationRepository,
+          sessionRepository,
+          localUserRepository,
           timeUtils);
 
         when(timeUtils.getCurrentTime()).thenReturn(NOW);
@@ -67,8 +75,8 @@ public class EventsListInteractorTest {
 
         interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(spyCallback).onLoaded(anyListOf(EventSearchResult.class));
-        assertThat(spyCallback.firstResult()).hasSize(2);
+        verify(spyCallback).onLoaded(any(EventSearchResultList.class));
+        assertThat(spyCallback.firstResult().getEventSearchResults()).hasSize(2);
     }
 
     @Test public void shouldLoadRemoteEventsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
@@ -107,8 +115,8 @@ public class EventsListInteractorTest {
 
         interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(spyCallback).onLoaded(emptyResults());
-        verify(spyCallback).onLoaded(twoEventResults());
+        verify(spyCallback).onLoaded(emptyResultList());
+        verify(spyCallback).onLoaded(twoEventResultList());
     }
 
     @Test public void shouldOverwriteRemoteEventsInLocalRepositoryWhenRefreshed() throws Exception {
@@ -128,7 +136,7 @@ public class EventsListInteractorTest {
         interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         InOrder inOrder = inOrder(spyCallback, localEventSearchRepository);
-        inOrder.verify(spyCallback).onLoaded(twoEventResults());
+        inOrder.verify(spyCallback).onLoaded(twoEventResultList());
         inOrder.verify(localEventSearchRepository).deleteDefaultEvents();
         inOrder.verify(localEventSearchRepository).putDefaultEvents(twoEventResults());
     }
@@ -173,8 +181,16 @@ public class EventsListInteractorTest {
         return Arrays.asList(eventResult(), eventResult());
     }
 
+    private EventSearchResultList twoEventResultList() {
+        return new EventSearchResultList(twoEventResults());
+    }
+
     private List<EventSearchResult> emptyResults() {
         return Collections.emptyList();
+    }
+
+    private EventSearchResultList emptyResultList() {
+        return new EventSearchResultList(emptyResults());
     }
 
     private EventSearchResult eventResult() {
