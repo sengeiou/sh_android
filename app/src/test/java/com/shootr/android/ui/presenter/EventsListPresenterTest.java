@@ -134,6 +134,12 @@ public class EventsListPresenterTest {
         verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
+    @Test public void shouldSetCurrentVisibleEventInViewWhenEventSelected() throws Exception {
+        presenter.selectEvent(selectedEventModel());
+
+        verify(eventsListView).setCurrentVisibleEventId(SELECTED_EVENT_ID);
+    }
+
     //TODO search tests
 
     private Interactor.ErrorCallback anyErrorCallback() {

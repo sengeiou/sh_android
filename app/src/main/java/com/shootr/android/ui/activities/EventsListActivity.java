@@ -135,7 +135,12 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
 
     @Override protected void onResume() {
         super.onResume();
+        redrawEventListWithCurrentValues();
         presenter.resume();
+    }
+
+    private void redrawEventListWithCurrentValues() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override protected void onPause() {
