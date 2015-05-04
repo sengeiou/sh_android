@@ -27,6 +27,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -38,7 +39,7 @@ import static org.mockito.Mockito.verify;
 
 public class EventDetailPresenterTest {
 
-    private static final long EVENT_ID_STUB = 1L;
+    private static final String EVENT_ID_STUB = "1L";
     private EventDetailPresenter presenter;
 
     @Mock
@@ -132,7 +133,7 @@ public class EventDetailPresenterTest {
                 callback.onLoaded(eventInfo);
                 return null;
             }
-        }).when(eventInfoInteractor).obtainEventInfo(anyLong(), any(VisibleEventInfoInteractor.Callback.class));
+        }).when(eventInfoInteractor).obtainVisibleEventInfo(any(VisibleEventInfoInteractor.Callback.class));
     }
 
     private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
@@ -143,7 +144,7 @@ public class EventDetailPresenterTest {
                 callback.onLoaded(isCheckedIn);
                 return null;
             }
-        }).when(getCheckinStatusInteractor).loadCheckinStatus(Matchers.<Interactor.Callback<Boolean>>any());
+        }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
     }
 
     private EventInfo eventInfoWithUserNotWatching() {
@@ -166,7 +167,7 @@ public class EventDetailPresenterTest {
 
     private User userWithIdUser() {
         User user = new User();
-        user.setIdUser(1L);
+        user.setIdUser("1L");
         return user;
     }
 

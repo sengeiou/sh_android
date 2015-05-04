@@ -80,7 +80,7 @@ public class EventSelectionPresenterTest {
     public void shouldPostEventToBusPublisherWhenEventSelected() throws Exception {
         setupSelectEventInteractorCallbacksVisibleEventWatch();
 
-        presenter.onEventSelected(EVENT_ID);
+        presenter.onEventSelected(String.valueOf(EVENT_ID));
 
         ArgumentCaptor<EventChanged.Event> captor = ArgumentCaptor.forClass(EventChanged.Event.class);
         verify(busPublisher).post(captor.capture());
@@ -93,7 +93,7 @@ public class EventSelectionPresenterTest {
         setupSelectEventInteractorCallbacksVisibleEventWatch();
         setupVisibleEventInteractorCallbacks(visibleEventInfo());
 
-        presenter.onEventSelected(EVENT_ID);
+        presenter.onEventSelected(String.valueOf(EVENT_ID));
 
         verify(eventSelectionView).showCurrentEventTitle(anyString());
     }

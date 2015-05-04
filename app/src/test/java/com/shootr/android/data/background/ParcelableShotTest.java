@@ -2,6 +2,8 @@ package com.shootr.android.data.background;
 
 import android.os.Parcel;
 import com.shootr.android.domain.Shot;
+
+import java.lang.String;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,8 +134,8 @@ public class ParcelableShotTest {
     @Test public void testShotFromParcelableHasParentInfo() throws Exception {
         Shot shotStub = shotStub();
 
-        shotStub.setParentShotId(PARENT_ID);
-        shotStub.setParentShotUserId(PARENT_USER_ID);
+        shotStub.setParentShotId(String.valueOf(PARENT_ID));
+        shotStub.setParentShotUserId(String.valueOf(PARENT_USER_ID));
         shotStub.setParentShotUsername(PARENT_USERNAME);
 
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -145,9 +147,9 @@ public class ParcelableShotTest {
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
 
-        assertThat(shotFromParcel.getParentShotId()).isEqualTo(PARENT_ID);
-        assertThat(shotFromParcel.getParentShotUserId()).isEqualTo(PARENT_USER_ID);
-        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo(PARENT_USERNAME);
+        assertThat(shotFromParcel.getParentShotId()).isEqualTo(String.valueOf(PARENT_ID));
+        assertThat(shotFromParcel.getParentShotUserId()).isEqualTo(String.valueOf(PARENT_USER_ID));
+        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo(String.valueOf(PARENT_USERNAME));
     }
 
     @Test public void testShotFromParcelableKeepsNullParentInfo() throws Exception {
@@ -168,13 +170,13 @@ public class ParcelableShotTest {
 
         assertThat(shotFromParcel.getParentShotId()).isEqualTo(null);
         assertThat(shotFromParcel.getParentShotUserId()).isEqualTo(null);
-        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo(null);
+        assertThat(shotFromParcel.getParentShotUsername()).isEqualTo("");
     }
 
     //region Stubs
     private Shot shotStub() {
         Shot shot = new Shot();
-        shot.setIdShot(SHOT_ID_STUB);
+        shot.setIdShot(String.valueOf(SHOT_ID_STUB));
         shot.setComment(COMMENT_STUB);
         shot.setImage(IMAGE_STUB);
         shot.setPublishDate(new Date());
@@ -185,7 +187,7 @@ public class ParcelableShotTest {
 
     private Shot.ShotEventInfo eventInfo() {
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(EVENT_ID);
+        eventInfo.setIdEvent(String.valueOf(EVENT_ID));
         eventInfo.setEventTitle(EVENT_TITLE);
         eventInfo.setEventTag(EVENT_TAG);
         return eventInfo;
@@ -193,7 +195,7 @@ public class ParcelableShotTest {
 
     private Shot.ShotUserInfo userInfo() {
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
-        userInfo.setIdUser(USER_ID);
+        userInfo.setIdUser(String.valueOf(USER_ID));
         userInfo.setUsername(USERNAME);
         userInfo.setAvatar(AVATAR);
         return userInfo;
