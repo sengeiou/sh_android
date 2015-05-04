@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class VisibleEventInfoInteractor implements Interactor {
 
-    private static final long VISIBLE_EVENT = -1;
+    private static final String VISIBLE_EVENT = "-1";
     private static final EventInfo NO_EVENT_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
@@ -30,7 +30,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final EventRepository localEventRepository;
     private final SessionRepository sessionRepository;
 
-    private Long idEventWanted;
+    private String idEventWanted;
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
@@ -49,7 +49,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
-    public void obtainEventInfo(long idEventWanted, Callback callback) {
+    public void obtainEventInfo(String idEventWanted, Callback callback) {
         this.idEventWanted = idEventWanted;
         this.callback = callback;
         interactorHandler.execute(this);
@@ -84,11 +84,11 @@ public class VisibleEventInfoInteractor implements Interactor {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
         Long wantedEventId = null;
 
-        if(getWantedEventId(currentUser) != "null"){
-            wantedEventId = Long.parseLong(getWantedEventId(currentUser));
+        if(getWantedEventId(currentUser) != null){
+            wantedEventId = Long.valueOf(getWantedEventId(currentUser));
         }
 
-        if (wantedEventId!=null && wantedEventId > 0) {
+        if (wantedEventId != null && wantedEventId != Long.valueOf(VISIBLE_EVENT)) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
@@ -109,10 +109,10 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     private String getWantedEventId(User currentUser) {
-        if (idEventWanted > 0) {
-            return idEventWanted.toString();
+        if (idEventWanted != null && idEventWanted != VISIBLE_EVENT) {
+            return idEventWanted;
         } else {
-            return currentUser.getVisibleEventId().toString();
+            return currentUser.getVisibleEventId();
         }
     }
 

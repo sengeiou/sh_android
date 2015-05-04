@@ -46,7 +46,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventDetailView eventDetailView;
-    private long idEvent;
+    private String idEvent;
 
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
@@ -71,7 +71,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    public void initialize(EventDetailView eventDetailView, long idEvent) {
+    public void initialize(EventDetailView eventDetailView, String idEvent) {
         setView(eventDetailView);
         this.idEvent = idEvent;
         this.loadEventInfo();

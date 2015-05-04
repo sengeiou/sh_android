@@ -96,7 +96,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private boolean showEditButton;
     private float headerMaxElevation;
 
-    public static Intent getIntent(Context context, Long eventId) {
+    public static Intent getIntent(Context context, String eventId) {
         Intent intent = new Intent(context, EventDetailActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, eventId);
         return intent;
@@ -108,11 +108,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        long idEvent = getIntent().getLongExtra(EXTRA_EVENT_ID, -1);
+        String idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 
-    private void initializePresenter(long idEvent) {
+    private void initializePresenter(String idEvent) {
         presenter.initialize(this, idEvent);
     }
 
