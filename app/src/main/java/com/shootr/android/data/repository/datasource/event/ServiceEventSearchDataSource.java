@@ -46,6 +46,10 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
+    @Override public EventSearchEntity getEventResult(Long idEvent) {
+        throw new IllegalStateException("Method not implemented in remote datasource");
+    }
+
     private List<EventSearchEntity> loadEvents(String query) {
         try {
             Map<Long, Integer> eventsWatchesCounts = getWatchersCountByEvents();

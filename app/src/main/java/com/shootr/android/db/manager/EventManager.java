@@ -153,6 +153,27 @@ public class EventManager extends AbstractManager{
         return eventSearchEntities;
     }
 
+    public EventSearchEntity getEventSearchResultById(Long idEvent) {
+        String whereClause = DatabaseContract.EventSearchTable.ID_EVENT + "=?";
+        String[] whereArguments = new String[] { String.valueOf(idEvent) };
+
+        Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
+          DatabaseContract.EventSearchTable.PROJECTION,
+          whereClause,
+          whereArguments,
+          null,
+          null,
+          null,
+          "1");
+
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            return eventEntityMapper.fromSearchCursor(queryResults);
+        } else {
+            return null;
+        }
+    }
+
     public void putDefaultEventSearch(List<EventSearchEntity> eventSearchEntities) {
         SQLiteDatabase database = getWritableDatabase();
         try{

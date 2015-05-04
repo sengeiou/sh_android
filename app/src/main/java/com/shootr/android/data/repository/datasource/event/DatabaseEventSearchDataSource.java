@@ -30,4 +30,7 @@ public class DatabaseEventSearchDataSource implements EventSearchDataSource {
         eventManager.deleteDefaultEventSearch();
     }
 
+    @Override public EventSearchEntity getEventResult(Long idEvent) {
+        return eventManager.getEventSearchResultById(idEvent);
+    }
 }

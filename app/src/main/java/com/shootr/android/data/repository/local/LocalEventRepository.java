@@ -3,6 +3,7 @@ package com.shootr.android.data.repository.local;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
@@ -12,16 +13,28 @@ import javax.inject.Inject;
 public class LocalEventRepository implements EventRepository {
 
     private final EventDataSource localEventDataSource;
+    private final EventSearchDataSource localEventSearchDataSource;
     private final EventEntityMapper eventEntityMapper;
 
-    @Inject public LocalEventRepository(@Local EventDataSource localEventDataSource, EventEntityMapper eventEntityMapper) {
+    @Inject public LocalEventRepository(@Local EventDataSource localEventDataSource,
+      @Local EventSearchDataSource localEventSearchDataSource, EventEntityMapper eventEntityMapper) {
         this.localEventDataSource = localEventDataSource;
+        this.localEventSearchDataSource = localEventSearchDataSource;
         this.eventEntityMapper = eventEntityMapper;
     }
 
     @Override public Event getEventById(Long idEvent) {
         EventEntity eventEntity = localEventDataSource.getEventById(idEvent);
+        if (eventEntity == null) {
+            eventEntity = fallbackOnSearchResults(idEvent);
+        }
         return eventEntityMapper.transform(eventEntity);
+    }
+
+    private EventEntity fallbackOnSearchResults(Long idEvent) {
+        EventEntity eventEntity = localEventSearchDataSource.getEventResult(idEvent);
+        localEventDataSource.putEvent(eventEntity);
+        return eventEntity;
     }
 
     @Override public List<Event> getEventsByIds(List<Long> eventIds) {

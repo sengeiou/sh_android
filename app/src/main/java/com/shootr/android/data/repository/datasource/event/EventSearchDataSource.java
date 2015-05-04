@@ -12,4 +12,6 @@ public interface EventSearchDataSource {
     void putDefaultEvents(List<EventSearchEntity> transform);
 
     void deleteDefaultEvents();
+
+    EventSearchEntity getEventResult(Long idEvent);
 }
