@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     private final ShotRepository shotRepository;
-    private Long replyParentId;
+    private String replyParentId;
     private Shot parentShot;
 
     @Inject public PostNewShotAsReplyInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
@@ -23,7 +23,7 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
         this.shotRepository = shotRepository;
     }
 
-    public void postNewShotAsReply(String comment, File image, Long replyParentId, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void postNewShotAsReply(String comment, File image, String replyParentId, CompletedCallback callback, ErrorCallback errorCallback) {
         this.replyParentId = replyParentId;
         super.postNewShot(comment, image, callback, errorCallback);
     }

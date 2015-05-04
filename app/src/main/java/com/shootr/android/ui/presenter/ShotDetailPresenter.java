@@ -67,7 +67,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadParentShot() {
-        getReplyParentInteractor.loadReplyParent(Long.parseLong(shotModel.getParentShotId()), new Interactor.Callback<Shot>() {
+        getReplyParentInteractor.loadReplyParent(shotModel.getParentShotId(), new Interactor.Callback<Shot>() {
             @Override public void onLoaded(Shot shot) {
                 if (shot != null) {
                     shotDetailView.renderParent(shotModelMapper.transform(shot));

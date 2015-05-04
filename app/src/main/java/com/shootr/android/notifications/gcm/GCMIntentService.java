@@ -92,7 +92,7 @@ public class GCMIntentService extends IntentService {
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
-        Long idShot = parameters.getLong(ID_SHOT);
+        String idShot = parameters.getString(ID_SHOT);
         Long idUser = parameters.getLong(ID_USER);
         ShotEntity shot = service.getShotById(idShot);
         UserEntity user = userManager.getUserByIdUser(idUser);

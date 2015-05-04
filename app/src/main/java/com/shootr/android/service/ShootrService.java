@@ -26,7 +26,7 @@ public interface ShootrService {
 
     UserEntity getUserByIdUser(Long idUser) throws IOException;
 
-    ShotEntity getShotById(Long idShot) throws IOException;
+    ShotEntity getShotById(String idShot) throws IOException;
 
     List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
 

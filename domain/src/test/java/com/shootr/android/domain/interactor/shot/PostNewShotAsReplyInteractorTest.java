@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestBase{
 
-    private static final Long PARENT_SHOT_ID = 1L;
+    private static final String PARENT_SHOT_ID = 1L;
     private static final Long PARENT_EVENT_ID = 2L;
     private static final String PARENT_EVENT_TITLE = "title";
     private static final String PARENT_EVENT_TAG = "tag";

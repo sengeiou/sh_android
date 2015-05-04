@@ -31,7 +31,7 @@ public class ShotDtoFactory {
 
     }
 
-    public GenericDto getSingleShotOperationDto(Long idShot) {
+    public GenericDto getSingleShotOperationDto(String idShot) {
         MetadataDto md = new MetadataDto.Builder()
                 .operation(ServiceConstants.OPERATION_RETRIEVE)
                 .entity(ShotTable.TABLE)

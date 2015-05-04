@@ -146,7 +146,7 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-    public ShotEntity getShotById(Long idShot) {
+    public ShotEntity getShotById(String idShot) {
         String whereClause = ShotTable.ID_SHOT + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idShot)};
 

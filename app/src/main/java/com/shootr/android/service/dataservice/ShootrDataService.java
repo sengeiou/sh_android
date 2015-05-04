@@ -172,7 +172,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public ShotEntity getShotById(Long idShot) throws IOException {
+    public ShotEntity getShotById(String idShot) throws IOException {
         GenericDto requestDto = shotDtoFactory.getSingleShotOperationDto(idShot);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();

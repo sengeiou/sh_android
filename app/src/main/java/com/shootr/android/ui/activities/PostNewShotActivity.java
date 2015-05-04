@@ -77,7 +77,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private void initializePresenterWithIntentExtras(Bundle extras) {
         if (extras != null) {
             String replyToUsername = extras.getString(EXTRA_REPLY_USERNAME);
-            Long replyParentId = extras.getLong(EXTRA_REPLY_PARENT_ID, 0L);
+            String replyParentId = extras.getString(EXTRA_REPLY_PARENT_ID);
             boolean isReply = replyToUsername != null;
             if (isReply) {
                 presenter.initializeAsReply(this, replyParentId, replyToUsername);

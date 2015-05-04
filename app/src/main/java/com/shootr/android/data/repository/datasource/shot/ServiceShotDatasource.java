@@ -48,7 +48,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public ShotEntity getShot(Long shotId) {
+    @Override public ShotEntity getShot(String shotId) {
         try {
             return shootrService.getShotById(shotId);
         } catch (IOException e) {
