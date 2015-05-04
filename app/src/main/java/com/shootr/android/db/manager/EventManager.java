@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
 
@@ -91,7 +92,13 @@ public class EventManager extends AbstractManager{
         long res = 0;
         String args = DatabaseContract.EventTable.ID_EVENT + "=?";
         String[] stringArgs = new String[]{String.valueOf(eventEntity.getIdEvent())};
-        Cursor c = getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(DatabaseContract.EventTable.TABLE,
+          DatabaseContract.EventTable.PROJECTION,
+          args,
+          stringArgs,
+          null,
+          null,
+          null);
         if (c.getCount() > 0) {
            res = getWritableDatabase().delete(DatabaseContract.EventTable.TABLE, args, stringArgs);
         }
@@ -106,7 +113,7 @@ public class EventManager extends AbstractManager{
     }
 
     public void insertInSync(){
-        insertInTableSync(DatabaseContract.EventTable.TABLE,10,1000,0);
+        insertInTableSync(DatabaseContract.EventTable.TABLE, 10, 1000, 0);
     }
 
     public List<EventEntity> getEndedEvents() {
@@ -124,5 +131,45 @@ public class EventManager extends AbstractManager{
         }
         queryResult.close();
         return resultEvents;
+    }
+
+    public List<EventSearchEntity> getDefaultEventSearch() {
+        List<EventSearchEntity> eventSearchEntities = new ArrayList<>();
+
+        Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
+          DatabaseContract.EventSearchTable.PROJECTION,
+          null,
+          null,
+          null,
+          null,
+          null);
+
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                eventSearchEntities.add(eventEntityMapper.fromSearchCursor(queryResults));
+            } while (queryResults.moveToNext());
+        }
+        return eventSearchEntities;
+    }
+
+    public void putDefaultEventSearch(List<EventSearchEntity> eventSearchEntities) {
+        SQLiteDatabase database = getWritableDatabase();
+        try{
+            database.beginTransaction();
+            for (EventSearchEntity eventSearchEntity : eventSearchEntities) {
+                database.insert(DatabaseContract.EventSearchTable.TABLE,
+                  null,
+                  eventEntityMapper.toSearchContentValues(eventSearchEntity));
+            }
+            database.setTransactionSuccessful();
+        }finally {
+            database.endTransaction();
+        }
+
+    }
+
+    public void deleteDefaultEventSearch() {
+        getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
     }
 }

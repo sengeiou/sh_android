@@ -38,6 +38,14 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         return loadEvents(query);
     }
 
+    @Override public void putDefaultEvents(List<EventSearchEntity> transform) {
+        throw new IllegalStateException("Method not implemented in remote datasource");
+    }
+
+    @Override public void deleteDefaultEvents() {
+        throw new IllegalStateException("Method not implemented in remote datasource");
+    }
+
     private List<EventSearchEntity> loadEvents(String query) {
         try {
             Map<Long, Integer> eventsWatchesCounts = getWatchersCountByEvents();

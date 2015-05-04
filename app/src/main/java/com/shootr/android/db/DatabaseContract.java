@@ -164,7 +164,7 @@ public class DatabaseContract {
         };
     }
 
-    public static final class EventTable implements SyncColumns {
+    public static class EventTable implements SyncColumns {
 
         private EventTable() {
 
@@ -188,6 +188,20 @@ public class DatabaseContract {
           ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
+    }
+
+    public static class EventSearchTable extends EventTable {
+
+        public static final String TABLE = "EventSearch";
+
+        public static final String WATCHERS = "watchers";
+
+        public static final String[] PROJECTION = {
+          WATCHERS,
+          ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, ID_LOCAL_TEAM, ID_VISITOR_TEAM, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
+          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+        };
+
     }
 
     public static final class ShotQueueTable implements SyncColumns {

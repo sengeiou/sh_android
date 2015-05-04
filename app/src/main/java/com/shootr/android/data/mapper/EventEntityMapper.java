@@ -39,17 +39,21 @@ public class EventEntityMapper {
 
     public EventEntity transform(Event event) {
         EventEntity eventEntity = new EventEntity();
-        eventEntity.setIdEvent(event.getId());
-        eventEntity.setIdUser(event.getAuthorId());
-        eventEntity.setTitle(event.getTitle());
-        eventEntity.setBeginDate(event.getStartDate());
-        eventEntity.setEndDate(event.getEndDate());
-        eventEntity.setPhoto(event.getPicture());
-        eventEntity.setTimezone(event.getTimezone());
-        eventEntity.setTag(event.getTag());
-        eventEntity.setUserName(event.getAuthorUsername());
-
-        eventEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
+        transformToTemplate(event, eventEntity);
         return eventEntity;
+    }
+
+    protected void transformToTemplate(Event event, EventEntity entityTemplate) {
+        entityTemplate.setIdEvent(event.getId());
+        entityTemplate.setIdUser(event.getAuthorId());
+        entityTemplate.setTitle(event.getTitle());
+        entityTemplate.setBeginDate(event.getStartDate());
+        entityTemplate.setEndDate(event.getEndDate());
+        entityTemplate.setPhoto(event.getPicture());
+        entityTemplate.setTimezone(event.getTimezone());
+        entityTemplate.setTag(event.getTag());
+        entityTemplate.setUserName(event.getAuthorUsername());
+
+        entityTemplate.setCsysSynchronized(Synchronized.SYNC_NEW);
     }
 }
