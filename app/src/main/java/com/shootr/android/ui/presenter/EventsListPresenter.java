@@ -19,14 +19,11 @@ import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListPresenter implements Presenter, CommunicationPresenter{
+public class EventsListPresenter implements Presenter {
 
-    //region Dependencies
-    private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
     private final SelectEventInteractor selectEventInteractor;
@@ -36,10 +33,9 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
 
     private EventsListView eventsListView;
 
-    @Inject public EventsListPresenter(@Main Bus bus, EventsListInteractor eventsListInteractor,
+    @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
       EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
       EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
         this.selectEventInteractor = selectEventInteractor;
@@ -79,16 +75,28 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.navigateToEventTimeline(selectedEvent.getIdEvent(), selectedEvent.getTitle());
     }
 
-    private void loadDefaultEventList() {
+    protected void loadDefaultEventList() {
         eventsListView.showLoading();
-        eventsListInteractor.loadEvents();
+        eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
+            @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+                onDefaultEventListLoaded(eventSearchResultList);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+                //TODO discriminar por tipo
+            }
+        });
     }
 
-    @Subscribe
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
-        eventsListView.hideLoading();
-        this.setViewCurrentVisibleEvent(resultList);
-        this.showEventListInView(resultList);
+        List<EventSearchResult> eventSearchResults = resultList.getEventSearchResults();
+        if (!eventSearchResults.isEmpty()) {
+            List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
+            eventsListView.hideLoading();
+            this.renderViewEventsList(eventResultModels);
+            this.setViewCurrentVisibleEvent(resultList.getCurrentVisibleEventId());
+        }
     }
 
     public void search(String queryText) {
@@ -109,27 +117,20 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     }
 
     private void onSearchResults(EventSearchResultList eventSearchResultList) {
-        showEventListInView(eventSearchResultList);
-    }
-
-    private void setViewCurrentVisibleEvent(EventSearchResultList resultList) {
-        Event currentVisibleEvent = resultList.getCurrentVisibleEvent();
-        if (currentVisibleEvent != null) {
-            eventsListView.setCurrentVisibleEventId(currentVisibleEvent.getId());
-        }
-    }
-
-    private void showEventListInView(EventSearchResultList resultList) {
-        List<EventSearchResult> events = resultList.getEventSearchResults();
-        if (events.size() > 0) {
-            this.renderViewEventsList(events);
+        List<EventSearchResult> eventSearchResults = eventSearchResultList.getEventSearchResults();
+        if (!eventSearchResults.isEmpty()) {
+            List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
+            renderViewEventsList(eventModels);
         } else {
             this.showViewEmpty();
         }
     }
 
-    private void renderViewEventsList(List<EventSearchResult> events) {
-        List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+    private void setViewCurrentVisibleEvent(Long currentVisibleEventId) {
+        eventsListView.setCurrentVisibleEventId(currentVisibleEventId);
+    }
+
+    private void renderViewEventsList(List<EventResultModel> eventModels) {
         eventsListView.showContent();
         eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);
@@ -151,23 +152,20 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         eventsListView.showError(errorMessage);
     }
 
-    @Subscribe
-    @Override public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorEvent event) {
         eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
-    @Subscribe
-    @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
 
     //region Lifecycle
     @Override public void resume() {
-        bus.register(this);
+        this.loadDefaultEventList();
     }
 
     @Override public void pause() {
-        bus.unregister(this);
     }
     //endregion
 }
