@@ -66,7 +66,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @InjectView(R.id.userlist_empty) TextView emptyTextView;
 
     // Args
-    Long userId;
+    String userId;
     Integer followType;
 
     UserModel user;
@@ -100,7 +100,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void injectArguments() {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            userId = arguments.getLong(ARGUMENT_USER_ID);
+            userId = arguments.getString(ARGUMENT_USER_ID);
             followType = arguments.getInt(ARGUMENT_FOLLOW_TYPE);
         } else {
             Timber.w("UserFollowsFragment has null arguments, which might cause a NullPointerException");
@@ -179,7 +179,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
         GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(Long.parseLong(userVO.getIdUser()),followType);
+        job2.init(userVO.getIdUser(),followType);
         jobManager.addJobInBackground(job2);
 
         //Al instante
@@ -251,8 +251,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        Pair<Long, Boolean> result = event.getResult();
-        Long idUser = result.first;
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
         Boolean following = result.second;
 
         List<UserModel> usersInList = userListAdapter.getItems();

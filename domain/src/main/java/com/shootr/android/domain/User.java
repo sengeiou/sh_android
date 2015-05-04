@@ -6,7 +6,7 @@ public class User {
 
     private String idUser;
     private String favoriteTeamName;
-    private Long favoriteTeamId;
+    private String favoriteTeamId;
     private String username;
     private String name;
     private String email;
@@ -42,11 +42,11 @@ public class User {
         this.favoriteTeamName = favoriteTeamName;
     }
 
-    public Long getFavoriteTeamId() {
+    public String getFavoriteTeamId() {
         return favoriteTeamId;
     }
 
-    public void setFavoriteTeamId(Long favoriteTeamId) {
+    public void setFavoriteTeamId(String favoriteTeamId) {
         this.favoriteTeamId = favoriteTeamId;
     }
 

@@ -349,7 +349,7 @@ public class ProfileFragment extends BaseFragment {
         Context context = getActivity();
 
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(Long.valueOf(idUser));
+        job.init(idUser);
         jobManager.addJobInBackground(job);
 
         loadLatestShots();
@@ -359,7 +359,7 @@ public class ProfileFragment extends BaseFragment {
     public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(Long.valueOf(idUser), followType);
+        job2.init(idUser, followType);
         jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserOnlineJob job =
@@ -376,9 +376,9 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<Long, Boolean> result = event.getResult();
+        Pair<String, Boolean> result = event.getResult();
         if (result != null) {
-            Long idUserFromResult = result.first;
+            String idUserFromResult = result.first;
             Boolean following = result.second;
             if (idUserFromResult.equals(this.idUser)) {
                 followButton.setFollowing(following);
@@ -518,7 +518,7 @@ public class ProfileFragment extends BaseFragment {
         GetLatestShotsJob getLatestShotsJob =
           ShootrApplication.get(getActivity()).getObjectGraph().get(GetLatestShotsJob.class);
 
-        getLatestShotsJob.init(Long.valueOf(idUser));
+        getLatestShotsJob.init(idUser);
 
         jobManager.addJobInBackground(getLatestShotsJob);
     }

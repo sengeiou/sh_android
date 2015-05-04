@@ -87,7 +87,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected favoriteTeamId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    Long actualFavoriteTeamId = actual.getFavoriteTeamId();
+    String actualFavoriteTeamId = actual.getFavoriteTeamId();
     if (!Objects.areEqual(actualFavoriteTeamId, favoriteTeamId)) {
       failWithMessage(assertjErrorMessage, actual, favoriteTeamId, actualFavoriteTeamId);
     }
@@ -417,7 +417,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
    * @return this assertion object.
    * @throws AssertionError - if the actual User's visibleEventId is not equal to the given one.
    */
-  public UserAssert hasVisibleEventId(Long visibleEventId) {
+  public UserAssert hasVisibleEventId(String visibleEventId) {
     // check that actual User we want to make assertions on is not null.
     isNotNull();
 

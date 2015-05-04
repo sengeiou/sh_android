@@ -43,7 +43,7 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
     private Event currentVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
         if (visibleEventId != null) {
-            return localEventRepository.getEventById(Long.valueOf(visibleEventId));
+            return localEventRepository.getEventById(visibleEventId);
         } else {
             return null;
         }

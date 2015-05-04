@@ -72,10 +72,10 @@ public class CreateEventInteractor implements Interactor {
         if (isNewEvent()) {
             event = new Event();
         } else {
-            event = remoteEventRepository.getEventById(Long.parseLong(idEvent));
+            event = remoteEventRepository.getEventById(idEvent);
         }
         event.setTitle(title);
-        Long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         event.setAuthorId(currentUserId.toString());
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));

@@ -82,13 +82,13 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-        Long wantedEventId = null;
+        String wantedEventId = null;
 
         if(getWantedEventId(currentUser) != null){
-            wantedEventId = Long.valueOf(getWantedEventId(currentUser));
+            wantedEventId = getWantedEventId(currentUser);
         }
 
-        if (wantedEventId != null && wantedEventId != Long.valueOf(VISIBLE_EVENT)) {
+        if (wantedEventId != null && wantedEventId != VISIBLE_EVENT) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
@@ -116,7 +116,7 @@ public class VisibleEventInfoInteractor implements Interactor {
         }
     }
 
-    protected List<User> filterUsersWatchingEvent(List<User> people, Long idEvent) {
+    protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idEvent.equals(user.getVisibleEventId())) {

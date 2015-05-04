@@ -27,14 +27,14 @@ public class SessionHandler {
 
     private boolean hasSessionActive() {
         return sessionRepository.getCurrentUser() != null
-          && sessionRepository.getCurrentUserId() > 0
+          && sessionRepository.getCurrentUserId() != "0L"
           && sessionRepository.getSessionToken() != null;
     }
 
     private void restoreStoredSession() {
         String sessionToken = sessionRepository.getSessionToken();
-        long currentUserId = sessionRepository.getCurrentUserId();
-        if (sessionToken != null && currentUserId > 0) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        if (sessionToken != null && currentUserId != "0L") {
             User currentUser = localUserRepository.getUserById(currentUserId);
             if (currentUser != null) {
                 sessionRepository.createSession(currentUserId, sessionToken, currentUser);

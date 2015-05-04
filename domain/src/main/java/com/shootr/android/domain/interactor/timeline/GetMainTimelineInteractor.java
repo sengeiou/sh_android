@@ -117,12 +117,12 @@ public class GetMainTimelineInteractor implements Interactor {
     }
 
     private TimelineParameters buildParametersWithoutEvent() {
-        Long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         return TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId).build();
     }
 
     private TimelineParameters buildParametersWithEvent(Event event) {
-        Long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         return TimelineParameters.builder()
           .forUsers(getPeopleIds(), currentUserId)
           .forEvent(event)
@@ -140,19 +140,19 @@ public class GetMainTimelineInteractor implements Interactor {
         return remoteShots;
     }
 
-    private List<Long> getPeopleIds() {
-        List<Long> ids = new ArrayList<>();
+    private List<String> getPeopleIds() {
+        List<String> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
-            ids.add(Long.valueOf(user.getIdUser()));
+            ids.add(user.getIdUser());
         }
         return ids;
     }
 
     private Event getVisibleEventFromRepository(UserRepository userRepository) {
-        Long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         String visibleEventId = userRepository.getUserById(currentUserId).getVisibleEventId();
         if (visibleEventId != null && visibleEventId != "null") {
-            return localEventRepository.getEventById(Long.valueOf(visibleEventId));
+            return localEventRepository.getEventById(visibleEventId);
         }
         return null;
     }
@@ -171,7 +171,8 @@ public class GetMainTimelineInteractor implements Interactor {
 
     private void notifyLoaded(final Timeline timeline) {
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 callback.onLoaded(timeline);
             }
         });

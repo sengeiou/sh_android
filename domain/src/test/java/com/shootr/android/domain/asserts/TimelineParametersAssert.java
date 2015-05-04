@@ -46,7 +46,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected eventAuthorId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Long actualEventAuthorId = actual.getEventAuthorId();
+        String actualEventAuthorId = actual.getEventAuthorId();
         if (!Objects.areEqual(actualEventAuthorId, eventAuthorId)) {
             failWithMessage(assertjErrorMessage, actual, eventAuthorId, actualEventAuthorId);
         }
@@ -146,7 +146,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected sinceDate of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Long actualSinceDate = actual.getSinceDate();
+        String actualSinceDate = actual.getSinceDate();
         if (!Objects.areEqual(actualSinceDate, sinceDate)) {
             failWithMessage(assertjErrorMessage, actual, sinceDate, actualSinceDate);
         }

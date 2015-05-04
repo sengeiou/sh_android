@@ -337,7 +337,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         GetFollowUnFollowUserOfflineJob jobOffline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        jobOffline.init(Long.parseLong(userVO.getIdUser()), followType);
+        jobOffline.init(userVO.getIdUser(), followType);
         jobManager.addJobInBackground(jobOffline);
 
         GetFollowUnfollowUserOnlineJob
@@ -363,8 +363,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<Long, Boolean> result = event.getResult();
-        Long idUser = result.first;
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
         Boolean following = result.second;
 
         List<UserModel> usersInList = adapter.getItems();

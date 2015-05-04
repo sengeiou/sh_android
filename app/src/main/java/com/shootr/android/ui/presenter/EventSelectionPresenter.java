@@ -71,14 +71,14 @@ public class EventSelectionPresenter implements Presenter {
     }
 
     public void onEventSelected(String eventId) {
-        selectEventInteractor.selectEvent(Long.valueOf(eventId), new SelectEventInteractor.Callback() {
-            @Override public void onLoaded(Long selectedEventId) {
+        selectEventInteractor.selectEvent(eventId, new SelectEventInteractor.Callback() {
+            @Override public void onLoaded(String selectedEventId) {
                 onEventChanged(selectedEventId);
             }
         });
     }
 
-    private void onEventChanged(Long idEvent) {
+    private void onEventChanged(String idEvent) {
         if (idEvent == null) {
             showViewHall();
         } else {
@@ -87,7 +87,7 @@ public class EventSelectionPresenter implements Presenter {
         notifyEventChanged(idEvent);
     }
 
-    private void notifyEventChanged(Long idEvent) {
+    private void notifyEventChanged(String idEvent) {
         busPublisher.post(new EventChanged.Event(idEvent));
     }
 

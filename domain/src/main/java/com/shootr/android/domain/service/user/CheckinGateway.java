@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface CheckinGateway {
 
-    void performCheckin(Long idUser, Long idEvent) throws IOException;
+    void performCheckin(String idUser, String idEvent) throws IOException;
 }

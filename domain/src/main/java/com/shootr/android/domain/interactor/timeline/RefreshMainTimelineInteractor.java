@@ -77,27 +77,27 @@ public class RefreshMainTimelineInteractor implements Interactor {
     private void updateLastRefreshDate(List<Shot> remoteShots) {
         if (remoteShots.size() > 0) {
             synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0)
-              .getPublishDate()
-              .getTime());
+                    .getPublishDate()
+                    .getTime());
         }
     }
 
     private TimelineParameters buildTimelineParameters() {
-        Long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         TimelineParameters.Builder timelineParametersBuilder = TimelineParameters.builder().forUsers(getPeopleIds(), currentUserId);
         Event visibleEvent = getVisibleEvent();
         if (visibleEvent != null) {
             timelineParametersBuilder.forEvent(visibleEvent);
         }
         Long since = synchronizationRepository.getTimelineLastRefresh();
-        timelineParametersBuilder.since(since);
+        timelineParametersBuilder.since(Long.valueOf(since));
         return timelineParametersBuilder.build();
     }
 
-    private List<Long> getPeopleIds() {
-        List<Long> ids = new ArrayList<>();
+    private List<String> getPeopleIds() {
+        List<String> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
-            ids.add(Long.valueOf(user.getIdUser()));
+            ids.add(user.getIdUser());
         }
         return ids;
     }
@@ -117,7 +117,7 @@ public class RefreshMainTimelineInteractor implements Interactor {
     private Event getVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
         if (visibleEventId != null && visibleEventId != "null") {
-            return localEventRepository.getEventById(Long.valueOf(visibleEventId));
+            return localEventRepository.getEventById(visibleEventId);
         }
         return null;
     }

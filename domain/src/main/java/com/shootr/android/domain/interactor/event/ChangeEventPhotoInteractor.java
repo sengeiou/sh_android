@@ -52,7 +52,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
             String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, Long.valueOf(idEvent));
-            Event event = localEventRepository.getEventById(Long.valueOf(idEvent));
+            Event event = localEventRepository.getEventById(idEvent);
             event.setPicture(imageUrl);
             Event remoteEvent = remoteEventRepository.putEvent(event);
             notifyLoaded(remoteEvent);
