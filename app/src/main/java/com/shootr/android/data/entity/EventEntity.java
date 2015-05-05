@@ -11,8 +11,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
     private String tag;
     private Date beginDate;
     private Date endDate;
-    private String idLocalTeam;
-    private String idVisitorTeam;
     private String title;
     private String photo;
     private Integer notifyCreation;
@@ -31,22 +29,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setBeginDate(Date beginDate) {
         this.beginDate = beginDate;
-    }
-
-    public String getIdLocalTeam() {
-        return idLocalTeam;
-    }
-
-    public void setIdLocalTeam(String idLocalTeam) {
-        this.idLocalTeam = idLocalTeam;
-    }
-
-    public String getIdVisitorTeam() {
-        return idVisitorTeam;
-    }
-
-    public void setIdVisitorTeam(String idVisitorTeam) {
-        this.idVisitorTeam = idVisitorTeam;
     }
 
     @Override

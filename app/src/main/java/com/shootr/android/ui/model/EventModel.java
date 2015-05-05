@@ -6,8 +6,6 @@ public class EventModel {
     private String idEvent;
     private String authorId;
     private String authorUsername;
-    private String localTeamId;
-    private String visitorTeamId;
     private String datetime;
     private String title;
     private String picture;
@@ -39,22 +37,6 @@ public class EventModel {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getVisitorTeamId() {
-        return visitorTeamId;
-    }
-
-    public void setVisitorTeamId(String visitorTeamId) {
-        this.visitorTeamId = visitorTeamId;
-    }
-
-    public String getLocalTeamId() {
-        return localTeamId;
-    }
-
-    public void setLocalTeamId(String localTeamId) {
-        this.localTeamId = localTeamId;
     }
 
     @Override
