@@ -22,6 +22,7 @@ import static com.shootr.android.domain.asserts.UserAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -30,8 +31,8 @@ import static org.mockito.Mockito.when;
 
 public class SelectEventInteractorTest {
 
-    private static final Long OLD_EVENT_ID = 1L;
-    private static final Long NEW_EVENT_ID = 2L;
+    private static final String OLD_EVENT_ID = "1L";
+    private static final String NEW_EVENT_ID = "2L";
     private static final Long CURRENT_USER_ID = 1L;
     private static final String OLD_EVENT_TITLE = "oldTitle";
     private static final String NEW_EVENT_TITLE = "newTitle";
@@ -101,7 +102,7 @@ public class SelectEventInteractorTest {
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
-        verify(dummyCallback, never()).onLoaded(anyLong());
+        verify(dummyCallback, never()).onLoaded(anyString());
     }
 
     @Test
@@ -111,7 +112,7 @@ public class SelectEventInteractorTest {
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
-        inOrder.verify(dummyCallback).onLoaded(anyLong());
+        inOrder.verify(dummyCallback).onLoaded(anyString());
         inOrder.verify(remoteUserRepository).putUser(any(User.class));
     }
 

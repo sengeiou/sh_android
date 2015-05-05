@@ -22,8 +22,8 @@ import static org.mockito.Mockito.when;
 
 public class ShootrUserServiceTest {
 
-    private static final Long CURRENT_USER_ID = 1L;
-    private static final Long VISIBLE_EVENT_ID = 2L;
+    private static final String CURRENT_USER_ID = "1L";
+    private static final String VISIBLE_EVENT_ID = "2L";
     public static final String NO_VISIBLE_EVENT = null;
     private static final String USERNAME_OR_EMAIL_STUB = "username_or_email";
     private static final String PASSWORD_STUB = "password";
@@ -93,7 +93,7 @@ public class ShootrUserServiceTest {
     @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws IOException {
         when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-        verify(remoteEventRepository, never()).getEventById(anyLong());
+        verify(remoteEventRepository, never()).getEventById(anyString());
     }
 
     @Test public void shouldDownloadPeopleIfUserHasEventsWhenLoginCorrect() throws IOException {
@@ -133,19 +133,19 @@ public class ShootrUserServiceTest {
         User currentUser = currentUser();
         currentUser.setCheckedIn(false);
         currentUser.setVisibleEventId(NO_VISIBLE_EVENT);
-        when(localUserRepository.getUserById(anyLong())).thenReturn(currentUser);
+        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserNotCheckedIn() {
         User currentUser = currentUser();
         currentUser.setCheckedIn(false);
-        when(localUserRepository.getUserById(anyLong())).thenReturn(currentUser);
+        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserCheckedIn() {
         User currentUser = currentUser();
         currentUser.setCheckedIn(true);
-        when(localUserRepository.getUserById(anyLong())).thenReturn(currentUser);
+        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private User currentUser() {

@@ -16,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.lang.String;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -27,7 +29,7 @@ import static org.mockito.Mockito.verify;
 public class EventSelectionPresenterTest {
 
     private static final String EVENT_TAG = "tag";
-    private static final Long EVENT_ID = 1L;
+    private static final String EVENT_ID = "1L";
 
     @Mock EventSelectionView eventSelectionView;
     @Mock VisibleEventInfoInteractor visibleEventInfoInteractor;
@@ -152,7 +154,7 @@ public class EventSelectionPresenterTest {
     private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Long selectedEventId = (Long) invocation.getArguments()[0];
+                String selectedEventId = (Long) invocation.getArguments()[0];
                 ((SelectEventInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedEventId);
                 return null;
             }

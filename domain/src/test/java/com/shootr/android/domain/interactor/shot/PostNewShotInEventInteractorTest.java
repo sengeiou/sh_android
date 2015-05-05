@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestBase {
 
-    private static final Long VISIBLE_EVENT_ID = 1L;
+    private static final String VISIBLE_EVENT_ID = "1L";
 
     @Mock EventRepository localEventRepository;
 
