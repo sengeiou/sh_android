@@ -206,9 +206,10 @@ public class UserDtoFactory {
     }
 
     public GenericDto getUsersOperationDto(List<String> userIds) {
-        FilterDto filter = orIsNotDeleted()
-          .or(UserTable.CSYS_MODIFIED).greaterThan(0L)
-          .or(UserTable.ID).isIn(userIds).build();
+        FilterDto filter = and( //
+          orModifiedOrDeletedAfter(0L), //
+          or(UserTable.ID).isIn(userIds) //
+        ).build();
 
         MetadataDto metadata = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(UserTable.TABLE)
