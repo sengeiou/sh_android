@@ -55,7 +55,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
                 if (!shouldPoll) {
                     return;
                 }
-                refresh();
+                loadNewShots();
                 scheduleNextPolling();
             }
         };
@@ -102,6 +102,16 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void refresh() {
         timelineView.showLoading();
+        this.loadNewShots();
+    }
+
+    public void showingLastShot(ShotModel lastShot) {
+        if (!isLoadingOlderShots && mightHaveMoreShots) {
+            this.loadOlderShots(lastShot.getCsysBirth().getTime());
+        }
+    }
+
+    private void loadNewShots() {
         timelineInteractorsWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -118,12 +128,6 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
                 timelineView.hideLoading();
             }
         });
-    }
-
-    public void showingLastShot(ShotModel lastShot) {
-        if (!isLoadingOlderShots && mightHaveMoreShots) {
-            this.loadOlderShots(lastShot.getCsysBirth().getTime());
-        }
     }
 
     private void loadOlderShots(long lastShotInScreenDate) {
