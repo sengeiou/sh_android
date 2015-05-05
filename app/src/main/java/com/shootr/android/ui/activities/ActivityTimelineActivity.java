@@ -40,8 +40,8 @@ public class ActivityTimelineActivity extends BaseNavDrawerToolbarActivity {
         /* no-op: no presenter here, just a dummy container activity */
     }
 
-    @Override protected ObjectGraph getObjectGraph() {
-        ObjectGraph globalObjectGraph = super.getObjectGraph();
+    @Override protected ObjectGraph buildObjectGraph() {
+        ObjectGraph globalObjectGraph = super.buildObjectGraph();
         return globalObjectGraph.plus(new ActivityTimelineInteractorsModule());
     }
 }

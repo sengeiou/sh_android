@@ -50,8 +50,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void injectDependencies() {
-        activityGraph = getObjectGraph();
-        activityGraph.inject(this);
+        getObjectGraph().inject(this);
     }
 
     protected void createLayout() {
@@ -80,10 +79,17 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     public void inject(Object object) {
-        activityGraph.inject(object);
+        getObjectGraph().inject(object);
     }
 
-    protected ObjectGraph getObjectGraph() {
+    private ObjectGraph getObjectGraph() {
+        if (activityGraph == null) {
+            activityGraph = buildObjectGraph();
+        }
+        return activityGraph;
+    }
+
+    protected ObjectGraph buildObjectGraph() {
         return ShootrApplication.get(this).getObjectGraph();
     }
 

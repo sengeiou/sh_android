@@ -10,9 +10,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.dagger.EventTimelineInteractorsModule;
 import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
-import com.shootr.android.ui.presenter.TimelinePresenter;
 import dagger.ObjectGraph;
-import javax.inject.Inject;
 
 public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
@@ -70,7 +68,7 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
         /* no-op */
     }
 
-    @Override protected ObjectGraph getObjectGraph() {
-        return super.getObjectGraph().plus(new EventTimelineInteractorsModule());
+    @Override protected ObjectGraph buildObjectGraph() {
+        return super.buildObjectGraph().plus(new EventTimelineInteractorsModule());
     }
 }
