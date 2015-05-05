@@ -16,6 +16,7 @@ public class EmailLoginPresenter implements Presenter {
 
     private final PerformEmailLoginInteractor emailLoginInteractor;
     private final ErrorMessageFactory errorMessageFactory;
+    private boolean isInitialized = false;
 
     @Inject public EmailLoginPresenter(PerformEmailLoginInteractor emailLoginInteractor,
       ErrorMessageFactory errorMessageFactory) {
@@ -29,6 +30,11 @@ public class EmailLoginPresenter implements Presenter {
 
     public void initialize(EmailLoginView emailLoginView){
         this.setView(emailLoginView);
+        this.isInitialized = true;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     //region Interaction methods
