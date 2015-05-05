@@ -120,8 +120,10 @@ public class ShootrDataService implements ShootrService {
             follows.add(followEntity);
             userIds.add(followEntity.getFollowedUser());
         }
-
-        List<UserEntity> usersById = getUsersById(userIds);
+        List<UserEntity> usersById = new ArrayList<>();
+        if(userIds.size()>0){
+            usersById = getUsersById(userIds);
+        }
         //TODO order
         return usersById;
     }
@@ -250,7 +252,7 @@ public class ShootrDataService implements ShootrService {
         return shots;
     }
 
-    @Override public List<ShotEntity> getRepliesToShot(Long shotId) throws IOException {
+    @Override public List<ShotEntity> getRepliesToShot(String shotId) throws IOException {
         List<ShotEntity> shots = new ArrayList<>();
         GenericDto genericDto = shotDtoFactory.getRepliesOperationDto(shotId);
         GenericDto responseDto = postRequest(genericDto);

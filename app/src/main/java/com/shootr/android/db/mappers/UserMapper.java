@@ -68,13 +68,13 @@ public class UserMapper extends GenericMapper {
 
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
-        user.setIdUser(dto.containsKey(UserTable.ID) ?  (String.valueOf(dto.get(UserTable.ID))) : null);
+        user.setIdUser(dto.containsKey(UserTable.ID) ?  (String)dto.get(UserTable.ID) : null);
         user.setSessionToken(
-          dto.containsKey(UserTable.SESSION_TOKEN) ? (String.valueOf(dto.get(UserTable.SESSION_TOKEN))) : null);
-        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String.valueOf(dto.get(UserTable.USER_NAME))) : null);
-        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String.valueOf(dto.get(UserTable.EMAIL))) : null);
-        user.setName(dto.containsKey(UserTable.NAME) ? (String.valueOf(dto.get(UserTable.NAME))) : null);
-        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String.valueOf(dto.get(UserTable.PHOTO))) : null);
+          dto.containsKey(UserTable.SESSION_TOKEN) ? (String)dto.get(UserTable.SESSION_TOKEN) : null);
+        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String)dto.get(UserTable.USER_NAME) : null);
+        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String)dto.get(UserTable.EMAIL) : null);
+        user.setName(dto.containsKey(UserTable.NAME) ? (String)dto.get(UserTable.NAME) : null);
+        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String)dto.get(UserTable.PHOTO): null);
         user.setNumFollowers(
           dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
         user.setNumFollowings(
@@ -82,19 +82,22 @@ public class UserMapper extends GenericMapper {
         if(dto.get(UserTable.POINTS)!= null){
             user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
         }
-        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String.valueOf(dto.get(UserTable.WEBSITE))) : null);
-        user.setBio(dto.containsKey(UserTable.BIO) ? (String.valueOf(dto.get(UserTable.BIO))) : null);
+        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String) dto.get(UserTable.WEBSITE) : null);
+        user.setBio(dto.containsKey(UserTable.BIO) ? (String)dto.get(UserTable.BIO) : null);
         if(dto.get(UserTable.RANK) != null){
             user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
         }
-        String eventId = String.valueOf(dto.get(UserTable.EVENT_ID));
+        String eventId = (String) dto.get(UserTable.EVENT_ID);
         if (eventId != null) {
             user.setIdEvent(eventId);
         }
 
-        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? (String.valueOf(dto.get(UserTable.EVENT_TITLE))) : null);
-        user.setStatus(dto.containsKey(UserTable.STATUS) ? ((String.valueOf(dto.get(UserTable.STATUS)))) : null);
-        user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
+        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? (String)dto.get(UserTable.EVENT_TITLE) : null);
+        user.setStatus(dto.containsKey(UserTable.STATUS) ? (String)dto.get(UserTable.STATUS) : null);
+        if(dto.get(UserTable.CHECK_IN)!=null){
+            user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
+        }
+
         setSynchronizedfromDto(dto,user);
         return user;
     }

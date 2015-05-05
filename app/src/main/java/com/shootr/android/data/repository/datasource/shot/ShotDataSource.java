@@ -14,5 +14,5 @@ public interface ShotDataSource {
 
     ShotEntity getShot(String shotId);
 
-    List<ShotEntity> getReplies(Long shotId);
+    List<ShotEntity> getReplies(String shotId);
 }

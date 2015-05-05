@@ -314,7 +314,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
             String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
-            Long idEventEdited = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+            String idEventEdited = data.getStringExtra(EventsListActivity.KEY_EVENT_ID);
             presenter.resultFromEditEventInfo(idEventEdited);
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();

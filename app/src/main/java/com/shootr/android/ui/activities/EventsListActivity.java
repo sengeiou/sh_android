@@ -156,8 +156,8 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_EVENT && resultCode == RESULT_OK) {
-            long eventId = data.getLongExtra(KEY_EVENT_ID, 0L);
-            presenter.eventCreated(String.valueOf(eventId));
+            String eventId = data.getStringExtra(KEY_EVENT_ID);
+            presenter.eventCreated(eventId);
         }
     }
 

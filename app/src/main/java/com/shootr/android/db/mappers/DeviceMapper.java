@@ -38,8 +38,8 @@ public class DeviceMapper extends GenericMapper {
 
     public DeviceEntity fromDto(Map<String, Object> dto) {
         DeviceEntity device = new DeviceEntity();
-        device.setIdDevice(String.valueOf((dto.get(DatabaseContract.DeviceTable.ID_DEVICE))));
-        device.setIdUser((String.valueOf(dto.get(DatabaseContract.DeviceTable.ID_USER))));
+        device.setIdDevice((String)((dto.get(DatabaseContract.DeviceTable.ID_DEVICE))));
+        device.setIdUser((String)(dto.get(DatabaseContract.DeviceTable.ID_USER)));
         device.setPlatform(((Number) dto.get(DatabaseContract.DeviceTable.PLATFORM)).intValue());
         device.setToken((String) dto.get(DatabaseContract.DeviceTable.TOKEN));
         device.setUniqueDevideID((String) dto.get(DatabaseContract.DeviceTable.UNIQUE_DEVICE_ID));

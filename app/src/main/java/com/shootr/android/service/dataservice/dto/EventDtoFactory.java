@@ -56,7 +56,7 @@ public class EventDtoFactory {
 
     public GenericDto saveEvent(EventEntity eventEntity) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, null)
+          .putKey(DatabaseContract.EventTable.ID_EVENT, eventEntity.getIdEvent())
           .entity(DatabaseContract.EventTable.TABLE)
           .build();
 
@@ -78,7 +78,7 @@ public class EventDtoFactory {
     public GenericDto getSearchEventDto(String query, Map<String, Integer> eventsWatchesCounts) {
         MetadataDto md = new MetadataDto.Builder().items(50)
           .operation(Constants.OPERATION_RETRIEVE)
-          .entity("SearchEvent")
+          .entity("SearchEventMongo")
           .putKey("pattern", query)
           .build();
 

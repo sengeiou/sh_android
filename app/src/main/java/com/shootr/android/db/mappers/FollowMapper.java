@@ -32,8 +32,8 @@ public class FollowMapper extends GenericMapper {
 
     public FollowEntity fromDto(Map<String, Object> dto) {
         FollowEntity follow = new FollowEntity();
-        follow.setIdUser((dto.get(ID_USER)) == null ? null : String.valueOf(dto.get(ID_USER)));
-        follow.setFollowedUser((dto.get(ID_FOLLOWED_USER)) == null ? null: (String.valueOf(dto.get(ID_FOLLOWED_USER))));
+        follow.setIdUser((String) dto.get(ID_USER));
+        follow.setFollowedUser((dto.get(ID_FOLLOWED_USER)) == null ? null: (String)dto.get(ID_FOLLOWED_USER));
         setSynchronizedfromDto(dto,follow);
         return follow;
     }

@@ -57,7 +57,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
             userVO = userVOMapper.toUserModel(userFromLocalDatabase, follow, isMe);
             postSuccessfulEvent(new UserInfoResultEvent(userVO));
         } else {
-            Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
+            Timber.d("User with id %s not found in local database. Retrieving from the service...", userId);
         }
 
         if(hasInternetConnection()){

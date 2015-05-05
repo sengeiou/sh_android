@@ -9,7 +9,7 @@ public class UserEntityModelMapper {
 
     public UserModel toUserModel(UserEntity user, FollowEntity follow, boolean isMe){
         UserModel userModel = new UserModel();
-        userModel.setIdUser(user.getIdUser().toString());
+        userModel.setIdUser(user.getIdUser());
         userModel.setBio(user.getBio());
         userModel.setUsername(user.getUserName());
         userModel.setFavoriteTeamId(null);
@@ -21,7 +21,7 @@ public class UserEntityModelMapper {
         userModel.setPhoto(user.getPhoto());
         userModel.setRelationship(isMe ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(follow));
         userModel.setWebsite(user.getWebsite());
-        userModel.setEventWatchingId(user.getIdEvent().toString());
+        userModel.setEventWatchingId(user.getIdEvent());
         userModel.setEventWatchingTitle(user.getEventTitle());
         return userModel;
     }

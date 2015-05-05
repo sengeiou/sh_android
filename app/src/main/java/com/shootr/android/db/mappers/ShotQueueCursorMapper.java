@@ -14,7 +14,11 @@ public class ShotQueueCursorMapper extends GenericMapper{
     public ShotQueueEntity fromCursor(Cursor cursor) {
         ShotQueueEntity shotQueueEntity = new ShotQueueEntity();
 
-        shotQueueEntity.setIdQueue(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_QUEUE)));
+        if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_QUEUE))) {
+            shotQueueEntity.setIdQueue(cursor.getLong(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_QUEUE)));
+        } else {
+            shotQueueEntity.setIdQueue(null);
+        }
         shotQueueEntity.setFailed(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.FAILED)));
         shotQueueEntity.setImageFile(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE_FILE)));
 

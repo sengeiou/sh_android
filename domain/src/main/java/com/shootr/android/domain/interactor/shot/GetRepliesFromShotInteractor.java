@@ -36,11 +36,11 @@ public class GetRepliesFromShotInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        List<Shot> localReplies = localShotRepository.getReplies(Long.parseLong(shotId));
+        List<Shot> localReplies = localShotRepository.getReplies(shotId);
         if (!localReplies.isEmpty()) {
             notifyLoaded(orderShots(localReplies));
         }
-        List<Shot> updatedReplies = remoteShotRepository.getReplies(Long.parseLong(shotId));
+        List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
         if (!updatedReplies.isEmpty()) {
             notifyLoaded(orderShots(updatedReplies));
         }

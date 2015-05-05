@@ -98,7 +98,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
 
-        if (idEventToEdit != "-1L") {
+        if (idEventToEdit != null) {
             actionBar.setTitle(R.string.activity_edit_event_title);
         }
     }

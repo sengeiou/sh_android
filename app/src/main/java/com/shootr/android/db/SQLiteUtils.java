@@ -59,7 +59,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS " + ShotQueueTable.TABLE + " ("
-          + ShotQueueTable.ID_QUEUE + " TEXT PRIMARY KEY,"
+          + ShotQueueTable.ID_QUEUE + " INTEGER PRIMARY KEY AUTOINCREMENT,"
           + ShotQueueTable.FAILED + " INT NOT NULL,"
           + ShotQueueTable.IMAGE_FILE+ " TEXT NULL,"
           + ShotQueueTable.ID_SHOT + " TEXT NULL,"

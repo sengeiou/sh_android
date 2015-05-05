@@ -98,8 +98,8 @@ public class UserManager extends AbstractManager {
      */
     public UserEntity getUserByIdUser(String idUser) {
         UserEntity resUser = null;
-        String args = UserTable.ID + "=?";
-        String[] argsString = new String[] { String.valueOf(idUser) };
+        String args = UserTable.ID + "= ?";
+        String[] argsString = new String[] { idUser };
 
         Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
         if (c.getCount() > 0) {

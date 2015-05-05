@@ -511,7 +511,7 @@ public class ProfileFragment extends BaseFragment {
         if (idUser == null) {
             return;
         }
-        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), Long.valueOf(idUser), followType), 677);
+        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
     }
 
     private void loadLatestShots() {
@@ -605,6 +605,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser != null && idUser.equals(String.valueOf(sessionRepository.getCurrentUserId()));
+        return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 }

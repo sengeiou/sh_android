@@ -19,9 +19,9 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     private static final String EXTRA_USER_ID = "userid";
     private static final String EXTRA_FOLLOW_TYPE = "followtype";
     private Integer followType;
-    private Long userId;
+    private String userId;
 
-    public static Intent getIntent(Context context, Long userId, Integer followType) {
+    public static Intent getIntent(Context context, String userId, Integer followType) {
         Intent i = new Intent(context, UserFollowsContainerActivity.class);
         i.putExtra(EXTRA_USER_ID, userId);
         i.putExtra(EXTRA_FOLLOW_TYPE, followType);
@@ -54,8 +54,8 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
 
     private void getIntentExtras() {
         followType = getIntent().getIntExtra(EXTRA_FOLLOW_TYPE, -1);
-        userId = getIntent().getLongExtra(EXTRA_USER_ID, 0L);
-        if (userId == 0L) {
+        userId = getIntent().getStringExtra(EXTRA_USER_ID);
+        if (userId == null) {
             Timber.e("Consulted following list of user id %d", userId);
             finish();
         }

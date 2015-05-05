@@ -167,9 +167,9 @@ public class ShotManager extends  AbstractManager{
         return shotEntity;
     }
 
-    public List<ShotEntity> getRepliesTo(Long shotParentId) {
+    public List<ShotEntity> getRepliesTo(String shotParentId) {
         String whereClause = ShotTable.ID_SHOT_PARENT + " = ?";
-        String[] whereArguments = new String[]{String.valueOf(shotParentId)};
+        String[] whereArguments = new String[]{shotParentId};
 
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
           ShotTable.PROJECTION,

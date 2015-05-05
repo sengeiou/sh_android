@@ -16,7 +16,7 @@ public class UserEntityMapper {
             return null;
         }
         User user = new User();
-        user.setIdUser(String.valueOf(userEntity.getIdUser()));
+        user.setIdUser(userEntity.getIdUser());
         user.setFavoriteTeamName(userEntity.getFavoriteTeamName());
         user.setFavoriteTeamId(userEntity.getFavoriteTeamId());
         user.setUsername(userEntity.getUserName());
@@ -28,7 +28,7 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setVisibleEventId(String.valueOf(userEntity.getIdEvent()));
+        user.setVisibleEventId(userEntity.getIdEvent());
         user.setVisibleEventTitle(userEntity.getEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));

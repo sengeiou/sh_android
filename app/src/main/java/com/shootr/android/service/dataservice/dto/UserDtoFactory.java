@@ -112,7 +112,7 @@ public class UserDtoFactory {
             throw new IllegalArgumentException("IdUser who is followed by, can't be null");
         }
         Map<String,Object> keys = new ArrayMap<>();
-        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_CREATE, "Follow",true,1L,0L,1L,keys);
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_CREATE, FollowTable.TABLE,true,1L,0L,1L,keys);
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 
@@ -132,7 +132,7 @@ public class UserDtoFactory {
         Map<String, Object> keys = new ArrayMap<>();
         keys.put(FollowTable.ID_USER, follow.getIdUser());
         keys.put(FollowTable.ID_FOLLOWED_USER,follow.getFollowedUser());
-        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_DELETE, "Follow",true,1L,0L,1L,keys);
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_DELETE, FollowTable.TABLE,true,1L,0L,1L,keys);
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 
@@ -153,7 +153,7 @@ public class UserDtoFactory {
         keys.put(FollowTable.ID_USER, idFromUser);
         keys.put(FollowTable.ID_FOLLOWED_USER, idToUser);
 
-        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_RETRIEVE, "Follow",true,1L,0L,1L,keys);
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_RETRIEVE, FollowTable.TABLE,true,1L,0L,1L,keys);
         OperationDto op = new OperationDto();
         op.setMetadata(md);
 

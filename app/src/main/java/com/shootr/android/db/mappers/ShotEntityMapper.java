@@ -48,28 +48,28 @@ public class ShotEntityMapper extends GenericMapper {
 
     public ShotEntity fromDto(Map<String, Object> dto) {
         ShotEntity shot = new ShotEntity();
-        shot.setIdShot(String.valueOf(dto.get(DatabaseContract.ShotTable.ID_SHOT)));
-        shot.setIdUser((String.valueOf(dto.get(DatabaseContract.ShotTable.ID_USER))));
+        shot.setIdShot((String)dto.get(DatabaseContract.ShotTable.ID_SHOT));
+        shot.setIdUser((String)dto.get(DatabaseContract.ShotTable.ID_USER));
         shot.setUsername(((String) dto.get(DatabaseContract.ShotTable.USERNAME)));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
         shot.setEventTag((String) dto.get(DatabaseContract.ShotTable.EVENT_TAG));
         shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
-        Number idEvent = (Number) dto.get(DatabaseContract.ShotTable.ID_EVENT);
+        String idEvent = (String) dto.get(DatabaseContract.ShotTable.ID_EVENT);
         if (idEvent != null) {
-            shot.setIdEvent(String.valueOf(idEvent));
+            shot.setIdEvent(idEvent);
         }
         Number type = (Number) dto.get(DatabaseContract.ShotTable.TYPE);
         if (type != null) {
             shot.setType(type.intValue());
         }
-        Number idParent = (Number) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT);
+        String idParent = (String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT);
         if (idParent != null) {
-            shot.setIdShotParent(String.valueOf(idParent));
+            shot.setIdShotParent(idParent);
         }
-        Number idParentUser = (Number) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT);
+        String idParentUser = (String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT);
         if (idParentUser != null) {
-            shot.setIdUserParent(String.valueOf(idParentUser));
+            shot.setIdUserParent(idParentUser);
         }
         String usernameParentUser = (String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT);
         if (usernameParentUser != null) {

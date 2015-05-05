@@ -90,7 +90,7 @@ public class RefreshMainTimelineInteractor implements Interactor {
             timelineParametersBuilder.forEvent(visibleEvent);
         }
         Long since = synchronizationRepository.getTimelineLastRefresh();
-        timelineParametersBuilder.since(Long.valueOf(since));
+        timelineParametersBuilder.since(since);
         return timelineParametersBuilder.build();
     }
 
@@ -116,7 +116,7 @@ public class RefreshMainTimelineInteractor implements Interactor {
 
     private Event getVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != null && visibleEventId != "null") {
+        if (visibleEventId != null) {
             return localEventRepository.getEventById(visibleEventId);
         }
         return null;

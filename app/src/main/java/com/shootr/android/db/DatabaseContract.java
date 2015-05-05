@@ -110,7 +110,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "Follow";
+        public static final String TABLE = "FollowMongo";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
 
@@ -164,13 +164,11 @@ public class DatabaseContract {
         public static final String TAG = "tag";
         public static final String NOTIFY_CREATION = "notifyCreation";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
-        public static final String STATUS = "status";
-        public static final String TOTAL_WATCHERS = "totalWatchers";
 
         public static final String[] PROJECTION = {
                 ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, BEGIN_DATE, END_DATE, TIMEZONE, TITLE,
-                PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER, STATUS,
-                TOTAL_WATCHERS,CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+                PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER,
+                CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
 

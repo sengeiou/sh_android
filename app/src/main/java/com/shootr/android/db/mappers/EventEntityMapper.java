@@ -35,9 +35,9 @@ public class EventEntityMapper extends GenericMapper{
 
     private void fillEventEntity(Map<String, Object> dto, EventEntity eventEntity) {
         eventEntity.setIdEvent(dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
-          : (String.valueOf(dto.get(DatabaseContract.EventTable.ID_EVENT))));
+          : ((String)(dto.get(DatabaseContract.EventTable.ID_EVENT))));
         eventEntity.setIdUser(dto.get(DatabaseContract.EventTable.ID_USER) == null ? null
-          : (String.valueOf(dto.get(DatabaseContract.EventTable.ID_USER))));
+          : ((String)(dto.get(DatabaseContract.EventTable.ID_USER))));
         eventEntity.setTitle((String) dto.get(DatabaseContract.EventTable.TITLE) == null ? null
           : (String) dto.get(DatabaseContract.EventTable.TITLE));
         eventEntity.setUserName((String) dto.get(DatabaseContract.EventTable.USERNAME) == null ? null

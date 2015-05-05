@@ -12,5 +12,5 @@ public interface ShotRepository {
 
     Shot getShot(String shotId);
 
-    List<Shot> getReplies(Long shot);
+    List<Shot> getReplies(String shot);
 }

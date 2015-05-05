@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class VisibleEventInfoInteractor implements Interactor {
 
-    private static final String VISIBLE_EVENT = "-1";
+    private static final String VISIBLE_EVENT = null;
     private static final EventInfo NO_EVENT_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
@@ -82,13 +82,10 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-        String wantedEventId = null;
 
-        if(getWantedEventId(currentUser) != null){
-            wantedEventId = getWantedEventId(currentUser);
-        }
+        String wantedEventId = getWantedEventId(currentUser);
 
-        if (wantedEventId != null && wantedEventId != VISIBLE_EVENT) {
+        if (wantedEventId != null) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
@@ -109,7 +106,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     private String getWantedEventId(User currentUser) {
-        if (idEventWanted != null && idEventWanted != VISIBLE_EVENT) {
+        if (idEventWanted != null && !idEventWanted.equals(VISIBLE_EVENT)) {
             return idEventWanted;
         } else {
             return currentUser.getVisibleEventId();

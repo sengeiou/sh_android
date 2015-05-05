@@ -59,7 +59,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);
         //TODO use some pattern or abstraction, setting these values here directly is quite ugly
-        Crashlytics.setUserIdentifier(String.valueOf(userId));
+        Crashlytics.setUserIdentifier(userId);
         Crashlytics.setUserName(loggedInUser.getUsername());
         Crashlytics.setUserEmail(loggedInUser.getEmail());
     }

@@ -80,7 +80,7 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
     }
 
-    public GenericDto getRepliesOperationDto(Long shotId) {
+    public GenericDto getRepliesOperationDto(String shotId) {
         FilterDto repliesFilter = and(ShotTable.ID_SHOT_PARENT).isEqualTo(shotId) //
           .and(ShotTable.CSYS_MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
           .build();

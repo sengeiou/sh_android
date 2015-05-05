@@ -1,8 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.Constants;
-import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.domain.TimelineParameters;
@@ -12,9 +10,9 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.OperationDto.Builder;
-import com.shootr.android.util.LongIdUtils;
 
 import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -107,17 +105,17 @@ public class TimelineDtoFactory {
     }
 
     public GenericDto getTimelineOperationDto(final TimelineParameters parameters) {
-        LongIdUtils longIdUtils = new LongIdUtils();
         FilterDto timelineFilter = and( //
           or(ShotTable.ID_USER).isIn(parameters.getAllUserIds()) //
         ) //
-          .and(ShotTable.ID_EVENT).isEqualTo(longIdUtils.transformIdFromStringtoLong(parameters.getEventId())) //
+          .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
           .and(ShotTable.TYPE).isNotEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED)
           .matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
-              @Override public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
+              @Override
+              public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
                   if (parameters.getMaxDate() != null) {
                       return itemField.lessThan(parameters.getMaxDate());
                   } else {

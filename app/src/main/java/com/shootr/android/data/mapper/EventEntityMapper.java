@@ -13,12 +13,12 @@ public class EventEntityMapper {
     }
 
     public Event transform(EventEntity eventEntity) {
-        Event event = new Event();
         if (eventEntity == null) {
-            return event;
+            return null;
         }
-        event.setId(String.valueOf(eventEntity.getIdEvent()));
-        event.setAuthorId(String.valueOf(eventEntity.getIdUser()));
+        Event event = new Event();
+        event.setId(eventEntity.getIdEvent());
+        event.setAuthorId(eventEntity.getIdUser());
         event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
         event.setEndDate(eventEntity.getEndDate());

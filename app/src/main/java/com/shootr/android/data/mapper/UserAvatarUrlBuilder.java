@@ -6,7 +6,7 @@ import javax.inject.Inject;
 public class UserAvatarUrlBuilder {
 
     private static final String SIZE_THUMBNAIL = "thumbnail";
-    private static final String URL_PATTERN = BuildConfig.RESOURCES_ENDPOINT_BASE + "users/%d/profileImages/profile.%s";
+    private static final String URL_PATTERN = BuildConfig.RESOURCES_ENDPOINT_BASE + "users/%s/profileImages/profile.%s";
 
     @Inject public UserAvatarUrlBuilder() {
     }

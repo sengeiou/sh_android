@@ -70,7 +70,7 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
-        isNewEvent = optionalIdEventToEdit == "0L";
+        this.isNewEvent = optionalIdEventToEdit == null;
         if (isNewEvent) {
             this.setDefaultTimezone();
             this.setDefaultStartDateTime();

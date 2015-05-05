@@ -76,15 +76,15 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     private UserListAdapter userListAdapter;
 
-    public static UserFollowsFragment newInstance(Long userId, Integer followType) {
+    public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
         fragment.setArguments(createArguments(userId, followType));
         return fragment;
     }
 
-    public static Bundle createArguments(Long userId, Integer followType) {
+    public static Bundle createArguments(String userId, Integer followType) {
         Bundle bundle = new Bundle();
-        bundle.putLong(ARGUMENT_USER_ID, userId);
+        bundle.putString(ARGUMENT_USER_ID, userId);
         bundle.putInt(ARGUMENT_FOLLOW_TYPE, followType);
         return bundle;
     }

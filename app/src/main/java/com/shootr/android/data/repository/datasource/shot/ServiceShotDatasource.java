@@ -56,7 +56,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getReplies(Long shotId) {
+    @Override public List<ShotEntity> getReplies(String shotId) {
         try {
             return shootrService.getRepliesToShot(shotId);
         } catch (IOException e) {

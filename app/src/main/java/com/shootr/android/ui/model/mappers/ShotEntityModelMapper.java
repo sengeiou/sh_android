@@ -15,17 +15,17 @@ public class ShotEntityModelMapper {
     public ShotModel toShotModel(UserEntity user,ShotEntity shot){
         ShotModel shotModel = new ShotModel();
         shotModel.setPhoto(user.getPhoto());
-        shotModel.setIdUser(user.getIdUser().toString());
+        shotModel.setIdUser(user.getIdUser());
         shotModel.setComment(shot.getComment());
         shotModel.setImage(shot.getImage());
         shotModel.setEventTag(shot.getEventTag());
         shotModel.setEventTitle(shot.getEventTitle());
-        shotModel.setIdShot(shot.getIdShot().toString());
+        shotModel.setIdShot(shot.getIdShot());
         shotModel.setUsername(user.getUserName());
         shotModel.setType(shot.getType());
         shotModel.setCsysBirth(shot.getCsysBirth());
         shotModel.setReplyUsername(shot.getUserNameParent());
-        shotModel.setParentShotId(shot.getIdShotParent().toString());
+        shotModel.setParentShotId(shot.getIdShotParent());
         return shotModel;
     }
 

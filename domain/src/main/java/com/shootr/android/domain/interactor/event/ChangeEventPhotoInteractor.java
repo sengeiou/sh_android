@@ -51,7 +51,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
-            String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, Long.valueOf(idEvent));
+            String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, idEvent);
             Event event = localEventRepository.getEventById(idEvent);
             event.setPicture(imageUrl);
             Event remoteEvent = remoteEventRepository.putEvent(event);
