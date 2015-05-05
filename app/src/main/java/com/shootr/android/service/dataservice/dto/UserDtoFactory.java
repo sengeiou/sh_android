@@ -26,6 +26,7 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orMod
 
 public class UserDtoFactory {
 
+    public static final long MAX_FOLLOWS_ITEMS = 100L;
     static final int NUMBER_OF_DAYS_AGO = 7;
 
     public static final Integer GET_FOLLOWERS = 0;
@@ -162,35 +163,46 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
     }
 
-    public GenericDto getFollowingsOperationDto(String idUserFollowing, Long offset,Long date, boolean includeDeleted) {
+    public GenericDto getFollowingsOperationDto(String fromUserId, Long offset,Long date, boolean includeDeleted) {
+        FilterDto filter = and(FollowTable.ID_USER).isEqualTo(fromUserId) //
+          .and(FollowTable.ID_FOLLOWED_USER).isNotEqualTo(null) //
+          .build();
 
-        OperationDto od = new OperationDto();
-        FilterDto filter = and(orModifiedOrDeletedAfter(date), or(ID_USER_FOLLOWING).isEqualTo(idUserFollowing)).build();
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(FollowTable.TABLE) //
+          .includeDeleted(false) //
+          .filter(filter) //
+          .items(MAX_FOLLOWS_ITEMS) //
+          .build();
 
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,"Following", includeDeleted, null, null, null, filter);
-        od.setMetadata(md);
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(followMapper.toDto(null)) //
+          .build();
 
-        Map<String, Object>[] array = new HashMap[1];
-        array[0] = userMapper.reqRestUsersToDto(null);
-        od.setData(array);
-
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWING, od);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWING, operation);
     }
 
-    public GenericDto getFollowersOperationDto(String idUserWhoFollow, Long offset,Long date, boolean includeDeleted) {
+    public GenericDto getFollowersOperationDto(String fromUserId, Long offset,Long date, boolean includeDeleted) {
+        FilterDto filter = and(FollowTable.ID_FOLLOWED_USER).isEqualTo(fromUserId) //
+          .and(FollowTable.ID_USER).isNotEqualTo(null) //
+          .build();
 
-        OperationDto od = new OperationDto();
-        FilterDto filter = and(orModifiedOrDeletedAfter(date), or(ID_USER_WHO_IS_FOLLOWED).isEqualTo(idUserWhoFollow)).build();
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(FollowTable.TABLE) //
+          .includeDeleted(false) //
+          .filter(filter) //
+          .items(MAX_FOLLOWS_ITEMS) //
+          .build();
 
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,"Followers", includeDeleted, null, null, null, filter);
-        od.setMetadata(md);
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(followMapper.toDto(null)) //
+          .build();
 
-        Map<String, Object>[] array = new HashMap[1];
-        array[0] = userMapper.reqRestUsersToDto(null);
-        od.setData(array);
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWERS, od);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWERS, operation);
     }
 
     public GenericDto getUserByUserId(String userId){

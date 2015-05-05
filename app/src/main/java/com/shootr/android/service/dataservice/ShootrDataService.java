@@ -108,21 +108,22 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
-        List<UserEntity> following = new ArrayList<>();
+        List<FollowEntity> follows = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
         boolean includeDeleted = lastModifiedDate > 0L;
         GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else if (ops[0]!=null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> d : data) {
-                UserEntity user = userMapper.fromDto(d);
-                following.add(user);
-            }
+        Map<String, Object>[] data = ops[0].getData();
+        for (Map<String, Object> d : data) {
+            FollowEntity followEntity = followMapper.fromDto(d);
+            follows.add(followEntity);
+            userIds.add(followEntity.getFollowedUser());
         }
-        return following;
+
+        List<UserEntity> usersById = getUsersById(userIds);
+        //TODO order
+        return usersById;
     }
 
     @Override public List<UserEntity> getUsersById(List<String> userIds) throws IOException{
@@ -143,24 +144,19 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws IOException {
-        List<UserEntity> followers = new ArrayList<>();
+        List<FollowEntity> follows = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getFollowersOperationDto(idUserFollowed, 0L, lastModifiedDate, false);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0] != null) {
-            if(ops[0].getData() != null){
-                Map<String, Object>[] data = ops[0].getData();
-                for(Map<String, Object> d:data){
-                    UserEntity user = userMapper.fromDto(d);
-                    if(user.getCsysDeleted()==null){
-                        followers.add(user);
-                    }
-                }
-            }
+        Map<String, Object>[] data = ops[0].getData();
+        for(Map<String,Object> d:data){
+            FollowEntity followEntity = followMapper.fromDto(d);
+            follows.add(followEntity);
+            userIds.add(followEntity.getIdUser());
         }
-        return followers;
+        //TODO order
+        return getUsersById(userIds);
     }
 
     @Override
