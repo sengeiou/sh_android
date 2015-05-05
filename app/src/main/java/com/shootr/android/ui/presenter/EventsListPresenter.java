@@ -89,7 +89,6 @@ public class EventsListPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
-                //TODO discriminar por tipo
             }
         });
     }

@@ -36,7 +36,6 @@ import butterknife.InjectView;
 
 public class EventsListActivity extends BaseNavDrawerToolbarActivity implements EventsListView {
 
-    private static final String KEY_SEARCH_QUERY = "search";
     public static final int REQUEST_NEW_EVENT = 1;
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
@@ -52,7 +51,6 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
 
     private EventsListAdapter adapter;
     private SearchView searchView;
-    private String restoredQuery;
 
     @Override protected int getNavDrawerItemId() {
         return NavigationDrawerDecorator.NAVDRAWER_ITEM_EVENTS;
@@ -93,14 +91,6 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
     }
 
     @Override protected void initializePresenter() {
-        //TODO
-        /*if (savedInstanceState != null) {
-            restoredQuery = savedInstanceState.getString(KEY_SEARCH_QUERY);
-            if (restoredQuery != null) {
-                presenter.initialize(this, restoredQuery);
-                return;
-            }
-        }*/
         presenter.initialize(this);
 
         //TODO well... the method's name is a lie right now. GCM Registration should be done from the actual presenter I guess
@@ -143,11 +133,6 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
                 return false;
             }
         });
-
-        if (restoredQuery != null) {
-            searchView.setIconified(false);
-            searchView.setQuery(restoredQuery, true);
-        }
     }
 
     @Override protected void onResume() {
@@ -167,7 +152,6 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
 
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putString(KEY_SEARCH_QUERY, String.valueOf(searchView.getQuery()));
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

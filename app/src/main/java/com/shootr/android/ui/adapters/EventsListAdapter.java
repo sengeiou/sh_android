@@ -90,7 +90,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     public void setCurrentVisibleEvent(Long eventId) {
         this.currentVisibleEvent = eventId;
-        //notifyDataSetChanged();
     }
 
     public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
