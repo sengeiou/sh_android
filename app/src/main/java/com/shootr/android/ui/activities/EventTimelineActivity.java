@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.dagger.EventTimelineInteractorsModule;
@@ -32,6 +33,15 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
         }
         setEventTitleFromIntent();
         setupAndAddFragment(savedInstanceState);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupAndAddFragment(Bundle savedInstanceState) {
