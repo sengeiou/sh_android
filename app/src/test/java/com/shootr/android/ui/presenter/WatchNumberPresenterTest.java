@@ -31,7 +31,7 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
     private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
-    private static final Long EVENT_ID = 3L;
+    private static final String EVENT_ID = "3L";
 
     @Mock WatchNumberInteractor watchNumberInteractor;
     @Mock Bus bus;

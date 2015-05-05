@@ -86,7 +86,7 @@ public class EventSelectionPresenterTest {
 
         ArgumentCaptor<EventChanged.Event> captor = ArgumentCaptor.forClass(EventChanged.Event.class);
         verify(busPublisher).post(captor.capture());
-        Long newEventId = captor.getValue().getNewEventId();
+        String newEventId = captor.getValue().getNewEventId();
         assertThat(newEventId).isEqualTo(EVENT_ID);
     }
 
@@ -108,7 +108,7 @@ public class EventSelectionPresenterTest {
 
         ArgumentCaptor<EventChanged.Event> captor = ArgumentCaptor.forClass(EventChanged.Event.class);
         verify(busPublisher).post(captor.capture());
-        Long newEventId = captor.getValue().getNewEventId();
+        String newEventId = captor.getValue().getNewEventId();
         assertThat(newEventId).isNull();
     }
 
@@ -154,11 +154,11 @@ public class EventSelectionPresenterTest {
     private void setupSelectEventInteractorCallbacksVisibleEventWatch() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                String selectedEventId = (Long) invocation.getArguments()[0];
+                String selectedEventId = (String) invocation.getArguments()[0];
                 ((SelectEventInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedEventId);
                 return null;
             }
-        }).when(selectEventInteractor).selectEvent(anyLong(), any(SelectEventInteractor.Callback.class));
+        }).when(selectEventInteractor).selectEvent(anyString(), any(SelectEventInteractor.Callback.class));
     }
 
     private void setupExitEventInteractorCallbacks() {
