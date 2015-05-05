@@ -16,6 +16,7 @@ import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class GetCheckinStatusInteractorTest {
@@ -36,14 +37,14 @@ public class GetCheckinStatusInteractorTest {
     }
 
     @Test public void shouldCallbackFalseWhenCheckinInUserIsFalse() throws Exception {
-        when(localUserRepository.getUserById(anyLong())).thenReturn(currentUserWithoutCheckin());
+        when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithoutCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 
         assertThat(spyCallback.result).isFalse();
     }
     @Test public void shouldCallbackTrueWhenCheckinInUserIsTrue() throws Exception {
-        when(localUserRepository.getUserById(anyLong())).thenReturn(currentUserWithCheckin());
+        when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 

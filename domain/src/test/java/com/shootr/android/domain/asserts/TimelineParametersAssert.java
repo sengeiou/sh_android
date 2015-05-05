@@ -146,7 +146,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected sinceDate of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        String actualSinceDate = actual.getSinceDate();
+        Long actualSinceDate = actual.getSinceDate();
         if (!Objects.areEqual(actualSinceDate, sinceDate)) {
             failWithMessage(assertjErrorMessage, actual, sinceDate, actualSinceDate);
         }

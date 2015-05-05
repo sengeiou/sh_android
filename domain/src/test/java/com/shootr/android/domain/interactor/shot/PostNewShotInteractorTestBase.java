@@ -102,7 +102,7 @@ public abstract class PostNewShotInteractorTestBase {
     //region Setup
     protected void setupCurrentUserSession() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
-        when(sessionRepository.getCurrentUserId()).thenReturn(Long.valueOf(currentUser().getIdUser()));
+        when(sessionRepository.getCurrentUserId()).thenReturn(currentUser().getIdUser());
     }
     //endregion
 

@@ -425,7 +425,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected visibleEventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    Long actualVisibleEventId = Long.valueOf(actual.getVisibleEventId());
+    String actualVisibleEventId = actual.getVisibleEventId();
     if (!Objects.areEqual(actualVisibleEventId, visibleEventId)) {
       failWithMessage(assertjErrorMessage, actual, visibleEventId, actualVisibleEventId);
     }
