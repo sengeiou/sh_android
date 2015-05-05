@@ -127,8 +127,8 @@ public class TimelineParameters {
             return this;
         }
 
-        public Builder includeSyncTriggers() {
-            parameters.includeHiddenSyncTriggers = true;
+        public Builder includeSyncTriggers(boolean includeHiddenSyncTriggers) {
+            parameters.includeHiddenSyncTriggers = includeHiddenSyncTriggers;
             return this;
         }
 

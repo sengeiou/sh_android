@@ -46,6 +46,7 @@ public class ShootrTimelineService {
                     .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
                     .forEvent(visibleEvent) //
                     .since(eventRefreshDateSince) //
+                    .includeSyncTriggers(true)
                     .build();
             List<Shot> shotsForEvent = remoteShotRepository.getShotsForTimeline(eventTimelineParameters);
             resultTimelines.add(buildSortedTimeline(eventTimelineParameters, shotsForEvent));
@@ -56,6 +57,7 @@ public class ShootrTimelineService {
                 .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
                 .forActivity() //
                 .since(activityRefreshDateSince) //
+                .includeSyncTriggers(false)
                 .build();
         List<Shot> shotsForActivity = remoteShotRepository.getShotsForTimeline(activityTimelineParameters);
         resultTimelines.add(buildSortedTimeline(activityTimelineParameters, shotsForActivity));
