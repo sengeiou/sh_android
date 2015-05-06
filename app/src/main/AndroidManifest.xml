@@ -55,7 +55,7 @@
       </activity>
 
         <activity android:name=".ui.activities.PeopleActivity"
-            android:label="@string/drawer_people_title"
+            android:label="@string/drawer_friends_title"
             />
 
         <activity
