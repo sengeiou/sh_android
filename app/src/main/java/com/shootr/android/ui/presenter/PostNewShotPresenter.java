@@ -29,7 +29,7 @@ public class PostNewShotPresenter implements Presenter {
     private String shotCommentToSend;
     private String currentTextWritten = "";
     private boolean isReply;
-    private Long replyParentId;
+    private String replyParentId;
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
@@ -49,7 +49,7 @@ public class PostNewShotPresenter implements Presenter {
         this.setView(postNewShotView);
     }
 
-    public void initializeAsReply(PostNewShotView postNewShotView, Long replyParentId, String replyToUsername) {
+    public void initializeAsReply(PostNewShotView postNewShotView, String replyParentId, String replyToUsername) {
         this.setView(postNewShotView);
         if (replyParentId == null || replyToUsername == null) {
             throw new IllegalArgumentException(String.format("Invalid reply data: parentId=%d username=%s",

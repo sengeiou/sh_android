@@ -16,7 +16,7 @@ public class GetEventInteractor implements Interactor {
     private final EventRepository localEventRepository;
     private final EventRepository remoteEventRepository;
 
-    private Long idEvent;
+    private String idEvent;
     private Callback callback;
 
     @Inject public GetEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
@@ -27,7 +27,7 @@ public class GetEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void loadEvent(Long idEvent, Callback callback) {
+    public void loadEvent(String idEvent, Callback callback) {
         this.idEvent = idEvent;
         this.callback = callback;
         interactorHandler.execute(this);

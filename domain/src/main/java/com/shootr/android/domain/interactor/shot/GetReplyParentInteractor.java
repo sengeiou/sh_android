@@ -13,7 +13,7 @@ public class GetReplyParentInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository remoteShotRepository;
-    private Long parentId;
+    private String parentId;
     private Callback<Shot> callback;
 
     @Inject
@@ -24,7 +24,7 @@ public class GetReplyParentInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplyParent(Long parentId, Callback<Shot> callback) {
+    public void loadReplyParent(String parentId, Callback<Shot> callback) {
         this.parentId = parentId;
         this.callback = callback;
         interactorHandler.execute(this);

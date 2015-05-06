@@ -14,7 +14,7 @@ import dagger.ObjectGraph;
 
 public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
-    public static Intent newIntent(Context context, Long eventId, String eventTitle) {
+    public static Intent newIntent(Context context, String eventId, String eventTitle) {
         Intent intent = new Intent(context, EventTimelineActivity.class);
         intent.putExtra(EventTimelineFragment.EXTRA_EVENT_ID, eventId);
         intent.putExtra(EventTimelineFragment.EXTRA_EVENT_TITLE, eventTitle);

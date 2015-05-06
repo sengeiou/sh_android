@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface EventDataSource {
 
-    EventEntity getEventById(Long idEvent);
+    EventEntity getEventById(String idEvent);
 
     List<EventEntity> getEventsByIds(List<Long> eventIds);
 

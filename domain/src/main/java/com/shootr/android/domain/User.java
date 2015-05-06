@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 public class User {
 
-    private Long idUser;
+    private String idUser;
     private String favoriteTeamName;
-    private Long favoriteTeamId;
+    private String favoriteTeamId;
     private String username;
     private String name;
     private String email;
@@ -17,7 +17,7 @@ public class User {
     private String bio;
     private Long points;
 
-    private Long visibleEventId;
+    private String visibleEventId;
     private String visibleEventTitle;
     private String status;
     private Boolean checkedIn;
@@ -26,11 +26,11 @@ public class User {
     private boolean isFollower;
     private boolean isMe;
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
@@ -42,11 +42,11 @@ public class User {
         this.favoriteTeamName = favoriteTeamName;
     }
 
-    public Long getFavoriteTeamId() {
+    public String getFavoriteTeamId() {
         return favoriteTeamId;
     }
 
-    public void setFavoriteTeamId(Long favoriteTeamId) {
+    public void setFavoriteTeamId(String favoriteTeamId) {
         this.favoriteTeamId = favoriteTeamId;
     }
 
@@ -163,11 +163,11 @@ public class User {
         this.email = email;
     }
 
-    public Long getVisibleEventId() {
+    public String getVisibleEventId() {
         return visibleEventId;
     }
 
-    public void setVisibleEventId(Long visibleEventId) {
+    public void setVisibleEventId(String visibleEventId) {
         this.visibleEventId = visibleEventId;
     }
 

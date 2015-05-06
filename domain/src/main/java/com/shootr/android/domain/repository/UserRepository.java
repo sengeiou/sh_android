@@ -7,13 +7,13 @@ public interface UserRepository {
 
     List<User> getPeople();
 
-    User getUserById(Long id);
+    User getUserById(String id);
 
-    List<User> getUsersByIds(List<Long> ids);
+    List<User> getUsersByIds(List<String> ids);
 
-    boolean isFollower(Long userId);
+    boolean isFollower(String userId);
 
-    boolean isFollowing(Long userId);
+    boolean isFollowing(String userId);
 
     User putUser(User user);
 }

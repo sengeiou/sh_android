@@ -36,12 +36,12 @@ import static org.mockito.Mockito.when;
 
 public class GetEventTimelineInteractorTest {
 
-    private static final Long ID_SHOT_WITHOUT_EVENT = 1L;
-    private static final Long VISIBLE_EVENT_ID = 2L;
-    private static final Long ID_SHOT_WITH_EVENT = 3L;
-    private static final Long EVENT_AUTHOR_ID = 4L;
-    private static final Long ID_SHOT_FROM_AUTHOR = 5L;
-    private static final Long ID_CURRENT_USER = 6L;
+    private static final String ID_SHOT_WITHOUT_EVENT = "shot_without_event";
+    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String ID_SHOT_WITH_EVENT = "shot_with_event";
+    private static final String EVENT_AUTHOR_ID = "event_author";
+    private static final String ID_SHOT_FROM_AUTHOR = "shot_from_author";
+    private static final String ID_CURRENT_USER = "current_user";
 
     private static final Long DATE_OLDER = 1000L;
     private static final Long DATE_MIDDLE = 2000L;

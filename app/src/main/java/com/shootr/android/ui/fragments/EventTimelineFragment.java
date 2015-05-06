@@ -85,9 +85,9 @@ public class EventTimelineFragment extends BaseFragment
     private View footerProgress;
     //endregion
 
-    public static EventTimelineFragment newInstance(Long eventId, String eventTitle) {
+    public static EventTimelineFragment newInstance(String eventId, String eventTitle) {
         Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putLong(EXTRA_EVENT_ID, eventId);
+        fragmentArguments.putString(EXTRA_EVENT_ID, eventId);
         fragmentArguments.putString(EXTRA_EVENT_TITLE, eventTitle);
         return newInstance(fragmentArguments);
     }

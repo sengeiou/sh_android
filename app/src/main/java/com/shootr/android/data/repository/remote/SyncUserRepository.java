@@ -64,7 +64,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     private List<FollowEntity> createFollowsFromUsers(List<UserEntity> following) {
-        long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         List<FollowEntity> followsByFollowing = new ArrayList<>();
         for (UserEntity u : following) {
             FollowEntity f = new FollowEntity();
@@ -80,7 +80,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return followsByFollowing;
     }
 
-    @Override public User getUserById(Long id) {
+    @Override public User getUserById(String id) {
         UserEntity user = cachedRemoteUserDataSource.getUser(id);
         return entityToDomain(user);
     }
@@ -100,16 +100,16 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return users;
     }
 
-    @Override public List<User> getUsersByIds(List<Long> userIds) {
+    @Override public List<User> getUsersByIds(List<String> userIds) {
         List<UserEntity> userEntities = cachedRemoteUserDataSource.getUsers(userIds);
         return entitiesToDomain(userEntities);
     }
 
-    @Override public boolean isFollower(Long userId) {
+    @Override public boolean isFollower(String userId) {
         return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
     }
 
-    @Override public boolean isFollowing(Long userId) {
+    @Override public boolean isFollowing(String userId) {
         return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
     }
 
@@ -159,7 +159,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
-        long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
             User user = userEntityMapper.transform(localUserEntity,
               currentUserId,

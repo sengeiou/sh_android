@@ -141,7 +141,7 @@ public class WatchersView extends LinearLayout{
     private void addMockData() {
         List<UserModel> userWatchingMocks = new ArrayList<>();
         UserModel watch1 = new UserModel();
-        watch1.setIdUser(1L);
+        watch1.setIdUser(String.valueOf(1L));
         watch1.setUsername("Username");
         watch1.setStatus("Watching");
 
@@ -161,7 +161,7 @@ public class WatchersView extends LinearLayout{
         @InjectView(R.id.watcher_user_name) TextView name;
         @InjectView(R.id.watcher_user_watching) TextView watchingText;
         @InjectView(R.id.watcher_user_edit) View editButton;
-        Long userId;
+        String userId;
 
         public WatcherViewHolder(View itemView) {
             super(itemView);
@@ -178,7 +178,7 @@ public class WatchersView extends LinearLayout{
 
     public static interface OnProfileClickListener {
 
-        void onProfile(Long idUser);
+        void onProfile(String idUser);
 
     }
 

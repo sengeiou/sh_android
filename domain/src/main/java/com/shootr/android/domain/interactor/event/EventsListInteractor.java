@@ -92,7 +92,7 @@ public class EventsListInteractor implements Interactor {
         });
     }
 
-    private Long getVisibleEventId() {
+    private String getVisibleEventId() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         return currentUser.getVisibleEventId();
     }

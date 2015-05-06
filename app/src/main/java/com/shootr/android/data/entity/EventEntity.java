@@ -4,24 +4,22 @@ import java.util.Date;
 
 public class EventEntity extends Synchronized implements Comparable<EventEntity> {
 
-    private Long idEvent;
-    private Long idUser;
+    private String idEvent;
+    private String idUser;
     private String userName;
     private String timezone;
     private String tag;
     private Date beginDate;
     private Date endDate;
-    private Long idLocalTeam;
-    private Long idVisitorTeam;
     private String title;
     private String photo;
     private Integer notifyCreation;
 
-    public Long getIdEvent() {
+    public String getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(Long idEvent) {
+    public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
     }
 
@@ -31,22 +29,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setBeginDate(Date beginDate) {
         this.beginDate = beginDate;
-    }
-
-    public Long getIdLocalTeam() {
-        return idLocalTeam;
-    }
-
-    public void setIdLocalTeam(Long idLocalTeam) {
-        this.idLocalTeam = idLocalTeam;
-    }
-
-    public Long getIdVisitorTeam() {
-        return idVisitorTeam;
-    }
-
-    public void setIdVisitorTeam(Long idVisitorTeam) {
-        this.idVisitorTeam = idVisitorTeam;
     }
 
     @Override
@@ -116,11 +98,11 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
         this.timezone = timezone;
     }
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 

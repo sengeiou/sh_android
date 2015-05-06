@@ -40,9 +40,12 @@ public class ShotEntityMapper {
         userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
 
-        shot.setParentShotId(shotEntity.getIdShotParent());
-        shot.setParentShotUserId(shotEntity.getIdUserParent());
-        shot.setParentShotUsername(shotEntity.getUserNameParent());
+        String idShotParent = shotEntity.getIdShotParent();
+        shot.setParentShotId(idShotParent != null ? idShotParent : null);
+        String idUserParent = shotEntity.getIdUserParent();
+        shot.setParentShotUserId(idUserParent != null? idUserParent : null);
+        String userNameParent = shotEntity.getUserNameParent();
+        shot.setParentShotUsername(userNameParent);
 
         return shot;
     }
@@ -63,11 +66,13 @@ public class ShotEntityMapper {
             throw new IllegalArgumentException("Shot can't be null");
         }
         ShotEntity shotEntity = new ShotEntity();
-        shotEntity.setIdShot(shot.getIdShot());
+        String idShot = shot.getIdShot();
+        shotEntity.setIdShot(idShot != null && idShot != "null"? idShot : null);
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
-        shotEntity.setIdUser(shot.getUserInfo().getIdUser());
+        String idUser = shot.getUserInfo().getIdUser();
+        shotEntity.setIdUser(idUser != null? idUser : null);
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
             shotEntity.setIdEvent(eventInfo.getIdEvent());
@@ -75,9 +80,12 @@ public class ShotEntityMapper {
             shotEntity.setEventTag(eventInfo.getEventTag());
         }
 
-        shotEntity.setIdShotParent(shot.getParentShotId());
-        shotEntity.setIdUserParent(shot.getParentShotUserId());
-        shotEntity.setUserNameParent(shot.getParentShotUsername());
+        String parentShotId = shot.getParentShotId();
+        shotEntity.setIdShotParent(parentShotId != null && parentShotId != "null" ? parentShotId : null );
+        String parentShotUserId = shot.getParentShotUserId();
+        shotEntity.setIdUserParent(parentShotUserId != null && parentShotUserId != "null" ? parentShotUserId : null);
+        String parentShotUsername = shot.getParentShotUsername();
+        shotEntity.setUserNameParent(parentShotUsername != "" ? parentShotUsername : null);
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;

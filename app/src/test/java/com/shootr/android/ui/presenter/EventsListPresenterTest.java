@@ -31,6 +31,7 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -38,8 +39,9 @@ import static org.mockito.Mockito.verify;
 
 public class EventsListPresenterTest {
 
-    private static final Long SELECTED_EVENT_ID = 1L;
+    private static final String SELECTED_EVENT_ID = "selected_event";
     private static final String SELECTED_EVENT_TITLE = "title";
+    private static final String EVENT_AUTHOR_ID = "author";
 
     @Mock Bus bus;
     @Mock EventsListInteractor eventsListInteractor;
@@ -135,6 +137,8 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldSetCurrentVisibleEventInViewWhenEventSelected() throws Exception {
+        setupSelectEventInteractorCallbacksEvent();
+
         presenter.selectEvent(selectedEventModel());
 
         verify(eventsListView).setCurrentVisibleEventId(SELECTED_EVENT_ID);
@@ -157,7 +161,7 @@ public class EventsListPresenterTest {
                 callback.onLoaded(selectedEvent());
                 return null;
             }
-        }).when(selectEventInteractor).selectEvent(anyLong(), any(Interactor.Callback.class));
+        }).when(selectEventInteractor).selectEvent(anyString(), any(Interactor.Callback.class));
     }
 
     private void setupEventListInteractorCallbacks(final List<EventSearchResult> result) {
@@ -190,7 +194,7 @@ public class EventsListPresenterTest {
         event.setTitle(SELECTED_EVENT_TITLE);
         event.setStartDate(new Date());
         event.setEndDate(new Date());
-        event.setAuthorId(1L);
+        event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }
 }

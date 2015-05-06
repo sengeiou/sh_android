@@ -83,8 +83,8 @@ public class GetEventTimelineInteractor implements Interactor {
         return remoteShots;
     }
 
-    private List<Long> getPeopleIds() {
-        List<Long> ids = new ArrayList<>();
+    private List<String> getPeopleIds() {
+        List<String> ids = new ArrayList<>();
         for (User user : localUserRepository.getPeople()) {
             ids.add(user.getIdUser());
         }
@@ -92,7 +92,7 @@ public class GetEventTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEvent() {
-        Long visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getVisibleEventId();
+        String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getVisibleEventId();
         if (visibleEventId != null) {
             return localEventRepository.getEventById(visibleEventId);
         }

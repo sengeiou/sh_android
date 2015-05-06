@@ -79,7 +79,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void setCurrentVisibleEventIfAny(EventSearchResultList eventSearchResultList) {
-        Long eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
+        String eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
         if (eventWatchingId != null) {
             eventSearchResultList.setCurrentVisibleEventId(eventWatchingId);
         }

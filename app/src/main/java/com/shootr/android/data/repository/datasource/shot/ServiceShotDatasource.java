@@ -48,7 +48,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public ShotEntity getShot(Long shotId) {
+    @Override public ShotEntity getShot(String shotId) {
         try {
             return shootrService.getShotById(shotId);
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getReplies(Long shotId) {
+    @Override public List<ShotEntity> getReplies(String shotId) {
         try {
             return shootrService.getRepliesToShot(shotId);
         } catch (IOException e) {
@@ -76,7 +76,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     private void notifySyncTrigger(List<ShotEntity> newShots) {
-        long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         for (ShotEntity newShot : newShots) {
             if ((newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC
               || newShot.getType() == ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW)

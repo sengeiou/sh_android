@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class VisibleEventInfoInteractor implements Interactor {
 
-    private static final long VISIBLE_EVENT = -1;
+    private static final String VISIBLE_EVENT = null;
     private static final EventInfo NO_EVENT_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
@@ -30,7 +30,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final EventRepository localEventRepository;
     private final SessionRepository sessionRepository;
 
-    private long idEventWanted;
+    private String idEventWanted;
     private Callback callback;
 
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
@@ -49,7 +49,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
-    public void obtainEventInfo(long idEventWanted, Callback callback) {
+    public void obtainEventInfo(String idEventWanted, Callback callback) {
         this.idEventWanted = idEventWanted;
         this.callback = callback;
         interactorHandler.execute(this);
@@ -82,9 +82,10 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-        Long wantedEventId = getWantedEventId(currentUser);
 
-        if (wantedEventId!=null && wantedEventId > 0) {
+        String wantedEventId = getWantedEventId(currentUser);
+
+        if (wantedEventId != null) {
             Event visibleEvent = eventRepository.getEventById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
@@ -104,15 +105,15 @@ public class VisibleEventInfoInteractor implements Interactor {
         return watchesFromPeople;
     }
 
-    private Long getWantedEventId(User currentUser) {
-        if (idEventWanted > 0) {
+    private String getWantedEventId(User currentUser) {
+        if (idEventWanted != null && !idEventWanted.equals(VISIBLE_EVENT)) {
             return idEventWanted;
         } else {
             return currentUser.getVisibleEventId();
         }
     }
 
-    protected List<User> filterUsersWatchingEvent(List<User> people, Long idEvent) {
+    protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idEvent.equals(user.getVisibleEventId())) {

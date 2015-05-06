@@ -23,8 +23,8 @@ public class PreferenceModule {
         return new StringPreference(preferences, "gcm_registration_id", GCM_REGISTRATION_ID_DEFAULT);
     }
 
-    @Provides @Singleton @CurrentUserId LongPreference provideCurrentUserId(SharedPreferences preferences) {
-        return new LongPreference(preferences, "current_user_id", 0L);
+    @Provides @Singleton @CurrentUserId StringPreference provideCurrentUserId(SharedPreferences preferences) {
+        return new StringPreference(preferences, "current_user_id", null);
     }
 
     @Provides @Singleton @SessionToken StringPreference provideSessionToken(SharedPreferences preferences) {

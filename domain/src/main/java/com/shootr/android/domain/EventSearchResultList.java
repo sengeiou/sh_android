@@ -5,13 +5,13 @@ import java.util.List;
 public class EventSearchResultList {
 
     private List<EventSearchResult> eventSearchResults;
-    private Long currentVisibleEventId;
+    private String currentVisibleEventId;
 
     public EventSearchResultList(List<EventSearchResult> eventSearchResults) {
         this.eventSearchResults = eventSearchResults;
     }
 
-    public EventSearchResultList(List<EventSearchResult> eventSearchResults, Long currentVisibleEventId) {
+    public EventSearchResultList(List<EventSearchResult> eventSearchResults, String currentVisibleEventId) {
         this.eventSearchResults = eventSearchResults;
         this.currentVisibleEventId = currentVisibleEventId;
     }
@@ -24,11 +24,11 @@ public class EventSearchResultList {
         this.eventSearchResults = eventSearchResults;
     }
 
-    public Long getCurrentVisibleEventId() {
+    public String getCurrentVisibleEventId() {
         return currentVisibleEventId;
     }
 
-    public void setCurrentVisibleEventId(Long currentVisibleEventId) {
+    public void setCurrentVisibleEventId(String currentVisibleEventId) {
         this.currentVisibleEventId = currentVisibleEventId;
     }
 

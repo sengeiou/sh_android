@@ -52,7 +52,7 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<ShotEntity> getLatestShotsFromIdUser(Long idUser, Long latestShotsNumber) {
+    public List<ShotEntity> getLatestShotsFromIdUser(String idUser, Long latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idUser)};
@@ -114,7 +114,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
-        List<Long> userIds = parameters.getAllUserIds();
+        List<String> userIds = parameters.getAllUserIds();
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + (parameters.getEventId() != null ? " = ?" : " IS NULL");
         //TODO since & max
@@ -146,7 +146,7 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-    public ShotEntity getShotById(Long idShot) {
+    public ShotEntity getShotById(String idShot) {
         String whereClause = ShotTable.ID_SHOT + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idShot)};
 
@@ -167,9 +167,9 @@ public class ShotManager extends  AbstractManager{
         return shotEntity;
     }
 
-    public List<ShotEntity> getRepliesTo(Long shotParentId) {
+    public List<ShotEntity> getRepliesTo(String shotParentId) {
         String whereClause = ShotTable.ID_SHOT_PARENT + " = ?";
-        String[] whereArguments = new String[]{String.valueOf(shotParentId)};
+        String[] whereArguments = new String[]{shotParentId};
 
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE,
           ShotTable.PROJECTION,
@@ -192,7 +192,7 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-    public Long getLastModifiedDateForEvent(Long eventId) {
+    public Long getLastModifiedDateForEvent(String eventId) {
         String whereClause = ShotTable.ID_EVENT + " = ?";
         String[] whereArguments = new String[]{String.valueOf(eventId)};
         String order = ShotTable.CSYS_MODIFIED + " desc";

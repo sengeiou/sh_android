@@ -59,7 +59,7 @@ public class GetFollowUnfollowUserOnlineJob extends ShootrBaseJob<FollowUnFollow
         return followReceived;
     }
 
-    public UserEntity getUserFromDatabaseOrServer(Long idUser) throws SQLException, IOException {
+    public UserEntity getUserFromDatabaseOrServer(String idUser) throws SQLException, IOException {
        UserEntity userEntity = userManager.getUserByIdUser(idUser);
         if(hasInternetConnection() || userEntity == null){
             userEntity = service.getUserByIdUser(idUser);

@@ -35,9 +35,9 @@ import static org.mockito.Mockito.when;
 
 public class SelectEventInteractorTest {
 
-    private static final Long OLD_EVENT_ID = 1L;
-    private static final Long NEW_EVENT_ID = 2L;
-    private static final Long CURRENT_USER_ID = 1L;
+    private static final String OLD_EVENT_ID = "old_event";
+    private static final String NEW_EVENT_ID = "new_event";
+    private static final String CURRENT_USER_ID = "current_user";
     private static final String OLD_EVENT_TITLE = "oldTitle";
     private static final String NEW_EVENT_TITLE = "newTitle";
     private static final String STATUS_WATCHING = "Watching";

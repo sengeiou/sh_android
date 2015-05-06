@@ -30,13 +30,17 @@ public class ShotQueueEntityMapper {
         }
 
         Shot shot = queuedShot.getShot();
-        entity.setIdShot(shot.getIdShot());
+        String idShot = shot.getIdShot();
+        entity.setIdShot(idShot != null && idShot != "null"? idShot : null);
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
-        entity.setIdShotParent(shot.getParentShotId());
-        entity.setIdUserParent(shot.getParentShotUserId());
-        entity.setUserNameParent(shot.getParentShotUsername());
+        String parentShotId = shot.getParentShotId();
+        entity.setIdShotParent(parentShotId != null && parentShotId != "null"? parentShotId : null);
+        String parentShotUserId = shot.getParentShotUserId();
+        entity.setIdUserParent(parentShotUserId!= null && parentShotUserId != "null"? parentShotUserId : null);
+        String parentShotUsername = shot.getParentShotUsername();
+        entity.setUserNameParent(parentShotUsername != "" ? parentShotUsername : null);
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
@@ -82,13 +86,16 @@ public class ShotQueueEntityMapper {
         eventInfo.setIdEvent(entity.getIdEvent());
         eventInfo.setEventTitle(entity.getEventTitle());
         eventInfo.setEventTag(entity.getEventTag());
-        if (eventInfo.getIdEvent() != null && eventInfo.getIdEvent() > 0L) {
+        if (eventInfo.getIdEvent() != null) {
             shot.setEventInfo(eventInfo);
         }
 
-        shot.setParentShotId(entity.getIdShotParent());
-        shot.setParentShotUserId(entity.getIdUserParent());
-        shot.setParentShotUsername(entity.getUserNameParent());
+        String idShotParent = entity.getIdShotParent();
+        shot.setParentShotId(idShotParent);
+        String idUserParent = entity.getIdUserParent();
+        shot.setParentShotUserId(idUserParent);
+        String userNameParent = entity.getUserNameParent();
+        shot.setParentShotUsername(userNameParent);
 
         queuedShot.setShot(shot);
         return queuedShot;

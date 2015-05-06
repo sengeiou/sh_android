@@ -96,7 +96,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private boolean showEditButton;
     private float headerMaxElevation;
 
-    public static Intent getIntent(Context context, Long eventId) {
+    public static Intent getIntent(Context context, String eventId) {
         Intent intent = new Intent(context, EventDetailActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, eventId);
         return intent;
@@ -108,11 +108,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        long idEvent = getIntent().getLongExtra(EXTRA_EVENT_ID, -1);
+        String idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 
-    private void initializePresenter(long idEvent) {
+    private void initializePresenter(String idEvent) {
         presenter.initialize(this, idEvent);
     }
 
@@ -120,7 +120,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         ButterKnife.inject(this);
         headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
-            @Override public void onProfile(Long idUser) {
+            @Override public void onProfile(String idUser) {
                 navigateToUserProfile(idUser);
             }
         });
@@ -207,8 +207,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
     //endregion
 
-    private void navigateToUserProfile(Long idUser) {
-        Intent intent = ProfileContainerActivity.getIntent(this, idUser);
+    private void navigateToUserProfile(String idUser) {
+        Intent intent = ProfileContainerActivity.getIntent(this, idUser.toString());
         startActivity(intent);
     }
 
@@ -317,7 +317,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
             String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
             presenter.resultFromEditStatus(statusText);
         } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
-            Long idEventEdited = data.getLongExtra(NewEventActivity.KEY_EVENT_ID, 0L);
+            String idEventEdited = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
             presenter.resultFromEditEventInfo(idEventEdited);
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
@@ -464,12 +464,12 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
-    @Override public void navigateToEditEvent(Long idEvent) {
+    @Override public void navigateToEditEvent(String idEvent) {
         Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(NewEventActivity.KEY_EVENT_ID, idEvent);
         startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
     }
 
-    @Override public void navigateToUser(Long userId) {
+    @Override public void navigateToUser(String userId) {
         Intent userProfileIntent = ProfileContainerActivity.getIntent(this, userId);
         startActivity(userProfileIntent);
     }

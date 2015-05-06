@@ -46,28 +46,28 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    @Override public EventSearchEntity getEventResult(Long idEvent) {
+    @Override public EventSearchEntity getEventResult(String idEvent) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
     private List<EventSearchEntity> loadEvents(String query) {
         try {
-            Map<Long, Integer> eventsWatchesCounts = getWatchersCountByEvents();
+            Map<String, Integer> eventsWatchesCounts = getWatchersCountByEvents();
             return shootrService.getEventSearch(query, eventsWatchesCounts);
         } catch (SQLException | IOException e) {
             throw new RepositoryException(e);
         }
     }
 
-    private Map<Long, Integer> getWatchersCountByEvents() throws SQLException {
-        long currentUserId = sessionRepository.getCurrentUserId();
+    private Map<String, Integer> getWatchersCountByEvents() throws SQLException {
+        String currentUserId = sessionRepository.getCurrentUserId();
 
-        List<Long> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
+        List<String> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
         followingAndCurrentUserIds.add(currentUserId);
 
         List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingAndCurrentUserIds);
 
-        Map<Long, Integer> eventsWatchesCounts = new HashMap<>();
+        Map<String, Integer> eventsWatchesCounts = new HashMap<>();
         for (UserEntity watcher : watchers) {
             Integer currentCount = eventsWatchesCounts.get(watcher.getIdEvent());
             if (currentCount != null) {

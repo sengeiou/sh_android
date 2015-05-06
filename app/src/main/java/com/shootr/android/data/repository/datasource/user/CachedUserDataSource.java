@@ -43,7 +43,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         wasValidLastCheck = true;
     }
 
-    @Override public List<UserEntity> getFollowing(Long userId) {
+    @Override public List<UserEntity> getFollowing(String userId) {
         throw new RuntimeException("getFollowing not cacheable");
     }
 
@@ -55,7 +55,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         return userEntities;
     }
 
-    @Override public UserEntity getUser(Long id) {
+    @Override public UserEntity getUser(String id) {
         UserEntity cachedUser = null;
         if (isValid()) {
             cachedUser = localUserDataSource.getUser(id);
@@ -70,7 +70,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         }
     }
 
-    @Override public List<UserEntity> getUsers(List<Long> userIds) {
+    @Override public List<UserEntity> getUsers(List<String> userIds) {
         List<UserEntity> cachedUsers = null;
         if (isValid()) {
             cachedUsers = localUserDataSource.getUsers(userIds);
@@ -85,11 +85,11 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         }
     }
 
-    @Override public boolean isFollower(Long from, Long who) {
+    @Override public boolean isFollower(String from, String who) {
         throw new RuntimeException("Can't use cache for follow status check");
     }
 
-    @Override public boolean isFollowing(Long who, Long to) {
+    @Override public boolean isFollowing(String who, String to) {
         throw new RuntimeException("Can't use cache for follow status check");
     }
 

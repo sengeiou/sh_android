@@ -91,7 +91,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     private void setupAdapter() {
         detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
           new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-              @Override public void onClick(Long userId) {
+              @Override public void onClick(String userId) {
                   onAvatarClick(userId);
               }
           }, //
@@ -164,7 +164,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         detailPresenter.imageClick(shot);
     }
 
-    public void onAvatarClick(Long userId) {
+    public void onAvatarClick(String userId) {
         detailPresenter.avatarClick(userId);
     }
 
@@ -197,7 +197,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         startActivity(intentForImage);
     }
 
-    @Override public void openProfile(Long idUser) {
+    @Override public void openProfile(String idUser) {
         Intent intentForUser = ProfileContainerActivity.getIntent(this, idUser);
         startActivity(intentForUser);
     }

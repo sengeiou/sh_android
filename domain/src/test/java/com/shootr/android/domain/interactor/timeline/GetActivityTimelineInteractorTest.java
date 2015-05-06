@@ -35,9 +35,9 @@ import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
 
-    private static final Long VISIBLE_EVENT_ID = 2L;
-    private static final Long EVENT_AUTHOR_ID = 4L;
-    private static final Long ID_CURRENT_USER = 6L;
+    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String EVENT_AUTHOR_ID = "event_author";
+    private static final String ID_CURRENT_USER = "current_user";
 
     private static final Long DATE_OLDER = 1000L;
     private static final Long DATE_MIDDLE = 2000L;

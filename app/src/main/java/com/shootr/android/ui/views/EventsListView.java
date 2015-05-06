@@ -8,7 +8,7 @@ public interface EventsListView extends LoadDataView {
 
     void renderEvents(List<EventResultModel> events);
 
-    void setCurrentVisibleEventId(Long eventId);
+    void setCurrentVisibleEventId(String eventId);
 
     void showContent();
 
@@ -16,5 +16,5 @@ public interface EventsListView extends LoadDataView {
 
     void hideKeyboard();
 
-    void navigateToEventTimeline(Long idEvent, String title);
+    void navigateToEventTimeline(String idEvent, String title);
 }

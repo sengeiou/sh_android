@@ -15,10 +15,10 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     private User currentUser;
 
-    private LongPreference currentUserIdPreference;
+    private StringPreference currentUserIdPreference;
 
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
-      @CurrentUserId LongPreference currentUserIdPreference) {
+      @CurrentUserId StringPreference currentUserIdPreference) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
     }
@@ -44,22 +44,22 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public long getCurrentUserId() {
+    public String getCurrentUserId() {
         return currentUserIdPreference.get();
     }
 
     @Override
-    public void setCurrentUserId(long currentUserId) {
+    public void setCurrentUserId(String currentUserId) {
         this.currentUserIdPreference.set(currentUserId);
     }
 
     @Override
-    public void createSession(long userId, String sessionToken, User loggedInUser) {
+    public void createSession(String userId, String sessionToken, User loggedInUser) {
         setCurrentUserId(userId);
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);
         //TODO use some pattern or abstraction, setting these values here directly is quite ugly
-        Crashlytics.setUserIdentifier(String.valueOf(userId));
+        Crashlytics.setUserIdentifier(userId);
         Crashlytics.setUserName(loggedInUser.getUsername());
         Crashlytics.setUserEmail(loggedInUser.getEmail());
     }

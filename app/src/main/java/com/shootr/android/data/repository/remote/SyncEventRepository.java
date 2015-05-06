@@ -31,7 +31,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
-    @Override public Event getEventById(Long idEvent) {
+    @Override public Event getEventById(String idEvent) {
         EventEntity eventEntity = remoteEventDataSource.getEventById(idEvent);
         if (eventEntity != null) {
             markEntityAsSynchronized(eventEntity);

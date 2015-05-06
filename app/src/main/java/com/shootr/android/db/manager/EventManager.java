@@ -26,7 +26,7 @@ public class EventManager extends AbstractManager{
         this.timeUtils = timeUtils;
     }
 
-    public EventEntity getEventById(Long eventid) {
+    public EventEntity getEventById(String eventid) {
         String whereSelection = DatabaseContract.EventTable.ID_EVENT + " = ?";
         String[] whereArguments = new String[] { String.valueOf(eventid) };
 
@@ -153,7 +153,7 @@ public class EventManager extends AbstractManager{
         return eventSearchEntities;
     }
 
-    public EventSearchEntity getEventSearchResultById(Long idEvent) {
+    public EventSearchEntity getEventSearchResultById(String idEvent) {
         String whereClause = DatabaseContract.EventSearchTable.ID_EVENT + "=?";
         String[] whereArguments = new String[] { String.valueOf(idEvent) };
 

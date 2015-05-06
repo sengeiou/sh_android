@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
 
-    private Long idUser;
-    private Long favoriteTeamId;
+    private String idUser;
+    private String favoriteTeamId;
     private String favoriteTeamName;
     private String sessionToken;
     private String userName;
@@ -19,26 +19,26 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String website;
     private String bio;
     private String eventTitle;
-    private Long idEvent;
+    private String idEvent;
     private String status;
     private Integer checkIn;
 
     public UserEntity(){
     }
 
-    public Long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
-    public Long getFavoriteTeamId() {
+    public String getFavoriteTeamId() {
         return favoriteTeamId;
     }
 
-    public void setFavoriteTeamId(Long favoriteTeamId) {
+    public void setFavoriteTeamId(String favoriteTeamId) {
         this.favoriteTeamId = favoriteTeamId;
     }
 
@@ -177,12 +177,12 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         this.eventTitle = eventTitle;
     }
 
-    public Long getIdEvent() {
+    public String getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(Long idEvent) {
-        if (idEvent!=null && idEvent > 0) {
+    public void setIdEvent(String idEvent) {
+        if (idEvent!=null && idEvent != "-1L") {
             this.idEvent = idEvent;
         } else {
             this.idEvent = null;

@@ -157,7 +157,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_EVENT && resultCode == RESULT_OK) {
-            long eventId = data.getLongExtra(NewEventActivity.KEY_EVENT_ID, 0L);
+            String eventId = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
             String title = data.getStringExtra(NewEventActivity.KEY_EVENT_TITLE);
             presenter.eventCreated(eventId, title);
         }
@@ -169,7 +169,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentVisibleEventId(Long eventId) {
+    @Override public void setCurrentVisibleEventId(String eventId) {
         adapter.setCurrentVisibleEvent(eventId);
     }
 
@@ -186,7 +186,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
-    @Override public void navigateToEventTimeline(Long idEvent, String title) {
+    @Override public void navigateToEventTimeline(String idEvent, String title) {
         startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
     }
 

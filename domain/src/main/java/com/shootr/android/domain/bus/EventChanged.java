@@ -9,13 +9,13 @@ public interface EventChanged {
 
     class Event {
 
-        private Long newEventId;
+        private String newEventId;
 
-        public Event(Long newEventId) {
+        public Event(String newEventId) {
             this.newEventId = newEventId;
         }
 
-        public Long getNewEventId() {
+        public String getNewEventId() {
             return newEventId;
         }
 

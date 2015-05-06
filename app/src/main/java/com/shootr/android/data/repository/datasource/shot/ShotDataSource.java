@@ -12,7 +12,7 @@ public interface ShotDataSource {
 
     List<ShotEntity> getShotsForTimeline(TimelineParameters parameters);
 
-    ShotEntity getShot(Long shotId);
+    ShotEntity getShot(String shotId);
 
-    List<ShotEntity> getReplies(Long shotId);
+    List<ShotEntity> getReplies(String shotId);
 }

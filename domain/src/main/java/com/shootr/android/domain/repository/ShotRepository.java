@@ -10,7 +10,7 @@ public interface ShotRepository {
 
     List<Shot> getShotsForTimeline(TimelineParameters parameters);
 
-    Shot getShot(Long shotId);
+    Shot getShot(String shotId);
 
-    List<Shot> getReplies(Long shot);
+    List<Shot> getReplies(String shot);
 }

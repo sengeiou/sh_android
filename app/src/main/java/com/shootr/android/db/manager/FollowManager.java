@@ -79,7 +79,7 @@ public class FollowManager extends AbstractManager{
        insertInSync();
     }
 
-    public FollowEntity getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
+    public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ CSYS_DELETED+" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
@@ -95,8 +95,8 @@ public class FollowManager extends AbstractManager{
     /**
      * Retrieve a Following User
      */
-    public  List<Long> getUserFollowingIds(Long idUser) throws SQLException {
-        List<Long> userIds = new ArrayList<>();
+    public List<String> getUserFollowingIds(String idUser) throws SQLException {
+        List<String> userIds = new ArrayList<>();
 
         String args = ID_USER+"=? AND "+CSYS_DELETED +" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUser)};
@@ -108,7 +108,7 @@ public class FollowManager extends AbstractManager{
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                userIds.add(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER)));
+                userIds.add(String.valueOf(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER))));
                 c.moveToNext();
             }
         }
@@ -116,13 +116,13 @@ public class FollowManager extends AbstractManager{
         return userIds;
     }
 
-    public List<Long> getUserFollowingIdsWithOwnUser(Long idUser) throws SQLException{
-        List<Long> userIds = getUserFollowingIds(idUser);
+    public List<String> getUserFollowingIdsWithOwnUser(String idUser) throws SQLException{
+        List<String> userIds = getUserFollowingIds(idUser);
         userIds.add(idUser);
         return userIds;
     }
 
-    public int getFollowRelationshipState(Long idFromUser, Long idToUser) {
+    public int getFollowRelationshipState(String idFromUser, String idToUser) {
         int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
         String fromUserIdArgument = String.valueOf(idFromUser);
         String toUserIdArgument = String.valueOf(idToUser);

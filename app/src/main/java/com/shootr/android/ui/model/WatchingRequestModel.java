@@ -3,16 +3,16 @@ package com.shootr.android.ui.model;
 
 public class WatchingRequestModel {
 
-    private Long eventId;
+    private String eventId;
     private String title;
     private String subtitle;
     private Long eventDate;
 
-    public Long getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 

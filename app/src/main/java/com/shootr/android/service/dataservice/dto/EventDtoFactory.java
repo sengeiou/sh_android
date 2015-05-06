@@ -56,7 +56,7 @@ public class EventDtoFactory {
 
     public GenericDto saveEvent(EventEntity eventEntity) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, null)
+          .putKey(DatabaseContract.EventTable.ID_EVENT, eventEntity.getIdEvent())
           .entity(DatabaseContract.EventTable.TABLE)
           .build();
 
@@ -65,7 +65,7 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_EVENT, op);
     }
 
-    public GenericDto getEventById(Long idEvent) {
+    public GenericDto getEventById(String idEvent) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(DatabaseContract.EventTable.TABLE)
           .putKey(DatabaseContract.EventTable.ID_EVENT, idEvent)
@@ -75,15 +75,15 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENT_BY_ID_EVENT, op);
     }
 
-    public GenericDto getSearchEventDto(String query, Map<Long, Integer> eventsWatchesCounts) {
+    public GenericDto getSearchEventDto(String query, Map<String, Integer> eventsWatchesCounts) {
         MetadataDto md = new MetadataDto.Builder().items(50)
           .operation(Constants.OPERATION_RETRIEVE)
-          .entity("SearchEvent")
+          .entity("SearchEventMongo")
           .putKey("pattern", query)
           .build();
 
         OperationDto.Builder operationBuilder = new OperationDto.Builder();
-        for (Long idEvent : eventsWatchesCounts.keySet()) {
+        for (String idEvent : eventsWatchesCounts.keySet()) {
             Integer watchers = eventsWatchesCounts.get(idEvent);
             Map<String, Object> dataItem = new HashMap<>(2);
             dataItem.put("idEvent", idEvent);

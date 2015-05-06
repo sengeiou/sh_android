@@ -109,7 +109,7 @@ public abstract class PostNewShotInteractorTestBase {
     //region Stubs
     protected User currentUser() {
         User user = new User();
-        user.setIdUser(CURRENT_USER_ID);
+        user.setIdUser(String.valueOf(CURRENT_USER_ID));
         user.setUsername("currentUsername");
         user.setPhoto("http://avatar.jpg");
         return user;

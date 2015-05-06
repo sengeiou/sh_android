@@ -30,7 +30,7 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(shotsForEvent);
     }
 
-    @Override public Shot getShot(Long shotId) {
+    @Override public Shot getShot(String shotId) {
         ShotEntity shot = localShotDataSource.getShot(shotId);
         if (shot != null) {
             return shotEntityMapper.transform(shot);
@@ -39,7 +39,7 @@ public class LocalShotRepository implements ShotRepository {
         }
     }
 
-    @Override public List<Shot> getReplies(Long shot) {
+    @Override public List<Shot> getReplies(String shot) {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 }

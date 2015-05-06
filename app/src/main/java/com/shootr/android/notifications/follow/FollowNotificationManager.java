@@ -28,6 +28,6 @@ public class FollowNotificationManager {
 
     public void sendNewFollowerNotification(UserModel user) {
         FollowerNotification notification = new FollowerNotification(context, notificationBuilderFactory, user);
-        androidNotificationManager.notify(notification, NOTIFICATION_TAG, user.getIdUser().intValue());
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, Integer.parseInt(user.getIdUser()));
     }
 }

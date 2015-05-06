@@ -25,7 +25,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     private final Resources resources;
 
     private List<EventResultModel> events;
-    private Long currentVisibleEvent;
+    private String currentVisibleEvent;
 
     private OnEventClickListener onEventClickListener;
 
@@ -88,7 +88,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         return events.size();
     }
 
-    public void setCurrentVisibleEvent(Long eventId) {
+    public void setCurrentVisibleEvent(String eventId) {
         this.currentVisibleEvent = eventId;
     }
 

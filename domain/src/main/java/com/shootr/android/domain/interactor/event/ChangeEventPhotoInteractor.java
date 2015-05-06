@@ -24,7 +24,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
     private final EventRepository localEventRepository;
     private final EventRepository remoteEventRepository;
 
-    private Long idEvent;
+    private String idEvent;
     private File photoFile;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -40,7 +40,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void changeEventPhoto(Long idEvent, File photoFile, Callback callback, ErrorCallback errorCallback) {
+    public void changeEventPhoto(String idEvent, File photoFile, Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.photoFile = photoFile;
         this.callback = callback;

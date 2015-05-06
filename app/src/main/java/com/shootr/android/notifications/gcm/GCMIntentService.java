@@ -84,7 +84,7 @@ public class GCMIntentService extends IntentService {
     }
 
     private void receivedStatusChanged(JSONObject parameters) throws JSONException {
-        Long idUser = parameters.getLong(ID_USER);
+        String idUser = parameters.getString(ID_USER);
         String status = parameters.getString(STATUS);
 
         User user = localUserRepository.getUserById(idUser);
@@ -92,8 +92,8 @@ public class GCMIntentService extends IntentService {
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
-        Long idShot = parameters.getLong(ID_SHOT);
-        Long idUser = parameters.getLong(ID_USER);
+        String idShot = parameters.getString(ID_SHOT);
+        String idUser = parameters.getString(ID_USER);
         ShotEntity shot = service.getShotById(idShot);
         UserEntity user = userManager.getUserByIdUser(idUser);
         if (shot != null && user != null) {
@@ -105,7 +105,7 @@ public class GCMIntentService extends IntentService {
     }
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {
-        Long idUser = parameters.getLong("idUser");
+        String idUser = parameters.getString("idUser");
         UserEntity user = service.getUserByIdUser(idUser);
         UserModel userModel = userEntityModelMapper.toUserModel(user, null, false);
         followNotificationManager.sendNewFollowerNotification(userModel);

@@ -32,7 +32,7 @@ public class ProfileEditPresenter implements Presenter {
     private final JobManager jobManager;
 
     private UserModel currentUserModel;
-    private Long teamIdDidChange;
+    private String teamIdDidChange;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
@@ -73,7 +73,7 @@ public class ProfileEditPresenter implements Presenter {
         this.saveUpdatedProfile(updatedUserModel);
     }
 
-    public void changeTeam(long teamId, String teamName) {
+    public void changeTeam(String teamId, String teamName) {
         teamIdDidChange = teamId;
         profileEditView.setTeam(teamName);
     }

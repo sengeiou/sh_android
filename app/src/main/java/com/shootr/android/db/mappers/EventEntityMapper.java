@@ -23,8 +23,6 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.USERNAME, eventEntity.getUserName());
         contentValues.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity.getBeginDate()!=null ? eventEntity.getBeginDate().getTime() : null);
         contentValues.put(DatabaseContract.EventTable.END_DATE, eventEntity.getEndDate()!=null ? eventEntity.getEndDate().getTime() : null);
-        contentValues.put(DatabaseContract.EventTable.ID_LOCAL_TEAM, eventEntity.getIdLocalTeam());
-        contentValues.put(DatabaseContract.EventTable.ID_VISITOR_TEAM, eventEntity.getIdVisitorTeam());
         contentValues.put(DatabaseContract.EventTable.TITLE, eventEntity.getTitle());
         contentValues.put(DatabaseContract.EventTable.PHOTO, eventEntity.getPhoto());
         contentValues.put(DatabaseContract.EventTable.TIMEZONE, eventEntity.getTimezone());
@@ -39,14 +37,10 @@ public class EventEntityMapper extends GenericMapper{
     }
 
     private void fillEventEntity(Map<String, Object> dto, EventEntity eventEntity) {
-        eventEntity.setIdEvent((Number) dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
-          : ((Number) dto.get(DatabaseContract.EventTable.ID_EVENT)).longValue());
-        eventEntity.setIdUser((Number) dto.get(DatabaseContract.EventTable.ID_USER) == null ? null
-          : ((Number) dto.get(DatabaseContract.EventTable.ID_USER)).longValue());
-        eventEntity.setIdLocalTeam((Number) dto.get(DatabaseContract.EventTable.ID_LOCAL_TEAM) == null ? null
-          : ((Number) dto.get(DatabaseContract.EventTable.ID_LOCAL_TEAM)).longValue());
-        eventEntity.setIdVisitorTeam((Number) dto.get(DatabaseContract.EventTable.ID_VISITOR_TEAM) == null ? null
-          : ((Number) dto.get(DatabaseContract.EventTable.ID_VISITOR_TEAM)).longValue());
+        eventEntity.setIdEvent(dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
+          : ((String)(dto.get(DatabaseContract.EventTable.ID_EVENT))));
+        eventEntity.setIdUser(dto.get(DatabaseContract.EventTable.ID_USER) == null ? null
+          : ((String)(dto.get(DatabaseContract.EventTable.ID_USER))));
         eventEntity.setTitle((String) dto.get(DatabaseContract.EventTable.TITLE) == null ? null
           : (String) dto.get(DatabaseContract.EventTable.TITLE));
         eventEntity.setUserName((String) dto.get(DatabaseContract.EventTable.USERNAME) == null ? null
@@ -59,19 +53,15 @@ public class EventEntityMapper extends GenericMapper{
           : (String) dto.get(DatabaseContract.EventTable.TAG));
         eventEntity.setBeginDate(dto.get(DatabaseContract.EventTable.BEGIN_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
-        eventEntity.setEndDate(dto.get(DatabaseContract.EventTable.END_DATE) == null ? null
-          : new Date((Long) dto.get(DatabaseContract.EventTable.END_DATE)));
-        setSynchronizedfromDto(dto, eventEntity);
+        eventEntity.setEndDate(new Date(eventEntity.getBeginDate().getTime()+(1000*60*60*2)));
+        setSynchronizedfromDto(dto,eventEntity);
     }
 
-    public  Map<String, Object> toDto(EventEntity eventEntity) {
-        Map<String,Object> dto = new HashMap<>();
+    public Map<String, Object> toDto(EventEntity eventEntity) {
+        Map<String, Object> dto = new HashMap<>();
         dto.put(DatabaseContract.EventTable.ID_EVENT, eventEntity == null ? null : eventEntity.getIdEvent());
         dto.put(DatabaseContract.EventTable.ID_USER, eventEntity == null ? null : eventEntity.getIdUser());
         dto.put(DatabaseContract.EventTable.USERNAME, eventEntity == null ? null : eventEntity.getUserName());
-        dto.put(DatabaseContract.EventTable.ID_LOCAL_TEAM, eventEntity == null ? null : eventEntity.getIdLocalTeam());
-        dto.put(DatabaseContract.EventTable.ID_VISITOR_TEAM,
-          eventEntity == null ? null : eventEntity.getIdVisitorTeam());
         dto.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity == null ? null : eventEntity.getBeginDate());
         dto.put(DatabaseContract.EventTable.END_DATE, eventEntity == null ? null : eventEntity.getEndDate());
         dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
@@ -91,11 +81,9 @@ public class EventEntityMapper extends GenericMapper{
     }
 
     private void fillEventEntity(Cursor c, EventEntity eventEntity) {
-        eventEntity.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_EVENT)));
-        eventEntity.setIdUser(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_USER)));
+        eventEntity.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.EventTable.ID_EVENT)));
+        eventEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.EventTable.ID_USER)));
         eventEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.EventTable.USERNAME)));
-        eventEntity.setIdLocalTeam(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_LOCAL_TEAM)));
-        eventEntity.setIdVisitorTeam(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_VISITOR_TEAM)));
         eventEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TITLE)));
         eventEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.EventTable.PHOTO)));
         eventEntity.setTimezone(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TIMEZONE)));

@@ -36,7 +36,7 @@ public class WatchingRequestModelMapper {
 
     public WatchingRequestModel toWatchingRequestModel(EventEntity eventEntity, List<UserEntity> userEntities) {
         WatchingRequestModel watchingRequestModel = new WatchingRequestModel();
-        watchingRequestModel.setEventId(eventEntity.getIdEvent());
+        watchingRequestModel.setEventId(eventEntity.getIdEvent().toString());
         watchingRequestModel.setTitle(getTitle(eventEntity));
         watchingRequestModel.setSubtitle(getSubtitle(userEntities, eventEntity));
         watchingRequestModel.setEventDate(eventEntity.getBeginDate().getTime());

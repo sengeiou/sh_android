@@ -108,7 +108,7 @@ public class ProfileFragment extends BaseFragment {
     //endregion
 
     // Args
-    Long idUser;
+    String idUser;
 
     UserModel user;
     private View.OnClickListener avatarClickListener;
@@ -117,7 +117,7 @@ public class ProfileFragment extends BaseFragment {
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
 
-    public static ProfileFragment newInstance(Long idUser) {
+    public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
         //TODO  pasar idUser
@@ -157,7 +157,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void injectArguments() {
         Bundle arguments = getArguments();
-        idUser = (Long) arguments.getSerializable(ARGUMENT_USER);
+        idUser = (String) arguments.getSerializable(ARGUMENT_USER);
     }
 
     @Override
@@ -376,9 +376,9 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<Long, Boolean> result = event.getResult();
+        Pair<String, Boolean> result = event.getResult();
         if (result != null) {
-            Long idUserFromResult = result.first;
+            String idUserFromResult = result.first;
             Boolean following = result.second;
             if (idUserFromResult.equals(this.idUser)) {
                 followButton.setFollowing(following);

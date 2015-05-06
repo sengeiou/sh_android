@@ -2,7 +2,6 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.manager.EventManager;
-import com.shootr.android.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -30,7 +29,7 @@ public class DatabaseEventSearchDataSource implements EventSearchDataSource {
         eventManager.deleteDefaultEventSearch();
     }
 
-    @Override public EventSearchEntity getEventResult(Long idEvent) {
+    @Override public EventSearchEntity getEventResult(String idEvent) {
         return eventManager.getEventSearchResultById(idEvent);
     }
 }

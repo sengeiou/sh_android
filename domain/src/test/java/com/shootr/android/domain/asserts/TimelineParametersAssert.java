@@ -38,7 +38,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
      * @return this assertion object.
      * @throws AssertionError - if the actual TimelineParameters's eventAuthorId is not equal to the given one.
      */
-    public TimelineParametersAssert hasEventAuthorId(Long eventAuthorId) {
+    public TimelineParametersAssert hasEventAuthorId(String eventAuthorId) {
         // check that actual TimelineParameters we want to make assertions on is not null.
         isNotNull();
 
@@ -46,7 +46,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected eventAuthorId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Long actualEventAuthorId = actual.getEventAuthorId();
+        String actualEventAuthorId = actual.getEventAuthorId();
         if (!Objects.areEqual(actualEventAuthorId, eventAuthorId)) {
             failWithMessage(assertjErrorMessage, actual, eventAuthorId, actualEventAuthorId);
         }
@@ -76,7 +76,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
      * @return this assertion object.
      * @throws AssertionError - if the actual TimelineParameters's eventId is not equal to the given one.
      */
-    public TimelineParametersAssert hasEventId(Long eventId) {
+    public TimelineParametersAssert hasEventId(String eventId) {
         // check that actual TimelineParameters we want to make assertions on is not null.
         isNotNull();
 
@@ -84,7 +84,7 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
         String assertjErrorMessage = "\nExpected eventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
         // null safe check
-        Long actualEventId = actual.getEventId();
+        String actualEventId = actual.getEventId();
         if (!Objects.areEqual(actualEventId, eventId)) {
             failWithMessage(assertjErrorMessage, actual, eventId, actualEventId);
         }
@@ -156,17 +156,17 @@ public class TimelineParametersAssert extends AbstractAssert<TimelineParametersA
     }
 
     /**
-     * Verifies that the actual TimelineParameters's userIds contains the given Long elements.
+     * Verifies that the actual TimelineParameters's userIds contains the given String elements.
      *
      * @param userIds the given elements that should be contained in actual TimelineParameters's userIds.
      * @return this assertion object.
-     * @throws AssertionError if the actual TimelineParameters's userIds does not contain all given Long elements.
+     * @throws AssertionError if the actual TimelineParameters's userIds does not contain all given String elements.
      */
-    public TimelineParametersAssert hasUserIds(Long... userIds) {
+    public TimelineParametersAssert hasUserIds(String... userIds) {
         // check that actual TimelineParameters we want to make assertions on is not null.
         isNotNull();
 
-        // check that given Long varargs is not null.
+        // check that given String varargs is not null.
         if (userIds == null) throw new AssertionError("Expecting userIds parameter not to be null.");
 
         // check with standard error message, to set another message call: info.overridingErrorMessage("my error message");

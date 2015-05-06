@@ -6,16 +6,16 @@ import javax.inject.Inject;
 public class UserAvatarUrlBuilder {
 
     private static final String SIZE_THUMBNAIL = "thumbnail";
-    private static final String URL_PATTERN = BuildConfig.RESOURCES_ENDPOINT_BASE + "users/%d/profileImages/profile.%s";
+    private static final String URL_PATTERN = BuildConfig.RESOURCES_ENDPOINT_BASE + "users/%s/profileImages/profile.%s";
 
     @Inject public UserAvatarUrlBuilder() {
     }
 
-    public String thumbnail(Long userId) {
+    public String thumbnail(String userId) {
         return getUrl(userId, SIZE_THUMBNAIL);
     }
 
-    private String getUrl(Long userId, String size) {
+    private String getUrl(String userId, String size) {
         return String.format(URL_PATTERN, userId, size);
     }
 }

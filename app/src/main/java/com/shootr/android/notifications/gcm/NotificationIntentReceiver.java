@@ -31,7 +31,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         } else if (action.equals(ACTION_OPEN_STATUS_CHANGED)) {
             context.startActivity(new Intent(context, EventsListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }else if(action.equals(ACTION_OPEN_PROFILE)){
-            Long idUser = intent.getExtras().getLong(ProfileContainerActivity.EXTRA_USER);
+            String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
             context.startActivity(
               ProfileContainerActivity.getIntent(context, idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }

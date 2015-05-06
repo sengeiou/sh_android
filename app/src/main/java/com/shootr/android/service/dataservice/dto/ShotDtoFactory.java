@@ -31,7 +31,7 @@ public class ShotDtoFactory {
 
     }
 
-    public GenericDto getSingleShotOperationDto(Long idShot) {
+    public GenericDto getSingleShotOperationDto(String idShot) {
         MetadataDto md = new MetadataDto.Builder()
                 .operation(ServiceConstants.OPERATION_RETRIEVE)
                 .entity(ShotTable.TABLE)
@@ -62,7 +62,7 @@ public class ShotDtoFactory {
 
     }
 
-    public GenericDto getLatestShotsFromIdUser(Long idUser, Long latestShotNumber) {
+    public GenericDto getLatestShotsFromIdUser(String idUser, Long latestShotNumber) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }
@@ -80,7 +80,7 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
     }
 
-    public GenericDto getRepliesOperationDto(Long shotId) {
+    public GenericDto getRepliesOperationDto(String shotId) {
         FilterDto repliesFilter = and(ShotTable.ID_SHOT_PARENT).isEqualTo(shotId) //
           .and(ShotTable.CSYS_MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
           .build();

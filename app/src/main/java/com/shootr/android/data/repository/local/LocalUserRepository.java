@@ -32,27 +32,27 @@ public class LocalUserRepository implements UserRepository {
         return transformUserEntitiesForPeople(userEntities);
     }
 
-    @Override public User getUserById(Long id) {
+    @Override public User getUserById(String id) {
         return userEntityMapper.transform(localUserDataSource.getUser(id),
           sessionRepository.getCurrentUserId(),
           isFollower(id),
           isFollowing(id));
     }
 
-    @Override public List<User> getUsersByIds(List<Long> ids) {
+    @Override public List<User> getUsersByIds(List<String> ids) {
         // TODO optimize with its own query
         List<User> users = new ArrayList<>(ids.size());
-        for (Long id : ids) {
+        for (String id : ids) {
             users.add(getUserById(id));
         }
         return users;
     }
 
-    @Override public boolean isFollower(Long userId) {
+    @Override public boolean isFollower(String userId) {
         return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
     }
 
-    @Override public boolean isFollowing(Long userId) {
+    @Override public boolean isFollowing(String userId) {
         return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
     }
 
@@ -64,7 +64,7 @@ public class LocalUserRepository implements UserRepository {
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
-        long currentUserId = sessionRepository.getCurrentUserId();
+        String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
             User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(currentUserId), isFollowing(currentUserId));
             userList.add(user);

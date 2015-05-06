@@ -59,7 +59,7 @@ public class ShootrPhotoService implements PhotoService {
         return parseShotImageResponse(response);
     }
 
-    @Override public String uploadEventImageAndGetUrl(File imageFile, Long idEvent) throws IOException {
+    @Override public String uploadEventImageAndGetUrl(File imageFile, String idEvent) throws IOException {
         Timber.d("Uploading image with file path %s", imageFile.getAbsolutePath());
         RequestBody body = buildEventRequestBody(imageFile, idEvent);
         Response response = executeEventImageRequest(body);
@@ -69,7 +69,7 @@ public class ShootrPhotoService implements PhotoService {
     private RequestBody buildRequestBody(File photoFile) {
         return new MultipartBuilder().type(MultipartBuilder.FORM)
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
-            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionRepository.getCurrentUserId())))
+            RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getCurrentUserId()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
             RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getSessionToken()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
@@ -77,12 +77,12 @@ public class ShootrPhotoService implements PhotoService {
           .build();
     }
 
-    private RequestBody buildEventRequestBody(File photoFile, Long idEvent) {
+    private RequestBody buildEventRequestBody(File photoFile, String idEvent) {
         return new MultipartBuilder().type(MultipartBuilder.FORM)
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
-            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionRepository.getCurrentUserId())))
+            RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getCurrentUserId()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idEvent\""),
-            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idEvent)))
+            RequestBody.create(MediaType.parse("text/plain"), idEvent))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
             RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getSessionToken()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
@@ -185,7 +185,7 @@ public class ShootrPhotoService implements PhotoService {
 
     private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
         ShootrPhotoUploadError
-          shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
+        shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
         Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.getErrorCode(),
           shootrError.getMessage());

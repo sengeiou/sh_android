@@ -17,7 +17,7 @@ public class GetRepliesFromShotInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
-    private Long shotId;
+    private String shotId;
     private Callback<List<Shot>> callback;
 
     @Inject
@@ -29,7 +29,7 @@ public class GetRepliesFromShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplies(Long shotId, Callback<List<Shot>> callback) {
+    public void loadReplies(String shotId, Callback<List<Shot>> callback) {
         this.shotId = shotId;
         this.callback = callback;
         interactorHandler.execute(this);

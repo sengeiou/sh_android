@@ -3,14 +3,14 @@ package com.shootr.android.ui.model;
 
 public class TeamModel {
 
-    private Long idTeam;
+    private String idTeam;
     private String name;
 
-    public Long getIdTeam() {
+    public String getIdTeam() {
         return idTeam;
     }
 
-    public void setIdTeam(Long idTeam) {
+    public void setIdTeam(String idTeam) {
         this.idTeam = idTeam;
     }
 

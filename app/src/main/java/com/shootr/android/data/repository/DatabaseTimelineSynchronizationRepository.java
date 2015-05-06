@@ -14,7 +14,7 @@ public class DatabaseTimelineSynchronizationRepository implements TimelineSynchr
     }
 
     @Override
-    public Long getEventTimelineRefreshDate(Long eventId) {
+    public Long getEventTimelineRefreshDate(String eventId) {
         return shotManager.getLastModifiedDateForEvent(eventId);
     }
 

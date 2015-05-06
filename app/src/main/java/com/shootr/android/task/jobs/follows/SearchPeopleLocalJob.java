@@ -59,7 +59,7 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user:users){
-            Long idUser = user.getIdUser();
+            String idUser = user.getIdUser();
             FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
             boolean isMe = idUser.equals(sessionRepository.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));

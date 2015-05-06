@@ -7,7 +7,7 @@ public interface SearchTeamView {
 
     void setCurrentSearchText(String searchText);
 
-    void deliverSelectedTeam(String teamName, Long teamId);
+    void deliverSelectedTeam(String teamName, String teamId);
 
     void renderResults(List<TeamModel> teams);
 

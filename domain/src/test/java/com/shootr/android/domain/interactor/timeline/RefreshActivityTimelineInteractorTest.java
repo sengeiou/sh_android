@@ -29,8 +29,8 @@ import static org.mockito.Mockito.when;
 
 public class RefreshActivityTimelineInteractorTest {
 
-    private static final Long EVENT_ID = 1L;
-    private static final Long EVENT_AUTHOR = 2L;
+    private static final String EVENT_ID = "event";
+    private static final String EVENT_AUTHOR = "author";
 
     private RefreshActivityTimelineInteractor interactor;
 
@@ -90,8 +90,8 @@ public class RefreshActivityTimelineInteractorTest {
         return timeline;
     }
 
-    private List<Long> dummyThreeUserList() {
-        return Arrays.asList(1L, 2L, 3L);
+    private List<String> dummyThreeUserList() {
+        return Arrays.asList("a", "b", "c");
     }
 
     static class SpyCallback implements Interactor.Callback<Timeline> {

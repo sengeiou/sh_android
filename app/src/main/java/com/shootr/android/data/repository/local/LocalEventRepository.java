@@ -23,7 +23,7 @@ public class LocalEventRepository implements EventRepository {
         this.eventEntityMapper = eventEntityMapper;
     }
 
-    @Override public Event getEventById(Long idEvent) {
+    @Override public Event getEventById(String idEvent) {
         EventEntity eventEntity = localEventDataSource.getEventById(idEvent);
         if (eventEntity == null) {
             eventEntity = fallbackOnSearchResults(idEvent);
@@ -31,7 +31,7 @@ public class LocalEventRepository implements EventRepository {
         return eventEntityMapper.transform(eventEntity);
     }
 
-    private EventEntity fallbackOnSearchResults(Long idEvent) {
+    private EventEntity fallbackOnSearchResults(String idEvent) {
         EventEntity eventEntity = localEventSearchDataSource.getEventResult(idEvent);
         localEventDataSource.putEvent(eventEntity);
         return eventEntity;

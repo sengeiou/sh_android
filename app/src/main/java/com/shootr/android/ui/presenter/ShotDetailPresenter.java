@@ -82,7 +82,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         shotDetailView.openImage(shot.getImage());
     }
 
-    public void avatarClick(Long userId) {
+    public void avatarClick(String userId) {
         shotDetailView.openProfile(userId);
     }
 

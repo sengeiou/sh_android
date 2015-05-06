@@ -31,7 +31,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     private final UserManager userManager;
     private final ShotEntityModelMapper shotEntityModelMapper;
 
-    private Long idUser;
+    private String idUser;
     private UserEntity user;
 
     @Inject public GetLatestShotsJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService service,
@@ -43,7 +43,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
         this.shotEntityModelMapper = shotEntityModelMapper;
     }
 
-    public void init(Long idUser){
+    public void init(String idUser){
         this.idUser = idUser;
     }
 

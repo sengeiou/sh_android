@@ -48,7 +48,7 @@ public class NewEventPresenter implements Presenter {
     private String preloadedTitle;
     private long preloadedStartDate;
     private EndDate preloadedEndDate;
-    private Long preloadedEventId;
+    private String preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
     private boolean notifyCreation;
@@ -67,10 +67,10 @@ public class NewEventPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, long optionalIdEventToEdit) {
+    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.suggestedEndDates = suggestedEndDates;
-        isNewEvent = optionalIdEventToEdit == 0L;
+        this.isNewEvent = optionalIdEventToEdit == null;
         if (isNewEvent) {
             this.setDefaultTimezone();
             this.setDefaultStartDateTime();
@@ -84,7 +84,7 @@ public class NewEventPresenter implements Presenter {
         this.setTimezone(TimeZone.getDefault());
     }
 
-    private void preloadEventToEdit(long optionalIdEventToEdit) {
+    private void preloadEventToEdit(String optionalIdEventToEdit) {
         getEventInteractor.loadEvent(optionalIdEventToEdit, new GetEventInteractor.Callback() {
             @Override public void onLoaded(Event event) {
                 setDefaultEventInfo(eventModelMapper.transform(event));
@@ -220,11 +220,11 @@ public class NewEventPresenter implements Presenter {
         sendEvent(null);
     }
 
-    private void editEvent(Long preloadedEventId) {
+    private void editEvent(String preloadedEventId) {
         sendEvent(preloadedEventId);
     }
 
-    private void sendEvent(Long preloadedEventId) {
+    private void sendEvent(String preloadedEventId) {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         long endTimestamp = realDateFromFakeTimezone(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         String title = filterTitle(newEventView.getEventTitle());

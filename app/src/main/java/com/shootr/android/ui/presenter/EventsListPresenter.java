@@ -67,7 +67,7 @@ public class EventsListPresenter implements Presenter {
         selectEvent(event.getIdEvent(), event.getTitle());
     }
 
-    private void selectEvent(final Long idEvent, String eventTitle) {
+    private void selectEvent(final String idEvent, String eventTitle) {
         selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
             @Override public void onLoaded(Event selectedEvent) {
                 onEventSelected(eventModelMapper.transform(selectedEvent));
@@ -116,7 +116,7 @@ public class EventsListPresenter implements Presenter {
         });
     }
 
-    public void eventCreated(Long eventId, String eventTitle) {
+    public void eventCreated(String eventId, String eventTitle) {
         selectEvent(eventId, eventTitle);
     }
 
@@ -130,7 +130,7 @@ public class EventsListPresenter implements Presenter {
         }
     }
 
-    private void setViewCurrentVisibleEvent(Long currentVisibleEventId) {
+    private void setViewCurrentVisibleEvent(String currentVisibleEventId) {
         eventsListView.setCurrentVisibleEventId(currentVisibleEventId);
     }
 

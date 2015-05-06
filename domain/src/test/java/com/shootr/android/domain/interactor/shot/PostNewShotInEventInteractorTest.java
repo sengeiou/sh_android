@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestBase {
 
-    private static final Long VISIBLE_EVENT_ID = 1L;
+    private static final String VISIBLE_EVENT_ID = "1L";
 
     @Mock EventRepository localEventRepository;
 
@@ -81,7 +81,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private Event visibleEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
+        event.setId(String.valueOf(VISIBLE_EVENT_ID));
         event.setTitle(EVENT_TITLE_STUB);
         event.setTag(EVENT_TAG_STUB);
         return event;
@@ -89,7 +89,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private User currentUserWatching() {
         User user = currentUser();
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
         return user;
     }
 }

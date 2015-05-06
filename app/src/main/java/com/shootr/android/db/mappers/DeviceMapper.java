@@ -12,8 +12,8 @@ public class DeviceMapper extends GenericMapper {
 
     public DeviceEntity fromCursor(Cursor c) {
         DeviceEntity device = new DeviceEntity();
-        device.setIdDevice(c.getLong(c.getColumnIndex(DatabaseContract.DeviceTable.ID_DEVICE)));
-        device.setIdUser(c.getLong(c.getColumnIndex(DatabaseContract.DeviceTable.ID_USER)));
+        device.setIdDevice(c.getString(c.getColumnIndex(DatabaseContract.DeviceTable.ID_DEVICE)));
+        device.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.DeviceTable.ID_USER)));
         device.setPlatform(c.getInt(c.getColumnIndex(DatabaseContract.DeviceTable.PLATFORM)));
         device.setToken(c.getString(c.getColumnIndex(DatabaseContract.DeviceTable.TOKEN)));
         device.setUniqueDevideID(c.getString(c.getColumnIndex(DatabaseContract.DeviceTable.UNIQUE_DEVICE_ID)));
@@ -38,8 +38,8 @@ public class DeviceMapper extends GenericMapper {
 
     public DeviceEntity fromDto(Map<String, Object> dto) {
         DeviceEntity device = new DeviceEntity();
-        device.setIdDevice(((Number) dto.get(DatabaseContract.DeviceTable.ID_DEVICE)).longValue());
-        device.setIdUser(((Number) dto.get(DatabaseContract.DeviceTable.ID_USER)).longValue());
+        device.setIdDevice((String)((dto.get(DatabaseContract.DeviceTable.ID_DEVICE))));
+        device.setIdUser((String)(dto.get(DatabaseContract.DeviceTable.ID_USER)));
         device.setPlatform(((Number) dto.get(DatabaseContract.DeviceTable.PLATFORM)).intValue());
         device.setToken((String) dto.get(DatabaseContract.DeviceTable.TOKEN));
         device.setUniqueDevideID((String) dto.get(DatabaseContract.DeviceTable.UNIQUE_DEVICE_ID));
@@ -50,7 +50,7 @@ public class DeviceMapper extends GenericMapper {
     }
 
     public Map<String, Object> toDto(DeviceEntity device) {
-        Map<String,Object> dto = new HashMap<>();
+        Map<String, Object> dto = new HashMap<>();
         dto.put(DatabaseContract.DeviceTable.ID_DEVICE, device == null ? null : device.getIdDevice());
         dto.put(DatabaseContract.DeviceTable.ID_USER, device == null ? null : device.getIdUser());
         dto.put(DatabaseContract.DeviceTable.PLATFORM, device == null ? null : device.getPlatform());

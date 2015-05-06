@@ -22,10 +22,10 @@ public class ShotQueueManager extends AbstractManager {
 
     public ShotQueueEntity saveShotQueue(ShotQueueEntity shotQueueEntity) {
         ContentValues contentValues = shotQueueCursorMapper.toContentValues(shotQueueEntity);
-        long id = getWritableDatabase().insertWithOnConflict(DatabaseContract.ShotQueueTable.TABLE,
-          null,
-          contentValues,
-          SQLiteDatabase.CONFLICT_REPLACE);
+        Long id = getWritableDatabase().insertWithOnConflict(DatabaseContract.ShotQueueTable.TABLE,
+                null,
+                contentValues,
+                SQLiteDatabase.CONFLICT_REPLACE);
         shotQueueEntity.setIdQueue(id);
         return shotQueueEntity;
     }

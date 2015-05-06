@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -41,6 +42,7 @@ public class EventsListInteractorTest {
     private static final Long NOW = 10000L;
     private static final Long SECONDS_AGO_31 = NOW - (31L * 1000);
     private static final Long SECONDS_AGO_29 = NOW - (29L * 1000);
+    private static final String ID_CURRENT_USER = "current_user";
 
     @Mock EventSearchRepository remoteEventSearchRepository;
     @Mock EventSearchRepository localEventSearchRepository;
@@ -68,6 +70,7 @@ public class EventsListInteractorTest {
           timeUtils);
 
         when(timeUtils.getCurrentTime()).thenReturn(NOW);
+        setupLocalRepositoryReturnsCurrentUser();
     }
 
     @Test public void shouldCallbackTwoEventResultsFirstWhenLocalRepositoryReturnsTwoEventResults() throws Exception {
@@ -197,5 +200,14 @@ public class EventsListInteractorTest {
         EventSearchResult result = new EventSearchResult();
         result.setEvent(new Event());
         return result;
+    }
+
+    private void setupLocalRepositoryReturnsCurrentUser() {
+        when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
+        when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUser());
+    }
+
+    private User currentUser() {
+        return new User();
     }
 }

@@ -35,8 +35,8 @@ public class ShootrTimelineServiceTest {
     private static final Long DATE_MIDDLE = 2L;
     private static final Long DATE_NEWER = 3L;
 
-    private static final Long VISIBLE_EVENT_ID = 1L;
-    private static final Long VISIBLE_EVENT_AUTHOR = 2L;
+    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String VISIBLE_EVENT_AUTHOR = "event_author";
     private static final Long VISIBLE_EVENT_REFRESH_DATE = 1000L;
 
     @Mock SessionRepository sessionRepository;

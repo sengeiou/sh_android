@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Shot {
 
-    private Long idShot;
+    private String idShot;
     private String comment;
     private String image;
     private ShotUserInfo userInfo;
@@ -13,15 +13,15 @@ public class Shot {
     private Date publishDate;
     private Long idQueue;
 
-    private Long parentShotId;
-    private Long parentShotUserId;
+    private String parentShotId;
+    private String parentShotUserId;
     private String parentShotUsername;
 
-    public Long getIdShot() {
+    public String getIdShot() {
         return idShot;
     }
 
-    public void setIdShot(Long idShot) {
+    public void setIdShot(String idShot) {
         this.idShot = idShot;
     }
 
@@ -112,19 +112,19 @@ public class Shot {
           '}';
     }
 
-    public Long getParentShotId() {
+    public String getParentShotId() {
         return parentShotId;
     }
 
-    public void setParentShotId(Long parentShotId) {
+    public void setParentShotId(String parentShotId) {
         this.parentShotId = parentShotId;
     }
 
-    public Long getParentShotUserId() {
+    public String getParentShotUserId() {
         return parentShotUserId;
     }
 
-    public void setParentShotUserId(Long parentShotUserId) {
+    public void setParentShotUserId(String parentShotUserId) {
         this.parentShotUserId = parentShotUserId;
     }
 
@@ -138,7 +138,7 @@ public class Shot {
 
     public static class ShotEventInfo {
 
-        private Long idEvent;
+        private String idEvent;
         private String eventTitle;
         private String eventTag;
 
@@ -158,11 +158,11 @@ public class Shot {
             this.eventTitle = eventTitle;
         }
 
-        public Long getIdEvent() {
+        public String getIdEvent() {
             return idEvent;
         }
 
-        public void setIdEvent(Long idEvent) {
+        public void setIdEvent(String idEvent) {
             this.idEvent = idEvent;
         }
 
@@ -193,7 +193,7 @@ public class Shot {
 
     public static class ShotUserInfo {
 
-        private Long idUser;
+        private String idUser;
         private String username;
         private String avatar;
 
@@ -213,11 +213,11 @@ public class Shot {
             this.username = username;
         }
 
-        public Long getIdUser() {
+        public String getIdUser() {
             return idUser;
         }
 
-        public void setIdUser(Long idUser) {
+        public void setIdUser(String idUser) {
             this.idUser = idUser;
         }
 

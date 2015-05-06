@@ -69,7 +69,7 @@ public class WatchNumberInteractorTest {
         List<User> oneUserWatchingAndOneNotWatching =
           Arrays.asList(newUserWatching(ID_USER_1), newUserNotWatching(ID_USER_2));
 
-        List<User> filteredUsers = interactor.filterUsersWatchingEvent(oneUserWatchingAndOneNotWatching, ID_EVENT);
+        List<User> filteredUsers = interactor.filterUsersWatchingEvent(oneUserWatchingAndOneNotWatching, String.valueOf(ID_EVENT));
 
         assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
         assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
@@ -78,7 +78,7 @@ public class WatchNumberInteractorTest {
     private User me() {
         User user = newUserWatching(ID_USER_ME);
         user.setMe(true);
-        user.setVisibleEventId(ID_EVENT);
+        user.setVisibleEventId(String.valueOf(ID_EVENT));
         return user;
     }
 
@@ -90,13 +90,13 @@ public class WatchNumberInteractorTest {
 
     private User newUserWatching(Long id) {
         User user = newUserNotWatching(id);
-        user.setVisibleEventId(ID_EVENT);
+        user.setVisibleEventId(String.valueOf(ID_EVENT));
         return user;
     }
 
     private User newUserNotWatching(Long id) {
         User user = new User();
-        user.setIdUser(id);
+        user.setIdUser(String.valueOf(id));
         return user;
     }
 

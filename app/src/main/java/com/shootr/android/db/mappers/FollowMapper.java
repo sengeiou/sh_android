@@ -15,8 +15,8 @@ public class FollowMapper extends GenericMapper {
 
     public FollowEntity fromCursor(Cursor c) {
         FollowEntity follow = new FollowEntity();
-        follow.setIdUser(c.getLong(c.getColumnIndex(ID_USER)));
-        follow.setFollowedUser(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER)));
+        follow.setIdUser(c.getString(c.getColumnIndex(ID_USER)));
+        follow.setFollowedUser(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
         setSynchronizedfromCursor(c,follow);
         return follow;
     }
@@ -32,14 +32,14 @@ public class FollowMapper extends GenericMapper {
 
     public FollowEntity fromDto(Map<String, Object> dto) {
         FollowEntity follow = new FollowEntity();
-        follow.setIdUser(((Number) dto.get(ID_USER)) == null ? null : ((Number) dto.get(ID_USER)).longValue());
-        follow.setFollowedUser(((Number) dto.get(ID_FOLLOWED_USER)) == null ? null: ((Number) dto.get(ID_FOLLOWED_USER)).longValue());
+        follow.setIdUser((String) dto.get(ID_USER));
+        follow.setFollowedUser((dto.get(ID_FOLLOWED_USER)) == null ? null: (String)dto.get(ID_FOLLOWED_USER));
         setSynchronizedfromDto(dto,follow);
         return follow;
     }
 
-    public  Map<String, Object> toDto(FollowEntity follow) {
-        Map<String,Object> dto = new HashMap<>();
+    public Map<String, Object> toDto(FollowEntity follow) {
+        Map<String, Object> dto = new HashMap<>();
         dto.put(ID_USER, follow == null ? null : follow.getIdUser());
         dto.put(ID_FOLLOWED_USER, follow == null ? null : follow.getFollowedUser());
         setSynchronizedtoDto(follow,dto);

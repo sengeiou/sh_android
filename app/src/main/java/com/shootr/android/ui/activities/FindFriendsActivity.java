@@ -372,8 +372,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<Long, Boolean> result = event.getResult();
-        Long idUser = result.first;
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
         Boolean following = result.second;
 
         List<UserModel> usersInList = adapter.getItems();

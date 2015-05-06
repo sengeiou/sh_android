@@ -13,5 +13,5 @@ public interface EventSearchDataSource {
 
     void deleteDefaultEvents();
 
-    EventSearchEntity getEventResult(Long idEvent);
+    EventSearchEntity getEventResult(String idEvent);
 }

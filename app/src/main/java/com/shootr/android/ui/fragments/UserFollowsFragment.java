@@ -66,7 +66,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @InjectView(R.id.userlist_empty) TextView emptyTextView;
 
     // Args
-    Long userId;
+    String userId;
     Integer followType;
 
     UserModel user;
@@ -76,15 +76,15 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     private UserListAdapter userListAdapter;
 
-    public static UserFollowsFragment newInstance(Long userId, Integer followType) {
+    public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
         fragment.setArguments(createArguments(userId, followType));
         return fragment;
     }
 
-    public static Bundle createArguments(Long userId, Integer followType) {
+    public static Bundle createArguments(String userId, Integer followType) {
         Bundle bundle = new Bundle();
-        bundle.putLong(ARGUMENT_USER_ID, userId);
+        bundle.putString(ARGUMENT_USER_ID, userId);
         bundle.putInt(ARGUMENT_FOLLOW_TYPE, followType);
         return bundle;
     }
@@ -100,7 +100,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void injectArguments() {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            userId = arguments.getLong(ARGUMENT_USER_ID);
+            userId = arguments.getString(ARGUMENT_USER_ID);
             followType = arguments.getInt(ARGUMENT_FOLLOW_TYPE);
         } else {
             Timber.w("UserFollowsFragment has null arguments, which might cause a NullPointerException");
@@ -251,8 +251,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        Pair<Long, Boolean> result = event.getResult();
-        Long idUser = result.first;
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
         Boolean following = result.second;
 
         List<UserModel> usersInList = userListAdapter.getItems();
@@ -277,7 +277,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             userModel.setName(bundleUser.getString("NAME"));
             userModel.setFavoriteTeamName(bundleUser.getString("FAVORITE_TEAM"));
             userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
-            userModel.setIdUser(bundleUser.getLong("ID_USER"));
+            userModel.setIdUser(bundleUser.getString("ID_USER"));
             List<UserModel> userModels = getAdapter().getItems();
             for(UserModel userM: userModels){
                 if(userM.getIdUser().equals(userModel.getIdUser())){

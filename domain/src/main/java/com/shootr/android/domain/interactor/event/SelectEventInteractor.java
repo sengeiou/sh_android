@@ -22,7 +22,7 @@ public class SelectEventInteractor implements Interactor {
     private final UserRepository remoteUserRepository;
     private final SessionRepository sessionRepository;
 
-    private Long idSelectedEvent;
+    private String idSelectedEvent;
     private Callback<Event> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
@@ -38,7 +38,7 @@ public class SelectEventInteractor implements Interactor {
     }
     //endregion
 
-    public void selectEvent(Long idEvent, Callback<Event> callback) {
+    public void selectEvent(String idEvent, Callback<Event> callback) {
         this.idSelectedEvent = idEvent;
         this.callback = callback;
         interactorHandler.execute(this);

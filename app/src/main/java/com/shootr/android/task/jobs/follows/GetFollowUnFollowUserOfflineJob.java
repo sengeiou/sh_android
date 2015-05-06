@@ -32,7 +32,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     private final SessionRepository sessionRepository;
     private final TimeUtils timeUtils;
 
-    private Long idUser;
+    private String idUser;
     private int followUnfollowType;
 
     @Inject
@@ -45,7 +45,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         this.timeUtils = timeUtils;
     }
 
-    public void init(Long idUser, int followUnfollowType){
+    public void init(String idUser, int followUnfollowType){
         this.idUser = idUser;
         this.followUnfollowType = followUnfollowType;
     }
@@ -61,7 +61,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         }
     }
 
-    private void followUser(Long idUserToFollow) {
+    private void followUser(String idUserToFollow) {
         if (!isFollowing(idUserToFollow)) {
             FollowEntity followWithUser = performFollow(idUserToFollow);
 
@@ -75,7 +75,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         }
     }
 
-    private void unfollowUser(Long idUserToUnfollow) {
+    private void unfollowUser(String idUserToUnfollow) {
         if (isFollowing(idUserToUnfollow)) {
             FollowEntity followNotFollowing = performUnfollow(idUserToUnfollow);
             saveFollowRelationship(followNotFollowing);
@@ -87,18 +87,18 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         }
     }
 
-    private FollowEntity performUnfollow(Long idUserToUnfollow) {
+    private FollowEntity performUnfollow(String idUserToUnfollow) {
         FollowEntity followWithUser = getExistingFollow(idUserToUnfollow);
         followWithUser.setCsysDeleted(timeUtils.getCurrentDate());
         followWithUser.setCsysSynchronized("D");
         return followWithUser;
     }
 
-    private void success(Long followingUserId, Boolean following) {
+    private void success(String followingUserId, Boolean following) {
         postSuccessfulEvent(new FollowUnFollowResultEvent(followingUserId, following));
     }
 
-    private UserEntity storeUserFollowed(Long idUserToFollow) {
+    private UserEntity storeUserFollowed(String idUserToFollow) {
         //TODO este método no tiene mucho sentido, la idea es que si el usuario seguido no existe en local lo guarde, pero
         //TODO dado que el job es offline sólo lo saca de local. O sea, no hará nada útil
         UserEntity userToFollow = getUser(idUserToFollow);
@@ -114,7 +114,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         followManager.saveFollow(followRelationshipWithUser);
     }
 
-    private FollowEntity performFollow(Long idUserToFollow) {
+    private FollowEntity performFollow(String idUserToFollow) {
         Date currentDate = timeUtils.getCurrentDate();
         FollowEntity follow = getExistingFollow(idUserToFollow);
         if (follow == null) {
@@ -134,21 +134,21 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     }
 
-    private FollowEntity getExistingFollow(Long idUserFollowing) {
+    private FollowEntity getExistingFollow(String idUserFollowing) {
         return followManager.getFollowByUserIds(currentUserId(), idUserFollowing);
     }
 
-    private UserEntity getUser(Long idUserToFollow) {
+    private UserEntity getUser(String idUserToFollow) {
         return userManager.getUserByIdUser(idUserToFollow);
         //TODO y qué pasa si no lo tengo y estoy offline? Eh? EH!!?
     }
 
-    private boolean isFollowing(Long idUserFollowing) {
+    private boolean isFollowing(String idUserFollowing) {
         int followRelationshipState = followManager.getFollowRelationshipState(currentUserId(), idUserFollowing);
         return followRelationshipState == FollowEntity.RELATIONSHIP_FOLLOWING || followRelationshipState == FollowEntity.RELATIONSHIP_BOTH;
     }
 
-    private long currentUserId() {
+    private String currentUserId() {
         return sessionRepository.getCurrentUserId();
     }
 
