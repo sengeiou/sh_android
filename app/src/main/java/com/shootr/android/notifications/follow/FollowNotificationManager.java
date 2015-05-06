@@ -16,18 +16,18 @@ public class FollowNotificationManager {
     private final Context context;
     private final AndroidNotificationManager androidNotificationManager;
     private final NotificationBuilderFactory notificationBuilderFactory;
-    private final PicassoWrapper picasso;
+
+    int lastNotificationId = 1;
 
     @Inject public FollowNotificationManager(Application context, AndroidNotificationManager androidNotificationManager,
-      NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
+      NotificationBuilderFactory notificationBuilderFactory) {
         this.context = context;
         this.androidNotificationManager = androidNotificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;
-        this.picasso = picasso;
     }
 
     public void sendNewFollowerNotification(UserModel user) {
         FollowerNotification notification = new FollowerNotification(context, notificationBuilderFactory, user);
-        androidNotificationManager.notify(notification, NOTIFICATION_TAG, Integer.parseInt(user.getIdUser()));
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, lastNotificationId++);
     }
 }

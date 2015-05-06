@@ -108,7 +108,7 @@ public class FollowManager extends AbstractManager{
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                userIds.add(String.valueOf(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER))));
+                userIds.add(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
                 c.moveToNext();
             }
         }
