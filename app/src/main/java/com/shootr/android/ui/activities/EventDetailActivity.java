@@ -303,6 +303,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (item.getItemId() == R.id.menu_edit) {
             presenter.editEventClick();
             return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
