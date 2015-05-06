@@ -11,6 +11,7 @@ import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -33,6 +34,7 @@ import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -66,8 +68,8 @@ public class EventDetailPresenterTest {
     @Mock
     SessionRepository sessionRepository;
 
-    private EventModelMapper eventModelMapper;
-    private UserModelMapper userModelMapper;
+    EventModelMapper eventModelMapper;
+    UserModelMapper userModelMapper;
 
     @Mock SharedPreferences sharedPreferences;
 
@@ -133,7 +135,7 @@ public class EventDetailPresenterTest {
                 callback.onLoaded(eventInfo);
                 return null;
             }
-        }).when(eventInfoInteractor).obtainVisibleEventInfo(any(VisibleEventInfoInteractor.Callback.class));
+        }).when(eventInfoInteractor).obtainEventInfo(anyString(), any(VisibleEventInfoInteractor.Callback.class));
     }
 
     private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
