@@ -25,7 +25,6 @@ public interface ShootrError {
 
     String ERROR_CODE_SEARCH_TOO_SHORT = "???1";
 
-    String ERROR_CODE_TEAM_ID_INVALID = "U015";
     String ERROR_CODE_SHOT_TEXT_DUPLICATED = "CS002";
 
     String ERROR_CODE_EVENT_TITLE_TOO_SHORT = "E002";

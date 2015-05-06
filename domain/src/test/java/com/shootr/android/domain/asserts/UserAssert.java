@@ -74,52 +74,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
   }
 
   /**
-   * Verifies that the actual User's favoriteTeamId is equal to the given one.
-   * @param favoriteTeamId the given favoriteTeamId to compare the actual User's favoriteTeamId to.
-   * @return this assertion object.
-   * @throws AssertionError - if the actual User's favoriteTeamId is not equal to the given one.
-   */
-  public UserAssert hasFavoriteTeamId(Long favoriteTeamId) {
-    // check that actual User we want to make assertions on is not null.
-    isNotNull();
-
-    // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpected favoriteTeamId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-    
-    // null safe check
-    String actualFavoriteTeamId = actual.getFavoriteTeamId();
-    if (!Objects.areEqual(actualFavoriteTeamId, favoriteTeamId)) {
-      failWithMessage(assertjErrorMessage, actual, favoriteTeamId, actualFavoriteTeamId);
-    }
-
-    // return the current assertion for method chaining
-    return this;
-  }
-
-  /**
-   * Verifies that the actual User's favoriteTeamName is equal to the given one.
-   * @param favoriteTeamName the given favoriteTeamName to compare the actual User's favoriteTeamName to.
-   * @return this assertion object.
-   * @throws AssertionError - if the actual User's favoriteTeamName is not equal to the given one.
-   */
-  public UserAssert hasFavoriteTeamName(String favoriteTeamName) {
-    // check that actual User we want to make assertions on is not null.
-    isNotNull();
-
-    // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpected favoriteTeamName of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-    
-    // null safe check
-    String actualFavoriteTeamName = actual.getFavoriteTeamName();
-    if (!Objects.areEqual(actualFavoriteTeamName, favoriteTeamName)) {
-      failWithMessage(assertjErrorMessage, actual, favoriteTeamName, actualFavoriteTeamName);
-    }
-
-    // return the current assertion for method chaining
-    return this;
-  }
-
-  /**
    * Verifies that the actual User is follower.
    * @return this assertion object.
    * @throws AssertionError - if the actual User is not follower.

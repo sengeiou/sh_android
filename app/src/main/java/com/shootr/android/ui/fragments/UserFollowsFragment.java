@@ -275,7 +275,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             userModel.setPhoto(bundleUser.getString("PHOTO"));
             userModel.setUsername(bundleUser.getString("USER_NAME"));
             userModel.setName(bundleUser.getString("NAME"));
-            userModel.setFavoriteTeamName(bundleUser.getString("FAVORITE_TEAM"));
             userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
             userModel.setIdUser(bundleUser.getString("ID_USER"));
             List<UserModel> userModels = getAdapter().getItems();

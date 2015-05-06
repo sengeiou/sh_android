@@ -83,7 +83,6 @@ public class ProfileFragment extends BaseFragment {
     @InjectView(R.id.profile_name) TextView nameTextView;
     @InjectView(R.id.profile_bio) TextView bioTextView;
     @InjectView(R.id.profile_website) TextView websiteTextView;
-    @InjectView(R.id.profile_team) TextView teamTextView;
     @InjectView(R.id.profile_avatar) ImageView avatarImageView;
 
     @InjectView(R.id.profile_watching_container) View watchingContainerView;
@@ -433,12 +432,6 @@ public class ProfileFragment extends BaseFragment {
             bioTextView.setVisibility(View.VISIBLE);
         } else {
             bioTextView.setVisibility(View.GONE);
-        }
-        String favTeamName = user.getFavoriteTeamName();
-        if (favTeamName != null) {
-            teamTextView.setText(favTeamName);
-        } else {
-            teamTextView.setText(R.string.profile_team_name_private);
         }
         setMainButtonStatus(user.getRelationship());
     }

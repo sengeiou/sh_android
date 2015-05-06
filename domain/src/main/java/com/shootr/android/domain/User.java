@@ -5,8 +5,6 @@ import java.util.Comparator;
 public class User {
 
     private String idUser;
-    private String favoriteTeamName;
-    private String favoriteTeamId;
     private String username;
     private String name;
     private String email;
@@ -32,22 +30,6 @@ public class User {
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
-    }
-
-    public String getFavoriteTeamName() {
-        return favoriteTeamName;
-    }
-
-    public void setFavoriteTeamName(String favoriteTeamName) {
-        this.favoriteTeamName = favoriteTeamName;
-    }
-
-    public String getFavoriteTeamId() {
-        return favoriteTeamId;
-    }
-
-    public void setFavoriteTeamId(String favoriteTeamId) {
-        this.favoriteTeamId = favoriteTeamId;
     }
 
     public String getUsername() {

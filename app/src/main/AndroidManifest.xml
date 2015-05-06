@@ -137,16 +137,6 @@
         </activity>
 
         <activity
-          android:name="com.shootr.android.ui.activities.SearchTeamActivity"
-          android:label="@string/activity_search_team_hint"
-          android:parentActivityName="com.shootr.android.ui.activities.ProfileContainerActivity"
-          android:theme="@style/ShootrTheme.Closable">
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.ProfileContainerActivity" />
-        </activity>
-
-        <activity
           android:name="com.shootr.android.ui.activities.ShotDetailActivity"
           android:parentActivityName=".ui.activities.EventTimelineActivity"
           >

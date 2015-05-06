@@ -5,8 +5,6 @@ import java.io.Serializable;
 public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
 
     private String idUser;
-    private String favoriteTeamId;
-    private String favoriteTeamName;
     private String sessionToken;
     private String userName;
     private String email;
@@ -32,22 +30,6 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
-    }
-
-    public String getFavoriteTeamId() {
-        return favoriteTeamId;
-    }
-
-    public void setFavoriteTeamId(String favoriteTeamId) {
-        this.favoriteTeamId = favoriteTeamId;
-    }
-
-    public String getFavoriteTeamName() {
-        return favoriteTeamName;
-    }
-
-    public void setFavoriteTeamName(String favoriteTeamName) {
-        this.favoriteTeamName = favoriteTeamName;
     }
 
     public String getSessionToken() {
