@@ -157,8 +157,12 @@ public class ShootrDataService implements ShootrService {
             follows.add(followEntity);
             userIds.add(followEntity.getIdUser());
         }
+        List<UserEntity> usersById = new ArrayList<>();
+        if(userIds.size()>0){
+            usersById = getUsersById(userIds);
+        }
         //TODO order
-        return getUsersById(userIds);
+        return usersById;
     }
 
     @Override
