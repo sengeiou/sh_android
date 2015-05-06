@@ -20,10 +20,6 @@ public interface ProfileEditView {
 
     String getWebsite();
 
-    String getTeam();
-
-    void setTeam(String teamName);
-
     void showUsernameValidationError(String errorMessage);
 
     void showNameValidationError(String errorMessage);

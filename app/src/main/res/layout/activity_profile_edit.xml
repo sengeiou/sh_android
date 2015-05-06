@@ -58,29 +58,8 @@
                   android:inputType="textNoSuggestions"
                   android:lines="1"
                   android:maxLength="20"
-                  android:nextFocusDown="@+id/profile_edit_team"
-                  android:singleLine="true" />
-
-            </com.shootr.android.ui.widgets.FloatLabelLayout>
-
-            <com.shootr.android.ui.widgets.FloatLabelLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="16dp"
-              android:layout_marginRight="16dp"
-              android:layout_marginTop="16dp"
-              app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
-
-                <TextView
-                  android:id="@+id/profile_edit_team"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:background="?editTextBackground"
-                  android:hint="@string/activity_edit_profile_team_hint"
                   android:nextFocusDown="@+id/profile_edit_website"
-                  android:singleLine="true"
-                  android:textColor="?editTextColor"
-                  android:textSize="18sp" />
+                  android:singleLine="true" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
 

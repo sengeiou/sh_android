@@ -32,17 +32,12 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
-    private static final int REQUEST_SEARCH_TEAM = 1;
-
-    public static final String EXTRA_TEAM_NAME = "team_name";
-    public static final String EXTRA_TEAM_ID = "team_id";
 
     @Inject ProfileEditPresenter presenter;
 
     @InjectView(R.id.scroll) ScrollView scroll;
     @InjectView(R.id.profile_edit_name) TextView name;
     @InjectView(R.id.profile_edit_username) TextView username;
-    @InjectView(R.id.profile_edit_team) TextView team;
     @InjectView(R.id.profile_edit_website) TextView website;
     @InjectView(R.id.profile_edit_bio) TextView bio;
     private MenuItem menuItemDone;
@@ -101,19 +96,9 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         presenter.pause();
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SEARCH_TEAM && resultCode == RESULT_OK) {
-            String teamName = data.getStringExtra(EXTRA_TEAM_NAME);
-            long teamId = data.getLongExtra(EXTRA_TEAM_ID, 0);
-            presenter.changeTeam(String.valueOf(teamId), teamName);
-        }
-    }
-
     @Override public void renderUserInfo(UserModel userModel) {
         name.setText(userModel.getName());
         username.setText(userModel.getUsername());
-        team.setText(userModel.getFavoriteTeamName());
         website.setText(userModel.getWebsite());
         bio.setText(userModel.getBio());
     }
@@ -145,14 +130,6 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public String getWebsite() {
         return website.getText().toString();
-    }
-
-    @Override public String getTeam() {
-        return team.getText().toString();
-    }
-
-    @Override public void setTeam(String teamName) {
-        team.setText(teamName);
     }
 
     @Override public void showUsernameValidationError(String errorMessage) {

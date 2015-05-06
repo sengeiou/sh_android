@@ -171,18 +171,6 @@
       tools:text="Ignasi de Borbón y todos los Santos" />
 
     <TextView
-      android:id="@+id/profile_team"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/profile_name"
-      android:layout_below="@+id/profile_name"
-      android:ellipsize="end"
-      android:maxLines="1"
-      android:visibility="gone"
-      android:textColor="@color/gray_40"
-      tools:text="Sevilla FC" />
-
-    <TextView
       android:id="@+id/profile_bio"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -198,7 +186,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/profile_name"
-      android:layout_below="@+id/profile_team"
+      android:layout_below="@+id/profile_name"
       android:background="?android:selectableItemBackground"
       android:clickable="true"
       android:ellipsize="end"

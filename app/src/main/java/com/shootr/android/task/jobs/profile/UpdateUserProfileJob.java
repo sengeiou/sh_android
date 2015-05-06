@@ -149,8 +149,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
         updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
-        updatedUserEntity.setFavoriteTeamId(null);
-        updatedUserEntity.setFavoriteTeamName(updatedUserModel.getFavoriteTeamName());
         return updatedUserEntity;
     }
 
@@ -171,7 +169,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         validateName();
         validateWebsite();
         validateBio();
-        validateTeam();
     }
 
     private void validateWebsite() {
@@ -188,20 +185,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateBio() {
         addErrorsIfAny(new BioValidator(updatedUserModel).validate());
-    }
-
-    private void validateTeam() {
-        //TODO: Hardcoded porque hay que eliminarlo
-        Long teamId = 0L;
-        if (teamId != null && teamId <= 0) {
-            updatedUserModel.setFavoriteTeamId(null);
-            teamId = null;
-        }
-        String teamName = updatedUserModel.getFavoriteTeamName();
-        if (teamName == null && teamId != null) {
-            Timber.w("Trying to send a teamId %d with a null teamName. Setting id to null just in case.", teamId);
-            updatedUserModel.setFavoriteTeamId(null);
-        }
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {

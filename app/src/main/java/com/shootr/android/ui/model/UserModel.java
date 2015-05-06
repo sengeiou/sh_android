@@ -6,8 +6,6 @@ import timber.log.Timber;
 public class UserModel implements Serializable, Cloneable {
 
     private String idUser;
-    private String favoriteTeamName;
-    private String favoriteTeamId;
     private String userName;
     private String name;
     private String photo;
@@ -29,27 +27,12 @@ public class UserModel implements Serializable, Cloneable {
         this.points = points;
     }
 
-    public String getFavoriteTeamId() {
-        return favoriteTeamId;
-    }
-
-    public void setFavoriteTeamId(String favoriteTeamId) {
-        this.favoriteTeamId = favoriteTeamId;
-    }
     public String getIdUser() {
         return idUser;
     }
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
-    }
-
-    public String getFavoriteTeamName() {
-        return favoriteTeamName;
-    }
-
-    public void setFavoriteTeamName(String favoriteTeamName) {
-        this.favoriteTeamName = favoriteTeamName;
     }
 
     public String getUsername() {
