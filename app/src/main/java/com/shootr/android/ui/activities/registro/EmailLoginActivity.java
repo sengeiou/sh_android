@@ -58,8 +58,10 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
 
     @OnTextChanged({R.id.email_login_username_email, R.id.email_login_password})
-    public void inputTextChanged(){
-        presenter.inputTextChanged();
+    public void inputTextChanged() {
+        if (presenter.isInitialized()) {
+            presenter.inputTextChanged();
+        }
     }
 
     @OnClick(R.id.email_login_button)
