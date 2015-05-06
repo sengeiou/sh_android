@@ -152,7 +152,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
             UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
             synchedEntity.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
             localUserDataSource.putUser(synchedEntity);
-            Timber.d("Synchronized User entity: idUser=%d", userEntity.getIdUser());
+            Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
         }
     }
     //endregion
