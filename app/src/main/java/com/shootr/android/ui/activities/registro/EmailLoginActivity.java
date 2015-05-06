@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities.registro;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -15,7 +16,7 @@ import com.dd.CircularProgressButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.android.ui.activities.TimelineActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.presenter.EmailLoginPresenter;
 import com.shootr.android.ui.views.EmailLoginView;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         /* no-op */
     }
 
-    @Override protected  void initializeViews(){
+    @Override protected  void initializeViews(Bundle savedInstanceState){
         ButterKnife.inject(this);
         setupSuggestedEmails();
     }
@@ -68,7 +69,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     public void goToTimeline(){
         finish();
-        Intent i = new Intent(this,TimelineActivity.class);
+        Intent i = new Intent(this, EventsListActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }

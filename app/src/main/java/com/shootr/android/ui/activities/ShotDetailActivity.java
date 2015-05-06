@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -59,7 +60,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         toolbarDecorator.hideTitle();
     }
 
-    @Override protected void initializeViews() {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         setupPhotoPicker();
         setupNewShotBarDelegate(extractShotFromIntent());

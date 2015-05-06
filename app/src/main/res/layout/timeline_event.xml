@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+    <FrameLayout android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1">
+
+        <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+            <com.shootr.android.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:listitem="@layout/item_list_shot" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <include layout="@layout/include_timeline_empty" />
+
+        <include layout="@layout/include_shadow_above_shot_bar" />
+    </FrameLayout>
+
+    <include layout="@layout/include_new_shot_bar" />
+
+</LinearLayout>

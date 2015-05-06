@@ -21,16 +21,13 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     private final EventEntityMapper eventEntityMapper;
     private final EventDataSource localEventDataSource;
     private final EventDataSource remoteEventDataSource;
-    private final EventSearchDataSource cachedEventSearchDataSource;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
     @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper, @Local EventDataSource localEventDataSource,
-      @Remote EventDataSource remoteEventDataSource, @Cached EventSearchDataSource cachedEventSearchDataSource,
-      SyncableEventEntityFactory syncableEventEntityFactory) {
+      @Remote EventDataSource remoteEventDataSource, SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
-        this.cachedEventSearchDataSource = cachedEventSearchDataSource;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
@@ -63,7 +60,6 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         EventEntity remoteEventEntity = remoteEventDataSource.putEvent(currentOrNewEntity);
         markEntityAsSynchronized(remoteEventEntity);
         localEventDataSource.putEvent(remoteEventEntity);
-        invalidateEventListCache();
         return eventEntityMapper.transform(remoteEventEntity);
     }
 
@@ -79,9 +75,5 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
 
     @Override public void dispatchSync() {
         throw new RuntimeException("Method not implemented yet!");
-    }
-
-    private void invalidateEventListCache() {
-        ((CachedDataSource) cachedEventSearchDataSource).invalidate();
     }
 }

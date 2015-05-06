@@ -3,6 +3,7 @@ package com.shootr.android.ui.base;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import com.shootr.android.ShootrApplication;
+import dagger.ObjectGraph;
 
 public class BaseFragment extends Fragment {
 
@@ -16,7 +17,12 @@ public class BaseFragment extends Fragment {
 
     private void injectDependenciesOnFirstAttach() {
         if (mFistAttach) {
-            ShootrApplication.get(getActivity()).inject(this);
+            if (getActivity() instanceof BaseActivity) {
+                ((BaseActivity) getActivity()).inject(this);
+            } else {
+                //TODO delete this case when all activities have been migrated to BaseActivity
+                ShootrApplication.get(getActivity()).inject(this);
+            }
             mFistAttach = false;
         }
     }

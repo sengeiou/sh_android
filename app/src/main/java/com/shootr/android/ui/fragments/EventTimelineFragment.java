@@ -1,6 +1,5 @@
 package com.shootr.android.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -15,19 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
+import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -36,13 +33,10 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.presenter.EventSelectionPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
-import com.shootr.android.ui.views.EventSelectionView;
 import com.shootr.android.ui.views.NewShotBarView;
-import com.shootr.android.ui.views.NullEventSelectionView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.TimelineView;
@@ -57,13 +51,13 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class TimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, EventSelectionView, WatchNumberView{
+public class EventTimelineFragment extends BaseFragment
+  implements TimelineView, NewShotBarView, WatchNumberView{
 
-    private static final int REQUEST_SELECT_EVENT = 2;
+    public static final String EXTRA_EVENT_ID = "eventId";
+    public static final String EXTRA_EVENT_TITLE = "eventTitle";
 
     //region Fields
-    @Inject EventSelectionPresenter eventSelectionPresenter;
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
@@ -71,11 +65,8 @@ public class TimelineFragment extends BaseFragment
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
 
-    @InjectView(R.id.timeline_list) ListView listView;
-    @InjectView(R.id.new_shot_bar) View newShotView;
-    @InjectView(R.id.shot_bar_text) TextView newShotTextView;
+    @InjectView(R.id.timeline_shot_list) ListView listView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.exit_event_fab) FloatingActionButton exitEventFab;
 
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.shot_bar_drafts) View draftsButton;
@@ -94,10 +85,23 @@ public class TimelineFragment extends BaseFragment
     private View footerProgress;
     //endregion
 
+    public static EventTimelineFragment newInstance(Long eventId, String eventTitle) {
+        Bundle fragmentArguments = new Bundle();
+        fragmentArguments.putLong(EXTRA_EVENT_ID, eventId);
+        fragmentArguments.putString(EXTRA_EVENT_TITLE, eventTitle);
+        return newInstance(fragmentArguments);
+    }
+
+    public static EventTimelineFragment newInstance(Bundle fragmentArguments) {
+        EventTimelineFragment fragment = new EventTimelineFragment();
+        fragment.setArguments(fragmentArguments);
+        return fragment;
+    }
+
     //region Lifecycle methods
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.fragment_timeline, container, true);
+        View fragmentView = inflater.inflate(R.layout.timeline_event, container, false);
         ButterKnife.inject(this, fragmentView);
         return fragmentView;
     }
@@ -112,7 +116,6 @@ public class TimelineFragment extends BaseFragment
         ButterKnife.reset(this);
         timelinePresenter.setView(new NullTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
-        eventSelectionPresenter.setView(new NullEventSelectionView());
         watchNumberPresenter.setView(new NullWatchNumberView());
     }
 
@@ -124,12 +127,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SELECT_EVENT && resultCode == Activity.RESULT_OK) {
-            Long idEventSelected = data.getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
-            eventSelectionPresenter.onEventSelected(idEventSelected);
-        } else {
-            photoPickerController.onActivityResult(requestCode, resultCode, data);
-        }
+        photoPickerController.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -160,7 +158,6 @@ public class TimelineFragment extends BaseFragment
         super.onResume();
         timelinePresenter.resume();
         newShotBarPresenter.resume();
-        eventSelectionPresenter.resume();
         watchNumberPresenter.resume();
     }
 
@@ -168,17 +165,19 @@ public class TimelineFragment extends BaseFragment
         super.onPause();
         timelinePresenter.pause();
         newShotBarPresenter.pause();
-        eventSelectionPresenter.pause();
         watchNumberPresenter.pause();
     }
 
     private void initializeToolbar() {
-        //TODO So coupling. Much bad. Such ugly.
-        toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
-        toolbarDecorator.showDropdownIcon(true);
+        //FIXME So coupling. Much bad. Such ugly.
+        if (getActivity() instanceof BaseNavDrawerToolbarActivity) {
+            toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
+        } else {
+            toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
+        }
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                eventSelectionPresenter.selectEventClick();
+                //TODO go to top?
             }
         });
     }
@@ -186,7 +185,6 @@ public class TimelineFragment extends BaseFragment
     private void initializePresenters() {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
-        eventSelectionPresenter.initialize(this);
         watchNumberPresenter.initialize(this);
     }
 
@@ -305,17 +303,15 @@ public class TimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
-                    exitEventFab.hide();
+                    // going down
                 } else if (delta > 10) {
-                    exitEventFab.show();
+                    // going up
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -328,10 +324,9 @@ public class TimelineFragment extends BaseFragment
             timelinePresenter.showingLastShot(adapter.getLastShot());
         }
     }
-
     //endregion
 
-    @OnItemClick(R.id.timeline_list)
+    @OnItemClick(R.id.timeline_shot_list)
     public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
         Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
@@ -366,11 +361,6 @@ public class TimelineFragment extends BaseFragment
     @OnClick(R.id.shot_bar_drafts)
     public void openDrafts() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
-    }
-
-    @OnClick(R.id.exit_event_fab)
-    public void exitEventClick() {
-        eventSelectionPresenter.exitEventClick();
     }
 
     //region View methods
@@ -440,27 +430,6 @@ public class TimelineFragment extends BaseFragment
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
-    }
-
-    @Override public void showCurrentEventTitle(String eventTitle) {
-        toolbarDecorator.setTitle(eventTitle);
-    }
-
-    @Override public void showHallTitle() {
-        toolbarDecorator.setTitle(getString(R.string.timeline_hall_title));
-    }
-
-    @Override public void openEventSelectionView() {
-        Intent intent = new Intent(getActivity(), EventsListActivity.class);
-        startActivityForResult(intent, REQUEST_SELECT_EVENT);
-    }
-
-    @Override public void showExitButton() {
-        exitEventFab.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideExitButton() {
-        exitEventFab.setVisibility(View.GONE);
     }
 
     @Override public void showWatchingPeopleCount(Integer count) {

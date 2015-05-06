@@ -109,7 +109,15 @@ public class TimelineDtoFactory {
           or(ShotTable.ID_USER).isIn(parameters.getAllUserIds()) //
         ) //
           .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
-          .and(ShotTable.TYPE).isNotEqualTo(null) //
+          .and(ShotTable.TYPE).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
+              @Override public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
+                  if (parameters.includesHiddenSyncTriggers()) {
+                      return itemField.isNotEqualTo(null);
+                  } else {
+                      return itemField.isNotEqualTo(ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW);
+                  }
+              }
+          })
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED)

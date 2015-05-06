@@ -17,6 +17,7 @@
         <item name="toolbar">@style/ToolBar</item>
 
         <item name="bottomSheetStyle">@style/BottomSheetMaterial</item>
+        <item name="android:windowBackground">@color/white_backround</item>
     </style>
 
     <style name="ShootrTheme.Closable">

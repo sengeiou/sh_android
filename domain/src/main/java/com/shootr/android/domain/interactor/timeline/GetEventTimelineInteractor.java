@@ -6,12 +6,12 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -20,57 +20,62 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetOlderMainTimelineInteractor implements Interactor {
+public class GetEventTimelineInteractor implements Interactor {
 
-    private final SessionRepository sessionRepository;
+    //region Dependencies
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final ShotRepository remoteShotRepository;
+    private final SessionRepository sessionRepository;
+    private final ShotRepository localShotRepository;
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
-
-    private Long currentOldestDate;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetOlderMainTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetEventTimelineInteractor(InteractorHandler interactorHandler,
+                                              PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+                                              @Local ShotRepository localShotRepository,
+                                              @Local EventRepository localEventRepository,
+                                              @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
-        this.remoteShotRepository = remoteShotRepository;
+        this.localShotRepository = localShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
     }
+    //endregion
 
-    public void loadOlderMainTimeline(Long currentOldestDate, Callback callback, ErrorCallback errorCallback) {
-        this.currentOldestDate = currentOldestDate;
+    public void loadEventTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        try {
-            TimelineParameters timelineParameters = buildTimelineParameters();
-            List<Shot> olderShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
-            sortShotsByPublishDate(olderShots);
-            notifyTimelineFromShots(olderShots);
-        } catch (ShootrException error) {
-            notifyError(error);
+        loadLocalShots();
+    }
+
+    private void loadLocalShots() {
+        Event visibleEvent = getVisibleEvent();
+        if (visibleEvent != null) {
+            List<Shot> shots = loadLocalShots(buildParameters(visibleEvent));
+            shots = sortShotsByPublishDate(shots);
+            notifyTimelineFromShots(shots);
+        } else {
+            notifyError(new TimelineException("Can't load event timeline without visible event"));
         }
     }
 
-    private TimelineParameters buildTimelineParameters() {
-        TimelineParameters.Builder timelineParametersBuilder =
-          TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId());
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            timelineParametersBuilder.forEvent(visibleEvent);
-        }
-        timelineParametersBuilder.maxDate(currentOldestDate);
-        return timelineParametersBuilder.build();
+    private List<Shot> loadLocalShots(TimelineParameters timelineParameters) {
+        return localShotRepository.getShotsForTimeline(timelineParameters);
+    }
+
+    private TimelineParameters buildParameters(Event event) {
+        return TimelineParameters.builder()
+          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId())
+          .forEvent(event)
+          .build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
@@ -86,6 +91,14 @@ public class GetOlderMainTimelineInteractor implements Interactor {
         return ids;
     }
 
+    private Event getVisibleEvent() {
+        Long visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getVisibleEventId();
+        if (visibleEventId != null) {
+            return localEventRepository.getEventById(visibleEventId);
+        }
+        return null;
+    }
+
     //region Result
     private void notifyTimelineFromShots(List<Shot> shots) {
         Timeline timeline = buildTimeline(shots);
@@ -96,14 +109,6 @@ public class GetOlderMainTimelineInteractor implements Interactor {
         Timeline timeline = new Timeline();
         timeline.setShots(shots);
         return timeline;
-    }
-
-    private Event getVisibleEvent() {
-        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
-        }
-        return null;
     }
 
     private void notifyLoaded(final Timeline timeline) {
@@ -120,11 +125,6 @@ public class GetOlderMainTimelineInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
-    }
-
-    public interface Callback {
-
-        void onLoaded(Timeline timeline);
     }
     //endregion
 }

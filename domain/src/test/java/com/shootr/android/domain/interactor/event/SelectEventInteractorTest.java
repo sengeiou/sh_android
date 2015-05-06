@@ -47,7 +47,7 @@ public class SelectEventInteractorTest {
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock SelectEventInteractor.Callback dummyCallback;
+    @Mock Interactor.Callback<Event> dummyCallback;
 
     private SelectEventInteractor interactor;
 
@@ -100,13 +100,24 @@ public class SelectEventInteractorTest {
     }
 
     @Test
-    public void selectingCurrentEventDoesntNotifyUi() throws Exception {
+    public void selectingCurrentEventDoesNotifyUi() throws Exception {
         setupOldVisibleEvent();
         when(eventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
-        verify(dummyCallback, never()).onLoaded(anyLong());
+        verify(dummyCallback).onLoaded(anyEvent());
+    }
+
+    @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentEvent() throws Exception {
+        setupOldVisibleEvent();
+        when(eventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
+
+        interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
+
+        verify(localUserRepository, never()).putUser(any(User.class));
+        verify(remoteUserRepository, never()).putUser(any(User.class));
+
     }
 
     @Test
@@ -116,7 +127,7 @@ public class SelectEventInteractorTest {
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
-        inOrder.verify(dummyCallback).onLoaded(anyLong());
+        inOrder.verify(dummyCallback).onLoaded(anyEvent());
         inOrder.verify(remoteUserRepository).putUser(any(User.class));
     }
 
@@ -199,6 +210,10 @@ public class SelectEventInteractorTest {
         User user = new User();
         user.setIdUser(CURRENT_USER_ID);
         return user;
+    }
+
+    private Event anyEvent() {
+        return any(Event.class);
     }
     //endregion
 }

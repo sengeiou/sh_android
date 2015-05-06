@@ -111,6 +111,12 @@ public class TimelineParameters {
             return this;
         }
 
+        public Builder forActivity() {
+            parameters.eventId = null;
+            parameters.eventAuthorId = null;
+            return this;
+        }
+
         public Builder since(Long sinceDate) {
             parameters.sinceDate = sinceDate;
             return this;
@@ -121,8 +127,8 @@ public class TimelineParameters {
             return this;
         }
 
-        public Builder includeSyncTriggers() {
-            parameters.includeHiddenSyncTriggers = true;
+        public Builder includeSyncTriggers(boolean includeHiddenSyncTriggers) {
+            parameters.includeHiddenSyncTriggers = includeHiddenSyncTriggers;
             return this;
         }
 
@@ -132,5 +138,45 @@ public class TimelineParameters {
             }
             return parameters;
         }
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimelineParameters that = (TimelineParameters) o;
+
+        if (includeHiddenSyncTriggers != that.includeHiddenSyncTriggers) return false;
+        if (!userIds.equals(that.userIds)) return false;
+        if (eventId != null ? !eventId.equals(that.eventId) : that.eventId != null) return false;
+        if (eventAuthorId != null ? !eventAuthorId.equals(that.eventAuthorId) : that.eventAuthorId != null)
+            return false;
+        if (!sinceDate.equals(that.sinceDate)) return false;
+        if (maxDate != null ? !maxDate.equals(that.maxDate) : that.maxDate != null) return false;
+        return limit.equals(that.limit);
+
+    }
+
+    @Override public int hashCode() {
+        int result = userIds.hashCode();
+        result = 31 * result + (eventId != null ? eventId.hashCode() : 0);
+        result = 31 * result + (eventAuthorId != null ? eventAuthorId.hashCode() : 0);
+        result = 31 * result + sinceDate.hashCode();
+        result = 31 * result + (maxDate != null ? maxDate.hashCode() : 0);
+        result = 31 * result + (includeHiddenSyncTriggers ? 1 : 0);
+        result = 31 * result + limit.hashCode();
+        return result;
+    }
+
+    @Override public String toString() {
+        return "TimelineParameters{" +
+                "userIds=" + userIds +
+                ", eventId=" + eventId +
+                ", eventAuthorId=" + eventAuthorId +
+                ", sinceDate=" + sinceDate +
+                ", maxDate=" + maxDate +
+                ", includeHiddenSyncTriggers=" + includeHiddenSyncTriggers +
+                ", limit=" + limit +
+                '}';
     }
 }

@@ -34,6 +34,9 @@ import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
 
+    public static final String KEY_EVENT_ID = "event_id";
+    public static final String KEY_EVENT_TITLE = "event_title";
+
     private static final long TIME_1_DAY_MILLIS = 24 * 60 * 60 * 1000;
     private static final long TIME_6_HOURS_MILLIS = 6 * 60 * 60 * 1000;
     private static final long TIME_30_MINUTES_MILLIS = 30 * 60 * 1000;
@@ -60,7 +63,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_new_event);
-        long idEventToEdit = getIntent().getLongExtra(EventsListActivity.KEY_EVENT_ID, 0L);
+        long idEventToEdit = getIntent().getLongExtra(KEY_EVENT_ID, 0L);
 
         initializeViews(idEventToEdit);
         setupActionbar(idEventToEdit);
@@ -231,8 +234,10 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         endDateErrorView.setText(errorMessage);
     }
 
-    @Override public void closeScreenWithResult(Long eventId) {
-        setResult(RESULT_OK, new Intent().putExtra(EventsListActivity.KEY_EVENT_ID, eventId));
+    @Override public void closeScreenWithResult(Long eventId, String title) {
+        setResult(RESULT_OK, new Intent()
+          .putExtra(KEY_EVENT_ID, eventId)
+          .putExtra(KEY_EVENT_TITLE, title));
         finish();
     }
 

@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -26,7 +27,7 @@ import butterknife.OnFocusChange;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.android.ui.activities.TimelineActivity;
+import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         return R.layout.activity_registration_email;
     }
 
-    @Override protected void initializeViews() {
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         setupDisclaimerLinks();
         setupSuggestedEmails();
@@ -253,7 +254,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void navigateToMainScreen() {
         finish();
-        Intent navigateToMainScreenIntent = new Intent(this,TimelineActivity.class);
+        Intent navigateToMainScreenIntent = new Intent(this, EventsListActivity.class);
         navigateToMainScreenIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(navigateToMainScreenIntent);
     }

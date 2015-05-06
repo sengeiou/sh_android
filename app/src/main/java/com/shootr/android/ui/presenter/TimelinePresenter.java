@@ -3,15 +3,12 @@ package com.shootr.android.ui.presenter;
 import android.os.Handler;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.timeline.GetMainTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.GetOlderMainTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.RefreshMainTimelineInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.presenter.interactorwrapper.TimelineInteractorsWrapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -19,13 +16,11 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventChanged.Receiver {
+public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
-    private final GetMainTimelineInteractor getMainTimelineInteractor;
-    private final RefreshMainTimelineInteractor refreshMainTimelineInteractor;
-    private final GetOlderMainTimelineInteractor getOlderMainTimelineInteractor;
+    private final TimelineInteractorsWrapper timelineInteractorsWrapper;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -38,13 +33,9 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     private boolean shouldPoll;
     private Handler pollShotsHanlder;
 
-    @Inject public TimelinePresenter(GetMainTimelineInteractor getMainTimelineInteractor,
-      RefreshMainTimelineInteractor refreshMainTimelineInteractor,
-      GetOlderMainTimelineInteractor getOlderMainTimelineInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory) {
-        this.getMainTimelineInteractor = getMainTimelineInteractor;
-        this.refreshMainTimelineInteractor = refreshMainTimelineInteractor;
-        this.getOlderMainTimelineInteractor = getOlderMainTimelineInteractor;
+    @Inject public TimelinePresenter(TimelineInteractorsWrapper timelineInteractorsWrapper, ShotModelMapper shotModelMapper,
+      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
+        this.timelineInteractorsWrapper = timelineInteractorsWrapper;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -56,7 +47,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
 
     public void initialize(TimelineView timelineView) {
         this.setView(timelineView);
-        this.loadMainTimeline();
+        this.loadTimeline();
         this.pollShotsHanlder = new Handler();
         this.pollShotsRunnable = new Runnable() {
             @Override
@@ -64,7 +55,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
                 if (!shouldPoll) {
                     return;
                 }
-                refresh();
+                loadNewShots();
                 scheduleNextPolling();
             }
         };
@@ -86,9 +77,9 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
         }
     }
 
-    public void loadMainTimeline() {
+    protected void loadTimeline() {
         timelineView.showLoading();
-        getMainTimelineInteractor.loadMainTimeline(new GetMainTimelineInteractor.Callback() {
+        timelineInteractorsWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 timelineView.hideLoading();
@@ -111,7 +102,17 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
 
     public void refresh() {
         timelineView.showLoading();
-        refreshMainTimelineInteractor.refreshMainTimeline(new RefreshMainTimelineInteractor.Callback() {
+        this.loadNewShots();
+    }
+
+    public void showingLastShot(ShotModel lastShot) {
+        if (!isLoadingOlderShots && mightHaveMoreShots) {
+            this.loadOlderShots(lastShot.getCsysBirth().getTime());
+        }
+    }
+
+    private void loadNewShots() {
+        timelineInteractorsWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
@@ -129,17 +130,10 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
         });
     }
 
-    public void showingLastShot(ShotModel lastShot) {
-        if (!isLoadingOlderShots && mightHaveMoreShots) {
-            this.loadOlderShots(lastShot.getCsysBirth().getTime());
-        }
-    }
-
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
         timelineView.showLoadingOldShots();
-        getOlderMainTimelineInteractor.loadOlderMainTimeline(lastShotInScreenDate,
-          new GetOlderMainTimelineInteractor.Callback() {
+        timelineInteractorsWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
               @Override public void onLoaded(Timeline timeline) {
                   isLoadingOlderShots = false;
                   timelineView.hideLoadingOldShots();
@@ -172,10 +166,5 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver, EventCha
     @Subscribe
     @Override public void onShotSent(ShotSent.Event event) {
         refresh();
-    }
-
-    @Subscribe
-    @Override public void onEventChanged(EventChanged.Event event) {
-        loadMainTimeline();
     }
 }

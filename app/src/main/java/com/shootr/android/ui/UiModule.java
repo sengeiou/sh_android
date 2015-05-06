@@ -1,9 +1,11 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.ActivityTimelineActivity;
 import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EditStatusActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
@@ -14,7 +16,6 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.SearchTeamActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.TimelineActivity;
 import com.shootr.android.ui.activities.TimezonePickerActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
@@ -48,7 +49,8 @@ import javax.inject.Singleton;
                 SearchTeamActivity.class,
                 ShotDetailActivity.class,
                 PhotoViewActivity.class,
-                TimelineActivity.class,
+                EventTimelineActivity.class,
+                ActivityTimelineActivity.class,
                 PeopleActivity.class,
                 PeopleFragment.class,
                 WatchersView.class,

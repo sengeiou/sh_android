@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
@@ -14,83 +13,65 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.SynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 
-public class RefreshMainTimelineInteractor implements Interactor {
+public class GetOlderActivityTimelineInteractor implements Interactor {
 
+    private final SessionRepository sessionRepository;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final SessionRepository sessionRepository;
     private final ShotRepository remoteShotRepository;
-    private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
-    private final SynchronizationRepository synchronizationRepository;
-    private Callback callback;
+
+    private Long currentOldestDate;
+    private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public RefreshMainTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository,
-      @Local UserRepository localUserRepository, SynchronizationRepository synchronizationRepository) {
+    @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
+                                                      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+                                                      @Remote ShotRepository remoteShotRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
-        this.synchronizationRepository = synchronizationRepository;
     }
 
-    public void refreshMainTimeline(Callback callback, ErrorCallback errorCallback) {
+    public void loadOlderActivityTimeline(Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
+        this.currentOldestDate = currentOldestDate;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        executeSynchronized();
-    }
-
-    private synchronized void executeSynchronized() {
         try {
             TimelineParameters timelineParameters = buildTimelineParameters();
-
-            List<Shot> remoteShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
-            remoteShots = sortShotsByPublishDate(remoteShots);
-            notifyTimelineFromShots(remoteShots);
-
-            updateLastRefreshDate(remoteShots);
+            List<Shot> olderShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+            sortShotsByPublishDate(olderShots);
+            notifyTimelineFromShots(olderShots);
         } catch (ShootrException error) {
             notifyError(error);
         }
     }
 
+    private TimelineParameters buildTimelineParameters() {
+        return TimelineParameters.builder() //
+                .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+                .forActivity() //
+                .maxDate(currentOldestDate) //
+                .build();
+    }
+
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
         Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
-    }
-
-    private void updateLastRefreshDate(List<Shot> remoteShots) {
-        if (remoteShots.size() > 0) {
-            synchronizationRepository.putTimelineLastRefresh(remoteShots.get(0)
-              .getPublishDate()
-              .getTime());
-        }
-    }
-
-    private TimelineParameters buildTimelineParameters() {
-        TimelineParameters.Builder timelineParametersBuilder = TimelineParameters.builder().forUsers(getPeopleIds(), sessionRepository.getCurrentUserId());
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            timelineParametersBuilder.forEvent(visibleEvent);
-        }
-        Long since = synchronizationRepository.getTimelineLastRefresh();
-        timelineParametersBuilder.since(since);
-        return timelineParametersBuilder.build();
     }
 
     private List<Long> getPeopleIds() {
@@ -113,14 +94,6 @@ public class RefreshMainTimelineInteractor implements Interactor {
         return timeline;
     }
 
-    private Event getVisibleEvent() {
-        Long visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
-        if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
-        }
-        return null;
-    }
-
     private void notifyLoaded(final Timeline timeline) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
@@ -128,7 +101,6 @@ public class RefreshMainTimelineInteractor implements Interactor {
             }
         });
     }
-    //endregion
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
@@ -137,9 +109,5 @@ public class RefreshMainTimelineInteractor implements Interactor {
             }
         });
     }
-
-    public interface Callback {
-
-        void onLoaded(Timeline timeline);
-    }
+    //endregion
 }

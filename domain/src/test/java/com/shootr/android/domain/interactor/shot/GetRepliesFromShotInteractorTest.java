@@ -51,7 +51,7 @@ public class GetRepliesFromShotInteractorTest {
 
         interactor.loadReplies(ANY_SHOT_ID, spyCallback);
 
-        assertThat(spyCallback.lastResult).isSortedAccordingTo(new Shot.NewerBelowComparator());
+        assertThat(spyCallback.lastResult()).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
 
     @Test public void shouldCallbackRemoteRepliesInOrderNewerBelow() throws Exception {
@@ -59,7 +59,7 @@ public class GetRepliesFromShotInteractorTest {
 
         interactor.loadReplies(ANY_SHOT_ID, spyCallback);
 
-        assertThat(spyCallback.lastResult).isSortedAccordingTo(new Shot.NewerBelowComparator());
+        assertThat(spyCallback.lastResult()).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
 
     @Test public void shouldCallbackNothingWhenRepliesEmptyInLocalAndRemote() throws Exception {

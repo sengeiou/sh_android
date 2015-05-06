@@ -8,4 +8,8 @@ public interface EventSearchRepository {
     List<EventSearchResult> getDefaultEvents();
 
     List<EventSearchResult> getEvents(String query);
+
+    void putDefaultEvents(List<EventSearchResult> eventSearchResults);
+
+    void deleteDefaultEvents();
 }

@@ -27,8 +27,9 @@ import timber.log.Timber;
 
 public class NavigationDrawerDecorator implements ViewContainerDecorator {
 
-    public static final int NAVDRAWER_ITEM_TIMELINE = 0;
-    public static final int NAVDRAWER_ITEM_PEOPLE = 1;
+    public static final int NAVDRAWER_ITEM_EVENTS = 0;
+    public static final int NAVDRAWER_ITEM_ACTIVITY = 1;
+    public static final int NAVDRAWER_ITEM_PEOPLE = 2;
 
     private static final int NAVDRAWER_LAUNCH_DELAY = 250;
 
@@ -36,8 +37,9 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
     private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
 
     private static final int[] NAV_DRAWER_ICON_RES =
-      { R.drawable.ic_drawer_timeline_mask, R.drawable.ic_drawer_people_mask };
-    private static final int[] NAV_DRAWER_TITLE_RES = { R.string.drawer_timeline_title, R.string.drawer_people_title };
+      {R.drawable.ic_drawer_events_mask, R.drawable.ic_drawer_activity_mask, R.drawable.ic_drawer_people_mask };
+    private static final int[] NAV_DRAWER_TITLE_RES =
+            { R.string.drawer_events_title, R.string.drawer_activity_title, R.string.drawer_people_title };
 
     private final Activity activity;
     private final PicassoWrapper picasso;
@@ -87,7 +89,8 @@ public class NavigationDrawerDecorator implements ViewContainerDecorator {
 
     public void populateMenu() {
         List<Integer> navItemList = new ArrayList<>();
-        navItemList.add(NAVDRAWER_ITEM_TIMELINE);
+        navItemList.add(NAVDRAWER_ITEM_EVENTS);
+        navItemList.add(NAVDRAWER_ITEM_ACTIVITY);
         navItemList.add(NAVDRAWER_ITEM_PEOPLE);
         createNavDrawerItems(navItemList);
     }

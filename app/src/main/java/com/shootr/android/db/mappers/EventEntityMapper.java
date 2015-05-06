@@ -13,6 +13,11 @@ public class EventEntityMapper extends GenericMapper{
 
     public ContentValues toContentValues(EventEntity eventEntity){
         ContentValues contentValues = new ContentValues();
+        fillContentValues(eventEntity, contentValues);
+        return contentValues;
+    }
+
+    private void fillContentValues(EventEntity eventEntity, ContentValues contentValues) {
         contentValues.put(DatabaseContract.EventTable.ID_EVENT, eventEntity.getIdEvent());
         contentValues.put(DatabaseContract.EventTable.ID_USER, eventEntity.getIdUser());
         contentValues.put(DatabaseContract.EventTable.USERNAME, eventEntity.getUserName());
@@ -25,9 +30,7 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.TIMEZONE, eventEntity.getTimezone());
         contentValues.put(DatabaseContract.EventTable.TAG, eventEntity.getTag());
         setSynchronizedtoContentValues(eventEntity,contentValues);
-        return contentValues;
     }
-
 
     public EventEntity fromDto(Map<String, Object> dto) {
         EventEntity eventEntity = new EventEntity();
@@ -58,7 +61,7 @@ public class EventEntityMapper extends GenericMapper{
           : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
         eventEntity.setEndDate(dto.get(DatabaseContract.EventTable.END_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.END_DATE)));
-        setSynchronizedfromDto(dto,eventEntity);
+        setSynchronizedfromDto(dto, eventEntity);
     }
 
     public  Map<String, Object> toDto(EventEntity eventEntity) {
@@ -67,20 +70,27 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.ID_USER, eventEntity == null ? null : eventEntity.getIdUser());
         dto.put(DatabaseContract.EventTable.USERNAME, eventEntity == null ? null : eventEntity.getUserName());
         dto.put(DatabaseContract.EventTable.ID_LOCAL_TEAM, eventEntity == null ? null : eventEntity.getIdLocalTeam());
-        dto.put(DatabaseContract.EventTable.ID_VISITOR_TEAM, eventEntity == null ? null : eventEntity.getIdVisitorTeam());
+        dto.put(DatabaseContract.EventTable.ID_VISITOR_TEAM,
+          eventEntity == null ? null : eventEntity.getIdVisitorTeam());
         dto.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity == null ? null : eventEntity.getBeginDate());
         dto.put(DatabaseContract.EventTable.END_DATE, eventEntity == null ? null : eventEntity.getEndDate());
         dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
         dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         dto.put(DatabaseContract.EventTable.TIMEZONE, eventEntity == null ? null : eventEntity.getTimezone());
         dto.put(DatabaseContract.EventTable.TAG, eventEntity == null ? null : eventEntity.getTag());
-        dto.put(DatabaseContract.EventTable.NOTIFY_CREATION, eventEntity == null ? null : eventEntity.getNotifyCreation());
+        dto.put(DatabaseContract.EventTable.NOTIFY_CREATION,
+          eventEntity == null ? null : eventEntity.getNotifyCreation());
         setSynchronizedtoDto(eventEntity, dto);
         return dto;
     }
 
     public EventEntity fromCursor(Cursor c) {
         EventEntity eventEntity = new EventEntity();
+        fillEventEntity(c, eventEntity);
+        return eventEntity;
+    }
+
+    private void fillEventEntity(Cursor c, EventEntity eventEntity) {
         eventEntity.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_EVENT)));
         eventEntity.setIdUser(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_USER)));
         eventEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.EventTable.USERNAME)));
@@ -95,13 +105,27 @@ public class EventEntityMapper extends GenericMapper{
         date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.END_DATE));
         eventEntity.setEndDate(date != 0L ? new Date(date) : null);
         setSynchronizedfromCursor(c, eventEntity);
-        return eventEntity;
     }
 
     public EventSearchEntity fromSearchDto(Map<String, Object> dataItem) {
         EventSearchEntity eventSearchEntity = new EventSearchEntity();
         fillEventEntity(dataItem, eventSearchEntity);
-        eventSearchEntity.setWatchers(((Number) dataItem.get("watchers")).intValue());
+        eventSearchEntity.setWatchers(((Number) dataItem.get(DatabaseContract.EventSearchTable.WATCHERS)).intValue());
         return eventSearchEntity;
     }
+
+    public EventSearchEntity fromSearchCursor(Cursor cursor) {
+        EventSearchEntity eventSearchEntity = new EventSearchEntity();
+        fillEventEntity(cursor, eventSearchEntity);
+        eventSearchEntity.setWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.EventSearchTable.WATCHERS)));
+        return eventSearchEntity;
+    }
+
+    public ContentValues toSearchContentValues(EventSearchEntity entity) {
+        ContentValues contentValues = new ContentValues();
+        fillContentValues(entity, contentValues);
+        contentValues.put(DatabaseContract.EventSearchTable.WATCHERS, entity.getWatchers());
+        return contentValues;
+    }
+
 }

@@ -9,4 +9,9 @@ public interface EventSearchDataSource {
 
     List<EventSearchEntity> getEvents(String query);
 
+    void putDefaultEvents(List<EventSearchEntity> transform);
+
+    void deleteDefaultEvents();
+
+    EventSearchEntity getEventResult(Long idEvent);
 }

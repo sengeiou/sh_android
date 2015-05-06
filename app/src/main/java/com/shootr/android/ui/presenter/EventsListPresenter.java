@@ -1,49 +1,56 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrValidationException;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
+import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListPresenter implements Presenter, CommunicationPresenter{
+public class EventsListPresenter implements Presenter {
 
-    //region Dependencies
-    private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
+    private final SelectEventInteractor selectEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
+    private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
+    private boolean hasBeenPaused;
 
-    @Inject public EventsListPresenter(@Main Bus bus, EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.bus = bus;
+    @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
+      EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
+      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
+        this.selectEventInteractor = selectEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
+        this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
 
-    public void initialize(EventsListView eventsListView) {
+    protected void setView(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
+    }
+
+    public void initialize(EventsListView eventsListView) {
+        this.setView(eventsListView);
         this.loadDefaultEventList();
     }
 
@@ -52,20 +59,48 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         this.search(initialQuery);
     }
 
+    public void refresh() {
+        this.loadDefaultEventList();
+    }
+
     public void selectEvent(EventModel event) {
-        eventsListView.closeScrenWithEventResult(event.getIdEvent());
+        selectEvent(event.getIdEvent(), event.getTitle());
     }
 
-    private void loadDefaultEventList() {
+    private void selectEvent(final Long idEvent, String eventTitle) {
+        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
+            @Override public void onLoaded(Event selectedEvent) {
+                onEventSelected(eventModelMapper.transform(selectedEvent));
+                setViewCurrentVisibleEvent(idEvent);
+            }
+        });
+    }
+
+    private void onEventSelected(EventModel selectedEvent) {
+        eventsListView.navigateToEventTimeline(selectedEvent.getIdEvent(), selectedEvent.getTitle());
+    }
+
+    protected void loadDefaultEventList() {
         eventsListView.showLoading();
-        eventsListInteractor.loadEvents();
+        eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
+            @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+                onDefaultEventListLoaded(eventSearchResultList);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
     }
 
-    @Subscribe
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
-        eventsListView.hideLoading();
-        this.setViewCurrentVisibleEvent(resultList);
-        this.showEventListInView(resultList);
+        List<EventSearchResult> eventSearchResults = resultList.getEventSearchResults();
+        if (!eventSearchResults.isEmpty()) {
+            List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
+            eventsListView.hideLoading();
+            this.renderViewEventsList(eventResultModels);
+            this.setViewCurrentVisibleEvent(resultList.getCurrentVisibleEventId());
+        }
     }
 
     public void search(String queryText) {
@@ -74,40 +109,32 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
             }
-        },
-        new Interactor.ErrorCallback() {
+        }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
         });
     }
 
-    public void eventCreated(long eventId) {
-        eventsListView.closeScrenWithEventResult(eventId);
+    public void eventCreated(Long eventId, String eventTitle) {
+        selectEvent(eventId, eventTitle);
     }
 
     private void onSearchResults(EventSearchResultList eventSearchResultList) {
-        showEventListInView(eventSearchResultList);
-    }
-
-    private void setViewCurrentVisibleEvent(EventSearchResultList resultList) {
-        Event currentVisibleEvent = resultList.getCurrentVisibleEvent();
-        if (currentVisibleEvent != null) {
-            eventsListView.setCurrentVisibleEventId(currentVisibleEvent.getId());
-        }
-    }
-
-    private void showEventListInView(EventSearchResultList resultList) {
-        List<EventSearchResult> events = resultList.getEventSearchResults();
-        if (events.size() > 0) {
-            this.renderViewEventsList(events);
+        List<EventSearchResult> eventSearchResults = eventSearchResultList.getEventSearchResults();
+        if (!eventSearchResults.isEmpty()) {
+            List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
+            renderViewEventsList(eventModels);
         } else {
             this.showViewEmpty();
         }
     }
 
-    private void renderViewEventsList(List<EventSearchResult> events) {
-        List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+    private void setViewCurrentVisibleEvent(Long currentVisibleEventId) {
+        eventsListView.setCurrentVisibleEventId(currentVisibleEventId);
+    }
+
+    private void renderViewEventsList(List<EventResultModel> eventModels) {
         eventsListView.showContent();
         eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);
@@ -123,29 +150,31 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
         if (error instanceof ShootrValidationException) {
             String errorCode = ((ShootrValidationException) error).getErrorCode();
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
+        } else if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
         } else {
             errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
         eventsListView.showError(errorMessage);
     }
 
-    @Subscribe
-    @Override public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError() {
         eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
-    @Subscribe
-    @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable() {
         eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
 
     //region Lifecycle
     @Override public void resume() {
-        bus.register(this);
+        if (hasBeenPaused) {
+            this.loadDefaultEventList();
+        }
     }
 
     @Override public void pause() {
-        bus.unregister(this);
+        hasBeenPaused = true;
     }
     //endregion
 }

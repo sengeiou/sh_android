@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class EventsSearchInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
-      EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
+      @Remote EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
       PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
@@ -80,10 +81,7 @@ public class EventsSearchInteractor implements Interactor {
     private void setCurrentVisibleEventIfAny(EventSearchResultList eventSearchResultList) {
         Long eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
         if (eventWatchingId != null) {
-            Event visibleEvent = localEventRepository.getEventById(eventWatchingId);
-            if (visibleEvent != null) {
-                eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
-            }
+            eventSearchResultList.setCurrentVisibleEventId(eventWatchingId);
         }
     }
 

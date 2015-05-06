@@ -147,4 +147,23 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
             + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_EVENT_SEARCH = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventSearchTable.TABLE+" ("
+            + DatabaseContract.EventTable.ID_EVENT +" INT NOT NULL PRIMARY KEY,"
+            + DatabaseContract.EventTable.ID_USER +" INT NOT NULL,"
+            + DatabaseContract.EventTable.USERNAME +" TEXT NOT NULL,"
+            + DatabaseContract.EventTable.BEGIN_DATE + " DATETIME NOT NULL,"
+            + DatabaseContract.EventTable.END_DATE + " DATETIME NOT NULL,"
+            + DatabaseContract.EventTable.ID_LOCAL_TEAM+" INT NULL,"
+            + DatabaseContract.EventTable.ID_VISITOR_TEAM+" INT NULL,"
+            + DatabaseContract.EventTable.TITLE +" VARCHAR(255) NOT NULL,"
+            + DatabaseContract.EventTable.PHOTO +" TEXT NULL,"
+            + DatabaseContract.EventTable.TIMEZONE +" TEXT NOT NULL,"
+            + DatabaseContract.EventTable.TAG +" TEXT NULL,"
+            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL,"
+            + DatabaseContract.EventSearchTable.WATCHERS +" INT NOT NULL)";
     }

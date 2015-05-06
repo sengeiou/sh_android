@@ -36,9 +36,13 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     }
 
     public void setEvents(List<EventResultModel> events) {
-        notifyItemRangeRemoved(0, this.events.size());
+        boolean wasEmpty = this.events.isEmpty();
         this.events = events;
-        notifyItemRangeInserted(0, events.size());
+        if (wasEmpty) {
+            notifyItemRangeInserted(0, events.size());
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
