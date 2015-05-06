@@ -1,18 +1,14 @@
 package com.shootr.android.ui.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.ProfileFragment;
-import com.shootr.android.ui.model.UserModel;
-
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
@@ -59,7 +55,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
+            finish();
             return true;
         }else{
             return super.onOptionsItemSelected(item);

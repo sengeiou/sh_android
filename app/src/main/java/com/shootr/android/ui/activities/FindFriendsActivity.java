@@ -177,6 +177,15 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         return true;
     }
 
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     @OnItemClick(R.id.search_results_list)
     public void openProfile(int position) {
         UserModel user = (UserModel) resultsListView.getItemAtPosition(position);
