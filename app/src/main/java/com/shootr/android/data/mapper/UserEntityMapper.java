@@ -39,6 +39,9 @@ public class UserEntityMapper {
             user.setCheckedIn(userEntity.getCheckIn() == 1);
         }
 
+        if(userEntity.getJoinEventDate() != null){
+            user.setJoinEventDate(userEntity.getJoinEventDate());
+        }
 
         return user;
     }
@@ -69,6 +72,8 @@ public class UserEntityMapper {
         userEntity.setEventTitle(user.getVisibleEventTitle());
 
         userEntity.setCheckIn(user.isCheckedIn() ? 1 : 0);
+
+        userEntity.setJoinEventDate(user.getJoinEventDate());
 
         //TODO synchronized fields
         return userEntity;

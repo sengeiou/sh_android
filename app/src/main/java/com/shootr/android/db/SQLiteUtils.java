@@ -32,6 +32,7 @@ public class SQLiteUtils {
             + UserTable.EVENT_ID+" TEXT NULL,"
             + UserTable.EVENT_TITLE+" TEXT NULL,"
             + UserTable.CHECK_IN+" INT NULL,"
+            + UserTable.JOIN_EVENT_DATE+" INTEGER NULL,"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME,"
