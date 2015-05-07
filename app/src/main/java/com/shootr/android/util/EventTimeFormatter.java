@@ -40,53 +40,49 @@ public class EventTimeFormatter {
     }
 
     private String formatPastDate(DateTime date, DateTime now) {
-        if(isPastInLessThanAnHour(date, now)){
-            if(isOneMinuteRemaining(date, now)){
+        if(differsLessThan1Hour(date, now)){
+            if(differsOneMinuteOrLess(date, now)){
                 return timeTextFormatter.getStartingNowFormat();
             }else{
                 return timeTextFormatter.getMinutesAgoFormat(date);
             }
-        } else if(isPastBetween1And12Hours(date, now)){
-            return  timeTextFormatter.getHoursAgoFormat(date);
-        } else if(isPastBetween12And24Hours(date, now)){
+        } else if(differs12HoursOrLess(date, now)){
+            return timeTextFormatter.getHoursAgoFormat(date);
+        } else if(differs24HoursOrLess(date, now)){
             if(isToday(date, now)){
                 return  timeTextFormatter.getHoursAgoFormat(date);
             }else{
                 return timeTextFormatter.getYesterdayFormat(date);
             }
-        } else if (isPastMoreThan24Hour(date, now)) {
-            if (!isPastMoreThanAWeek(date, now)) {
-                if (!wasYesterday(date, now)) {
-                    return timeTextFormatter.getDaysAgoFormat(date);
-                } else {
-                    return timeTextFormatter.getYesterdayFormat(date);
-                }
-            } else if (isPastMoreThanAYear(date, now)) {
-                return timeTextFormatter.getAnotherYearFormat(date);
+        } else if (differsOneWeekOrLess(date, now)) {
+            if (wasYesterday(date, now)) {
+                return timeTextFormatter.getYesterdayFormat(date);
             } else {
-                return timeTextFormatter.getThisYearFormat(date);
+                return timeTextFormatter.getDaysAgoFormat(date);
             }
+        } else if (differsOneYearOrLess(date, now)) {
+            return timeTextFormatter.getThisYearFormat(date);
         } else {
-            return null; // TODO can't/shouldn't happen, refactor to remove this case
+            return timeTextFormatter.getAnotherYearFormat(date);
         }
     }
 
     private String formatFutureDate(DateTime date, DateTime now) {
-        if(isFutureInLessThanAnHour(date, now)){
-            if(isOneMinuteRemaining(date, now)){
+        if(differsLessThan1Hour(date, now)){
+            if(differsOneMinuteOrLess(date, now)){
                 return timeTextFormatter.getStartingNowFormat();
             }else{
                 return timeTextFormatter.getStartingInMinutesFormat(date);
             }
-        } else if (isFutureBetween1And12Hours(date, now)) {
+        } else if (differs12HoursOrLess(date, now)) {
             return timeTextFormatter.getStartingInHoursFormat(date);
-        }else if (isFutureBetween12And24Hours(date, now)) {
+        }else if (differs24HoursOrLess(date, now)) {
             if(isToday(date, now)){
                 return timeTextFormatter.getTodayFormat(date);
             }else{
                 return timeTextFormatter.getTomorrowFormat(date);
             }
-        }else if (isFutureBetween24And48Hours(date, now)){
+        }else if (differs48HoursOrLess(date, now)){
             if(isTomorrow(date, now)){
                 return timeTextFormatter.getTomorrowFormat(date);
             }else{
@@ -102,38 +98,23 @@ public class EventTimeFormatter {
         return getDaysBetweenNowAndDate(date, now) == 1;
     }
 
-    private boolean isPastMoreThanAWeek(DateTime date, DateTime now) {
-        return getDaysBetweenNowAndDate(date, now) > 7;
+    private boolean differsOneWeekOrLess(DateTime date, DateTime now) {
+        return getDaysBetweenNowAndDate(date, now) <= 7;
     }
 
-    private boolean isFutureBetween24And48Hours(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) >= 24 &&
-                getHoursBetweenNowAndDate(date, now) <= 48;
+    private boolean differs48HoursOrLess(DateTime date, DateTime now) {
+        return getHoursBetweenNowAndDate(date, now) <= 48;
     }
 
-    private boolean isFutureBetween12And24Hours(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) > 12 &&
-                getHoursBetweenNowAndDate(date, now) <= 24;
+    private boolean differs24HoursOrLess(DateTime date, DateTime now) {
+        return getHoursBetweenNowAndDate(date, now) <= 24;
     }
 
-    private boolean isFutureBetween1And12Hours(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) <= 12 && getHoursBetweenNowAndDate(date, now) >= 1;
+    private boolean differs12HoursOrLess(DateTime date, DateTime now) {
+        return getHoursBetweenNowAndDate(date, now) <= 12;
     }
 
-    private boolean isPastMoreThan24Hour(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) >= 24;
-    }
-
-    private boolean isPastBetween12And24Hours(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) > 12 &&
-                getHoursBetweenNowAndDate(date, now) <= 24;
-    }
-
-    private boolean isPastBetween1And12Hours(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) <= 12 && getHoursBetweenNowAndDate(date, now) >= 1;
-    }
-
-    private boolean isOneMinuteRemaining(DateTime date, DateTime now) {
+    private boolean differsOneMinuteOrLess(DateTime date, DateTime now) {
         return getMinutesBetweenNowAndDate(date, now) <= 1;
     }
 
@@ -141,11 +122,7 @@ public class EventTimeFormatter {
         return Math.abs(Minutes.minutesBetween(now, date).getMinutes());
     }
 
-    private boolean isPastInLessThanAnHour(DateTime date, DateTime now) {
-        return getHoursBetweenNowAndDate(date, now) < 1;
-    }
-
-    private boolean isFutureInLessThanAnHour(DateTime date, DateTime now) {
+    private boolean differsLessThan1Hour(DateTime date, DateTime now) {
         return getHoursBetweenNowAndDate(date, now) < 1;
     }
 
@@ -153,8 +130,8 @@ public class EventTimeFormatter {
         return getDaysBetweenNowAndDate(date, now) == 1;
     }
 
-    private boolean isPastMoreThanAYear(DateTime date, DateTime now) {
-        return getYearsBetweenNowAndDate(date, now) >= 1;
+    private boolean differsOneYearOrLess(DateTime date, DateTime now) {
+        return getYearsBetweenNowAndDate(date, now) <= 1;
     }
 
     private boolean isFuture(DateTime date, DateTime now) {
