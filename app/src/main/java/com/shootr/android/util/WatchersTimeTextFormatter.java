@@ -22,21 +22,6 @@ public class WatchersTimeTextFormatter {
         this.resources = resources;
     }
 
-    public int calculateDaysOfDifferenceBetweenDates(DateTime referenceDate, DateTime targetDate) {
-        int daysBetween = Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
-        if(daysBetween == 0){
-            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 0){
-                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
-            }
-        } else if(daysBetween == 1){
-            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 1){
-                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
-            }
-        }
-        return Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
-    }
-
-
     public String getLongTimeAgoFormat() {
         return resources.getString(R.string.entered_long_time_ago);
     }
@@ -47,15 +32,23 @@ public class WatchersTimeTextFormatter {
 
     public String getMinutesAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.entered);
-        dateInText += String.valueOf(Math.abs(
-                Minutes.minutesBetween(DateTime.now(), date).getMinutes()) + 1);
-        dateInText += resources.getString(R.string.minutes_ago);
+        int minutesAgo = Math.abs(
+                Minutes.minutesBetween(DateTime.now().withSecondOfMinute(0),
+                        date.withSecondOfMinute(0)).getMinutes());
+        dateInText += String.valueOf(minutesAgo);
+        if(minutesAgo == 1){
+            dateInText += resources.getString(R.string.minute_ago);
+        }else{
+            dateInText += resources.getString(R.string.minutes_ago);
+        }
         return dateInText;
     }
 
     public String getHoursAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.entered);
-        int hoursAgo = Math.abs(Hours.hoursBetween(DateTime.now(), date).getHours() + 1);
+        DateTime dateTime = new DateTime(new Date().getTime());
+        int hoursAgo = Math.abs(Hours.hoursBetween(dateTime,
+                date.withMinuteOfHour(0)).getHours());
         dateInText += String.valueOf(hoursAgo);
         if(hoursAgo == 1){
             dateInText += resources.getString(R.string.hour_ago);
@@ -76,16 +69,8 @@ public class WatchersTimeTextFormatter {
 
     private int calculateHowManyDaysAgo(DateTime date) {
         DateTime dateTime = new DateTime(new Date().getTime());
-        int daysBetween = Math.abs(Days.daysBetween(dateTime, date).getDays());
-        if(daysBetween == 0){
-            if(Math.abs(dateTime.getDayOfMonth() - date.getDayOfMonth()) != 0){
-                daysBetween = Math.abs(dateTime.getDayOfMonth() - date.getDayOfMonth());
-            }
-        } else if(daysBetween == 1){
-            if(Math.abs(dateTime.getDayOfMonth() - date.getDayOfMonth()) != 1){
-                daysBetween = Math.abs(dateTime.getDayOfMonth() - date.getDayOfMonth());
-            }
-        }
+        int daysBetween = Math.abs(Days.daysBetween(dateTime.withHourOfDay(0),
+                date.withHourOfDay(0)).getDays());
         return daysBetween;
     }
 }

@@ -4,6 +4,7 @@ package com.shootr.android.util;
 import com.shootr.android.domain.utils.TimeUtils;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Months;
@@ -55,11 +56,11 @@ public class WatchersTimeFormatter {
     }
 
     private boolean isLessThanAnHour(DateTime date) {
-        return getHoursBetweenNowAndDate(date) < 1;
+        return getMinutesBetweenNowAndDate(date) < 60;
     }
 
     private boolean isLessThanADay(DateTime date) {
-        return getDaysBetweenNowAndDate(date) < 1;
+        return getHoursBetweenNowAndDate(date) < 24;
     }
 
     private boolean isMoreThanSevenDays(DateTime date) {
@@ -89,15 +90,32 @@ public class WatchersTimeFormatter {
 
     //region Date Getters
     private int getDaysBetweenNowAndDate(DateTime targetDate) {
-        return watchersTimeTextFormatter.calculateDaysOfDifferenceBetweenDates(referenceDate, targetDate);
+        return calculateDaysOfDifferenceBetweenDates(
+                referenceDate, targetDate);
     }
 
     private int getHoursBetweenNowAndDate(DateTime date) {
-        return Math.abs(Hours.hoursBetween(referenceDate, date).getHours());
+        return Math.abs(Hours.hoursBetween(
+                referenceDate, date).getHours());
     }
 
     private int getMinutesBetweenNowAndDate(DateTime date) {
-        return Math.abs(Minutes.minutesBetween(referenceDate, date).getMinutes());
+        return Math.abs(Minutes.minutesBetween(
+                referenceDate, date).getMinutes());
     }
     //endregion
+
+    public int calculateDaysOfDifferenceBetweenDates(DateTime referenceDate, DateTime targetDate) {
+        int daysBetween = Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
+        if(daysBetween == 0){
+            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 0){
+                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
+            }
+        } else if(daysBetween == 1){
+            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 1){
+                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
+            }
+        }
+        return Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
+    }
 }
