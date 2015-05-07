@@ -147,6 +147,13 @@ public class EventTimeFormatterTest {
         verify(timeTextFormatter).getAnotherYearFormat(any(DateTime.class));
     }
 
+    @Test
+    public void shouldShowCurrentYearFormatIfDateWasPastYear() {
+        when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
+        eventTimeFormatter.eventResultDateText(1420423200000L);
+        verify(timeTextFormatter).getThisYearFormat(any(DateTime.class));
+    }
+
     private Long setUpDateStartingLessThanAMinuteInTimestamp() {
         Long thirtySeconds = Long.valueOf(1000 * 30);
         Long timestamp = new Date().getTime()+thirtySeconds;
