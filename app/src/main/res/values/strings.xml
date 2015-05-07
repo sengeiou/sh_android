@@ -152,10 +152,6 @@
     <string name="add_photo">Add Photo</string>
     <string name="edit_event">Edit Event</string>
     <string name="activity_new_event_title">New event</string>
-    <string name="end_date_6_hours">6 hours</string>
-    <string name="end_date_30_minutes">30 minutes</string>
-    <string name="end_date_1_day">1 day</string>
-    <string name="end_date_pick">Custom…</string>
     <string name="activity_edit_event_title">Edit event</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
     <string name="activity_pick_timezone_title">Select time zone</string>

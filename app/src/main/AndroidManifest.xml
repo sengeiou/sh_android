@@ -154,12 +154,7 @@
               android:value=".ui.activities.EventsListActivity" />
           </activity>
 
-        <activity
-          android:name=".ui.activities.DateTimePickerDialogActivity"
-          android:theme="@style/ShootrTheme.NoActionBar.Floating">
-        </activity>
-
-        <activity
+      <activity
           android:name=".ui.activities.TimezonePickerActivity"
           android:label="@string/activity_pick_timezone_title"
           android:theme="@style/ShootrTheme.Closable"

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -20,16 +19,12 @@ import butterknife.OnClick;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.ui.model.EndDate;
-import com.shootr.android.ui.model.RelativeEndDate;
 import com.shootr.android.ui.presenter.NewEventPresenter;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.ui.widgets.DatePickerBuilder;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
@@ -37,12 +32,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     public static final String KEY_EVENT_ID = "event_id";
     public static final String KEY_EVENT_TITLE = "event_title";
 
-    private static final long TIME_1_DAY_MILLIS = 24 * 60 * 60 * 1000;
-    private static final long TIME_6_HOURS_MILLIS = 6 * 60 * 60 * 1000;
-    private static final long TIME_30_MINUTES_MILLIS = 30 * 60 * 1000;
-
     private static final int REQUEST_PICK_TIMEZONE = 2;
-    private static final int REQUEST_END_DATE = 1;
 
     @Inject NewEventPresenter presenter;
 
@@ -50,13 +40,10 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @InjectView(R.id.new_event_start_date) TextView startDateView;
     @InjectView(R.id.new_event_start_time) TextView startTimeView;
-    @InjectView(R.id.new_event_end_date) TextView endDateView;
     @InjectView(R.id.new_event_title_error) TextView titleErrorView;
     @InjectView(R.id.new_event_start_date_timezone) TextView timezoneView;
     @InjectView(R.id.new_event_start_date_error) TextView startDateErrorView;
-    @InjectView(R.id.new_event_end_date_error) TextView endDateErrorView;
 
-    private PopupMenu endDatePopupMenu;
     private MenuItem doneMenuItem;
 
     //region Initialization
@@ -72,15 +59,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     private void initializeViews(String idEventToEdit) {
         ButterKnife.inject(this);
-        endDatePopupMenu = new PopupMenu(this, endDateView);
-        endDatePopupMenu.inflate(R.menu.new_event_end_date);
-        endDatePopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override public boolean onMenuItemClick(MenuItem menuItem) {
-                int itemId = menuItem.getItemId();
-                presenter.endDateItemSelected(itemId);
-                return true;
-            }
-        });
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 presenter.titleTextChanged(s.toString());
@@ -107,18 +85,9 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     }
 
     private void initializePresenter(String idEventToEdit) {
-        presenter.initialize(this, suggestedEndDates(), idEventToEdit);
+        presenter.initialize(this, idEventToEdit);
     }
 
-    private List<EndDate> suggestedEndDates() {
-        List<EndDate> endDates = new ArrayList<>();
-        endDates.add(new RelativeEndDate(getString(R.string.end_date_30_minutes), R.id.end_date_30_minutes,
-          TIME_30_MINUTES_MILLIS));
-        endDates.add(
-          new RelativeEndDate(getString(R.string.end_date_6_hours), R.id.end_date_6_hours, TIME_6_HOURS_MILLIS));
-        endDates.add(new RelativeEndDate(getString(R.string.end_date_1_day), R.id.end_date_1_day, TIME_1_DAY_MILLIS));
-        return endDates;
-    }
     //endregion
 
     //region Listeners
@@ -140,11 +109,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
         }).build();
         timePickerDialog.show(getSupportFragmentManager(), "timepicker");
-    }
-
-    @OnClick(R.id.new_event_end_date)
-    public void onEndDateClick() {
-        endDatePopupMenu.show();
     }
 
     @OnClick(R.id.new_event_start_date_timezone)
@@ -174,12 +138,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_END_DATE && resultCode == RESULT_OK) {
-            long selectedTimestamp = data.getLongExtra(DateTimePickerDialogActivity.KEY_TIMESTAMP, 0L);
-            if (selectedTimestamp != 0L) {
-                presenter.customEndDateSelected(selectedTimestamp);
-            }
-        }else if (requestCode == REQUEST_PICK_TIMEZONE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_PICK_TIMEZONE && resultCode == RESULT_OK) {
             String selectedTimezone = data.getStringExtra(TimezonePickerActivity.KEY_TIMEZONE);
             presenter.timezoneSelected(selectedTimezone);
         }
@@ -195,18 +154,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Override public void setStartTime(String timeText) {
         resetStartDateError();
         startTimeView.setText(timeText);
-    }
-
-    @Override public void setEndDate(String timeText) {
-        resetEndDateError();
-        endDateView.setText(timeText);
-    }
-
-    @Override public void pickCustomDateTime(long initialTimestamp, String timezone) {
-        Intent dateTimePickerIntent = new Intent(this, DateTimePickerDialogActivity.class);
-        dateTimePickerIntent.putExtra(DateTimePickerDialogActivity.KEY_TIMESTAMP, initialTimestamp);
-        dateTimePickerIntent.putExtra(DateTimePickerDialogActivity.KEY_TIMEZONE, timezone);
-        startActivityForResult(dateTimePickerIntent, REQUEST_END_DATE);
     }
 
     @Override public void setEventTitle(String title) {
@@ -228,10 +175,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override public void showStartDateError(String errorMessage) {
         startDateErrorView.setText(errorMessage);
-    }
-
-    @Override public void showEndDateError(String errorMessage) {
-        endDateErrorView.setText(errorMessage);
     }
 
     @Override public void closeScreenWithResult(String eventId, String title) {
@@ -292,10 +235,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     private void resetStartDateError() {
         startDateErrorView.setText(null);
-    }
-
-    private void resetEndDateError() {
-        endDateErrorView.setText(null);
     }
     //endregion
 }

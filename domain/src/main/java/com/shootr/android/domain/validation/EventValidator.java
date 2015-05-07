@@ -18,7 +18,6 @@ public class EventValidator {
 
     public static final int FIELD_TITLE = 1;
     public static final int FIELD_START_DATE = 2;
-    public static final int FIELD_END_DATE = 3;
 
     private List<FieldValidationError> fieldValidationErrors;
 
