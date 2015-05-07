@@ -5,12 +5,9 @@ import com.shootr.android.domain.utils.TimeUtils;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Years;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 @Singleton
 public class EventTimeFormatter {
@@ -24,8 +21,8 @@ public class EventTimeFormatter {
         this.timeUtils = timeUtils;
     }
 
-    public String eventResultDateText(long timestamp) {
-        DateTime date = new DateTime(timestamp);
+    public String formatEventDate(long eventTimestamp) {
+        DateTime date = new DateTime(eventTimestamp);
         now = new DateTime(timeUtils.getCurrentTime());
         String dateInTextFormat = null;
         if (isPast(date)) {

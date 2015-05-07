@@ -8,7 +8,7 @@ public class EventTimeFormatterStub extends EventTimeFormatter {
         super(null, null);
     }
 
-    @Override public String eventResultDateText(long timestamp) {
+    @Override public String formatEventDate(long eventTimestamp) {
         return "test_date";
     }
 }
