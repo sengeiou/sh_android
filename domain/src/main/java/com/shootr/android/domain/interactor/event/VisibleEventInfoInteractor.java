@@ -13,6 +13,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -94,14 +95,19 @@ public class VisibleEventInfoInteractor implements Interactor {
 
             List<User> people = userRepository.getPeople();
             List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
-            watchesFromPeople = orderWatchersByUsername(watchesFromPeople);
+            watchesFromPeople = sortWatchersListByJoinEventDate(watchesFromPeople);
             return buildEventInfo(visibleEvent, watchesFromPeople, currentUser);
         }
         return NO_EVENT_VISIBLE_INFO;
     }
 
-    private List<User> orderWatchersByUsername(List<User> watchesFromPeople) {
-        Collections.sort(watchesFromPeople, new User.UsernameComparator());
+    private List<User> sortWatchersListByJoinEventDate(List<User> watchesFromPeople) {
+        Collections.sort(watchesFromPeople, new Comparator<User>() {
+            @Override
+            public int compare(User userModel, User t1) {
+                return t1.getJoinEventDate().compareTo(userModel.getJoinEventDate());
+            }
+        });
         return watchesFromPeople;
     }
 

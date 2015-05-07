@@ -10,6 +10,9 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+
+import java.util.Date;
+
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
@@ -73,7 +76,12 @@ public class SelectEventInteractor implements Interactor {
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
         currentUser.setVisibleEventId(selectedEvent.getId());
         currentUser.setVisibleEventTitle(selectedEvent.getTitle());
+        currentUser.setJoinEventDate(getCurrentTime());
         return currentUser;
+    }
+
+    private long getCurrentTime() {
+        return new Date().getTime();
     }
 
     private void notifyLoaded(final Event selectedEvent) {

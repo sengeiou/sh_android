@@ -1,5 +1,6 @@
 package com.shootr.android.domain;
 
+import java.io.StringBufferInputStream;
 import java.util.Comparator;
 
 public class User {
@@ -14,6 +15,7 @@ public class User {
     private String website;
     private String bio;
     private Long points;
+    private Long joinEventDate;
 
     private String visibleEventId;
     private String visibleEventTitle;
@@ -174,6 +176,14 @@ public class User {
 
     public void setCheckedIn(Boolean checkedIn) {
         this.checkedIn = checkedIn;
+    }
+
+    public Long getJoinEventDate() {
+        return joinEventDate;
+    }
+
+    public void setJoinEventDate(Long joinEventDate) {
+        this.joinEventDate = joinEventDate;
     }
 
     public static class UsernameComparator implements Comparator<User> {
