@@ -10,7 +10,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
     private String timezone;
     private String tag;
     private Date beginDate;
-    private Date endDate;
     private String title;
     private String photo;
     private Integer notifyCreation;
@@ -64,14 +63,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
         } else {
             return dateComparison;
         }
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public String getTitle() {

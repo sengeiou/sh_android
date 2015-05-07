@@ -21,7 +21,6 @@ public class EventEntityMapper {
         event.setAuthorId(eventEntity.getIdUser());
         event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
-        event.setEndDate(eventEntity.getEndDate());
         event.setPicture(eventEntity.getPhoto());
         event.setTimezone(eventEntity.getTimezone());
         event.setTag(eventEntity.getTag());
@@ -48,7 +47,6 @@ public class EventEntityMapper {
         entityTemplate.setIdUser(event.getAuthorId());
         entityTemplate.setTitle(event.getTitle());
         entityTemplate.setBeginDate(event.getStartDate());
-        entityTemplate.setEndDate(event.getEndDate());
         entityTemplate.setPhoto(event.getPicture());
         entityTemplate.setTimezone(event.getTimezone());
         entityTemplate.setTag(event.getTag());

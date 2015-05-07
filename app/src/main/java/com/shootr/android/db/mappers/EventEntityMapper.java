@@ -52,7 +52,6 @@ public class EventEntityMapper extends GenericMapper{
           : (String) dto.get(DatabaseContract.EventTable.TAG));
         eventEntity.setBeginDate(dto.get(DatabaseContract.EventTable.BEGIN_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
-        eventEntity.setEndDate(new Date(eventEntity.getBeginDate().getTime()+(1000*60*60*2)));
         setSynchronizedfromDto(dto,eventEntity);
     }
 
@@ -88,7 +87,6 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TAG)));
         Long date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.BEGIN_DATE));
         eventEntity.setBeginDate(date != 0L ? new Date(date) : null);
-        eventEntity.setEndDate(date != 0L ? new Date(date) : null);
         setSynchronizedfromCursor(c, eventEntity);
     }
 
