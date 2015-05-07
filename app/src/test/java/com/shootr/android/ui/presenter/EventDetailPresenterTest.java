@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.EventTimeFormatter;
+import com.shootr.android.util.WatchersTimeFormatter;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
@@ -66,6 +67,7 @@ public class EventDetailPresenterTest {
     UserModelMapper userModelMapper;
 
     @Mock SharedPreferences sharedPreferences;
+    @Mock WatchersTimeFormatter watchersTimeFormatter;
 
     @Before
     public void setUp() {
@@ -75,7 +77,7 @@ public class EventDetailPresenterTest {
 
         presenter = new EventDetailPresenter(bus, eventInfoInteractor,
           changeEventPhotoInteractor, getCheckinStatusInteractor, performCheckinInteractor,
-                eventModelMapper, userModelMapper, errorMessageFactory);
+                eventModelMapper, userModelMapper, errorMessageFactory, watchersTimeFormatter);
 
         presenter.setView(eventDetailView);
     }

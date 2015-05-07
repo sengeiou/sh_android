@@ -18,6 +18,7 @@ import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
+import com.shootr.android.util.WatchersTimeFormatter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -40,6 +41,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final EventModelMapper eventModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
+    private final WatchersTimeFormatter watchersTimeFormatter;
 
     private EventDetailView eventDetailView;
     private String idEvent;
@@ -53,7 +55,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
-      PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+                                WatchersTimeFormatter watchersTimeFormatter) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
@@ -62,6 +65,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.eventModelMapper = eventModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
+        this.watchersTimeFormatter = watchersTimeFormatter;
     }
     //endregion
 
@@ -231,12 +235,23 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
+        obtainJoinDatesInText(watcherModels);
         eventDetailView.setWatchers(watcherModels);
+    }
+
+    private void obtainJoinDatesInText(List<UserModel> watcherModels) {
+        for (UserModel watcherModel : watcherModels) {
+            watcherModel.setJoinEventDateText(
+                    watchersTimeFormatter.jointDateText(watcherModel.getJoinEventDate()));
+        }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
         if (isCurrentUserWatchingEvent(currentUserWatch)) {
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+            currentUserWatchingModel.setJoinEventDateText(
+                    watchersTimeFormatter.jointDateText(
+                            currentUserWatchingModel.getJoinEventDate()));
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }

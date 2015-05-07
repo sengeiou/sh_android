@@ -197,6 +197,14 @@
     <string name="drawer_events_title">Events</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
+    <string name="entered">Entered&#160;</string>
+    <string name="hours_ago">&#160;hours ago</string>
+    <string name="days_ago">&#160;days ago</string>
+    <string name="minutes_ago">&#160;minutes ago</string>
+    <string name="entered_long_time_ago">Entered long time ago</string>
+    <string name="just_entered">Just Entered</string>
+    <string name="day_ago">&#160;day ago</string>
+    <string name="hour_ago">&#160;hour ago</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
