@@ -205,6 +205,7 @@
     <string name="just_entered">Just Entered</string>
     <string name="day_ago">&#160;day ago</string>
     <string name="hour_ago">&#160;hour ago</string>
+    <string name="minute_ago">minute ago</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
