@@ -40,63 +40,61 @@ public class EventTimeFormatter {
     }
 
     private String formatPastDate(DateTime date, DateTime now) {
-        String dateInTextFormat = null;
         if(isPastInLessThanAnHour(date, now)){
             if(isOneMinuteRemaining(date, now)){
-                dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+                return timeTextFormatter.getStartingNowFormat();
             }else{
-                dateInTextFormat = timeTextFormatter.getMinutesAgoFormat(date);
+                return timeTextFormatter.getMinutesAgoFormat(date);
             }
         } else if(isPastBetween1And12Hours(date, now)){
-            dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
+            return  timeTextFormatter.getHoursAgoFormat(date);
         } else if(isPastBetween12And24Hours(date, now)){
             if(isToday(date, now)){
-                dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
+                return  timeTextFormatter.getHoursAgoFormat(date);
             }else{
-                dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
+                return timeTextFormatter.getYesterdayFormat(date);
             }
-        } else if (isPastMoreThan24Hour(date, now)){
-            if (!isPastMoreThanAWeek(date, now)){
-                if(!wasYesterday(date, now)){
-                    dateInTextFormat = timeTextFormatter.getDaysAgoFormat(date);
-                }else{
-                    dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
+        } else if (isPastMoreThan24Hour(date, now)) {
+            if (!isPastMoreThanAWeek(date, now)) {
+                if (!wasYesterday(date, now)) {
+                    return timeTextFormatter.getDaysAgoFormat(date);
+                } else {
+                    return timeTextFormatter.getYesterdayFormat(date);
                 }
-            }else if(isPastMoreThanAYear(date, now)){
-                dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
-            }else{
-                dateInTextFormat = timeTextFormatter.getThisYearFormat(date);
+            } else if (isPastMoreThanAYear(date, now)) {
+                return timeTextFormatter.getAnotherYearFormat(date);
+            } else {
+                return timeTextFormatter.getThisYearFormat(date);
             }
+        } else {
+            return null; // TODO can't/shouldn't happen, refactor to remove this case
         }
-        return dateInTextFormat;
     }
 
     private String formatFutureDate(DateTime date, DateTime now) {
-        String dateInTextFormat;
         if(isFutureInLessThanAnHour(date, now)){
             if(isOneMinuteRemaining(date, now)){
-                dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+                return timeTextFormatter.getStartingNowFormat();
             }else{
-                dateInTextFormat = timeTextFormatter.getStartingInMinutesFormat(date);
+                return timeTextFormatter.getStartingInMinutesFormat(date);
             }
         } else if (isFutureBetween1And12Hours(date, now)) {
-            dateInTextFormat = timeTextFormatter.getStartingInHoursFormat(date);
+            return timeTextFormatter.getStartingInHoursFormat(date);
         }else if (isFutureBetween12And24Hours(date, now)) {
             if(isToday(date, now)){
-                dateInTextFormat = timeTextFormatter.getTodayFormat(date);
+                return timeTextFormatter.getTodayFormat(date);
             }else{
-                dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
+                return timeTextFormatter.getTomorrowFormat(date);
             }
         }else if (isFutureBetween24And48Hours(date, now)){
             if(isTomorrow(date, now)){
-                dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
+                return timeTextFormatter.getTomorrowFormat(date);
             }else{
-                dateInTextFormat = timeTextFormatter.getCurrentWeekFormat(date);
+                return timeTextFormatter.getCurrentWeekFormat(date);
             }
         }else{
-            dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
+            return timeTextFormatter.getAnotherYearFormat(date);
         }
-        return dateInTextFormat;
     }
 
     //region Date Evaluators
