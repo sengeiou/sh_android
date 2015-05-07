@@ -11,18 +11,17 @@ import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
-import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.EventTimeFormatter;
+import com.shootr.android.utils.EventTimeFormatterStub;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -76,7 +74,7 @@ public class EventDetailPresenterTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        eventModelMapper = new EventModelMapper(new EventTimeFormatter(), sessionRepository);
+        eventModelMapper = new EventModelMapper(new EventTimeFormatterStub(), sessionRepository);
         userModelMapper= new UserModelMapper();
 
         presenter = new EventDetailPresenter(bus, eventInfoInteractor, watchingStatusInteractor,
