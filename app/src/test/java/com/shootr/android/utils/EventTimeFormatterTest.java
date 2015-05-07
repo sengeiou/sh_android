@@ -110,9 +110,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowTomorowFormatIfDateBetween12And24HoursAndItsTomorow() {
         when(timeUtils.getCurrentTime()).thenReturn(TWENTY_TWO_HOURS_MILLISECONDS);
-        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
-                new DateTime(TWENTY_TWO_HOURS_MILLISECONDS),
-                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.formatEventDate(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getTomorrowFormat(any(DateTime.class));
     }
@@ -120,9 +117,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowYesterdayFormatIfDateBetween12And24HoursAndItsYesterday() {
         when(timeUtils.getCurrentTime()).thenReturn(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
-        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
-                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS),
-                new DateTime(TWENTY_TWO_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.formatEventDate(TWENTY_TWO_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getYesterdayFormat(any(DateTime.class));
     }
@@ -130,9 +124,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowTomorrowFormatIfDateBetween24And48HoursAndItsTomorow() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
-                new DateTime(EIGHT_HOURS_MILLISECONDS),
-                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.formatEventDate(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getTomorrowFormat(any(DateTime.class));
     }
@@ -161,9 +152,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowAnotherYearFormatIfDateWasAPastYear() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
-                new DateTime(EIGHT_HOURS_MILLISECONDS),
-                new DateTime(PAST_YEAR_MILLISECONDS))).thenReturn(RANDOM_DAYS_OF_DIFFERENCE);
         eventTimeFormatter.formatEventDate(PAST_YEAR_MILLISECONDS);
         verify(timeTextFormatter).getAnotherYearFormat(any(DateTime.class));
     }
@@ -171,9 +159,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowCurrentYearFormatIfDateWasThisYear() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
-                new DateTime(EIGHT_HOURS_MILLISECONDS),
-                new DateTime(SOME_TIME_AGO_THIS_YEAR))).thenReturn(RANDOM_DAYS_OF_DIFFERENCE);
         eventTimeFormatter.formatEventDate(SOME_TIME_AGO_THIS_YEAR);
         verify(timeTextFormatter).getThisYearFormat(any(DateTime.class));
     }

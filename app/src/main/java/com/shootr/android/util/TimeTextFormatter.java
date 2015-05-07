@@ -1,6 +1,5 @@
 package com.shootr.android.util;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import com.shootr.android.R;
@@ -91,21 +90,6 @@ public class TimeTextFormatter {
         }
         return daysBetween;
     }
-
-    public int calculateDaysOfDifferenceBetweenDates(DateTime referenceDate, DateTime targetDate) {
-        int daysBetween = Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
-        if(daysBetween == 0){
-            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 0){
-                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
-            }
-        } else if(daysBetween == 1){
-            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 1){
-                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
-            }
-        }
-        return Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
-    }
-
 
     public String getHoursAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.started);

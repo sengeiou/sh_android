@@ -4,6 +4,7 @@ import com.shootr.android.domain.utils.TimeUtils;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Years;
@@ -149,7 +150,7 @@ public class EventTimeFormatter {
 
     //region Date Getters
     private int getDaysBetweenNowAndDate(DateTime targetDate, DateTime now) {
-        return timeTextFormatter.calculateDaysOfDifferenceBetweenDates(now, targetDate);
+        return Math.abs(Days.daysBetween(targetDate, now).getDays());
     }
 
     private int getHoursBetweenNowAndDate(DateTime date, DateTime now) {
