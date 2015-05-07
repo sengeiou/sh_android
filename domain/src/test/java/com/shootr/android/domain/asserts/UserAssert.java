@@ -320,29 +320,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
   }
 
   /**
-   * Verifies that the actual User's status is equal to the given one.
-   * @param status the given status to compare the actual User's status to.
-   * @return this assertion object.
-   * @throws AssertionError - if the actual User's status is not equal to the given one.
-   */
-  public UserAssert hasStatus(String status) {
-    // check that actual User we want to make assertions on is not null.
-    isNotNull();
-
-    // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpected status of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-    
-    // null safe check
-    String actualStatus = actual.getStatus();
-    if (!Objects.areEqual(actualStatus, status)) {
-      failWithMessage(assertjErrorMessage, actual, status, actualStatus);
-    }
-
-    // return the current assertion for method chaining
-    return this;
-  }
-
-  /**
    * Verifies that the actual User's username is equal to the given one.
    * @param username the given username to compare the actual User's username to.
    * @return this assertion object.

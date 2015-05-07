@@ -120,13 +120,7 @@
               android:value=".ui.activities.EventsListActivity" />
         </activity>
 
-        <activity
-          android:name=".ui.activities.EditStatusActivity"
-          android:label="@string/activity_edit_status_title"
-          android:theme="@style/ShootrTheme.Closable"
-          android:windowSoftInputMode="stateVisible"></activity>
-
-        <activity
+      <activity
           android:name="com.shootr.android.ui.activities.ProfileEditActivity"
           android:label="@string/profile_edit_profile"
           android:theme="@style/ShootrTheme.Closable"
@@ -205,7 +199,6 @@
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_PROFILE"/>
-                <action android:name="com.shootr.android.ACTION_OPEN_STATUS_CHANGED"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

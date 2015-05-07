@@ -9,8 +9,6 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.utils.TimeUtils;
-import java.util.Date;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,16 +17,11 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static com.shootr.android.domain.asserts.UserAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,7 +33,6 @@ public class SelectEventInteractorTest {
     private static final String CURRENT_USER_ID = "current_user";
     private static final String OLD_EVENT_TITLE = "oldTitle";
     private static final String NEW_EVENT_TITLE = "newTitle";
-    private static final String STATUS_WATCHING = "Watching";
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock EventRepository eventRepository;
@@ -149,17 +141,6 @@ public class SelectEventInteractorTest {
         User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
 
         assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
-    }
-
-    @Test
-    public void should_setStatusAsWatching_when_updateUserWithEventInfo() throws Exception {
-        User userWithOldEvent = currentUserWatchingOldEvent();
-        userWithOldEvent.setStatus("oldStatus");
-        Event selectedEvent = newEvent();
-
-        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
-
-        assertThat(updatedUser).hasStatus(STATUS_WATCHING);
     }
 
     @Test public void shouldSetCheckinAsFalseInLocalRepository() throws Exception {

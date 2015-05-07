@@ -7,7 +7,6 @@ import com.shootr.android.domain.interactor.event.CreateEventInteractor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
-import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.shot.DeleteDraftInteractor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
@@ -23,7 +22,7 @@ import javax.inject.Singleton;
 @Module(
   includes = { ServiceModule.class },
   injects = {
-    GetPeopleInteractor.class, VisibleEventInfoInteractor.class, UpdateStatusInteractor.class,
+    GetPeopleInteractor.class, VisibleEventInfoInteractor.class,
     EventsListInteractor.class, SelectEventInteractor.class,
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class, SendDraftInteractor.class,

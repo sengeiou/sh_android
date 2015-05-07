@@ -17,7 +17,6 @@ public class User {
 
     private String visibleEventId;
     private String visibleEventTitle;
-    private String status;
     private Boolean checkedIn;
 
     private boolean isFollowing;
@@ -161,21 +160,12 @@ public class User {
         this.visibleEventTitle = visibleEventTitle;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     @Override public String toString() {
         return "User{" +
           "idUser=" + idUser +
           ", username='" + username + '\'' +
           ", visibleEventId=" + visibleEventId +
-          ", status='" + status + '\'' +
           '}';
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Boolean isCheckedIn() {

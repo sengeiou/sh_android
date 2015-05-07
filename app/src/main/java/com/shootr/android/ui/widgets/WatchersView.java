@@ -27,7 +27,6 @@ public class WatchersView extends LinearLayout{
     @Inject PicassoWrapper picasso;
 
     private LayoutInflater layoutInflater;
-    private OnEditListener onEditListener;
     private WatcherViewHolder currentUserViewHolder;
     private Map<UserModel, WatcherViewHolder> watchersHoldersMap;
     private OnProfileClickListener profileClickListener;
@@ -105,29 +104,16 @@ public class WatchersView extends LinearLayout{
         this.profileClickListener = profileClickListener;
     }
 
-    public void setOnEditListener(OnEditListener onEditListener) {
-        this.onEditListener = onEditListener;
-    }
     //endregion
 
     //region Private methods
     private void bindCurrentUserData(WatcherViewHolder viewHolder, UserModel currentUserWatching) {
         bindWatcherData(viewHolder, currentUserWatching);
-
-        viewHolder.editButton.setVisibility(VISIBLE);
-        viewHolder.editButton.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) {
-                if (onEditListener != null) {
-                    onEditListener.onEdit();
-                }
-            }
-        });
     }
 
     private void bindWatcherData(WatcherViewHolder viewHolder, UserModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
-        viewHolder.watchingText.setText(userWatching.getStatus());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
         }
@@ -143,7 +129,6 @@ public class WatchersView extends LinearLayout{
         UserModel watch1 = new UserModel();
         watch1.setIdUser("id");
         watch1.setUsername("Username");
-        watch1.setStatus("Watching");
 
         userWatchingMocks.add(watch1);
         userWatchingMocks.add(watch1);
@@ -180,10 +165,5 @@ public class WatchersView extends LinearLayout{
 
         void onProfile(String idUser);
 
-    }
-
-    public static interface OnEditListener {
-
-        void onEdit();
     }
 }

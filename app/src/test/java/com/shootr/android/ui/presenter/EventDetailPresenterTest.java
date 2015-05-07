@@ -7,11 +7,9 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
-import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -22,7 +20,6 @@ import com.squareup.otto.Bus;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -33,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -48,8 +44,6 @@ public class EventDetailPresenterTest {
     Bus bus;
     @Mock
     VisibleEventInfoInteractor eventInfoInteractor;
-    @Mock
-    UpdateStatusInteractor watchingStatusInteractor;
     @Mock
     ChangeEventPhotoInteractor changeEventPhotoInteractor;
     @Mock
@@ -79,8 +73,8 @@ public class EventDetailPresenterTest {
         eventModelMapper = new EventModelMapper(new EventTimeFormatter(), sessionRepository);
         userModelMapper= new UserModelMapper();
 
-        presenter = new EventDetailPresenter(bus, eventInfoInteractor, watchingStatusInteractor,
-                changeEventPhotoInteractor, getCheckinStatusInteractor, performCheckinInteractor,
+        presenter = new EventDetailPresenter(bus, eventInfoInteractor,
+          changeEventPhotoInteractor, getCheckinStatusInteractor, performCheckinInteractor,
                 eventModelMapper, userModelMapper, errorMessageFactory);
 
         presenter.setView(eventDetailView);
