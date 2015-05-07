@@ -29,59 +29,71 @@ public class EventTimeFormatter {
         referenceDate = new DateTime(timeUtils.getCurrentTime());
         String dateInTextFormat = null;
         if (isPast(date)) {
-            if(isPastInLessThanAnHour(date)){
-                if(isOneMinuteRemaining(date)){
-                    dateInTextFormat = timeTextFormatter.getStartingNowFormat();
-                }else{
-                    dateInTextFormat = timeTextFormatter.getMinutesAgoFormat(date);
-                }
-            } else if(isPastBetween1And12Hours(date)){
+            dateInTextFormat = formatPastDate(date);
+        }else if (isFuture(date)){
+            dateInTextFormat = formatFutureDate(date);
+        }else{
+            dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+        }
+        return dateInTextFormat;
+    }
+
+    private String formatPastDate(DateTime date) {
+        String dateInTextFormat = null;
+        if(isPastInLessThanAnHour(date)){
+            if(isOneMinuteRemaining(date)){
+                dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+            }else{
+                dateInTextFormat = timeTextFormatter.getMinutesAgoFormat(date);
+            }
+        } else if(isPastBetween1And12Hours(date)){
+            dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
+        } else if(isPastBetween12And24Hours(date)){
+            if(isToday(date)){
                 dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
-            } else if(isPastBetween12And24Hours(date)){
-                if(isToday(date)){
-                    dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
+            }else{
+                dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
+            }
+        } else if (isPastMoreThan24Hour(date)){
+            if (!isPastMoreThanAWeek(date)){
+                if(!wasYesterday(date)){
+                    dateInTextFormat = timeTextFormatter.getDaysAgoFormat(date);
                 }else{
                     dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
                 }
-            } else if (isPastMoreThan24Hour(date)){
-                if (!isPastMoreThanAWeek(date)){
-                    if(!wasYesterday(date)){
-                        dateInTextFormat = timeTextFormatter.getDaysAgoFormat(date);
-                    }else{
-                        dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
-                    }
-                }else if(isPastMoreThanAYear(date)){
-                    dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
-                }else{
-                    dateInTextFormat = timeTextFormatter.getThisYearFormat(date);
-                }
-            }
-        }else if (isFuture(date)){
-            if(isFutureInLessThanAnHour(date)){
-                if(isOneMinuteRemaining(date)){
-                    dateInTextFormat = timeTextFormatter.getStartingNowFormat();
-                }else{
-                    dateInTextFormat = timeTextFormatter.getStartingInMinutesFormat(date);
-                }
-            } else if (isFutureBetween1And12Hours(date)) {
-                dateInTextFormat = timeTextFormatter.getStartingInHoursFormat(date);
-            }else if (isFutureBetween12And24Hours(date)) {
-                if(isToday(date)){
-                    dateInTextFormat = timeTextFormatter.getTodayFormat(date);
-                }else{
-                    dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
-                }
-            }else if (isFutureBetween24And48Hours(date)){
-                if(isTomorrow(date)){
-                    dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
-                }else{
-                    dateInTextFormat = timeTextFormatter.getCurrentWeekFormat(date);
-                }
-            }else{
+            }else if(isPastMoreThanAYear(date)){
                 dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
+            }else{
+                dateInTextFormat = timeTextFormatter.getThisYearFormat(date);
+            }
+        }
+        return dateInTextFormat;
+    }
+
+    private String formatFutureDate(DateTime date) {
+        String dateInTextFormat;
+        if(isFutureInLessThanAnHour(date)){
+            if(isOneMinuteRemaining(date)){
+                dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+            }else{
+                dateInTextFormat = timeTextFormatter.getStartingInMinutesFormat(date);
+            }
+        } else if (isFutureBetween1And12Hours(date)) {
+            dateInTextFormat = timeTextFormatter.getStartingInHoursFormat(date);
+        }else if (isFutureBetween12And24Hours(date)) {
+            if(isToday(date)){
+                dateInTextFormat = timeTextFormatter.getTodayFormat(date);
+            }else{
+                dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
+            }
+        }else if (isFutureBetween24And48Hours(date)){
+            if(isTomorrow(date)){
+                dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
+            }else{
+                dateInTextFormat = timeTextFormatter.getCurrentWeekFormat(date);
             }
         }else{
-            dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+            dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
         }
         return dateInTextFormat;
     }
