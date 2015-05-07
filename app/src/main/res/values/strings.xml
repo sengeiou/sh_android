@@ -199,6 +199,19 @@
     <string name="drawer_events_title">Events</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
+    <string name="starting_in">Starting in&#160;</string>
+    <string name="space_and_minutes">&#160;minutes</string>
+    <string name="started">Started&#160;</string>
+    <string name="minutes_ago">&#160;minutes ago</string>
+    <string name="starting_now">Starting now</string>
+    <string name="an_hour">an hour</string>
+    <string name="space_and_hours">&#160;hours</string>
+    <string name="yesterday_at">Yesterday at&#160;</string>
+    <string name="days_ago">&#160;days ago</string>
+    <string name="an_hour_ago">an hour ago</string>
+    <string name="hours_ago">&#160;hours ago</string>
+    <string name="today_at">Today at&#160;</string>
+    <string name="tomorrow_at">Tomorrow at&#160;</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">

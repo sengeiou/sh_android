@@ -1,5 +1,7 @@
 package com.shootr.android.util;
 
+import com.shootr.android.domain.utils.TimeUtils;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.joda.time.DateTime;
@@ -14,18 +16,22 @@ import org.joda.time.format.DateTimeFormatter;
 public class EventTimeFormatter {
 
     private final TimeTextFormatter timeTextFormatter;
+    private final TimeUtils timeUtils;
+    private DateTime referenceDate;
 
-    @Inject public EventTimeFormatter(TimeTextFormatter timeTextFormatter) {
+    @Inject public EventTimeFormatter(TimeTextFormatter timeTextFormatter, TimeUtils timeUtils) {
         this.timeTextFormatter = timeTextFormatter;
+        this.timeUtils = timeUtils;
     }
 
     public String eventResultDateText(long timestamp) {
         DateTime date = new DateTime(timestamp);
+        referenceDate = new DateTime(timeUtils.getCurrentTime());
         String dateInTextFormat = null;
         if (isPast(date)) {
             if(isPastInLessThanAnHour(date)){
                 if(isOneMinuteRemaining(date)){
-                    dateInTextFormat = timeTextFormatter.getStartingNowFormat(date);
+                    dateInTextFormat = timeTextFormatter.getStartingNowFormat();
                 }else{
                     dateInTextFormat = timeTextFormatter.getMinutesAgoFormat(date);
                 }
@@ -35,20 +41,25 @@ public class EventTimeFormatter {
                 if(isToday(date)){
                     dateInTextFormat =  timeTextFormatter.getHoursAgoFormat(date);
                 }else{
-                    // Was yesterday
                     dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
                 }
             } else if (isPastMoreThan24Hour(date)){
-                if(isPastMoreThanAYear(date)){
+                if (!isPastMoreThanAWeek(date)){
+                    if(!wasYesterday(date)){
+                        dateInTextFormat = timeTextFormatter.getDaysAgoFormat(date);
+                    }else{
+                        dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
+                    }
+                }else if(isPastMoreThanAYear(date)){
                     dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
                 }else{
-                    dateInTextFormat = timeTextFormatter.getYesterdayFormat(date);
+                    dateInTextFormat = timeTextFormatter.getThisYearFormat(date);
                 }
             }
         }else if (isFuture(date)){
             if(isFutureInLessThanAnHour(date)){
                 if(isOneMinuteRemaining(date)){
-                    dateInTextFormat = timeTextFormatter.getStartingNowFormat(date);
+                    dateInTextFormat = timeTextFormatter.getStartingNowFormat();
                 }else{
                     dateInTextFormat = timeTextFormatter.getStartingInMinutesFormat(date);
                 }
@@ -58,26 +69,32 @@ public class EventTimeFormatter {
                 if(isToday(date)){
                     dateInTextFormat = timeTextFormatter.getTodayFormat(date);
                 }else{
-                    // Tomorrow
                     dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
                 }
             }else if (isFutureBetween24And48Hours(date)){
                 if(isTomorrow(date)){
                     dateInTextFormat = timeTextFormatter.getTomorrowFormat(date);
                 }else{
-                    // This week day
                     dateInTextFormat = timeTextFormatter.getCurrentWeekFormat(date);
                 }
             }else{
-                //TODO: Refactor this method's name
-                //Year Format
                 dateInTextFormat = timeTextFormatter.getAnotherYearFormat(date);
             }
+        }else{
+            dateInTextFormat = timeTextFormatter.getStartingNowFormat();
         }
         return dateInTextFormat;
     }
 
     //region Date Evaluators
+    private boolean wasYesterday(DateTime date) {
+        return getDaysBetweenNowAndDate(date) == 1;
+    }
+
+    private boolean isPastMoreThanAWeek(DateTime date) {
+        return getDaysBetweenNowAndDate(date) > 7;
+    }
+
     public boolean isFutureBetween24And48Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) >= 24 &&
                 getHoursBetweenNowAndDate(date) <= 48;
@@ -110,7 +127,7 @@ public class EventTimeFormatter {
     }
 
     private int getMinutesBetweenNowAndDate(DateTime date) {
-        return Math.abs(Minutes.minutesBetween(DateTime.now(), date).getMinutes());
+        return Math.abs(Minutes.minutesBetween(referenceDate, date).getMinutes());
     }
 
     public boolean isPastInLessThanAnHour(DateTime date) {
@@ -125,35 +142,34 @@ public class EventTimeFormatter {
         return getDaysBetweenNowAndDate(date) == 1;
     }
 
-    public boolean isInAnHourRange(DateTime date) {
-        return getHoursBetweenNowAndDate(date) <= 1;
-    }
-
     public boolean isPastMoreThanAYear(DateTime date) {
         return getYearsBetweenNowAndDate(date) >= 1;
     }
 
     public boolean isFuture(DateTime date) {
-        return date.isAfterNow();
+        return date.isAfter(referenceDate);
     }
 
     public boolean isPast(DateTime date) {
-        return date.isBeforeNow();
+        return date.isBefore(referenceDate);
     }
 
     public boolean isToday(DateTime targetDate) {
         return getDaysBetweenNowAndDate(targetDate) == 0;
     }
     //endregion
+
+    //region Date Getters
     private int getDaysBetweenNowAndDate(DateTime targetDate) {
-        return Math.abs(Days.daysBetween(DateTime.now(), targetDate).getDays()) + 1;
+        return timeTextFormatter.calculateDaysOfDifferenceBetweenDates(referenceDate, targetDate);
     }
 
     private int getHoursBetweenNowAndDate(DateTime date) {
-        return Math.abs(Hours.hoursBetween(DateTime.now(), date).getHours());
+        return Math.abs(Hours.hoursBetween(referenceDate, date).getHours());
     }
 
     private int getYearsBetweenNowAndDate(DateTime date) {
-        return Math.abs(Years.yearsBetween(DateTime.now(), date).getYears());
+        return Math.abs(Years.yearsBetween(referenceDate, date).getYears());
     }
+    //endregion
 }
