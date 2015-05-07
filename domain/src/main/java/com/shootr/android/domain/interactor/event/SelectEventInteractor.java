@@ -73,7 +73,6 @@ public class SelectEventInteractor implements Interactor {
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
         currentUser.setVisibleEventId(selectedEvent.getId());
         currentUser.setVisibleEventTitle(selectedEvent.getTitle());
-        currentUser.setStatus("Watching"); //TODO hardoced, eh??
         return currentUser;
     }
 

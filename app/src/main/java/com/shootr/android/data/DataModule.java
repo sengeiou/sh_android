@@ -52,7 +52,6 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.fragments.UserFollowsFragment;
-import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -112,8 +111,6 @@ import static android.content.Context.MODE_PRIVATE;
     GCMIntentService.class,
 
     LogTreeFactory.class,
-
-    EditInfoPresenter.class,
 
     ProfileEditPresenter.class,
 

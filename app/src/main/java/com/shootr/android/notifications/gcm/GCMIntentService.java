@@ -7,12 +7,10 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
-import com.shootr.android.notifications.status.StatusChangedNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -29,11 +27,9 @@ public class GCMIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
     private static final int PUSH_TYPE_FOLLOW = 2;
-    private static final int PUSH_TYPE_STATUS_CHANGED = 4;
 
     @Inject ShotNotificationManager shotNotificationManager;
     @Inject FollowNotificationManager followNotificationManager;
-    @Inject StatusChangedNotificationManager statusChangedNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject @Local UserRepository localUserRepository;
@@ -48,7 +44,6 @@ public class GCMIntentService extends IntentService {
     private static final String ID_USER = "idUser";
     private static final String ID_SHOT = "idShot";
     private static final String ID_EVENT = "idEvent";
-    private static final String STATUS = "status";
 
     @Override public void onCreate() {
         super.onCreate();
@@ -70,9 +65,6 @@ public class GCMIntentService extends IntentService {
                 case PUSH_TYPE_FOLLOW:
                     receivedFollow(parameters);
                     break;
-                case PUSH_TYPE_STATUS_CHANGED:
-                    receivedStatusChanged(parameters);
-                    break;
                 default:
                     receivedUnknown(parameters);
             }
@@ -81,14 +73,6 @@ public class GCMIntentService extends IntentService {
         } catch (Exception e) {
             Timber.e(e, "Error creating notification");
         }
-    }
-
-    private void receivedStatusChanged(JSONObject parameters) throws JSONException {
-        String idUser = parameters.getString(ID_USER);
-        String status = parameters.getString(STATUS);
-
-        User user = localUserRepository.getUserById(idUser);
-        statusChangedNotificationManager.sendWatchRequestNotification(userModelMapper.transform(user), status);
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {

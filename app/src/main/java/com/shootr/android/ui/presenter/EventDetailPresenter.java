@@ -1,7 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import android.support.annotation.Nullable;
-
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
@@ -9,7 +7,6 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.UpdateStatusInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
@@ -36,7 +33,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //region Dependencies
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
-    private final UpdateStatusInteractor watchingStatusInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
     private final GetCheckinStatusInteractor getCheckinStatusInteractor;
     private final PerformCheckinInteractor performCheckinInteractor;
@@ -56,12 +52,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-        UpdateStatusInteractor watchingStatusInteractor, ChangeEventPhotoInteractor changeEventPhotoInteractor,
-        GetCheckinStatusInteractor getCheckinStatusInteractor, PerformCheckinInteractor performCheckinInteractor,
-        EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
+      PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
-        this.watchingStatusInteractor = watchingStatusInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
         this.getCheckinStatusInteractor = getCheckinStatusInteractor;
         this.performCheckinInteractor = performCheckinInteractor;
@@ -101,25 +95,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             }
         }
 
-    }
-
-    //region Edit status
-    public void editStatus() {
-        eventDetailView.navigateToEditStatus(eventModel, currentUserWatchingModel.getStatus());
-    }
-
-    public void resultFromEditStatus(@Nullable String statusText) {
-        updateWatchStatus(statusText);
-    }
-
-    private void updateWatchStatus(String statusText) {
-        watchingStatusInteractor.updateStatus(
-                statusText,
-                new UpdateStatusInteractor.Callback() {
-                    @Override public void onLoaded(User currentUser) {
-                        renderCurrentUserWatching(currentUser);
-                    }
-                });
     }
     //endregion
 

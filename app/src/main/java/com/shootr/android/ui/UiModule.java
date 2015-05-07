@@ -3,7 +3,6 @@ package com.shootr.android.ui;
 import com.shootr.android.ui.activities.ActivityTimelineActivity;
 import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
-import com.shootr.android.ui.activities.EditStatusActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
@@ -45,7 +44,6 @@ import dagger.Provides;
                 UserFollowsContainerActivity.class,
                 FindFriendsActivity.class,
                 EventDetailActivity.class,
-                EditStatusActivity.class,
                 ProfileEditActivity.class,
                 ShotDetailActivity.class,
                 PhotoViewActivity.class,

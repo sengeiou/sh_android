@@ -124,11 +124,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
                 navigateToUserProfile(idUser);
             }
         });
-        watchersList.setOnEditListener(new WatchersView.OnEditListener() {
-            @Override public void onEdit() {
-                presenter.editStatus();
-            }
-        });
         scrollView.addCallbacks(this);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
@@ -313,10 +308,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
-            String statusText = data.getStringExtra(EditStatusActivity.KEY_STATUS);
-            presenter.resultFromEditStatus(statusText);
-        } else if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             String idEventEdited = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
             presenter.resultFromEditEventInfo(idEventEdited);
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -451,17 +443,13 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setWatchersCount(int watchersCount) {
-        watchersNumber.setText(
-          getResources().getQuantityString(R.plurals.event_watching_watchers_number, watchersCount, watchersCount));
+        watchersNumber.setText(getResources().getQuantityString(R.plurals.event_watching_watchers_number,
+          watchersCount,
+          watchersCount));
     }
 
     @Override public void setCurrentUserWatching(UserModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
-    }
-
-    @Override public void navigateToEditStatus(EventModel eventModel, String currentcurrentStatus) {
-        Intent intent = EditStatusActivity.getIntent(this, eventModel, currentcurrentStatus);
-        startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
     @Override public void navigateToEditEvent(String idEvent) {
