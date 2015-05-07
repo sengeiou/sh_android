@@ -107,34 +107,34 @@ public class EventTimeFormatter {
         return getDaysBetweenNowAndDate(date) > 7;
     }
 
-    public boolean isFutureBetween24And48Hours(DateTime date) {
+    private boolean isFutureBetween24And48Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) >= 24 &&
                 getHoursBetweenNowAndDate(date) <= 48;
     }
 
-    public boolean isFutureBetween12And24Hours(DateTime date) {
+    private boolean isFutureBetween12And24Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) > 12 &&
                 getHoursBetweenNowAndDate(date) <= 24;
     }
 
-    public boolean isFutureBetween1And12Hours(DateTime date) {
+    private boolean isFutureBetween1And12Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) <= 12 && getHoursBetweenNowAndDate(date) >= 1;
     }
 
-    public boolean isPastMoreThan24Hour(DateTime date) {
+    private boolean isPastMoreThan24Hour(DateTime date) {
         return getHoursBetweenNowAndDate(date) >= 24;
     }
 
-    public boolean isPastBetween12And24Hours(DateTime date) {
+    private boolean isPastBetween12And24Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) > 12 &&
                 getHoursBetweenNowAndDate(date) <= 24;
     }
 
-    public boolean isPastBetween1And12Hours(DateTime date) {
+    private boolean isPastBetween1And12Hours(DateTime date) {
         return getHoursBetweenNowAndDate(date) <= 12 && getHoursBetweenNowAndDate(date) >= 1;
     }
 
-    public boolean isOneMinuteRemaining(DateTime date) {
+    private boolean isOneMinuteRemaining(DateTime date) {
         return getMinutesBetweenNowAndDate(date) <= 1;
     }
 
@@ -142,31 +142,31 @@ public class EventTimeFormatter {
         return Math.abs(Minutes.minutesBetween(referenceDate, date).getMinutes());
     }
 
-    public boolean isPastInLessThanAnHour(DateTime date) {
+    private boolean isPastInLessThanAnHour(DateTime date) {
         return getHoursBetweenNowAndDate(date) < 1;
     }
 
-    public boolean isFutureInLessThanAnHour(DateTime date) {
+    private boolean isFutureInLessThanAnHour(DateTime date) {
         return getHoursBetweenNowAndDate(date) < 1;
     }
 
-    public boolean isTomorrow(DateTime date) {
+    private boolean isTomorrow(DateTime date) {
         return getDaysBetweenNowAndDate(date) == 1;
     }
 
-    public boolean isPastMoreThanAYear(DateTime date) {
+    private boolean isPastMoreThanAYear(DateTime date) {
         return getYearsBetweenNowAndDate(date) >= 1;
     }
 
-    public boolean isFuture(DateTime date) {
+    private boolean isFuture(DateTime date) {
         return date.isAfter(referenceDate);
     }
 
-    public boolean isPast(DateTime date) {
+    private boolean isPast(DateTime date) {
         return date.isBefore(referenceDate);
     }
 
-    public boolean isToday(DateTime targetDate) {
+    private boolean isToday(DateTime targetDate) {
         return getDaysBetweenNowAndDate(targetDate) == 0;
     }
     //endregion
