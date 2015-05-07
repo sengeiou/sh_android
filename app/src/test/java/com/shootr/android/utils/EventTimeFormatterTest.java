@@ -18,11 +18,14 @@ import static org.mockito.Mockito.when;
 
 public class EventTimeFormatterTest {
 
-    public static final long EIGH_MORNING_MILLISECONDS = 1431021600000L;
     public static final long EIGHT_HOURS_MILLISECONDS = 1430978400000L;
     public static final long TWENTY_TWO_HOURS_MILLISECONDS = 1431028800000L;
     public static final long NEXT_DAY_ELEVEN_HOURS_MILLISECONDS = 1431075600000L;
     public static final long TWO_DAYS_LATER_MILLISECONDS = 1431133200000L;
+    public static final long SOME_TIME_AGO_THIS_YEAR = 1420423200000L;
+    public static final long DATE_ON_NEXT_YEAR = 1462755600000L;
+    public static final long PAST_YEAR_MILLISECONDS = 1399597200L;
+    public static final int RANDOM_DAYS_OF_DIFFERENCE = 30;
     @Mock TimeTextFormatter timeTextFormatter;
     @Mock TimeUtils timeUtils;
 
@@ -39,7 +42,15 @@ public class EventTimeFormatterTest {
         Long timestamp = setUpDateStartingLessThanAMinuteInTimestamp();
         when(timeUtils.getCurrentTime()).thenReturn(new Date().getTime());
         eventTimeFormatter.eventResultDateText(timestamp);
-        verify(timeTextFormatter).getStartingNowFormat(any(DateTime.class));
+        verify(timeTextFormatter).getStartingNowFormat();
+    }
+
+    @Test
+    public void shouldShowStartingNowIfDateIsZeroMinutes() {
+        Long timestamp = setUpDateStartingLessThanAMinuteInTimestamp();
+        when(timeUtils.getCurrentTime()).thenReturn(timestamp);
+        eventTimeFormatter.eventResultDateText(timestamp);
+        verify(timeTextFormatter).getStartingNowFormat();
     }
 
     @Test
@@ -47,7 +58,7 @@ public class EventTimeFormatterTest {
         Long timestamp = setUpDateStartedLessThanAMinuteInTimestamp();
         when(timeUtils.getCurrentTime()).thenReturn(new Date().getTime());
         eventTimeFormatter.eventResultDateText(timestamp);
-        verify(timeTextFormatter).getStartingNowFormat(any(DateTime.class));
+        verify(timeTextFormatter).getStartingNowFormat();
     }
 
     @Test
@@ -85,8 +96,6 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowTodayFormatIfDateBetween12And24HoursAndItsToday() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        // 8 mañana 1430978400000
-        // 8 tarde 1431021600000
         eventTimeFormatter.eventResultDateText(TWENTY_TWO_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getTodayFormat(any(DateTime.class));
     }
@@ -101,6 +110,9 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowTomorowFormatIfDateBetween12And24HoursAndItsTomorow() {
         when(timeUtils.getCurrentTime()).thenReturn(TWENTY_TWO_HOURS_MILLISECONDS);
+        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
+                new DateTime(TWENTY_TWO_HOURS_MILLISECONDS),
+                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.eventResultDateText(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getTomorrowFormat(any(DateTime.class));
     }
@@ -108,6 +120,9 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowYesterdayFormatIfDateBetween12And24HoursAndItsYesterday() {
         when(timeUtils.getCurrentTime()).thenReturn(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
+        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
+                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS),
+                new DateTime(TWENTY_TWO_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.eventResultDateText(TWENTY_TWO_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getYesterdayFormat(any(DateTime.class));
     }
@@ -115,6 +130,9 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowTomorrowFormatIfDateBetween24And48HoursAndItsTomorow() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
+        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
+                new DateTime(EIGHT_HOURS_MILLISECONDS),
+                new DateTime(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS))).thenReturn(1);
         eventTimeFormatter.eventResultDateText(NEXT_DAY_ELEVEN_HOURS_MILLISECONDS);
         verify(timeTextFormatter).getTomorrowFormat(any(DateTime.class));
     }
@@ -136,24 +154,31 @@ public class EventTimeFormatterTest {
     @Test
     public void shouldShowAnotherYearFormatIfDateIsOnNextYear() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        eventTimeFormatter.eventResultDateText(1462755600000L);
+        eventTimeFormatter.eventResultDateText(DATE_ON_NEXT_YEAR);
         verify(timeTextFormatter).getAnotherYearFormat(any(DateTime.class));
     }
 
     @Test
-    public void shouldShowAnotherYearFormatIfDateWasPastYear() {
+    public void shouldShowAnotherYearFormatIfDateWasAPastYear() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        eventTimeFormatter.eventResultDateText(1399597200L);
+        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
+                new DateTime(EIGHT_HOURS_MILLISECONDS),
+                new DateTime(PAST_YEAR_MILLISECONDS))).thenReturn(RANDOM_DAYS_OF_DIFFERENCE);
+        eventTimeFormatter.eventResultDateText(PAST_YEAR_MILLISECONDS);
         verify(timeTextFormatter).getAnotherYearFormat(any(DateTime.class));
     }
 
     @Test
-    public void shouldShowCurrentYearFormatIfDateWasPastYear() {
+    public void shouldShowCurrentYearFormatIfDateWasThisYear() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
-        eventTimeFormatter.eventResultDateText(1420423200000L);
+        when(timeTextFormatter.calculateDaysOfDifferenceBetweenDates(
+                new DateTime(EIGHT_HOURS_MILLISECONDS),
+                new DateTime(SOME_TIME_AGO_THIS_YEAR))).thenReturn(RANDOM_DAYS_OF_DIFFERENCE);
+        eventTimeFormatter.eventResultDateText(SOME_TIME_AGO_THIS_YEAR);
         verify(timeTextFormatter).getThisYearFormat(any(DateTime.class));
     }
 
+    //region SetUp
     private Long setUpDateStartingLessThanAMinuteInTimestamp() {
         Long thirtySeconds = Long.valueOf(1000 * 30);
         Long timestamp = new Date().getTime()+thirtySeconds;
@@ -189,12 +214,6 @@ public class EventTimeFormatterTest {
         Long timestamp = new Date().getTime()-hourAndAHalf;
         return timestamp;
     }
+    //endregion
 
-    private Long setUpDateStartingTomorrowTimestamp(long time) {
-        Long seventeenHours = Long.valueOf(1000*60*60*17);
-        Date timestampDate = new Date();
-        timestampDate.setTime(time);
-        Long timestamp = new Date().getTime()+seventeenHours;
-        return timestamp;
-    }
 }
