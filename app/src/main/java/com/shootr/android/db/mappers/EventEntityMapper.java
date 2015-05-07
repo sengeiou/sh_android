@@ -22,7 +22,6 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.ID_USER, eventEntity.getIdUser());
         contentValues.put(DatabaseContract.EventTable.USERNAME, eventEntity.getUserName());
         contentValues.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity.getBeginDate()!=null ? eventEntity.getBeginDate().getTime() : null);
-        contentValues.put(DatabaseContract.EventTable.END_DATE, eventEntity.getEndDate()!=null ? eventEntity.getEndDate().getTime() : null);
         contentValues.put(DatabaseContract.EventTable.TITLE, eventEntity.getTitle());
         contentValues.put(DatabaseContract.EventTable.PHOTO, eventEntity.getPhoto());
         contentValues.put(DatabaseContract.EventTable.TIMEZONE, eventEntity.getTimezone());
@@ -63,7 +62,6 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.ID_USER, eventEntity == null ? null : eventEntity.getIdUser());
         dto.put(DatabaseContract.EventTable.USERNAME, eventEntity == null ? null : eventEntity.getUserName());
         dto.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity == null ? null : eventEntity.getBeginDate());
-        dto.put(DatabaseContract.EventTable.END_DATE, eventEntity == null ? null : eventEntity.getEndDate());
         dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
         dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         dto.put(DatabaseContract.EventTable.TIMEZONE, eventEntity == null ? null : eventEntity.getTimezone());
@@ -90,7 +88,6 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TAG)));
         Long date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.BEGIN_DATE));
         eventEntity.setBeginDate(date != 0L ? new Date(date) : null);
-        date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.END_DATE));
         eventEntity.setEndDate(date != 0L ? new Date(date) : null);
         setSynchronizedfromCursor(c, eventEntity);
     }

@@ -116,23 +116,6 @@ public class EventManager extends AbstractManager{
         insertInTableSync(DatabaseContract.EventTable.TABLE, 10, 1000, 0);
     }
 
-    public List<EventEntity> getEndedEvents() {
-        String whereSelection = DatabaseContract.EventTable.END_DATE + "<" + timeUtils.getCurrentTime();
-        Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, null, null, null, null);
-
-        List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                EventEntity eventEntity = eventEntityMapper.fromCursor(queryResult);
-                resultEvents.add(eventEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultEvents;
-    }
-
     public List<EventSearchEntity> getDefaultEventSearch() {
         List<EventSearchEntity> eventSearchEntities = new ArrayList<>();
 
