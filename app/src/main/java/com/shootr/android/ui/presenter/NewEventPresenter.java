@@ -47,7 +47,6 @@ public class NewEventPresenter implements Presenter {
     private TimeZone selectedTimeZone;
     private String preloadedTitle;
     private long preloadedStartDate;
-    private EndDate preloadedEndDate;
     private String preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
@@ -106,10 +105,6 @@ public class NewEventPresenter implements Presenter {
 
         preloadedStartDate = fakeDateFromRealTimezone(eventModel.getStartDate());
         setStartDateTime(new MutableDateTime(preloadedStartDate));
-
-        long offsetEndDate = fakeDateFromRealTimezone(eventModel.getEndDate());
-        preloadedEndDate = endDateFromTimestamp(offsetEndDate, preloadedStartDate);
-        setEndDateTime(preloadedEndDate);
     }
 
     private void setDefaultStartDateTime() {
@@ -392,7 +387,6 @@ public class NewEventPresenter implements Presenter {
     private boolean canSendEvent() {
         return isValidTitle() && (hasChangedTitle()
           || hasChangedStartDate()
-          || hasChangedEndDate()
           || hasChangedTimezone());
     }
 
@@ -406,12 +400,6 @@ public class NewEventPresenter implements Presenter {
 
     private boolean hasChangedStartDate() {
         return selectedStartDateTime != null && selectedStartDateTime.getMillis() != preloadedStartDate;
-    }
-
-    private boolean hasChangedEndDate() {
-        return preloadedEndDate == null
-          || selectedEndDate.getDateTime(selectedStartDateTime.getMillis()) != preloadedEndDate.getDateTime(
-          preloadedStartDate);
     }
 
     private boolean hasChangedTitle() {

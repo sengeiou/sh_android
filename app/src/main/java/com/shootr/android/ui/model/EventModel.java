@@ -12,7 +12,6 @@ public class EventModel {
     private String tag;
     private String timezone;
     private long startDate;
-    private long endDate;
     private boolean amIAuthor;
 
     public String getIdEvent() {
@@ -62,14 +61,6 @@ public class EventModel {
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public long getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(long endDate) {
-        this.endDate = endDate;
     }
 
     public long getStartDate() {
