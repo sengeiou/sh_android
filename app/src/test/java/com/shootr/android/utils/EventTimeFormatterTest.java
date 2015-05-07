@@ -5,6 +5,7 @@ import com.shootr.android.util.EventTimeFormatter;
 import com.shootr.android.util.TimeTextFormatter;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -121,6 +123,26 @@ public class EventTimeFormatterTest {
         verify(timeTextFormatter).getYesterdayFormat(any(DateTime.class));
     }
 
+    @Test public void shouldShowYesterdayFormatWhenDateIsDayBefore26HoursAgo() throws Exception {
+        long now = date(7, 5, 2015) + time(12, 0, 0);
+        long eventDate = date(6, 5, 2015) + time(10, 0, 0);
+        when(timeUtils.getCurrentTime()).thenReturn(now);
+
+        eventTimeFormatter.formatEventDate(eventDate);
+
+        verify(timeTextFormatter).getYesterdayFormat(any(DateTime.class));
+    }
+
+    @Test public void shouldShowDaysAgoFormatWhenDateIsDayBeforeYesterday() throws Exception {
+        long now = date(7, 5, 2015) + time(12, 0, 0);
+        long eventDate = date(5, 5, 2015) + time(10, 0, 0);
+        when(timeUtils.getCurrentTime()).thenReturn(now);
+
+        eventTimeFormatter.formatEventDate(eventDate);
+
+        verify(timeTextFormatter).getDaysAgoFormat(any(DateTime.class));
+    }
+
     @Test
     public void shouldShowTomorrowFormatIfDateBetween24And48HoursAndItsTomorow() {
         when(timeUtils.getCurrentTime()).thenReturn(EIGHT_HOURS_MILLISECONDS);
@@ -198,6 +220,24 @@ public class EventTimeFormatterTest {
         Long hourAndAHalf = Long.valueOf(1000*60*60 + 1000*60*30);
         Long timestamp = new Date().getTime()-hourAndAHalf;
         return timestamp;
+    }
+    //endregion
+
+    //region Date constructors
+    private long date(int day, int month, int year) {
+        MutableDateTime date = new MutableDateTime(0);
+        date.setDayOfMonth(day);
+        date.setMonthOfYear(month);
+        date.setYear(year);
+        return date.getMillis();
+    }
+
+    private long time(int hour, int minutes, int seconds) {
+        MutableDateTime time = new MutableDateTime(0);
+        time.setHourOfDay(hour);
+        time.setMinuteOfHour(minutes);
+        time.setSecondOfMinute(seconds);
+        return time.getMillis();
     }
     //endregion
 
