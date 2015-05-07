@@ -9,6 +9,8 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.utils.TimeUtils;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,9 +42,10 @@ public class SelectEventInteractorTest {
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock Interactor.Callback<Event> dummyCallback;
+    @Mock TimeUtils timeUtils;
 
     private SelectEventInteractor interactor;
-
+    
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -53,7 +56,7 @@ public class SelectEventInteractorTest {
           eventRepository,
           localUserRepository,
           remoteUserRepository,
-          sessionRepository);
+          sessionRepository, timeUtils);
     }
 
     @Test
