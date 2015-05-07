@@ -7,7 +7,6 @@ import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
-import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -30,8 +29,6 @@ import javax.inject.Singleton;
                 GetUserInfoJob.class,
                 GetFollowingsJob.class,
 
-                LoginUserJob.class,
-          
                 ProfileFragment.class,
                 ProfileContainerActivity.class,
 

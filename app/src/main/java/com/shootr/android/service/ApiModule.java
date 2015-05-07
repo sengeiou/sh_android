@@ -8,12 +8,10 @@ import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.service.dataservice.ShootrDataService;
 import com.shootr.android.service.dataservice.DataServiceModule;
-import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import javax.inject.Singleton;
 
 @Module(
         injects = {
-                LoginUserJob.class,
                 ShootrPhotoService.class,
                 PhotoService.class,
         },

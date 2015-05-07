@@ -539,8 +539,7 @@ public class ShootrDataService implements ShootrService {
                 String statusMessage = genericDto.getStatusMessage();
                 String statusSubcode = genericDto.getStatusSubcode();
 
-                boolean isHookException = ServerException.G025.equals(statusCode);
-                if (isHookException && statusSubcode != null) {
+                if (statusSubcode != null) {
                     ShootrError shootrError = new ShootrDataServiceError(statusSubcode, statusMessage);
                     if (shootrError.getErrorCode().equals(ShootrError.ERROR_CODE_UPDATE_REQUIRED)) {
                         versionUpdater.notifyUpdateRequired();
