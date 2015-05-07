@@ -193,7 +193,6 @@ public class EventsListPresenterTest {
         event.setId(SELECTED_EVENT_ID);
         event.setTitle(SELECTED_EVENT_TITLE);
         event.setStartDate(new Date());
-        event.setEndDate(new Date());
         event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }

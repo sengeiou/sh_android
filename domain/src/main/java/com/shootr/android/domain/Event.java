@@ -12,7 +12,6 @@ public class Event {
     private String timezone;
     private String tag;
     private Date startDate;
-    private Date endDate;
 
     public Event() {
     }
@@ -31,14 +30,6 @@ public class Event {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public String getId() {
@@ -104,8 +95,7 @@ public class Event {
         if (picture != null ? !picture.equals(event.picture) : event.picture != null) return false;
         if (timezone != null ? !timezone.equals(event.timezone) : event.timezone != null) return false;
         if (tag != null ? !tag.equals(event.tag) : event.tag != null) return false;
-        if (startDate != null ? !startDate.equals(event.startDate) : event.startDate != null) return false;
-        return !(endDate != null ? !endDate.equals(event.endDate) : event.endDate != null);
+        return !(startDate != null ? !startDate.equals(event.startDate) : event.startDate != null);
     }
 
     @Override public int hashCode() {
@@ -117,7 +107,6 @@ public class Event {
         result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
         result = 31 * result + (tag != null ? tag.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         return result;
     }
 

@@ -79,7 +79,6 @@ public class CreateEventInteractor implements Interactor {
         event.setAuthorId(currentUserId);
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));
-        event.setEndDate(new Date(endDate));
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
         return event;
