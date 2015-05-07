@@ -22,15 +22,21 @@ public class EventTimeFormatter {
     public String formatEventDate(long eventTimestamp) {
         DateTime date = new DateTime(eventTimestamp);
         DateTime now = new DateTime(timeUtils.getCurrentTime());
-        String dateInTextFormat = null;
-        if (isPast(date, now)) {
-            dateInTextFormat = formatPastDate(date, now);
-        }else if (isFuture(date, now)){
-            dateInTextFormat = formatFutureDate(date, now);
+        return formatRelativeEventDate(date, now);
+    }
+
+    private String formatRelativeEventDate(DateTime eventDate, DateTime now) {
+        if (isPast(eventDate, now)) {
+            return formatPastDate(eventDate, now);
+        }else if (isFuture(eventDate, now)){
+            return formatFutureDate(eventDate, now);
         }else{
-            dateInTextFormat = timeTextFormatter.getStartingNowFormat();
+            return formatCurrentDate();
         }
-        return dateInTextFormat;
+    }
+
+    private String formatCurrentDate() {
+        return timeTextFormatter.getStartingNowFormat();
     }
 
     private String formatPastDate(DateTime date, DateTime now) {
