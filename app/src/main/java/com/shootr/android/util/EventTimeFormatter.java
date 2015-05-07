@@ -17,7 +17,7 @@ public class EventTimeFormatter {
 
     private final TimeTextFormatter timeTextFormatter;
     private final TimeUtils timeUtils;
-    private DateTime referenceDate;
+    private DateTime now;
 
     @Inject public EventTimeFormatter(TimeTextFormatter timeTextFormatter, TimeUtils timeUtils) {
         this.timeTextFormatter = timeTextFormatter;
@@ -26,7 +26,7 @@ public class EventTimeFormatter {
 
     public String eventResultDateText(long timestamp) {
         DateTime date = new DateTime(timestamp);
-        referenceDate = new DateTime(timeUtils.getCurrentTime());
+        now = new DateTime(timeUtils.getCurrentTime());
         String dateInTextFormat = null;
         if (isPast(date)) {
             dateInTextFormat = formatPastDate(date);
@@ -139,7 +139,7 @@ public class EventTimeFormatter {
     }
 
     private int getMinutesBetweenNowAndDate(DateTime date) {
-        return Math.abs(Minutes.minutesBetween(referenceDate, date).getMinutes());
+        return Math.abs(Minutes.minutesBetween(now, date).getMinutes());
     }
 
     private boolean isPastInLessThanAnHour(DateTime date) {
@@ -159,11 +159,11 @@ public class EventTimeFormatter {
     }
 
     private boolean isFuture(DateTime date) {
-        return date.isAfter(referenceDate);
+        return date.isAfter(now);
     }
 
     private boolean isPast(DateTime date) {
-        return date.isBefore(referenceDate);
+        return date.isBefore(now);
     }
 
     private boolean isToday(DateTime targetDate) {
@@ -173,15 +173,15 @@ public class EventTimeFormatter {
 
     //region Date Getters
     private int getDaysBetweenNowAndDate(DateTime targetDate) {
-        return timeTextFormatter.calculateDaysOfDifferenceBetweenDates(referenceDate, targetDate);
+        return timeTextFormatter.calculateDaysOfDifferenceBetweenDates(now, targetDate);
     }
 
     private int getHoursBetweenNowAndDate(DateTime date) {
-        return Math.abs(Hours.hoursBetween(referenceDate, date).getHours());
+        return Math.abs(Hours.hoursBetween(now, date).getHours());
     }
 
     private int getYearsBetweenNowAndDate(DateTime date) {
-        return Math.abs(Years.yearsBetween(referenceDate, date).getYears());
+        return Math.abs(Years.yearsBetween(now, date).getYears());
     }
     //endregion
 }
