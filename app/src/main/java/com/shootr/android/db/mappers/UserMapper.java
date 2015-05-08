@@ -29,7 +29,7 @@ public class UserMapper extends GenericMapper {
         if (emailTokenIndex >= 0) {
             user.setEmail(c.getString(emailTokenIndex));
         }
-        setSynchronizedfromCursor(c,user);
+        setSynchronizedfromCursor(c, user);
         return user;
     }
 
@@ -60,6 +60,7 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.EVENT_ID, u.getIdEvent());
             cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
             cv.put(UserTable.CHECK_IN, u.getCheckIn());
+            cv.put(UserTable.JOIN_EVENT_DATE, u.getJoinEventDate());
             setSynchronizedtoContentValues(u, cv);
         }
         return cv;
@@ -95,7 +96,9 @@ public class UserMapper extends GenericMapper {
         if(dto.get(UserTable.CHECK_IN)!=null){
             user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
         }
-
+        if(dto.get(UserTable.JOIN_EVENT_DATE)!=null) {
+            user.setJoinEventDate(dto.containsKey(UserTable.JOIN_EVENT_DATE) ? ((Number) dto.get(UserTable.JOIN_EVENT_DATE)).longValue() : null);
+        }
         setSynchronizedfromDto(dto,user);
         return user;
     }
@@ -129,6 +132,7 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.EVENT_ID, user == null ? null : user.getIdEvent());
         dto.put(UserTable.EVENT_TITLE, user == null ? null : user.getEventTitle());
         dto.put(UserTable.CHECK_IN, user == null ? null : user.getCheckIn());
+        dto.put(UserTable.JOIN_EVENT_DATE, user == null ? null : user.getJoinEventDate());
         setSynchronizedtoDto(user, dto);
         return dto;
     }
@@ -168,6 +172,7 @@ public class UserMapper extends GenericMapper {
         user.setIdEvent(c.getString(c.getColumnIndex(UserTable.EVENT_ID)));
         user.setEventTitle(c.getString(c.getColumnIndex(UserTable.EVENT_TITLE)));
         user.setCheckIn(c.getInt(c.getColumnIndex(UserTable.CHECK_IN)));
+        user.setJoinEventDate(c.getLong(c.getColumnIndex(UserTable.JOIN_EVENT_DATE)));
         return user;
     }
 

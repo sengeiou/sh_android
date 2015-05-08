@@ -19,6 +19,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String eventTitle;
     private String idEvent;
     private Integer checkIn;
+    private Long joinEventDate;
 
     public UserEntity(){
     }
@@ -176,5 +177,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setCheckIn(Integer checkIn) {
         this.checkIn = checkIn;
+    }
+
+    public Long getJoinEventDate() {
+        return joinEventDate;
+    }
+
+    public void setJoinEventDate(Long joinEventDate) {
+        this.joinEventDate = joinEventDate;
     }
 }

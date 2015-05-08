@@ -10,6 +10,10 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.utils.TimeUtils;
+
+import java.util.Date;
+
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
@@ -21,6 +25,7 @@ public class SelectEventInteractor implements Interactor {
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final SessionRepository sessionRepository;
+    private final TimeUtils timeUtils;
 
     private String idSelectedEvent;
     private Callback<Event> callback;
@@ -28,13 +33,14 @@ public class SelectEventInteractor implements Interactor {
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
       @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
-      SessionRepository sessionRepository) {
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.sessionRepository = sessionRepository;
+        this.timeUtils = timeUtils;
     }
     //endregion
 
@@ -73,7 +79,12 @@ public class SelectEventInteractor implements Interactor {
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
         currentUser.setVisibleEventId(selectedEvent.getId());
         currentUser.setVisibleEventTitle(selectedEvent.getTitle());
+        currentUser.setJoinEventDate(getCurrentTime());
         return currentUser;
+    }
+
+    private long getCurrentTime() {
+        return timeUtils.getCurrentDate().getTime();
     }
 
     private void notifyLoaded(final Event selectedEvent) {

@@ -18,6 +18,7 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -114,6 +115,7 @@ public class WatchersView extends LinearLayout{
     private void bindWatcherData(WatcherViewHolder viewHolder, UserModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
+        viewHolder.watchingText.setText(userWatching.getJoinEventDateText());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
         }
@@ -145,7 +147,6 @@ public class WatchersView extends LinearLayout{
         @InjectView(R.id.watcher_user_avatar) ImageView avatar;
         @InjectView(R.id.watcher_user_name) TextView name;
         @InjectView(R.id.watcher_user_watching) TextView watchingText;
-        @InjectView(R.id.watcher_user_edit) View editButton;
         String userId;
 
         public WatcherViewHolder(View itemView) {

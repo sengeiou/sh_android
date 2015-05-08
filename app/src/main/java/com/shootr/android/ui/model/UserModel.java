@@ -17,6 +17,8 @@ public class UserModel implements Serializable, Cloneable {
     private Long points;
     private String eventWatchingId;
     private String eventWatchingTitle;
+    private Long joinEventDate;
+    private String joinEventDateText;
 
     public Long getPoints() {
         return points;
@@ -129,5 +131,21 @@ public class UserModel implements Serializable, Cloneable {
 
     public void setEventWatchingTitle(String eventWatchingTitle) {
         this.eventWatchingTitle = eventWatchingTitle;
+    }
+
+    public Long getJoinEventDate() {
+        return joinEventDate;
+    }
+
+    public void setJoinEventDate(Long joinEventDate) {
+        this.joinEventDate = joinEventDate;
+    }
+
+    public String getJoinEventDateText() {
+        return joinEventDateText;
+    }
+
+    public void setJoinEventDateText(String joinEventDateText) {
+        this.joinEventDateText = joinEventDateText;
     }
 }
