@@ -147,7 +147,6 @@ public class WatchersView extends LinearLayout{
         @InjectView(R.id.watcher_user_avatar) ImageView avatar;
         @InjectView(R.id.watcher_user_name) TextView name;
         @InjectView(R.id.watcher_user_watching) TextView watchingText;
-        @InjectView(R.id.watcher_user_edit) View editButton;
         String userId;
 
         public WatcherViewHolder(View itemView) {

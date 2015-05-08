@@ -148,13 +148,16 @@
                           android:layout_marginTop="8dp"
                           android:paddingBottom="4dp"
                           android:paddingTop="8dp"
-                          android:textColor="@color/gray_50"
-                          android:textStyle="bold"
+                          android:textSize="14dp"
+                          android:textColor="@color/watching"
+                          android:fontFamily="sans-serif-medium"
                           tools:text="3 watchers" />
 
                         <com.shootr.android.ui.widgets.WatchersView android:id="@+id/event_content_detail_watchers_list"
                           android:layout_width="match_parent"
-                          android:layout_height="wrap_content" />
+                          android:layout_height="wrap_content"
+                          android:paddingBottom="56dp"
+                          />
                     </LinearLayout>
 
                 </FrameLayout>
