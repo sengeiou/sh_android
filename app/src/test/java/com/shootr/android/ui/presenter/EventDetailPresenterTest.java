@@ -172,6 +172,7 @@ public class EventDetailPresenterTest {
         EventInfo eventInfo = new EventInfo();
         Event event = eventWithStartDate();
         User user = userWithIdUser();
+        user.setJoinEventDate(0L);
         event.setAuthorId(user.getIdUser());
         eventInfo.setEvent(event);
         eventInfo.setWatchers(new ArrayList<User>());
