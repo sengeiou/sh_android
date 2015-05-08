@@ -31,7 +31,7 @@ public class WatchersTimeTextFormatter {
     }
 
     public String getMinutesAgoFormat(DateTime date) {
-        String dateInText = resources.getString(R.string.entered);
+        String dateInText = "";
         int minutesAgo = Math.abs(DateTime.now().getMinuteOfHour() - date.getMinuteOfHour());
         if(minutesAgo <= 1){
             dateInText += resources.getString(R.string.minute_ago);
@@ -43,7 +43,7 @@ public class WatchersTimeTextFormatter {
     }
 
     public String getHoursAgoFormat(DateTime date) {
-        String dateInText = resources.getString(R.string.entered);
+        String dateInText = "";
         DateTime dateTime = new DateTime(new Date().getTime());
         int hoursAgo = Math.abs(dateTime.getHourOfDay() - date.getHourOfDay());
         if(hoursAgo <= 1){

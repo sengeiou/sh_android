@@ -63,7 +63,7 @@
     <string name="profile_marks_followers">followers</string>
 
     <!-- Menu names -->
-    <string name="menu_info">Watchers</string>
+    <string name="menu_info">Friends</string>
     <string name="menu_search_timeline">Search timeline</string>
     <string name="menu_search_friends">Find friends</string>
 
@@ -99,7 +99,7 @@
     <string name="activity_empty_info">No people watching</string>
     <string name="enter_to_confirm">Now Playing</string>
     <string name="following_notif_text">Touch to access the profile</string>
-    <string name="activity_info_title">Watchers</string>
+    <string name="activity_info_title">Friends</string>
 
     <!-- Watching requests -->
     <string name="watching_request_subtitle_none">Now Playing</string>
@@ -201,11 +201,11 @@
     <string name="hours_ago">&#160;hours ago</string>
     <string name="days_ago">&#160;days ago</string>
     <string name="minutes_ago">&#160;minutes ago</string>
-    <string name="entered_long_time_ago">Entered long time ago</string>
-    <string name="just_entered">Just Entered</string>
-    <string name="day_ago">&#160;a day ago</string>
-    <string name="hour_ago">&#160;an hour ago</string>
-    <string name="minute_ago">a minute ago</string>
+    <string name="entered_long_time_ago">Long time ago</string>
+    <string name="just_entered">Entered just now</string>
+    <string name="day_ago">&#160;A day ago</string>
+    <string name="hour_ago">&#160;An hour ago</string>
+    <string name="minute_ago">A minute ago</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
@@ -218,18 +218,18 @@
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
-            %d Watcher
+            %d Friends
         </item>
         <item quantity="other">
-            %d Watchers
+            %d Friendss
         </item>
     </plurals>
     <plurals name="event_watchers">
         <item quantity="one">
-            – %d Watcher
+            – %d Friends
         </item>
         <item quantity="other">
-           – %d Watchers
+           – %d Friends
         </item>
     </plurals>
 </resources>
