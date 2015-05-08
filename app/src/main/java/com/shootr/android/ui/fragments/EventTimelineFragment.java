@@ -228,8 +228,6 @@ public class EventTimelineFragment extends BaseFragment
             if (watchNumberCount != null) {
                 watchersBadgeDrawable.setCount(watchNumberCount);
                 watchersMenuItem.setVisible(true);
-            } else {
-                watchersMenuItem.setVisible(false);
             }
         }
     }
