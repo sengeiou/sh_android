@@ -84,7 +84,7 @@ public class SelectEventInteractor implements Interactor {
     }
 
     private long getCurrentTime() {
-        return timeUtils.getCurrentDate().getTime();
+        return timeUtils.getCurrentTime();
     }
 
     private void notifyLoaded(final Event selectedEvent) {
