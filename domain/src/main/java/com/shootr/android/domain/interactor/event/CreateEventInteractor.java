@@ -27,7 +27,6 @@ public class CreateEventInteractor implements Interactor {
     private String idEvent;
     private String title;
     private long startDate;
-    private long endDate;
     private String timezoneId;
     private boolean notifyCreation;
     private Callback callback;
@@ -41,12 +40,11 @@ public class CreateEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void sendEvent(String idEvent, String title, long startDate, long endDate, String timezoneId,
-      boolean notifyCreation, Callback callback, ErrorCallback errorCallback) {
+    public void sendEvent(String idEvent, String title, long startDate, String timezoneId, boolean notifyCreation,
+      Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.timezoneId = timezoneId;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
@@ -79,7 +77,6 @@ public class CreateEventInteractor implements Interactor {
         event.setAuthorId(currentUserId);
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
         event.setStartDate(new Date(startDate));
-        event.setEndDate(new Date(endDate));
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
         return event;
@@ -164,10 +161,6 @@ public class CreateEventInteractor implements Interactor {
                 return EventValidator.FIELD_TITLE;
             case ShootrError.ERROR_CODE_EVENT_START_DATE_TOO_LATE:
                 return EventValidator.FIELD_START_DATE;
-            case ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW:
-            case ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START:
-            case ShootrError.ERROR_CODE_EVENT_END_DATE_TOO_LATE:
-                return EventValidator.FIELD_END_DATE;
         }
         return 0;
     }

@@ -8,10 +8,6 @@ public interface NewEventView extends DataTransferView{
 
     void setStartTime(String timeText);
 
-    void setEndDate(String timeText);
-
-    void pickCustomDateTime(long initialTimestamp, String timezone);
-
     void setEventTitle(String title);
 
     void setTimeZone(String timezoneName);
@@ -21,8 +17,6 @@ public interface NewEventView extends DataTransferView{
     void showTitleError(String errorMessage);
 
     void showStartDateError(String errorMessage);
-
-    void showEndDateError(String errorMessage);
 
     void closeScreenWithResult(String eventId, String title);
 

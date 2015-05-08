@@ -10,9 +10,7 @@ import com.shootr.android.domain.interactor.event.CreateEventInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
-import com.shootr.android.ui.model.EndDate;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.FixedEndDate;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
@@ -27,7 +25,6 @@ import timber.log.Timber;
 
 public class NewEventPresenter implements Presenter {
 
-    private static final int DEFAULT_END_DATETIME_ID = R.id.end_date_6_hours;
     public static final int MINIMUM_TITLE_LENGTH = 3;
     private static final long SIX_HOURS_MILLIS = 6 * 60 * 60 * 1000;
 
@@ -39,15 +36,12 @@ public class NewEventPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
 
     private NewEventView newEventView;
-    private List<EndDate> suggestedEndDates;
 
     private boolean isNewEvent;
     private MutableDateTime selectedStartDateTime;
-    private EndDate selectedEndDate;
     private TimeZone selectedTimeZone;
     private String preloadedTitle;
     private long preloadedStartDate;
-    private EndDate preloadedEndDate;
     private String preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
@@ -67,14 +61,12 @@ public class NewEventPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(NewEventView newEventView, List<EndDate> suggestedEndDates, String optionalIdEventToEdit) {
+    public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
-        this.suggestedEndDates = suggestedEndDates;
         this.isNewEvent = optionalIdEventToEdit == null;
         if (isNewEvent) {
             this.setDefaultTimezone();
             this.setDefaultStartDateTime();
-            this.setDefaultEndDateTime();
         } else {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
@@ -106,10 +98,6 @@ public class NewEventPresenter implements Presenter {
 
         preloadedStartDate = fakeDateFromRealTimezone(eventModel.getStartDate());
         setStartDateTime(new MutableDateTime(preloadedStartDate));
-
-        long offsetEndDate = fakeDateFromRealTimezone(eventModel.getEndDate());
-        preloadedEndDate = endDateFromTimestamp(offsetEndDate, preloadedStartDate);
-        setEndDateTime(preloadedEndDate);
     }
 
     private void setDefaultStartDateTime() {
@@ -133,14 +121,6 @@ public class NewEventPresenter implements Presenter {
             return baseHour + 1;
         }
     }
-
-    private void setDefaultEndDateTime() {
-        setEndDateTime(defaultEndDateTime());
-    }
-
-    private EndDate defaultEndDateTime() {
-        return endDateFromItemId(DEFAULT_END_DATETIME_ID);
-    }
     //endregion
 
     //region Interaction methods
@@ -160,20 +140,6 @@ public class NewEventPresenter implements Presenter {
         selectedStartDateTime.setHourOfDay(hour);
         selectedStartDateTime.setMinuteOfHour(minutes);
         setStartDateTime(selectedStartDateTime);
-    }
-
-    public void endDateItemSelected(int selectedItemId) {
-        if (selectedItemId == R.id.end_date_custom) {
-            newEventView.pickCustomDateTime(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()), timezoneDisplayText());
-        } else {
-            EndDate endDate = endDateFromItemId(selectedItemId);
-            this.setEndDateTime(endDate);
-        }
-    }
-
-    public void customEndDateSelected(long selectedTimestamp) {
-        FixedEndDate endDate = new FixedEndDate(selectedTimestamp, R.id.end_date_custom, timeFormatter, dateFormatter);
-        this.setEndDateTime(endDate);
     }
 
     public void pickTimezone() {
@@ -226,9 +192,9 @@ public class NewEventPresenter implements Presenter {
 
     private void sendEvent(String preloadedEventId) {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
-        long endTimestamp = realDateFromFakeTimezone(selectedEndDate.getDateTime(selectedStartDateTime.getMillis()));
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp, endTimestamp, selectedTimeZone.getID(), notifyCreation,
+        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp,
+          selectedTimeZone.getID(), notifyCreation,
           new CreateEventInteractor.Callback() {
                 @Override public void onLoaded(Event event) {
                     eventCreated(event);
@@ -284,9 +250,6 @@ public class NewEventPresenter implements Presenter {
                 case EventValidator.FIELD_START_DATE:
                     showViewStartDateError(errorMessage);
                     break;
-                case EventValidator.FIELD_END_DATE:
-                    showViewEndDateError(errorMessage);
-                    break;
                 default:
                     showViewError(errorMessage);
             }
@@ -299,10 +262,6 @@ public class NewEventPresenter implements Presenter {
 
     private void showViewStartDateError(String errorMessage) {
         newEventView.showStartDateError(errorMessage);
-    }
-
-    private void showViewEndDateError(String errorMessage) {
-        newEventView.showEndDateError(errorMessage);
     }
 
     private void showViewError(String errorMessage) {
@@ -335,12 +294,6 @@ public class NewEventPresenter implements Presenter {
         this.updateDoneButtonStatus();
     }
 
-    private void setEndDateTime(EndDate endDate) {
-        selectedEndDate = endDate;
-        newEventView.setEndDate(endDate.getTitle());
-        this.updateDoneButtonStatus();
-    }
-
     private void setTimezone(TimeZone timeZone) {
         this.selectedTimeZone = timeZone;
         this.updateViewTimezone();
@@ -367,24 +320,6 @@ public class NewEventPresenter implements Presenter {
         newEventView.setStartTime(timeFormatter.getAbsoluteTime(selectedDateTimeMillis));
     }
 
-    private EndDate endDateFromItemId(int itemId) {
-        for (EndDate endDate : suggestedEndDates) {
-            if (endDate.getMenuItemId() == itemId) {
-                return endDate;
-            }
-        }
-        return null;
-    }
-
-    private EndDate endDateFromTimestamp(long endDateTime, long startDateTime) {
-        for (EndDate endDate : suggestedEndDates) {
-            if (endDate.getDateTime(startDateTime) == endDateTime) {
-                return endDate;
-            }
-        }
-        return new FixedEndDate(endDateTime, R.id.end_date_custom, timeFormatter, dateFormatter);
-    }
-
     private void updateDoneButtonStatus() {
         newEventView.doneButtonEnabled(canSendEvent());
     }
@@ -392,7 +327,6 @@ public class NewEventPresenter implements Presenter {
     private boolean canSendEvent() {
         return isValidTitle() && (hasChangedTitle()
           || hasChangedStartDate()
-          || hasChangedEndDate()
           || hasChangedTimezone());
     }
 
@@ -406,12 +340,6 @@ public class NewEventPresenter implements Presenter {
 
     private boolean hasChangedStartDate() {
         return selectedStartDateTime != null && selectedStartDateTime.getMillis() != preloadedStartDate;
-    }
-
-    private boolean hasChangedEndDate() {
-        return preloadedEndDate == null
-          || selectedEndDate.getDateTime(selectedStartDateTime.getMillis()) != preloadedEndDate.getDateTime(
-          preloadedStartDate);
     }
 
     private boolean hasChangedTitle() {

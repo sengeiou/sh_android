@@ -18,7 +18,6 @@ public class EventValidator {
 
     public static final int FIELD_TITLE = 1;
     public static final int FIELD_START_DATE = 2;
-    public static final int FIELD_END_DATE = 3;
 
     private List<FieldValidationError> fieldValidationErrors;
 
@@ -29,7 +28,6 @@ public class EventValidator {
     public List<FieldValidationError> validate(Event event) {
         validateTitle(event);
         validateStartDate(event);
-        validateEndDate(event);
         return fieldValidationErrors;
     }
 
@@ -72,30 +70,6 @@ public class EventValidator {
     }
     //endregion
 
-    //region End date
-    private void validateEndDate(Event event) {
-        validateEndDateAfterNow(event);
-        validateEndDateAfterStartDate(event);
-        validateEndDateNotMoreThanOneYearAferStartDate(event);
-    }
-
-    private void validateEndDateAfterNow(Event event) {
-        if (event.getEndDate().before(new Date())) {
-            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_NOW, FIELD_END_DATE));
-        }
-    }
-
-    private void validateEndDateNotMoreThanOneYearAferStartDate(Event event) {
-        if (event.getEndDate().after(oneyearFrom(event.getStartDate()))) {
-            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_EVENT_END_DATE_TOO_LATE, FIELD_END_DATE));
-        }
-    }
-
-    private void validateEndDateAfterStartDate(Event event) {
-        if (event.getEndDate().before(event.getStartDate())) {
-            fieldValidationErrors.add(new FieldValidationError(ShootrError.ERROR_CODE_EVENT_END_DATE_BEFORE_START, FIELD_END_DATE));
-        }
-    }
     //endregion
 
     private Date oneyearFrom(Date date) {

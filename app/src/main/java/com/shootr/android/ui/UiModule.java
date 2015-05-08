@@ -1,7 +1,6 @@
 package com.shootr.android.ui;
 
 import com.shootr.android.ui.activities.ActivityTimelineActivity;
-import com.shootr.android.ui.activities.DateTimePickerDialogActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
@@ -54,7 +53,6 @@ import dagger.Provides;
                 WatchersView.class,
                 EventsListActivity.class,
                 NewEventActivity.class,
-                DateTimePickerDialogActivity.class,
                 UpdateWarningActivity.class, TimezonePickerActivity.class, DraftsActivity.class, DraftsPresenter.class
         },
         complete = false
