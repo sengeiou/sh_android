@@ -218,18 +218,18 @@
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
-            %d Friend
+            %d friend
         </item>
         <item quantity="other">
-            %d Friends
+            %d friends
         </item>
     </plurals>
     <plurals name="event_watchers">
         <item quantity="one">
-            – %d Friend
+            – %d friend
         </item>
         <item quantity="other">
-           – %d Friends
+           – %d friends
         </item>
     </plurals>
 </resources>
