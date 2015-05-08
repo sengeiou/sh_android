@@ -67,7 +67,7 @@ public class ShotEntityMapper {
         }
         ShotEntity shotEntity = new ShotEntity();
         String idShot = shot.getIdShot();
-        shotEntity.setIdShot(idShot != null && idShot != "null"? idShot : null);
+        shotEntity.setIdShot(idShot != null && !idShot.equals("null")? idShot : null);
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
@@ -81,11 +81,11 @@ public class ShotEntityMapper {
         }
 
         String parentShotId = shot.getParentShotId();
-        shotEntity.setIdShotParent(parentShotId != null && parentShotId != "null" ? parentShotId : null );
+        shotEntity.setIdShotParent(parentShotId != null && !parentShotId.equals("null") ? parentShotId : null );
         String parentShotUserId = shot.getParentShotUserId();
-        shotEntity.setIdUserParent(parentShotUserId != null && parentShotUserId != "null" ? parentShotUserId : null);
+        shotEntity.setIdUserParent(parentShotUserId != null && !parentShotUserId.equals("null") ? parentShotUserId : null);
         String parentShotUsername = shot.getParentShotUsername();
-        shotEntity.setUserNameParent(parentShotUsername != "" ? parentShotUsername : null);
+        shotEntity.setUserNameParent(!parentShotUsername.equals("") ? parentShotUsername : null);
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;

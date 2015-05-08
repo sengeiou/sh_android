@@ -164,7 +164,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     }
 
     public void setIdEvent(String idEvent) {
-        if (idEvent!=null && idEvent != "-1L") {
+        if (idEvent!=null && !idEvent.equals("-1L")) {
             this.idEvent = idEvent;
         } else {
             this.idEvent = null;
