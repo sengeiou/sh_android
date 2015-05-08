@@ -145,7 +145,7 @@ public class EventDetailPresenterTest {
 
     private EventInfo eventInfoWithUserNotWatching() {
         EventInfo eventInfo = new EventInfo();
-        Event event = eventWithStart();
+        Event event = eventWithStartDate();
         User user = userWithIdUser();
         event.setAuthorId(user.getIdUser());
         eventInfo.setEvent(event);
@@ -154,7 +154,7 @@ public class EventDetailPresenterTest {
         return eventInfo;
     }
 
-    private Event eventWithStart() {
+    private Event eventWithStartDate() {
         Event event = new Event();
         event.setStartDate(new Date());
         return event;
@@ -168,7 +168,7 @@ public class EventDetailPresenterTest {
 
     private EventInfo eventInfoWithUserWatching() {
         EventInfo eventInfo = new EventInfo();
-        Event event = eventWithStart();
+        Event event = eventWithStartDate();
         User user = userWithIdUser();
         event.setAuthorId(user.getIdUser());
         eventInfo.setEvent(event);
