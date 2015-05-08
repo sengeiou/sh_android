@@ -32,13 +32,11 @@ public class WatchersTimeTextFormatter {
 
     public String getMinutesAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.entered);
-        int minutesAgo = Math.abs(
-                Minutes.minutesBetween(DateTime.now().withSecondOfMinute(0),
-                        date.withSecondOfMinute(0)).getMinutes());
-        dateInText += String.valueOf(minutesAgo);
-        if(minutesAgo == 1){
+        int minutesAgo = Math.abs(DateTime.now().getMinuteOfHour() - date.getMinuteOfHour());
+        if(minutesAgo <= 1){
             dateInText += resources.getString(R.string.minute_ago);
-        }else{
+        }else if (minutesAgo >= 2){
+            dateInText += String.valueOf(minutesAgo);
             dateInText += resources.getString(R.string.minutes_ago);
         }
         return dateInText;
@@ -47,12 +45,11 @@ public class WatchersTimeTextFormatter {
     public String getHoursAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.entered);
         DateTime dateTime = new DateTime(new Date().getTime());
-        int hoursAgo = Math.abs(Hours.hoursBetween(dateTime,
-                date.withMinuteOfHour(0)).getHours());
-        dateInText += String.valueOf(hoursAgo);
-        if(hoursAgo == 1){
+        int hoursAgo = Math.abs(dateTime.getHourOfDay() - date.getHourOfDay());
+        if(hoursAgo <= 1){
             dateInText += resources.getString(R.string.hour_ago);
         }else{
+            dateInText += String.valueOf(hoursAgo);
             dateInText += resources.getString(R.string.hours_ago);
         }
         return dateInText;
@@ -60,8 +57,8 @@ public class WatchersTimeTextFormatter {
 
     public String getDaysAgoFormat(DateTime date) {
         int daysAgo = calculateHowManyDaysAgo(date);
-        if(daysAgo == 1){
-            return String.valueOf(daysAgo) + resources.getString(R.string.day_ago);
+        if(daysAgo <= 1){
+            return resources.getString(R.string.day_ago);
         }else{
             return String.valueOf(daysAgo) + resources.getString(R.string.days_ago);
         }
