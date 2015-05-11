@@ -50,7 +50,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
 
     private Boolean isCurrentUserWatchingThisEvent;
-    private Boolean hasUserCheckedIn;
 
     private String userIdCheckedEvent;
 
@@ -83,24 +82,28 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void loadCheckinStatus() {
-        getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<String>() {
+        getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
             @Override
-            public void onLoaded(String currentiDCheckedEvent) {
+            public void onLoaded(Boolean currentCheckIn) {
                 getUserIdCheckedEvent();
                 updateCheckinVisibility();
+                if (!currentCheckIn) {
+                    eventDetailView.showCheckin();
+                }
             }
         });
     }
 
     private void getUserIdCheckedEvent() {
         if(currentUserWatchingModel != null){
-            userIdCheckedEvent = currentUserWatchingModel.getEventWatchingId();
+            userIdCheckedEvent = currentUserWatchingModel.getIdCheckedEvent();
         }
     }
 
     private void updateCheckinVisibility(){
         if(currentUserWatchingModel!= null){
-            if(currentUserWatchingModel.getIdCheckedEvent() == null){
+            if(currentUserWatchingModel.getIdCheckedEvent() == null
+                    || !currentUserWatchingModel.getIdCheckedEvent().equals(currentUserWatchingModel.getEventWatchingId())){
                 eventDetailView.showCheckin();
             }
         }

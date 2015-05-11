@@ -217,4 +217,36 @@ public class DatabaseContract {
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
+
+    public static final class CheckInMongo implements SyncColumns {
+
+        private CheckInMongo() {
+
+        }
+
+        public static final String TABLE = "CheckInMongo";
+
+        public static final String ID = "idUser";
+        public static final String ID_CHECKED_EVENT = "idEvent";
+
+        public static final String[] PROJECTION = {
+                ID, ID_CHECKED_EVENT
+        };
+    }
+
+    public static final class CheckOutMongo implements SyncColumns {
+
+        private CheckOutMongo() {
+
+        }
+
+        public static final String TABLE = "CheckOutMongo";
+
+        public static final String ID = "idUser";
+        public static final String ID_CHECKED_EVENT = "idEvent";
+
+        public static final String[] PROJECTION = {
+                ID, ID_CHECKED_EVENT
+        };
+    }
 }

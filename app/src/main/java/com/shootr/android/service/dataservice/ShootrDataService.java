@@ -503,6 +503,12 @@ public class ShootrDataService implements ShootrService {
         GenericDto responseDto = postRequest(createAccountDto);
     }
 
+    @Override
+    public void performCheckout(String idUser) throws IOException {
+        GenericDto checkoutDto = userDtoFactory.getCheckoutOperationDto(idUser);
+        GenericDto responseDto = postRequest(checkoutDto);
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);
