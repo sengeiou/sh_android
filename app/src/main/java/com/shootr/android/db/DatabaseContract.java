@@ -63,14 +63,14 @@ public class DatabaseContract {
         public static final String NAME_NORMALIZED = "nameNormalized";
         public static final String USER_NAME_NORMALIZED = "userNameNormalized";
         public static final String EMAIL_NORMALIZED = "emailNormalized";
-        public static final String EVENT_ID = "idEvent";
-        public static final String EVENT_TITLE = "eventTitle";
-        public static final String CHECK_IN = "checkIn";
+        public static final String WATCHING_EVENT_ID = "idWatchingEvent";
+        public static final String WATCHING_EVENT_TITLE = "watchingEventTitle";
+        public static final String ID_CHECKED_EVENT = "idCheckedEvent";
         public static final String JOIN_EVENT_DATE = "joinEventDate";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, CHECK_IN, JOIN_EVENT_DATE, EVENT_ID, EVENT_TITLE,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, ID_CHECKED_EVENT, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };

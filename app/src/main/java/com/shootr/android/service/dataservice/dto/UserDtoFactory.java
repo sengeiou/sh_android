@@ -21,7 +21,6 @@ import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
@@ -66,7 +65,7 @@ public class UserDtoFactory {
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
           .putKey(UserTable.ID, idUser)
-          .putKey(UserTable.EVENT_ID, idEvent)
+          .putKey(UserTable.WATCHING_EVENT_ID, idEvent)
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .build();
 
