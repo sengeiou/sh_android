@@ -8,13 +8,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.R;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 public class UserListAdapter extends BindableAdapter<UserModel> {
 
@@ -65,10 +73,10 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.title.setText(item.getUsername());
+        viewHolder.title.setText(item.getName());
 
         if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getSubtitle(item));
+            viewHolder.subtitle.setText(getUsernameForSubtitle(item));
             viewHolder.subtitle.setVisibility(View.VISIBLE);
         } else {
             viewHolder.subtitle.setVisibility(View.GONE);
@@ -104,8 +112,12 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
          }
     }
 
+    private String getUsernameForSubtitle(UserModel item) {
+        return String.format("@%s",item.getUsername());
+    }
+
     protected boolean showSubtitle(UserModel item) {
-        return false;
+        return true;
     }
 
     protected String getSubtitle(UserModel item) {
