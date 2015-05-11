@@ -50,7 +50,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
 
     private Boolean isCurrentUserWatchingThisEvent;
-    private Boolean hasUserCheckdIn;
+    private Boolean hasUserCheckedIn;
+
+    private String userIdCheckedEvent;
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
@@ -81,22 +83,30 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void loadCheckinStatus() {
-        getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
+        getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<String>() {
             @Override
-            public void onLoaded(Boolean currentCheckIn) {
-                hasUserCheckdIn = currentCheckIn;
-                if (!currentCheckIn) {
+            public void onLoaded(String currentiDCheckedEvent) {
+                getUserIdCheckedEvent();
+                if (userIdCheckedEvent != null) {
                     updateCheckinVisibility();
                 }
             }
         });
     }
 
+    private void getUserIdCheckedEvent() {
+        if(currentUserWatchingModel != null){
+            userIdCheckedEvent = currentUserWatchingModel.getEventWatchingId();
+        }
+    }
+
     private void updateCheckinVisibility(){
-        if(isCurrentUserWatchingThisEvent != null && hasUserCheckdIn != null){
-            if(!hasUserCheckdIn && isCurrentUserWatchingThisEvent){
+        if(userIdCheckedEvent != null && hasUserCheckedIn != null){
+            if(!hasUserCheckedIn){
                 eventDetailView.showCheckin();
             }
+        }else if(userIdCheckedEvent == null){
+            loadCheckinStatus();
         }
 
     }
@@ -172,7 +182,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
-            isCurrentUserWatchingEvent(eventInfo.getCurrentUserWatching());
+            isCurrentUserWatchingEvent(currentUserWatchingModel.getEventWatchingId(),
+                    idEvent);
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
             updateCheckinVisibility();
@@ -205,12 +216,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void performCheckin() {
         eventDetailView.showCheckinLoading();
-        performCheckinInteractor.performCheckin(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+        performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
                 eventDetailView.hideCheckin();
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 Timber.e(error, "Error while doing check-in");
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 eventDetailView.showCheckinErrorRetry(errorMessage);
@@ -247,17 +260,15 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        if (isCurrentUserWatchingEvent(currentUserWatch)) {
-            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-            currentUserWatchingModel.setJoinEventDateText(
-                    watchersTimeFormatter.jointDateText(
-                            currentUserWatchingModel.getJoinEventDate()));
-            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
-        }
+        currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+        currentUserWatchingModel.setJoinEventDateText(
+                watchersTimeFormatter.jointDateText(
+                        currentUserWatchingModel.getJoinEventDate()));
+        eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
     }
 
-    private boolean isCurrentUserWatchingEvent(User currentUserWatch) {
-        if(currentUserWatch != null){
+    private boolean isCurrentUserWatchingEvent(String idCurrentEvent, String idUserWatchingEvent) {
+        if(idCurrentEvent != null && idCurrentEvent.equals(idUserWatchingEvent)){
             isCurrentUserWatchingThisEvent = true;
             return isCurrentUserWatchingThisEvent;
         }
