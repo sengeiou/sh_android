@@ -12,7 +12,6 @@ import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
@@ -94,7 +93,7 @@ public class EventsListInteractor implements Interactor {
 
     private String getVisibleEventId() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        return currentUser.getVisibleEventId();
+        return currentUser.getIdWatchingEvent();
     }
 
     private void notifyError(final ShootrException error) {

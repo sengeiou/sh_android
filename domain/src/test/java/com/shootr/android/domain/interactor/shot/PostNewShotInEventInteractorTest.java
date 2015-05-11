@@ -89,7 +89,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private User currentUserWatching() {
         User user = currentUser();
-        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
         return user;
     }
 }

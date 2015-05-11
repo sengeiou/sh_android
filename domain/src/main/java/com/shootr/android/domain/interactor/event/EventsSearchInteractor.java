@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.exception.ShootrError;
@@ -79,7 +78,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void setCurrentVisibleEventIfAny(EventSearchResultList eventSearchResultList) {
-        String eventWatchingId = sessionRepository.getCurrentUser().getVisibleEventId();
+        String eventWatchingId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (eventWatchingId != null) {
             eventSearchResultList.setCurrentVisibleEventId(eventWatchingId);
         }

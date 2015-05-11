@@ -78,7 +78,7 @@ public class WatchNumberInteractorTest {
     private User me() {
         User user = newUserWatching(ID_USER_ME);
         user.setMe(true);
-        user.setVisibleEventId(String.valueOf(ID_EVENT));
+        user.setIdWatchingEvent(String.valueOf(ID_EVENT));
         return user;
     }
 
@@ -90,7 +90,7 @@ public class WatchNumberInteractorTest {
 
     private User newUserWatching(Long id) {
         User user = newUserNotWatching(id);
-        user.setVisibleEventId(String.valueOf(ID_EVENT));
+        user.setIdWatchingEvent(String.valueOf(ID_EVENT));
         return user;
     }
 

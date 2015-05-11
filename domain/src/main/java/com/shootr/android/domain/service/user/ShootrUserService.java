@@ -34,25 +34,29 @@ public class ShootrUserService {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void checkInCurrentEvent() {
+    public void checkInCurrentEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        if (currentUser.isCheckedIn()) {
+        if (isCurrentUserCheckedInEvent(currentUser, idEvent)) {
             throw new InvalidCheckinException("Can't perform checkin if already checked-in");
         }
-        String visibleEventId = currentUser.getVisibleEventId();
-        if (visibleEventId == null) {
+        String watchingEventId = currentUser.getIdWatchingEvent();
+        if (watchingEventId == null) {
             throw new InvalidCheckinException("Can't perform checkin without visible event");
         }
 
         try {
             String idUser = currentUser.getIdUser();
-            checkinGateway.performCheckin(idUser, visibleEventId);
+            checkinGateway.performCheckin(idUser, watchingEventId);
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
 
-        currentUser.setCheckedIn(true);
+        currentUser.setIdCheckedEvent(idEvent);
         localUserRepository.putUser(currentUser);
+    }
+
+    private boolean isCurrentUserCheckedInEvent(User currentUser, String idEvent) {
+        return currentUser.getIdCheckedEvent().equals(idEvent);
     }
 
     public void createAccount(String username, String email, String password) {
@@ -68,7 +72,7 @@ public class ShootrUserService {
         try {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
             storeSession(loginResult);
-            String visibleEventId = loginResult.getUser().getVisibleEventId();
+            String visibleEventId = loginResult.getUser().getIdWatchingEvent();
             if(visibleEventId != null && visibleEventId != "null"){
                 remoteEventRepository.getEventById(visibleEventId);
             }

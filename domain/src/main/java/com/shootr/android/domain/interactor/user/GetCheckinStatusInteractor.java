@@ -15,7 +15,7 @@ public class GetCheckinStatusInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
-    private Callback<Boolean> callback;
+    private Callback<String> callback;
 
     @Inject
     public GetCheckinStatusInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -26,21 +26,21 @@ public class GetCheckinStatusInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadCheckinStatus(Callback<Boolean> callback) {
+    public void loadCheckinStatus(Callback<String> callback) {
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        boolean checkedIn = currentUser.isCheckedIn();
-        notifyResult(checkedIn);
+        String idcheckedEvent = currentUser.getIdCheckedEvent();
+        notifyResult(idcheckedEvent);
     }
 
-    private void notifyResult(final boolean checkedIn) {
+    private void notifyResult(final String idCheckedEvent) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(checkedIn);
+                callback.onLoaded(idCheckedEvent);
             }
         });
     }

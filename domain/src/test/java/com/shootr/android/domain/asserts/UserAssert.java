@@ -356,7 +356,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected visibleEventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    String actualVisibleEventId = actual.getVisibleEventId();
+    String actualVisibleEventId = actual.getIdWatchingEvent();
     if (!Objects.areEqual(actualVisibleEventId, visibleEventId)) {
       failWithMessage(assertjErrorMessage, actual, visibleEventId, actualVisibleEventId);
     }
@@ -379,7 +379,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected visibleEventTitle of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    String actualVisibleEventTitle = actual.getVisibleEventTitle();
+    String actualVisibleEventTitle = actual.getWatchingEventTitle();
     if (!Objects.areEqual(actualVisibleEventTitle, visibleEventTitle)) {
       failWithMessage(assertjErrorMessage, actual, visibleEventTitle, actualVisibleEventTitle);
     }

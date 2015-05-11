@@ -35,25 +35,25 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldCallbackCompleteIfServiceDoesntFail() throws Exception {
-        doNothing().when(shootrUserService).checkInCurrentEvent();
+        doNothing().when(shootrUserService).checkInCurrentEvent(idEvent);
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(idEvent, completedCallback, errorCallback);
 
         verify(completedCallback).onCompleted();
     }
 
     @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent();
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent(idEvent);
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(idEvent, completedCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent();
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent(idEvent);
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(idEvent, completedCallback, errorCallback);
 
         verify(completedCallback, never()).onCompleted();
     }

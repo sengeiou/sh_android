@@ -115,14 +115,14 @@ public class VisibleEventInfoInteractor implements Interactor {
         if (idEventWanted != null && !idEventWanted.equals(VISIBLE_EVENT)) {
             return idEventWanted;
         } else {
-            return currentUser.getVisibleEventId();
+            return currentUser.getIdWatchingEvent();
         }
     }
 
     protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
-            if (idEvent.equals(user.getVisibleEventId())) {
+            if (idEvent.equals(user.getIdWatchingEvent())) {
                 watchers.add(user);
             }
         }
@@ -130,7 +130,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     private EventInfo buildEventInfo(Event currentVisibleEvent, List<User> eventWatchers, User currentUser) {
-        boolean isCurrentUserWatching = currentVisibleEvent.getId().equals(currentUser.getVisibleEventId());
+        boolean isCurrentUserWatching = currentVisibleEvent.getId().equals(currentUser.getIdWatchingEvent());
         return EventInfo.builder()
           .event(currentVisibleEvent)
           .watchers(eventWatchers)

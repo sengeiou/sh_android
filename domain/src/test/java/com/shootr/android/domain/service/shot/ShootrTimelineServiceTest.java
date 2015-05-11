@@ -140,7 +140,7 @@ public class ShootrTimelineServiceTest {
 
     private User currentUserWatching() {
         User user = new User();
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
         return user;
     }
 
