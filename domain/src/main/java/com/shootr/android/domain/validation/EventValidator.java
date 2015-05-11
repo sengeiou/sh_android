@@ -14,7 +14,7 @@ public class EventValidator {
     public static final String EMOJI_RANGE_REGEX = "[\\x{1F300}-\\x{1F64F}\\x{1f680}-\\x{1f6ff}\\x{2600}-\\x{27bf}]";
     public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
 
-    private static final long ONE_YEAR_MILLIS = 365 * 24 * 60 * 60 * 1000;
+    private static final long ONE_YEAR_MILLIS = 365L * 24L * 60L * 60L * 1000L;
 
     public static final int FIELD_TITLE = 1;
     public static final int FIELD_START_DATE = 2;
