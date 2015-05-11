@@ -56,7 +56,10 @@ public class ShootrUserService {
     }
 
     private boolean isCurrentUserCheckedInEvent(User currentUser, String idEvent) {
-        return currentUser.getIdCheckedEvent().equals(idEvent);
+        if(currentUser.getIdCheckedEvent() != null){
+            return currentUser.getIdCheckedEvent().equals(idEvent);
+        }
+        return false;
     }
 
     public void createAccount(String username, String email, String password) {

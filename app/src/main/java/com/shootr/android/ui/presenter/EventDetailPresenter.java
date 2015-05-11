@@ -87,9 +87,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             @Override
             public void onLoaded(String currentiDCheckedEvent) {
                 getUserIdCheckedEvent();
-                if (userIdCheckedEvent != null) {
-                    updateCheckinVisibility();
-                }
+                updateCheckinVisibility();
             }
         });
     }
@@ -101,14 +99,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void updateCheckinVisibility(){
-        if(userIdCheckedEvent != null && hasUserCheckedIn != null){
-            if(!hasUserCheckedIn){
+        if(currentUserWatchingModel!= null){
+            if(currentUserWatchingModel.getIdCheckedEvent() == null){
                 eventDetailView.showCheckin();
             }
-        }else if(userIdCheckedEvent == null){
-            loadCheckinStatus();
         }
-
     }
     //endregion
 

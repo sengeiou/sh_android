@@ -52,7 +52,7 @@ public class SelectEventInteractor implements Interactor {
         User currentUser = sessionRepository.getCurrentUser();
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
 
-        if (isSelectingCurrentVisibleEvent(currentUser)) {
+        if (isSelectingCurrentWatchingEvent(currentUser)) {
             notifyLoaded(selectedEvent);
         } else {
             User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
@@ -70,14 +70,13 @@ public class SelectEventInteractor implements Interactor {
         updatedUser.setIdCheckedEvent(null);
     }
 
-    private boolean isSelectingCurrentVisibleEvent(User currentUser) {
+    private boolean isSelectingCurrentWatchingEvent(User currentUser) {
         return idSelectedEvent.equals(currentUser.getIdWatchingEvent());
     }
 
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
         currentUser.setIdWatchingEvent(selectedEvent.getId());
         currentUser.setWatchingEventTitle(selectedEvent.getTitle());
-        currentUser.setIdCheckedEvent(selectedEvent.getId());
         currentUser.setJoinEventDate(getCurrentTime());
         return currentUser;
     }

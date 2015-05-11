@@ -26,7 +26,7 @@ public class GetCheckinStatusInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadCheckinStatus(Callback<String> callback) {
+    public void loadCheckinStatus(Callback callback) {
         this.callback = callback;
         interactorHandler.execute(this);
     }
