@@ -43,6 +43,7 @@ import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.ui.widgets.CheckinBar;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -70,6 +71,8 @@ public class EventTimelineFragment extends BaseFragment
 
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.shot_bar_drafts) View draftsButton;
+
+    @InjectView(R.id.checkin_container) CheckinBar checkinContainer;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -177,10 +180,16 @@ public class EventTimelineFragment extends BaseFragment
         }
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                //TODO go to top?
+                if (checkinContainer.isExpanded()) {
+                    checkinContainer.collapse();
+                } else {
+                    checkinContainer.expand();
+                }
             }
         });
     }
+
+
 
     private void initializePresenters() {
         timelinePresenter.initialize(this);
