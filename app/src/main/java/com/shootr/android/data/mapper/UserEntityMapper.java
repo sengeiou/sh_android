@@ -67,7 +67,7 @@ public class UserEntityMapper {
 
         userEntity.setWatchingEventTitle(user.getWatchingEventTitle());
 
-        userEntity.setIdCheckedEvent(user.isCheckedIn());
+        userEntity.setIdCheckedEvent(user.getIdCheckedEvent());
 
         userEntity.setJoinEventDate(user.getJoinEventDate());
 
