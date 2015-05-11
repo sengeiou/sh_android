@@ -27,6 +27,8 @@ public class GetCheckinStatusInteractorTest {
     @Spy
     SpyCallback spyCallback = new SpyCallback();
 
+    private String dummyIdEvent = "EVENT_ID";
+
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
@@ -36,38 +38,38 @@ public class GetCheckinStatusInteractorTest {
           sessionRepository);
     }
 
-    @Test public void shouldCallbackFalseWhenCheckinInUserIsFalse() throws Exception {
+    @Test public void shouldCallbackNullWhenUserNotCheckedIn() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithoutCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 
-        assertThat(spyCallback.result).isFalse();
+        assertThat(spyCallback.result).isNull();
     }
-    @Test public void shouldCallbackTrueWhenCheckinInUserIsTrue() throws Exception {
+    @Test public void shouldCallbackNotNullWhenUserIsCheckedIn() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 
-        assertThat(spyCallback.result).isTrue();
+        assertThat(spyCallback.result).isNotNull();
     }
 
     private User currentUserWithCheckin() {
         User user = new User();
-        user.setIdCheckedEvent(true);
+        user.setIdWatchingEvent(dummyIdEvent);
+        user.setIdCheckedEvent(dummyIdEvent);
         return user;
     }
 
     private User currentUserWithoutCheckin() {
         User user = new User();
-        user.setIdCheckedEvent(false);
         return user;
     }
 
-    private class SpyCallback implements Interactor.Callback<Boolean> {
+    private class SpyCallback implements Interactor.Callback<String> {
 
-        Boolean result;
+        String result;
 
-        @Override public void onLoaded(Boolean result) {
+        @Override public void onLoaded(String result) {
             this.result = result;
         }
     }

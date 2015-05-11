@@ -32,13 +32,16 @@ import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class EventDetailPresenterTest {
 
-    private static final String EVENT_ID_STUB = "1L";
+    private static final String EVENT_ID_STUB = "EVENT_ID";
     private EventDetailPresenter presenter;
 
     @Mock
@@ -85,41 +88,21 @@ public class EventDetailPresenterTest {
     @Test
     public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(false);
+        setupCheckinStatusCallbacks(null);
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView).showCheckin();
+        verify(eventDetailView, times(2)).showCheckin();
     }
 
     @Test
     public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(true);
+        setupCheckinStatusCallbacks(EVENT_ID_STUB);
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
+        verify(eventDetailView, times(2)).showCheckin();
     }
 
     //region Setups and stubs
@@ -134,12 +117,12 @@ public class EventDetailPresenterTest {
         }).when(eventInfoInteractor).obtainEventInfo(anyString(), any(VisibleEventInfoInteractor.Callback.class));
     }
 
-    private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
+    private void setupCheckinStatusCallbacks(final String eventCheckedIn) {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
-                callback.onLoaded(isCheckedIn);
+                Interactor.Callback<String> callback = (Interactor.Callback<String>) invocation.getArguments()[0];
+                callback.onLoaded(eventCheckedIn);
                 return null;
             }
         }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
@@ -152,7 +135,6 @@ public class EventDetailPresenterTest {
         event.setAuthorId(user.getIdUser());
         eventInfo.setEvent(event);
         eventInfo.setWatchers(new ArrayList<User>());
-        eventInfo.setCurrentUserWatching(null);
         return eventInfo;
     }
 
@@ -164,7 +146,7 @@ public class EventDetailPresenterTest {
 
     private User userWithIdUser() {
         User user = new User();
-        user.setIdUser("1L");
+        user.setIdUser("USER_ID");
         return user;
     }
 

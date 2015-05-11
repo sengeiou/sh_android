@@ -154,7 +154,7 @@ public class SelectEventInteractorTest {
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(localUserRepository).putUser(userCaptor.capture());
-        assertThat(userCaptor.getValue().isCheckedIn()).isFalse();
+        assertThat(userCaptor.getValue().getIdCheckedEvent()).isNullOrEmpty();
     }
 
     private void setupOldVisibleEvent() {

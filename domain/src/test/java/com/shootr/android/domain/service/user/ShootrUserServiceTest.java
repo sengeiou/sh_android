@@ -37,6 +37,8 @@ public class ShootrUserServiceTest {
     @Mock UserRepository remoteUserRepository;
     public static final String SESSION_TOKEN_STUB = "sessionToken";
 
+    private String dummyIdEvent = "EVENT_ID";
+
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
@@ -45,32 +47,32 @@ public class ShootrUserServiceTest {
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedIn() throws Exception {
         setupCurrentUserCheckedIn();
-        shootrUserService.checkInCurrentEvent(idEvent);
+        shootrUserService.checkInCurrentEvent(dummyIdEvent);
     }
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfNoVisibleEvent() throws Exception {
         setupCurrentUserWithoutVisibleEvent();
 
-        shootrUserService.checkInCurrentEvent(idEvent);
+        shootrUserService.checkInCurrentEvent(dummyIdEvent);
     }
 
     @Test public void shouldCallGatewayWithCurrentUserIdAndEvent() throws Exception {
         setupCurrentUserNotCheckedIn();
 
-        shootrUserService.checkInCurrentEvent(idEvent);
+        shootrUserService.checkInCurrentEvent(dummyIdEvent);
 
-        verify(checkinGateway).performCheckin(CURRENT_USER_ID, VISIBLE_EVENT_ID);
+        verify(checkinGateway).performCheckin(CURRENT_USER_ID, dummyIdEvent);
     }
 
     @Test public void shouldStoreCurrentUserInLocalCheckedIn() throws Exception {
         setupCurrentUserNotCheckedIn();
 
-        shootrUserService.checkInCurrentEvent(idEvent);
+        shootrUserService.checkInCurrentEvent(dummyIdEvent);
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(localUserRepository).putUser(userCaptor.capture());
         User userStoredInLocal = userCaptor.getValue();
-        assertThat(userStoredInLocal.isCheckedIn()).isTrue();
+        assertThat(userStoredInLocal.getIdCheckedEvent()).isNotNull();
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws IOException {
@@ -130,20 +132,20 @@ public class ShootrUserServiceTest {
 
     private void setupCurrentUserWithoutVisibleEvent() {
         User currentUser = currentUser();
-        currentUser.setIdCheckedEvent(false);
         currentUser.setIdWatchingEvent(NO_VISIBLE_EVENT);
+        currentUser.setIdCheckedEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserNotCheckedIn() {
         User currentUser = currentUser();
-        currentUser.setIdCheckedEvent(false);
+        currentUser.setIdWatchingEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserCheckedIn() {
         User currentUser = currentUser();
-        currentUser.setIdCheckedEvent(true);
+        currentUser.setIdCheckedEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
