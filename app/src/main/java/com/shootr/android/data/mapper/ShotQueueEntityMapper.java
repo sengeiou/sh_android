@@ -31,16 +31,16 @@ public class ShotQueueEntityMapper {
 
         Shot shot = queuedShot.getShot();
         String idShot = shot.getIdShot();
-        entity.setIdShot(idShot != null && !idShot.equals("null")? idShot : null);
+        entity.setIdShot(idShot != null ? idShot : null);
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
         String parentShotId = shot.getParentShotId();
-        entity.setIdShotParent(parentShotId != null && !parentShotId.equals("null")? parentShotId : null);
+        entity.setIdShotParent(parentShotId != null ? parentShotId : null);
         String parentShotUserId = shot.getParentShotUserId();
-        entity.setIdUserParent(parentShotUserId!= null && !parentShotUserId.equals("null")? parentShotUserId : null);
+        entity.setIdUserParent(parentShotUserId!= null ? parentShotUserId : null);
         String parentShotUsername = shot.getParentShotUsername();
-        entity.setUserNameParent(!parentShotUsername.equals("") ? parentShotUsername : null);
+        entity.setUserNameParent(parentShotUsername != null ? parentShotUsername : null);
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
