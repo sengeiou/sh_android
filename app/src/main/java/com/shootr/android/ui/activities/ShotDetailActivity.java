@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -86,6 +87,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         super.onPause();
         detailPresenter.pause();
         newShotBarPresenter.resume();
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupAdapter() {
