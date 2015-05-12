@@ -10,15 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.StartedFollowingShotFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
@@ -29,8 +33,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private AndroidTimeUtils timeUtils;
     private int tagColor;
 
+    private StartedFollowingShotFormatter startedFollowingShotFormatter;
+
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
+                           View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
@@ -109,10 +115,18 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 String comment = item.getComment();
-                if (comment != null) {
+                SpannableStringBuilder spannableStringBuilder = null;
+                startedFollowingShotFormatter = new StartedFollowingShotFormatter();
+                if(startedFollowingShotFormatter.commentIsAStartedFollowingShot(comment)){
+                    spannableStringBuilder = startedFollowingShotFormatter
+                            .renderStartedFollowingShotSpan(comment, getContext());
+                }
+                if(spannableStringBuilder != null){
+                    vh.text.setVisibility(View.VISIBLE);
+                    vh.text.setText(spannableStringBuilder);
+                }else if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);
-                    vh.text.addLinks();
                 } else {
                     vh.text.setVisibility(View.GONE);
                 }
