@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.interactor.user.PerformCheckoutInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -51,12 +52,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private Boolean isCurrentUserWatchingThisEvent;
 
-    private String userIdCheckedEvent;
+    private Boolean hasUserCheckdIn;
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
-      PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+                                ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
+                                PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
                                 WatchersTimeFormatter watchersTimeFormatter) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
@@ -85,7 +86,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         getCheckinStatusInteractor.loadCheckinStatus(new Interactor.Callback<Boolean>() {
             @Override
             public void onLoaded(Boolean currentCheckIn) {
-                getUserIdCheckedEvent();
+                hasUserCheckdIn = currentCheckIn;
                 updateCheckinVisibility();
                 if (!currentCheckIn) {
                     eventDetailView.showCheckin();
@@ -94,16 +95,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         });
     }
 
-    private void getUserIdCheckedEvent() {
-        if(currentUserWatchingModel != null){
-            userIdCheckedEvent = currentUserWatchingModel.getIdCheckedEvent();
-        }
-    }
-
     private void updateCheckinVisibility(){
-        if(currentUserWatchingModel!= null){
-            if(currentUserWatchingModel.getIdCheckedEvent() == null
-                    || !currentUserWatchingModel.getIdCheckedEvent().equals(currentUserWatchingModel.getEventWatchingId())){
+        if(isCurrentUserWatchingThisEvent != null && hasUserCheckdIn != null){
+            if(!hasUserCheckdIn && isCurrentUserWatchingThisEvent){
                 eventDetailView.showCheckin();
             }
         }
@@ -180,8 +174,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
-            isCurrentUserWatchingEvent(currentUserWatchingModel.getEventWatchingId(),
-                    idEvent);
+            isCurrentUserWatchingEvent(eventInfo.getEvent().getId(),
+                    currentUserWatchingModel.getEventWatchingId());
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
             updateCheckinVisibility();
@@ -214,7 +208,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void performCheckin() {
         eventDetailView.showCheckinLoading();
-        performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
+        performCheckinInteractor.performCheckin(new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
                 eventDetailView.hideCheckin();
