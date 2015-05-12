@@ -2,12 +2,16 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -18,8 +22,12 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
     private final GetReplyParentInteractor getReplyParentInteractor;
+    private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final ShotModelMapper shotModelMapper;
+    private final UserModelMapper userModelMapper;
     private final Bus bus;
+
+    private UserModel userModel;
 
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
@@ -28,11 +36,14 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
-      GetReplyParentInteractor getReplyParentInteractor, ShotModelMapper shotModelMapper, @Main Bus bus) {
+                               GetReplyParentInteractor getReplyParentInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
+                               GetUserByUsernameInteractor getUserByUsernameInteractor, UserModelMapper userModelMapper) {
         this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
         this.getReplyParentInteractor = getReplyParentInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
+        this.getUserByUsernameInteractor = getUserByUsernameInteractor;
+        this.userModelMapper = userModelMapper;
     }
 
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
@@ -45,7 +56,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void loadReplies() {
         getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
 
-            @Override public void onLoaded(List<Shot> replies) {
+            @Override
+            public void onLoaded(List<Shot> replies) {
                 int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
                 int newReplyCount = replies.size();
                 repliesModels = shotModelMapper.transform(replies);
@@ -68,7 +80,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void loadParentShot() {
         getReplyParentInteractor.loadReplyParent(shotModel.getParentShotId(), new Interactor.Callback<Shot>() {
-            @Override public void onLoaded(Shot shot) {
+            @Override
+            public void onLoaded(Shot shot) {
                 if (shot != null) {
                     shotDetailView.renderParent(shotModelMapper.transform(shot));
                 } else {
@@ -84,6 +97,22 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void avatarClick(String userId) {
         shotDetailView.openProfile(userId);
+    }
+
+    public void usernameClick(String username) {
+        loadUserModelFromUsername(username);
+        shotDetailView.openProfile(userModel.getIdUser());
+    }
+
+    private void loadUserModelFromUsername(String username) {
+        final User[] userFromCallback = {null};
+        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+            @Override
+            public void onLoaded(User user) {
+                userFromCallback[0] = user;
+            }
+        });
+        userModel =userModelMapper.transform(userFromCallback[0]);
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
