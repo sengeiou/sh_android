@@ -88,21 +88,21 @@ public class EventDetailPresenterTest {
     @Test
     public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(null);
+        setupCheckinStatusCallbacks(false);
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView, times(2)).showCheckin();
+        verify(eventDetailView, times(1)).showCheckin();
     }
 
     @Test
     public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(EVENT_ID_STUB);
+        setupCheckinStatusCallbacks(true);
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView, times(2)).showCheckin();
+        verify(eventDetailView, never()).showCheckin();
     }
 
     //region Setups and stubs
@@ -117,12 +117,12 @@ public class EventDetailPresenterTest {
         }).when(eventInfoInteractor).obtainEventInfo(anyString(), any(VisibleEventInfoInteractor.Callback.class));
     }
 
-    private void setupCheckinStatusCallbacks(final String eventCheckedIn) {
+    private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
-                callback.onLoaded(true);
+                callback.onLoaded(isCheckedIn);
                 return null;
             }
         }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));

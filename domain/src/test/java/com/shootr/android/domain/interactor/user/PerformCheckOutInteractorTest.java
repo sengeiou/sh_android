@@ -27,7 +27,6 @@ public class PerformCheckOutInteractorTest {
     @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckoutInteractor interactor;
-    private String dummyIdEvent = "EVENT_ID";
 
     @Before
     public void setUp() throws Exception {
@@ -39,25 +38,25 @@ public class PerformCheckOutInteractorTest {
 
     @Test
     public void shouldCallbackCompleteIfServiceDoesntFail() throws Exception {
-        doNothing().when(shootrUserService).checkOutCurrentEvent(dummyIdEvent);
+        doNothing().when(shootrUserService).checkOutCurrentEvent();
 
-        interactor.performCheckout(dummyIdEvent, completedCallback, errorCallback);
+        interactor.performCheckout(completedCallback, errorCallback);
 
         verify(completedCallback).onCompleted();
     }
 
     @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkOutCurrentEvent(dummyIdEvent);
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkOutCurrentEvent();
 
-        interactor.performCheckout(dummyIdEvent, completedCallback, errorCallback);
+        interactor.performCheckout(completedCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkOutCurrentEvent(dummyIdEvent);
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkOutCurrentEvent();
 
-        interactor.performCheckout(dummyIdEvent, completedCallback, errorCallback);
+        interactor.performCheckout(completedCallback, errorCallback);
 
         verify(completedCallback, never()).onCompleted();
     }
