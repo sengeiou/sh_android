@@ -54,7 +54,8 @@ public class CheckinBar extends FrameLayout {
         if (!isExpanded) {
             return;
         }
-        startExpandCollapseAnimation(false);
+        //startExpandCollapseAnimation(false);
+        setVisibility(GONE);
         isExpanded = false;
     }
 
@@ -62,13 +63,19 @@ public class CheckinBar extends FrameLayout {
         if (isExpanded) {
             return;
         }
-        startExpandCollapseAnimation(true);
+        setVisibility(VISIBLE);
+        //startExpandCollapseAnimation(true);
         isExpanded = true;
     }
 
     private void startExpandCollapseAnimation(final boolean expand) {
         setVisibility(VISIBLE);
-        final ValueAnimator valueAnimator = getAnimatorForAction(expand);
+        final ValueAnimator valueAnimator = getExpandCollapseAnimator(expand);
+        valueAnimator.start();
+    }
+
+    public ValueAnimator getExpandCollapseAnimator(final boolean expand) {
+        final ValueAnimator valueAnimator = createAnimatorForAction(expand);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override public void onAnimationUpdate(ValueAnimator animation) {
                 Float value = (Float) animation.getAnimatedValue();
@@ -83,10 +90,10 @@ public class CheckinBar extends FrameLayout {
                 }
             }
         });
-        valueAnimator.start();
+        return valueAnimator;
     }
 
-    private ValueAnimator getAnimatorForAction(boolean expand) {
+    private ValueAnimator createAnimatorForAction(boolean expand) {
         return expand ? ValueAnimator.ofFloat(0f, 1f) : ValueAnimator.ofFloat(1f, 0f);
     }
 }
