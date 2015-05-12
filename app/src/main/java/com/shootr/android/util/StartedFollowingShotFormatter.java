@@ -1,31 +1,30 @@
 package com.shootr.android.util;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StartedFollowingShotFormatter {
 
+    private String username;
+    private UsernameClickListener onClickListener;
+
     public StartedFollowingShotFormatter() {
 
     }
 
-    public SpannableStringBuilder renderStartedFollowingShotSpan(String comment, final Context context) {
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(comment);
-        final View.OnClickListener startedFollowingShotListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Toast.makeText(context, "username", Toast.LENGTH_SHORT).show();
-            }
-        };
-        return replacePatternWithClickableText(spannableStringBuilder, startedFollowingShotListener);
+    public SpannableString renderStartedFollowingShotSpan(String comment, final Context context, UsernameClickListener onClickListener) {
+        SpannableString spannableString = new SpannableString(comment);
+        this.onClickListener = onClickListener;
+        return replacePatternWithClickableText(spannableString);
     }
 
     public boolean commentIsAStartedFollowingShot(String comment) {
@@ -37,14 +36,15 @@ public class StartedFollowingShotFormatter {
         return false;
     }
 
-    private SpannableStringBuilder replacePatternWithClickableText(SpannableStringBuilder spannableBuilder,
-                                                                   final View.OnClickListener onClick) {
-        SpannableStringBuilder spanWithClick = spannableBuilder;
+    private SpannableString replacePatternWithClickableText(SpannableString spannableBuilder) {
+        SpannableString spanWithClick = spannableBuilder;
         Pattern termsPattern = Pattern.compile("@[_A-Za-z0-9]+");
         Matcher termsMatcher = termsPattern.matcher(spanWithClick.toString());
         if (termsMatcher.find()) {
             int termsStart = termsMatcher.start();
             int termsEnd = termsMatcher.end();
+
+            username = extractUsernameFromExpression(spanWithClick, termsStart, termsEnd);
 
             CharacterStyle termsSpan = new ClickableSpan() {
                 @Override
@@ -54,7 +54,7 @@ public class StartedFollowingShotFormatter {
                 }
 
                 @Override public void onClick(View widget) {
-                    onClick.onClick(widget);
+                    onClickListener.onClick(username);
                 }
             };
             spanWithClick.setSpan(termsSpan,
@@ -63,5 +63,9 @@ public class StartedFollowingShotFormatter {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spanWithClick;
+    }
+
+    private String extractUsernameFromExpression(SpannableString spanWithClick, int termsStart, int termsEnd) {
+        return spanWithClick.toString().substring(termsStart+1,termsEnd);
     }
 }

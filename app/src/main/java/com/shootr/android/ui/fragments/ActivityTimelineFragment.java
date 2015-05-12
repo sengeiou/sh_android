@@ -26,6 +26,7 @@ import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.UsernameClickListener;
 
 import java.util.List;
 
@@ -136,7 +137,12 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
+            @Override
+            public void onClick(String username) {
+                Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
+            }
+        }, timeUtils);
         listView.setAdapter(adapter);
     }
 

@@ -17,6 +17,7 @@ import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.StartedFollowingShotFormatter;
+import com.shootr.android.util.UsernameClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,19 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
+    private final UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
 
     private StartedFollowingShotFormatter startedFollowingShotFormatter;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-                           View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
+                           View.OnClickListener imageClickListener, UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         tagColor = context.getResources().getColor(R.color.tag_color);
@@ -117,12 +120,13 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
                 String comment = item.getComment();
 
-                SpannableStringBuilder spannableStringBuilder = startedFollowingShotFormatter
-                            .renderStartedFollowingShotSpan(comment, getContext());
+                SpannableString spannableStringBuilder = startedFollowingShotFormatter
+                            .renderStartedFollowingShotSpan(comment, getContext(), clickListener);
                 if(spannableStringBuilder != null){
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(spannableStringBuilder);
                     vh.text.addLinks();
+                    vh.text.setClickable(true);
                 }else if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);

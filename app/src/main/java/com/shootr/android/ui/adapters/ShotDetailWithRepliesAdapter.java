@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -18,6 +20,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.StartedFollowingShotFormatter;
 import com.shootr.android.util.TimeFormatter;
+import com.shootr.android.util.UsernameClickListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +40,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
+    private final UsernameClickListener onClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
@@ -49,11 +53,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
-      AndroidTimeUtils timeUtils) {
+                                        ImageClickListener imageClickListener, UsernameClickListener onClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
+                                        AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.onClickListener = onClickListener;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
@@ -237,8 +242,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
 
-            SpannableStringBuilder spannableStringBuilder = startedFollowingShotFormatter
-                        .renderStartedFollowingShotSpan(comment,context);
+            SpannableString spannableStringBuilder = startedFollowingShotFormatter
+                        .renderStartedFollowingShotSpan(comment, context.getApplicationContext(), new UsernameClickListener() {
+                            @Override
+                            public void onClick(String username) {
+                                Toast.makeText(context,username,Toast.LENGTH_SHORT).show();
+                            }
+                        });
             if(spannableStringBuilder != null) {
                 shotText.setVisibility(View.VISIBLE);
                 shotText.setText(spannableStringBuilder);
@@ -315,6 +325,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
 
+        private final StartedFollowingShotFormatter startedFollowingShotFormatter;
+        private Context context;
+
         @InjectView(R.id.shot_detail_parent_progress) View progress;
         @InjectView(R.id.shot_detail_parent_shot) View shot;
 
@@ -327,6 +340,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            context = itemView.getContext();
+            startedFollowingShotFormatter = new StartedFollowingShotFormatter();
         }
 
         public void showLoading() {
@@ -340,7 +355,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.name.setText(getUsernameTitle(shotModel));
 
             String comment = shotModel.getComment();
-            if (comment != null) {
+            SpannableString spannableStringBuilder = startedFollowingShotFormatter
+                    .renderStartedFollowingShotSpan(comment, context.getApplicationContext(), new UsernameClickListener() {
+                        @Override
+                        public void onClick(String username) {
+                            Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            if(spannableStringBuilder != null) {
+                this.text.setVisibility(View.VISIBLE);
+                this.text.setText(spannableStringBuilder);
+                this.text.addLinks();
+            } else if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
                 this.text.setText(comment);
                 this.text.addLinks();
@@ -412,6 +438,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.text.setVisibility(View.VISIBLE);
                 this.text.setText(comment);
                 this.text.addLinks();
+                this.text.setClickable(true);
             } else {
                 this.text.setVisibility(View.GONE);
             }

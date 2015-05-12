@@ -46,6 +46,8 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.UsernameClickListener;
+
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -283,7 +285,12 @@ public class EventTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
+            @Override
+            public void onClick(String username) {
+                Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
+            }
+        }, timeUtils);
         listView.setAdapter(adapter);
     }
 

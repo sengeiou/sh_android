@@ -61,6 +61,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.UsernameClickListener;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -527,7 +528,12 @@ public class ProfileFragment extends BaseFragment {
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             latestsShotsAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils){
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
+                  @Override
+                  public void onClick(String username) {
+                      Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
+                  }
+              }, timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }
