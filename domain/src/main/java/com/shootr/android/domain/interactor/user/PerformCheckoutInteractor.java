@@ -34,7 +34,7 @@ public class PerformCheckoutInteractor implements Interactor{
 
     @Override public void execute() throws Throwable {
         try {
-            shootrUserService.checkOutCurrentEvent();
+            shootrUserService.checkOutCurrentEvent(idEvent);
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);
