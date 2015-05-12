@@ -39,6 +39,11 @@ public class LocalUserRepository implements UserRepository {
           isFollowing(id));
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        return userEntityMapper.transform(localUserDataSource.getUserByUsername(username));
+    }
+
     @Override public List<User> getUsersByIds(List<String> ids) {
         // TODO optimize with its own query
         List<User> users = new ArrayList<>(ids.size());

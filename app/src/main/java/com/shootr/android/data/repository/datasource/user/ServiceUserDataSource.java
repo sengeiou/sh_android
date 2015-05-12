@@ -60,6 +60,15 @@ public class ServiceUserDataSource implements UserDataSource {
         throw new RuntimeException("Method not implemented for service.");
     }
 
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        try {
+            return service.getUserByUsername(username);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }

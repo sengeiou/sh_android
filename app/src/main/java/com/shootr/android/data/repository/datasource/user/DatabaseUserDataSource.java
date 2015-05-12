@@ -63,6 +63,11 @@ public class DatabaseUserDataSource implements UserDataSource {
         return follow != null;
     }
 
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        return userManager.getUserByUsername(username);
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }

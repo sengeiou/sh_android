@@ -503,6 +503,20 @@ public class ShootrDataService implements ShootrService {
         GenericDto responseDto = postRequest(createAccountDto);
     }
 
+    @Override
+    public UserEntity getUserByUsername(String username) throws IOException {
+        GenericDto requestDto = userDtoFactory.getUserByUserId(username);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else if (ops[0].getMetadata()!=null) {
+            Map<String, Object> dataItem = ops[0].getData()[0];
+            return userMapper.fromDto(dataItem);
+        }
+        return null;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

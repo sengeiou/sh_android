@@ -111,7 +111,7 @@ public class UserManager extends AbstractManager {
     }
 
     public void insertInSync(){
-        insertInTableSync(USER_TABLE,1,0,0);
+        insertInTableSync(USER_TABLE, 1, 0, 0);
     }
 
     public List<UserEntity> getUsersByIds(List<String> usersIds) {
@@ -214,5 +214,19 @@ public class UserManager extends AbstractManager {
         }
         queryResult.close();
         return resultUsers;
+    }
+
+    public UserEntity getUserByUsername(String username) {
+        UserEntity resUser = null;
+        String args = UserTable.USER_NAME + "= ?";
+        String[] argsString = new String[] { username };
+
+        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            resUser = userMapper.fromCursor(c);
+        }
+        c.close();
+        return resUser;
     }
 }

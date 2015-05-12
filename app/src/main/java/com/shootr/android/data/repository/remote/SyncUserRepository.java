@@ -85,6 +85,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return entityToDomain(user);
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        UserEntity user = cachedRemoteUserDataSource.getUserByUsername(username);
+        return entityToDomain(user);
+    }
+
     private User entityToDomain(UserEntity remoteUser) {
         return userEntityMapper.transform(remoteUser,
           sessionRepository.getCurrentUserId(),
