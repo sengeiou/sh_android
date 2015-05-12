@@ -284,10 +284,10 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
     }
 
-    public GenericDto getCheckoutOperationDto(String idUser) {
+    public GenericDto getCheckoutOperationDto(String idUser, String watchingEventId) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ALIAS_CHECKOUT)
                 .putKey(DatabaseContract.CheckOutMongo.ID, idUser)
-                .putKey(DatabaseContract.CheckOutMongo.ID_CHECKED_EVENT, null)
+                .putKey(DatabaseContract.CheckOutMongo.ID_CHECKED_EVENT, watchingEventId)
                 .operation(ServiceConstants.OPERATION_RETRIEVE)
                 .build();
 
