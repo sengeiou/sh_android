@@ -15,8 +15,6 @@ public class PerformCheckoutInteractor implements Interactor{
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
-    private String idEvent;
-
     @Inject
     public PerformCheckoutInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
                                     ShootrUserService shootrUserService) {
@@ -25,16 +23,15 @@ public class PerformCheckoutInteractor implements Interactor{
         this.shootrUserService = shootrUserService;
     }
 
-    public void performCheckout(String idEvent, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void performCheckout(CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
-        this.idEvent = idEvent;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
         try {
-            shootrUserService.checkOutCurrentEvent(idEvent);
+            shootrUserService.checkOutCurrentEvent();
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);
