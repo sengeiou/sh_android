@@ -121,8 +121,8 @@ public class EventDetailPresenterTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<String> callback = (Interactor.Callback<String>) invocation.getArguments()[0];
-                callback.onLoaded(eventCheckedIn);
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
+                callback.onLoaded(true);
                 return null;
             }
         }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));

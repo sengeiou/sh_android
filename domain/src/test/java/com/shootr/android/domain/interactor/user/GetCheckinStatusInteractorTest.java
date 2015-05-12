@@ -38,19 +38,19 @@ public class GetCheckinStatusInteractorTest {
           sessionRepository);
     }
 
-    @Test public void shouldCallbackNullWhenUserNotCheckedIn() throws Exception {
+    @Test public void shouldCallbackFalseWhenCheckinInUserIsFalse() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithoutCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 
-        assertThat(spyCallback.result).isNull();
+        assertThat(spyCallback.result).isFalse();
     }
-    @Test public void shouldCallbackNotNullWhenUserIsCheckedIn() throws Exception {
+    @Test public void shouldCallbackTrueWhenCheckinInUserIsTrue() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithCheckin());
 
         interactor.loadCheckinStatus(spyCallback);
 
-        assertThat(spyCallback.result).isNotNull();
+        assertThat(spyCallback.result).isTrue();
     }
 
     private User currentUserWithCheckin() {
@@ -62,14 +62,15 @@ public class GetCheckinStatusInteractorTest {
 
     private User currentUserWithoutCheckin() {
         User user = new User();
+        user.setIdWatchingEvent(dummyIdEvent);
         return user;
     }
 
-    private class SpyCallback implements Interactor.Callback<String> {
+    private class SpyCallback implements Interactor.Callback<Boolean> {
 
-        String result;
+        Boolean result;
 
-        @Override public void onLoaded(String result) {
+        @Override public void onLoaded(Boolean result) {
             this.result = result;
         }
     }
