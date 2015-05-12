@@ -44,6 +44,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         tagColor = context.getResources().getColor(R.color.tag_color);
+        startedFollowingShotFormatter = new StartedFollowingShotFormatter();
     }
 
     @Override
@@ -116,7 +117,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
                 String comment = item.getComment();
                 SpannableStringBuilder spannableStringBuilder = null;
-                startedFollowingShotFormatter = new StartedFollowingShotFormatter();
                 if(startedFollowingShotFormatter.commentIsAStartedFollowingShot(comment)){
                     spannableStringBuilder = startedFollowingShotFormatter
                             .renderStartedFollowingShotSpan(comment, getContext());

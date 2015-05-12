@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnItemClick;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -28,8 +26,14 @@ import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class ActivityTimelineFragment extends BaseFragment implements TimelineView {
 

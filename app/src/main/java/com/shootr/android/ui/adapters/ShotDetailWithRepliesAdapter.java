@@ -1,24 +1,30 @@
 package com.shootr.android.ui.adapters;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.StartedFollowingShotFormatter;
 import com.shootr.android.util.TimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import timber.log.Timber;
 
 public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -209,6 +215,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     //region View holders
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
+        private final StartedFollowingShotFormatter startedFollowingShotFormatter;
+        private Context context;
         @InjectView(R.id.shot_detail_avatar) ImageView avatar;
         @InjectView(R.id.shot_detail_user_name) TextView username;
         @InjectView(R.id.shot_detail_timestamp) TextView timestamp;
@@ -220,13 +228,24 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            context = itemView.getContext();
+            startedFollowingShotFormatter = new StartedFollowingShotFormatter();
         }
 
         public void bindView(final ShotModel shotModel) {
             username.setText(getUsernameTitle(shotModel));
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
-            if (comment != null) {
+
+            SpannableStringBuilder spannableStringBuilder = null;
+            if(startedFollowingShotFormatter.commentIsAStartedFollowingShot(comment)){
+                spannableStringBuilder = startedFollowingShotFormatter
+                        .renderStartedFollowingShotSpan(comment,context);
+            }
+            if(spannableStringBuilder != null) {
+                shotText.setVisibility(View.VISIBLE);
+                shotText.setText(spannableStringBuilder);
+            } else if (comment != null) {
                 shotText.setText(comment);
                 shotText.addLinks();
             } else {
@@ -236,7 +255,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     avatarClickListener.onClick(shotModel.getIdUser());
                 }
             });

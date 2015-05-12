@@ -23,52 +23,56 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
+
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.PhotoViewActivity;
-import com.shootr.android.ui.activities.ProfileEditActivity;
-import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
+import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.PicassoWrapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
@@ -104,6 +108,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
+
     //endregion
 
     // Args
