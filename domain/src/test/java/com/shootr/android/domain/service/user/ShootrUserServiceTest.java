@@ -47,19 +47,19 @@ public class ShootrUserServiceTest {
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedIn() throws Exception {
         setupCurrentUserCheckedIn();
-        shootrUserService.checkInCurrentEvent(dummyIdEvent);
+        shootrUserService.checkInCurrentEvent();
     }
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfNoVisibleEvent() throws Exception {
         setupCurrentUserWithoutVisibleEvent();
 
-        shootrUserService.checkInCurrentEvent(dummyIdEvent);
+        shootrUserService.checkInCurrentEvent();
     }
 
     @Test public void shouldCallGatewayWithCurrentUserIdAndEvent() throws Exception {
         setupCurrentUserNotCheckedIn();
 
-        shootrUserService.checkInCurrentEvent(dummyIdEvent);
+        shootrUserService.checkInCurrentEvent();
 
         verify(checkinGateway).performCheckin(CURRENT_USER_ID, dummyIdEvent);
     }
@@ -67,7 +67,7 @@ public class ShootrUserServiceTest {
     @Test public void shouldStoreCurrentUserInLocalCheckedIn() throws Exception {
         setupCurrentUserNotCheckedIn();
 
-        shootrUserService.checkInCurrentEvent(dummyIdEvent);
+        shootrUserService.checkInCurrentEvent();
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(localUserRepository).putUser(userCaptor.capture());
@@ -146,6 +146,7 @@ public class ShootrUserServiceTest {
     private void setupCurrentUserCheckedIn() {
         User currentUser = currentUser();
         currentUser.setIdCheckedEvent(dummyIdEvent);
+        currentUser.setIdWatchingEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
