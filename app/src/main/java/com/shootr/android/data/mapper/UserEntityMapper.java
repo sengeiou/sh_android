@@ -58,12 +58,7 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        String visibleEventId = user.getIdWatchingEvent();
-        if(visibleEventId !=  null){
-            userEntity.setIdWatchingEvent(visibleEventId);
-        }else{
-            userEntity.setIdWatchingEvent(null);
-        }
+        userEntity.setIdWatchingEvent(user.getIdWatchingEvent());
 
         userEntity.setWatchingEventTitle(user.getWatchingEventTitle());
 
