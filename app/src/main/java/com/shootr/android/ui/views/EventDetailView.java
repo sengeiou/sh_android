@@ -48,16 +48,4 @@ public interface EventDetailView extends LoadDataView {
     void showEditEventButton();
 
     void hideEditEventButton();
-
-    void showCheckin();
-
-    void hideCheckinLoading();
-
-    void showCheckinLoading();
-
-    void hideCheckin();
-
-    void showCheckinErrorRetry(String errorMessage);
-
-    void showCheckinConfirmation();
 }
