@@ -37,6 +37,7 @@ public class UserDtoFactory {
 
     private static final String ENTITY_LOGIN = "LoginMongo";
     private static final String ENTITY_CHECKIN = "CheckInMongo";
+    private static final String ENTITY_CHECKOUT = "CheckOutMongo";
     private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_CHECKOUT = "CHECKOUT";
@@ -284,10 +285,10 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
     }
 
-    public GenericDto getCheckoutOperationDto(String idUser, String watchingEventId) {
-        MetadataDto metadataDto = new MetadataDto.Builder().entity(ALIAS_CHECKOUT)
+    public GenericDto getCheckoutOperationDto(String idUser, String checkedEventID) {
+        MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKOUT)
                 .putKey(DatabaseContract.CheckOutMongo.ID, idUser)
-                .putKey(DatabaseContract.CheckOutMongo.ID_CHECKED_EVENT, watchingEventId)
+                .putKey(DatabaseContract.CheckOutMongo.ID_CHECKED_EVENT, checkedEventID)
                 .operation(ServiceConstants.OPERATION_RETRIEVE)
                 .build();
 
