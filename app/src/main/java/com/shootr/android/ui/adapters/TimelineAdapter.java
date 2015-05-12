@@ -116,17 +116,17 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 String comment = item.getComment();
-                SpannableStringBuilder spannableStringBuilder = null;
-                if(startedFollowingShotFormatter.commentIsAStartedFollowingShot(comment)){
-                    spannableStringBuilder = startedFollowingShotFormatter
+
+                SpannableStringBuilder spannableStringBuilder = startedFollowingShotFormatter
                             .renderStartedFollowingShotSpan(comment, getContext());
-                }
                 if(spannableStringBuilder != null){
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(spannableStringBuilder);
+                    vh.text.addLinks();
                 }else if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);
+                    vh.text.addLinks();
                 } else {
                     vh.text.setVisibility(View.GONE);
                 }

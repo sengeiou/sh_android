@@ -39,8 +39,9 @@ public class StartedFollowingShotFormatter {
 
     private SpannableStringBuilder replacePatternWithClickableText(SpannableStringBuilder spannableBuilder,
                                                                    final View.OnClickListener onClick) {
+        SpannableStringBuilder spanWithClick = spannableBuilder;
         Pattern termsPattern = Pattern.compile("@[_A-Za-z0-9]+");
-        Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
+        Matcher termsMatcher = termsPattern.matcher(spanWithClick.toString());
         if (termsMatcher.find()) {
             int termsStart = termsMatcher.start();
             int termsEnd = termsMatcher.end();
@@ -56,11 +57,11 @@ public class StartedFollowingShotFormatter {
                     onClick.onClick(widget);
                 }
             };
-            spannableBuilder.setSpan(termsSpan,
+            spanWithClick.setSpan(termsSpan,
                     termsStart,
                     termsEnd,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        return spannableBuilder;
+        return spanWithClick;
     }
 }

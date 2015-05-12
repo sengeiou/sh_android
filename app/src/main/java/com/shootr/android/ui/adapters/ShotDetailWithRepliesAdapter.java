@@ -237,11 +237,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
 
-            SpannableStringBuilder spannableStringBuilder = null;
-            if(startedFollowingShotFormatter.commentIsAStartedFollowingShot(comment)){
-                spannableStringBuilder = startedFollowingShotFormatter
+            SpannableStringBuilder spannableStringBuilder = startedFollowingShotFormatter
                         .renderStartedFollowingShotSpan(comment,context);
-            }
             if(spannableStringBuilder != null) {
                 shotText.setVisibility(View.VISIBLE);
                 shotText.setText(spannableStringBuilder);
