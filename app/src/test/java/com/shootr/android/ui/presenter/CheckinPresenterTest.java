@@ -33,6 +33,7 @@ public class CheckinPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new CheckinPresenter(getCheckinStatusInteractor, performCheckinInteractor);
+        presenter.setView(checkinView);
     }
 
     //region Initialization
@@ -74,12 +75,30 @@ public class CheckinPresenterTest {
           any(Interactor.ErrorCallback.class));
     }
 
+    @Test public void shouldShowCheckinLoadingWhenCheckIn() throws Exception {
+        doNothing().when(performCheckinInteractor)
+          .performCheckin(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+
+        presenter.checkIn();
+
+        verify(checkinView).showCheckinLoading();
+    }
+
+    @Test public void shouldHideCheckinLoadingWhenCheckInCallbacksCompleted() throws Exception {
+        setupPerformCheckinCallbacksCompleted();
+
+        presenter.checkIn();
+
+        verify(checkinView).hideCheckinLoading();
+    }
+
     //endregion
 
     //TODO Check out
 
     //region Toolbar interaction
-    @Test public void shouldShowCheckinButtonWhenToolbarClickedAfterInteractorCallbacksIfButtonIsNotVisible() throws Exception {
+    @Test public void shouldShowCheckinButtonWhenToolbarClickedAfterInteractorCallbacksIfButtonIsNotVisible()
+      throws Exception {
         setupCheckinStatusCallbacks(true);
         presenter.initialize(checkinView, EVENT_ID);
         presenter.showingCheckinButton = false;
@@ -100,8 +119,6 @@ public class CheckinPresenterTest {
     }
     //endregion
 
-
-
     @Test public void shouldNotInteractWithViewWhenToolbarClickedIfCheckinStatusHasntCallbackYet() throws Exception {
         doNothing().when(getCheckinStatusInteractor).loadCheckinStatus(anyString(), any(Interactor.Callback.class));
 
@@ -119,5 +136,15 @@ public class CheckinPresenterTest {
             }
         }).when(getCheckinStatusInteractor)
           .loadCheckinStatus(eq(EVENT_ID), any(GetCheckinStatusInteractor.Callback.class));
+    }
+
+    private void setupPerformCheckinCallbacksCompleted() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(performCheckinInteractor).performCheckin(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 }
