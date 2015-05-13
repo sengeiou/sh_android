@@ -5,6 +5,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -54,12 +55,12 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         try {
             Map<String, Integer> eventsWatchesCounts = getWatchersCountByEvents();
             return shootrService.getEventSearch(query, eventsWatchesCounts);
-        } catch (SQLException | IOException e) {
-            throw new RepositoryException(e);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
         }
     }
 
-    private Map<String, Integer> getWatchersCountByEvents() throws SQLException {
+    private Map<String, Integer> getWatchersCountByEvents()  {
         String currentUserId = sessionRepository.getCurrentUserId();
 
         List<String> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);

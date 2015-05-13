@@ -95,7 +95,7 @@ public class FollowManager extends AbstractManager{
     /**
      * Retrieve a Following User
      */
-    public List<String> getUserFollowingIds(String idUser) throws SQLException {
+    public List<String> getUserFollowingIds(String idUser) {
         List<String> userIds = new ArrayList<>();
 
         String args = ID_USER+"=? AND "+CSYS_DELETED +" IS NULL";
