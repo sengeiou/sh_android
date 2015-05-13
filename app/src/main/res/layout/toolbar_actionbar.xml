@@ -6,20 +6,35 @@
   android:layout_width="match_parent"
   android:layout_height="?actionBarSize">
 
-    <TextView android:id="@+id/toolbar_title"
-      style="@style/ActionBar.TitleText"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
+    <LinearLayout android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:animateLayoutChanges="true"
       android:background="?selectableItemBackground"
-      android:drawablePadding="8dp"
-      android:gravity="center_vertical|start"
+      android:orientation="vertical"
       android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:visibility="gone"
-      android:singleLine="true"
-      android:ellipsize="end"
-      tools:drawableRight="@drawable/spinner_triangle_white"
-      tools:text="Title"
-      tools:visibility="visible" />
+      android:paddingRight="16dp">
+
+        <TextView android:id="@+id/toolbar_title"
+          style="@style/ActionBar.TitleText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:drawablePadding="8dp"
+          android:ellipsize="end"
+          android:gravity="center_vertical|start"
+          android:singleLine="true"
+          android:visibility="gone"
+          tools:drawableRight="@drawable/spinner_triangle_white"
+          tools:text="Title"
+          tools:visibility="visible" />
+
+        <TextView android:id="@+id/toolbar_subtitle"
+          style="@style/ActionBar.SubtitleText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+          tools:text="Subtitle"
+          tools:visibility="visible" />
+    </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
