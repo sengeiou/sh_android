@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
+        setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
 
@@ -90,5 +92,11 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void hideSubtitle() {
         subtitleText.setVisibility(View.GONE);
+    }
+
+    private void setupTitleContainerTransitions() {
+        LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
+        layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
     }
 }
