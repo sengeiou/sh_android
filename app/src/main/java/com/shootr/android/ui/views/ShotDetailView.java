@@ -21,6 +21,6 @@ public interface ShotDetailView  {
 
     void showUserNotFoundNotification();
 
-    void startProfileContainerActivity(String idUser);
+    void startProfileContainerActivity(String username);
 
 }

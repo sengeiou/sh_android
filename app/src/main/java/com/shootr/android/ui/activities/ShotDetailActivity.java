@@ -237,8 +237,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override
-    public void startProfileContainerActivity(String idUser) {
-        Intent intentForUser = ProfileContainerActivity.getIntent(this, idUser);
+    public void startProfileContainerActivity(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
         startActivity(intentForUser);
     }
 

@@ -176,27 +176,13 @@ public class ProfileFragment extends BaseFragment {
         };
     }
 
-    private void startProfileContainerActivity(String idUser) {
-        Intent intentForUser = ProfileContainerActivity.getIntent(getActivity(), idUser);
+    private void startProfileContainerActivity(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
         startActivity(intentForUser);
     }
 
     private void goToUserProfile(String username) {
-        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-            @Override
-            public void onLoaded(User user) {
-                if (user != null) {
-                    startProfileContainerActivity(user.getIdUser());
-                } else {
-                    userNotFoundNotification();
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                Timber.e(error, "Error while searching user by username");
-            }
-        });
+        startProfileContainerActivity(username);
     }
 
     private void userNotFoundNotification(){

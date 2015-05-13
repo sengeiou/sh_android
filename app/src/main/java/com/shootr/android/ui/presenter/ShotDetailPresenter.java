@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.shootr.android.data.bus.Main;
@@ -11,6 +12,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -109,22 +111,12 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     }
 
+    private void startProfileContainerActivity(String username) {
+        shotDetailView.startProfileContainerActivity(username);
+    }
+
     private void goToUserProfile(String username) {
-        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-            @Override
-            public void onLoaded(User user) {
-                if (user != null) {
-                    shotDetailView.startProfileContainerActivity(user.getIdUser());
-                } else {
-                    shotDetailView.showUserNotFoundNotification();
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                Timber.e(error, "Error while searching user by username");
-            }
-        });
+        startProfileContainerActivity(username);
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
