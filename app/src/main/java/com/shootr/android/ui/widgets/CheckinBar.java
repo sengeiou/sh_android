@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -15,6 +16,7 @@ import com.shootr.android.R;
 public class CheckinBar extends FrameLayout {
 
     @InjectView(R.id.checkin_text) TextView checkinText;
+    @InjectView(R.id.checkin_loading) View checkinLoading;
 
     private boolean isExpanded;
     private int checkinOriginalHeight;
@@ -44,6 +46,16 @@ public class CheckinBar extends FrameLayout {
 
     public void setText(String text) {
         checkinText.setText(text);
+    }
+
+    public void showLoading(boolean loading) {
+        if (loading) {
+            checkinLoading.setVisibility(VISIBLE);
+            checkinText.setVisibility(GONE);
+        } else {
+            checkinLoading.setVisibility(GONE);
+            checkinText.setVisibility(VISIBLE);
+        }
     }
 
     public boolean isExpanded() {

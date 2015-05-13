@@ -465,11 +465,13 @@ public class EventTimelineFragment extends BaseFragment
     }
 
     @Override public void showCheckinLoading() {
-        //TODO
+        checkinBar.showLoading(true);
+        checkinBar.setClickable(false);
     }
 
     @Override public void hideCheckinLoading() {
-        //TODO
+        checkinBar.showLoading(false);
+        checkinBar.setClickable(true);
     }
 
     @Override public void showCheckedIn() {
