@@ -505,7 +505,7 @@ public class ShootrDataService implements ShootrService {
 
     @Override
     public UserEntity getUserByUsername(String username) throws IOException {
-        GenericDto requestDto = userDtoFactory.getUserByUserId(username);
+        GenericDto requestDto = userDtoFactory.getUserByUsername(username);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

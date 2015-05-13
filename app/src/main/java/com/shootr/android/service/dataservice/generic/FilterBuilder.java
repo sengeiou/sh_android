@@ -27,6 +27,7 @@ public class FilterBuilder {
     public static final String COMPARATOR_NOT_CONTAINS = "nct";
     public static final String COMPARATOR_ENDS_WITH = "en";
     public static final String COMPARATOR_NOT_ENDS_WITH = "nen";
+    public static final String COMPARATOR_COMPLETLY_CONTAINS = "cc";
 
     public static ItemField<AndItem> and(String field) {
         AndItem andItem = new AndItem();
@@ -171,6 +172,11 @@ public class FilterBuilder {
         private void createAndAddItem(String comparator, Object value) {
             FilterItemDto item = new FilterItemDto(comparator, fieldName, value);
             nexusItemReference.addItem(item);
+        }
+
+        public T completlyContains(String textValue) {
+            createAndAddItem(COMPARATOR_COMPLETLY_CONTAINS, textValue);
+            return nexusItemReference;
         }
 
 

@@ -1,6 +1,7 @@
 package com.shootr.android.service.dataservice.dto;
 
 import android.support.v4.util.ArrayMap;
+
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
@@ -15,14 +16,15 @@ import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
@@ -208,12 +210,20 @@ public class UserDtoFactory {
     }
 
     public GenericDto getUserByUsername(String username){
+        FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
+                .build();
+
         OperationDto od  = new OperationDto();
         Map<String, Object> key = new HashMap<>();
         key.put(UserTable.USER_NAME,username);
         key.put(DatabaseContract.SyncColumns.CSYS_DELETED, null);
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE,true,null,0L,1L,key);
-        od.setMetadata(md);
+        MetadataDto metadata = new MetadataDto.Builder() //
+                .operation(Constants.OPERATION_RETRIEVE) //
+                .entity(UserTable.TABLE) //
+                .includeDeleted(false) //
+                .filter(filter) //
+                .build();
+        od.setMetadata(metadata);
         Map<String, Object>[] array = new HashMap[1];
         array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
