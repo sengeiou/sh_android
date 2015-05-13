@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -228,6 +229,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void renderParent(ShotModel parentShot) {
         detailAdapter.renderParentShot(parentShot);
+    }
+
+    @Override
+    public void showNotification(String notification) {
+        Toast.makeText(this,notification,Toast.LENGTH_LONG);
     }
 
     @Override public void openNewShotView() {

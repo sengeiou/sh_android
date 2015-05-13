@@ -18,4 +18,6 @@ public interface ShotDetailView  {
     void scrollToBottom();
 
     void renderParent(ShotModel parentShot);
+
+    void showNotification(String notification);
 }

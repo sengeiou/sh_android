@@ -40,12 +40,13 @@ public class GetUserByUsernameInteractor implements Interactor {
 
     @Override
     public void execute() throws Throwable {
-        User user = userRepository.getUserByUsername(username);
-        if(user == null){
+        User user = null;
+        try {
+            user = userRepository.getUserByUsername(username);
+        }catch (Exception e){
             notifyError(new InvalidGetUserException("Can't find a user with that username"));
-        }else{
-            notifyResult(user);
         }
+        notifyResult(user);
     }
 
     private void notifyResult(final User user) {

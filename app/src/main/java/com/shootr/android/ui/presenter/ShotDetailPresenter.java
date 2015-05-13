@@ -1,5 +1,7 @@
 package com.shootr.android.ui.presenter;
 
+import android.widget.Toast;
+
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
@@ -115,7 +117,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
-
+                shotDetailView.showNotification("notification");
+                return;
             }
         });
         userModel =userModelMapper.transform(userFromCallback[0]);
