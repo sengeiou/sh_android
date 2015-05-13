@@ -61,7 +61,7 @@ public class CheckinPresenterTest {
         presenter.initialize(checkinView, EVENT_ID);
         presenter.checkinClick();
 
-        verify(performCheckinInteractor).performCheckin(any(Interactor.CompletedCallback.class),
+        verify(performCheckinInteractor).performCheckin(anyString(), any(Interactor.CompletedCallback.class),
           any(Interactor.ErrorCallback.class));
     }
 
@@ -71,13 +71,13 @@ public class CheckinPresenterTest {
         presenter.initialize(checkinView, EVENT_ID);
         presenter.checkinClick();
 
-        verify(performCheckinInteractor, never()).performCheckin(any(Interactor.CompletedCallback.class),
+        verify(performCheckinInteractor, never()).performCheckin(anyString(), any(Interactor.CompletedCallback.class),
           any(Interactor.ErrorCallback.class));
     }
 
     @Test public void shouldShowCheckinLoadingWhenCheckIn() throws Exception {
         doNothing().when(performCheckinInteractor)
-          .performCheckin(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+          .performCheckin(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
 
         presenter.checkIn();
 
@@ -141,10 +141,10 @@ public class CheckinPresenterTest {
     private void setupPerformCheckinCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
                 callback.onCompleted();
                 return null;
             }
-        }).when(performCheckinInteractor).performCheckin(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(performCheckinInteractor).performCheckin(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 }

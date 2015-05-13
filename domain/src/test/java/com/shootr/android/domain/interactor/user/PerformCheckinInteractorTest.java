@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -21,12 +22,13 @@ import static org.mockito.Mockito.verify;
 
 public class PerformCheckinInteractorTest {
 
+    private static final String ANY_EVENT_ID = "any_event_id";
+
     @Mock ShootrUserService shootrUserService;
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckinInteractor interactor;
-    private String dummyIdEvent = "EVENT_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -36,25 +38,25 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldCallbackCompleteIfServiceDoesntFail() throws Exception {
-        doNothing().when(shootrUserService).checkInCurrentEvent();
+        doNothing().when(shootrUserService).checkInEvent(anyString());
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 
         verify(completedCallback).onCompleted();
     }
 
     @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent();
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInEvent(anyString());
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInCurrentEvent();
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInEvent(anyString());
 
-        interactor.performCheckin(completedCallback, errorCallback);
+        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 
         verify(completedCallback, never()).onCompleted();
     }

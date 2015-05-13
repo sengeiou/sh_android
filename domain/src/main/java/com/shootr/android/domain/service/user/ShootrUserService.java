@@ -34,30 +34,6 @@ public class ShootrUserService {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    @Deprecated
-    public void checkInCurrentEvent() {
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        String watchingEventId = currentUser.getIdWatchingEvent();
-
-        if (isCheckedInEvent(currentUser, watchingEventId)) {
-            throw new InvalidCheckinException("Can't perform checkin if already checked-in");
-        }
-
-        if (watchingEventId == null) {
-            throw new InvalidCheckinException("Can't perform checkin without visible event");
-        }
-
-        try {
-            String idUser = currentUser.getIdUser();
-            checkinGateway.performCheckin(idUser, watchingEventId);
-        } catch (IOException e) {
-            throw new InvalidCheckinException(e);
-        }
-
-        currentUser.setIdCheckedEvent(watchingEventId);
-        localUserRepository.putUser(currentUser);
-    }
-
     public void checkInEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         if (isCheckedInEvent(currentUser, idEvent)) {

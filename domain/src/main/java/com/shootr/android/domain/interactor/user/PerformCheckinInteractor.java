@@ -12,6 +12,8 @@ public class PerformCheckinInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrUserService shootrUserService;
+
+    private String idEvent;
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
@@ -23,7 +25,8 @@ public class PerformCheckinInteractor implements Interactor {
         this.shootrUserService = shootrUserService;
     }
 
-    public void performCheckin(CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void performCheckin(String idEvent, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+        this.idEvent = idEvent;
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -31,7 +34,7 @@ public class PerformCheckinInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         try {
-            shootrUserService.checkInCurrentEvent();
+            shootrUserService.checkInEvent(idEvent);
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);

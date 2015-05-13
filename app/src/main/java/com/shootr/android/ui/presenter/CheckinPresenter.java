@@ -68,7 +68,7 @@ public class CheckinPresenter implements Presenter {
 
     protected void checkIn() {
         checkinView.showCheckinLoading();
-        performCheckinInteractor.performCheckin(new Interactor.CompletedCallback() {
+        performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 checkinView.hideCheckinLoading();
                 checkinView.hideCheckinView();
