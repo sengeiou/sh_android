@@ -203,6 +203,8 @@
     <string name="hour_ago">&#160;An hour ago</string>
     <string name="minute_ago">A minute ago</string>
     <string name="checked_in">Checked In</string>
+    <string name="check_in_action">Check In</string>
+    <string name="check_out_action">Check Out</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">

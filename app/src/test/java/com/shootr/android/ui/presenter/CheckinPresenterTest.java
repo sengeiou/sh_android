@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.interactor.user.PerformCheckoutInteractor;
 import com.shootr.android.ui.views.CheckinView;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -29,13 +29,15 @@ public class CheckinPresenterTest {
 
     @Mock GetCheckinStatusInteractor getCheckinStatusInteractor;
     @Mock PerformCheckinInteractor performCheckinInteractor;
+    @Mock PerformCheckoutInteractor performCheckoutInteractor;
     @Mock CheckinView checkinView;
 
     private CheckinPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new CheckinPresenter(getCheckinStatusInteractor, performCheckinInteractor);
+        presenter = new CheckinPresenter(getCheckinStatusInteractor, performCheckinInteractor,
+          performCheckoutInteractor);
         presenter.setView(checkinView);
     }
 
@@ -54,6 +56,14 @@ public class CheckinPresenterTest {
         presenter.initialize(checkinView, EVENT_ID);
 
         verify(checkinView, never()).showCheckinButton();
+    }
+
+    @Test public void shouldShowCheckOutTextWhenCheckedInEvent() throws Exception {
+        setupCheckinStatusCallbacks(true);
+
+        presenter.initialize(checkinView, EVENT_ID);
+
+        verify(checkinView).showTextCheckOut();
     }
     //endregion
 
@@ -103,9 +113,72 @@ public class CheckinPresenterTest {
         assertThat(presenter.checkedInEvent).isTrue();
     }
 
+    @Test public void shouldShowCheckoutTextWhenCheckInCallbacks() throws Exception {
+        setupPerformCheckinCallbacksCompleted();
+
+        presenter.checkIn();
+
+        verify(checkinView).showTextCheckOut();
+    }
+
     //endregion
 
-    //TODO Check out
+    // region Check out
+    @Test public void shouldPerformCheckOutWhenCheckinButtonClickedIfAlreadyCheckedInEvent() throws Exception {
+        setupCheckinStatusCallbacks(true);
+
+        presenter.initialize(checkinView, EVENT_ID);
+        presenter.checkinClick();
+
+        verify(performCheckoutInteractor).performCheckout(anyString(), any(Interactor.CompletedCallback.class), any(
+          Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldNotPerformCheckOutWhenCheckinButtonClickedIfNotCheckedInEvent() throws Exception {
+        setupCheckinStatusCallbacks(false);
+
+        presenter.initialize(checkinView, EVENT_ID);
+        presenter.checkinClick();
+
+        verify(performCheckoutInteractor, never()).performCheckout(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    @Test public void shouldShowCheckinLoadingWhenCheckOut() throws Exception {
+        doNothing().when(performCheckinInteractor)
+          .performCheckin(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+
+        presenter.checkOut();
+
+        verify(checkinView).showCheckinLoading();
+    }
+
+    @Test public void shouldHideCheckinLoadingWhenCheckOutCallbacksCompleted() throws Exception {
+        setupPerformCheckoutCallbacksCompleted();
+
+        presenter.checkOut();
+
+        verify(checkinView).hideCheckinLoading();
+    }
+
+    @Test public void shouldNotBeCheckedInEventWhenPerformCheckOutCallbacks() throws Exception {
+        setupPerformCheckoutCallbacksCompleted();
+
+        presenter.checkOut();
+
+        assertThat(presenter.checkedInEvent).isFalse();
+    }
+
+
+    @Test public void shouldShowCheckInTextWhenCheckOutCallbacks() throws Exception {
+        setupPerformCheckoutCallbacksCompleted();
+
+        presenter.checkOut();
+
+        verify(checkinView).showTextCheckIn();
+    }
+    // endregion
 
     //region Toolbar interaction
     @Test public void shouldShowCheckinButtonWhenToolbarClickedAfterInteractorCallbacksIfButtonIsNotVisible()
@@ -137,7 +210,7 @@ public class CheckinPresenterTest {
 
         presenter.toolbarClick();
 
-        verify(checkinView).hideCheckinView();
+        verify(checkinView).hideCheckinButton();
     }
 
     @Test public void shouldShowCheckedInWhenToolbarClickedIfButtonIsAlreadyVisible() throws Exception {
@@ -178,6 +251,20 @@ public class CheckinPresenterTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(performCheckinInteractor).performCheckin(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(performCheckinInteractor).performCheckin(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupPerformCheckoutCallbacksCompleted() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
+                callback.onCompleted();
+                return null;
+            }
+        }).when(performCheckoutInteractor).performCheckout(anyString(),
+          any(Interactor.CompletedCallback.class),
+          any(Interactor.ErrorCallback.class));
     }
 }

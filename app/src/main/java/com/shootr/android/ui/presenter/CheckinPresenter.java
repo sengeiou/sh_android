@@ -4,6 +4,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.interactor.user.PerformCheckoutInteractor;
 import com.shootr.android.ui.views.CheckinView;
 import javax.inject.Inject;
 
@@ -11,6 +12,7 @@ public class CheckinPresenter implements Presenter {
 
     private final GetCheckinStatusInteractor getCheckinStatusInteractor;
     private final PerformCheckinInteractor performCheckinInteractor;
+    private final PerformCheckoutInteractor performCheckoutInteractor;
 
     private CheckinView checkinView;
     protected Boolean checkedInEvent;
@@ -18,9 +20,10 @@ public class CheckinPresenter implements Presenter {
     private String idEvent;
 
     @Inject public CheckinPresenter(GetCheckinStatusInteractor getCheckinStatusInteractor,
-      PerformCheckinInteractor performCheckinInteractor) {
+      PerformCheckinInteractor performCheckinInteractor, PerformCheckoutInteractor performCheckoutInteractor) {
         this.getCheckinStatusInteractor = getCheckinStatusInteractor;
         this.performCheckinInteractor = performCheckinInteractor;
+        this.performCheckoutInteractor = performCheckoutInteractor;
     }
 
     protected void setView(CheckinView checkinView) {
@@ -47,6 +50,7 @@ public class CheckinPresenter implements Presenter {
             this.showViewCheckinButton();
         } else {
             checkinView.showCheckedIn();
+            checkinView.showTextCheckOut();
         }
     }
 
@@ -82,8 +86,9 @@ public class CheckinPresenter implements Presenter {
             @Override public void onCompleted() {
                 checkedInEvent = true;
                 checkinView.hideCheckinLoading();
-                checkinView.hideCheckinView();
+                hideViewCheckinButton();
                 checkinView.showCheckedIn();
+                checkinView.showTextCheckOut();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -92,8 +97,20 @@ public class CheckinPresenter implements Presenter {
         });
     }
 
-    private void checkOut() {
-        //TODO waiting for the interactor
+    protected void checkOut() {
+        checkinView.showCheckinLoading();
+        performCheckoutInteractor.performCheckout(idEvent, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                checkedInEvent = false;
+                hideViewCheckinButton();
+                checkinView.hideCheckinLoading();
+                checkinView.showTextCheckIn();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                // TODO veremos tambien
+            }
+        });
     }
 
     private void showViewCheckinButton() {
@@ -103,7 +120,7 @@ public class CheckinPresenter implements Presenter {
 
     private void hideViewCheckinButton() {
         showingCheckinButton = false;
-        checkinView.hideCheckinView();
+        checkinView.hideCheckinButton();
     }
 
     @Override public void resume() {

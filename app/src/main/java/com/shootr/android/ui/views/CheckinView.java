@@ -4,7 +4,7 @@ public interface CheckinView {
 
     void showCheckinButton();
 
-    void hideCheckinView();
+    void hideCheckinButton();
 
     void showCheckinLoading();
 
@@ -13,4 +13,8 @@ public interface CheckinView {
     void showCheckedIn();
 
     void hideCheckedIn();
+
+    void showTextCheckOut();
+
+    void showTextCheckIn();
 }

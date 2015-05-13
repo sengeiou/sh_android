@@ -460,7 +460,7 @@ public class EventTimelineFragment extends BaseFragment
         checkinBar.expand();
     }
 
-    @Override public void hideCheckinView() {
+    @Override public void hideCheckinButton() {
         checkinBar.collapse();
     }
 
@@ -478,6 +478,14 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void hideCheckedIn() {
         toolbarDecorator.hideSubtitle();
+    }
+
+    @Override public void showTextCheckOut() {
+        checkinBar.setText(getString(R.string.check_out_action));
+    }
+
+    @Override public void showTextCheckIn() {
+        checkinBar.setText(getString(R.string.check_in_action));
     }
     //endregion
 }
