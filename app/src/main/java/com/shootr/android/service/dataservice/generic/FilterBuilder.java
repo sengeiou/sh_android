@@ -164,6 +164,11 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
+        public T completlyContains(String textValue) {
+            createAndAddItem(COMPARATOR_COMPLETLY_CONTAINS, textValue);
+            return nexusItemReference;
+        }
+
         public T matches(FilterMatcher<T> matcher) {
             NexusItem nexusItem = matcher.match(this);
             return nexusItemReference;
@@ -172,11 +177,6 @@ public class FilterBuilder {
         private void createAndAddItem(String comparator, Object value) {
             FilterItemDto item = new FilterItemDto(comparator, fieldName, value);
             nexusItemReference.addItem(item);
-        }
-
-        public T completlyContains(String textValue) {
-            createAndAddItem(COMPARATOR_COMPLETLY_CONTAINS, textValue);
-            return nexusItemReference;
         }
 
 

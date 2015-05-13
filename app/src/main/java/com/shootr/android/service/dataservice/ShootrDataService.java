@@ -14,6 +14,7 @@ import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.exception.InvalidGetUserException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -504,9 +505,14 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) throws IOException {
+    public UserEntity getUserByUsername(String username) {
         GenericDto requestDto = userDtoFactory.getUserByUsername(username);
-        GenericDto responseDto = postRequest(requestDto);
+        GenericDto responseDto = null;
+        try {
+            responseDto = postRequest(requestDto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");

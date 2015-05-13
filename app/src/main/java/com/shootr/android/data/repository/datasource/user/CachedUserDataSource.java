@@ -4,9 +4,10 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+
 import java.util.List;
+
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class CachedUserDataSource implements UserDataSource, CachedDataSource {
 
@@ -97,7 +98,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         throw new RuntimeException("Can't use cache for synchronization manipulation");
     }
 
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserByUsername(String username){
         UserEntity cachedUser = null;
         if (isValid()) {
             cachedUser = localUserDataSource.getUserByUsername(username);

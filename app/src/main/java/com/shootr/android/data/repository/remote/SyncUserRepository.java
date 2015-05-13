@@ -5,7 +5,6 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
-import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.datasource.user.CachedUserDataSource;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
@@ -21,9 +20,12 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
@@ -86,7 +88,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public User getUserByUsername(String username){
         UserEntity user = cachedRemoteUserDataSource.getUserByUsername(username);
         return entityToDomain(user);
     }

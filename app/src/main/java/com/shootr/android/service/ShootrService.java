@@ -69,5 +69,5 @@ public interface ShootrService {
 
     void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
 
-    UserEntity getUserByUsername(String username) throws IOException;
+    UserEntity getUserByUsername(String username);
 }
