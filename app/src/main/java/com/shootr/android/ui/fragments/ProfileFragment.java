@@ -32,6 +32,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
@@ -178,6 +179,12 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onLoaded(User user) {
                 userFromCallback[0] = user;
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                Timber.e(error, "Error while searching user by username");
+                Toast.makeText(getActivity(), "User not found", Toast.LENGTH_LONG);
             }
         });
         return userModelMapper.transform(userFromCallback[0]);

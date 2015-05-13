@@ -4,6 +4,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
@@ -110,6 +111,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             @Override
             public void onLoaded(User user) {
                 userFromCallback[0] = user;
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+
             }
         });
         userModel =userModelMapper.transform(userFromCallback[0]);

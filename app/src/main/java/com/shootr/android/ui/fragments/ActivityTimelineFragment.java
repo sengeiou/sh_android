@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.shootr.android.R;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
@@ -40,6 +41,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import timber.log.Timber;
 
 public class ActivityTimelineFragment extends BaseFragment implements TimelineView {
 
@@ -172,6 +174,12 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
             @Override
             public void onLoaded(User user) {
                 userFromCallback[0] = user;
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                Timber.e(error, "Error while searching user by username");
+                Toast.makeText(getActivity(), "User not found", Toast.LENGTH_LONG);
             }
         });
         return userModelMapper.transform(userFromCallback[0]);
