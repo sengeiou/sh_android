@@ -21,12 +21,8 @@ public class DatabaseUserDataSource implements UserDataSource {
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
-        try {
-            List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
-            return userManager.getUsersByIds(usersFollowingIds);
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+        List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
+        return userManager.getUsersByIds(usersFollowingIds);
     }
 
     @Override public UserEntity putUser(UserEntity userEntity) {
