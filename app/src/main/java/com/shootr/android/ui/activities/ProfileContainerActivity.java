@@ -14,11 +14,19 @@ import timber.log.Timber;
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
     public static final String EXTRA_USER = "user";
+    public static final String EXTRA_USERNAME = "username";
     String idUser;
+    String username;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
         i.putExtra(EXTRA_USER, idUser);
+        return i;
+    }
+
+    public static Intent getIntentWithUsername(Context context, String username) {
+        Intent i = new Intent(context, ProfileContainerActivity.class);
+        i.putExtra(EXTRA_USERNAME, username);
         return i;
     }
 
@@ -34,11 +42,18 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
 
         if (savedInstanceState == null) {
             idUser = (String) getIntent().getSerializableExtra(EXTRA_USER);
-            if (idUser == null) {
+            username = (String) getIntent().getSerializableExtra(EXTRA_USERNAME);
+            if (idUser == null && username == null) {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();
+                return;
             }
-            ProfileFragment profileFragment = ProfileFragment.newInstance(idUser);
+            ProfileFragment profileFragment = null;
+            if(idUser != null){
+                profileFragment = ProfileFragment.newInstance(idUser);
+            }else{
+                profileFragment = ProfileFragment.newInstanceFromUsername(username);
+            }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //TODO check que no hubiera ya uno? necesario?
             transaction.add(R.id.container, profileFragment, ProfileFragment.TAG);

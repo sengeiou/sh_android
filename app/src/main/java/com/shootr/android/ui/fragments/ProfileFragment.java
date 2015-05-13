@@ -88,6 +88,7 @@ public class ProfileFragment extends BaseFragment {
     private static final int REQUEST_TAKE_PHOTO = 2;
 
     public static final String ARGUMENT_USER = "user";
+    public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
 
     //region injected
@@ -125,6 +126,7 @@ public class ProfileFragment extends BaseFragment {
 
     // Args
     String idUser;
+    String username;
 
     UserModel user;
     private View.OnClickListener avatarClickListener;
@@ -137,8 +139,15 @@ public class ProfileFragment extends BaseFragment {
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
-        //TODO  pasar idUser
         arguments.putSerializable(ARGUMENT_USER, idUser);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    public static ProfileFragment newInstanceFromUsername(String username) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ARGUMENT_USERNAME, username);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -208,6 +217,7 @@ public class ProfileFragment extends BaseFragment {
     private void injectArguments() {
         Bundle arguments = getArguments();
         idUser = (String) arguments.getSerializable(ARGUMENT_USER);
+        username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
     }
 
     @Override
@@ -311,7 +321,7 @@ public class ProfileFragment extends BaseFragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
-          REQUEST_CHOOSE_PHOTO);
+                REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -396,14 +406,35 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void retrieveUserInfo() {
-        Context context = getActivity();
+        if(idUser != null){
+            loadProfileUsingJob(idUser);
+        }else{
+            getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+                @Override
+                public void onLoaded(User user) {
+                    if (user != null) {
+                        loadProfileUsingJob(user.getIdUser());
+                    } else {
+                        userNotFoundNotification();
+                    }
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override
+                public void onError(ShootrException error) {
+                    Timber.e(error, "Error while searching user by username");
+                }
+            });
+        }
 
+        //TODO loading
+    }
+
+    private void loadProfileUsingJob(String idUser) {
+        Context context = getActivity();
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
         job.init(idUser);
         jobManager.addJobInBackground(job);
-
         loadLatestShots();
-        //TODO loading
     }
 
     public void startFollowUnfollowUserJob(Context context, int followType) {

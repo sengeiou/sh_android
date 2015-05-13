@@ -35,6 +35,10 @@ public class GetUserByUsernameInteractorTest {
     private GetUserByUsernameInteractor interactor;
     private User dummyUser;
 
+    private String DUMMY_USERNAME = "dummy_user";
+    private String DUMMY_USERNAME_ID = "\"dummy_user_id\"";
+    private String DUMMY_EXCEPTION_MESSAGE = "test";
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -47,7 +51,7 @@ public class GetUserByUsernameInteractorTest {
     @Test public void shouldCallbackIfRepositoryDoesntFail() throws Exception {
         setupUser();
 
-        doReturn(dummyUser).when(userRepository).getUserByUsername("dummy_user");
+        doReturn(dummyUser).when(userRepository).getUserByUsername(DUMMY_USERNAME);
 
         interactor.searchUserByUsername(dummyUser.getUsername(), callback, errorCallback);
 
@@ -58,7 +62,7 @@ public class GetUserByUsernameInteractorTest {
     public void shouldCallbackErrorIfRepositoryFailsWithInvalidException() throws Exception {
         setupUser();
 
-        doThrow(new InvalidGetUserException("test")).when(userRepository).getUserByUsername("dummy_user");
+        doThrow(new NullPointerException()).when(userRepository).getUserByUsername(DUMMY_USERNAME);
 
         interactor.searchUserByUsername(user.getUsername(), callback, errorCallback);
 
@@ -67,7 +71,7 @@ public class GetUserByUsernameInteractorTest {
 
     private void setupUser() {
         dummyUser = new User();
-        dummyUser.setIdUser("dummy_user");
-        dummyUser.setUsername("dummy_user");
+        dummyUser.setIdUser(DUMMY_USERNAME_ID);
+        dummyUser.setUsername(DUMMY_USERNAME);
     }
 }
