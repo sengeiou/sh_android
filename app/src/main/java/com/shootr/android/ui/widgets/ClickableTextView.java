@@ -12,10 +12,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 import com.shootr.android.util.Patterns;
 import java.util.regex.Matcher;
@@ -27,7 +29,7 @@ public class ClickableTextView extends TextView {
     private static final String DEFAULT_SCHEMA = ALLOWED_SCHEMAS[0];
 
     private Pattern urlPattern;
-    private TouchableUrlSpan alreadyPressedSpan;
+    private PressableSpan alreadyPressedSpan;
 
     public ClickableTextView(Context context) {
         super(context);
@@ -123,10 +125,10 @@ public class ClickableTextView extends TextView {
             }
 
             if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
-                TouchableUrlSpan touchedSpan = getTouchedSpan(event, widget, buffer);
+                PressableSpan touchedUrlSpan = getTouchedSpan(event, widget, buffer);
 
                 if (action == MotionEvent.ACTION_MOVE) {
-                    if (alreadyPressedSpan != null && touchedSpan != alreadyPressedSpan) {
+                    if (alreadyPressedSpan != null && touchedUrlSpan != alreadyPressedSpan) {
                         alreadyPressedSpan.setPressed(false);
                         alreadyPressedSpan = null;
                         Selection.removeSelection(buffer);
@@ -134,13 +136,13 @@ public class ClickableTextView extends TextView {
                     }
                 }
 
-                if (touchedSpan != null) {
+                if (touchedUrlSpan != null) {
                     if (action == MotionEvent.ACTION_DOWN) {
-                        Selection.setSelection(buffer, buffer.getSpanStart(touchedSpan), buffer.getSpanEnd(touchedSpan));
-                        alreadyPressedSpan = touchedSpan;
+                        Selection.setSelection(buffer, buffer.getSpanStart(touchedUrlSpan), buffer.getSpanEnd(touchedUrlSpan));
+                        alreadyPressedSpan = touchedUrlSpan;
                         alreadyPressedSpan.setPressed(true);
                     } else if (action == MotionEvent.ACTION_UP) {
-                        if (alreadyPressedSpan != null && alreadyPressedSpan == touchedSpan) {
+                        if (alreadyPressedSpan != null && alreadyPressedSpan == touchedUrlSpan) {
                             alreadyPressedSpan.onClick(widget);
                             alreadyPressedSpan.setPressed(false);
                         }
@@ -158,7 +160,7 @@ public class ClickableTextView extends TextView {
         return false;
     }
 
-    private TouchableUrlSpan getTouchedSpan(MotionEvent event, TextView widget, Spannable buffer) {
+    private PressableSpan getTouchedSpan(MotionEvent event, TextView widget, Spannable buffer) {
         int x = (int) event.getX();
         int y = (int) event.getY();
 
@@ -172,17 +174,24 @@ public class ClickableTextView extends TextView {
         int line = layout.getLineForVertical(y);
         int off = layout.getOffsetForHorizontal(line, x);
 
-        TouchableUrlSpan[] link = buffer.getSpans(off, off, TouchableUrlSpan.class);
+        PressableSpan[] pressedSpans = buffer.getSpans(off, off, PressableSpan.class);
 
-        TouchableUrlSpan touchableUrlSpan = null;
+        PressableSpan pressedSpan = null;
 
-        if (link.length != 0) {
-            touchableUrlSpan = link[0];
+        if (pressedSpans.length != 0) {
+            pressedSpan = pressedSpans[0];
         }
-        return touchableUrlSpan;
+        return pressedSpan;
     }
 
-    private class TouchableUrlSpan extends URLSpan{
+    public interface PressableSpan {
+
+        void setPressed(boolean isPressed);
+
+        void onClick(View widget);
+    }
+
+    private class TouchableUrlSpan extends URLSpan implements PressableSpan {
 
         private boolean isPressed = false;
 
@@ -194,7 +203,7 @@ public class ClickableTextView extends TextView {
             super(src);
         }
 
-        public void setPressed(boolean isPressed) {
+        @Override public void setPressed(boolean isPressed) {
             this.isPressed = isPressed;
             invalidate();
         }
@@ -204,4 +213,6 @@ public class ClickableTextView extends TextView {
             ds.setUnderlineText(isPressed);
         }
     }
+
+
 }
