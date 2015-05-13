@@ -37,8 +37,9 @@ public class ShootrUserService {
     public void checkInEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         if (isCheckedInEvent(currentUser, idEvent)) {
-            throw new InvalidCheckinException(
-              "Can't perform checkin in event with id %s because user is already checked-in in it");
+            throw new InvalidCheckinException(String.format(
+              "Can't perform checkin in event with id %s because user is already checked-in in it",
+              idEvent));
         }
 
         try {
@@ -75,21 +76,24 @@ public class ShootrUserService {
         }
     }
 
-    public void checkOutCurrentEvent() {
+    public void checkOutFromEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         String idCheckedEvent = currentUser.getIdCheckedEvent();
-        if (idCheckedEvent == null) {
-            throw new InvalidCheckinException("Can't perform checkin without visible event");
+        if (!idEvent.equals(idCheckedEvent)) {
+            throw new InvalidCheckinException(String.format(
+              "Can't perform check-out from event with id %s because user is not checked-in it",
+              idEvent));
         }
-        String idUser = currentUser.getIdUser();
+
         try {
-            checkinGateway.performCheckout(idUser, idCheckedEvent);
+            checkinGateway.performCheckout(currentUser.getIdUser(), idEvent);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new InvalidCheckinException(e);
         }
 
         currentUser.setIdCheckedEvent(null);
         localUserRepository.putUser(currentUser);
+        sessionRepository.setCurrentUser(currentUser);
     }
 
     private void storeSession(LoginResult loginResult) {
