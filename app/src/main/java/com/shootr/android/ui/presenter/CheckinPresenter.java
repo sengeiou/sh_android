@@ -13,7 +13,7 @@ public class CheckinPresenter implements Presenter {
     private final PerformCheckinInteractor performCheckinInteractor;
 
     private CheckinView checkinView;
-    private Boolean checkedInEvent;
+    protected Boolean checkedInEvent;
     protected boolean showingCheckinButton;
     private String idEvent;
 
@@ -80,6 +80,7 @@ public class CheckinPresenter implements Presenter {
         checkinView.showCheckinLoading();
         performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
+                checkedInEvent = true;
                 checkinView.hideCheckinLoading();
                 checkinView.hideCheckinView();
                 checkinView.showCheckedIn();

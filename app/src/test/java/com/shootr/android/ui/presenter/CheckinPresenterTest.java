@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -92,6 +93,14 @@ public class CheckinPresenterTest {
         presenter.checkIn();
 
         verify(checkinView).hideCheckinLoading();
+    }
+
+    @Test public void shouldBeCheckedInEventWhenPerformCheckinCallbacks() throws Exception {
+        setupPerformCheckinCallbacksCompleted();
+
+        presenter.checkIn();
+
+        assertThat(presenter.checkedInEvent).isTrue();
     }
 
     //endregion
