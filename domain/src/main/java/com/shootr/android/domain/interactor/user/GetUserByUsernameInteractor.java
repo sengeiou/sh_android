@@ -28,6 +28,7 @@ public class GetUserByUsernameInteractor implements Interactor {
 
     public void searchUserByUsername(String username, Callback<User> callback){
         this.username = username;
+        this.callback = callback;
         interactorHandler.execute(this);
     }
 

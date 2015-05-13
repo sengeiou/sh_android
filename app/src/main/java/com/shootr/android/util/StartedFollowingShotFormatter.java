@@ -2,7 +2,6 @@ package com.shootr.android.util;
 
 import android.content.Context;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.CharacterStyle;
@@ -21,7 +20,7 @@ public class StartedFollowingShotFormatter {
 
     }
 
-    public SpannableString renderStartedFollowingShotSpan(String comment, final Context context, UsernameClickListener onClickListener) {
+    public SpannableString renderStartedFollowingShotSpan(String comment, UsernameClickListener onClickListener) {
         SpannableString spannableString = new SpannableString(comment);
         this.onClickListener = onClickListener;
         return replacePatternWithClickableText(spannableString);
@@ -54,7 +53,7 @@ public class StartedFollowingShotFormatter {
                 }
 
                 @Override public void onClick(View widget) {
-                    onClickListener.onClick(username);
+                    onClickListener.onClickPassingUsername(username);
                 }
             };
             spanWithClick.setSpan(termsSpan,
@@ -67,5 +66,9 @@ public class StartedFollowingShotFormatter {
 
     private String extractUsernameFromExpression(SpannableString spanWithClick, int termsStart, int termsEnd) {
         return spanWithClick.toString().substring(termsStart+1,termsEnd);
+    }
+
+    public String getUsername(){
+        return username;
     }
 }

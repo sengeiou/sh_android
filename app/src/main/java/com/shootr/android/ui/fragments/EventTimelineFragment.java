@@ -15,11 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
+
 import com.shootr.android.R;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
@@ -33,6 +33,8 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
@@ -50,7 +52,13 @@ import com.shootr.android.util.UsernameClickListener;
 
 import java.io.File;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class EventTimelineFragment extends BaseFragment
@@ -63,6 +71,11 @@ public class EventTimelineFragment extends BaseFragment
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
+
+    @Inject
+    GetUserByUsernameInteractor getUserByUsernameInteractor;
+    @Inject
+    UserModelMapper userModelMapper;
 
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
@@ -77,6 +90,7 @@ public class EventTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private UsernameClickListener usernameClickListener;
     private PhotoPickerController photoPickerController;
 
     private NewShotBarView newShotBarViewDelegate;
@@ -278,6 +292,14 @@ public class EventTimelineFragment extends BaseFragment
             }
         };
 
+        usernameClickListener = new UsernameClickListener() {
+            @Override
+            public void onClickPassingUsername(String username) {
+                UserModel userModel = getUserModelFromUsername(username);
+                startProfileContainerActivity(userModel.getIdUser());
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -285,13 +307,25 @@ public class EventTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
-            @Override
-            public void onClick(String username) {
-                Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
-            }
-        }, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
+                imageClickListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
+    }
+
+    private void startProfileContainerActivity(String idUser) {
+        Intent intentForUser = ProfileContainerActivity.getIntent(getActivity(), idUser);
+        startActivity(intentForUser);
+    }
+
+    private UserModel getUserModelFromUsername(String username) {
+        final User[] userFromCallback = {null};
+        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+            @Override
+            public void onLoaded(User user) {
+                userFromCallback[0] = user;
+            }
+        });
+        return userModelMapper.transform(userFromCallback[0]);
     }
 
     private void setupSwipeRefreshLayout() {

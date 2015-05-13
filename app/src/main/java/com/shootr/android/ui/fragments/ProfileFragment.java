@@ -30,8 +30,11 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -48,6 +51,7 @@ import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
@@ -56,6 +60,7 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -110,6 +115,11 @@ public class ProfileFragment extends BaseFragment {
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
 
+    @Inject
+    GetUserByUsernameInteractor getUserByUsernameInteractor;
+    @Inject
+    UserModelMapper userModelMapper;
+
     //endregion
 
     // Args
@@ -118,6 +128,7 @@ public class ProfileFragment extends BaseFragment {
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private UsernameClickListener usernameClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
@@ -147,6 +158,29 @@ public class ProfileFragment extends BaseFragment {
                 openShotImage(position);
             }
         };
+        usernameClickListener =  new UsernameClickListener() {
+            @Override
+            public void onClickPassingUsername(String username) {
+                UserModel userModel = getUserModelFromUsername(username);
+                startProfileContainerActivity(userModel.getIdUser());
+            }
+        };
+    }
+
+    private void startProfileContainerActivity(String idUser) {
+        Intent intentForUser = ProfileContainerActivity.getIntent(getActivity(), idUser);
+        startActivity(intentForUser);
+    }
+
+    private UserModel getUserModelFromUsername(String username) {
+        final User[] userFromCallback = {null};
+        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+            @Override
+            public void onLoaded(User user) {
+                userFromCallback[0] = user;
+            }
+        });
+        return userModelMapper.transform(userFromCallback[0]);
     }
 
     private void openShotImage(int position) {
@@ -528,12 +562,8 @@ public class ProfileFragment extends BaseFragment {
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             latestsShotsAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
-                  @Override
-                  public void onClick(String username) {
-                      Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
-                  }
-              }, timeUtils){
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener,
+                      imageClickListener, usernameClickListener, timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }

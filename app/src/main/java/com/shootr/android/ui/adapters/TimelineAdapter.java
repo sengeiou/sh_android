@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -31,7 +32,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
-    private final UsernameClickListener clickListener;
+    private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
 
@@ -119,14 +120,19 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 String comment = item.getComment();
-
-                SpannableString spannableStringBuilder = startedFollowingShotFormatter
-                            .renderStartedFollowingShotSpan(comment, getContext(), clickListener);
+                final SpannableString spannableStringBuilder = startedFollowingShotFormatter
+                            .renderStartedFollowingShotSpan(comment, clickListener);
                 if(spannableStringBuilder != null){
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(spannableStringBuilder);
                     vh.text.addLinks();
                     vh.text.setClickable(true);
+                    vh.text.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            clickListener.onClickPassingUsername(startedFollowingShotFormatter.getUsername());
+                        }
+                    });
                 }else if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);
@@ -216,7 +222,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             ButterKnife.inject(this, view);
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
-
         }
     }
 }

@@ -5,13 +5,11 @@ import android.content.res.Resources;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -243,15 +241,16 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = shotModel.getComment();
 
             SpannableString spannableStringBuilder = startedFollowingShotFormatter
-                        .renderStartedFollowingShotSpan(comment, context.getApplicationContext(), new UsernameClickListener() {
-                            @Override
-                            public void onClick(String username) {
-                                Toast.makeText(context,username,Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        .renderStartedFollowingShotSpan(comment, onClickListener);
             if(spannableStringBuilder != null) {
                 shotText.setVisibility(View.VISIBLE);
                 shotText.setText(spannableStringBuilder);
+                shotText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onClickListener.onClickPassingUsername(startedFollowingShotFormatter.getUsername());
+                    }
+                });
             } else if (comment != null) {
                 shotText.setText(comment);
                 shotText.addLinks();
@@ -356,16 +355,16 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             String comment = shotModel.getComment();
             SpannableString spannableStringBuilder = startedFollowingShotFormatter
-                    .renderStartedFollowingShotSpan(comment, context.getApplicationContext(), new UsernameClickListener() {
-                        @Override
-                        public void onClick(String username) {
-                            Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    .renderStartedFollowingShotSpan(comment, onClickListener);
             if(spannableStringBuilder != null) {
                 this.text.setVisibility(View.VISIBLE);
                 this.text.setText(spannableStringBuilder);
-                this.text.addLinks();
+                this.text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onClickListener.onClickPassingUsername(startedFollowingShotFormatter.getUsername());
+                    }
+                });
             } else if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
                 this.text.setText(comment);

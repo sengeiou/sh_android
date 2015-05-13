@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shootr.android.R;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -20,6 +23,8 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
@@ -50,9 +55,15 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_empty_title) TextView emptyViewTitle;
 
+    @Inject
+    GetUserByUsernameInteractor getUserByUsernameInteractor;
+    @Inject
+    UserModelMapper userModelMapper;
+
     @Deprecated private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private UsernameClickListener usernameClickListener;
 
     private View footerProgress;
     //endregion
@@ -132,18 +143,38 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
             }
         };
 
+        usernameClickListener =  new UsernameClickListener() {
+            @Override
+            public void onClickPassingUsername(String username) {
+                UserModel userModel = getUserModelFromUsername(username);
+                startProfileContainerActivity(userModel.getIdUser());
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, new UsernameClickListener() {
-            @Override
-            public void onClick(String username) {
-                Toast.makeText(getActivity(),username,Toast.LENGTH_LONG).show();
-            }
-        }, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
+                imageClickListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
+    }
+
+    private void startProfileContainerActivity(String idUser) {
+        Intent intentForUser = ProfileContainerActivity.getIntent(getActivity(), idUser);
+        startActivity(intentForUser);
+    }
+
+    private UserModel getUserModelFromUsername(String username) {
+        final User[] userFromCallback = {null};
+        getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+            @Override
+            public void onLoaded(User user) {
+                userFromCallback[0] = user;
+            }
+        });
+        return userModelMapper.transform(userFromCallback[0]);
     }
 
     private void setupSwipeRefreshLayout() {

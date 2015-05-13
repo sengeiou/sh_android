@@ -109,8 +109,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                 }, //
                 new UsernameClickListener() {
                     @Override
-                    public void onClick(String username) {
-                        Toast.makeText(getBaseContext(),username,Toast.LENGTH_LONG).show();
+                    public void onClickPassingUsername(String username) {
+                        onUsernameClick(username);
                     }
                 }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
             @Override
@@ -182,7 +182,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     public void onUsernameClick(String username){
-        Toast.makeText(this, "username", Toast.LENGTH_SHORT).show();
         detailPresenter.usernameClick(username);
     }
 
