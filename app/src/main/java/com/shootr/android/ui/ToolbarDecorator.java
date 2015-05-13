@@ -18,6 +18,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private ActionBar supportActionBar;
     private TextView titleText;
     private TextView subtitleText;
+    private ViewGroup titleContainer;
 
     public ToolbarDecorator(Context context) {
         this.context = context;
@@ -28,6 +29,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         toolbar = ((Toolbar) inflatedView.findViewById(R.id.toolbar_actionbar));
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
+        titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
 
@@ -58,7 +60,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     }
 
     public void setTitleClickListener(View.OnClickListener clickListener) {
-        titleText.setOnClickListener(clickListener);
+        titleContainer.setOnClickListener(clickListener);
     }
 
     public void setSubtitle(@StringRes int subtitle) {
