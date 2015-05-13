@@ -19,5 +19,8 @@ public interface ShotDetailView  {
 
     void renderParent(ShotModel parentShot);
 
-    void showNotification(String notification);
+    void showUserNotFoundNotification();
+
+    void startProfileContainerActivity(String idUser);
+
 }

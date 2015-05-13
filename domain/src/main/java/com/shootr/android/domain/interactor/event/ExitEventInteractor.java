@@ -47,8 +47,8 @@ public class ExitEventInteractor implements Interactor {
         }
 
     private void removeEventFromUser(User currentUser) {
-        currentUser.setVisibleEventId(null);
-        currentUser.setVisibleEventTitle(null);
+        currentUser.setIdWatchingEvent(null);
+        currentUser.setWatchingEventTitle(null);
     }
 
     private void notifyLoaded() {

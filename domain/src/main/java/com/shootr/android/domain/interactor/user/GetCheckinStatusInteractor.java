@@ -19,7 +19,7 @@ public class GetCheckinStatusInteractor implements Interactor {
 
     @Inject
     public GetCheckinStatusInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+                                      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;
@@ -33,7 +33,7 @@ public class GetCheckinStatusInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        boolean checkedIn = currentUser.isCheckedIn();
+        boolean checkedIn = currentUser.getIdWatchingEvent().equals(currentUser.getIdCheckedEvent());
         notifyResult(checkedIn);
     }
 

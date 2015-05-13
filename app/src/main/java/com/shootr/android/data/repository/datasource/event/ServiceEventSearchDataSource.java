@@ -69,11 +69,11 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
 
         Map<String, Integer> eventsWatchesCounts = new HashMap<>();
         for (UserEntity watcher : watchers) {
-            Integer currentCount = eventsWatchesCounts.get(watcher.getIdEvent());
+            Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
             if (currentCount != null) {
-                eventsWatchesCounts.put(watcher.getIdEvent(), currentCount + 1);
+                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), currentCount + 1);
             } else {
-                eventsWatchesCounts.put(watcher.getIdEvent(), 1);
+                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), 1);
             }
         }
         return eventsWatchesCounts;

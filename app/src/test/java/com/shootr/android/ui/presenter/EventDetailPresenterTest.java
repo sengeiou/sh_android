@@ -32,13 +32,16 @@ import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class EventDetailPresenterTest {
 
-    private static final String EVENT_ID_STUB = "1L";
+    private static final String EVENT_ID_STUB = "EVENT_ID";
     private EventDetailPresenter presenter;
 
     @Mock
@@ -89,33 +92,13 @@ public class EventDetailPresenterTest {
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
-        verify(eventDetailView).showCheckin();
+        verify(eventDetailView, times(1)).showCheckin();
     }
 
     @Test
     public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn() {
         setupEventInfoCallbacks(eventInfoWithUserWatching());
         setupCheckinStatusCallbacks(true);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
 
         presenter.initialize(eventDetailView, EVENT_ID_STUB);
 
@@ -152,7 +135,6 @@ public class EventDetailPresenterTest {
         event.setAuthorId(user.getIdUser());
         eventInfo.setEvent(event);
         eventInfo.setWatchers(new ArrayList<User>());
-        eventInfo.setCurrentUserWatching(null);
         return eventInfo;
     }
 
@@ -164,7 +146,7 @@ public class EventDetailPresenterTest {
 
     private User userWithIdUser() {
         User user = new User();
-        user.setIdUser("1L");
+        user.setIdUser("USER_ID");
         return user;
     }
 

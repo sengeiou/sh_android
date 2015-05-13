@@ -57,9 +57,9 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
             cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
             cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
-            cv.put(UserTable.EVENT_ID, u.getIdEvent());
-            cv.put(UserTable.EVENT_TITLE, u.getEventTitle());
-            cv.put(UserTable.CHECK_IN, u.getCheckIn());
+            cv.put(UserTable.WATCHING_EVENT_ID, u.getIdWatchingEvent());
+            cv.put(UserTable.WATCHING_EVENT_TITLE, u.getWatchingEventTitle());
+            cv.put(UserTable.ID_CHECKED_EVENT, u.getIdCheckedEvent());
             cv.put(UserTable.JOIN_EVENT_DATE, u.getJoinEventDate());
             setSynchronizedtoContentValues(u, cv);
         }
@@ -70,31 +70,31 @@ public class UserMapper extends GenericMapper {
         UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  (String)dto.get(UserTable.ID) : null);
         user.setSessionToken(
-          dto.containsKey(UserTable.SESSION_TOKEN) ? (String)dto.get(UserTable.SESSION_TOKEN) : null);
-        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String)dto.get(UserTable.USER_NAME) : null);
-        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String)dto.get(UserTable.EMAIL) : null);
-        user.setName(dto.containsKey(UserTable.NAME) ? (String)dto.get(UserTable.NAME) : null);
-        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String)dto.get(UserTable.PHOTO): null);
+                dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
+        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String) dto.get(UserTable.USER_NAME) : null);
+        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
+        user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
+        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
         user.setNumFollowers(
-          dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
+                dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
         user.setNumFollowings(
-          dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
+                dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
         if(dto.get(UserTable.POINTS)!= null){
             user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
         }
         user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String) dto.get(UserTable.WEBSITE) : null);
-        user.setBio(dto.containsKey(UserTable.BIO) ? (String)dto.get(UserTable.BIO) : null);
+        user.setBio(dto.containsKey(UserTable.BIO) ? (String) dto.get(UserTable.BIO) : null);
         if(dto.get(UserTable.RANK) != null){
             user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
         }
-        String eventId = (String) dto.get(UserTable.EVENT_ID);
+        String eventId = (String) dto.get(UserTable.WATCHING_EVENT_ID);
         if (eventId != null) {
-            user.setIdEvent(eventId);
+            user.setIdWatchingEvent(eventId);
         }
 
-        user.setEventTitle(dto.containsKey(UserTable.EVENT_TITLE) ? (String)dto.get(UserTable.EVENT_TITLE) : null);
-        if(dto.get(UserTable.CHECK_IN)!=null){
-            user.setCheckIn(dto.containsKey(UserTable.CHECK_IN) ? ((Number) dto.get(UserTable.CHECK_IN)).intValue() : null);
+        user.setWatchingEventTitle(dto.containsKey(UserTable.WATCHING_EVENT_TITLE) ? (String) dto.get(UserTable.WATCHING_EVENT_TITLE) : null);
+        if(dto.get(UserTable.ID_CHECKED_EVENT)!=null){
+            user.setIdCheckedEvent(dto.containsKey(UserTable.ID_CHECKED_EVENT) ? ((String) dto.get(UserTable.ID_CHECKED_EVENT)) : null);
         }
         if(dto.get(UserTable.JOIN_EVENT_DATE)!=null) {
             user.setJoinEventDate(dto.containsKey(UserTable.JOIN_EVENT_DATE) ? ((Number) dto.get(UserTable.JOIN_EVENT_DATE)).longValue() : null);
@@ -129,9 +129,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.BIO, user == null ? null : user.getBio());
         dto.put(UserTable.RANK, user == null ? null : user.getRank());
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        dto.put(UserTable.EVENT_ID, user == null ? null : user.getIdEvent());
-        dto.put(UserTable.EVENT_TITLE, user == null ? null : user.getEventTitle());
-        dto.put(UserTable.CHECK_IN, user == null ? null : user.getCheckIn());
+        dto.put(UserTable.WATCHING_EVENT_ID, user == null ? null : user.getIdWatchingEvent());
+        dto.put(UserTable.WATCHING_EVENT_TITLE, user == null ? null : user.getWatchingEventTitle());
+        dto.put(UserTable.ID_CHECKED_EVENT, user == null ? null : user.getIdCheckedEvent());
         dto.put(UserTable.JOIN_EVENT_DATE, user == null ? null : user.getJoinEventDate());
         setSynchronizedtoDto(user, dto);
         return dto;
@@ -169,9 +169,9 @@ public class UserMapper extends GenericMapper {
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
-        user.setIdEvent(c.getString(c.getColumnIndex(UserTable.EVENT_ID)));
-        user.setEventTitle(c.getString(c.getColumnIndex(UserTable.EVENT_TITLE)));
-        user.setCheckIn(c.getInt(c.getColumnIndex(UserTable.CHECK_IN)));
+        user.setIdWatchingEvent(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_ID)));
+        user.setWatchingEventTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_TITLE)));
+        user.setIdCheckedEvent(c.getString(c.getColumnIndex(UserTable.ID_CHECKED_EVENT)));
         user.setJoinEventDate(c.getLong(c.getColumnIndex(UserTable.JOIN_EVENT_DATE)));
         return user;
     }

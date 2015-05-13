@@ -232,8 +232,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override
-    public void showNotification(String notification) {
-        Toast.makeText(this,notification,Toast.LENGTH_LONG);
+    public void showUserNotFoundNotification() {
+        Toast.makeText(this,"User not found",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void startProfileContainerActivity(String idUser) {
+        Intent intentForUser = ProfileContainerActivity.getIntent(this, idUser);
+        startActivity(intentForUser);
     }
 
     @Override public void openNewShotView() {

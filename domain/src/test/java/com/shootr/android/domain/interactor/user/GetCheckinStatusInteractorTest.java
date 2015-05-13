@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +24,10 @@ public class GetCheckinStatusInteractorTest {
 
     @Mock SessionRepository sessionRepository;
     @Mock UserRepository localUserRepository;
-    @Spy SpyCallback spyCallback = new SpyCallback();
+    @Spy
+    SpyCallback spyCallback = new SpyCallback();
+
+    private String dummyIdEvent = "EVENT_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -53,13 +55,14 @@ public class GetCheckinStatusInteractorTest {
 
     private User currentUserWithCheckin() {
         User user = new User();
-        user.setCheckedIn(true);
+        user.setIdWatchingEvent(dummyIdEvent);
+        user.setIdCheckedEvent(dummyIdEvent);
         return user;
     }
 
     private User currentUserWithoutCheckin() {
         User user = new User();
-        user.setCheckedIn(false);
+        user.setIdWatchingEvent(dummyIdEvent);
         return user;
     }
 

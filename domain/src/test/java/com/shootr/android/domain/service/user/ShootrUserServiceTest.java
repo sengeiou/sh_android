@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -38,6 +37,8 @@ public class ShootrUserServiceTest {
     @Mock UserRepository remoteUserRepository;
     public static final String SESSION_TOKEN_STUB = "sessionToken";
 
+    private String dummyIdEvent = "EVENT_ID";
+
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
@@ -60,7 +61,7 @@ public class ShootrUserServiceTest {
 
         shootrUserService.checkInCurrentEvent();
 
-        verify(checkinGateway).performCheckin(CURRENT_USER_ID, VISIBLE_EVENT_ID);
+        verify(checkinGateway).performCheckin(CURRENT_USER_ID, dummyIdEvent);
     }
 
     @Test public void shouldStoreCurrentUserInLocalCheckedIn() throws Exception {
@@ -71,7 +72,7 @@ public class ShootrUserServiceTest {
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(localUserRepository).putUser(userCaptor.capture());
         User userStoredInLocal = userCaptor.getValue();
-        assertThat(userStoredInLocal.isCheckedIn()).isTrue();
+        assertThat(userStoredInLocal.getIdCheckedEvent()).isNotNull();
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws IOException {
@@ -121,7 +122,7 @@ public class ShootrUserServiceTest {
 
     private LoginResult loginResultWithEvent() {
         User user = currentUser();
-        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -131,27 +132,28 @@ public class ShootrUserServiceTest {
 
     private void setupCurrentUserWithoutVisibleEvent() {
         User currentUser = currentUser();
-        currentUser.setCheckedIn(false);
-        currentUser.setVisibleEventId(NO_VISIBLE_EVENT);
+        currentUser.setIdWatchingEvent(NO_VISIBLE_EVENT);
+        currentUser.setIdCheckedEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserNotCheckedIn() {
         User currentUser = currentUser();
-        currentUser.setCheckedIn(false);
+        currentUser.setIdWatchingEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private void setupCurrentUserCheckedIn() {
         User currentUser = currentUser();
-        currentUser.setCheckedIn(true);
+        currentUser.setIdCheckedEvent(dummyIdEvent);
+        currentUser.setIdWatchingEvent(dummyIdEvent);
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
     }
 
     private User currentUser() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
-        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
         return user;
     }
 }

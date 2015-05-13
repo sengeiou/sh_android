@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.DomainValidationException;
@@ -12,6 +11,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
 import com.shootr.android.domain.service.dagger.Background;
+
 import java.io.File;
 import java.util.Date;
 

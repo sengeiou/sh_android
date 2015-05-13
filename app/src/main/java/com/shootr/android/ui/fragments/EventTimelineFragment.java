@@ -34,7 +34,6 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
@@ -296,8 +295,7 @@ public class EventTimelineFragment extends BaseFragment
         usernameClickListener = new UsernameClickListener() {
             @Override
             public void onClick(String username) {
-                UserModel userModel = getUserModelFromUsername(username);
-                startProfileContainerActivity(userModel.getIdUser());
+                goToUserProfile(username);
             }
         };
 
@@ -318,21 +316,26 @@ public class EventTimelineFragment extends BaseFragment
         startActivity(intentForUser);
     }
 
-    private UserModel getUserModelFromUsername(String username) {
-        final User[] userFromCallback = {null};
+    private void goToUserProfile(String username) {
         getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
             @Override
             public void onLoaded(User user) {
-                userFromCallback[0] = user;
+                if (user != null) {
+                    startProfileContainerActivity(user.getIdUser());
+                } else {
+                    userNotFoundNotification();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
                 Timber.e(error, "Error while searching user by username");
-                Toast.makeText(getActivity(), "User not found", Toast.LENGTH_LONG);
             }
         });
-        return userModelMapper.transform(userFromCallback[0]);
+    }
+
+    private void userNotFoundNotification(){
+        Toast.makeText(getActivity(), "User not found", Toast.LENGTH_LONG).show();
     }
 
     private void setupSwipeRefreshLayout() {

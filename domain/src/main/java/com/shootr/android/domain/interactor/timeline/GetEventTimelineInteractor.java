@@ -92,7 +92,7 @@ public class GetEventTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEvent() {
-        String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getVisibleEventId();
+        String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingEvent();
         if (visibleEventId != null) {
             return localEventRepository.getEventById(visibleEventId);
         }

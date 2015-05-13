@@ -26,18 +26,14 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setVisibleEventId(userEntity.getIdEvent());
-        user.setVisibleEventTitle(userEntity.getEventTitle());
+        user.setIdWatchingEvent(userEntity.getIdWatchingEvent());
+        user.setWatchingEventTitle(userEntity.getWatchingEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
 
-        if(userEntity.getCheckIn() == null){
-            user.setCheckedIn(false);
-        }else{
-            user.setCheckedIn(userEntity.getCheckIn() == 1);
-        }
+        user.setIdCheckedEvent(userEntity.getIdCheckedEvent());
 
         if(userEntity.getJoinEventDate() != null){
             user.setJoinEventDate(userEntity.getJoinEventDate());
@@ -62,16 +58,11 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        String visibleEventId = user.getVisibleEventId();
-        if(visibleEventId !=  null){
-            userEntity.setIdEvent(visibleEventId);
-        }else{
-            userEntity.setIdEvent(null);
-        }
+        userEntity.setIdWatchingEvent(user.getIdWatchingEvent());
 
-        userEntity.setEventTitle(user.getVisibleEventTitle());
+        userEntity.setWatchingEventTitle(user.getWatchingEventTitle());
 
-        userEntity.setCheckIn(user.isCheckedIn() ? 1 : 0);
+        userEntity.setIdCheckedEvent(user.getIdCheckedEvent());
 
         userEntity.setJoinEventDate(user.getJoinEventDate());
 

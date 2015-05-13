@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.interactor.user.PerformCheckoutInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -50,12 +51,13 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private EventModel eventModel;
 
     private Boolean isCurrentUserWatchingThisEvent;
+
     private Boolean hasUserCheckdIn;
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
-      PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+                                ChangeEventPhotoInteractor changeEventPhotoInteractor, GetCheckinStatusInteractor getCheckinStatusInteractor,
+                                PerformCheckinInteractor performCheckinInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
                                 WatchersTimeFormatter watchersTimeFormatter) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
@@ -85,8 +87,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             @Override
             public void onLoaded(Boolean currentCheckIn) {
                 hasUserCheckdIn = currentCheckIn;
+                updateCheckinVisibility();
                 if (!currentCheckIn) {
-                    updateCheckinVisibility();
+                    eventDetailView.showCheckin();
                 }
             }
         });
@@ -98,7 +101,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
                 eventDetailView.showCheckin();
             }
         }
-
     }
     //endregion
 
@@ -172,7 +174,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderEventInfo(eventInfo.getEvent());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
-            isCurrentUserWatchingEvent(eventInfo.getCurrentUserWatching());
+            isCurrentUserWatchingEvent(eventInfo.getEvent().getId(),
+                    currentUserWatchingModel.getEventWatchingId());
             this.renderWatchersCount(eventInfo.getWatchersCount());
             this.showViewDetail();
             updateCheckinVisibility();
@@ -206,11 +209,13 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private void performCheckin() {
         eventDetailView.showCheckinLoading();
         performCheckinInteractor.performCheckin(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
                 eventDetailView.hideCheckin();
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 Timber.e(error, "Error while doing check-in");
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 eventDetailView.showCheckinErrorRetry(errorMessage);
@@ -247,17 +252,15 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        if (isCurrentUserWatchingEvent(currentUserWatch)) {
-            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-            currentUserWatchingModel.setJoinEventDateText(
-                    watchersTimeFormatter.jointDateText(
-                            currentUserWatchingModel.getJoinEventDate()));
-            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
-        }
+        currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+        currentUserWatchingModel.setJoinEventDateText(
+                watchersTimeFormatter.jointDateText(
+                        currentUserWatchingModel.getJoinEventDate()));
+        eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
     }
 
-    private boolean isCurrentUserWatchingEvent(User currentUserWatch) {
-        if(currentUserWatch != null){
+    private boolean isCurrentUserWatchingEvent(String idCurrentEvent, String idUserWatchingEvent) {
+        if(idCurrentEvent != null && idCurrentEvent.equals(idUserWatchingEvent)){
             isCurrentUserWatchingThisEvent = true;
             return isCurrentUserWatchingThisEvent;
         }

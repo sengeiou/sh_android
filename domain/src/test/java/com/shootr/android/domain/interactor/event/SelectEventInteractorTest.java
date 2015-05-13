@@ -154,7 +154,7 @@ public class SelectEventInteractorTest {
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(localUserRepository).putUser(userCaptor.capture());
-        assertThat(userCaptor.getValue().isCheckedIn()).isFalse();
+        assertThat(userCaptor.getValue().getIdCheckedEvent()).isNullOrEmpty();
     }
 
     private void setupOldVisibleEvent() {
@@ -163,14 +163,14 @@ public class SelectEventInteractorTest {
 
     private User currentUserWatchingOldEvent() {
         User user = currentUser();
-        user.setVisibleEventId(OLD_EVENT_ID);
-        user.setVisibleEventTitle(OLD_EVENT_TITLE);
+        user.setIdWatchingEvent(OLD_EVENT_ID);
+        user.setWatchingEventTitle(OLD_EVENT_TITLE);
         return user;
     }
 
     private User currentUserWatchingNewEvent() {
         User user = currentUser();
-        user.setVisibleEventId(NEW_EVENT_ID);
+        user.setIdWatchingEvent(NEW_EVENT_ID);
         return user;
     }
     //endregion

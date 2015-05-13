@@ -63,14 +63,14 @@ public class DatabaseContract {
         public static final String NAME_NORMALIZED = "nameNormalized";
         public static final String USER_NAME_NORMALIZED = "userNameNormalized";
         public static final String EMAIL_NORMALIZED = "emailNormalized";
-        public static final String EVENT_ID = "idEvent";
-        public static final String EVENT_TITLE = "eventTitle";
-        public static final String CHECK_IN = "checkIn";
+        public static final String WATCHING_EVENT_ID = "idWatchingEvent";
+        public static final String WATCHING_EVENT_TITLE = "watchingEventTitle";
+        public static final String ID_CHECKED_EVENT = "idCheckedEvent";
         public static final String JOIN_EVENT_DATE = "joinEventDate";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, CHECK_IN, JOIN_EVENT_DATE, EVENT_ID, EVENT_TITLE,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, ID_CHECKED_EVENT, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
           CSYS_SYNCHRONIZED
         };
@@ -215,6 +215,38 @@ public class DatabaseContract {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+        };
+    }
+
+    public static final class CheckInMongo implements SyncColumns {
+
+        private CheckInMongo() {
+
+        }
+
+        public static final String TABLE = "CheckInMongo";
+
+        public static final String ID = "idUser";
+        public static final String ID_CHECKED_EVENT = "idEvent";
+
+        public static final String[] PROJECTION = {
+                ID, ID_CHECKED_EVENT
+        };
+    }
+
+    public static final class CheckOutMongo implements SyncColumns {
+
+        private CheckOutMongo() {
+
+        }
+
+        public static final String TABLE = "CheckOutMongo";
+
+        public static final String ID = "idUser";
+        public static final String ID_CHECKED_EVENT = "idEvent";
+
+        public static final String[] PROJECTION = {
+                ID, ID_CHECKED_EVENT
         };
     }
 }

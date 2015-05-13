@@ -21,6 +21,8 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
@@ -103,25 +105,26 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     public void usernameClick(String username) {
-        loadUserModelFromUsername(username);
-        shotDetailView.openProfile(userModel.getIdUser());
+        goToUserProfile(username);
+
     }
 
-    private void loadUserModelFromUsername(String username) {
-        final User[] userFromCallback = {null};
+    private void goToUserProfile(String username) {
         getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
             @Override
             public void onLoaded(User user) {
-                userFromCallback[0] = user;
+                if (user != null) {
+                    shotDetailView.startProfileContainerActivity(user.getIdUser());
+                } else {
+                    shotDetailView.showUserNotFoundNotification();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
-                shotDetailView.showNotification("notification");
-                return;
+                Timber.e(error, "Error while searching user by username");
             }
         });
-        userModel =userModelMapper.transform(userFromCallback[0]);
     }
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
