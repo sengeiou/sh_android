@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +14,14 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
-import com.shootr.android.ui.widgets.UsernameSpan;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.UsernameClickListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import timber.log.Timber;
 
 public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -49,10 +45,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private float itemElevation;
     private ShotModel parentShot;
     private boolean isShowingParent = false;
+    private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-                                        ImageClickListener imageClickListener, UsernameClickListener usernameClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
-                                        AndroidTimeUtils timeUtils) {
+      ImageClickListener imageClickListener, UsernameClickListener usernameClickListener,
+      OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
+      AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
@@ -63,6 +61,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.timeUtils = timeUtils;
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
+        this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     public void renderMainShot(ShotModel mainShot) {
@@ -238,22 +237,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
             if (comment != null) {
-                SpannableStringBuilder ssb = new SpannableStringBuilder(comment);
-                Pattern pattern = Pattern.compile("@[_A-Za-z0-9]+");
-                Matcher matcher = pattern.matcher(ssb.toString());
-                if (matcher.find()) {
-                    int start = matcher.start();
-                    int end = matcher.end();
-
-                    UsernameSpan usernameClickSpan = new UsernameSpan(comment.substring(start+1, end)) {
-                        @Override public void onUsernameClick(String username) {
-                            usernameClickListener.onClick(username);
-                        }
-                    };
-                    ssb.setSpan(usernameClickSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-
-                shotText.setText(ssb);
+                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                  usernameClickListener);
+                shotText.setText(spannedComment);
                 shotText.addLinks();
             } else {
                 shotText.setVisibility(View.GONE);
