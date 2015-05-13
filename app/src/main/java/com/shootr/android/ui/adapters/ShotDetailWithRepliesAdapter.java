@@ -340,9 +340,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             String comment = shotModel.getComment();
            if (comment != null) {
-                this.text.setVisibility(View.VISIBLE);
-                this.text.setText(comment);
-                this.text.addLinks();
+               CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                       usernameClickListener);
+               this.text.setText(spannedComment);
+               this.text.addLinks();
             } else {
                 this.text.setVisibility(View.GONE);
             }
@@ -409,9 +410,10 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = reply.getComment();
             if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
-                this.text.setText(comment);
+                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                        usernameClickListener);
+                this.text.setText(spannedComment);
                 this.text.addLinks();
-                this.text.setClickable(true);
             } else {
                 this.text.setVisibility(View.GONE);
             }

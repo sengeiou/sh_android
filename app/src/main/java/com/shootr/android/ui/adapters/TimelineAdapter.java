@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.UsernameClickListener;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
-
+    private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
                            View.OnClickListener imageClickListener, UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
@@ -45,6 +46,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         tagColor = context.getResources().getColor(R.color.tag_color);
+        this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     @Override
@@ -118,7 +120,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 String comment = item.getComment();
                 if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
-                    vh.text.setText(comment);
+                    CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                            clickListener);
+                    vh.text.setText(spannedComment);
                     vh.text.addLinks();
                 } else {
                     vh.text.setVisibility(View.GONE);
