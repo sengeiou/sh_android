@@ -125,14 +125,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 if(spannableStringBuilder != null){
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(spannableStringBuilder);
-                    vh.text.addLinks();
-                    vh.text.setClickable(true);
-                    vh.text.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            clickListener.onClickPassingUsername(startedFollowingShotFormatter.getUsername());
-                        }
-                    });
                 }else if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);
