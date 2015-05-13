@@ -211,23 +211,22 @@ public class UserDtoFactory {
 
     public GenericDto getUserByUsername(String username){
         FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
+                .and(UserTable.CSYS_DELETED).isEqualTo(null) //
                 .build();
 
-        OperationDto od  = new OperationDto();
-        Map<String, Object> key = new HashMap<>();
-        key.put(UserTable.USER_NAME,username);
-        key.put(DatabaseContract.SyncColumns.CSYS_DELETED, null);
         MetadataDto metadata = new MetadataDto.Builder() //
                 .operation(Constants.OPERATION_RETRIEVE) //
                 .entity(UserTable.TABLE) //
                 .includeDeleted(false) //
                 .filter(filter) //
                 .build();
-        od.setMetadata(metadata);
-        Map<String, Object>[] array = new HashMap[1];
-        array[0] = userMapper.reqRestUsersToDto(null);
-        od.setData(array);
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYUSERNAME, od);
+
+        OperationDto operation = new OperationDto.Builder() //
+                .metadata(metadata) //
+                .putData(userMapper.toDto(null)) //
+                .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYUSERNAME, operation);
     }
 
     public GenericDto getUserByUserId(String userId){
