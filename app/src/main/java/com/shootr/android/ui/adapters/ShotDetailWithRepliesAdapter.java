@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -39,7 +38,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
-    private final UsernameClickListener onClickListener;
+    private final UsernameClickListener usernameClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
@@ -52,12 +51,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-                                        ImageClickListener imageClickListener, UsernameClickListener onClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
+                                        ImageClickListener imageClickListener, UsernameClickListener usernameClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
                                         AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
-        this.onClickListener = onClickListener;
+        this.usernameClickListener = usernameClickListener;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
@@ -248,7 +247,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
                     UsernameSpan usernameClickSpan = new UsernameSpan(comment.substring(start+1, end)) {
                         @Override public void onUsernameClick(String username) {
-                            Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
+                            usernameClickListener.onClick(username);
                         }
                     };
                     ssb.setSpan(usernameClickSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

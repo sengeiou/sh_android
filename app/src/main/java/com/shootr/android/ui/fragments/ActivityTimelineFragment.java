@@ -147,7 +147,7 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
 
         usernameClickListener =  new UsernameClickListener() {
             @Override
-            public void onClickPassingUsername(String username) {
+            public void onClick(String username) {
                 UserModel userModel = getUserModelFromUsername(username);
                 startProfileContainerActivity(userModel.getIdUser());
             }

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -109,7 +108,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                 }, //
                 new UsernameClickListener() {
                     @Override
-                    public void onClickPassingUsername(String username) {
+                    public void onClick(String username) {
                         onUsernameClick(username);
                     }
                 }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {

@@ -161,7 +161,7 @@ public class ProfileFragment extends BaseFragment {
         };
         usernameClickListener =  new UsernameClickListener() {
             @Override
-            public void onClickPassingUsername(String username) {
+            public void onClick(String username) {
                 UserModel userModel = getUserModelFromUsername(username);
                 startProfileContainerActivity(userModel.getIdUser());
             }
