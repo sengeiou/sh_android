@@ -14,9 +14,11 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
@@ -108,6 +110,17 @@ public class CheckinPresenterTest {
         verify(checkinView).showCheckinButton();
     }
 
+    @Test public void shouldHideCheckedInStatusWhenToolbarClickedAfterInteractorCallbacksIfButtonIsNotVisible()
+      throws Exception {
+        setupCheckinStatusCallbacks(true);
+        presenter.initialize(checkinView, EVENT_ID);
+        presenter.showingCheckinButton = false;
+
+        presenter.toolbarClick();
+
+        verify(checkinView).hideCheckedIn();
+    }
+
     @Test public void shouldHideCheckinButtonWhenToolbarClickedIfButtonIsAlreadyVisible() throws Exception {
         setupCheckinStatusCallbacks(true);
         presenter.initialize(checkinView, EVENT_ID);
@@ -117,6 +130,17 @@ public class CheckinPresenterTest {
 
         verify(checkinView).hideCheckinView();
     }
+
+    @Test public void shouldShowCheckedInWhenToolbarClickedIfButtonIsAlreadyVisible() throws Exception {
+        setupCheckinStatusCallbacks(true);
+        presenter.initialize(checkinView, EVENT_ID);
+        presenter.showingCheckinButton = true;
+
+        presenter.toolbarClick();
+
+        verify(checkinView, times(2)).showCheckedIn();
+    }
+
     //endregion
 
     @Test public void shouldNotInteractWithViewWhenToolbarClickedIfCheckinStatusHasntCallbackYet() throws Exception {

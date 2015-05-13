@@ -9,4 +9,8 @@ public interface CheckinView {
     void showCheckinLoading();
 
     void hideCheckinLoading();
+
+    void showCheckedIn();
+
+    void hideCheckedIn();
 }

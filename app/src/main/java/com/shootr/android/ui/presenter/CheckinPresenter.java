@@ -45,6 +45,8 @@ public class CheckinPresenter implements Presenter {
     private void onCheckinStatusLoaded() {
         if (!checkedInEvent) {
             this.showViewCheckinButton();
+        } else {
+            checkinView.showCheckedIn();
         }
     }
 
@@ -52,9 +54,17 @@ public class CheckinPresenter implements Presenter {
         if (checkedInEvent != null) {
             if (showingCheckinButton) {
                 hideViewCheckinButton();
+                showViewCheckedInIfCheckedIn();
             } else {
                 showViewCheckinButton();
+                checkinView.hideCheckedIn();
             }
+        }
+    }
+
+    private void showViewCheckedInIfCheckedIn() {
+        if (checkedInEvent) {
+            checkinView.showCheckedIn();
         }
     }
 
@@ -72,6 +82,7 @@ public class CheckinPresenter implements Presenter {
             @Override public void onCompleted() {
                 checkinView.hideCheckinLoading();
                 checkinView.hideCheckinView();
+                checkinView.showCheckedIn();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

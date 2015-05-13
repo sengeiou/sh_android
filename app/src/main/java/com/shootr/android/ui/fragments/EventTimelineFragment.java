@@ -471,5 +471,13 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void hideCheckinLoading() {
         //TODO
     }
+
+    @Override public void showCheckedIn() {
+        toolbarDecorator.setSubtitle(R.string.checked_in);
+    }
+
+    @Override public void hideCheckedIn() {
+        toolbarDecorator.hideSubtitle();
+    }
     //endregion
 }
