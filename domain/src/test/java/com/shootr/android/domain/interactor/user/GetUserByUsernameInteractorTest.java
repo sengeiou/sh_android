@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -36,7 +37,7 @@ public class GetUserByUsernameInteractorTest {
     private User dummyUser;
 
     private String DUMMY_USERNAME = "dummy_user";
-    private String DUMMY_USERNAME_ID = "\"dummy_user_id\"";
+    private String DUMMY_USERNAME_ID = "dummy_user_id";
     private String DUMMY_EXCEPTION_MESSAGE = "test";
 
     @Before
@@ -62,11 +63,11 @@ public class GetUserByUsernameInteractorTest {
     public void shouldCallbackErrorIfRepositoryFailsWithInvalidException() throws Exception {
         setupUser();
 
-        doThrow(new NullPointerException()).when(userRepository).getUserByUsername(DUMMY_USERNAME);
+        doReturn(null).when(userRepository).getUserByUsername(DUMMY_USERNAME);
 
         interactor.searchUserByUsername(user.getUsername(), callback, errorCallback);
 
-        verify(errorCallback).onError(any(ShootrException.class));
+        verify(errorCallback).onError(any(InvalidGetUserException.class));
     }
 
     private void setupUser() {
