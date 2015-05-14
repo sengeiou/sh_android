@@ -1,4 +1,4 @@
-package com.shootr.android.ui.adapters;
+package com.shootr.android.ui.adapters.recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,32 +6,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.shootr.android.R;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.ui.adapters.BindableAdapter;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.PicassoWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.shootr.android.domain.repository.Local;
-import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.R;
-import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.widgets.FollowButton;
-
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Locale;
-
-public class UserListAdapter extends BindableAdapter<UserModel> {
+public class FriendsAdapter extends BindableAdapter<UserModel> {
 
     private List<UserModel> users;
     private PicassoWrapper picasso;
 
     private FollowUnfollowAdapterCallback callback;
 
-    public UserListAdapter(Context context, PicassoWrapper picasso) {
+    public FriendsAdapter(Context context, PicassoWrapper picasso) {
         super(context);
         this.picasso = picasso;
         this.users = new ArrayList<>(0);
@@ -76,7 +72,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         viewHolder.title.setText(item.getName());
 
         if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getUsernameForSubtitle(item));
+            viewHolder.subtitle.setText(geWatchingEventTitleForSubtitle(item));
             viewHolder.subtitle.setVisibility(View.VISIBLE);
         } else {
             viewHolder.subtitle.setVisibility(View.GONE);
@@ -95,25 +91,29 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
             }
             viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                       if(viewHolder.followButton.isFollowing()){
-                            if(callback!=null){
-                                callback.unFollow(position);
-                            }
-                       }else{
-                           if(callback!=null){
-                               callback.follow(position);
-                           }
-                       }
+                    if(viewHolder.followButton.isFollowing()){
+                        if(callback!=null){
+                            callback.unFollow(position);
+                        }
+                    }else{
+                        if(callback!=null){
+                            callback.follow(position);
+                        }
+                    }
                 }
             });
 
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
-         }
+        }
     }
 
-    private String getUsernameForSubtitle(UserModel item) {
-        return String.format("@%s",item.getUsername());
+    private String geWatchingEventTitleForSubtitle(UserModel item) {
+        String eventWatchingTitle = item.getEventWatchingTitle();
+        if(eventWatchingTitle != null){
+            return eventWatchingTitle;
+        }
+            return "";
     }
 
     protected boolean showSubtitle(UserModel item) {
@@ -133,10 +133,13 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.user_avatar) ImageView avatar;
-        @InjectView(R.id.user_name) TextView title;
+        @InjectView(R.id.user_avatar)
+        ImageView avatar;
+        @InjectView(R.id.user_name)
+        TextView title;
         @InjectView(R.id.user_username) TextView subtitle;
-        @InjectView(R.id.user_follow_button) FollowButton followButton;
+        @InjectView(R.id.user_follow_button)
+        FollowButton followButton;
         public int position;
 
         public ViewHolder(View view) {
@@ -149,7 +152,5 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         public void follow(int position);
         public void unFollow(int position);
     }
-
-
 
 }
