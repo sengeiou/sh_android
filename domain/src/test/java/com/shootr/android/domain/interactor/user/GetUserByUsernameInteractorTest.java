@@ -1,8 +1,8 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.InvalidGetUserException;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.UserNotFoundException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -16,62 +16,95 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class GetUserByUsernameInteractorTest {
 
-    @Mock
-    UserRepository userRepository;
-    @Mock
-    Interactor.ErrorCallback errorCallback;
+    private static final String USERNAME_STUB = "username";
+    private static final String LOCAL_USER_ID = "local_user";
+    private static final String REMOTE_USER_ID = "remote_user";
+
+    @Mock Interactor.ErrorCallback errorCallback;
     @Mock PostExecutionThread postExecutionThread;
-
     @Mock Interactor.Callback<User> callback;
-
-    @Mock User user;
+    @Mock UserRepository localUserRepository;
+    @Mock UserRepository remoteUserRepository;
 
     private GetUserByUsernameInteractor interactor;
-    private User dummyUser;
 
-    private String DUMMY_USERNAME = "dummy_user";
-    private String DUMMY_USERNAME_ID = "dummy_user_id";
-
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        interactor = new GetUserByUsernameInteractor(interactorHandler, userRepository,
-                postExecutionThread);
+        interactor = new GetUserByUsernameInteractor(interactorHandler,
+          remoteUserRepository,
+          localUserRepository,
+          postExecutionThread);
     }
 
-    @Test public void shouldCallbackIfRepositoryDoesntFail() throws Exception {
-        setupUser();
+    @Test public void shouldCallbackLocalUserIfLocalRepositoryReturnsAUser() throws Exception {
+        when(localUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(localUser());
 
-        doReturn(dummyUser).when(userRepository).getUserByUsername(DUMMY_USERNAME);
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
 
-        interactor.searchUserByUsername(dummyUser.getUsername(), callback, errorCallback);
-
-        verify(callback).onLoaded(any(User.class));
+        verify(callback).onLoaded(localUser());
     }
 
-    @Test
-    public void shouldCallbackErrorIfRepositoryFailsWithInvalidException() throws Exception {
-        setupUser();
+    @Test public void shouldCallbackRemoteUserIfRemoteUserReturnsAUser() throws Exception {
+        when(remoteUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(remoteUser());
 
-        doReturn(null).when(userRepository).getUserByUsername(DUMMY_USERNAME);
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
 
-        interactor.searchUserByUsername(user.getUsername(), callback, errorCallback);
-
-        verify(errorCallback).onError(any(InvalidGetUserException.class));
+        verify(callback).onLoaded(remoteUser());
     }
 
-    private void setupUser() {
-        dummyUser = new User();
-        dummyUser.setIdUser(DUMMY_USERNAME_ID);
-        dummyUser.setUsername(DUMMY_USERNAME);
+    @Test public void shouldPutRemoteUserInLocalIfLocalRepositoryReturnsAUser() throws Exception {
+        when(localUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(localUser());
+        when(remoteUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(remoteUser());
+
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
+
+        verify(localUserRepository).putUser(remoteUser());
+    }
+
+    @Test public void shouldNotPutRemoteUserInLocalIfLocalRepositoryDoesntReturnAUser() throws Exception {
+        when(localUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(null);
+        when(remoteUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(remoteUser());
+
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
+
+        verify(localUserRepository, never()).putUser(any(User.class));
+    }
+
+    @Test public void shouldCallbackErrorIfRemoteRepositoryDoesntReturnAUser() throws Exception {
+        when(remoteUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(null);
+
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
+
+        verify(errorCallback).onError(new UserNotFoundException(USERNAME_STUB));
+    }
+
+    @Test public void shouldCallbackErrorIfRemoteRepositoryFails() throws Exception {
+        when(remoteUserRepository.getUserByUsername(anyString())).thenThrow(new ShootrException() {});
+
+        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
+
+        verify(errorCallback).onError(any(ShootrException.class));
+    }
+
+    private User remoteUser() {
+        User user = new User();
+        user.setIdUser(REMOTE_USER_ID);
+        return user;
+    }
+
+    private User localUser() {
+        User user = new User();
+        user.setIdUser(LOCAL_USER_ID);
+        return user;
     }
 }

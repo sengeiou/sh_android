@@ -1,11 +1,12 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.InvalidGetUserException;
+import com.shootr.android.domain.exception.UserNotFoundException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 
@@ -14,7 +15,8 @@ import javax.inject.Inject;
 public class GetUserByUsernameInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
-    private final UserRepository userRepository;
+    private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
     private final PostExecutionThread postExecutionThread;
     private Callback<User> callback;
     private ErrorCallback errorCallback;
@@ -22,41 +24,53 @@ public class GetUserByUsernameInteractor implements Interactor {
     private String username;
 
     @Inject
-    public GetUserByUsernameInteractor(InteractorHandler interactorHandler,
-                                       @Remote UserRepository userRepository,
-                                       PostExecutionThread postExecutionThread) {
+    public GetUserByUsernameInteractor(InteractorHandler interactorHandler, @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
-        this.userRepository = userRepository;
+        this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void searchUserByUsername(String username, Callback<User> callback,
-                                     ErrorCallback errorCallback){
+    public void searchUserByUsername(String username, Callback<User> callback, ErrorCallback errorCallback) {
         this.username = username;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    @Override
-    public void execute() throws Throwable {
-        User user = null;
+    @Override public void execute() throws Throwable {
+        User localUser = loadLocalUser();
+        loadRemoteUser(localUser);
+    }
+
+    private void loadRemoteUser(User localUser) {
         try {
-            user = userRepository.getUserByUsername(username);
-        }catch (Exception e){
-            notifyError(new InvalidGetUserException("No User Found"));
+            User remoteUser = remoteUserRepository.getUserByUsername(username);
+            if (remoteUser != null) {
+                notifyResult(remoteUser);
+                if (localUser != null) {
+                    localUserRepository.putUser(remoteUser);
+                }
+            } else {
+                notifyError(new UserNotFoundException(username));
+            }
+        } catch (ShootrException error) {
+            notifyError(error);
         }
-        if(user != null){
-            notifyResult(user);
-        }else{
-            notifyError(new InvalidGetUserException("No User Found"));
+    }
+
+    private User loadLocalUser() {
+        User localUser = localUserRepository.getUserByUsername(username);
+        if (localUser != null) {
+            notifyResult(localUser);
         }
+        return localUser;
     }
 
     private void notifyResult(final User user) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 callback.onLoaded(user);
             }
         });

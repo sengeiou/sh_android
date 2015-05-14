@@ -1,10 +1,7 @@
 package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.domain.exception.InvalidGetUserException;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
