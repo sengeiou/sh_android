@@ -10,8 +10,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -71,7 +69,6 @@ public class EventsListPresenter implements Presenter {
         selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
             @Override public void onLoaded(Event selectedEvent) {
                 onEventSelected(eventModelMapper.transform(selectedEvent));
-                setViewCurrentVisibleEvent(idEvent);
             }
         });
     }
@@ -99,7 +96,7 @@ public class EventsListPresenter implements Presenter {
             List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
             eventsListView.hideLoading();
             this.renderViewEventsList(eventResultModels);
-            this.setViewCurrentVisibleEvent(resultList.getCurrentVisibleEventId());
+            this.setViewCurrentVisibleEvent(resultList.getCurrentCheckedInEventId());
         }
     }
 
