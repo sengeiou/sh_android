@@ -2,6 +2,8 @@ package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.views.base.DataTransferView;
 
+import java.util.Locale;
+
 public interface NewEventView extends DataTransferView{
 
     void setStartDate(String dateText);
@@ -27,4 +29,6 @@ public interface NewEventView extends DataTransferView{
     void navigateToPickTimezone(String currentTimezoneID);
 
     void showNotificationConfirmation();
+
+    Locale getLocale();
 }
