@@ -13,6 +13,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ public class EventsListInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
+    private final LocaleProvider localeProvider;
 
     private Callback<EventSearchResultList> callback;
     private ErrorCallback errorCallback;
@@ -36,7 +38,8 @@ public class EventsListInteractor implements Interactor {
     @Inject public EventsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote EventSearchRepository remoteEventSearchRepository,
       @Local EventSearchRepository localEventSearchRepository, EventListSynchronizationRepository eventListSynchronizationRepository,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils) {
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteEventSearchRepository = remoteEventSearchRepository;
@@ -45,6 +48,7 @@ public class EventsListInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.timeUtils = timeUtils;
+        this.localeProvider = localeProvider;
     }
 
     public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback) {
@@ -54,7 +58,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents();
+        List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
         notifyLoaded(localEvents);
 
         Long currentTime = timeUtils.getCurrentTime();
@@ -69,7 +73,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     protected void refreshEvents() {
-        List<EventSearchResult> remoteEvents = remoteEventSearchRepository.getDefaultEvents();
+        List<EventSearchResult> remoteEvents = remoteEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
         notifyLoaded(remoteEvents);
         localEventSearchRepository.deleteDefaultEvents();
         localEventSearchRepository.putDefaultEvents(remoteEvents);

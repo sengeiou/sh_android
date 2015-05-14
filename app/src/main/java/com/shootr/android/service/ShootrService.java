@@ -62,7 +62,7 @@ public interface ShootrService {
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
-    List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)
+    List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts, String locale)
       throws IOException;
 
     void performCheckin(String idUser, String idEvent) throws IOException;

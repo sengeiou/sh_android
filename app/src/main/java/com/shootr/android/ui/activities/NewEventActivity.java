@@ -25,6 +25,7 @@ import com.shootr.android.ui.widgets.DatePickerBuilder;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
+
 import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {

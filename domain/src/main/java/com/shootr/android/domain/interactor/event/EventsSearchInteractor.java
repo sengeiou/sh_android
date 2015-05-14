@@ -13,6 +13,7 @@ import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ public class EventsSearchInteractor implements Interactor {
     private final EventSearchRepository eventSearchRepository;
     private final EventRepository localEventRepository;
     private final PostExecutionThread postExecutionThread;
+    private final LocaleProvider localeProvider;
 
     private String query;
     private Callback callback;
@@ -32,12 +34,13 @@ public class EventsSearchInteractor implements Interactor {
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
       @Remote EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
-      PostExecutionThread postExecutionThread) {
+      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
         this.eventSearchRepository = eventSearchRepository;
         this.localEventRepository = localEventRepository;
         this.postExecutionThread = postExecutionThread;
+        this.localeProvider = localeProvider;
     }
 
     public void searchEvents(String query, Callback callback, ErrorCallback errorCallback) {
@@ -67,7 +70,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void performSearch() {
-        List<EventSearchResult> events = eventSearchRepository.getEvents(query);
+        List<EventSearchResult> events = eventSearchRepository.getEvents(query, localeProvider.getLocale());
         events = filterEventsNotMatchingQuery(events);
 
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);

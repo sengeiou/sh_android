@@ -29,6 +29,7 @@ import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;

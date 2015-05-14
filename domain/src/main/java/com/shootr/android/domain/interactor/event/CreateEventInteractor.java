@@ -11,6 +11,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class CreateEventInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final EventRepository remoteEventRepository;
+    private final LocaleProvider localeProvider;
 
     private String idEvent;
     private String title;
@@ -33,11 +35,12 @@ public class CreateEventInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository) {
+      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.remoteEventRepository = remoteEventRepository;
+        this.localeProvider = localeProvider;
     }
 
     public void sendEvent(String idEvent, String title, long startDate, String timezoneId, boolean notifyCreation,
@@ -69,6 +72,7 @@ public class CreateEventInteractor implements Interactor {
         Event event;
         if (isNewEvent()) {
             event = new Event();
+            event.setLocale(localeProvider.getLocale());
         } else {
             event = remoteEventRepository.getEventById(idEvent);
         }
@@ -183,7 +187,6 @@ public class CreateEventInteractor implements Interactor {
     }
 
     public interface Callback {
-
         void onLoaded(Event event);
     }
 }

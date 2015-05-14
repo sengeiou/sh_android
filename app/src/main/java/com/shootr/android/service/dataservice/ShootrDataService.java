@@ -475,10 +475,10 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts)
+    @Override public List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts, String locale)
       throws IOException {
         List<EventSearchEntity> eventSearchResults = new ArrayList<>();
-        GenericDto requestDto = eventDtoFactory.getSearchEventDto(query, eventsWatchesCounts);
+        GenericDto requestDto = eventDtoFactory.getSearchEventDto(query, eventsWatchesCounts, locale);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){

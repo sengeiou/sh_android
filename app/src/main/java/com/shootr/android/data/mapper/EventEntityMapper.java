@@ -25,6 +25,7 @@ public class EventEntityMapper {
         event.setTimezone(eventEntity.getTimezone());
         event.setTag(eventEntity.getTag());
         event.setAuthorUsername(eventEntity.getUserName());
+        event.setLocale(eventEntity.getLocale());
         return event;
     }
 
@@ -51,6 +52,7 @@ public class EventEntityMapper {
         entityTemplate.setTimezone(event.getTimezone());
         entityTemplate.setTag(event.getTag());
         entityTemplate.setUserName(event.getAuthorUsername());
+        entityTemplate.setLocale(event.getLocale());
 
         entityTemplate.setCsysSynchronized(Synchronized.SYNC_NEW);
     }

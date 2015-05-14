@@ -13,6 +13,7 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
     private String title;
     private String photo;
     private Integer notifyCreation;
+    private String locale;
 
     public String getIdEvent() {
         return idEvent;
@@ -20,6 +21,14 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public Date getBeginDate() {

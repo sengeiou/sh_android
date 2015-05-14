@@ -17,6 +17,7 @@ import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class EventsListPresenter implements Presenter {
@@ -67,7 +68,8 @@ public class EventsListPresenter implements Presenter {
 
     private void selectEvent(final String idEvent, String eventTitle) {
         selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
-            @Override public void onLoaded(Event selectedEvent) {
+            @Override
+            public void onLoaded(Event selectedEvent) {
                 onEventSelected(eventModelMapper.transform(selectedEvent));
             }
         });
@@ -80,11 +82,13 @@ public class EventsListPresenter implements Presenter {
     protected void loadDefaultEventList() {
         eventsListView.showLoading();
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
-            @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+            @Override
+            public void onLoaded(EventSearchResultList eventSearchResultList) {
                 onDefaultEventListLoaded(eventSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 showViewError(error);
             }
         });
@@ -173,5 +177,6 @@ public class EventsListPresenter implements Presenter {
     @Override public void pause() {
         hasBeenPaused = true;
     }
+
     //endregion
 }

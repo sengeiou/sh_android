@@ -31,12 +31,12 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public List<EventSearchEntity> getDefaultEvents() {
-        return loadEvents(null);
+    @Override public List<EventSearchEntity> getDefaultEvents(String locale) {
+        return loadEvents(null, locale);
     }
 
-    @Override public List<EventSearchEntity> getEvents(String query) {
-        return loadEvents(query);
+    @Override public List<EventSearchEntity> getEvents(String query, String locale) {
+        return loadEvents(query, locale);
     }
 
     @Override public void putDefaultEvents(List<EventSearchEntity> transform) {
@@ -51,10 +51,10 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    private List<EventSearchEntity> loadEvents(String query) {
+    private List<EventSearchEntity> loadEvents(String query, String locale) {
         try {
             Map<String, Integer> eventsWatchesCounts = getWatchersCountByEvents();
-            return shootrService.getEventSearch(query, eventsWatchesCounts);
+            return shootrService.getEventSearch(query, eventsWatchesCounts, locale);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

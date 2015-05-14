@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.R;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -193,17 +192,21 @@ public class NewEventPresenter implements Presenter {
     private void sendEvent(String preloadedEventId) {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp,
-          selectedTimeZone.getID(), notifyCreation,
+        createEventInteractor.sendEvent(preloadedEventId,
+          title,
+          startTimestamp,
+          selectedTimeZone.getID(),
+          notifyCreation,
           new CreateEventInteractor.Callback() {
-                @Override public void onLoaded(Event event) {
-                    eventCreated(event);
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    eventCreationError(error);
-                }
-            });
+              @Override public void onLoaded(Event event) {
+                  eventCreated(event);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventCreationError(error);
+              }
+          });
     }
 
     private int realTimezoneOffset(long date) {

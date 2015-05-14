@@ -12,8 +12,17 @@ public class Event {
     private String timezone;
     private String tag;
     private Date startDate;
+    private String locale;
 
     public Event() {
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public String getTitle() {
@@ -95,7 +104,8 @@ public class Event {
         if (picture != null ? !picture.equals(event.picture) : event.picture != null) return false;
         if (timezone != null ? !timezone.equals(event.timezone) : event.timezone != null) return false;
         if (tag != null ? !tag.equals(event.tag) : event.tag != null) return false;
-        return !(startDate != null ? !startDate.equals(event.startDate) : event.startDate != null);
+        if (startDate != null ? !startDate.equals(event.startDate) : event.startDate != null) return false;
+        return !(locale != null ? !locale.equals(event.locale) : event.locale != null);
     }
 
     @Override public int hashCode() {
@@ -107,6 +117,7 @@ public class Event {
         result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
         result = 31 * result + (tag != null ? tag.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (locale != null ? locale.hashCode() : 0);
         return result;
     }
 

@@ -26,6 +26,7 @@ import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.ImageResizer;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.notifications.gcm.GCMIntentService;
@@ -63,6 +64,7 @@ import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -143,6 +145,10 @@ public class DataModule {
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;
+    }
+
+    @Provides LocaleProvider provideLocaleProvider(ResourcesLocaleProvider resourcesLocaleProvider) {
+        return resourcesLocaleProvider;
     }
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
