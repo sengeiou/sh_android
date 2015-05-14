@@ -27,6 +27,7 @@ public class FilterBuilder {
     public static final String COMPARATOR_NOT_CONTAINS = "nct";
     public static final String COMPARATOR_ENDS_WITH = "en";
     public static final String COMPARATOR_NOT_ENDS_WITH = "nen";
+    public static final String COMPARATOR_COMPLETLY_CONTAINS = "cc";
 
     public static ItemField<AndItem> and(String field) {
         AndItem andItem = new AndItem();
@@ -160,6 +161,11 @@ public class FilterBuilder {
 
         public T notEndsWith(String textValue) {
             createAndAddItem(COMPARATOR_NOT_ENDS_WITH, textValue);
+            return nexusItemReference;
+        }
+
+        public T completlyContains(String textValue) {
+            createAndAddItem(COMPARATOR_COMPLETLY_CONTAINS, textValue);
             return nexusItemReference;
         }
 

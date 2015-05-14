@@ -1,6 +1,7 @@
 package com.shootr.android.service.dataservice.dto;
 
 import android.support.v4.util.ArrayMap;
+
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
@@ -15,9 +16,11 @@ import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -46,6 +49,7 @@ public class UserDtoFactory {
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
+    private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
@@ -205,6 +209,26 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWERS, operation);
+    }
+
+    public GenericDto getUserByUsername(String username){
+        FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
+                .and(UserTable.CSYS_DELETED).isEqualTo(null) //
+                .build();
+
+        MetadataDto metadata = new MetadataDto.Builder() //
+                .operation(Constants.OPERATION_RETRIEVE) //
+                .entity(UserTable.TABLE) //
+                .includeDeleted(false) //
+                .filter(filter) //
+                .build();
+
+        OperationDto operation = new OperationDto.Builder() //
+                .metadata(metadata) //
+                .putData(userMapper.toDto(null)) //
+                .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYUSERNAME, operation);
     }
 
     public GenericDto getUserByUserId(String userId){

@@ -49,6 +49,7 @@ import com.shootr.android.ui.widgets.CheckinBar;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.UsernameClickListener;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -81,6 +82,7 @@ public class EventTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private UsernameClickListener usernameClickListener;
     private PhotoPickerController photoPickerController;
 
     private NewShotBarView newShotBarViewDelegate;
@@ -287,6 +289,13 @@ public class EventTimelineFragment extends BaseFragment
             }
         };
 
+        usernameClickListener = new UsernameClickListener() {
+            @Override
+            public void onClick(String username) {
+                goToUserProfile(username);
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -294,8 +303,18 @@ public class EventTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
+                imageClickListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
+    }
+
+    private void startProfileContainerActivity(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
+    }
+
+    private void goToUserProfile(String username) {
+        startProfileContainerActivity(username);
     }
 
     private void setupSwipeRefreshLayout() {

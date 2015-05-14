@@ -53,6 +53,13 @@ public class ShootrUserService {
         sessionRepository.setCurrentUser(currentUser);
     }
 
+    private boolean isCurrentUserCheckedInEvent(User currentUser, String idEvent) {
+        if(currentUser.getIdCheckedEvent() != null){
+            return currentUser.getIdCheckedEvent().equals(idEvent);
+        }
+        return false;
+    }
+
     public void createAccount(String username, String email, String password) {
         String hashedPassword = SecurityUtils.encodePassword(password);
         try {

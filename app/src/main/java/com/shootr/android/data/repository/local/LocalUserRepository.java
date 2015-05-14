@@ -8,8 +8,10 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class LocalUserRepository implements UserRepository {
@@ -37,6 +39,11 @@ public class LocalUserRepository implements UserRepository {
           sessionRepository.getCurrentUserId(),
           isFollower(id),
           isFollowing(id));
+    }
+
+    @Override
+    public User getUserByUsername(String username){
+        return userEntityMapper.transform(localUserDataSource.getUserByUsername(username));
     }
 
     @Override public List<User> getUsersByIds(List<String> ids) {

@@ -241,7 +241,9 @@ public class ShootrDataService implements ShootrService {
     @Override
     public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<ShotEntity> shots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
+        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds,
+          lastModifiedDate,
+          DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -507,6 +509,23 @@ public class ShootrDataService implements ShootrService {
     public void performCheckout(String idUser, String watchingEventId) throws IOException {
         GenericDto checkoutDto = userDtoFactory.getCheckoutOperationDto(idUser, watchingEventId);
         GenericDto responseDto = postRequest(checkoutDto);
+    }
+
+    @Override
+    public UserEntity getUserByUsername(String username) throws IOException {
+        GenericDto requestDto = userDtoFactory.getUserByUsername(username);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            Map<String, Object>[] data = ops[0].getData();
+            if (data.length > 0) {
+                Map<String, Object> dataItem = data[0];
+                return userMapper.fromDto(dataItem);
+            }
+        }
+        return null;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

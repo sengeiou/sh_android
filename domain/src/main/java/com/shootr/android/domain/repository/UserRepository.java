@@ -1,6 +1,7 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.User;
+
 import java.util.List;
 
 public interface UserRepository {
@@ -8,6 +9,8 @@ public interface UserRepository {
     List<User> getPeople();
 
     User getUserById(String id);
+
+    User getUserByUsername(String username);
 
     List<User> getUsersByIds(List<String> ids);
 

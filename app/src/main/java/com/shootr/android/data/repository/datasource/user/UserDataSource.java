@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.repository.datasource.SyncableDataSource;
+
 import java.util.List;
 
 public interface UserDataSource  extends SyncableDataSource<UserEntity>{
@@ -19,4 +20,6 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
     boolean isFollower(String from, String who);
 
     boolean isFollowing(String who, String to);
+
+    UserEntity getUserByUsername(String username);
 }

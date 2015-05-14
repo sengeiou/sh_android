@@ -29,6 +29,7 @@ public class PerformCheckinInteractorTest {
     @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckinInteractor interactor;
+    private String dummyIdEvent = "EVENT_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);

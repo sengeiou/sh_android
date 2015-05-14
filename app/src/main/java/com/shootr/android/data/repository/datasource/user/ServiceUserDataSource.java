@@ -1,7 +1,6 @@
 package com.shootr.android.data.repository.datasource.user;
 
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -58,6 +57,15 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public boolean isFollowing(String who, String to) {
         throw new RuntimeException("Method not implemented for service.");
+    }
+
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        try {
+            return service.getUserByUsername(username);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {

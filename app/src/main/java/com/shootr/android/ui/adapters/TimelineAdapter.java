@@ -10,15 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ShotTextSpannableBuilder;
+import com.shootr.android.util.UsernameClickListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
@@ -26,18 +31,22 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
+    private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
+    private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
+                           View.OnClickListener imageClickListener, UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         tagColor = context.getResources().getColor(R.color.tag_color);
+        this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     @Override
@@ -111,7 +120,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 String comment = item.getComment();
                 if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
-                    vh.text.setText(comment);
+                    CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                            clickListener);
+                    vh.text.setText(spannedComment);
                     vh.text.addLinks();
                 } else {
                     vh.text.setVisibility(View.GONE);
@@ -198,7 +209,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             ButterKnife.inject(this, view);
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
-
         }
     }
 }

@@ -18,4 +18,9 @@ public interface ShotDetailView  {
     void scrollToBottom();
 
     void renderParent(ShotModel parentShot);
+
+    void showUserNotFoundNotification();
+
+    void startProfileContainerActivity(String username);
+
 }

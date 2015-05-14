@@ -1,5 +1,6 @@
 package com.shootr.android.ui.adapters;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,9 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.TimeFormatter;
+import com.shootr.android.util.UsernameClickListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +34,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
+    private final UsernameClickListener usernameClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
@@ -41,19 +45,23 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private float itemElevation;
     private ShotModel parentShot;
     private boolean isShowingParent = false;
+    private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
+      ImageClickListener imageClickListener, UsernameClickListener usernameClickListener,
+      OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.usernameClickListener = usernameClickListener;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
+        this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     public void renderMainShot(ShotModel mainShot) {
@@ -209,6 +217,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     //region View holders
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
+        private Context context;
         @InjectView(R.id.shot_detail_avatar) ImageView avatar;
         @InjectView(R.id.shot_detail_user_name) TextView username;
         @InjectView(R.id.shot_detail_timestamp) TextView timestamp;
@@ -220,6 +229,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            context = itemView.getContext();
         }
 
         public void bindView(final ShotModel shotModel) {
@@ -227,7 +237,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
             String comment = shotModel.getComment();
             if (comment != null) {
-                shotText.setText(comment);
+                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                  usernameClickListener);
+                shotText.setText(spannedComment);
                 shotText.addLinks();
             } else {
                 shotText.setVisibility(View.GONE);
@@ -236,7 +248,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     avatarClickListener.onClick(shotModel.getIdUser());
                 }
             });
@@ -298,6 +311,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
 
+        private Context context;
+
         @InjectView(R.id.shot_detail_parent_progress) View progress;
         @InjectView(R.id.shot_detail_parent_shot) View shot;
 
@@ -310,6 +325,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            context = itemView.getContext();
         }
 
         public void showLoading() {
@@ -323,10 +339,11 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.name.setText(getUsernameTitle(shotModel));
 
             String comment = shotModel.getComment();
-            if (comment != null) {
-                this.text.setVisibility(View.VISIBLE);
-                this.text.setText(comment);
-                this.text.addLinks();
+           if (comment != null) {
+               CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                       usernameClickListener);
+               this.text.setText(spannedComment);
+               this.text.addLinks();
             } else {
                 this.text.setVisibility(View.GONE);
             }
@@ -393,7 +410,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = reply.getComment();
             if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
-                this.text.setText(comment);
+                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                        usernameClickListener);
+                this.text.setText(spannedComment);
                 this.text.addLinks();
             } else {
                 this.text.setVisibility(View.GONE);

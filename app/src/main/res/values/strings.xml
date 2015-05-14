@@ -205,6 +205,7 @@
     <string name="checked_in">Checked In</string>
     <string name="check_in_action">Check In</string>
     <string name="check_out_action">Check Out</string>
+    <string name="user_not_found">User not found</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">

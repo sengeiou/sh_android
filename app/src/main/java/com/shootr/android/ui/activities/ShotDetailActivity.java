@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -23,6 +25,8 @@ import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
+import com.shootr.android.util.UsernameClickListener;
+
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -45,6 +49,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
+    private View.OnClickListener onClickListener;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -90,22 +95,30 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void setupAdapter() {
         detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
-          new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-              @Override public void onClick(String userId) {
-                  onAvatarClick(userId);
-              }
-          }, //
-          new ShotDetailWithRepliesAdapter.ImageClickListener() {
-              @Override public void onClick(ShotModel shot) {
-                  onImageClick(shot);
-              }
-          }, //
-          new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-              @Override public void onShown() {
-                  detailList.scrollToPosition(0);
-              }
-          }, //
-          timeFormatter, getResources(), timeUtils);
+                new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+                    @Override
+                    public void onClick(String userId) {
+                        onAvatarClick(userId);
+                    }
+                }, //
+                new ShotDetailWithRepliesAdapter.ImageClickListener() {
+                    @Override
+                    public void onClick(ShotModel shot) {
+                        onImageClick(shot);
+                    }
+                }, //
+                new UsernameClickListener() {
+                    @Override
+                    public void onClick(String username) {
+                        onUsernameClick(username);
+                    }
+                }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
+            @Override
+            public void onShown() {
+                detailList.scrollToPosition(0);
+            }
+        }, //
+                timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
     }
@@ -168,6 +181,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         detailPresenter.avatarClick(userId);
     }
 
+    public void onUsernameClick(String username){
+        detailPresenter.usernameClick(username);
+    }
+
     @OnClick(R.id.shot_bar_text) public void onReplyClick() {
         newShotBarPresenter.newShotFromTextBox();
     }
@@ -212,6 +229,17 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void renderParent(ShotModel parentShot) {
         detailAdapter.renderParentShot(parentShot);
+    }
+
+    @Override
+    public void showUserNotFoundNotification() {
+        Toast.makeText(this,"User not found",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void startProfileContainerActivity(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(this, username);
+        startActivity(intentForUser);
     }
 
     @Override public void openNewShotView() {

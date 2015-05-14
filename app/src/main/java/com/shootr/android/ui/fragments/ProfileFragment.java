@@ -23,52 +23,63 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
+
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.PhotoViewActivity;
-import com.shootr.android.ui.activities.ProfileEditActivity;
-import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
+import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.UsernameClickListener;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
@@ -77,6 +88,7 @@ public class ProfileFragment extends BaseFragment {
     private static final int REQUEST_TAKE_PHOTO = 2;
 
     public static final String ARGUMENT_USER = "user";
+    public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
 
     //region injected
@@ -104,14 +116,22 @@ public class ProfileFragment extends BaseFragment {
     @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
+
+    @Inject
+    GetUserByUsernameInteractor getUserByUsernameInteractor;
+    @Inject
+    UserModelMapper userModelMapper;
+
     //endregion
 
     // Args
     String idUser;
+    String username;
 
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private UsernameClickListener usernameClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
@@ -119,8 +139,15 @@ public class ProfileFragment extends BaseFragment {
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
-        //TODO  pasar idUser
         arguments.putSerializable(ARGUMENT_USER, idUser);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    public static ProfileFragment newInstanceFromUsername(String username) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ARGUMENT_USERNAME, username);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -141,6 +168,25 @@ public class ProfileFragment extends BaseFragment {
                 openShotImage(position);
             }
         };
+        usernameClickListener =  new UsernameClickListener() {
+            @Override
+            public void onClick(String username) {
+                goToUserProfile(username);
+            }
+        };
+    }
+
+    private void startProfileContainerActivity(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
+    }
+
+    private void goToUserProfile(String username) {
+        startProfileContainerActivity(username);
+    }
+
+    private void userNotFoundNotification(){
+        Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
     }
 
     private void openShotImage(int position) {
@@ -157,6 +203,7 @@ public class ProfileFragment extends BaseFragment {
     private void injectArguments() {
         Bundle arguments = getArguments();
         idUser = (String) arguments.getSerializable(ARGUMENT_USER);
+        username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
     }
 
     @Override
@@ -260,7 +307,7 @@ public class ProfileFragment extends BaseFragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
-          REQUEST_CHOOSE_PHOTO);
+                REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -345,14 +392,38 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void retrieveUserInfo() {
-        Context context = getActivity();
+        if(idUser != null){
+            loadProfileUsingJob(idUser);
+        }else{
+            getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
+                @Override
+                public void onLoaded(User userFromCallback) {
+                    loadProfileUsingUser(userFromCallback);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override
+                public void onError(ShootrException error) {
+                    userNotFoundNotification();
+                }
+            });
+        }
 
+        //TODO loading
+    }
+
+    private void loadProfileUsingUser(User userFromCallback) {
+        idUser = userFromCallback.getIdUser();
+        user = userModelMapper.transform(userFromCallback);
+        loadLatestShots();
+        setUserInfo(user);
+    }
+
+    private void loadProfileUsingJob(String idUser) {
+        Context context = getActivity();
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
         job.init(idUser);
         jobManager.addJobInBackground(job);
-
         loadLatestShots();
-        //TODO loading
     }
 
     public void startFollowUnfollowUserJob(Context context, int followType) {
@@ -522,7 +593,8 @@ public class ProfileFragment extends BaseFragment {
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             latestsShotsAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils){
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener,
+                      imageClickListener, usernameClickListener, timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }

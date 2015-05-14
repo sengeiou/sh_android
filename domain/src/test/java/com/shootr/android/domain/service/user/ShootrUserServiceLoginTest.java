@@ -37,6 +37,8 @@ public class ShootrUserServiceLoginTest {
     @Mock UserRepository remoteUserRepository;
     private ShootrUserService shootrUserService;
 
+    private String dummyIdEvent = "EVENT_ID";
+
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,

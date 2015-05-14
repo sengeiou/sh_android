@@ -27,9 +27,7 @@ public class GetCheckinStatusInteractorTest {
     private GetCheckinStatusInteractor interactor;
     @Mock SessionRepository sessionRepository;
     @Mock UserRepository localUserRepository;
-
-    @Spy
-    SpyCallback spyCallback = new SpyCallback();
+    @Spy SpyCallback spyCallback = new SpyCallback();
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
