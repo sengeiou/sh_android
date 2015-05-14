@@ -44,7 +44,7 @@ public class GetUserByUsernameInteractor implements Interactor {
         try {
             user = userRepository.getUserByUsername(username);
         }catch (Exception e){
-            notifyError(new InvalidGetUserException(e));
+            notifyError(new InvalidGetUserException("No User Found"));
         }
         notifyResult(user);
     }

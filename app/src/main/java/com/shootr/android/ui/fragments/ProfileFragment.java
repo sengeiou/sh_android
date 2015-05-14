@@ -397,9 +397,9 @@ public class ProfileFragment extends BaseFragment {
         }else{
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
                 @Override
-                public void onLoaded(User user) {
-                    if (user != null) {
-                        loadProfileUsingJob(user.getIdUser());
+                public void onLoaded(User userFromCallback) {
+                    if (userFromCallback != null) {
+                        loadProfileUsingUser(userFromCallback);
                     } else {
                         userNotFoundNotification();
                     }
@@ -413,6 +413,13 @@ public class ProfileFragment extends BaseFragment {
         }
 
         //TODO loading
+    }
+
+    private void loadProfileUsingUser(User userFromCallback) {
+        idUser = userFromCallback.getIdUser();
+        user = userModelMapper.transform(userFromCallback);
+        loadLatestShots();
+        setUserInfo(user);
     }
 
     private void loadProfileUsingJob(String idUser) {
