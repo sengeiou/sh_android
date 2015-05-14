@@ -99,8 +99,8 @@ android {
             signingConfig signingConfigs.debug
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.dataservices.shootr.com\""
-            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.specialservices.shootr.com\""
+            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.services.shootr.com\""
+            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.services.shootr.com\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.tst.shootr.com/\""
         }
         release {
@@ -108,8 +108,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://dataservices.shootr.com\""
-            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://specialservices.shootr.com\""
+            buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://services.shootr.com\""
+            buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://services.shootr.com\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
         }
     }

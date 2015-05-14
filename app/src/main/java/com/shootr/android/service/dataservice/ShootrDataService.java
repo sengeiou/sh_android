@@ -53,6 +53,7 @@ public class ShootrDataService implements ShootrService {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
+    public static final String DATA_SERVICES_PATH = "/data-services/rest/generic/";
 
     private final OkHttpClient client;
     private final Endpoint endpoint;
@@ -533,7 +534,7 @@ public class ShootrDataService implements ShootrService {
         String requestJson = mapper.writeValueAsString(dto);
         Timber.d("Executing request: %s", requestJson);
         RequestBody body = RequestBody.create(JSON, requestJson);
-        Request request = new Request.Builder().url(endpoint.getUrl()).post(body).build();
+        Request request = new Request.Builder().url(getDataservicesUrl()).post(body).build();
 
         // Execute request
         Response response;
@@ -581,6 +582,10 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
         }
+    }
+
+    private String getDataservicesUrl() {
+        return endpoint.getUrl()+ DATA_SERVICES_PATH;
     }
 
     private void updateTimeFromServer(GenericDto dto) {

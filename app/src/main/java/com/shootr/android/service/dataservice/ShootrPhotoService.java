@@ -1,10 +1,10 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.repository.PhotoService;
+import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.ShootrPhotoUploadError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.squareup.okhttp.Headers;
@@ -23,24 +23,21 @@ import timber.log.Timber;
 
 public class ShootrPhotoService implements PhotoService {
 
-    // TODO invertir dependencia
-    public static final String ENDPOINT_UPLOAD_PHOTO_PROFILE =
-      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/profile";
-
-    public static final String ENDPOINT_UPLOAD_PHOTO_SHOT =
-      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/shot";
-
-    public static final String ENDPOINT_UPLOAD_EVENT_IMAGE =
-      BuildConfig.SPECIAL_SERVICES_ENDPOINT_BASE+"/shootr-services/rest/upload/img/event";
+    public final String uploadProfilePhotoEndpoint;
+    public final String uploadShotPhotoEndpoint;
+    public final String uploadEventPhotoEndpoint;
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;
     private ObjectMapper objectMapper;
 
-    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, ObjectMapper objectMapper) {
+    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, ObjectMapper objectMapper, Endpoint endpoint) {
         this.client = client;
         this.sessionRepository = sessionRepository;
         this.objectMapper = objectMapper;
+        uploadProfilePhotoEndpoint = endpoint.getUrl() + "/shootr-services/rest/upload/img/profile";
+        uploadShotPhotoEndpoint = endpoint.getUrl() + "/shootr-services/rest/upload/img/shot";
+        uploadEventPhotoEndpoint = endpoint.getUrl() + "/shootr-services/rest/upload/img/event";
     }
 
     @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
@@ -91,17 +88,17 @@ public class ShootrPhotoService implements PhotoService {
     }
 
     private Response executeProfileRequest(RequestBody body) throws IOException {
-        return executeRequest(body, ENDPOINT_UPLOAD_PHOTO_PROFILE);
+        return executeRequest(body, uploadProfilePhotoEndpoint);
     }
 
     private Response executeShotImageRequest(RequestBody body) throws IOException {
-        return executeRequest(body, ENDPOINT_UPLOAD_PHOTO_SHOT);
+        return executeRequest(body, uploadShotPhotoEndpoint);
     }
 
 
 
     private Response executeEventImageRequest(RequestBody body) throws IOException {
-        return executeRequest(body, ENDPOINT_UPLOAD_EVENT_IMAGE);
+        return executeRequest(body, uploadEventPhotoEndpoint);
     }
 
     private Response executeRequest(RequestBody body, String endpoint) throws IOException {
