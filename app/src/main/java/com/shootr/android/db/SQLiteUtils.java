@@ -126,6 +126,7 @@ public class SQLiteUtils {
             + DatabaseContract.EventTable.TIMEZONE +" TEXT NOT NULL,"
             + DatabaseContract.EventTable.TAG +" TEXT NULL,"
             + DatabaseContract.EventTable.LAST_UPDATED_USER +" TEXT NULL,"
+            + DatabaseContract.EventTable.LOCALE +" TEXT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"

@@ -163,10 +163,11 @@ public class DatabaseContract {
         public static final String TAG = "tag";
         public static final String NOTIFY_CREATION = "notifyCreation";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
+        public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
                 ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, BEGIN_DATE, TIMEZONE, TITLE,
-                PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER,
+                PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER, LOCALE,
                 CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
     }
@@ -191,11 +192,9 @@ public class DatabaseContract {
         }
 
         public static final String TABLE = "ShotQueue";
-
         public static final String ID_QUEUE = "idQueue";
         public static final String FAILED = "failed";
         public static final String IMAGE_FILE = "imageFile";
-
         public static final String ID_SHOT = "idShot";
         public static final String ID_USER = "idUser";
         public static final String USERNAME = "userName";
@@ -205,11 +204,9 @@ public class DatabaseContract {
         public static final String EVENT_TAG = "eventTag";
         public static final String EVENT_TITLE = "eventTitle";
         public static final String TYPE = "type";
-
         public static final String ID_SHOT_PARENT = "idShotParent";
         public static final String ID_USER_PARENT = "idUserParent";
         public static final String USERNAME_PARENT = "userNameParent";
-
 
         public static final String[] PROJECTION = {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE, TYPE,
