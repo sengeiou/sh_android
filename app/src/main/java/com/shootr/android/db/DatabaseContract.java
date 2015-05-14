@@ -174,12 +174,12 @@ public class DatabaseContract {
 
     public static class EventSearchTable extends EventTable {
 
-        public static final String TABLE = "EventSearch";
+        public static final String TABLE = "SearchEventMongo";
 
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS,
+          WATCHERS, LOCALE,
           ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, TIMEZONE, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };

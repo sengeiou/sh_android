@@ -19,6 +19,8 @@ import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 public class EventsListPresenter implements Presenter {
@@ -32,6 +34,7 @@ public class EventsListPresenter implements Presenter {
 
     private EventsListView eventsListView;
     private boolean hasBeenPaused;
+    private Long locale;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
       EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
@@ -69,7 +72,8 @@ public class EventsListPresenter implements Presenter {
 
     private void selectEvent(final String idEvent, String eventTitle) {
         selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
-            @Override public void onLoaded(Event selectedEvent) {
+            @Override
+            public void onLoaded(Event selectedEvent) {
                 onEventSelected(eventModelMapper.transform(selectedEvent));
                 setViewCurrentVisibleEvent(idEvent);
             }
@@ -82,15 +86,18 @@ public class EventsListPresenter implements Presenter {
 
     protected void loadDefaultEventList() {
         eventsListView.showLoading();
+        String localeInStringFormat = getLocale().toString();
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
-            @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+            @Override
+            public void onLoaded(EventSearchResultList eventSearchResultList) {
                 onDefaultEventListLoaded(eventSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 showViewError(error);
             }
-        });
+        }, localeInStringFormat);
     }
 
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
@@ -105,6 +112,7 @@ public class EventsListPresenter implements Presenter {
 
     public void search(String queryText) {
         eventsListView.hideKeyboard();
+        String localeInStringFormat = getLocale().toString();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
@@ -113,7 +121,7 @@ public class EventsListPresenter implements Presenter {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
-        });
+        }, localeInStringFormat);
     }
 
     public void eventCreated(String eventId, String eventTitle) {
@@ -175,6 +183,10 @@ public class EventsListPresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public Locale getLocale() {
+        return eventsListView.getLocale();
     }
     //endregion
 }

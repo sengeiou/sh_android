@@ -141,6 +141,7 @@ public class SQLiteUtils {
             + DatabaseContract.EventTable.TITLE +" VARCHAR(255) NOT NULL,"
             + DatabaseContract.EventTable.PHOTO +" TEXT NULL,"
             + DatabaseContract.EventTable.TIMEZONE +" TEXT NOT NULL,"
+            + DatabaseContract.EventTable.LOCALE +" TEXT NULL,"
             + DatabaseContract.EventTable.TAG +" TEXT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"

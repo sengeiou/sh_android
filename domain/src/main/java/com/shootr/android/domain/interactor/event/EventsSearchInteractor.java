@@ -30,6 +30,8 @@ public class EventsSearchInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
+    private String locale;
+
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
       @Remote EventSearchRepository eventSearchRepository, @Local EventRepository localEventRepository,
       PostExecutionThread postExecutionThread) {
@@ -40,10 +42,11 @@ public class EventsSearchInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void searchEvents(String query, Callback callback, ErrorCallback errorCallback) {
+    public void searchEvents(String query, Callback callback, ErrorCallback errorCallback, String locale) {
         this.query = query;
         this.callback = callback;
         this.errorCallback = errorCallback;
+        this.locale = locale;
         interactorHandler.execute(this);
     }
 
@@ -67,7 +70,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void performSearch() {
-        List<EventSearchResult> events = eventSearchRepository.getEvents(query);
+        List<EventSearchResult> events = eventSearchRepository.getEvents(query, locale);
         events = filterEventsNotMatchingQuery(events);
 
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);

@@ -74,11 +74,13 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENT_BY_ID_EVENT, op);
     }
 
-    public GenericDto getSearchEventDto(String query, Map<String, Integer> eventsWatchesCounts) {
+    public GenericDto getSearchEventDto(String query, Map<String, Integer> eventsWatchesCounts,
+                                        String locale) {
         MetadataDto md = new MetadataDto.Builder().items(50)
           .operation(Constants.OPERATION_RETRIEVE)
           .entity("SearchEventMongo")
-          .putKey("pattern", query)
+                .putKey("pattern", query)
+                .putKey("locale", locale)
           .build();
 
         OperationDto.Builder operationBuilder = new OperationDto.Builder();

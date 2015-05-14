@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -66,7 +68,7 @@ public class EventsListPresenterTest {
     @Test public void shouldLoadEventListOnInitialized() throws Exception {
         presenter.initialize(eventsListView);
 
-        verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback(), anyString());
     }
 
     @Test public void shouldSelectEventWithInteractorWhenEventSelected() throws Exception {
@@ -125,7 +127,7 @@ public class EventsListPresenterTest {
         presenter.initialize(eventsListView);
         presenter.resume();
 
-        verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback(), anyString());
     }
 
     @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
@@ -133,7 +135,7 @@ public class EventsListPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback(), anyString());
     }
 
     @Test public void shouldSetCurrentVisibleEventInViewWhenEventSelected() throws Exception {
@@ -172,7 +174,7 @@ public class EventsListPresenterTest {
                 callback.onLoaded(new EventSearchResultList(result));
                 return null;
             }
-        }).when(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
+        }).when(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback(),anyString());
     }
 
     private EventSearchResult eventResult() {

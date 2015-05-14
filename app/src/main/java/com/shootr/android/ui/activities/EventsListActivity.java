@@ -29,6 +29,8 @@ import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -188,6 +190,11 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
 
     @Override public void navigateToEventTimeline(String idEvent, String title) {
         startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
+    }
+
+    @Override
+    public Locale getLocale() {
+        return getResources().getConfiguration().locale;
     }
 
     @Override public void showEmpty() {

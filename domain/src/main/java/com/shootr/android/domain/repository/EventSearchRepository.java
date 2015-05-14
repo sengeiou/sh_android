@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface EventSearchRepository {
 
-    List<EventSearchResult> getDefaultEvents();
+    List<EventSearchResult> getDefaultEvents(String locale);
 
-    List<EventSearchResult> getEvents(String query);
+    List<EventSearchResult> getEvents(String query, String locale);
 
     void putDefaultEvents(List<EventSearchResult> eventSearchResults);
 

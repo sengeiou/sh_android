@@ -162,9 +162,10 @@ public class EventManager extends AbstractManager{
         try{
             database.beginTransaction();
             for (EventSearchEntity eventSearchEntity : eventSearchEntities) {
-                database.insert(DatabaseContract.EventSearchTable.TABLE,
-                  null,
-                  eventEntityMapper.toSearchContentValues(eventSearchEntity));
+                database.insertWithOnConflict(DatabaseContract.EventSearchTable.TABLE,
+                        null,
+                        eventEntityMapper.toSearchContentValues(eventSearchEntity),
+                        SQLiteDatabase.CONFLICT_REPLACE);
             }
             database.setTransactionSuccessful();
         }finally {

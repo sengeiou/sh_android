@@ -33,6 +33,8 @@ public class EventsListInteractor implements Interactor {
     private Callback<EventSearchResultList> callback;
     private ErrorCallback errorCallback;
 
+    private String locale;
+
     @Inject public EventsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote EventSearchRepository remoteEventSearchRepository,
       @Local EventSearchRepository localEventSearchRepository, EventListSynchronizationRepository eventListSynchronizationRepository,
@@ -47,14 +49,15 @@ public class EventsListInteractor implements Interactor {
         this.timeUtils = timeUtils;
     }
 
-    public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback) {
+    public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback, String locale) {
         this.callback = callback;
         this.errorCallback = errorCallback;
+        this.locale = locale;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents();
+        List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents(locale);
         notifyLoaded(localEvents);
 
         Long currentTime = timeUtils.getCurrentTime();
@@ -69,7 +72,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     protected void refreshEvents() {
-        List<EventSearchResult> remoteEvents = remoteEventSearchRepository.getDefaultEvents();
+        List<EventSearchResult> remoteEvents = remoteEventSearchRepository.getDefaultEvents(locale);
         notifyLoaded(remoteEvents);
         localEventSearchRepository.deleteDefaultEvents();
         localEventSearchRepository.putDefaultEvents(remoteEvents);
