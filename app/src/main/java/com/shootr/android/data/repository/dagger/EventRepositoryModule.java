@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.MemoryEventListSynchronizationRepository;
 import com.shootr.android.data.repository.datasource.event.DatabaseEventDataSource;
-import com.shootr.android.data.repository.datasource.event.DatabaseEventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceEventDataSource;
@@ -64,7 +64,7 @@ public class EventRepositoryModule {
     }
 
     @Provides @Local EventSearchDataSource provideLocalEventSearchDataSource(
-      DatabaseEventSearchDataSource serviceEventSearchDataSource) {
+      DatabaseMemoryEventSearchDataSource serviceEventSearchDataSource) {
         return serviceEventSearchDataSource;
     }
 

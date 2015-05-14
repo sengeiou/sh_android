@@ -33,7 +33,9 @@ public class LocalEventRepository implements EventRepository {
 
     private EventEntity fallbackOnSearchResults(String idEvent) {
         EventEntity eventEntity = localEventSearchDataSource.getEventResult(idEvent);
-        localEventDataSource.putEvent(eventEntity);
+        if (eventEntity != null) {
+            localEventDataSource.putEvent(eventEntity);
+        }
         return eventEntity;
     }
 
