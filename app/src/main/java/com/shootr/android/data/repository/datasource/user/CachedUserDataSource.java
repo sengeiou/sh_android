@@ -98,18 +98,8 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         throw new RuntimeException("Can't use cache for synchronization manipulation");
     }
 
+    @Override
     public UserEntity getUserByUsername(String username){
-        UserEntity cachedUser = null;
-        if (isValid()) {
-            cachedUser = localUserDataSource.getUserByUsername(username);
-        }
-        if (cachedUser != null) {
-            return cachedUser;
-        } else {
-            UserEntity remoteUser = remoteUserDataSource.getUserByUsername(username);
-            localUserDataSource.putUser(remoteUser);
-            this.resetCachedUpdateTime();
-            return remoteUser;
-        }
+        throw new RuntimeException("Username filtering is not cached");
     }
 }
