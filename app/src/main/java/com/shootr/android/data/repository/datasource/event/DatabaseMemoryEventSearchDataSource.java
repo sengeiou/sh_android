@@ -2,7 +2,12 @@ package com.shootr.android.data.repository.datasource.event;
 
 import android.support.v4.util.ArrayMap;
 import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.EventManager;
+import com.shootr.android.db.manager.FollowManager;
+import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.domain.repository.SessionRepository;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -13,9 +18,18 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
 
     private final EventManager eventManager;
     private final Map<String, EventSearchEntity> lastEventSearchResults;
+    private final SessionRepository sessionRepository;
+    private final FollowManager followManager;
+    private final UserManager userManager;
 
-    @Inject public DatabaseMemoryEventSearchDataSource(EventManager eventManager) {
+    @Inject public DatabaseMemoryEventSearchDataSource(EventManager eventManager,
+                                                       SessionRepository sessionRepository,
+                                                       FollowManager followManager,
+                                                       UserManager userManager) {
         this.eventManager = eventManager;
+        this.sessionRepository = sessionRepository;
+        this.followManager = followManager;
+        this.userManager = userManager;
         lastEventSearchResults = new ArrayMap<>();
     }
 
@@ -27,7 +41,23 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
     }
 
     @Override public List<EventSearchEntity> getDefaultEvents(String locale) {
-        return eventManager.getDefaultEventSearch();
+        Map<String, Integer> watchersCountByEvents = getWatchersCountByEvents();
+        List<EventSearchEntity> defaultEventSearch = eventManager.getDefaultEventSearch();
+        List<EventSearchEntity> eventSearchEntitiesWithUpdatedWatchNumber =
+          updateWatchNumberInEvents(watchersCountByEvents, defaultEventSearch);
+        return eventSearchEntitiesWithUpdatedWatchNumber;
+    }
+
+    private List<EventSearchEntity> updateWatchNumberInEvents(Map<String, Integer> watchersCountByEvents,
+      List<EventSearchEntity> defaultEventSearch) {
+        for (String eventID : watchersCountByEvents.keySet()) {
+            for (EventSearchEntity eventSearchEntity : defaultEventSearch) {
+                if (eventSearchEntity.getIdEvent().equals(eventID)) {
+                    eventSearchEntity.setWatchers(watchersCountByEvents.get(eventID));
+                }
+            }
+        }
+        return defaultEventSearch;
     }
 
     @Override public List<EventSearchEntity> getEvents(String query, String locale) {
@@ -50,5 +80,25 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
             EventSearchEntity eventFromLastSearchResults = lastEventSearchResults.get(idEvent);
             return eventFromLastSearchResults;
         }
+    }
+
+    private Map<String, Integer> getWatchersCountByEvents()  {
+        String currentUserId = sessionRepository.getCurrentUserId();
+
+        List<String> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
+        followingAndCurrentUserIds.add(currentUserId);
+
+        List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingAndCurrentUserIds);
+
+        Map<String, Integer> eventsWatchesCounts = new HashMap<>();
+        for (UserEntity watcher : watchers) {
+            Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
+            if (currentCount != null) {
+                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), currentCount + 1);
+            } else {
+                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), 1);
+            }
+        }
+        return eventsWatchesCounts;
     }
 }

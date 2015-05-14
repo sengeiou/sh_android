@@ -13,6 +13,8 @@ import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 public class EventManager extends AbstractManager{
