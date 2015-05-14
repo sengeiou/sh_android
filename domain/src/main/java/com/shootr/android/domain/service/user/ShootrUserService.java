@@ -34,25 +34,23 @@ public class ShootrUserService {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void checkInCurrentEvent() {
+    public void checkInEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        if (currentUser.isCheckedIn()) {
-            throw new InvalidCheckinException("Can't perform checkin if already checked-in");
-        }
-        String visibleEventId = currentUser.getVisibleEventId();
-        if (visibleEventId == null) {
-            throw new InvalidCheckinException("Can't perform checkin without visible event");
+        if (isCheckedInEvent(currentUser, idEvent)) {
+            throw new InvalidCheckinException(String.format(
+              "Can't perform checkin in event with id %s because user is already checked-in in it",
+              idEvent));
         }
 
         try {
-            String idUser = currentUser.getIdUser();
-            checkinGateway.performCheckin(idUser, visibleEventId);
+            checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
 
-        currentUser.setCheckedIn(true);
+        currentUser.setIdCheckedEvent(idEvent);
         localUserRepository.putUser(currentUser);
+        sessionRepository.setCurrentUser(currentUser);
     }
 
     public void createAccount(String username, String email, String password) {
@@ -68,14 +66,34 @@ public class ShootrUserService {
         try {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
             storeSession(loginResult);
-            String visibleEventId = loginResult.getUser().getVisibleEventId();
-            if(visibleEventId != null && visibleEventId != "null"){
+            String visibleEventId = loginResult.getUser().getIdWatchingEvent();
+            if (visibleEventId != null) {
                 remoteEventRepository.getEventById(visibleEventId);
             }
             remoteUserRepository.getPeople();
         } catch (IOException e) {
             throw new LoginException(e);
         }
+    }
+
+    public void checkOutFromEvent(String idEvent) {
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
+        String idCheckedEvent = currentUser.getIdCheckedEvent();
+        if (!idEvent.equals(idCheckedEvent)) {
+            throw new InvalidCheckinException(String.format(
+              "Can't perform check-out from event with id %s because user is not checked-in it",
+              idEvent));
+        }
+
+        try {
+            checkinGateway.performCheckout(currentUser.getIdUser(), idEvent);
+        } catch (IOException e) {
+            throw new InvalidCheckinException(e);
+        }
+
+        currentUser.setIdCheckedEvent(null);
+        localUserRepository.putUser(currentUser);
+        sessionRepository.setCurrentUser(currentUser);
     }
 
     private void storeSession(LoginResult loginResult) {
@@ -86,4 +104,7 @@ public class ShootrUserService {
         localUserRepository.putUser(loginResult.getUser());
     }
 
+    private boolean isCheckedInEvent(User user, String idEvent) {
+        return user.getIdCheckedEvent() != null && user.getIdCheckedEvent().equals(idEvent);
+    }
 }

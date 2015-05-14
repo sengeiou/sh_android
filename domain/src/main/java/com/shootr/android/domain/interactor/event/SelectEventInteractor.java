@@ -12,8 +12,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
@@ -57,7 +55,7 @@ public class SelectEventInteractor implements Interactor {
             throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
         }
 
-        if (isSelectingCurrentVisibleEvent(currentUser)) {
+        if (isSelectingCurrentWatchingEvent(currentUser)) {
             notifyLoaded(selectedEvent);
         } else {
             User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
@@ -72,16 +70,16 @@ public class SelectEventInteractor implements Interactor {
     }
 
     private void deleteCheckin(User updatedUser) {
-        updatedUser.setCheckedIn(false);
+        updatedUser.setIdCheckedEvent(null);
     }
 
-    private boolean isSelectingCurrentVisibleEvent(User currentUser) {
-        return idSelectedEvent.equals(currentUser.getVisibleEventId());
+    private boolean isSelectingCurrentWatchingEvent(User currentUser) {
+        return idSelectedEvent.equals(currentUser.getIdWatchingEvent());
     }
 
     protected User updateUserWithEventInfo(User currentUser, Event selectedEvent) {
-        currentUser.setVisibleEventId(selectedEvent.getId());
-        currentUser.setVisibleEventTitle(selectedEvent.getTitle());
+        currentUser.setIdWatchingEvent(selectedEvent.getId());
+        currentUser.setWatchingEventTitle(selectedEvent.getTitle());
         currentUser.setJoinEventDate(getCurrentTime());
         return currentUser;
     }

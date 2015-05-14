@@ -99,7 +99,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     }
 
     private Event getVisibleEvent() {
-        String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
+        String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {
             return localEventRepository.getEventById(visibleEventId);
         }

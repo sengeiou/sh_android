@@ -6,6 +6,7 @@ import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
@@ -21,7 +22,6 @@ import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
@@ -37,8 +37,10 @@ public class UserDtoFactory {
 
     private static final String ENTITY_LOGIN = "LoginMongo";
     private static final String ENTITY_CHECKIN = "CheckInMongo";
+    private static final String ENTITY_CHECKOUT = "CheckOutMongo";
     private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_CHECKIN = "CHECKIN";
+    private static final String ALIAS_CHECKOUT = "CHECKOUT";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
@@ -65,8 +67,8 @@ public class UserDtoFactory {
 
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
-          .putKey(UserTable.ID, idUser)
-          .putKey(UserTable.EVENT_ID, idEvent)
+          .putKey(DatabaseContract.CheckInMongo.ID, idUser)
+          .putKey(DatabaseContract.CheckInMongo.ID_CHECKED_EVENT, idEvent)
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .build();
 
@@ -281,5 +283,17 @@ public class UserDtoFactory {
         OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
+    }
+
+    public GenericDto getCheckoutOperationDto(String idUser, String checkedEventID) {
+        MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKOUT)
+                .putKey(DatabaseContract.CheckOutMongo.ID, idUser)
+                .putKey(DatabaseContract.CheckOutMongo.ID_CHECKED_EVENT, checkedEventID)
+                .operation(ServiceConstants.OPERATION_RETRIEVE)
+                .build();
+
+        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).setData(null).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CHECKOUT, operationDto);
     }
 }

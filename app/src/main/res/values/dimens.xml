@@ -37,5 +37,6 @@
     <dimen name="event_result_picture_size">72dp</dimen>
     <dimen name="event_header_elevation">4dp</dimen>
     <dimen name="navdrawer_profile_avatar_size">64dp</dimen>
+    <dimen name="checkin_bar_height">56dp</dimen>
 
 </resources>

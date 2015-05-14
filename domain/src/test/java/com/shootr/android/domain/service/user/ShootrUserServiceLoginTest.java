@@ -14,64 +14,33 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ShootrUserServiceTest {
+public class ShootrUserServiceLoginTest {
 
-    private static final String CURRENT_USER_ID = "1L";
-    private static final String VISIBLE_EVENT_ID = "2L";
-    public static final String NO_VISIBLE_EVENT = null;
+    private static final String CURRENT_USER_ID = "user_id";
+    private static final String VISIBLE_EVENT_ID = "eventd_id";
     private static final String USERNAME_OR_EMAIL_STUB = "username_or_email";
-    private static final String PASSWORD_STUB = "password";
+    private static final String SESSION_TOKEN_STUB = "sessionToken";
 
-    private ShootrUserService shootrUserService;
+    private static final String PASSWORD_STUB = "password";
     @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock CheckinGateway checkinGateway;
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock EventRepository remoteEventRepository;
+
     @Mock UserRepository remoteUserRepository;
-    public static final String SESSION_TOKEN_STUB = "sessionToken";
+    private ShootrUserService shootrUserService;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
           createAccountGateway, loginGateway, remoteEventRepository, remoteUserRepository);
-    }
-
-    @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedIn() throws Exception {
-        setupCurrentUserCheckedIn();
-        shootrUserService.checkInCurrentEvent();
-    }
-
-    @Test(expected = InvalidCheckinException.class) public void shouldFailIfNoVisibleEvent() throws Exception {
-        setupCurrentUserWithoutVisibleEvent();
-
-        shootrUserService.checkInCurrentEvent();
-    }
-
-    @Test public void shouldCallGatewayWithCurrentUserIdAndEvent() throws Exception {
-        setupCurrentUserNotCheckedIn();
-
-        shootrUserService.checkInCurrentEvent();
-
-        verify(checkinGateway).performCheckin(CURRENT_USER_ID, VISIBLE_EVENT_ID);
-    }
-
-    @Test public void shouldStoreCurrentUserInLocalCheckedIn() throws Exception {
-        setupCurrentUserNotCheckedIn();
-
-        shootrUserService.checkInCurrentEvent();
-
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(localUserRepository).putUser(userCaptor.capture());
-        User userStoredInLocal = userCaptor.getValue();
-        assertThat(userStoredInLocal.isCheckedIn()).isTrue();
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws IOException {
@@ -121,7 +90,7 @@ public class ShootrUserServiceTest {
 
     private LoginResult loginResultWithEvent() {
         User user = currentUser();
-        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -129,29 +98,10 @@ public class ShootrUserServiceTest {
         return new LoginResult(currentUser(), SESSION_TOKEN_STUB);
     }
 
-    private void setupCurrentUserWithoutVisibleEvent() {
-        User currentUser = currentUser();
-        currentUser.setCheckedIn(false);
-        currentUser.setVisibleEventId(NO_VISIBLE_EVENT);
-        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
-    }
-
-    private void setupCurrentUserNotCheckedIn() {
-        User currentUser = currentUser();
-        currentUser.setCheckedIn(false);
-        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
-    }
-
-    private void setupCurrentUserCheckedIn() {
-        User currentUser = currentUser();
-        currentUser.setCheckedIn(true);
-        when(localUserRepository.getUserById(anyString())).thenReturn(currentUser);
-    }
-
     private User currentUser() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
-        user.setVisibleEventId(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
         return user;
     }
 }

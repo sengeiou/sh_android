@@ -12,7 +12,6 @@ import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
@@ -26,7 +25,7 @@ public class EventsListInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final EventSearchRepository remoteEventSearchRepository;
     private final EventSearchRepository localEventSearchRepository;
-    private final EventListSynchronizationRepository timelineSynchronizationRepository;
+    private final EventListSynchronizationRepository eventListSynchronizationRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
@@ -42,7 +41,7 @@ public class EventsListInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
         this.remoteEventSearchRepository = remoteEventSearchRepository;
         this.localEventSearchRepository = localEventSearchRepository;
-        this.timelineSynchronizationRepository = eventListSynchronizationRepository;
+        this.eventListSynchronizationRepository = eventListSynchronizationRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.timeUtils = timeUtils;
@@ -62,7 +61,7 @@ public class EventsListInteractor implements Interactor {
         if (localEvents.isEmpty() || minimumRefreshTimePassed(currentTime)) {
             try {
                 refreshEvents();
-                timelineSynchronizationRepository.setEventsRefreshDate(currentTime);
+                eventListSynchronizationRepository.setEventsRefreshDate(currentTime);
             } catch (ShootrException error) {
                 notifyError(error);
             }
@@ -77,14 +76,14 @@ public class EventsListInteractor implements Interactor {
     }
 
     private boolean minimumRefreshTimePassed(Long currentTime) {
-        Long eventsLastRefreshDate = timelineSynchronizationRepository.getEventsRefreshDate();
+        Long eventsLastRefreshDate = eventListSynchronizationRepository.getEventsRefreshDate();
         Long minimumTimeToRefresh = eventsLastRefreshDate + REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS;
         return minimumTimeToRefresh < currentTime;
     }
 
     //region Result
     private void notifyLoaded(final List<EventSearchResult> results) {
-        final EventSearchResultList searchResultList = new EventSearchResultList(results, getVisibleEventId());
+        final EventSearchResultList searchResultList = new EventSearchResultList(results, getCheckedEventId());
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(searchResultList);
@@ -92,9 +91,9 @@ public class EventsListInteractor implements Interactor {
         });
     }
 
-    private String getVisibleEventId() {
+    private String getCheckedEventId() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        return currentUser.getVisibleEventId();
+        return currentUser.getIdCheckedEvent();
     }
 
     private void notifyError(final ShootrException error) {

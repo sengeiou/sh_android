@@ -1,6 +1,5 @@
 package com.shootr.android.domain;
 
-import java.io.StringBufferInputStream;
 import java.util.Comparator;
 
 public class User {
@@ -17,9 +16,9 @@ public class User {
     private Long points;
     private Long joinEventDate;
 
-    private String visibleEventId;
-    private String visibleEventTitle;
-    private Boolean checkedIn;
+    private String idWatchingEvent;
+    private String watchingEventTitle;
+    private String idCheckedEvent;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -146,36 +145,36 @@ public class User {
         this.email = email;
     }
 
-    public String getVisibleEventId() {
-        return visibleEventId;
+    public String getIdWatchingEvent() {
+        return idWatchingEvent;
     }
 
-    public void setVisibleEventId(String visibleEventId) {
-        this.visibleEventId = visibleEventId;
+    public void setIdWatchingEvent(String idWatchingEvent) {
+        this.idWatchingEvent = idWatchingEvent;
     }
 
-    public String getVisibleEventTitle() {
-        return visibleEventTitle;
+    public String getWatchingEventTitle() {
+        return watchingEventTitle;
     }
 
-    public void setVisibleEventTitle(String visibleEventTitle) {
-        this.visibleEventTitle = visibleEventTitle;
+    public void setWatchingEventTitle(String watchingEventTitle) {
+        this.watchingEventTitle = watchingEventTitle;
     }
 
     @Override public String toString() {
         return "User{" +
           "idUser=" + idUser +
           ", username='" + username + '\'' +
-          ", visibleEventId=" + visibleEventId +
+          ", idWatchingEvent=" + idWatchingEvent +
           '}';
     }
 
-    public Boolean isCheckedIn() {
-        return checkedIn;
+    public String getIdCheckedEvent() {
+        return idCheckedEvent;
     }
 
-    public void setCheckedIn(Boolean checkedIn) {
-        this.checkedIn = checkedIn;
+    public void setIdCheckedEvent(String idCheckedEvent) {
+        this.idCheckedEvent = idCheckedEvent;
     }
 
     public Long getJoinEventDate() {

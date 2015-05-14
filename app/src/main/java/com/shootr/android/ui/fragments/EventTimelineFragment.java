@@ -33,9 +33,11 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
+import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
@@ -43,6 +45,7 @@ import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.ui.widgets.CheckinBar;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -52,7 +55,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EventTimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, WatchNumberView{
+  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView {
 
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
@@ -61,6 +64,7 @@ public class EventTimelineFragment extends BaseFragment
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
+    @Inject CheckinPresenter checkinPresenter;
 
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
@@ -70,6 +74,8 @@ public class EventTimelineFragment extends BaseFragment
 
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.shot_bar_drafts) View draftsButton;
+
+    @InjectView(R.id.checkin_container) CheckinBar checkinBar;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -122,8 +128,9 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        String idEvent = getArguments().getString(EXTRA_EVENT_ID);
         initializeToolbar();
-        initializePresenters();
+        initializePresenters(idEvent);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -159,6 +166,7 @@ public class EventTimelineFragment extends BaseFragment
         timelinePresenter.resume();
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
+        checkinPresenter.resume();
     }
 
     @Override public void onPause() {
@@ -166,6 +174,7 @@ public class EventTimelineFragment extends BaseFragment
         timelinePresenter.pause();
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
+        checkinPresenter.pause();
     }
 
     private void initializeToolbar() {
@@ -177,15 +186,17 @@ public class EventTimelineFragment extends BaseFragment
         }
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                //TODO go to top?
+                checkinPresenter.toolbarClick();
             }
         });
     }
 
-    private void initializePresenters() {
+
+    private void initializePresenters(String idEvent) {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this);
+        checkinPresenter.initialize(this, idEvent);
     }
 
     //endregion
@@ -324,6 +335,11 @@ public class EventTimelineFragment extends BaseFragment
     }
     //endregion
 
+    @OnClick(R.id.checkin_container)
+    public void onCheckinClick() {
+        checkinPresenter.checkinClick();
+    }
+
     @OnItemClick(R.id.timeline_shot_list)
     public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
@@ -438,6 +454,40 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void hideWatchingPeopleCount() {
         watchNumberCount = null;
         updateWatchNumberIcon();
+    }
+
+    @Override public void showCheckinButton() {
+        checkinBar.expand();
+    }
+
+    @Override public void hideCheckinButton() {
+        checkinBar.collapse();
+    }
+
+    @Override public void showCheckinLoading() {
+        checkinBar.showLoading(true);
+        checkinBar.setClickable(false);
+    }
+
+    @Override public void hideCheckinLoading() {
+        checkinBar.showLoading(false);
+        checkinBar.setClickable(true);
+    }
+
+    @Override public void showCheckedIn() {
+        toolbarDecorator.setSubtitle(R.string.checked_in);
+    }
+
+    @Override public void hideCheckedIn() {
+        toolbarDecorator.hideSubtitle();
+    }
+
+    @Override public void showTextCheckOut() {
+        checkinBar.setText(getString(R.string.check_out_action));
+    }
+
+    @Override public void showTextCheckIn() {
+        checkinBar.setText(getString(R.string.check_in_action));
     }
     //endregion
 }

@@ -5,10 +5,10 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.service.user.ShootrUserService;
+
 import javax.inject.Inject;
 
-public class PerformCheckinInteractor implements Interactor {
-
+public class PerformCheckoutInteractor implements Interactor{
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrUserService shootrUserService;
@@ -18,14 +18,14 @@ public class PerformCheckinInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public PerformCheckinInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShootrUserService shootrUserService) {
+    public PerformCheckoutInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+                                    ShootrUserService shootrUserService) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
     }
 
-    public void performCheckin(String idEvent, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void performCheckout(String idEvent, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
@@ -34,7 +34,7 @@ public class PerformCheckinInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         try {
-            shootrUserService.checkInEvent(idEvent);
+            shootrUserService.checkOutFromEvent(idEvent);
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);

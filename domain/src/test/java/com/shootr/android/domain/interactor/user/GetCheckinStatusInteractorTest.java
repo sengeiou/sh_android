@@ -15,17 +15,21 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class GetCheckinStatusInteractorTest {
 
-    private GetCheckinStatusInteractor interactor;
+    private static final String ANY_EVENT_ID = "eventId";
+    private static final String NOT_CHECKEDIN_EVENT_ID = "not_checked_in_id";
+    private static final String CHECKEDIN_EVENT_ID = "checked_in_id";
 
+    private GetCheckinStatusInteractor interactor;
     @Mock SessionRepository sessionRepository;
     @Mock UserRepository localUserRepository;
-    @Spy SpyCallback spyCallback = new SpyCallback();
+
+    @Spy
+    SpyCallback spyCallback = new SpyCallback();
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -36,30 +40,45 @@ public class GetCheckinStatusInteractorTest {
           sessionRepository);
     }
 
-    @Test public void shouldCallbackFalseWhenCheckinInUserIsFalse() throws Exception {
+    @Test public void shouldCallbackFalseWhenCheckinEventIsNull() throws Exception {
         when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithoutCheckin());
 
-        interactor.loadCheckinStatus(spyCallback);
+        interactor.loadCheckinStatus(ANY_EVENT_ID, spyCallback);
 
         assertThat(spyCallback.result).isFalse();
     }
-    @Test public void shouldCallbackTrueWhenCheckinInUserIsTrue() throws Exception {
-        when(localUserRepository.getUserById(anyString())).thenReturn(currentUserWithCheckin());
 
-        interactor.loadCheckinStatus(spyCallback);
+    @Test public void shouldCallbackFalseWhenCheckinEventIsDifferent() throws Exception {
+        User user = currentUserWithCheckin();
+        user.setIdCheckedEvent(NOT_CHECKEDIN_EVENT_ID);
+        when(localUserRepository.getUserById(anyString())).thenReturn(user);
+
+        interactor.loadCheckinStatus(ANY_EVENT_ID, spyCallback);
+
+        assertThat(spyCallback.result).isFalse();
+    }
+
+    @Test public void shouldCallbackTrueWhenCheckinEventIsTheSame() throws Exception {
+        User user = currentUserWithCheckin();
+        user.setIdCheckedEvent(CHECKEDIN_EVENT_ID);
+        when(localUserRepository.getUserById(anyString())).thenReturn(user);
+
+        interactor.loadCheckinStatus(CHECKEDIN_EVENT_ID, spyCallback);
 
         assertThat(spyCallback.result).isTrue();
     }
 
     private User currentUserWithCheckin() {
         User user = new User();
-        user.setCheckedIn(true);
+        user.setIdWatchingEvent(ANY_EVENT_ID);
+        user.setIdCheckedEvent(ANY_EVENT_ID);
         return user;
     }
 
     private User currentUserWithoutCheckin() {
         User user = new User();
-        user.setCheckedIn(false);
+        user.setIdWatchingEvent(ANY_EVENT_ID);
+        user.setIdCheckedEvent(null);
         return user;
     }
 

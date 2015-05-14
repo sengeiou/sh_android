@@ -108,14 +108,14 @@ public class GetEventTimelineInteractorTest {
     private User currentUserNotWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setVisibleEventId(null);
+        user.setIdWatchingEvent(null);
         return user;
     }
 
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setVisibleEventId(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
         return user;
     }
 

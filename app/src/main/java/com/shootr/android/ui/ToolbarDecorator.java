@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
@@ -17,6 +18,8 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
+    private TextView subtitleText;
+    private ViewGroup titleContainer;
 
     public ToolbarDecorator(Context context) {
         this.context = context;
@@ -26,6 +29,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         View inflatedView = LayoutInflater.from(context).inflate(R.layout.action_bar_decor, originalRoot, true);
         toolbar = ((Toolbar) inflatedView.findViewById(R.id.toolbar_actionbar));
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
+        titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
+        setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
 
@@ -56,7 +62,20 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     }
 
     public void setTitleClickListener(View.OnClickListener clickListener) {
-        titleText.setOnClickListener(clickListener);
+        titleContainer.setOnClickListener(clickListener);
+    }
+
+    public void setSubtitle(@StringRes int subtitle) {
+        setSubtitle(context.getString(subtitle));
+    }
+
+    public void setSubtitle(String subtitle) {
+        if (subtitle == null) {
+            hideSubtitle();
+        } else {
+            subtitleText.setText(subtitle);
+            subtitleText.setVisibility(View.VISIBLE);
+        }
     }
 
     public Toolbar getToolbar() {
@@ -69,5 +88,15 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void hideTitle() {
         titleText.setVisibility(View.GONE);
+    }
+
+    public void hideSubtitle() {
+        subtitleText.setVisibility(View.GONE);
+    }
+
+    private void setupTitleContainerTransitions() {
+        LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
+        layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
     }
 }

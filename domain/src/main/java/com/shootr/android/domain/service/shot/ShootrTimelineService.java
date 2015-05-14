@@ -86,7 +86,7 @@ public class ShootrTimelineService {
     }
 
     private Event getVisibleEvent() {
-        String visibleEventId = sessionRepository.getCurrentUser().getVisibleEventId();
+        String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {
             return localEventRepository.getEventById(visibleEventId);
         }

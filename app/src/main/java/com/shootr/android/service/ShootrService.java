@@ -68,4 +68,6 @@ public interface ShootrService {
     void performCheckin(String idUser, String idEvent) throws IOException;
 
     void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
+
+    void performCheckout(String idUser, String watchingEventId) throws IOException;
 }

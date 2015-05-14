@@ -67,6 +67,10 @@
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">18sp</item>
     </style>
+    <style name="ActionBar.SubtitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/primary_disabled</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
     <style name="ActionBar.TitleText.Closable">
         <item name="android:textColor">@color/toolbar_closable</item>

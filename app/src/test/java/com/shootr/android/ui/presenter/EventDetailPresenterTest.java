@@ -34,34 +34,23 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class EventDetailPresenterTest {
 
-    private static final String EVENT_ID_STUB = "1L";
     private EventDetailPresenter presenter;
 
-    @Mock
-    Bus bus;
-    @Mock
-    VisibleEventInfoInteractor eventInfoInteractor;
-    @Mock
-    ChangeEventPhotoInteractor changeEventPhotoInteractor;
-    @Mock
-    GetCheckinStatusInteractor getCheckinStatusInteractor;
-    @Mock
-    PerformCheckinInteractor performCheckinInteractor;
+    @Mock Bus bus;
+    @Mock VisibleEventInfoInteractor eventInfoInteractor;
+    @Mock ChangeEventPhotoInteractor changeEventPhotoInteractor;
 
-    @Mock
-    ErrorMessageFactory errorMessageFactory;
-    @Mock
-    EventDetailView eventDetailView;
+    @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock EventDetailView eventDetailView;
 
-    @Mock
-    EventTimeFormatter timeFormatter;
+    @Mock EventTimeFormatter timeFormatter;
 
-    @Mock
-    SessionRepository sessionRepository;
+    @Mock SessionRepository sessionRepository;
 
     EventModelMapper eventModelMapper;
     UserModelMapper userModelMapper;
@@ -69,115 +58,19 @@ public class EventDetailPresenterTest {
     @Mock SharedPreferences sharedPreferences;
     @Mock WatchersTimeFormatter watchersTimeFormatter;
 
-    @Before
-    public void setUp() {
+    @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
         eventModelMapper = new EventModelMapper(new EventTimeFormatter(), sessionRepository);
-        userModelMapper= new UserModelMapper();
+        userModelMapper = new UserModelMapper();
 
-        presenter = new EventDetailPresenter(bus, eventInfoInteractor,
-          changeEventPhotoInteractor, getCheckinStatusInteractor, performCheckinInteractor,
-                eventModelMapper, userModelMapper, errorMessageFactory, watchersTimeFormatter);
+        presenter = new EventDetailPresenter(bus,
+          eventInfoInteractor,
+          changeEventPhotoInteractor,
+          eventModelMapper,
+          userModelMapper,
+          errorMessageFactory,
+          watchersTimeFormatter);
 
         presenter.setView(eventDetailView);
     }
-
-    @Test
-    public void shouldShowCheckinOnInitializedWhenUserWatchingEventAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserWatchingEventAndCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserWatching());
-        setupCheckinStatusCallbacks(true);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingEventAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    @Test
-    public void shouldNotShowCheckinOnInitializedWhenUserNotWatchingAndNotCheckedIn() {
-        setupEventInfoCallbacks(eventInfoWithUserNotWatching());
-        setupCheckinStatusCallbacks(false);
-
-        presenter.initialize(eventDetailView, EVENT_ID_STUB);
-
-        verify(eventDetailView, never()).showCheckin();
-    }
-
-    //region Setups and stubs
-    private void setupEventInfoCallbacks(final EventInfo eventInfo) {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                VisibleEventInfoInteractor.Callback callback = (VisibleEventInfoInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(eventInfo);
-                return null;
-            }
-        }).when(eventInfoInteractor).obtainEventInfo(anyString(), any(VisibleEventInfoInteractor.Callback.class));
-    }
-
-    private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
-                callback.onLoaded(isCheckedIn);
-                return null;
-            }
-        }).when(getCheckinStatusInteractor).loadCheckinStatus(any(GetCheckinStatusInteractor.Callback.class));
-    }
-
-    private EventInfo eventInfoWithUserNotWatching() {
-        EventInfo eventInfo = new EventInfo();
-        Event event = eventWithStartDate();
-        User user = userWithIdUser();
-        event.setAuthorId(user.getIdUser());
-        eventInfo.setEvent(event);
-        eventInfo.setWatchers(new ArrayList<User>());
-        eventInfo.setCurrentUserWatching(null);
-        return eventInfo;
-    }
-
-    private Event eventWithStartDate() {
-        Event event = new Event();
-        event.setStartDate(new Date());
-        return event;
-    }
-
-    private User userWithIdUser() {
-        User user = new User();
-        user.setIdUser("1L");
-        return user;
-    }
-
-    private EventInfo eventInfoWithUserWatching() {
-        EventInfo eventInfo = new EventInfo();
-        Event event = eventWithStartDate();
-        User user = userWithIdUser();
-        user.setJoinEventDate(0L);
-        event.setAuthorId(user.getIdUser());
-        eventInfo.setEvent(event);
-        eventInfo.setWatchers(new ArrayList<User>());
-        eventInfo.setCurrentUserWatching(user);
-        return eventInfo;
-    }
-//endregion
 }
