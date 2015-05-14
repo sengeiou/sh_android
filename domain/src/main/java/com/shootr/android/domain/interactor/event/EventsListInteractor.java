@@ -83,7 +83,7 @@ public class EventsListInteractor implements Interactor {
 
     //region Result
     private void notifyLoaded(final List<EventSearchResult> results) {
-        final EventSearchResultList searchResultList = new EventSearchResultList(results, getVisibleEventId());
+        final EventSearchResultList searchResultList = new EventSearchResultList(results, getCheckedEventId());
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(searchResultList);
@@ -91,9 +91,9 @@ public class EventsListInteractor implements Interactor {
         });
     }
 
-    private String getVisibleEventId() {
+    private String getCheckedEventId() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        return currentUser.getIdWatchingEvent();
+        return currentUser.getIdCheckedEvent();
     }
 
     private void notifyError(final ShootrException error) {
