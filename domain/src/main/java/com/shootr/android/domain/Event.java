@@ -13,7 +13,17 @@ public class Event {
     private String tag;
     private Date startDate;
 
+    private String locale;
+
     public Event() {
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public String getTitle() {

@@ -28,6 +28,7 @@ public class CreateEventInteractor implements Interactor {
     private String title;
     private long startDate;
     private String timezoneId;
+    private String locale;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -40,12 +41,14 @@ public class CreateEventInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepository;
     }
 
-    public void sendEvent(String idEvent, String title, long startDate, String timezoneId, boolean notifyCreation,
-      Callback callback, ErrorCallback errorCallback) {
+    public void sendEvent(String idEvent, String title, long startDate, String timezoneId,
+                          String locale, boolean notifyCreation, Callback callback,
+                          ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
         this.timezoneId = timezoneId;
+        this.locale = locale;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -79,6 +82,7 @@ public class CreateEventInteractor implements Interactor {
         event.setStartDate(new Date(startDate));
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
+        event.setLocale(locale);
         return event;
     }
 
@@ -183,7 +187,6 @@ public class CreateEventInteractor implements Interactor {
     }
 
     public interface Callback {
-
         void onLoaded(Event event);
     }
 }
