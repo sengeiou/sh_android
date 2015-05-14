@@ -72,6 +72,7 @@ public class CreateEventInteractor implements Interactor {
         Event event;
         if (isNewEvent()) {
             event = new Event();
+            event.setLocale(localeProvider.getLocale());
         } else {
             event = remoteEventRepository.getEventById(idEvent);
         }
@@ -82,7 +83,6 @@ public class CreateEventInteractor implements Interactor {
         event.setStartDate(new Date(startDate));
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
-        event.setLocale(localeProvider.getLocale());
         return event;
     }
 
