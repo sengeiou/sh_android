@@ -186,7 +186,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void userNotFoundNotification(){
-        Toast.makeText(getActivity(), "User not found", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_LONG).show();
     }
 
     private void openShotImage(int position) {
