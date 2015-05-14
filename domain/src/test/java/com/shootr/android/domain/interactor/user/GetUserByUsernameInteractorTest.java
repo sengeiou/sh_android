@@ -38,7 +38,6 @@ public class GetUserByUsernameInteractorTest {
 
     private String DUMMY_USERNAME = "dummy_user";
     private String DUMMY_USERNAME_ID = "dummy_user_id";
-    private String DUMMY_EXCEPTION_MESSAGE = "test";
 
     @Before
     public void setUp() throws Exception {

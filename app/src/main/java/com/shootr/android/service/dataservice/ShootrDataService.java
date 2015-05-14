@@ -517,8 +517,12 @@ public class ShootrDataService implements ShootrService {
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
         }else if (ops[0].getMetadata()!=null) {
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            return userMapper.fromDto(dataItem);
+            try{
+                Map<String, Object> dataItem = ops[0].getData()[0];
+                return userMapper.fromDto(dataItem);
+            }catch(ArrayIndexOutOfBoundsException e){
+                throw new ArrayIndexOutOfBoundsException();
+            }
         }
         return null;
     }

@@ -186,7 +186,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void userNotFoundNotification(){
-        Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
     }
 
     private void openShotImage(int position) {
@@ -398,16 +398,12 @@ public class ProfileFragment extends BaseFragment {
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
                 @Override
                 public void onLoaded(User userFromCallback) {
-                    if (userFromCallback != null) {
-                        loadProfileUsingUser(userFromCallback);
-                    } else {
-                        userNotFoundNotification();
-                    }
+                    loadProfileUsingUser(userFromCallback);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override
                 public void onError(ShootrException error) {
-                    Timber.e(error, "Error while searching user by username");
+                    userNotFoundNotification();
                 }
             });
         }
