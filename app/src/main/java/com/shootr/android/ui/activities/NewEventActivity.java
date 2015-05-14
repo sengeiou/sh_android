@@ -26,8 +26,6 @@ import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.TimePickerBuilder;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
-import java.util.Locale;
-
 import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
@@ -218,11 +216,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
               }
           })
           .create().show();
-    }
-
-    @Override
-    public Locale getLocale() {
-        return getResources().getConfiguration().locale;
     }
 
     @Override public void showLoading() {

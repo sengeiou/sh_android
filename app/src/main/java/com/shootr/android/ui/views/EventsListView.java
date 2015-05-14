@@ -18,6 +18,4 @@ public interface EventsListView extends LoadDataView {
     void hideKeyboard();
 
     void navigateToEventTimeline(String idEvent, String title);
-
-    Locale getLocale();
 }

@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.R;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -17,7 +16,6 @@ import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.TimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
@@ -194,25 +192,21 @@ public class NewEventPresenter implements Presenter {
     private void sendEvent(String preloadedEventId) {
         long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         String title = filterTitle(newEventView.getEventTitle());
-        Locale locale = getLocale();
-        String localeInStringFormat = locale.toString();
-        createEventInteractor.sendEvent(preloadedEventId, title, startTimestamp,
-                selectedTimeZone.getID(), localeInStringFormat, notifyCreation,
-                new CreateEventInteractor.Callback() {
-                    @Override
-                    public void onLoaded(Event event) {
-                        eventCreated(event);
-                    }
-                }, new Interactor.ErrorCallback() {
-                    @Override
-                    public void onError(ShootrException error) {
-                        eventCreationError(error);
-                    }
-                });
-    }
-
-    private Locale getLocale(){
-        return newEventView.getLocale();
+        createEventInteractor.sendEvent(preloadedEventId,
+          title,
+          startTimestamp,
+          selectedTimeZone.getID(),
+          notifyCreation,
+          new CreateEventInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  eventCreated(event);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventCreationError(error);
+              }
+          });
     }
 
     private int realTimezoneOffset(long date) {

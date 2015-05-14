@@ -10,8 +10,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -19,7 +17,6 @@ import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -34,7 +31,6 @@ public class EventsListPresenter implements Presenter {
 
     private EventsListView eventsListView;
     private boolean hasBeenPaused;
-    private Long locale;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
       EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
@@ -86,7 +82,6 @@ public class EventsListPresenter implements Presenter {
 
     protected void loadDefaultEventList() {
         eventsListView.showLoading();
-        String localeInStringFormat = getLocale().toString();
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
             @Override
             public void onLoaded(EventSearchResultList eventSearchResultList) {
@@ -97,7 +92,7 @@ public class EventsListPresenter implements Presenter {
             public void onError(ShootrException error) {
                 showViewError(error);
             }
-        }, localeInStringFormat);
+        });
     }
 
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
@@ -112,7 +107,6 @@ public class EventsListPresenter implements Presenter {
 
     public void search(String queryText) {
         eventsListView.hideKeyboard();
-        String localeInStringFormat = getLocale().toString();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
@@ -121,7 +115,7 @@ public class EventsListPresenter implements Presenter {
             @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
-        }, localeInStringFormat);
+        });
     }
 
     public void eventCreated(String eventId, String eventTitle) {
@@ -185,8 +179,5 @@ public class EventsListPresenter implements Presenter {
         hasBeenPaused = true;
     }
 
-    public Locale getLocale() {
-        return eventsListView.getLocale();
-    }
     //endregion
 }

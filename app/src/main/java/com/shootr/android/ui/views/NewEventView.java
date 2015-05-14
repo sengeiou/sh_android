@@ -29,6 +29,4 @@ public interface NewEventView extends DataTransferView{
     void navigateToPickTimezone(String currentTimezoneID);
 
     void showNotificationConfirmation();
-
-    Locale getLocale();
 }
