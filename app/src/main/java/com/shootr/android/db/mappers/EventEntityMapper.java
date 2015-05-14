@@ -26,6 +26,7 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.PHOTO, eventEntity.getPhoto());
         contentValues.put(DatabaseContract.EventTable.TIMEZONE, eventEntity.getTimezone());
         contentValues.put(DatabaseContract.EventTable.TAG, eventEntity.getTag());
+        contentValues.put(DatabaseContract.EventTable.LOCALE, eventEntity.getLocale());
         setSynchronizedtoContentValues(eventEntity,contentValues);
     }
 
@@ -39,19 +40,21 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setIdEvent(dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
           : ((String)(dto.get(DatabaseContract.EventTable.ID_EVENT))));
         eventEntity.setIdUser(dto.get(DatabaseContract.EventTable.ID_USER) == null ? null
-          : ((String)(dto.get(DatabaseContract.EventTable.ID_USER))));
+                : ((String) (dto.get(DatabaseContract.EventTable.ID_USER))));
         eventEntity.setTitle((String) dto.get(DatabaseContract.EventTable.TITLE) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.TITLE));
+                : (String) dto.get(DatabaseContract.EventTable.TITLE));
         eventEntity.setUserName((String) dto.get(DatabaseContract.EventTable.USERNAME) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.USERNAME));
+                : (String) dto.get(DatabaseContract.EventTable.USERNAME));
         eventEntity.setPhoto((String) dto.get(DatabaseContract.EventTable.PHOTO) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.PHOTO));
+                : (String) dto.get(DatabaseContract.EventTable.PHOTO));
         eventEntity.setTimezone((String) dto.get(DatabaseContract.EventTable.TIMEZONE) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.TIMEZONE));
+                : (String) dto.get(DatabaseContract.EventTable.TIMEZONE));
         eventEntity.setTag((String) dto.get(DatabaseContract.EventTable.TAG) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.TAG));
+                : (String) dto.get(DatabaseContract.EventTable.TAG));
         eventEntity.setBeginDate(dto.get(DatabaseContract.EventTable.BEGIN_DATE) == null ? null
-          : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
+                : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
+        eventEntity.setLocale(dto.get(DatabaseContract.EventTable.LOCALE) == null ? null
+                : (String) dto.get(DatabaseContract.EventTable.LOCALE));
         setSynchronizedfromDto(dto,eventEntity);
     }
 
@@ -65,6 +68,7 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         dto.put(DatabaseContract.EventTable.TIMEZONE, eventEntity == null ? null : eventEntity.getTimezone());
         dto.put(DatabaseContract.EventTable.TAG, eventEntity == null ? null : eventEntity.getTag());
+        dto.put(DatabaseContract.EventTable.LOCALE, eventEntity == null ? null : eventEntity.getLocale());
         dto.put(DatabaseContract.EventTable.NOTIFY_CREATION,
           eventEntity == null ? null : eventEntity.getNotifyCreation());
         setSynchronizedtoDto(eventEntity, dto);
@@ -86,6 +90,7 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setTimezone(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TIMEZONE)));
         eventEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TAG)));
         Long date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.BEGIN_DATE));
+        eventEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.EventTable.LOCALE)));
         eventEntity.setBeginDate(date != 0L ? new Date(date) : null);
         setSynchronizedfromCursor(c, eventEntity);
     }
