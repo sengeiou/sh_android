@@ -61,7 +61,11 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override
     public UserEntity getUserByUsername(String username) {
-        return service.getUserByUsername(username);
+        try {
+            return service.getUserByUsername(username);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {

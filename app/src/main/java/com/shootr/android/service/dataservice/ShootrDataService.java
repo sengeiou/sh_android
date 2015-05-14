@@ -504,23 +504,17 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserByUsername(String username) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUsername(username);
-        GenericDto responseDto = null;
-        try {
-            responseDto = postRequest(requestDto);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata()!=null) {
-            try{
-                Map<String, Object> dataItem = ops[0].getData()[0];
+        }else {
+            Map<String, Object>[] data = ops[0].getData();
+            if (data.length > 0) {
+                Map<String, Object> dataItem = data[0];
                 return userMapper.fromDto(dataItem);
-            }catch(ArrayIndexOutOfBoundsException e){
-                throw new ArrayIndexOutOfBoundsException();
             }
         }
         return null;
