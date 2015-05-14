@@ -32,7 +32,7 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
 
     @Override public List<EventSearchResult> getEvents(String query, String locale) {
         List<EventSearchEntity> eventSearchEntities = remoteEventSearchDataSource.getEvents(query, locale);
-        localEventSearchDataSource.putDefaultEvents(eventSearchEntities);
+        localEventSearchDataSource.setLastSearchResults(eventSearchEntities);
         return eventSearchEntityMapper.transformToDomain(eventSearchEntities);
     }
 
