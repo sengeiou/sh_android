@@ -66,8 +66,7 @@ public class CheckinBar extends FrameLayout {
         if (!isExpanded) {
             return;
         }
-        //startExpandCollapseAnimation(false);
-        setVisibility(GONE);
+        startExpandCollapseAnimation(false);
         isExpanded = false;
     }
 
@@ -75,8 +74,7 @@ public class CheckinBar extends FrameLayout {
         if (isExpanded) {
             return;
         }
-        setVisibility(VISIBLE);
-        //startExpandCollapseAnimation(true);
+        startExpandCollapseAnimation(true);
         isExpanded = true;
     }
 
