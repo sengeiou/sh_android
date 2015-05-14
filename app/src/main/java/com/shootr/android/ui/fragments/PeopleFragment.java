@@ -13,21 +13,24 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnItemClick;
+
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
-import com.shootr.android.ui.adapters.PeopleAdapter;
-import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.recyclerview.FriendsAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.util.PicassoWrapper;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class PeopleFragment extends BaseFragment implements PeopleView{
 
@@ -39,7 +42,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
 
     @InjectView(R.id.userlist_empty) TextView emptyTextView;
-    private UserListAdapter userListAdapter;
+    private FriendsAdapter peopleAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,11 +114,11 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
         emptyTextView.setText(R.string.following_list_empty);
     }
 
-    private UserListAdapter getPeopleAdapter() {
-        if (userListAdapter == null) {
-            userListAdapter = new PeopleAdapter(getActivity(), picasso);
+    private FriendsAdapter getPeopleAdapter() {
+        if (peopleAdapter == null) {
+            peopleAdapter = new FriendsAdapter(getActivity(), picasso);
         }
-        return userListAdapter;
+        return peopleAdapter;
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
