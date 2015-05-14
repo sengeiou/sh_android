@@ -16,12 +16,6 @@ import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.EventTimeFormatter;
 import com.squareup.otto.Bus;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,12 +24,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -44,6 +45,7 @@ public class EventsListPresenterTest {
     private static final String SELECTED_EVENT_ID = "selected_event";
     private static final String SELECTED_EVENT_TITLE = "title";
     private static final String EVENT_AUTHOR_ID = "author";
+    private final String LOCALE_STUB = "ES";
 
     @Mock Bus bus;
     @Mock EventsListInteractor eventsListInteractor;
@@ -66,6 +68,8 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldLoadEventListOnInitialized() throws Exception {
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
+
         presenter.initialize(eventsListView);
 
         verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback(), anyString());
@@ -102,6 +106,8 @@ public class EventsListPresenterTest {
     @Test public void shouldRenderEventListWhenEventListInteractorCallbacksResults() throws Exception {
         setupEventListInteractorCallbacks(Arrays.asList(eventResult(), eventResult()));
 
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
+
         presenter.loadDefaultEventList();
 
         verify(eventsListView).renderEvents(anyListOf(EventResultModel.class));
@@ -109,6 +115,8 @@ public class EventsListPresenterTest {
 
     @Test public void shouldHideLoadingWhenEventListInteractorCallbacksResults() throws Exception {
         setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
+
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
 
         presenter.loadDefaultEventList();
 
@@ -118,19 +126,26 @@ public class EventsListPresenterTest {
     @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {
         setupEventListInteractorCallbacks(new ArrayList<EventSearchResult>());
 
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
+
         presenter.loadDefaultEventList();
 
         verify(eventsListView).showLoading();
     }
 
     @Test public void shouldLoadEventListOnceWhenInitializedAndResumed() throws Exception {
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
+
         presenter.initialize(eventsListView);
+
         presenter.resume();
 
         verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback(), anyString());
     }
 
     @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
+        doReturn(new Locale(LOCALE_STUB)).when(eventsListView).getLocale();
+
         presenter.initialize(eventsListView);
         presenter.pause();
         presenter.resume();
