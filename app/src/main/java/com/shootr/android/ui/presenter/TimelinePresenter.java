@@ -153,7 +153,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Override public void resume() {
-        refresh();
+        loadNewShots();
         bus.register(this);
         startPollingShots();
     }
