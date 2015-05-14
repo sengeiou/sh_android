@@ -51,6 +51,9 @@ public class SelectEventInteractor implements Interactor {
     @Override public void execute() throws Throwable {
         User currentUser = sessionRepository.getCurrentUser();
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
+        if (selectedEvent == null) {
+            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
+        }
 
         if (isSelectingCurrentWatchingEvent(currentUser)) {
             notifyLoaded(selectedEvent);
