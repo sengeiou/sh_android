@@ -11,6 +11,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.Date;
@@ -23,32 +24,31 @@ public class CreateEventInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final EventRepository remoteEventRepository;
+    private final LocaleProvider localeProvider;
 
     private String idEvent;
     private String title;
     private long startDate;
     private String timezoneId;
-    private String locale;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository) {
+      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.remoteEventRepository = remoteEventRepository;
+        this.localeProvider = localeProvider;
     }
 
-    public void sendEvent(String idEvent, String title, long startDate, String timezoneId,
-                          String locale, boolean notifyCreation, Callback callback,
-                          ErrorCallback errorCallback) {
+    public void sendEvent(String idEvent, String title, long startDate, String timezoneId, boolean notifyCreation,
+      Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
         this.startDate = startDate;
         this.timezoneId = timezoneId;
-        this.locale = locale;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -82,7 +82,7 @@ public class CreateEventInteractor implements Interactor {
         event.setStartDate(new Date(startDate));
         event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
-        event.setLocale(locale);
+        event.setLocale(localeProvider.getLocale());
         return event;
     }
 

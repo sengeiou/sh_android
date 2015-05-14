@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -22,6 +23,7 @@ public class EventsSearchInteractorTest {
     @Mock EventRepository eventRepository;
     @Mock PostExecutionThread postExecutionThread;
     @Mock SessionRepository sessionRepository;
+    @Mock LocaleProvider localeProvider;
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +31,7 @@ public class EventsSearchInteractorTest {
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new EventsSearchInteractor(interactorHandler,
           sessionRepository,
-          eventSearchRepository, eventRepository, postExecutionThread);
+          eventSearchRepository, eventRepository, postExecutionThread, localeProvider);
     }
 
 }

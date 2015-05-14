@@ -16,6 +16,7 @@ import com.shootr.android.domain.repository.EventListSynchronizationRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
 
 import org.junit.Before;
@@ -32,6 +33,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -43,7 +45,6 @@ public class EventsListInteractorTest {
     private static final Long SECONDS_AGO_31 = NOW - (31L * 1000);
     private static final Long SECONDS_AGO_29 = NOW - (29L * 1000);
     private static final String ID_CURRENT_USER = "current_user";
-    private static final String LOCALE_STUB = "es_ES";
 
     @Mock EventSearchRepository remoteEventSearchRepository;
     @Mock EventSearchRepository localEventSearchRepository;
@@ -53,7 +54,7 @@ public class EventsListInteractorTest {
     @Mock TimeUtils timeUtils;
     @Spy SpyCallback<EventSearchResultList> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback dummyErrorCallback;
-
+    @Mock LocaleProvider localeProvider;
 
     private EventsListInteractor interactor;
 
@@ -69,16 +70,16 @@ public class EventsListInteractorTest {
           eventListSynchronizationRepository,
           sessionRepository,
           localUserRepository,
-          timeUtils);
+          timeUtils, localeProvider);
 
         when(timeUtils.getCurrentTime()).thenReturn(NOW);
         setupLocalRepositoryReturnsCurrentUser();
     }
 
     @Test public void shouldCallbackTwoEventResultsFirstWhenLocalRepositoryReturnsTwoEventResults() throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(spyCallback).onLoaded(any(EventSearchResultList.class));
         assertThat(spyCallback.firstResult().getEventSearchResults()).hasSize(2);
@@ -86,59 +87,59 @@ public class EventsListInteractorTest {
 
     @Test public void shouldLoadRemoteEventsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
       throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(SECONDS_AGO_31);
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(remoteEventSearchRepository).getDefaultEvents(LOCALE_STUB);
+        verify(remoteEventSearchRepository).getDefaultEvents(anyString());
     }
 
     @Test public void shouldNotLoadRemoteEventsWhenRefreshLessThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
       throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(SECONDS_AGO_29);
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(remoteEventSearchRepository, never()).getDefaultEvents(LOCALE_STUB);
+        verify(remoteEventSearchRepository, never()).getDefaultEvents(anyString());
     }
 
     @Test public void shouldLoadRemoteEventsWhenLastRefreshLessThanTirtySecondsAgoIfLocalRepositoryReturnsEmpty()
       throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(SECONDS_AGO_29);
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(remoteEventSearchRepository).getDefaultEvents(LOCALE_STUB);
+        verify(remoteEventSearchRepository).getDefaultEvents(anyString());
     }
 
     @Test public void shouldCallbackRemoteEventResultsWhenRefreshed() throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
-        when(remoteEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
+        when(remoteEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(spyCallback).onLoaded(emptyResultList());
         verify(spyCallback).onLoaded(twoEventResultList());
     }
 
     @Test public void shouldOverwriteRemoteEventsInLocalRepositoryWhenRefreshed() throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
-        when(remoteEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
+        when(remoteEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(localEventSearchRepository).deleteDefaultEvents();
         verify(localEventSearchRepository).putDefaultEvents(twoEventResults());
     }
 
     @Test public void shouldCallbackRemoteEventResultsBeforeOverwrittingLocalRepository() throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
-        when(remoteEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
+        when(remoteEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         InOrder inOrder = inOrder(spyCallback, localEventSearchRepository);
         inOrder.verify(spyCallback).onLoaded(twoEventResultList());
@@ -147,10 +148,10 @@ public class EventsListInteractorTest {
     }
 
     @Test public void shouldSetNowAsRefresDateWhenRemoteEventsRefreshed() throws Exception {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
-        when(remoteEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
+        when(remoteEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(eventListSynchronizationRepository).setEventsRefreshDate(NOW);
     }
@@ -158,27 +159,27 @@ public class EventsListInteractorTest {
     @Test public void shouldNotSetRefreshDateWhenRemoteEventsNotRefreshed() throws Exception {
         setupNotNeedRefresh();
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(eventListSynchronizationRepository, never()).setEventsRefreshDate(anyLong());
     }
 
     @Test public void shouldNotifyErrorCallbackWhenRefreshRemoteFails() throws Exception {
         setupNeedsRefresh();
-        when(remoteEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenThrow(new RepositoryException("test exception"));
+        when(remoteEventSearchRepository.getDefaultEvents(anyString())).thenThrow(new RepositoryException("test exception"));
 
-        interactor.loadEvents(spyCallback, dummyErrorCallback, LOCALE_STUB);
+        interactor.loadEvents(spyCallback, dummyErrorCallback);
 
         verify(dummyErrorCallback).onError(any(ShootrException.class));
     }
 
     private void setupNeedsRefresh() {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(emptyResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(emptyResults());
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(0L);
     }
 
     private void setupNotNeedRefresh() {
-        when(localEventSearchRepository.getDefaultEvents(LOCALE_STUB)).thenReturn(twoEventResults());
+        when(localEventSearchRepository.getDefaultEvents(anyString())).thenReturn(twoEventResults());
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(NOW);
     }
 
