@@ -25,7 +25,7 @@ public class EventsListInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final EventSearchRepository remoteEventSearchRepository;
     private final EventSearchRepository localEventSearchRepository;
-    private final EventListSynchronizationRepository timelineSynchronizationRepository;
+    private final EventListSynchronizationRepository eventListSynchronizationRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
@@ -41,7 +41,7 @@ public class EventsListInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
         this.remoteEventSearchRepository = remoteEventSearchRepository;
         this.localEventSearchRepository = localEventSearchRepository;
-        this.timelineSynchronizationRepository = eventListSynchronizationRepository;
+        this.eventListSynchronizationRepository = eventListSynchronizationRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.timeUtils = timeUtils;
@@ -61,7 +61,7 @@ public class EventsListInteractor implements Interactor {
         if (localEvents.isEmpty() || minimumRefreshTimePassed(currentTime)) {
             try {
                 refreshEvents();
-                timelineSynchronizationRepository.setEventsRefreshDate(currentTime);
+                eventListSynchronizationRepository.setEventsRefreshDate(currentTime);
             } catch (ShootrException error) {
                 notifyError(error);
             }
@@ -76,7 +76,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     private boolean minimumRefreshTimePassed(Long currentTime) {
-        Long eventsLastRefreshDate = timelineSynchronizationRepository.getEventsRefreshDate();
+        Long eventsLastRefreshDate = eventListSynchronizationRepository.getEventsRefreshDate();
         Long minimumTimeToRefresh = eventsLastRefreshDate + REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS;
         return minimumTimeToRefresh < currentTime;
     }
