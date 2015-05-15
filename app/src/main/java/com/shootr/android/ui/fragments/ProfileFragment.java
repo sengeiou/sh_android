@@ -271,7 +271,9 @@ public class ProfileFragment extends BaseFragment {
                 editPhotoBottomSheet.show();
             }
         } else {
-            openPhotoBig();
+            if(user != null){
+                openPhotoBig();
+            }
         }
     }
 
