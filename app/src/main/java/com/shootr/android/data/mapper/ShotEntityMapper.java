@@ -41,9 +41,9 @@ public class ShotEntityMapper {
         shot.setUserInfo(userInfo);
 
         String idShotParent = shotEntity.getIdShotParent();
-        shot.setParentShotId(idShotParent != null ? idShotParent : null);
+        shot.setParentShotId(idShotParent);
         String idUserParent = shotEntity.getIdUserParent();
-        shot.setParentShotUserId(idUserParent != null? idUserParent : null);
+        shot.setParentShotUserId(idUserParent);
         String userNameParent = shotEntity.getUserNameParent();
         shot.setParentShotUsername(userNameParent);
 
@@ -67,12 +67,12 @@ public class ShotEntityMapper {
         }
         ShotEntity shotEntity = new ShotEntity();
         String idShot = shot.getIdShot();
-        shotEntity.setIdShot(idShot != null? idShot : null);
+        shotEntity.setIdShot(idShot);
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(ShotEntity.TYPE_COMMENT);
         String idUser = shot.getUserInfo().getIdUser();
-        shotEntity.setIdUser(idUser != null? idUser : null);
+        shotEntity.setIdUser(idUser);
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
             shotEntity.setIdEvent(eventInfo.getIdEvent());
@@ -81,11 +81,11 @@ public class ShotEntityMapper {
         }
 
         String parentShotId = shot.getParentShotId();
-        shotEntity.setIdShotParent(parentShotId != null ? parentShotId : null );
+        shotEntity.setIdShotParent(parentShotId);
         String parentShotUserId = shot.getParentShotUserId();
-        shotEntity.setIdUserParent(parentShotUserId != null ? parentShotUserId : null);
+        shotEntity.setIdUserParent(parentShotUserId);
         String parentShotUsername = shot.getParentShotUsername();
-        shotEntity.setUserNameParent(parentShotUsername != null ? parentShotUsername : null);
+        shotEntity.setUserNameParent(parentShotUsername);
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;
