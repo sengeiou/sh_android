@@ -67,7 +67,8 @@ public class ShotDispatcherBackgroundService extends Service {
     }
 
     public boolean isSessionStored() {
-        return sessionRepository.getSessionToken() != null;
+        return sessionRepository.getSessionToken() != null &&
+          sessionRepository.getCurrentUserId() != null;
     }
 
     public void restoreSession() {
