@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-    <com.shootr.android.ui.widgets.CheckinBar android:id="@+id/checkin_container"
+    <com.shootr.android.ui.widgets.CheckinBar android:id="@+id/checkin_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 
@@ -13,7 +13,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/timeline_new_shot_bar"
-      android:layout_below="@id/checkin_container">
+      android:layout_below="@id/checkin_bar">
 
         <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
           android:layout_width="match_parent"

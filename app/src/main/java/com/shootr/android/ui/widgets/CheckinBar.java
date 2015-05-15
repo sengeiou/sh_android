@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -17,6 +18,7 @@ public class CheckinBar extends FrameLayout {
 
     @InjectView(R.id.checkin_text) TextView checkinText;
     @InjectView(R.id.checkin_loading) View checkinLoading;
+    @InjectView(R.id.checkin_container) ViewGroup checkinContainer;
 
     private boolean isExpanded;
     private int checkinOriginalHeight;
@@ -44,8 +46,14 @@ public class CheckinBar extends FrameLayout {
         ButterKnife.inject(this);
     }
 
-    public void setText(String text) {
-        checkinText.setText(text);
+    public void showCheckin() {
+        checkinText.setText(R.string.check_in_action);
+        checkinContainer.setBackgroundColor(getResources().getColor(R.color.checkin_bar_background_action_checkin));
+    }
+
+    public void showCheckout() {
+        checkinText.setText(R.string.check_out_action);
+        checkinContainer.setBackgroundColor(getResources().getColor(R.color.checkin_bar_background_action_checkout));
     }
 
     public void showLoading(boolean loading) {

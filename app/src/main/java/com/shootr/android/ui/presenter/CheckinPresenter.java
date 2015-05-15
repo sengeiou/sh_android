@@ -50,7 +50,7 @@ public class CheckinPresenter implements Presenter {
             this.showViewCheckinButton();
         } else {
             checkinView.showCheckedIn();
-            checkinView.showTextCheckOut();
+            checkinView.showCheckOutAction();
         }
     }
 
@@ -88,7 +88,7 @@ public class CheckinPresenter implements Presenter {
                 checkinView.hideCheckinLoading();
                 hideViewCheckinButton();
                 checkinView.showCheckedIn();
-                checkinView.showTextCheckOut();
+                checkinView.showCheckOutAction();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -104,7 +104,7 @@ public class CheckinPresenter implements Presenter {
                 checkedInEvent = false;
                 hideViewCheckinButton();
                 checkinView.hideCheckinLoading();
-                checkinView.showTextCheckIn();
+                checkinView.showCheckInAction();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

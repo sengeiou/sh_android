@@ -63,7 +63,7 @@ public class CheckinPresenterTest {
 
         presenter.initialize(checkinView, EVENT_ID);
 
-        verify(checkinView).showTextCheckOut();
+        verify(checkinView).showCheckOutAction();
     }
     //endregion
 
@@ -118,7 +118,7 @@ public class CheckinPresenterTest {
 
         presenter.checkIn();
 
-        verify(checkinView).showTextCheckOut();
+        verify(checkinView).showCheckOutAction();
     }
 
     //endregion
@@ -176,7 +176,7 @@ public class CheckinPresenterTest {
 
         presenter.checkOut();
 
-        verify(checkinView).showTextCheckIn();
+        verify(checkinView).showCheckInAction();
     }
     // endregion
 

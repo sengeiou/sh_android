@@ -76,7 +76,7 @@ public class EventTimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.shot_bar_drafts) View draftsButton;
 
-    @InjectView(R.id.checkin_container) CheckinBar checkinBar;
+    @InjectView(R.id.checkin_bar) CheckinBar checkinBar;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -354,7 +354,7 @@ public class EventTimelineFragment extends BaseFragment
     }
     //endregion
 
-    @OnClick(R.id.checkin_container)
+    @OnClick(R.id.checkin_bar)
     public void onCheckinClick() {
         checkinPresenter.checkinClick();
     }
@@ -501,12 +501,12 @@ public class EventTimelineFragment extends BaseFragment
         toolbarDecorator.hideSubtitle();
     }
 
-    @Override public void showTextCheckOut() {
-        checkinBar.setText(getString(R.string.check_out_action));
+    @Override public void showCheckOutAction() {
+        checkinBar.showCheckout();
     }
 
-    @Override public void showTextCheckIn() {
-        checkinBar.setText(getString(R.string.check_in_action));
+    @Override public void showCheckInAction() {
+        checkinBar.showCheckin();
     }
     //endregion
 }
