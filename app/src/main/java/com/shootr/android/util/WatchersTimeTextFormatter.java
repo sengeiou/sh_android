@@ -6,8 +6,6 @@ import com.shootr.android.R;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.Hours;
-import org.joda.time.Minutes;
 
 import java.util.Date;
 
@@ -23,15 +21,19 @@ public class WatchersTimeTextFormatter {
     }
 
     public String getLongTimeAgoFormat() {
-        return resources.getString(R.string.entered_long_time_ago);
+        String dateInText = resources.getString(R.string.entered);
+        dateInText += resources.getString(R.string.long_time_ago);
+        return dateInText;
     }
 
     public String getJustEnteredFormat() {
-        return resources.getString(R.string.just_entered);
+        String dateInText = resources.getString(R.string.entered);
+        dateInText += resources.getString(R.string.just_now);
+        return dateInText;
     }
 
     public String getMinutesAgoFormat(DateTime date) {
-        String dateInText = "";
+        String dateInText = resources.getString(R.string.entered);
         int minutesAgo = Math.abs(DateTime.now().getMinuteOfHour() - date.getMinuteOfHour());
         if(minutesAgo <= 1){
             dateInText += resources.getString(R.string.minute_ago);
@@ -43,7 +45,7 @@ public class WatchersTimeTextFormatter {
     }
 
     public String getHoursAgoFormat(DateTime date) {
-        String dateInText = "";
+        String dateInText = resources.getString(R.string.entered);
         DateTime dateTime = new DateTime(new Date().getTime());
         int hoursAgo = Math.abs(dateTime.getHourOfDay() - date.getHourOfDay());
         if(hoursAgo <= 1){
@@ -56,12 +58,14 @@ public class WatchersTimeTextFormatter {
     }
 
     public String getDaysAgoFormat(DateTime date) {
+        String dateInText = resources.getString(R.string.entered);
         int daysAgo = calculateHowManyDaysAgo(date);
         if(daysAgo <= 1){
-            return resources.getString(R.string.day_ago);
+            dateInText += resources.getString(R.string.day_ago);
         }else{
-            return String.valueOf(daysAgo) + resources.getString(R.string.days_ago);
+            dateInText += String.valueOf(daysAgo) + resources.getString(R.string.days_ago);
         }
+        return dateInText;
     }
 
     private int calculateHowManyDaysAgo(DateTime date) {
