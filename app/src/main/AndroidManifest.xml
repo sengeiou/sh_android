@@ -94,11 +94,7 @@
               android:value=".ui.activities.EventsListActivity" />
         </activity>
 
-        <activity android:name=".ui.activities.UserFollowsContainerActivity"
-            android:parentActivityName="com.shootr.android.ui.activities.ProfileContainerActivity">
-          <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
+        <activity android:name=".ui.activities.UserFollowsContainerActivity" >
         </activity>
 
         <activity

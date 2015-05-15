@@ -64,7 +64,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
+            finish();
             return true;
         }else{
             return super.onOptionsItemSelected(item);
