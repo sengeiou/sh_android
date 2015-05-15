@@ -95,9 +95,6 @@
         </activity>
 
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
         </activity>
 
         <activity
