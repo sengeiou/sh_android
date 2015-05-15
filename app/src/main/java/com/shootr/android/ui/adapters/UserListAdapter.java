@@ -76,7 +76,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         viewHolder.title.setText(item.getName());
 
         if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getUsernameForSubtitle(item));
+            viewHolder.subtitle.setText(getSubtitle(item));
             viewHolder.subtitle.setVisibility(View.VISIBLE);
         } else {
             viewHolder.subtitle.setVisibility(View.GONE);
@@ -112,16 +112,16 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
          }
     }
 
-    private String getUsernameForSubtitle(UserModel item) {
-        return String.format("@%s",item.getUsername());
-    }
-
     protected boolean showSubtitle(UserModel item) {
         return true;
     }
 
     protected String getSubtitle(UserModel item) {
-        return "";
+        return getUsernameForSubtitle(item);
+    }
+
+    private String getUsernameForSubtitle(UserModel item) {
+        return String.format("@%s",item.getUsername());
     }
 
     public void setCallback(FollowUnfollowAdapterCallback callback){
