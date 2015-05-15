@@ -1,6 +1,7 @@
 package com.shootr.android.data.mapper;
 
 import com.shootr.android.BuildConfig;
+import com.shootr.android.data.entity.ShotEntity;
 import javax.inject.Inject;
 
 public class UserAvatarUrlBuilder {
@@ -17,5 +18,9 @@ public class UserAvatarUrlBuilder {
 
     private String getUrl(String userId, String size) {
         return String.format(URL_PATTERN, userId, size);
+    }
+
+    public String calculateUserPhotoUrlFromIdUser(String idUser) {
+        return String.format(URL_PATTERN, idUser, "thumbnail");
     }
 }

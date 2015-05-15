@@ -77,11 +77,9 @@ public class GCMIntentService extends IntentService {
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
         String idShot = parameters.getString(ID_SHOT);
-        String idUser = parameters.getString(ID_USER);
         ShotEntity shot = service.getShotById(idShot);
-        UserEntity user = userManager.getUserByIdUser(idUser);
-        if (shot != null && user != null) {
-            ShotModel shotModel = shotEntityModelMapper.toShotModel(user, shot);
+        if (shot != null) {
+            ShotModel shotModel = shotEntityModelMapper.toShotModelFromShot(shot);
             shotNotificationManager.sendNewShotNotification(shotModel);
         } else {
             Timber.e("Shot or User null received, can't show notifications :(");
