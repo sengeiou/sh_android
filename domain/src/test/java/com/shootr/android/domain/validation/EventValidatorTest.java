@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EventValidatorTest {
 
-    private final String dummyEventTitle = "TITLE";
+    private static final String EVENT_TITLE_STUB = "TITLE";
     private static final long ONE_YEAR_AND_A_DAY_MILLIS = 366L * 24L * 60L * 60L * 1000L;
     private static final long ONE_MONTH_MILLIS = 30L * 24L * 60L * 60L * 1000L;
     private EventValidator validator;
@@ -71,10 +71,6 @@ public class EventValidatorTest {
     }
     //endregion
 
-    @Test
-    public void dummy() {
-    }
-
     private String filter(String original) {
         return original.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
     }
@@ -83,7 +79,7 @@ public class EventValidatorTest {
     private Event createEventWithTitleAndCorrectStartAndEndDates() {
         Date date = new Date();
         Event event = new Event();
-        event.setTitle(dummyEventTitle);
+        event.setTitle(EVENT_TITLE_STUB);
         event.setStartDate(new Date(date.getTime() + ONE_MONTH_MILLIS));
         return event;
     }
@@ -91,7 +87,7 @@ public class EventValidatorTest {
     private Event createEventWithTitleAndIncorrectStartAndEndDates() {
         Date date = new Date();
         Event event = new Event();
-        event.setTitle(dummyEventTitle);
+        event.setTitle(EVENT_TITLE_STUB);
         event.setStartDate(new Date(date.getTime() + ONE_YEAR_AND_A_DAY_MILLIS));
         return event;
     }
