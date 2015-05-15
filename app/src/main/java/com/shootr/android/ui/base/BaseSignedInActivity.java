@@ -46,7 +46,8 @@ public class BaseSignedInActivity extends BaseToolbarActivity {
     }
 
     public boolean isSessionStored() {
-        return sessionRepository.getSessionToken() != null && sessionRepository.getCurrentUserId() != "0L";
+        return sessionRepository.getSessionToken() != null &&
+          sessionRepository.getCurrentUserId() != null;
     }
 
     public void restoreSession() {
