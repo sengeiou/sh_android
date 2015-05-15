@@ -50,11 +50,10 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
 
     private List<EventSearchEntity> updateWatchNumberInEvents(Map<String, Integer> watchersCountByEvents,
       List<EventSearchEntity> defaultEventSearch) {
-        for (String eventID : watchersCountByEvents.keySet()) {
-            for (EventSearchEntity eventSearchEntity : defaultEventSearch) {
-                if (eventSearchEntity.getIdEvent().equals(eventID)) {
-                    eventSearchEntity.setWatchers(watchersCountByEvents.get(eventID));
-                }
+        for (EventSearchEntity eventSearchEntity : defaultEventSearch) {
+            Integer eventWatchers = watchersCountByEvents.get(eventSearchEntity.getIdEvent());
+            if (eventWatchers != null) {
+                eventSearchEntity.setWatchers(eventWatchers);
             }
         }
         return defaultEventSearch;
