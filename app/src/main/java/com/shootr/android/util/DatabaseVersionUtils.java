@@ -2,7 +2,6 @@ package com.shootr.android.util;
 
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersionCompatible;
 import com.shootr.android.db.ShootrDbOpenHelper;
@@ -10,39 +9,32 @@ import javax.inject.Inject;
 
 public class DatabaseVersionUtils {
 
-    @Inject @LastDatabaseVersionCompatible IntPreference lastCompatibleDatabaseVersion;
+    private final IntPreference lastCompatibleDatabaseVersion;
+    private final DatabaseBuildVersionUtil databaseBuildVersionUtil;
 
-    @Inject public DatabaseVersionUtils(){
-
+    @Inject public DatabaseVersionUtils(@LastDatabaseVersionCompatible
+        IntPreference lastCompatibleDatabaseVersion, DatabaseBuildVersionUtil databaseBuildVersionUtil){
+        this.lastCompatibleDatabaseVersion = lastCompatibleDatabaseVersion;
+        this.databaseBuildVersionUtil = databaseBuildVersionUtil;
     }
 
     public void manageCurrentDatabaseVersion(ShootrDbOpenHelper shootrDbOpenHelper,
       SharedPreferences sharedPreferences) {
-        int databaseVersion = getDatabaseVersion(sharedPreferences);
-
-        if(thereIsNoDatabaseVersionInPreferences(databaseVersion)){
-            databaseVersion = BuildConfig.DATABASE_VERSION;
-        }
-
+        int databaseVersion = getDatabaseVersion();
         if (isNecessaryToUpdateDatabase(databaseVersion)) {
             clearPreferences(sharedPreferences);
             upgradeDatabase(shootrDbOpenHelper, databaseVersion);
-            updateDatabaseVersionInPreferences(sharedPreferences);
+            updateDatabaseVersionInPreferences();
         }
     }
 
-    private int getDatabaseVersion(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt("databaseVersion", 0);
+    private int getDatabaseVersion() {
+        return lastCompatibleDatabaseVersion.get();
     }
 
-    private boolean thereIsNoDatabaseVersionInPreferences(int databaseVersion) {
-        return databaseVersion == 0;
-    }
-
-    private void updateDatabaseVersionInPreferences(SharedPreferences sharedPreferences) {
-        int databaseVersion;
-        databaseVersion = BuildConfig.DATABASE_VERSION;
-        sharedPreferences.edit().putInt("databaseVersion",databaseVersion).apply();
+    private void updateDatabaseVersionInPreferences() {
+        int databaseVersion = databaseBuildVersionUtil.getDatabaseVersionFromBuild();
+        lastCompatibleDatabaseVersion.set(databaseVersion);
     }
 
     private void clearPreferences(SharedPreferences sharedPreferences) {
@@ -55,7 +47,7 @@ public class DatabaseVersionUtils {
     }
 
     private boolean isNecessaryToUpdateDatabase(int databaseVersion) {
-        return databaseVersion <= lastCompatibleDatabaseVersion.get();
+        return databaseVersion < databaseBuildVersionUtil.getDatabaseVersionFromBuild();
     }
 
 }
