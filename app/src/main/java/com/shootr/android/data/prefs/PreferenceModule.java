@@ -1,6 +1,7 @@
 package com.shootr.android.data.prefs;
 
 import android.content.SharedPreferences;
+import com.shootr.android.BuildConfig;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -39,5 +40,10 @@ public class PreferenceModule {
     @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
+    }
+
+    @Provides @Singleton @LastDatabaseVersionCompatible IntPreference provideLastDatabaseVersionCompatible(
+      SharedPreferences preferences) {
+        return new IntPreference(preferences, "last_compatible_version", BuildConfig.DATABASE_VERSION);
     }
 }
