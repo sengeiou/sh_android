@@ -44,6 +44,6 @@ public class PreferenceModule {
 
     @Provides @Singleton @LastDatabaseVersionCompatible IntPreference provideLastDatabaseVersionCompatible(
       SharedPreferences preferences) {
-        return new IntPreference(preferences, "last_compatible_version", BuildConfig.DATABASE_VERSION);
+        return new IntPreference(preferences, "last_compatible_version", 0);
     }
 }
