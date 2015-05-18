@@ -35,6 +35,7 @@ def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone(
 def versionMajor = 0
 def versionMinor = 1
 def versionRevision = 3
+def databaseVersion = 1
 def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
 
 android {
@@ -76,7 +77,6 @@ android {
     signingConfigs {
         release {
             storeFile file('../certs/release.keystore')
-            //TODO use credentials from external file or environment variables
             storePassword "android"
             keyAlias "androiddebugkey"
             keyPassword "android"
@@ -102,15 +102,17 @@ android {
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://tst.services.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://tst.services.shootr.com\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.tst.shootr.com/\""
+            buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
         }
         release {
-            minifyEnabled false //TODO configurarlo y activarlo
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
             buildConfigField "String", "DATA_SERVICES_ENDPOINT_BASE", "\"http://services.shootr.com\""
             buildConfigField "String", "SPECIAL_SERVICES_ENDPOINT_BASE", "\"http://services.shootr.com\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
+            buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
         }
     }
     compileOptions {
