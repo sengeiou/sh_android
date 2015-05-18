@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class DatabaseVersionUtilsTest {
 
-    @Mock IntPreference lastCompatibleDatabaseVersion;
+    @Mock IntPreference preferencesDatabaseVersion;
     private DatabaseVersionUtils databaseVersionUtils;
     @Mock ShootrDbOpenHelper shootrDbOpenHelper;
     @Mock DatabaseBuildVersionUtil databaseBuildVersionUtil;
@@ -28,33 +28,33 @@ public class DatabaseVersionUtilsTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        databaseVersionUtils = new DatabaseVersionUtils(lastCompatibleDatabaseVersion, databaseBuildVersionUtil);
+        databaseVersionUtils = new DatabaseVersionUtils(preferencesDatabaseVersion, databaseBuildVersionUtil);
     }
 
     @Test
     public void shouldUpdateDatabaseVersionIfTheresNoVersion(){
-        when(lastCompatibleDatabaseVersion.get()).thenReturn(0);
+        when(preferencesDatabaseVersion.get()).thenReturn(0);
         when(databaseBuildVersionUtil.getDatabaseVersionFromBuild()).thenReturn(1);
         setupSharedPreferencesClear();
         databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
-        verify(lastCompatibleDatabaseVersion).set(anyInt());
+        verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldUpdateDatabaseVersionIfVersionIsInferior(){
-        when(lastCompatibleDatabaseVersion.get()).thenReturn(1);
+        when(preferencesDatabaseVersion.get()).thenReturn(1);
         when(databaseBuildVersionUtil.getDatabaseVersionFromBuild()).thenReturn(2);
         setupSharedPreferencesClear();
         databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
-        verify(lastCompatibleDatabaseVersion).set(anyInt());
+        verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldNotUpdateDatabaseVersionIfVersionIsTheSame(){
-        when(lastCompatibleDatabaseVersion.get()).thenReturn(1);
+        when(preferencesDatabaseVersion.get()).thenReturn(1);
         when(databaseBuildVersionUtil.getDatabaseVersionFromBuild()).thenReturn(1);
         databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
-        verify(lastCompatibleDatabaseVersion, never()).set(anyInt());
+        verify(preferencesDatabaseVersion, never()).set(anyInt());
     }
 
     private void setupSharedPreferencesClear() {
