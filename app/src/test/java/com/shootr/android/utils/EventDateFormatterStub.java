@@ -1,10 +1,10 @@
 package com.shootr.android.utils;
 
-import com.shootr.android.util.EventTimeFormatter;
+import com.shootr.android.domain.utils.EventDateFormatter;
 
-public class EventTimeFormatterStub extends EventTimeFormatter {
+public class EventDateFormatterStub extends EventDateFormatter {
 
-    public EventTimeFormatterStub() {
+    public EventDateFormatterStub() {
         super(null, null);
     }
 

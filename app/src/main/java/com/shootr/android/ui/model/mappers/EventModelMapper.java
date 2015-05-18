@@ -3,16 +3,16 @@ package com.shootr.android.ui.model.mappers;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.util.EventTimeFormatter;
+import com.shootr.android.domain.utils.EventDateFormatter;
 
 import javax.inject.Inject;
 
 public class EventModelMapper {
 
-    private final EventTimeFormatter timeFormatter;
+    private final EventDateFormatter timeFormatter;
     private final SessionRepository sessionRepository;
 
-    @Inject public EventModelMapper(EventTimeFormatter timeFormatter, SessionRepository sessionRepository) {
+    @Inject public EventModelMapper(EventDateFormatter timeFormatter, SessionRepository sessionRepository) {
         this.timeFormatter = timeFormatter;
         this.sessionRepository = sessionRepository;
     }

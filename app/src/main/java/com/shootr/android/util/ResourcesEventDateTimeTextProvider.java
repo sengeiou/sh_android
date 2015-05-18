@@ -4,18 +4,19 @@ import android.content.res.Resources;
 
 import com.shootr.android.R;
 
+import com.shootr.android.domain.utils.EventDateTimeTextProvider;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 
 import javax.inject.Inject;
+import org.joda.time.format.DateTimeFormatter;
 
-public class TimeTextFormatter {
+public class ResourcesEventDateTimeTextProvider implements EventDateTimeTextProvider {
 
     DateTimeFormatter todayFormater = DateTimeFormat.forPattern("HH:mm");
     DateTimeFormatter tomorrowFormater = DateTimeFormat.forPattern("HH:mm");
@@ -26,7 +27,7 @@ public class TimeTextFormatter {
 
     private final Resources resources;
 
-    @Inject public TimeTextFormatter(Resources resources){
+    @Inject public ResourcesEventDateTimeTextProvider(Resources resources){
         this.resources = resources;
     }
 
@@ -34,21 +35,21 @@ public class TimeTextFormatter {
         return getHoursBetweenNowAndDate(date) <= 1;
     }
 
-    public String getStartingInMinutesFormat(DateTime date) {
+    @Override public String getStartingInMinutesFormat(DateTime date) {
         String dateInText = resources.getString(R.string.starting_in);
         dateInText += String.valueOf(Minutes.minutesBetween(DateTime.now(), date).getMinutes());
         dateInText += resources.getString(R.string.space_and_minutes);
         return dateInText;
     }
 
-    public String getMinutesAgoFormat(DateTime date) {
+    @Override public String getMinutesAgoFormat(DateTime date, int numberOfMinutes) {
         String dateInText = resources.getString(R.string.started);
         dateInText += String.valueOf(Math.abs(Minutes.minutesBetween(DateTime.now(), date).getMinutes()));
-        dateInText += resources.getString(R.string.minutes_ago);
+        dateInText += resources.getString(R.string.min_ago);
         return dateInText;
     }
 
-    public String getStartingNowFormat() {
+    @Override public String getStartingNowFormat() {
         return resources.getString(R.string.starting_now);
     }
 
@@ -56,7 +57,7 @@ public class TimeTextFormatter {
         return Math.abs(Hours.hoursBetween(DateTime.now(), date).getHours());
     }
 
-    public String getStartingInHoursFormat(DateTime date) {
+    @Override public String getStartingInHoursFormat(DateTime date) {
         String dateInText = resources.getString(R.string.starting_in);
         if(isInAnHourRange(date)){
             dateInText += resources.getString(R.string.an_hour);
@@ -67,11 +68,11 @@ public class TimeTextFormatter {
         return dateInText;
     }
 
-    public String getYesterdayFormat(DateTime date) {
+    @Override public String getYesterdayFormat(DateTime date) {
         return resources.getString(R.string.yesterday_at) + yesterdayFormater.print(date);
     }
 
-    public String getDaysAgoFormat(DateTime date) {
+    @Override public String getDaysAgoFormat(DateTime date) {
         int daysAgo = calculateHowManyDaysAgo(date);
         return String.valueOf(daysAgo) + resources.getString(R.string.days_ago);
     }
@@ -91,7 +92,7 @@ public class TimeTextFormatter {
         return daysBetween;
     }
 
-    public String getHoursAgoFormat(DateTime date) {
+    @Override public String getHoursAgoFormat(DateTime date) {
         String dateInText = resources.getString(R.string.started);
         if(isInAnHourRange(date)){
             dateInText += resources.getString(R.string.an_hour_ago);
@@ -102,23 +103,23 @@ public class TimeTextFormatter {
         return dateInText;
     }
 
-    public String getTodayFormat(DateTime date) {
+    @Override public String getTodayFormat(DateTime date) {
         return resources.getString(R.string.today_at) + todayFormater.print(date);
     }
 
-    public String getTomorrowFormat(DateTime date) {
+    @Override public String getTomorrowFormat(DateTime date) {
         return resources.getString(R.string.tomorrow_at) + tomorrowFormater.print(date);
     }
 
-    public String getCurrentWeekFormat(DateTime date) {
+    @Override public String getWeekDayAndTimeFormat(DateTime date) {
         return currentWeekFormater.print(date);
     }
 
-    public String getAnotherYearFormat(DateTime date) {
+    @Override public String getDateAndYearFormat(DateTime date) {
         return anotherYearFormater.print(date);
     }
 
-    public String getThisYearFormat(DateTime date) {
+    @Override public String getDateAndTimeFormat(DateTime date) {
         return currentYearFormater.print(date);
     }
 }

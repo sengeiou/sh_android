@@ -25,6 +25,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.EventDateTimeTextProvider;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -67,6 +68,7 @@ import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
+import com.shootr.android.util.ResourcesEventDateTimeTextProvider;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -154,6 +156,10 @@ public class DataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application, Version version) {
         return new ShootrDbOpenHelper(application.getApplicationContext(), version);
+    }
+
+    @Provides @Singleton EventDateTimeTextProvider provideEventTimeFormatter(ResourcesEventDateTimeTextProvider timeTextFormatter) {
+        return timeTextFormatter;
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
