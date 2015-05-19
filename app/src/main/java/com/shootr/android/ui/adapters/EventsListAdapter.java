@@ -1,7 +1,6 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -79,9 +78,9 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
             markSelectedEvent(holder, isSelectedEvent);
         }else if(isWatchingEvent && !isSelectedEvent){
             markWatchingEvent(holder, isWatchingEvent);
-        }else if(isSelectedEvent && isWatchingEvent){
-            markSelectedEvent(holder, isSelectedEvent);
-        }else if(!isWatchingEvent && !isSelectedEvent){
+        }else if(isSelectedEvent){
+            markWatchingEvent(holder, true);
+        }else{
             markSelectedEventAsRegularEvent(holder);
         }
     }
