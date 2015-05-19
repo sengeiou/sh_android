@@ -10,12 +10,12 @@ import javax.inject.Inject;
 public class DatabaseVersionUtils {
 
     private final IntPreference preferencesDatabaseVersion;
-    private final DatabaseBuildVersionUtil databaseBuildVersionUtil;
+    private final Version version;
 
     @Inject public DatabaseVersionUtils(@PreferencesDatabaseVersion
-        IntPreference preferencesDatabaseVersion, DatabaseBuildVersionUtil databaseBuildVersionUtil){
+        IntPreference preferencesDatabaseVersion, Version version){
         this.preferencesDatabaseVersion = preferencesDatabaseVersion;
-        this.databaseBuildVersionUtil = databaseBuildVersionUtil;
+        this.version = version;
     }
 
     public void manageCurrentDatabaseVersion(ShootrDbOpenHelper shootrDbOpenHelper,
@@ -33,7 +33,7 @@ public class DatabaseVersionUtils {
     }
 
     private void updateDatabaseVersionInPreferences() {
-        int databaseVersion = databaseBuildVersionUtil.getDatabaseVersionFromBuild();
+        int databaseVersion = version.getDatabaseVersionFromBuild();
         preferencesDatabaseVersion.set(databaseVersion);
     }
 
@@ -47,7 +47,7 @@ public class DatabaseVersionUtils {
     }
 
     private boolean isNecessaryToUpdateDatabase(int databaseVersion) {
-        return databaseVersion < databaseBuildVersionUtil.getDatabaseVersionFromBuild();
+        return databaseVersion < version.getDatabaseVersionFromBuild();
     }
 
 }
