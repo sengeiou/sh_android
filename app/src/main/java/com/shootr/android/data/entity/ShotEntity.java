@@ -20,6 +20,10 @@ public class ShotEntity extends Synchronized{
     private String idUserParent;
     private String userNameParent;
 
+    private String videoUrl;
+    private String videoTitle;
+    private Long videoDuration;
+
     public String getIdShot() {
         return idShot;
     }
@@ -114,5 +118,29 @@ public class ShotEntity extends Synchronized{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public Long getVideoDuration() {
+        return videoDuration;
+    }
+
+    public void setVideoDuration(Long videoDuration) {
+        this.videoDuration = videoDuration;
     }
 }
