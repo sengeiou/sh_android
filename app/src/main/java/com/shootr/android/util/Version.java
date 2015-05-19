@@ -1,0 +1,23 @@
+package com.shootr.android.util;
+
+import com.shootr.android.BuildConfig;
+import javax.inject.Inject;
+
+public class Version {
+    
+    @Inject public Version(){
+
+    }
+
+    public int getDatabaseVersionFromBuild(){
+        return BuildConfig.DATABASE_VERSION;
+    }
+
+    public int getVersionCode(){
+        return  BuildConfig.VERSION_CODE;
+    }
+
+    public String getVersionName(){
+        return BuildConfig.VERSION_NAME;
+    }
+}
