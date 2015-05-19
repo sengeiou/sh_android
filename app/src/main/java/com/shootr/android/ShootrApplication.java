@@ -28,7 +28,7 @@ public class ShootrApplication extends Application {
             .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
             .build());
 
-        databaseVersionUtils.manageCurrentDatabaseVersion();
+        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
     }
 
     public void plantLoggerTrees() {

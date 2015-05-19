@@ -9,47 +9,44 @@ import javax.inject.Inject;
 
 public class DatabaseVersionUtils {
 
-    private final IntPreference databaseVersionPreference;
-    private final Version version;
+    private final IntPreference lastDatabaseVersion;
+    private final Version currentVersion;
     private final SQLiteOpenHelper sqliteOpenHelper;
     private final SharedPreferences sharedPreferences;
 
-    @Inject public DatabaseVersionUtils(@LastDatabaseVersion IntPreference databaseVersionPreference, Version version,
+    @Inject public DatabaseVersionUtils(@LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion,
       SQLiteOpenHelper sqliteOpenHelper, SharedPreferences sharedPreferences) {
-        this.databaseVersionPreference = databaseVersionPreference;
-        this.version = version;
+        this.lastDatabaseVersion = lastDatabaseVersion;
+        this.currentVersion = currentVersion;
         this.sqliteOpenHelper = sqliteOpenHelper;
         this.sharedPreferences = sharedPreferences;
     }
 
-    public void manageCurrentDatabaseVersion() {
-        int databaseVersion = getDatabaseVersion();
-        if (isNecessaryToUpdateDatabase(databaseVersion)) {
-            clearPreferences(sharedPreferences);
-            upgradeDatabase(databaseVersion);
+    public void clearDataOnDatabaseVersionUpdated() {
+        if (needsToClearData()) {
+            clearSharedPreferences();
+            clearDatabase();
             updateStoredDatabaseVersion();
         }
     }
 
-    private int getDatabaseVersion() {
-        return databaseVersionPreference.get();
-    }
-
-    private void updateStoredDatabaseVersion() {
-        int databaseVersion = version.getDatabaseVersion();
-        databaseVersionPreference.set(databaseVersion);
-    }
-
-    private void clearPreferences(SharedPreferences sharedPreferences) {
+    private void clearSharedPreferences() {
         sharedPreferences.edit().clear().apply();
     }
 
-    private void upgradeDatabase(int databaseVersion) {
+    private void clearDatabase() {
         SQLiteDatabase db = sqliteOpenHelper.getWritableDatabase();
-        sqliteOpenHelper.onUpgrade(db, databaseVersion, databaseVersionPreference.get());
+        sqliteOpenHelper.onUpgrade(db, currentVersion.getDatabaseVersion(), lastDatabaseVersion.get());
     }
 
-    private boolean isNecessaryToUpdateDatabase(int databaseVersion) {
-        return databaseVersion < version.getDatabaseVersion();
+    private void updateStoredDatabaseVersion() {
+        int databaseVersion = currentVersion.getDatabaseVersion();
+        lastDatabaseVersion.set(databaseVersion);
+    }
+
+    private boolean needsToClearData() {
+        int lastDatabaseVersion = this.lastDatabaseVersion.get();
+        int currentDatabaseVersion = currentVersion.getDatabaseVersion();
+        return lastDatabaseVersion < currentDatabaseVersion;
     }
 }
