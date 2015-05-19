@@ -66,6 +66,7 @@ import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
+import com.shootr.android.util.Version;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -151,8 +152,8 @@ public class DataModule {
         return resourcesLocaleProvider;
     }
 
-    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
-        return new ShootrDbOpenHelper(application.getApplicationContext(), null);
+    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application, Version version) {
+        return new ShootrDbOpenHelper(application.getApplicationContext(), version);
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {

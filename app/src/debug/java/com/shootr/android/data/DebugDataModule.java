@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.util.Version;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.prefs.BooleanPreference;
@@ -80,7 +81,7 @@ public class DebugDataModule {
         return networkUtil;
     }
 
-    @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application) {
-        return new ShootrDbOpenHelper(application.getApplicationContext(), new TrackingCursorFactory());
+    @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application, Version version) {
+        return new ShootrDbOpenHelper(application.getApplicationContext(), new TrackingCursorFactory(), version);
     }
 }

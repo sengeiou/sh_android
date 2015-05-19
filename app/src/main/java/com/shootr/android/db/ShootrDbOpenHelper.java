@@ -3,14 +3,18 @@ package com.shootr.android.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.util.Version;
 
 public class ShootrDbOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "shootr.db";
-    public static final int DATABASE_VERSION = 2;
 
-    public ShootrDbOpenHelper(Context context, SQLiteDatabase.CursorFactory cursorFactory) {
-        super(context, DATABASE_NAME, cursorFactory, DATABASE_VERSION);
+    public ShootrDbOpenHelper(Context context, SQLiteDatabase.CursorFactory cursorFactory, Version version) {
+        super(context, DATABASE_NAME, cursorFactory, version.getDatabaseVersion());
+    }
+
+    public ShootrDbOpenHelper(Context context, Version version) {
+        super(context, DATABASE_NAME, null, version.getDatabaseVersion());
     }
 
     @Override
