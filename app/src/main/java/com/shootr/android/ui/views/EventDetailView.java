@@ -48,4 +48,6 @@ public interface EventDetailView extends LoadDataView {
     void showEditEventButton();
 
     void hideEditEventButton();
+
+    void setMediaCount(Integer mediaCount);
 }

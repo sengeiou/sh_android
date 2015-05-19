@@ -77,6 +77,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
+    @InjectView(R.id.event_media) TextView eventMedia;
+
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
 
@@ -475,6 +477,10 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (editMenuItem != null) {
             updateEditIcon();
         }
+    }
+
+    @Override public void setMediaCount(Integer mediaCount) {
+        eventMedia.setText("Media "+mediaCount.toString());
     }
 
     @Override public void showEmpty() {
