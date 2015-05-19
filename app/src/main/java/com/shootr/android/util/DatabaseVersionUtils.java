@@ -3,18 +3,18 @@ package com.shootr.android.util;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import com.shootr.android.data.prefs.IntPreference;
-import com.shootr.android.data.prefs.PreferencesDatabaseVersion;
+import com.shootr.android.data.prefs.LastDatabaseVersion;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils {
 
-    private final IntPreference preferencesDatabaseVersion;
+    private final IntPreference databaseVersionPreference;
     private final Version version;
 
-    @Inject public DatabaseVersionUtils(@PreferencesDatabaseVersion
-        IntPreference preferencesDatabaseVersion, Version version){
-        this.preferencesDatabaseVersion = preferencesDatabaseVersion;
+    @Inject public DatabaseVersionUtils(@LastDatabaseVersion
+        IntPreference databaseVersionPreference, Version version){
+        this.databaseVersionPreference = databaseVersionPreference;
         this.version = version;
     }
 
@@ -24,17 +24,17 @@ public class DatabaseVersionUtils {
         if (isNecessaryToUpdateDatabase(databaseVersion)) {
             clearPreferences(sharedPreferences);
             upgradeDatabase(shootrDbOpenHelper, databaseVersion);
-            updateDatabaseVersionInPreferences();
+            updateStoredDatabaseVersion();
         }
     }
 
     private int getDatabaseVersion() {
-        return preferencesDatabaseVersion.get();
+        return databaseVersionPreference.get();
     }
 
-    private void updateDatabaseVersionInPreferences() {
-        int databaseVersion = version.getDatabaseVersionFromBuild();
-        preferencesDatabaseVersion.set(databaseVersion);
+    private void updateStoredDatabaseVersion() {
+        int databaseVersion = version.getDatabaseVersion();
+        databaseVersionPreference.set(databaseVersion);
     }
 
     private void clearPreferences(SharedPreferences sharedPreferences) {
@@ -43,11 +43,11 @@ public class DatabaseVersionUtils {
 
     private void upgradeDatabase(ShootrDbOpenHelper shootrDbOpenHelper, int databaseVersion) {
         SQLiteDatabase db = shootrDbOpenHelper.getWritableDatabase();
-        shootrDbOpenHelper.onUpgrade(db, databaseVersion, preferencesDatabaseVersion.get());
+        shootrDbOpenHelper.onUpgrade(db, databaseVersion, databaseVersionPreference.get());
     }
 
     private boolean isNecessaryToUpdateDatabase(int databaseVersion) {
-        return databaseVersion < version.getDatabaseVersionFromBuild();
+        return databaseVersion < version.getDatabaseVersion();
     }
 
 }

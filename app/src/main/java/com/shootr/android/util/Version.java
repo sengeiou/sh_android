@@ -9,7 +9,7 @@ public class Version {
 
     }
 
-    public int getDatabaseVersionFromBuild(){
+    public int getDatabaseVersion(){
         return BuildConfig.DATABASE_VERSION;
     }
 
