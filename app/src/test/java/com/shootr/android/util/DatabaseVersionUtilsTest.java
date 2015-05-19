@@ -3,7 +3,6 @@ package com.shootr.android.util;
 import android.content.SharedPreferences;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.db.ShootrDbOpenHelper;
-import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,6 +16,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class DatabaseVersionUtilsTest {
+
+    public static final int NO_VERSION_STORED = 0;
+    public static final int VERSION_1 = 1;
+    private static final int VERSION_2 = 2;
 
     @Mock IntPreference preferencesDatabaseVersion;
     private DatabaseVersionUtils databaseVersionUtils;
@@ -33,71 +36,31 @@ public class DatabaseVersionUtilsTest {
 
     @Test
     public void shouldUpdateDatabaseVersionIfTheresNoVersion(){
-        when(preferencesDatabaseVersion.get()).thenReturn(0);
-        when(version.getDatabaseVersion()).thenReturn(1);
-        setupSharedPreferencesClear();
+        when(preferencesDatabaseVersion.get()).thenReturn(NO_VERSION_STORED);
+        when(version.getDatabaseVersion()).thenReturn(VERSION_1);
+
         databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldUpdateDatabaseVersionIfVersionIsInferior(){
-        when(preferencesDatabaseVersion.get()).thenReturn(1);
-        when(version.getDatabaseVersion()).thenReturn(1);
-        setupSharedPreferencesClear();
+        when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
+        when(version.getDatabaseVersion()).thenReturn(VERSION_2);
+
         databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldNotUpdateDatabaseVersionIfVersionIsTheSame(){
-        when(preferencesDatabaseVersion.get()).thenReturn(1);
-        when(version.getDatabaseVersion()).thenReturn(1);
+        when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
+        when(version.getDatabaseVersion()).thenReturn(VERSION_1);
+
         databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+
         verify(preferencesDatabaseVersion, never()).set(anyInt());
-    }
-
-    private void setupSharedPreferencesClear() {
-        when(sharedPreferences.edit().clear()).thenReturn(new SharedPreferences.Editor() {
-            @Override public SharedPreferences.Editor putString(String s, String s1) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor putStringSet(String s, Set<String> set) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor putInt(String s, int i) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor putLong(String s, long l) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor putFloat(String s, float v) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor putBoolean(String s, boolean b) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor remove(String s) {
-                return null;
-            }
-
-            @Override public SharedPreferences.Editor clear() {
-                return null;
-            }
-
-            @Override public boolean commit() {
-                return false;
-            }
-
-            @Override public void apply() {
-
-            }
-        });
     }
 }
