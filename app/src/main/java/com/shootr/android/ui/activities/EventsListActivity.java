@@ -170,8 +170,12 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentVisibleEventId(String eventId) {
-        adapter.setCurrentVisibleEvent(eventId);
+    @Override public void setCurrentVisibleCheckedInEventId(String eventId) {
+        adapter.setCurrentVisibleCheckedInEvent(eventId);
+    }
+
+    @Override public void setCurrentVisibleWatchingEventId(String eventId) {
+        adapter.setCurrentVisibleWatchingEvent(eventId);
     }
 
     @Override public void showContent() {

@@ -9,7 +9,9 @@ public interface EventsListView extends LoadDataView {
 
     void renderEvents(List<EventResultModel> events);
 
-    void setCurrentVisibleEventId(String eventId);
+    void setCurrentVisibleCheckedInEventId(String eventId);
+
+    void setCurrentVisibleWatchingEventId(String eventId);
 
     void showContent();
 
