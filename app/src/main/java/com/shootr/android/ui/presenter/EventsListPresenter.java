@@ -17,7 +17,6 @@ import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class EventsListPresenter implements Presenter {
@@ -70,6 +69,7 @@ public class EventsListPresenter implements Presenter {
         selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
             @Override public void onLoaded(Event selectedEvent) {
                 onEventSelected(eventModelMapper.transform(selectedEvent));
+                setViewCurrentVisibleWatchingEvent(idEvent);
             }
         });
     }
