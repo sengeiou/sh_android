@@ -2,28 +2,31 @@ package com.shootr.android.util;
 
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersion;
-import com.shootr.android.db.ShootrDbOpenHelper;
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils {
 
     private final IntPreference databaseVersionPreference;
     private final Version version;
+    private final SQLiteOpenHelper sqliteOpenHelper;
+    private final SharedPreferences sharedPreferences;
 
-    @Inject public DatabaseVersionUtils(@LastDatabaseVersion
-        IntPreference databaseVersionPreference, Version version){
+    @Inject public DatabaseVersionUtils(@LastDatabaseVersion IntPreference databaseVersionPreference, Version version,
+      SQLiteOpenHelper sqliteOpenHelper, SharedPreferences sharedPreferences) {
         this.databaseVersionPreference = databaseVersionPreference;
         this.version = version;
+        this.sqliteOpenHelper = sqliteOpenHelper;
+        this.sharedPreferences = sharedPreferences;
     }
 
-    public void manageCurrentDatabaseVersion(ShootrDbOpenHelper shootrDbOpenHelper,
-      SharedPreferences sharedPreferences) {
+    public void manageCurrentDatabaseVersion() {
         int databaseVersion = getDatabaseVersion();
         if (isNecessaryToUpdateDatabase(databaseVersion)) {
             clearPreferences(sharedPreferences);
-            upgradeDatabase(shootrDbOpenHelper, databaseVersion);
+            upgradeDatabase(databaseVersion);
             updateStoredDatabaseVersion();
         }
     }
@@ -41,13 +44,12 @@ public class DatabaseVersionUtils {
         sharedPreferences.edit().clear().apply();
     }
 
-    private void upgradeDatabase(ShootrDbOpenHelper shootrDbOpenHelper, int databaseVersion) {
-        SQLiteDatabase db = shootrDbOpenHelper.getWritableDatabase();
-        shootrDbOpenHelper.onUpgrade(db, databaseVersion, databaseVersionPreference.get());
+    private void upgradeDatabase(int databaseVersion) {
+        SQLiteDatabase db = sqliteOpenHelper.getWritableDatabase();
+        sqliteOpenHelper.onUpgrade(db, databaseVersion, databaseVersionPreference.get());
     }
 
     private boolean isNecessaryToUpdateDatabase(int databaseVersion) {
         return databaseVersion < version.getDatabaseVersion();
     }
-
 }

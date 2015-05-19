@@ -2,10 +2,8 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
-import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.util.DatabaseVersionUtils;
 import com.shootr.android.util.LogTreeFactory;
 import dagger.ObjectGraph;
@@ -30,9 +28,7 @@ public class ShootrApplication extends Application {
             .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
             .build());
 
-        ShootrDbOpenHelper shootrDbOpenHelper = new ShootrDbOpenHelper(getApplicationContext(),null);
-        SharedPreferences sharedPreferences = getSharedPreferences("DatabaseVersionPreferences", MODE_PRIVATE);
-        databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
+        databaseVersionUtils.manageCurrentDatabaseVersion();
     }
 
     public void plantLoggerTrees() {
