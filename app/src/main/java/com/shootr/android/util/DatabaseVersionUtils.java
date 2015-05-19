@@ -24,7 +24,7 @@ public class DatabaseVersionUtils {
         this.context = context;
     }
 
-    public void clearDataOnDatabaseVersionUpdated() {
+    public void clearDataOnNewerVersion() {
         if (needsToClearData()) {
             clearSharedPreferences();
             clearDatabase();

@@ -2,7 +2,6 @@ package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import org.junit.Before;
@@ -43,7 +42,7 @@ public class DatabaseVersionUtilsTest {
         when(preferencesDatabaseVersion.get()).thenReturn(NO_VERSION);
         when(version.getDatabaseVersion()).thenReturn(VERSION_1);
 
-        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+        databaseVersionUtils.clearDataOnNewerVersion();
 
         verify(preferencesDatabaseVersion).set(anyInt());
     }
@@ -53,7 +52,7 @@ public class DatabaseVersionUtilsTest {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_2);
 
-        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+        databaseVersionUtils.clearDataOnNewerVersion();
 
         verify(preferencesDatabaseVersion).set(anyInt());
     }
@@ -63,7 +62,7 @@ public class DatabaseVersionUtilsTest {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_1);
 
-        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+        databaseVersionUtils.clearDataOnNewerVersion();
 
         verify(preferencesDatabaseVersion, never()).set(anyInt());
     }
@@ -72,7 +71,7 @@ public class DatabaseVersionUtilsTest {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_2);
 
-        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+        databaseVersionUtils.clearDataOnNewerVersion();
 
         verify(sharedPreferences.edit().clear()).apply();
     }
@@ -81,7 +80,7 @@ public class DatabaseVersionUtilsTest {
         when(preferencesDatabaseVersion.get()).thenReturn(VERSION_1);
         when(version.getDatabaseVersion()).thenReturn(VERSION_2);
 
-        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
+        databaseVersionUtils.clearDataOnNewerVersion();
 
         verify(context).deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
     }
