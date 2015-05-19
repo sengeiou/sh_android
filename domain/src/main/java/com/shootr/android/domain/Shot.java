@@ -101,6 +101,10 @@ public class Shot {
         this.parentShotUsername = parentShotUsername;
     }
 
+    public boolean hasVideoEmbed() {
+        return videoUrl != null;
+    }
+
     public String getVideoUrl() {
         return videoUrl;
     }

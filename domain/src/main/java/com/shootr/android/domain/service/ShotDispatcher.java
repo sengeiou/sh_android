@@ -142,6 +142,7 @@ public class ShotDispatcher implements ShotSender {
         try {
             notifySendingShot(queuedShot);
             fillImageUrlFromQueuedShot(queuedShot);
+            embedVideoFromLinksInComment(queuedShot);
             Shot shotSent = shootrShotService.sendShot(queuedShot.getShot());
             queuedShot.setShot(shotSent);
             notifyShotSent(queuedShot);
@@ -149,6 +150,14 @@ public class ShotDispatcher implements ShotSender {
         } catch (Exception e) {
             persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
+        }
+    }
+
+    private void embedVideoFromLinksInComment(QueuedShot queuedShot) {
+        boolean alreadyHasVideo = queuedShot.getShot().hasVideoEmbed();
+        if (!alreadyHasVideo) {
+            Shot shotWithEmbedVideoInfo = shootrShotService.embedVideoFromLinks(queuedShot.getShot());
+            queuedShot.setShot(shotWithEmbedVideoInfo);
         }
     }
 

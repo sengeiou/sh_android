@@ -14,12 +14,14 @@ public class ShootrShotService {
 
     private final ImageResizer imageResizer;
     private final PhotoService photoService;
+    private final ShotGateway shotGateway;
     private final ShotRepository remoteShotRepository;
 
-    @Inject public ShootrShotService(ImageResizer imageResizer, PhotoService photoService,
+    @Inject public ShootrShotService(ImageResizer imageResizer, PhotoService photoService, ShotGateway shotGateway,
       @Remote ShotRepository remoteShotRepository) {
         this.imageResizer = imageResizer;
         this.photoService = photoService;
+        this.shotGateway = shotGateway;
         this.remoteShotRepository = remoteShotRepository;
     }
 
@@ -30,6 +32,10 @@ public class ShootrShotService {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
+    }
+
+    public Shot embedVideoFromLinks(Shot originalShot) {
+        return shotGateway.embedVideoInfo(originalShot);
     }
 
     public Shot sendShot(Shot shot) {
