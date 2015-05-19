@@ -76,6 +76,7 @@ public class EventsSearchInteractor implements Interactor {
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
 
         setCurrentCheckedInEventIfAny(eventSearchResultList);
+        setCurrentWatchingEventIfAny(eventSearchResultList);
 
         notifySearchResultsSuccessful(eventSearchResultList);
     }
@@ -84,6 +85,13 @@ public class EventsSearchInteractor implements Interactor {
         String eventCheckedIn = sessionRepository.getCurrentUser().getIdCheckedEvent();
         if (eventCheckedIn != null) {
             eventSearchResultList.setCurrentCheckedInEventId(eventCheckedIn);
+        }
+    }
+
+    private void setCurrentWatchingEventIfAny(EventSearchResultList eventSearchResultList) {
+        String eventWatching = sessionRepository.getCurrentUser().getIdWatchingEvent();
+        if (eventWatching != null) {
+            eventSearchResultList.setCurrentWatchingEventId(eventWatching);
         }
     }
 
