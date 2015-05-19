@@ -28,32 +28,32 @@ public class DatabaseVersionUtilsTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        databaseVersionUtils = new DatabaseVersionUtils(preferencesDatabaseVersion, version);
+        databaseVersionUtils = new DatabaseVersionUtils(preferencesDatabaseVersion, version, shootrDbOpenHelper, sharedPreferences);
     }
 
     @Test
     public void shouldUpdateDatabaseVersionIfTheresNoVersion(){
         when(preferencesDatabaseVersion.get()).thenReturn(0);
-        when(version.getDatabaseVersionFromBuild()).thenReturn(1);
+        when(version.getDatabaseVersion()).thenReturn(1);
         setupSharedPreferencesClear();
-        databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
+        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldUpdateDatabaseVersionIfVersionIsInferior(){
         when(preferencesDatabaseVersion.get()).thenReturn(1);
-        when(version.getDatabaseVersionFromBuild()).thenReturn(2);
+        when(version.getDatabaseVersion()).thenReturn(1);
         setupSharedPreferencesClear();
-        databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
+        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
         verify(preferencesDatabaseVersion).set(anyInt());
     }
 
     @Test
     public void shouldNotUpdateDatabaseVersionIfVersionIsTheSame(){
         when(preferencesDatabaseVersion.get()).thenReturn(1);
-        when(version.getDatabaseVersionFromBuild()).thenReturn(1);
-        databaseVersionUtils.manageCurrentDatabaseVersion(shootrDbOpenHelper, sharedPreferences);
+        when(version.getDatabaseVersion()).thenReturn(1);
+        databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
         verify(preferencesDatabaseVersion, never()).set(anyInt());
     }
 
