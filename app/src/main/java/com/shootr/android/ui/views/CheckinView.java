@@ -14,7 +14,5 @@ public interface CheckinView {
 
     void hideCheckedIn();
 
-    void showCheckOutAction();
-
     void showCheckInAction();
 }

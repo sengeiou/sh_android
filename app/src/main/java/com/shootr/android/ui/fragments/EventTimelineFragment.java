@@ -501,10 +501,6 @@ public class EventTimelineFragment extends BaseFragment
         toolbarDecorator.hideSubtitle();
     }
 
-    @Override public void showCheckOutAction() {
-        checkinBar.showCheckout();
-    }
-
     @Override public void showCheckInAction() {
         checkinBar.showCheckin();
     }
