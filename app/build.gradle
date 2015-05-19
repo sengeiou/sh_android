@@ -77,6 +77,7 @@ android {
     signingConfigs {
         release {
             storeFile file('../certs/release.keystore')
+            //TODO use credentials from external file or environment variables
             storePassword "android"
             keyAlias "androiddebugkey"
             keyPassword "android"
@@ -105,7 +106,7 @@ android {
             buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
         }
         release {
-            minifyEnabled false
+            minifyEnabled false //TODO configurarlo y activarlo
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
