@@ -1,5 +1,6 @@
 package com.shootr.android.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import com.shootr.android.data.prefs.IntPreference;
@@ -24,16 +25,17 @@ public class DatabaseVersionUtilsTest {
     private static final int VERSION_2 = 2;
 
     @Mock IntPreference preferencesDatabaseVersion;
-    private DatabaseVersionUtils databaseVersionUtils;
-    @Mock ShootrDbOpenHelper shootrDbOpenHelper;
+    @Mock Context context;
     @Mock Version version;
+
+    private DatabaseVersionUtils databaseVersionUtils;
 
     SharedPreferences sharedPreferences = mock(SharedPreferences.class, RETURNS_DEEP_STUBS);
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        databaseVersionUtils = new DatabaseVersionUtils(preferencesDatabaseVersion, version, shootrDbOpenHelper, sharedPreferences);
+        databaseVersionUtils = new DatabaseVersionUtils(context, sharedPreferences, preferencesDatabaseVersion, version);
     }
 
     @Test
@@ -81,7 +83,7 @@ public class DatabaseVersionUtilsTest {
 
         databaseVersionUtils.clearDataOnDatabaseVersionUpdated();
 
-        verify(shootrDbOpenHelper).onUpgrade(any(SQLiteDatabase.class), anyInt(), anyInt());
+        verify(context).deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
     }
 
 

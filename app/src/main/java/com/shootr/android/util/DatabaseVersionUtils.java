@@ -1,25 +1,27 @@
 package com.shootr.android.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersion;
+import com.shootr.android.db.ShootrDbOpenHelper;
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils {
 
     private final IntPreference lastDatabaseVersion;
     private final Version currentVersion;
-    private final SQLiteOpenHelper sqliteOpenHelper;
     private final SharedPreferences sharedPreferences;
+    private Context context;
 
-    @Inject public DatabaseVersionUtils(@LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion,
-      SQLiteOpenHelper sqliteOpenHelper, SharedPreferences sharedPreferences) {
+    @Inject public DatabaseVersionUtils(@ApplicationContext Context context, SharedPreferences sharedPreferences,
+      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion) {
         this.lastDatabaseVersion = lastDatabaseVersion;
         this.currentVersion = currentVersion;
-        this.sqliteOpenHelper = sqliteOpenHelper;
         this.sharedPreferences = sharedPreferences;
+        this.context = context;
     }
 
     public void clearDataOnDatabaseVersionUpdated() {
@@ -35,8 +37,7 @@ public class DatabaseVersionUtils {
     }
 
     private void clearDatabase() {
-        SQLiteDatabase db = sqliteOpenHelper.getWritableDatabase();
-        sqliteOpenHelper.onUpgrade(db, currentVersion.getDatabaseVersion(), lastDatabaseVersion.get());
+        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
     }
 
     private void updateStoredDatabaseVersion() {
