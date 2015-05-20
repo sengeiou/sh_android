@@ -186,11 +186,6 @@ public class EventTimelineFragment extends BaseFragment
         } else {
             toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
         }
-        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                checkinPresenter.toolbarClick();
-            }
-        });
     }
 
 
@@ -493,16 +488,8 @@ public class EventTimelineFragment extends BaseFragment
         checkinBar.setClickable(true);
     }
 
-    @Override public void showCheckedIn() {
-        toolbarDecorator.setSubtitle(R.string.checked_in);
-    }
-
     @Override public void hideCheckedIn() {
         toolbarDecorator.hideSubtitle();
-    }
-
-    @Override public void showCheckInAction() {
-        checkinBar.showCheckin();
     }
     //endregion
 }

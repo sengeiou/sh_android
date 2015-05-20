@@ -94,49 +94,6 @@ public class CheckinPresenterTest {
     }
     // endregion
 
-    //region Toolbar interaction
-
-    @Test public void shouldNotShowCheckedInStatusWhenToolbarClickedAfterInteractorCallbacksIfButtonIsNotVisible()
-      throws Exception {
-        setupCheckinStatusCallbacks(true);
-        presenter.initialize(checkinView, EVENT_ID);
-        presenter.showingCheckinButton = false;
-
-        presenter.toolbarClick();
-
-        verify(checkinView, never()).showCheckinButton();
-    }
-
-    @Test public void shouldHideCheckinButtonWhenToolbarClickedIfButtonIsAlreadyVisible() throws Exception {
-        setupCheckinStatusCallbacks(true);
-        presenter.initialize(checkinView, EVENT_ID);
-        presenter.showingCheckinButton = true;
-
-        presenter.toolbarClick();
-
-        verify(checkinView).hideCheckinButton();
-    }
-
-    @Test public void shouldShowCheckedInWhenToolbarClickedIfButtonIsAlreadyVisible() throws Exception {
-        setupCheckinStatusCallbacks(true);
-        presenter.initialize(checkinView, EVENT_ID);
-        presenter.showingCheckinButton = true;
-
-        presenter.toolbarClick();
-
-        verify(checkinView, times(2)).showCheckedIn();
-    }
-
-    //endregion
-
-    @Test public void shouldNotInteractWithViewWhenToolbarClickedIfCheckinStatusHasntCallbackYet() throws Exception {
-        doNothing().when(getCheckinStatusInteractor).loadCheckinStatus(anyString(), any(Interactor.Callback.class));
-
-        presenter.toolbarClick();
-
-        verifyZeroInteractions(checkinView);
-    }
-
     private void setupCheckinStatusCallbacks(final boolean isCheckedIn) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

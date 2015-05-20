@@ -202,9 +202,6 @@
     <string name="day_ago">1 day ago</string>
     <string name="hour_ago">1 hour ago</string>
     <string name="minute_ago">1 minute ago</string>
-    <string name="checked_in">Checked In</string>
-    <string name="check_in_action">Check In</string>
-    <string name="check_out_action">Check Out</string>
     <string name="user_not_found">User not found</string>
 
     <plurals name="replies_header_count_pattern">

@@ -46,23 +46,13 @@ public class CheckinBar extends FrameLayout {
         ButterKnife.inject(this);
     }
 
-    public void showCheckin() {
-        checkinText.setText(R.string.check_in_action);
-        checkinContainer.setBackgroundColor(getResources().getColor(R.color.checkin_bar_background_action_checkin));
-    }
-
-    public void showCheckout() {
-        checkinText.setText(R.string.check_out_action);
-        checkinContainer.setBackgroundColor(getResources().getColor(R.color.checkin_bar_background_action_checkout));
-    }
-
     public void showLoading(boolean loading) {
         if (loading) {
             checkinLoading.setVisibility(VISIBLE);
             checkinText.setVisibility(GONE);
         } else {
+            checkinText.setVisibility(GONE);
             checkinLoading.setVisibility(GONE);
-            checkinText.setVisibility(VISIBLE);
         }
     }
 

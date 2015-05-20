@@ -45,28 +45,6 @@ public class CheckinPresenter implements Presenter {
     private void onCheckinStatusLoaded() {
         if (!checkedInEvent) {
             this.showViewCheckinButton();
-        } else {
-            checkinView.showCheckedIn();
-        }
-    }
-
-    public void toolbarClick() {
-        if (checkedInEvent != null) {
-            if (showingCheckinButton) {
-                hideViewCheckinButton();
-                showViewCheckedInIfCheckedIn();
-            } else {
-                if(checkedInEvent.equals(false)){
-                    showViewCheckinButton();
-                    checkinView.hideCheckedIn();
-                }
-            }
-        }
-    }
-
-    private void showViewCheckedInIfCheckedIn() {
-        if (checkedInEvent) {
-            checkinView.showCheckedIn();
         }
     }
 
@@ -81,7 +59,6 @@ public class CheckinPresenter implements Presenter {
                 checkedInEvent = true;
                 checkinView.hideCheckinLoading();
                 hideViewCheckinButton();
-                checkinView.showCheckedIn();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
