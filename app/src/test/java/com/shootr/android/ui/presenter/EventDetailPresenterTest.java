@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import android.content.SharedPreferences;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
+import com.shootr.android.domain.interactor.event.GetEventMediaCountInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -35,6 +36,7 @@ public class EventDetailPresenterTest {
 
     @Mock SharedPreferences sharedPreferences;
     @Mock WatchersTimeFormatter watchersTimeFormatter;
+    @Mock GetEventMediaCountInteractor eventMediaCountInteractor;
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -47,7 +49,7 @@ public class EventDetailPresenterTest {
           eventModelMapper,
           userModelMapper,
           errorMessageFactory,
-          watchersTimeFormatter);
+          watchersTimeFormatter, eventMediaCountInteractor);
 
         presenter.setView(eventDetailView);
     }
