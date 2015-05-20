@@ -1,206 +1,189 @@
-<manifest
-  package="com.shootr.android"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shootr.android" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- Sync adapter -->
-    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <!-- Account management -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <!-- GCM -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="${packageName}.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="${packageName}.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- optional -->
 
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
 
-    <permission android:name="${packageName}.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+    <permission
+        android:name="${packageName}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <application
-      android:name=".ShootrApplication"
-      android:allowBackup="true"
-      android:icon="@drawable/ic_launcher"
-      android:label="@string/app_name"
-      android:theme="@style/ShootrTheme">
-
-
+        android:name=".ShootrApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/ShootrTheme" >
         <activity
-          android:name=".ui.activities.EventsListActivity"
-          android:label="@string/app_name"
-          android:launchMode="standard"
-          >
+            android:name=".ui.activities.EventsListActivity"
+            android:label="@string/app_name"
+            android:launchMode="standard" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-      <activity
-        android:name="com.shootr.android.ui.activities.ActivityTimelineActivity"
-        android:label="@string/drawer_activity_title">
-      </activity>
-
-      <activity
-        android:name="com.shootr.android.ui.activities.EventTimelineActivity">
-      </activity>
-
-        <activity android:name=".ui.activities.PeopleActivity"
-            android:label="@string/drawer_friends_title"
-            />
-
         <activity
-          android:name=".ui.activities.registro.WelcomeLoginActivity"
-          android:label="@string/app_name"
-          android:launchMode="singleTop"
-          android:theme="@style/ShootrTheme.NoActionBar">
+            android:name=".ui.activities.ActivityTimelineActivity"
+            android:label="@string/drawer_activity_title" >
+        </activity>
+        <activity android:name=".ui.activities.EventTimelineActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activities.PeopleActivity"
+            android:label="@string/drawer_friends_title" />
+        <activity
+            android:name=".ui.activities.registro.WelcomeLoginActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/ShootrTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".ui.activities.registro.EmailRegistrationActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:label="@string/title_activity_registration_email">
+            android:label="@string/title_activity_registration_email"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-          android:name=".ui.activities.registro.EmailLoginActivity"
-          android:label="@string/title_activity_login_email">
+            android:name=".ui.activities.registro.EmailLoginActivity"
+            android:label="@string/title_activity_login_email" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.registro.WelcomeLoginActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shootr.android.ui.activities.registro.WelcomeLoginActivity" />
         </activity>
-
-
         <activity
-          android:name=".ui.activities.PostNewShotActivity"
-          android:theme="@style/ShootrTheme.NoActionBar.Floating">
+            android:name=".ui.activities.PostNewShotActivity"
+            android:theme="@style/ShootrTheme.NoActionBar.Floating" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activities.ProfileContainerActivity" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.EventsListActivity" />
         </activity>
-
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
         </activity>
-
         <activity
-          android:name=".ui.activities.FindFriendsActivity"
-          android:theme="@style/ShootrTheme.Closable"
-          android:label="@string/activity_find_friends_title">
-
+            android:name=".ui.activities.FindFriendsActivity"
+            android:label="@string/activity_find_friends_title"
+            android:theme="@style/ShootrTheme.Closable" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.EventsListActivity" />
         </activity>
-
         <activity
-          android:name=".ui.activities.EventDetailActivity"
-          android:theme="@style/ShootrTheme.TranslucentToolbar"
-          android:label="@string/activity_info_title">
-
+            android:name=".ui.activities.EventDetailActivity"
+            android:label="@string/activity_info_title"
+            android:theme="@style/ShootrTheme.TranslucentToolbar" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.EventsListActivity" />
         </activity>
-
-      <activity
-          android:name="com.shootr.android.ui.activities.ProfileEditActivity"
-          android:label="@string/profile_edit_profile"
-          android:theme="@style/ShootrTheme.Closable"
-          android:parentActivityName="com.shootr.android.ui.activities.ProfileContainerActivity" >
+        <activity
+            android:name=".ui.activities.ProfileEditActivity"
+            android:label="@string/profile_edit_profile"
+            android:parentActivityName=".ui.activities.ProfileContainerActivity"
+            android:theme="@style/ShootrTheme.Closable" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.ProfileContainerActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shootr.android.ui.activities.ProfileContainerActivity" />
         </activity>
-
         <activity
-          android:name="com.shootr.android.ui.activities.ShotDetailActivity"
-          android:parentActivityName=".ui.activities.EventTimelineActivity"
-          >
+            android:name=".ui.activities.ShotDetailActivity"
+            android:parentActivityName=".ui.activities.EventTimelineActivity" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventTimelineActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.EventTimelineActivity" />
         </activity>
-
         <activity
-          android:name=".ui.activities.PhotoViewActivity"
-          android:theme="@style/ShootrTheme.PhotoViewer"
-          >
+            android:name=".ui.activities.PhotoViewActivity"
+            android:theme="@style/ShootrTheme.PhotoViewer" >
         </activity>
-
         <activity
-          android:name="com.shootr.android.ui.activities.NewEventActivity"
-          android:label="@string/activity_new_event_title"
-          android:theme="@style/ShootrTheme.Closable" >
+            android:name=".ui.activities.NewEventActivity"
+            android:label="@string/activity_new_event_title"
+            android:theme="@style/ShootrTheme.Closable" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value=".ui.activities.EventsListActivity" />
-          </activity>
-
-      <activity
-          android:name=".ui.activities.TimezonePickerActivity"
-          android:label="@string/activity_pick_timezone_title"
-          android:theme="@style/ShootrTheme.Closable"
-          >
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.EventsListActivity" />
         </activity>
-
         <activity
-          android:name=".ui.activities.DraftsActivity"
-          android:label="@string/activity_drafts_title"
-          android:theme="@style/ShootrTheme.DarkToolbar"
-          >
+            android:name=".ui.activities.TimezonePickerActivity"
+            android:label="@string/activity_pick_timezone_title"
+            android:theme="@style/ShootrTheme.Closable" >
         </activity>
-
-        <activity android:name=".ui.activities.UpdateWarningActivity"
-          android:launchMode="singleTask"
-            />
+        <activity
+            android:name=".ui.activities.DraftsActivity"
+            android:label="@string/activity_drafts_title"
+            android:theme="@style/ShootrTheme.DarkToolbar" >
+        </activity>
+        <activity
+            android:name=".ui.activities.UpdateWarningActivity"
+            android:launchMode="singleTask" />
 
         <service android:name=".data.background.ShotDispatcherBackgroundService" />
 
         <meta-data
-          android:name="com.facebook.sdk.ApplicationId"
-          android:value="@string/facebookID"
-          />
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebookID" />
 
-        <receiver android:name=".notifications.gcm.GCMBroadcastReceiver"
-          android:exported="true"
-          android:permission="com.google.android.c2dm.permission.SEND" >
+        <receiver
+            android:name=".notifications.gcm.GCMBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".notifications.gcm.NotificationIntentReceiver"
-          >
+        <receiver android:name=".notifications.gcm.NotificationIntentReceiver" >
             <intent-filter>
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
-                <action android:name="com.shootr.android.ACTION_OPEN_PROFILE"/>
+                <action android:name="com.shootr.android.ACTION_OPEN_PROFILE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
         <service
-          android:name=".notifications.gcm.GCMIntentService"
-          android:exported="false" />
-        <meta-data android:name="com.crashlytics.ApiKey" android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662"/>
+            android:name=".notifications.gcm.GCMIntentService"
+            android:exported="false" />
 
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662" />
 
+        <activity
+            android:name=".ui.activities.EventMediaActivity"
+            android:label="@string/title_activity_event_media" >
+        </activity>
     </application>
 
 </manifest>

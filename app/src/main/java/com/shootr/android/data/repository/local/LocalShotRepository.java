@@ -46,4 +46,8 @@ public class LocalShotRepository implements ShotRepository {
     @Override public int getMediaCountByIdEvent(String idEvent, String idUser) {
         return 0;
     }
+
+    @Override public Shot getMediaByIdEvent(String idEvent, String userId) {
+        return null;
+    }
 }

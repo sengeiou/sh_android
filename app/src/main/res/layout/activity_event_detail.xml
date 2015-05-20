@@ -108,7 +108,7 @@
                               android:layout_gravity="center_vertical"
                               android:layout_marginLeft="16dp"
                               android:src="@drawable/ic_image_photo_library" />
-                            <TextView android:id="@+id/event_media"
+                            <TextView android:id="@+id/event_detail_media"
                               android:layout_width="match_parent"
                               android:layout_height="56dp"
                               android:background="?selectableItemBackground"
@@ -117,6 +117,7 @@
                               android:paddingLeft="@dimen/keyline_2"
                               android:textAppearance="@style/TextAppearance.Switch"
                               android:textColor="?android:attr/textColorPrimary"
+                              android:text="Loading media"
                               tools:text="media" />
                         </FrameLayout>
 
