@@ -72,40 +72,36 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     private void markEvents(ViewHolder holder, EventResultModel event) {
         String idEvent = event.getEventModel().getIdEvent();
-        boolean isSelectedEvent = idEvent.equals(currentVisibleCheckedInEvent);
+        boolean isCheckedInEvent = idEvent.equals(currentVisibleCheckedInEvent);
         boolean isWatchingEvent = idEvent.equals(currentVisibleWathingEvent);
-        if(isSelectedEvent && !isWatchingEvent){
-            markSelectedEvent(holder, isSelectedEvent);
-        }else if(isWatchingEvent && !isSelectedEvent){
-            markWatchingEvent(holder, isWatchingEvent);
-        }else if(isSelectedEvent){
-            markWatchingEvent(holder, true);
-        }else{
-            markSelectedEventAsRegularEvent(holder);
-        }
-    }
 
-    private void markSelectedEventAsRegularEvent(ViewHolder holder) {
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-    }
-
-    private void markSelectedEvent(ViewHolder holder, boolean isSelectedEvent) {
-        if (isSelectedEvent) {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_grey70, 0);
+        if (isCheckedInEvent || isWatchingEvent) {
+            setNotificationIconVisibility(holder, true);
         } else {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            setNotificationIconVisibility(holder, false);
+        }
+
+        if (isWatchingEvent) {
+            setHighlightColorVisibility(holder, true);
+        } else {
+            setHighlightColorVisibility(holder, false);
         }
     }
-    private void markWatchingEvent(ViewHolder holder, boolean isWatchingEvent) {
-        if (isWatchingEvent) {
+
+    private void setNotificationIconVisibility(ViewHolder holder, boolean visible) {
+        holder.title.setCompoundDrawablesWithIntrinsicBounds(0,
+          0,
+          visible ? R.drawable.ic_notifications_on_16_grey70 : 0,
+          0);
+    }
+
+    private void setHighlightColorVisibility(ViewHolder holder, boolean showHighlight) {
+        if (showHighlight) {
             CharSequence text = holder.title.getText();
             SpannableStringBuilder sp = new SpannableStringBuilder(text);
             int selectedColor = resources.getColor(R.color.primary);
             sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.title.setText(sp);
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_grey70, 0);
-        } else {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
     }
 
