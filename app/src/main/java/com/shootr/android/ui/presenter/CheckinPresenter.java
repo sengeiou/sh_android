@@ -1,5 +1,7 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.prefs.CheckinUserNotification;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
@@ -17,10 +19,14 @@ public class CheckinPresenter implements Presenter {
     protected boolean showingCheckinButton;
     private String idEvent;
 
+    private final BooleanPreference checkinUserNotificationPreference;
+
     @Inject public CheckinPresenter(GetCheckinStatusInteractor getCheckinStatusInteractor,
-      PerformCheckinInteractor performCheckinInteractor) {
+      PerformCheckinInteractor performCheckinInteractor,
+      @CheckinUserNotification BooleanPreference checkinUserNotificationPreference) {
         this.getCheckinStatusInteractor = getCheckinStatusInteractor;
         this.performCheckinInteractor = performCheckinInteractor;
+        this.checkinUserNotificationPreference = checkinUserNotificationPreference;
     }
 
     protected void setView(CheckinView checkinView) {
@@ -49,20 +55,21 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void checkinClick() {
-        checkIn();
+        checkinView.disableCheckinButton();
+        checkinView.showCheckinNotification(checkinUserNotificationPreference.get());
     }
 
-    protected void checkIn() {
-        checkinView.showCheckinLoading();
+    public void checkIn() {
+        hideViewCheckinButton();
         performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 checkedInEvent = true;
-                checkinView.hideCheckinLoading();
-                hideViewCheckinButton();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                //TODO veremos
+                checkinView.enableCheckinButton();
+                checkinView.showErrorWhileCheckingNotification();
+                checkinView.showCheckinButton();
             }
         });
     }
@@ -75,6 +82,10 @@ public class CheckinPresenter implements Presenter {
     private void hideViewCheckinButton() {
         showingCheckinButton = false;
         checkinView.hideCheckinButton();
+    }
+
+    public void saveUserNotificationPreferences() {
+        checkinUserNotificationPreference.set(false);
     }
 
     @Override public void resume() {

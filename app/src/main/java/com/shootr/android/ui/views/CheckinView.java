@@ -6,9 +6,11 @@ public interface CheckinView {
 
     void hideCheckinButton();
 
-    void showCheckinLoading();
+    void disableCheckinButton();
 
-    void hideCheckinLoading();
+    void enableCheckinButton();
 
-    void hideCheckedIn();
+    void showErrorWhileCheckingNotification();
+
+    void showCheckinNotification(Boolean userWantsNotification);
 }
