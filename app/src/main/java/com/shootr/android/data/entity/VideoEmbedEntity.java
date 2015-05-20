@@ -4,7 +4,7 @@ public class VideoEmbedEntity {
 
     private String image;
     private String comment;
-    private String videoURL;
+    private String videoUrl;
     private String videoTitle;
     private Long videoDuration;
 
@@ -24,12 +24,12 @@ public class VideoEmbedEntity {
         this.comment = comment;
     }
 
-    public String getVideoURL() {
-        return videoURL;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setVideoURL(String videoURL) {
-        this.videoURL = videoURL;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     public String getVideoTitle() {

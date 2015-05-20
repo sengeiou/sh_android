@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.VideoEmbedEntity;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.shot.ShotGateway;
@@ -19,9 +18,6 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
 import javax.inject.Inject;
-import org.json.JSONException;
-import org.json.JSONObject;
-import timber.log.Timber;
 
 public class SpecialserviceShotGateway implements ShotGateway {
 
@@ -78,7 +74,7 @@ public class SpecialserviceShotGateway implements ShotGateway {
     private Shot overwriteVideoValues(Shot originalShot, VideoEmbedEntity videoEmbedEntity) {
         originalShot.setImage(videoEmbedEntity.getImage());
         originalShot.setComment(videoEmbedEntity.getComment());
-        originalShot.setVideoUrl(videoEmbedEntity.getVideoURL());
+        originalShot.setVideoUrl(videoEmbedEntity.getVideoUrl());
         originalShot.setVideoTitle(videoEmbedEntity.getVideoTitle());
         originalShot.setVideoDuration(videoEmbedEntity.getVideoDuration());
         return originalShot;
