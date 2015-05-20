@@ -2,14 +2,12 @@ package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class ShootrUserServiceLoginTest {
 
     private static final String CURRENT_USER_ID = "user_id";
-    private static final String VISIBLE_EVENT_ID = "eventd_id";
+    private static final String WATCHING_EVENT_ID = "watching_id";
     private static final String USERNAME_OR_EMAIL_STUB = "username_or_email";
     private static final String SESSION_TOKEN_STUB = "sessionToken";
 
@@ -58,7 +56,7 @@ public class ShootrUserServiceLoginTest {
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
 
-        verify(remoteEventRepository).getEventById(VISIBLE_EVENT_ID);
+        verify(remoteEventRepository).getEventById(WATCHING_EVENT_ID);
     }
 
     @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws IOException {
@@ -92,7 +90,7 @@ public class ShootrUserServiceLoginTest {
 
     private LoginResult loginResultWithEvent() {
         User user = currentUser();
-        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(WATCHING_EVENT_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -103,7 +101,7 @@ public class ShootrUserServiceLoginTest {
     private User currentUser() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
-        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
     }
 }

@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
 
-    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String WATCHING_EVENT_ID = "watching_event";
     private static final String EVENT_AUTHOR_ID = "event_author";
     private static final String ID_CURRENT_USER = "current_user";
 
@@ -73,7 +73,7 @@ public class GetActivityTimelineInteractorTest {
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupVisibleEvent();
+        setupWatchingEvent();
         when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadActivityTimeline(spyCallback, errorCallback);
@@ -85,7 +85,7 @@ public class GetActivityTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -99,9 +99,9 @@ public class GetActivityTimelineInteractorTest {
         return shot;
     }
 
-    private void setupVisibleEvent() {
+    private void setupWatchingEvent() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
+        when(eventRepository.getEventById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
     }
 
     //region Stubs
@@ -109,15 +109,9 @@ public class GetActivityTimelineInteractorTest {
         return Arrays.asList(new User());
     }
 
-    private Shot.ShotEventInfo visibleEventInfo() {
-        Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(VISIBLE_EVENT_ID);
-        return eventInfo;
-    }
-
-    private Event visibleEvent() {
+    private Event watchingEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
+        event.setId(WATCHING_EVENT_ID);
         event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }

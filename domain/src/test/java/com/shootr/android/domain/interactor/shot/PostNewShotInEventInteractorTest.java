@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestBase {
 
-    private static final String VISIBLE_EVENT_ID = "1L";
+    private static final String WATCHING_EVENT_ID = "1L";
 
     @Mock EventRepository localEventRepository;
 
@@ -42,9 +42,9 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
     }
 
     @Test
-    public void shouldSendShotWithVisibleEventInfoWhenThereIsVisibleEvent() throws Exception {
+    public void shouldSendShotWithWatchingEventInfoWhenThereIsWatchingEvent() throws Exception {
         setupCurrentUserSession();
-        setupVisibleEvent();
+        setupWatchingEvent();
 
         interactor.postNewShotInEvent(COMMENT_STUB,
           IMAGE_NULL,
@@ -55,11 +55,11 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
         Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
-        assertEventInfoIsFromEvent(eventInfo, visibleEvent());
+        assertEventInfoIsFromEvent(eventInfo, watchingEvent());
     }
 
     @Test
-    public void shouldSendShotWithoutEventInfoWhenNoEventVisible() throws Exception {
+    public void shouldSendShotWithoutEventInfoWhenNoEventWatching() throws Exception {
         setupCurrentUserSession();
 
         interactor.postNewShotInEvent(COMMENT_STUB,
@@ -74,14 +74,14 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         assertThat(eventInfo).isNull();
     }
 
-    private void setupVisibleEvent() {
+    private void setupWatchingEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-        when(localEventRepository.getEventById(VISIBLE_EVENT_ID)).thenReturn(visibleEvent());
+        when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
-    private Event visibleEvent() {
+    private Event watchingEvent() {
         Event event = new Event();
-        event.setId(String.valueOf(VISIBLE_EVENT_ID));
+        event.setId(String.valueOf(WATCHING_EVENT_ID));
         event.setTitle(EVENT_TITLE_STUB);
         event.setTag(EVENT_TAG_STUB);
         return event;
@@ -89,7 +89,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private User currentUserWatching() {
         User user = currentUser();
-        user.setIdWatchingEvent(String.valueOf(VISIBLE_EVENT_ID));
+        user.setIdWatchingEvent(String.valueOf(WATCHING_EVENT_ID));
         return user;
     }
 }
