@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ public class GetEventMediaCountInteractor implements Interactor {
     private final UserRepository userRepository;
 
     private String idEvent;
+    private String idUser;
     private Callback callback;
 
     @Inject public GetEventMediaCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -28,17 +30,23 @@ public class GetEventMediaCountInteractor implements Interactor {
         this.userRepository = userRepository;
     }
 
-    public void getEventMediaCount(String idEvent, Callback callback) {
+    public void getEventMediaCount(String idEvent, String idUser, Callback callback) {
         this.idEvent = idEvent;
         this.callback = callback;
+        this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
         List<User> people = userRepository.getPeople();
-        Integer mediaCountByIdEvent = 0;
+        List<String> peopleIds = new ArrayList<>();
         for (User user : people) {
-            mediaCountByIdEvent += shotRepository.getMediaCountByIdEvent(idEvent, user.getIdUser());
+            peopleIds.add(user.getIdUser());
+        }
+        peopleIds.add(idUser);
+        Integer mediaCountByIdEvent = 0;
+        for (String userId : peopleIds) {
+            mediaCountByIdEvent += shotRepository.getMediaCountByIdEvent(idEvent, userId);
         }
         notifyLoaded(mediaCountByIdEvent);
     }
