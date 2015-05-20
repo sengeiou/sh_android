@@ -9,6 +9,7 @@ import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.TimelineParameters;
 
+import com.shootr.android.domain.User;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -72,4 +73,6 @@ public interface ShootrService {
     void performCheckout(String idUser, String watchingEventId) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
+
+    int getEventMediaCount(String idEvent, String idUser) throws IOException;
 }

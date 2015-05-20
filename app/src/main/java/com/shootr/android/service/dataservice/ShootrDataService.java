@@ -529,6 +529,20 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
+    @Override public int getEventMediaCount(String idEvent, String idUser) throws IOException {
+        Integer numberOfMedia = 0;
+        GenericDto requestDto = shotDtoFactory.getMediaByEventAndUser(idEvent, idUser);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            MetadataDto metadata = ops[0].getMetadata();
+            numberOfMedia = metadata.getTotalItems().intValue();
+        }
+        return numberOfMedia;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

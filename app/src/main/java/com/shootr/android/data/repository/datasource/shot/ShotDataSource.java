@@ -15,4 +15,6 @@ public interface ShotDataSource {
     ShotEntity getShot(String shotId);
 
     List<ShotEntity> getReplies(String shotId);
+
+    int getEventMediaCount(String idEvent, String idUser);
 }

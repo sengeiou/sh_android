@@ -42,4 +42,8 @@ public class LocalShotRepository implements ShotRepository {
     @Override public List<Shot> getReplies(String shot) {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
+
+    @Override public int getMediaCountByIdEvent(String idEvent, String idUser) {
+        return 0;
+    }
 }

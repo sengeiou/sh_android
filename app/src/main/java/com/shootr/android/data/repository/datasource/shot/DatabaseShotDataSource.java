@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.exception.RepositoryException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
@@ -39,5 +40,9 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
     @Override public List<ShotEntity> getReplies(String shotId) {
         return shotManager.getRepliesTo(shotId);
+    }
+
+    @Override public int getEventMediaCount(String idEvent, String idUser) {
+        return 0;
     }
 }

@@ -5,6 +5,7 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -20,6 +21,7 @@ public class ShotDtoFactory {
     private static final String ALIAS_GET_SHOT = "GET_SHOT";
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
     private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
+    private static final String ALIAS_GET_MEDIA = "GET_MEDIAS_OF_EVENT_BY_USER";
     private static final int REPLIES_MAX_ITEMS = 50;
 
     private UtilityDtoFactory utilityDtoFactory;
@@ -111,5 +113,27 @@ public class ShotDtoFactory {
      */
     private long futureModifiedTimeToSkipServerCache() {
         return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
+    }
+
+    public GenericDto getMediaByEventAndUser(String idEvent, String idUser) {
+        FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(idUser) //
+          .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
+          .and(ShotTable.IMAGE).isNotEqualTo(null) //
+          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder() //
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .entity(ShotTable.TABLE)
+          .filter(eventsFilter)
+          .items(0)
+          .build();
+
+        OperationDto op = new OperationDto.Builder() //
+          .metadata(md) //
+          .putData(shotEntityMapper.toDto(null)) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
 }

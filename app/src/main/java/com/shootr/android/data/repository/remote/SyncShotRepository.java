@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
+import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
@@ -47,5 +48,9 @@ public class SyncShotRepository implements ShotRepository {
 
     @Override public List<Shot> getReplies(String shot) {
         return shotEntityMapper.transform(remoteShotDataSource.getReplies(shot));
+    }
+
+    @Override public int getMediaCountByIdEvent(String idEvent, String idUser) {
+        return remoteShotDataSource.getEventMediaCount(idEvent, idUser);
     }
 }
