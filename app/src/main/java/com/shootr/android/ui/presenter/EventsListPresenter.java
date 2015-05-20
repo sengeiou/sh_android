@@ -130,11 +130,11 @@ public class EventsListPresenter implements Presenter {
     }
 
     private void setViewCurrentVisibleCheckedInEvent(String currentVisibleEventId) {
-        eventsListView.setCurrentVisibleCheckedInEventId(currentVisibleEventId);
+        eventsListView.setCurrentCheckedInEventId(currentVisibleEventId);
     }
 
     private void setViewCurrentVisibleWatchingEvent(String currentVisibleEventId) {
-        eventsListView.setCurrentVisibleWatchingEventId(currentVisibleEventId);
+        eventsListView.setCurrentWatchingEventId(currentVisibleEventId);
     }
 
     private void renderViewEventsList(List<EventResultModel> eventModels) {

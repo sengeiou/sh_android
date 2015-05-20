@@ -25,8 +25,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     private final Resources resources;
 
     private List<EventResultModel> events;
-    private String currentVisibleCheckedInEvent;
-    private String currentVisibleWathingEvent;
+    private String currentCheckedInEvent;
+    private String currentWathingEvent;
 
     private OnEventClickListener onEventClickListener;
 
@@ -72,8 +72,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     private void markEvents(ViewHolder holder, EventResultModel event) {
         String idEvent = event.getEventModel().getIdEvent();
-        boolean isCheckedInEvent = idEvent.equals(currentVisibleCheckedInEvent);
-        boolean isWatchingEvent = idEvent.equals(currentVisibleWathingEvent);
+        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
+        boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
 
         if (isCheckedInEvent || isWatchingEvent) {
             setNotificationIconVisibility(holder, true);
@@ -113,12 +113,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         return events.size();
     }
 
-    public void setCurrentVisibleCheckedInEvent(String eventId) {
-        this.currentVisibleCheckedInEvent = eventId;
+    public void setCurrentCheckedInEvent(String eventId) {
+        this.currentCheckedInEvent = eventId;
     }
 
-    public void setCurrentVisibleWatchingEvent(String eventId) {
-        this.currentVisibleWathingEvent = eventId;
+    public void setCurrentWatchingEvent(String eventId) {
+        this.currentWathingEvent = eventId;
     }
 
     public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
