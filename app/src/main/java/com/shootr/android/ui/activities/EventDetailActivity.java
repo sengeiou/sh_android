@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -77,7 +78,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
-    @InjectView(R.id.event_media) TextView eventMedia;
+    @InjectView(R.id.event_detail_media) TextView eventMedia;
 
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -153,6 +154,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @OnClick(R.id.event_author)
     public void onAuthorClick() {
         presenter.clickAuthor();
+    }
+
+    @OnClick(R.id.event_detail_media)
+    public void onMediaClick() {
+        presenter.clickMedia();
     }
 
     //region Edit photo
@@ -481,6 +487,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override public void setMediaCount(Integer mediaCount) {
         eventMedia.setText("Media "+mediaCount.toString());
+    }
+
+    @Override public void navigateToMedia() {
+        Intent intent = new Intent(this, EventMediaActivity.class);
+        startActivity(intent);
     }
 
     @Override public void showEmpty() {
