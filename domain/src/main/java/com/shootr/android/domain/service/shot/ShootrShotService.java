@@ -35,7 +35,12 @@ public class ShootrShotService {
     }
 
     public Shot embedVideoFromLinks(Shot originalShot) {
-        return shotGateway.embedVideoInfo(originalShot);
+        try {
+            return shotGateway.embedVideoInfo(originalShot);
+        } catch (IOException e) {
+            /* Ignore error and return shot without modifications */
+            return originalShot;
+        }
     }
 
     public Shot sendShot(Shot shot) {

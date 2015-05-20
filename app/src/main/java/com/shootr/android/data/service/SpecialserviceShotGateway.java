@@ -1,11 +1,15 @@
 package com.shootr.android.data.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.entity.VideoEmbedEntity;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.shot.ShotGateway;
 import com.shootr.android.service.Endpoint;
+import com.shootr.android.service.ShootrEmbedVideoError;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
@@ -17,6 +21,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 public class SpecialserviceShotGateway implements ShotGateway {
 
@@ -34,28 +39,48 @@ public class SpecialserviceShotGateway implements ShotGateway {
         embedVideoEndpoint = endpoint.getUrl() + "/shootr-services/rest/video/embed/";
     }
 
-    @Override public Shot embedVideoInfo(Shot originalShot) {
+    @Override public Shot embedVideoInfo(Shot originalShot) throws IOException {
+        VideoEmbedEntity videoEmbedEntity = executeRequest(originalShot);
+        return overwriteVideoValues(originalShot, videoEmbedEntity);
+    }
+
+    private VideoEmbedEntity executeRequest(Shot originalShot) throws IOException {
         RequestBody body = buildRequestBody(originalShot.getComment());
         Request request = new Request.Builder().url(embedVideoEndpoint).post(body).build();
+        String responseBody;
         try {
             Response response = okHttpClient.newCall(request).execute();
-            String responseBody = response.body().string();
-            JSONObject jsonBody = new JSONObject(responseBody);
-            String comment = jsonBody.getString("comment");
-            String image = jsonBody.getString("image");
-            String videoUrl = jsonBody.getString("videoUrl");
-            String videoTitle = jsonBody.getString("videoTitle");
-            Long videoDuration = jsonBody.getLong("videoDuration");
-
-            originalShot.setComment(comment);
-            originalShot.setVideoUrl(videoUrl);
-            originalShot.setVideoTitle(videoTitle);
-            originalShot.setVideoDuration(videoDuration);
-            originalShot.setImage(image);
-        } catch (IOException | JSONException e) {
-            //TODO throw proper error
-            return originalShot;
+            responseBody = response.body().string();
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
         }
+        VideoEmbedEntity videoEmbedEntity = entityFromBody(responseBody);
+        if (videoEmbedEntity != null) {
+            return videoEmbedEntity;
+        } else {
+            throw parseErrorToException(responseBody);
+        }
+    }
+
+    private ShootrServerException parseErrorToException(String responseBody) throws IOException {
+        ShootrEmbedVideoError error = objectMapper.readValue(responseBody, ShootrEmbedVideoError.class);
+        throw new ShootrServerException(error);
+    }
+
+    private VideoEmbedEntity entityFromBody(String responseBody) {
+        try {
+            return objectMapper.readValue(responseBody, VideoEmbedEntity.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private Shot overwriteVideoValues(Shot originalShot, VideoEmbedEntity videoEmbedEntity) {
+        originalShot.setImage(videoEmbedEntity.getImage());
+        originalShot.setComment(videoEmbedEntity.getComment());
+        originalShot.setVideoUrl(videoEmbedEntity.getVideoURL());
+        originalShot.setVideoTitle(videoEmbedEntity.getVideoTitle());
+        originalShot.setVideoDuration(videoEmbedEntity.getVideoDuration());
         return originalShot;
     }
 
