@@ -8,6 +8,7 @@ import com.shootr.android.domain.bus.ShotQueued;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.service.shot.ShootrShotService;
+import com.shootr.android.domain.utils.Patterns;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.regex.Matcher;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -155,10 +157,17 @@ public class ShotDispatcher implements ShotSender {
 
     private void embedVideoFromLinksInComment(QueuedShot queuedShot) {
         boolean alreadyHasVideo = queuedShot.getShot().hasVideoEmbed();
-        if (!alreadyHasVideo) {
+        boolean hasImage = queuedShot.getShot().getImage() != null || queuedShot.getImageFile() != null;
+        boolean hasLinks = commentHasLinks(queuedShot.getShot().getComment());
+        if (!alreadyHasVideo && !hasImage && hasLinks) {
             Shot shotWithEmbedVideoInfo = shootrShotService.embedVideoFromLinks(queuedShot.getShot());
             queuedShot.setShot(shotWithEmbedVideoInfo);
         }
+    }
+
+    private boolean commentHasLinks(String comment) {
+        Matcher matcher = Patterns.WEB_URL.matcher(comment);
+        return matcher.find();
     }
 
     private void fillImageUrlFromQueuedShot(QueuedShot queuedShot) {
