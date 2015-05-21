@@ -205,7 +205,7 @@
     <string name="user_not_found">User not found</string>
     <string name="dont_show_again">Ok, Don\'t show again</string>
     <string name="problem_while_checkin">There was a problem while checking in</string>
-    <string name="successfully_checked_in">You\'ve successfully checked in</string>
+    <string name="successfully_checked_in">Checked in</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
