@@ -75,7 +75,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
         boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
 
-        if (isCheckedInEvent || isWatchingEvent) {
+        if (isCheckedInEvent) {
             setNotificationIconVisibility(holder, true);
         } else {
             setNotificationIconVisibility(holder, false);

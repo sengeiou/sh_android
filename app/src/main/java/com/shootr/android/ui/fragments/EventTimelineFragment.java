@@ -368,6 +368,10 @@ public class EventTimelineFragment extends BaseFragment
         }
     }
 
+    @Override public void showCheckedInNotification() {
+        Toast.makeText(getActivity(),getActivity().getString(R.string.successfully_checked_in), Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void disableCheckinButton() {
         checkinButton.setEnabled(false);
     }

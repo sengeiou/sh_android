@@ -55,7 +55,6 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void checkinClick() {
-        checkinView.disableCheckinButton();
         checkinView.showCheckinNotification(checkinUserNotificationPreference.get());
     }
 
@@ -64,6 +63,7 @@ public class CheckinPresenter implements Presenter {
         performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 checkedInEvent = true;
+                checkinView.showCheckedInNotification();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

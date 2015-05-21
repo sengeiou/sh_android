@@ -13,4 +13,6 @@ public interface CheckinView {
     void showErrorWhileCheckingNotification();
 
     void showCheckinNotification(Boolean userWantsNotification);
+
+    void showCheckedInNotification();
 }
