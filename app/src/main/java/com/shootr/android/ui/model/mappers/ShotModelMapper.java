@@ -40,6 +40,9 @@ public class ShotModelMapper {
     }
 
     private String durationToText(Long durationInSeconds) {
+        if (durationInSeconds == null) {
+            return null;
+        }
         int minutes = (int) (durationInSeconds / 60);
         int seconds = (int) (durationInSeconds % 60);
         String secondsTwoDigits = seconds > 10 ? String.valueOf(seconds) : "0" + String.valueOf(seconds);
