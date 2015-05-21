@@ -20,7 +20,4 @@ public class UserAvatarUrlBuilder {
         return String.format(URL_PATTERN, userId, size);
     }
 
-    public String calculateUserPhotoUrlFromIdUser(String idUser) {
-        return String.format(URL_PATTERN, idUser, "thumbnail");
-    }
 }

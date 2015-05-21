@@ -79,7 +79,7 @@ public class GCMIntentService extends IntentService {
         String idShot = parameters.getString(ID_SHOT);
         ShotEntity shot = service.getShotById(idShot);
         if (shot != null) {
-            ShotModel shotModel = shotEntityModelMapper.toShotModelFromShot(shot);
+            ShotModel shotModel = shotEntityModelMapper.toShotModel(shot);
             shotNotificationManager.sendNewShotNotification(shotModel);
         } else {
             Timber.e("Shot or User null received, can't show notifications :(");
