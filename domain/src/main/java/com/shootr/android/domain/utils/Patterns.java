@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.shootr.android.util;
+package com.shootr.android.domain.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

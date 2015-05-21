@@ -12,14 +12,13 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import com.shootr.android.util.Patterns;
+import com.shootr.android.domain.utils.Patterns;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

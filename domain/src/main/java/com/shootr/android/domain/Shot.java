@@ -17,6 +17,10 @@ public class Shot {
     private String parentShotUserId;
     private String parentShotUsername;
 
+    private String videoUrl;
+    private String videoTitle;
+    private Long videoDuration;
+
     public String getIdShot() {
         return idShot;
     }
@@ -73,45 +77,6 @@ public class Shot {
         this.idQueue = idQueue;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Shot)) return false;
-
-        Shot shot = (Shot) o;
-
-        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
-        if (eventInfo != null ? !eventInfo.equals(shot.eventInfo) : shot.eventInfo != null) return false;
-        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
-        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
-        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
-        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
-        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = idShot != null ? idShot.hashCode() : 0;
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
-        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
-        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
-        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
-        return result;
-    }
-
-    @Override public String toString() {
-        return "Shot{" +
-          "idShot=" + idShot +
-          ", comment='" + comment + '\'' +
-          ", image='" + image + '\'' +
-          ", publishDate=" + publishDate +
-          '}';
-    }
-
     public String getParentShotId() {
         return parentShotId;
     }
@@ -134,6 +99,90 @@ public class Shot {
 
     public void setParentShotUsername(String parentShotUsername) {
         this.parentShotUsername = parentShotUsername;
+    }
+
+    public boolean hasVideoEmbed() {
+        return videoUrl != null;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public Long getVideoDuration() {
+        return videoDuration;
+    }
+
+    public void setVideoDuration(Long videoDuration) {
+        this.videoDuration = videoDuration;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shot)) return false;
+
+        Shot shot = (Shot) o;
+
+        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
+        if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
+        if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
+        if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
+        if (eventInfo != null ? !eventInfo.equals(shot.eventInfo) : shot.eventInfo != null) return false;
+        if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
+        if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
+        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) return false;
+        if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
+          : shot.parentShotUserId != null) {
+            return false;
+        }
+        if (parentShotUsername != null ? !parentShotUsername.equals(shot.parentShotUsername)
+          : shot.parentShotUsername != null) {
+            return false;
+        }
+        if (videoUrl != null ? !videoUrl.equals(shot.videoUrl) : shot.videoUrl != null) return false;
+        if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
+        if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null)
+            return false;
+
+        return true;
+    }
+
+    @Override public int hashCode() {
+        int result = idShot != null ? idShot.hashCode() : 0;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
+        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
+        result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
+        result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);
+        result = 31 * result + (parentShotUserId != null ? parentShotUserId.hashCode() : 0);
+        result = 31 * result + (parentShotUsername != null ? parentShotUsername.hashCode() : 0);
+        result = 31 * result + (videoUrl != null ? videoUrl.hashCode() : 0);
+        result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
+        result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
+        return result;
+    }
+
+    @Override public String toString() {
+        return "Shot{" +
+          "idShot=" + idShot +
+          ", comment='" + comment + '\'' +
+          ", image='" + image + '\'' +
+          ", publishDate=" + publishDate +
+          '}';
     }
 
     public static class ShotEventInfo {

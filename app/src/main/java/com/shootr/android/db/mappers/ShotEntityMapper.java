@@ -24,6 +24,9 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setIdShotParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
         shot.setIdUserParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
         shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
+        shot.setVideoUrl(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_URL)));
+        shot.setVideoTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_TITLE)));
+        shot.setVideoDuration(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.VIDEO_DURATION)));
         setSynchronizedfromCursor(c, shot);
         return shot;
     }
@@ -42,38 +45,36 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot.getIdShotParent());
         cv.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot.getIdUserParent());
         cv.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot.getUserNameParent());
+        cv.put(DatabaseContract.ShotTable.VIDEO_URL, shot.getVideoUrl());
+        cv.put(DatabaseContract.ShotTable.VIDEO_TITLE, shot.getVideoTitle());
+        cv.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot.getVideoDuration());
         setSynchronizedtoContentValues(shot,cv);
         return cv;
     }
 
     public ShotEntity fromDto(Map<String, Object> dto) {
         ShotEntity shot = new ShotEntity();
-        shot.setIdShot((String)dto.get(DatabaseContract.ShotTable.ID_SHOT));
-        shot.setIdUser((String)dto.get(DatabaseContract.ShotTable.ID_USER));
+        shot.setIdShot((String) dto.get(DatabaseContract.ShotTable.ID_SHOT));
+        shot.setIdUser((String) dto.get(DatabaseContract.ShotTable.ID_USER));
         shot.setUsername(((String) dto.get(DatabaseContract.ShotTable.USERNAME)));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
         shot.setEventTag((String) dto.get(DatabaseContract.ShotTable.EVENT_TAG));
         shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
-        String idEvent = (String) dto.get(DatabaseContract.ShotTable.ID_EVENT);
-        if (idEvent != null) {
-            shot.setIdEvent(idEvent);
-        }
+        shot.setIdEvent((String) dto.get(DatabaseContract.ShotTable.ID_EVENT));
         Number type = (Number) dto.get(DatabaseContract.ShotTable.TYPE);
         if (type != null) {
             shot.setType(type.intValue());
         }
-        String idParent = (String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT);
-        if (idParent != null) {
-            shot.setIdShotParent(idParent);
-        }
-        String idParentUser = (String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT);
-        if (idParentUser != null) {
-            shot.setIdUserParent(idParentUser);
-        }
-        String usernameParentUser = (String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT);
-        if (usernameParentUser != null) {
-            shot.setUserNameParent(usernameParentUser);
+        shot.setIdShotParent((String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT));
+        shot.setIdUserParent((String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT));
+        shot.setUserNameParent((String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT));
+
+        shot.setVideoUrl((String) dto.get(DatabaseContract.ShotTable.VIDEO_URL));
+        shot.setVideoTitle((String) dto.get(DatabaseContract.ShotTable.VIDEO_TITLE));
+        Number videoDuration = (Number) dto.get(DatabaseContract.ShotTable.VIDEO_DURATION);
+        if (videoDuration != null) {
+            shot.setVideoDuration(videoDuration.longValue());
         }
         setSynchronizedfromDto(dto, shot);
         return shot;
@@ -93,6 +94,9 @@ public class ShotEntityMapper extends GenericMapper {
         dto.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot == null ? null : shot.getIdShotParent());
         dto.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot == null ? null : shot.getIdUserParent());
         dto.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot == null ? null : shot.getUserNameParent());
+        dto.put(DatabaseContract.ShotTable.VIDEO_URL, shot == null ? null : shot.getVideoUrl());
+        dto.put(DatabaseContract.ShotTable.VIDEO_TITLE, shot == null ? null : shot.getVideoTitle());
+        dto.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot == null ? null : shot.getVideoDuration());
         setSynchronizedtoDto(shot,dto);
         return dto;
     }

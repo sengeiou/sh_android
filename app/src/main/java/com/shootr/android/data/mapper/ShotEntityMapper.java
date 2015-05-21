@@ -40,12 +40,13 @@ public class ShotEntityMapper {
         userInfo.setAvatar(avatarBuilder.thumbnail(shotEntity.getIdUser()));
         shot.setUserInfo(userInfo);
 
-        String idShotParent = shotEntity.getIdShotParent();
-        shot.setParentShotId(idShotParent);
-        String idUserParent = shotEntity.getIdUserParent();
-        shot.setParentShotUserId(idUserParent);
-        String userNameParent = shotEntity.getUserNameParent();
-        shot.setParentShotUsername(userNameParent);
+        shot.setParentShotId(shotEntity.getIdShotParent());
+        shot.setParentShotUserId(shotEntity.getIdUserParent());
+        shot.setParentShotUsername(shotEntity.getUserNameParent());
+
+        shot.setVideoUrl(shotEntity.getVideoUrl());
+        shot.setVideoTitle(shotEntity.getVideoTitle());
+        shot.setVideoDuration(shotEntity.getVideoDuration());
 
         return shot;
     }
@@ -80,12 +81,13 @@ public class ShotEntityMapper {
             shotEntity.setEventTag(eventInfo.getEventTag());
         }
 
-        String parentShotId = shot.getParentShotId();
-        shotEntity.setIdShotParent(parentShotId);
-        String parentShotUserId = shot.getParentShotUserId();
-        shotEntity.setIdUserParent(parentShotUserId);
-        String parentShotUsername = shot.getParentShotUsername();
-        shotEntity.setUserNameParent(parentShotUsername);
+        shotEntity.setIdShotParent(shot.getParentShotId());
+        shotEntity.setIdUserParent(shot.getParentShotUserId());
+        shotEntity.setUserNameParent(shot.getParentShotUsername());
+
+        shotEntity.setVideoUrl(shot.getVideoUrl());
+        shotEntity.setVideoTitle(shot.getVideoTitle());
+        shotEntity.setVideoDuration(shot.getVideoDuration());
 
         shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
         return shotEntity;

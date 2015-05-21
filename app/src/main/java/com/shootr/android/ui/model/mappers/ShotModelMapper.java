@@ -32,7 +32,21 @@ public class ShotModelMapper {
         shotModel.setReplyUsername(shot.getParentShotUsername());
         shotModel.setParentShotId(shot.getParentShotId());
 
+        shotModel.setVideoUrl(shot.getVideoUrl());
+        shotModel.setVideoTitle(shot.getVideoTitle());
+        shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
+
         return shotModel;
+    }
+
+    private String durationToText(Long durationInSeconds) {
+        if (durationInSeconds == null) {
+            return null;
+        }
+        int minutes = (int) (durationInSeconds / 60);
+        int seconds = (int) (durationInSeconds % 60);
+        String secondsTwoDigits = seconds > 10 ? String.valueOf(seconds) : "0" + String.valueOf(seconds);
+        return String.format("%d:%s", minutes, secondsTwoDigits);
     }
 
     public List<ShotModel> transform(List<Shot> shots) {

@@ -27,8 +27,7 @@ public class ParcelableShot implements Parcelable {
     }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
-        String idShot = shot.getIdShot();
-        dest.writeString(idShot != null ? idShot : null);
+        dest.writeString(shot.getIdShot());
         dest.writeString(shot.getComment());
         dest.writeString(shot.getImage());
         dest.writeLong(shot.getPublishDate() != null ? shot.getPublishDate().getTime() : 0L);
@@ -44,11 +43,14 @@ public class ParcelableShot implements Parcelable {
         dest.writeString(eventInfo != null ? eventInfo.getEventTitle() : null);
         dest.writeString(eventInfo != null ? eventInfo.getEventTag() : null);
 
-        String parentShotId = shot.getParentShotId();
-        dest.writeString(parentShotId !=null ? parentShotId : null);
-        String parentShotUserId = shot.getParentShotUserId();
-        dest.writeString(parentShotUserId !=null ? parentShotUserId : null);
-        dest.writeString(shot.getParentShotUsername() != null ? shot.getParentShotUsername() : null);
+        dest.writeString(shot.getParentShotId());
+        dest.writeString(shot.getParentShotUserId());
+        dest.writeString(shot.getParentShotUsername());
+
+        dest.writeString(shot.getVideoUrl());
+        dest.writeString(shot.getVideoTitle());
+        Long videoDuration = shot.getVideoDuration();
+        dest.writeLong(videoDuration != null ? videoDuration : 0);
     }
 
     public void readFromParcel(Parcel parcel) {
@@ -76,12 +78,13 @@ public class ParcelableShot implements Parcelable {
             shot.setEventInfo(eventInfo);
         }
 
-        String idShotParent = parcel.readString();
-        shot.setParentShotId(idShotParent);
-        String idUserParent = parcel.readString();
-        shot.setParentShotUserId(idUserParent);
-        String usernameParent = parcel.readString();
-        shot.setParentShotUsername(usernameParent);
+        shot.setParentShotId(parcel.readString());
+        shot.setParentShotUserId(parcel.readString());
+        shot.setParentShotUsername(parcel.readString());
+
+        shot.setVideoUrl(parcel.readString());
+        shot.setVideoTitle(parcel.readString());
+        shot.setVideoDuration(parcel.readLong());
     }
 
     public static final Creator<ParcelableShot> CREATOR = new Creator<ParcelableShot>() {

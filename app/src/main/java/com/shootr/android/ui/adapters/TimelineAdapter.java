@@ -31,17 +31,24 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
+    private final VideoClickListener videoClickListener;
     private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-                           View.OnClickListener imageClickListener, UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
+    public TimelineAdapter(Context context,
+      PicassoWrapper picasso,
+      View.OnClickListener avatarClickListener,
+      View.OnClickListener imageClickListener,
+      VideoClickListener videoClickListener,
+      UsernameClickListener clickListener,
+      AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.videoClickListener = videoClickListener;
         this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
@@ -103,7 +110,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     @Override
-    public void bindView(ShotModel item, int position, View view) {
+    public void bindView(final ShotModel item, int position, View view) {
         switch (getItemViewType(position)) {
             case 0: // Shot
 
@@ -146,6 +153,20 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     picasso.loadTimelineImage(imageUrl).into(vh.image);
                 } else {
                     vh.image.setVisibility(View.GONE);
+                }
+
+                if (item.hasVideo()) {
+                    vh.videoFrame.setVisibility(View.VISIBLE);
+                    vh.videoDuration.setText(item.getVideoDuration());
+                    vh.videoFrame.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            videoClickListener.onClick(item.getVideoUrl());
+                        }
+                    });
+                } else {
+                    vh.videoFrame.setVisibility(View.GONE);
+                    vh.videoFrame.setOnClickListener(null);
                 }
                 break;
             default:
@@ -203,12 +224,25 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
+        @InjectView(R.id.shot_video_frame) public View videoFrame;
+        @InjectView(R.id.shot_video_duration) public TextView videoDuration;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
             ButterKnife.inject(this, view);
+
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
         }
+
+        public void setVideoClickListener(View.OnClickListener videoClickListener) {
+            videoFrame.setOnClickListener(videoClickListener);
+        }
+    }
+
+    public interface VideoClickListener {
+
+        void onClick(String url);
+
     }
 }

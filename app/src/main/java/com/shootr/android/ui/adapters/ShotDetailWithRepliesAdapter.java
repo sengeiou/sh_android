@@ -34,6 +34,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
+    private TimelineAdapter.VideoClickListener videoClickListener;
     private final UsernameClickListener usernameClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
@@ -48,12 +49,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, UsernameClickListener usernameClickListener,
+      ImageClickListener imageClickListener, TimelineAdapter.VideoClickListener videoClickListener, UsernameClickListener usernameClickListener,
       OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.videoClickListener = videoClickListener;
         this.usernameClickListener = usernameClickListener;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
@@ -225,6 +227,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @InjectView(R.id.shot_detail_image) ImageView shotImage;
         @InjectView(R.id.shot_detail_event_title) TextView eventTitle;
         @InjectView(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
+        @InjectView(R.id.shot_video_frame) View videoFrame;
+        @InjectView(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -264,6 +268,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 });
             } else {
                 shotImage.setVisibility(View.GONE);
+            }
+
+            if (shotModel.hasVideo()) {
+                this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoDuration.setText(shotModel.getVideoDuration());
+                this.videoFrame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoClickListener.onClick(shotModel.getVideoUrl());
+                    }
+                });
+            } else {
+                this.videoFrame.setVisibility(View.GONE);
+                this.videoFrame.setOnClickListener(null);
             }
 
             if (shotModel.isReply()) {
@@ -321,6 +339,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
+        @InjectView(R.id.shot_video_frame) View videoFrame;
+        @InjectView(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -371,6 +391,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 this.image.setVisibility(View.GONE);
             }
+
+            if (shotModel.hasVideo()) {
+                this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoDuration.setText(shotModel.getVideoDuration());
+                this.videoFrame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoClickListener.onClick(shotModel.getVideoUrl());
+                    }
+                });
+            } else {
+                this.videoFrame.setVisibility(View.GONE);
+                this.videoFrame.setOnClickListener(null);
+            }
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
@@ -398,6 +432,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
+        @InjectView(R.id.shot_video_frame) View videoFrame;
+        @InjectView(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);
@@ -440,6 +476,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 });
             } else {
                 this.image.setVisibility(View.GONE);
+            }
+
+            if (reply.hasVideo()) {
+                this.videoFrame.setVisibility(View.VISIBLE);
+                this.videoDuration.setText(reply.getVideoDuration());
+                this.videoFrame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoClickListener.onClick(reply.getVideoUrl());
+                    }
+                });
+            } else {
+                this.videoFrame.setVisibility(View.GONE);
+                this.videoFrame.setOnClickListener(null);
             }
         }
     }

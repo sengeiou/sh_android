@@ -21,6 +21,10 @@ public class ShotModel implements Serializable{
     private String replyUsername;
     private String parentShotId;
 
+    private String videoUrl;
+    private String videoTitle;
+    private String videoDuration;
+
     public String getIdShot() {
         return idShot;
     }
@@ -119,5 +123,33 @@ public class ShotModel implements Serializable{
 
     public void setParentShotId(String parentShotId) {
         this.parentShotId = parentShotId;
+    }
+
+    public boolean hasVideo() {
+        return videoUrl != null;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public String getVideoDuration() {
+        return videoDuration;
+    }
+
+    public void setVideoDuration(String videoDuration) {
+        this.videoDuration = videoDuration;
     }
 }
