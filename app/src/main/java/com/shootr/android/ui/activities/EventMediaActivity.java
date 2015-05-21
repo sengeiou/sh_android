@@ -1,14 +1,9 @@
 package com.shootr.android.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -26,24 +21,19 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     private static final String EXTRA_EVENT_ID = "event";
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_media);
-        Intent intent = new Intent(getBaseContext(), EventMediaActivity.class);
-        String idEvent = intent.getStringExtra(EXTRA_EVENT_ID);
-        presenter.retrieveMedia(idEvent);
-    }
-
     @Override protected int getLayoutResource() {
         return R.layout.activity_event_media;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
+        mediaView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     @Override protected void initializePresenter() {
-        presenter.initialize(this);
+        Intent intent = getIntent();
+        String idEvent = intent.getStringExtra(EXTRA_EVENT_ID);
+        presenter.initialize(this, idEvent);
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -54,6 +44,5 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
         //mediaGridView.setVisibility(View.VISIBLE);
         MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(),shotsWithMedia);
         mediaView.setAdapter(mediaAdapter);
-        mediaView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

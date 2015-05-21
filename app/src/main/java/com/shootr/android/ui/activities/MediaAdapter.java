@@ -1,7 +1,6 @@
 package com.shootr.android.ui.activities;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +32,8 @@ public class MediaAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         ShotModel shotModel = shotsWithMedia.get(position);
-        // Casting the viewHolder to MyViewHolder so I could interact with the views
         MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
-        Picasso.with(context).load(shotModel.getImage()).into(myViewHolder.colorBlock);
+        Picasso.with(context).load(shotModel.getImage()).into(myViewHolder.imageView);
     }
 
     @Override
@@ -43,16 +41,13 @@ public class MediaAdapter extends RecyclerView.Adapter {
         return shotsWithMedia.size();
     }
 
-    /** This is our ViewHolder class */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView colorBlock;
+        public ImageView imageView;
 
         public MyViewHolder(View itemView) {
-            super(itemView); // Must call super() first
-            //TODO aqui picasso
-            colorBlock = (ImageView) itemView.findViewById(R.id.useLogo);
-
+            super(itemView);
+            imageView = (ImageView) itemView.findViewById(R.id.event_media_item);
         }
     }
 }

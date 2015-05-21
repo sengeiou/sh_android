@@ -492,9 +492,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToMedia() {
-        Intent intent = new Intent(getBaseContext(), EventMediaActivity.class);
+        Intent intent = new Intent(this, EventMediaActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, idEvent);
-        startActivity(intent);
+        this.startActivity(intent);
     }
 
     @Override public void showEmpty() {

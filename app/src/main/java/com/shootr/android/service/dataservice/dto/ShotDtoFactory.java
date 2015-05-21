@@ -147,6 +147,7 @@ public class ShotDtoFactory {
         MetadataDto md = new MetadataDto.Builder() //
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .entity(ShotTable.TABLE)
+          .items(100)
           .filter(eventsFilter)
           .build();
 
