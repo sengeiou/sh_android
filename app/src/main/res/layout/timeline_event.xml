@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_action_pin"
+        android:src="@drawable/ic_action_room"
         android:visibility="gone"
         fab:fab_colorNormal="@color/primary"
         fab:fab_colorPressed="@color/primary_dark"
