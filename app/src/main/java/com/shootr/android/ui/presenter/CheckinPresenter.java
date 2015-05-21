@@ -53,7 +53,7 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void checkIn() {
-        if(userWantsConfirmation()){
+        if(shouldAskForConfirmation()){
             checkinView.showCheckinConfirmation();
         } else {
             confirmCheckinDontShowAgain();
@@ -90,7 +90,7 @@ public class CheckinPresenter implements Presenter {
         checkinView.hideCheckinButton();
     }
 
-    private boolean userWantsConfirmation() {
+    private boolean shouldAskForConfirmation() {
         return askCheckinConfirmation.get();
     }
 
