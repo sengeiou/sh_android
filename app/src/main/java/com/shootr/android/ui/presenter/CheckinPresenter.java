@@ -33,8 +33,12 @@ public class CheckinPresenter implements Presenter {
         this.checkinView = checkinView;
     }
 
-    public void initialize(CheckinView checkinView, String idEvent) {
+    protected void setEventId(String idEvent) {
         this.idEvent = idEvent;
+    }
+
+    public void initialize(CheckinView checkinView, String idEvent) {
+        this.setEventId(idEvent);
         this.setView(checkinView);
         this.loadCheckinStatus();
     }
@@ -68,7 +72,7 @@ public class CheckinPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 checkinView.enableCheckinButton();
-                checkinView.showErrorWhileCheckingNotification();
+                checkinView.showCheckinError();
                 checkinView.showCheckinButton();
             }
         });
