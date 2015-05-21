@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -82,9 +84,10 @@ public class EventTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
-    private PhotoPickerController photoPickerController;
 
+    private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
     private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
@@ -296,6 +299,13 @@ public class EventTimelineFragment extends BaseFragment
             }
         };
 
+        videoClickListener = new TimelineAdapter.VideoClickListener() {
+            @Override
+            public void onClick(String url) {
+                onVideoClick(url);
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -304,7 +314,7 @@ public class EventTimelineFragment extends BaseFragment
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                imageClickListener, usernameClickListener, timeUtils);
+                imageClickListener, videoClickListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
     }
 
@@ -315,6 +325,12 @@ public class EventTimelineFragment extends BaseFragment
 
     private void goToUserProfile(String username) {
         startProfileContainerActivity(username);
+    }
+
+    private void onVideoClick(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     private void setupSwipeRefreshLayout() {

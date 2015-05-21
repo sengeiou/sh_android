@@ -1,6 +1,7 @@
 package com.shootr.android.ui.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shootr.android.R;
-import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -40,7 +38,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import timber.log.Timber;
 
 public class ActivityTimelineFragment extends BaseFragment implements TimelineView {
 
@@ -64,6 +61,7 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
     @Deprecated private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
 
     private View footerProgress;
@@ -151,13 +149,22 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
             }
         };
 
+        videoClickListener = new TimelineAdapter.VideoClickListener() {
+            @Override
+            public void onClick(String url) {
+                Uri uri = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                imageClickListener, usernameClickListener, timeUtils);
+                imageClickListener, videoClickListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
     }
 

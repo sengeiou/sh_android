@@ -62,6 +62,30 @@
           tools:src="@drawable/sample_avatar"
           tools:visibility="visible" />
 
+        <FrameLayout android:id="@+id/shot_video_frame"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:foreground="?selectableItemBackground"
+          android:layout_alignBottom="@+id/shot_image"
+          android:layout_alignTop="@+id/shot_image"
+          android:background="#66000000"
+          android:visibility="visible"
+          tools:visibility="visible">
+
+            <ImageView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:scaleType="center"
+              android:src="@drawable/ic_video_play_circle_48_white" />
+
+            <TextView android:id="@+id/shot_video_duration"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="right|bottom"
+              android:layout_margin="8dp"
+              android:textColor="@color/white"
+              tools:text="0:00" />
+        </FrameLayout>
     </RelativeLayout>
 
 </RelativeLayout>
