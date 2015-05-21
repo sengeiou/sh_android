@@ -10,7 +10,6 @@ public class TimeFormatter {
 
     DateTimeFormatter hourFormater = DateTimeFormat.forPattern("HH:mm");
     DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
-    DateTimeFormatter dayTimeFormater = DateTimeFormat.forPattern("MM/dd HH:mm");
     DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
     DateTimeFormatter detailedFormater = DateTimeFormat.forPattern("EEEE dd MMMM HH:mm");
 
@@ -20,6 +19,7 @@ public class TimeFormatter {
 
     }
 
+    //region Getters
     public String getDateAndTimeTextRelative(long targetTimestamp) {
         DateTime targetDate = new DateTime(targetTimestamp);
         if (isToday(targetDate)) {
@@ -29,11 +29,6 @@ public class TimeFormatter {
         } else {
             return getDayFormat(targetDate);
         }
-    }
-
-    public String getDateAndTimeTextGeneric(long targetTimestamp) {
-        DateTime targetDate = new DateTime(targetTimestamp);
-        return getDayTimeFormat(targetDate);
     }
 
     public String getDateAndTimeDetailed(long timestamp) {
@@ -49,25 +44,6 @@ public class TimeFormatter {
         return dayFormater.print(targetDate);
     }
 
-    private String getDayTimeFormat(DateTime targetDate) {
-        return dayTimeFormater.print(targetDate);
-    }
-    private String getTomorrowFormat(DateTime targetDate) {
-        return "Tomorrow";
-    }
-
-    private boolean isToday(DateTime targetDate) {
-        return getDaysUntil(targetDate) == 0;
-    }
-
-    private boolean isTomorrow(DateTime targetDate) {
-        return getDaysUntil(targetDate) == 1;
-    }
-
-    private boolean isLessThanAWeek(DateTime targetDate) {
-        return getDaysUntil(targetDate) < 7;
-    }
-
     private String getTodayFormat(DateTime dateTime) {
         return hourFormater.print(dateTime);
     }
@@ -76,12 +52,22 @@ public class TimeFormatter {
         return detailedFormater.print(targetDate);
     }
 
+    public String getAbsoluteTime(long targetTimestamp) {
+        return absoluteTimeFormater.print(targetTimestamp);
+    }
 
     private int getDaysUntil(DateTime targetDate) {
         return Days.daysBetween(DateTime.now(), targetDate).getDays();
     }
+    //endregion
 
-    public String getAbsoluteTime(long targetTimestamp) {
-        return absoluteTimeFormater.print(targetTimestamp);
+    //region Checkers
+    private boolean isToday(DateTime targetDate) {
+        return getDaysUntil(targetDate) == 0;
     }
+
+    private boolean isLessThanAWeek(DateTime targetDate) {
+        return getDaysUntil(targetDate) < 7;
+    }
+    //endregion
 }
