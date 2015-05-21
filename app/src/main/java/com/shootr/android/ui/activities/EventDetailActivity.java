@@ -80,6 +80,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
     @InjectView(R.id.event_detail_media) TextView eventMedia;
+    @InjectView(R.id.event_detail_media_number) TextView eventMediaNumber;
 
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -158,7 +159,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         presenter.clickAuthor();
     }
 
-    @OnClick(R.id.event_detail_media)
+    @OnClick({R.id.event_detail_media, R.id.event_detail_media_number})
     public void onMediaClick() {
         presenter.clickMedia();
     }
@@ -488,7 +489,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setMediaCount(Integer mediaCount) {
-        eventMedia.setText("Media "+mediaCount.toString());
+        eventMedia.setText("Media");
+        eventMediaNumber.setVisibility(View.VISIBLE);
+        eventMediaNumber.setText(mediaCount.toString());
     }
 
     @Override public void navigateToMedia() {
