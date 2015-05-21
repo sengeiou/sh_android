@@ -48,7 +48,7 @@ public class GetEventMediaInteractor implements Interactor {
         }
         peopleIds.add(idUser);
         for (String userId : peopleIds) {
-            shots.add(shotRepository.getMediaByIdEvent(idEvent, userId));
+            shots.addAll(shotRepository.getMediaByIdEvent(idEvent, userId));
         }
         notifyLoaded(shots);
     }

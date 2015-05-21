@@ -16,5 +16,5 @@ public interface ShotRepository {
 
     int getMediaCountByIdEvent(String idEvent, String idUser);
 
-    Shot getMediaByIdEvent(String idEvent, String userId);
+    List<Shot> getMediaByIdEvent(String idEvent, String userId);
 }
