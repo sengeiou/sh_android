@@ -3,7 +3,10 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -18,7 +21,7 @@ import javax.inject.Inject;
 
 public class EventMediaActivity extends BaseToolbarDecoratedActivity implements EventMediaView {
 
-    @InjectView(R.id.event_media_grid_view) GridView mediaGridView;
+    @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
     @Inject EventMediaPresenter presenter;
 
     private static final String EXTRA_EVENT_ID = "event";
@@ -49,12 +52,8 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void setMedia(List<ShotModel> shotsWithMedia) {
         //mediaGridView.setVisibility(View.VISIBLE);
-        mediaGridView.setAdapter(new MediaAdapter(this, shotsWithMedia));
-        final Context context = this;
-        mediaGridView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                Toast.makeText(context, "guayaco", Toast.LENGTH_SHORT).show();
-            }
-        });
+        MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(),shotsWithMedia);
+        mediaView.setAdapter(mediaAdapter);
+        mediaView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
