@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.android.ui.model.ShotModel;
@@ -50,7 +52,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
     private ShotDetailWithRepliesAdapter detailAdapter;
-    private View.OnClickListener onClickListener;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
         Intent intent = new Intent(context, ShotDetailActivity.class);
@@ -115,6 +116,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                     public void onClick(ShotModel shot) {
                         onImageClick(shot);
                     }
+                }, //
+                new TimelineAdapter.VideoClickListener() {
+                  @Override
+                  public void onClick(String url) {
+                      onVideoClick(url);
+                  }
                 }, //
                 new UsernameClickListener() {
                     @Override
@@ -192,6 +199,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     public void onUsernameClick(String username){
         detailPresenter.usernameClick(username);
+    }
+
+
+    private void onVideoClick(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @OnClick(R.id.shot_bar_text) public void onReplyClick() {
