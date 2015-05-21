@@ -507,12 +507,6 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public void performCheckout(String idUser, String watchingEventId) throws IOException {
-        GenericDto checkoutDto = userDtoFactory.getCheckoutOperationDto(idUser, watchingEventId);
-        GenericDto responseDto = postRequest(checkoutDto);
-    }
-
-    @Override
     public UserEntity getUserByUsername(String username) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUsername(username);
         GenericDto responseDto = postRequest(requestDto);

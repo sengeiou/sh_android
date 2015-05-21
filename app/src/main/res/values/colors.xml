@@ -64,5 +64,4 @@
     <color name="tag_color">#C7C7C7</color>
 
     <color name="checkin_bar_background_action_checkin">@color/primary_dark</color>
-    <color name="checkin_bar_background_action_checkout">#F44336</color>
 </resources>

@@ -10,9 +10,10 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.path.android.jobqueue.JobManager;
@@ -20,7 +21,6 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.NavigationDrawerDecorator;
-
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.EventModel;
@@ -29,11 +29,7 @@ import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class EventsListActivity extends BaseNavDrawerToolbarActivity implements EventsListView {
 
@@ -170,8 +166,12 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentVisibleEventId(String eventId) {
-        adapter.setCurrentVisibleEvent(eventId);
+    @Override public void setCurrentCheckedInEventId(String eventId) {
+        adapter.setCurrentCheckedInEvent(eventId);
+    }
+
+    @Override public void setCurrentWatchingEventId(String eventId) {
+        adapter.setCurrentWatchingEvent(eventId);
     }
 
     @Override public void showContent() {

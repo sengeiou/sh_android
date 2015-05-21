@@ -348,7 +348,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
    * @return this assertion object.
    * @throws AssertionError - if the actual User's visibleEventId is not equal to the given one.
    */
-  public UserAssert hasVisibleEventId(String visibleEventId) {
+  public UserAssert hasWatchingEventId(String visibleEventId) {
     // check that actual User we want to make assertions on is not null.
     isNotNull();
 
@@ -356,9 +356,9 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     String assertjErrorMessage = "\nExpected visibleEventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    String actualVisibleEventId = actual.getIdWatchingEvent();
-    if (!Objects.areEqual(actualVisibleEventId, visibleEventId)) {
-      failWithMessage(assertjErrorMessage, actual, visibleEventId, actualVisibleEventId);
+    String actualWatchingEventId = actual.getIdWatchingEvent();
+    if (!Objects.areEqual(actualWatchingEventId, visibleEventId)) {
+      failWithMessage(assertjErrorMessage, actual, visibleEventId, actualWatchingEventId);
     }
 
     // return the current assertion for method chaining

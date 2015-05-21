@@ -1,6 +1,8 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -15,12 +17,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
@@ -47,7 +52,6 @@ import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
-import com.shootr.android.ui.widgets.CheckinBar;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -67,9 +71,10 @@ public class EventTimelineFragment extends BaseFragment
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject CheckinPresenter checkinPresenter;
 
+    @Inject CheckinPresenter checkinPresenter;
     @Inject PicassoWrapper picasso;
+
     @Inject AndroidTimeUtils timeUtils;
 
     @InjectView(R.id.timeline_shot_list) ListView listView;
@@ -78,7 +83,7 @@ public class EventTimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.shot_bar_drafts) View draftsButton;
 
-    @InjectView(R.id.checkin_bar) CheckinBar checkinBar;
+    @InjectView(R.id.timeline_checkin) FloatingActionButton checkinButton;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -189,11 +194,6 @@ public class EventTimelineFragment extends BaseFragment
         } else {
             toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
         }
-        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                checkinPresenter.toolbarClick();
-            }
-        });
     }
 
 
@@ -370,9 +370,47 @@ public class EventTimelineFragment extends BaseFragment
     }
     //endregion
 
-    @OnClick(R.id.checkin_bar)
-    public void onCheckinClick() {
-        checkinPresenter.checkinClick();
+    @OnClick(R.id.timeline_checkin)
+    public void onCheckinButtonClick() {
+        checkinPresenter.checkIn();
+    }
+
+    @Override
+    public void showCheckinConfirmation() {
+            showNotificationToTheUser();
+    }
+
+    @Override public void showCheckinDone() {
+        Toast.makeText(getActivity(),getActivity().getString(R.string.successfully_checked_in), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void disableCheckinButton() {
+        checkinButton.setEnabled(false);
+    }
+
+    @Override public void enableCheckinButton() {
+        checkinButton.setEnabled(true);
+    }
+
+    @Override public void showCheckinError() {
+        Toast.makeText(getActivity(),
+          getActivity().getString(R.string.problem_while_checkin),
+          Toast.LENGTH_SHORT).show();
+    }
+
+    private void showNotificationToTheUser() {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.checkin_notification_message)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  checkinPresenter.confirmCheckin();
+              }
+          })
+          .setNegativeButton(R.string.dont_show_again, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  checkinPresenter.confirmCheckinDontShowAgain();
+              }
+          })
+          .show();
     }
 
     @OnItemClick(R.id.timeline_shot_list)
@@ -491,38 +529,21 @@ public class EventTimelineFragment extends BaseFragment
         updateWatchNumberIcon();
     }
 
-    @Override public void showCheckinButton() {
-        checkinBar.expand();
-    }
-
     @Override public void hideCheckinButton() {
-        checkinBar.collapse();
+        ScaleAnimation scaleAnimation = setUpScaleAnimation();
+        checkinButton.startAnimation(scaleAnimation);
+        checkinButton.setVisibility(View.GONE);
     }
 
-    @Override public void showCheckinLoading() {
-        checkinBar.showLoading(true);
-        checkinBar.setClickable(false);
+    private ScaleAnimation setUpScaleAnimation() {
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0,
+          Animation.RELATIVE_TO_SELF, (float)0.5, Animation.RELATIVE_TO_SELF, (float)0.5);
+        scaleAnimation.setDuration(200);
+        return scaleAnimation;
     }
 
-    @Override public void hideCheckinLoading() {
-        checkinBar.showLoading(false);
-        checkinBar.setClickable(true);
-    }
-
-    @Override public void showCheckedIn() {
-        toolbarDecorator.setSubtitle(R.string.checked_in);
-    }
-
-    @Override public void hideCheckedIn() {
-        toolbarDecorator.hideSubtitle();
-    }
-
-    @Override public void showCheckOutAction() {
-        checkinBar.showCheckout();
-    }
-
-    @Override public void showCheckInAction() {
-        checkinBar.showCheckin();
+    @Override public void showCheckinButton() {
+        checkinButton.setVisibility(View.VISIBLE);
     }
     //endregion
 }

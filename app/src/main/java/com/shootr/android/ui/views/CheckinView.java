@@ -6,15 +6,13 @@ public interface CheckinView {
 
     void hideCheckinButton();
 
-    void showCheckinLoading();
+    void disableCheckinButton();
 
-    void hideCheckinLoading();
+    void enableCheckinButton();
 
-    void showCheckedIn();
+    void showCheckinError();
 
-    void hideCheckedIn();
+    void showCheckinConfirmation();
 
-    void showCheckOutAction();
-
-    void showCheckInAction();
+    void showCheckinDone();
 }
