@@ -40,4 +40,9 @@ public class PreferenceModule {
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
     }
+
+    @Provides @Singleton @LastDatabaseVersion IntPreference providePreferencesDatabaseVersion(
+      SharedPreferences preferences) {
+        return new IntPreference(preferences, "preferences_database_version", 0);
+    }
 }
