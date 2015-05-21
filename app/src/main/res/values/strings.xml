@@ -203,7 +203,7 @@
     <string name="hour_ago">1 hour ago</string>
     <string name="minute_ago">1 minute ago</string>
     <string name="user_not_found">User not found</string>
-    <string name="dont_show_again">Ok, Don\'t show again</string>
+    <string name="dont_show_again">Ok, don\'t show again</string>
     <string name="problem_while_checkin">There was a problem while checking in</string>
     <string name="successfully_checked_in">Checked in</string>
 
