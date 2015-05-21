@@ -27,8 +27,9 @@ public class PreferenceModule {
         return new StringPreference(preferences, "current_user_id", null);
     }
 
-    @Provides @Singleton @CheckinUserNotification BooleanPreference provideCheckinUserNotification(SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "checkin_notification", true);
+    @Provides @Singleton @AskCheckinConfirmation
+    BooleanPreference provideCheckinUserNotification(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "ask_checkin_notification", true);
     }
 
     @Provides @Singleton @SessionToken StringPreference provideSessionToken(SharedPreferences preferences) {

@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.prefs.BooleanPreference;
-import com.shootr.android.data.prefs.CheckinUserNotification;
+import com.shootr.android.data.prefs.AskCheckinConfirmation;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
@@ -19,14 +19,14 @@ public class CheckinPresenter implements Presenter {
     protected boolean showingCheckinButton;
     private String idEvent;
 
-    private final BooleanPreference checkinUserNotificationPreference;
+    private final BooleanPreference askCheckinConfirmation;
 
     @Inject public CheckinPresenter(GetCheckinStatusInteractor getCheckinStatusInteractor,
       PerformCheckinInteractor performCheckinInteractor,
-      @CheckinUserNotification BooleanPreference checkinUserNotificationPreference) {
+      @AskCheckinConfirmation BooleanPreference askCheckinConfirmation) {
         this.getCheckinStatusInteractor = getCheckinStatusInteractor;
         this.performCheckinInteractor = performCheckinInteractor;
-        this.checkinUserNotificationPreference = checkinUserNotificationPreference;
+        this.askCheckinConfirmation = askCheckinConfirmation;
     }
 
     protected void setView(CheckinView checkinView) {
@@ -55,7 +55,7 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void checkinClick() {
-        checkinView.showCheckinNotification(checkinUserNotificationPreference.get());
+        checkinView.showCheckinNotification(askCheckinConfirmation.get());
     }
 
     public void checkIn() {
@@ -85,7 +85,7 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void saveUserNotificationPreferences() {
-        checkinUserNotificationPreference.set(false);
+        askCheckinConfirmation.set(false);
     }
 
     @Override public void resume() {
