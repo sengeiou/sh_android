@@ -97,7 +97,7 @@ public class CheckinPresenterTest {
     @Test
     public void shouldNotShowCheckinConfirmationWhenCheckinClickedIfAskCheckinConfirmationIsFalse() throws Exception {
         setupCheckinStatusCallbacks(NOT_CHECKED_IN);
-        when(askCheckinConfirmation.get()).thenReturn(true);
+        when(askCheckinConfirmation.get()).thenReturn(false);
 
         presenter.checkIn();
 

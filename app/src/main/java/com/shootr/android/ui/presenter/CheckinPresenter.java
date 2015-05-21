@@ -58,16 +58,20 @@ public class CheckinPresenter implements Presenter {
         }
     }
 
-    public void checkinClick() {
-        checkinView.showCheckinNotification(askCheckinConfirmation.get());
+    public void checkIn() {
+        if(askCheckinConfirmation.get()){
+            checkinView.showCheckinConfirmation();
+        } else {
+            confirmCheckinDontShowAgain();
+        }
     }
 
-    public void checkIn() {
+    public void confirmCheckin() {
         hideViewCheckinButton();
         performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 checkedInEvent = true;
-                checkinView.showCheckedInNotification();
+                checkinView.showCheckinDone();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -76,6 +80,11 @@ public class CheckinPresenter implements Presenter {
                 checkinView.showCheckinButton();
             }
         });
+    }
+
+    public void confirmCheckinDontShowAgain() {
+        saveUserNotificationPreferences();
+        confirmCheckin();
     }
 
     private void showViewCheckinButton() {

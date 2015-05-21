@@ -12,7 +12,7 @@ public interface CheckinView {
 
     void showCheckinError();
 
-    void showCheckinNotification(Boolean userWantsNotification);
+    void showCheckinConfirmation();
 
-    void showCheckedInNotification();
+    void showCheckinDone();
 }

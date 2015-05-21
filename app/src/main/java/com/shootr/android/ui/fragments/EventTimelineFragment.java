@@ -356,19 +356,15 @@ public class EventTimelineFragment extends BaseFragment
 
     @OnClick(R.id.timeline_checkin)
     public void onCheckinButtonClick() {
-        checkinPresenter.checkinClick();
+        checkinPresenter.checkIn();
     }
 
     @Override
-    public void showCheckinNotification(Boolean userWantsNotification) {
-        if(userWantsNotification){
+    public void showCheckinConfirmation() {
             showNotificationToTheUser();
-        }else{
-            checkinPresenter.checkIn();
-        }
     }
 
-    @Override public void showCheckedInNotification() {
+    @Override public void showCheckinDone() {
         Toast.makeText(getActivity(),getActivity().getString(R.string.successfully_checked_in), Toast.LENGTH_SHORT).show();
     }
 
@@ -390,13 +386,12 @@ public class EventTimelineFragment extends BaseFragment
         new AlertDialog.Builder(getActivity()).setMessage(R.string.checkin_notification_message)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  checkinPresenter.checkIn();
+                  checkinPresenter.confirmCheckin();
               }
           })
           .setNegativeButton(R.string.dont_show_again, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  checkinPresenter.checkIn();
-                  checkinPresenter.saveUserNotificationPreferences();
+                  checkinPresenter.confirmCheckinDontShowAgain();
               }
           })
           .show();
