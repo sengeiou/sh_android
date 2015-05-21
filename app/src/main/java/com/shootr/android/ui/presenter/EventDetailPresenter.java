@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
 import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -32,6 +33,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
+    private final SessionRepository sessionRepository;
 
     private final EventModelMapper eventModelMapper;
     private final UserModelMapper userModelMapper;
@@ -46,11 +48,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+      ChangeEventPhotoInteractor changeEventPhotoInteractor, SessionRepository sessionRepository, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
       WatchersTimeFormatter watchersTimeFormatter) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
+        this.sessionRepository = sessionRepository;
         this.eventModelMapper = eventModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -92,23 +95,23 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
-        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
-                new ChangeEventPhotoInteractor.Callback() {
-                    @Override
-                    public void onLoaded(Event event) {
-                        renderEventInfo(event);
-                        eventDetailView.hideLoadingPictureUpload();
-                        eventDetailView.showEditPicture(event.getPicture());
-                    }
-                }, new Interactor.ErrorCallback() {
-                    @Override
-                    public void onError(ShootrException error) {
-                        eventDetailView.showEditPicture(eventModel.getPicture());
-                        eventDetailView.hideLoadingPictureUpload();
-                        showImageUploadError();
-                        Timber.e(error, "Error changing event photo");
-                    }
-                });
+        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(),
+          photoFile,
+          new ChangeEventPhotoInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  renderEventInfo(event);
+                  eventDetailView.hideLoadingPictureUpload();
+                  eventDetailView.showEditPicture(event.getPicture());
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventDetailView.showEditPicture(eventModel.getPicture());
+                  eventDetailView.hideLoadingPictureUpload();
+                  showImageUploadError();
+                  Timber.e(error, "Error changing event photo");
+              }
+          });
     }
     //endregion
 
@@ -124,8 +127,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void getEventInfo() {
         eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(EventInfo eventInfo) {
+            @Override public void onLoaded(EventInfo eventInfo) {
                 onEventInfoLoaded(eventInfo);
             }
         });
@@ -183,11 +185,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-        currentUserWatchingModel.setJoinEventDateText(
-                watchersTimeFormatter.jointDateText(
-                        currentUserWatchingModel.getJoinEventDate()));
-        eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+        if(currentUserWatch == null){
+            currentUserWatch = sessionRepository.getCurrentUser();
+        }
+            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+            currentUserWatchingModel.setJoinEventDateText(
+              watchersTimeFormatter.jointDateText(
+                currentUserWatchingModel.getJoinEventDate()));
+            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
     }
 
     private void renderEventInfo(Event event) {
