@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +27,15 @@ public class MediaAdapter extends RecyclerView.Adapter {
         View layoutView = LayoutInflater
           .from(viewGroup.getContext())
           .inflate(R.layout.event_media_layout, null);
-        return new MyViewHolder(layoutView);
+        return new MediaItemHolder(layoutView);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         ShotModel shotModel = shotsWithMedia.get(position);
-        MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
-        Picasso.with(context).load(shotModel.getImage()).into(myViewHolder.imageView);
+        MediaItemHolder mediaItemHolder = (MediaItemHolder) viewHolder;
+        mediaItemHolder.shotModel = shotModel;
+        Picasso.with(context).load(shotModel.getImage()).into(mediaItemHolder.mediaImage);
     }
 
     @Override
@@ -41,13 +43,20 @@ public class MediaAdapter extends RecyclerView.Adapter {
         return shotsWithMedia.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MediaItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView imageView;
+        public ShotModel shotModel;
+        public ImageView mediaImage;
 
-        public MyViewHolder(View itemView) {
+        public MediaItemHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.event_media_item);
+            mediaImage = (ImageView) itemView.findViewById(R.id.event_media_item);
+            mediaImage.setOnClickListener(this);
+        }
+
+        @Override public void onClick(View view) {
+            Intent intentForImage = PhotoViewActivity.getIntentForActivity(view.getContext(), shotModel.getImage());
+            view.getContext().startActivity(intentForImage);
         }
     }
 }

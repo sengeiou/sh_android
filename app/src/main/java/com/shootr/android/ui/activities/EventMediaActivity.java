@@ -2,8 +2,10 @@ package com.shootr.android.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 public class EventMediaActivity extends BaseToolbarDecoratedActivity implements EventMediaView {
 
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
+
     @Inject EventMediaPresenter presenter;
 
     private static final String EXTRA_EVENT_ID = "event";
