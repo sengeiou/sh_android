@@ -26,7 +26,17 @@ public class ShotEntityModelMapper {
         shotModel.setCsysBirth(shot.getCsysBirth());
         shotModel.setReplyUsername(shot.getUserNameParent());
         shotModel.setParentShotId(shot.getIdShotParent());
+        shotModel.setVideoUrl(shot.getVideoUrl());
+        shotModel.setVideoTitle(shot.getVideoTitle());
+        shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
         return shotModel;
+    }
+
+    private String durationToText(Long durationInSeconds) {
+        int minutes = (int) (durationInSeconds / 60);
+        int seconds = (int) (durationInSeconds % 60);
+        String secondsTwoDigits = seconds > 10 ? String.valueOf(seconds) : "0" + String.valueOf(seconds);
+        return String.format("%d:%s", minutes, secondsTwoDigits);
     }
 
 
