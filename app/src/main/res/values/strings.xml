@@ -232,8 +232,7 @@
            – %d friends
         </item>
     </plurals>
-    <string name="title_activity_event_media">EventMediaActivity</string>
+    <string name="title_activity_event_media">Event Media</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_new_actibity">NewActibity</string>
 </resources>

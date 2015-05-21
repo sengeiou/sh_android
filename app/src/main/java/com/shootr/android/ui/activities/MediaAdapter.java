@@ -7,17 +7,22 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import com.shootr.android.R;
+import com.shootr.android.ui.model.ShotModel;
+import com.squareup.picasso.Picasso;
+import java.util.List;
 
 public class MediaAdapter extends BaseAdapter {
 
     private Context context;
+    private List<ShotModel> shotsWithMedia;
 
-    public MediaAdapter(Context context) {
+    public MediaAdapter(Context context, List<ShotModel> shotsWithMedia) {
         this.context = context;
+        this.shotsWithMedia = shotsWithMedia;
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return shotsWithMedia.size();
     }
 
     public Object getItem(int position) {
@@ -31,7 +36,6 @@ public class MediaAdapter extends BaseAdapter {
     @Override public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView imageView;
         if (view == null) {
-            // if it's not recycled, initialize some attributes
             imageView = new ImageView(context);
             imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -39,24 +43,8 @@ public class MediaAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) view;
         }
-
-        imageView.setImageResource(mThumbIds[i]);
+        ShotModel shotModel = shotsWithMedia.get(i);
+        Picasso.with(context).load(shotModel.getImage()).into(imageView);
         return imageView;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-      R.drawable.ab_solid_goles, R.drawable.ab_solid_goles,
-    };
-
 }

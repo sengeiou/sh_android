@@ -29,6 +29,7 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
+import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.views.EventDetailView;
@@ -89,6 +90,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private MenuItem editMenuItem;
     private boolean showEditButton;
     private float headerMaxElevation;
+    private String idEvent;
 
     public static Intent getIntent(Context context, String eventId) {
         Intent intent = new Intent(context, EventDetailActivity.class);
@@ -102,7 +104,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        String idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
+        idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 
@@ -490,7 +492,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToMedia() {
-        Intent intent = new Intent(this, EventMediaActivity.class);
+        Intent intent = new Intent(getBaseContext(), EventMediaActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, idEvent);
         startActivity(intent);
     }
 
