@@ -76,7 +76,7 @@ public class CheckinPresenter implements Presenter {
     }
 
     public void confirmCheckinDontShowAgain() {
-        saveUserNotificationPreferences();
+        neverShowConfirmationToUserAgain();
         confirmCheckin();
     }
 
@@ -90,7 +90,7 @@ public class CheckinPresenter implements Presenter {
         checkinView.hideCheckinButton();
     }
 
-    public void saveUserNotificationPreferences() {
+    private void neverShowConfirmationToUserAgain() {
         askCheckinConfirmation.set(false);
     }
 
