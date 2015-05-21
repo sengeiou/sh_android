@@ -7,6 +7,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -47,7 +48,7 @@ public class LocalShotRepository implements ShotRepository {
         return 0;
     }
 
-    @Override public Shot getMediaByIdEvent(String idEvent, String userId) {
-        return null;
+    @Override public List<Shot> getMediaByIdEvent(String idEvent, String userId) {
+        return new ArrayList<>();
     }
 }

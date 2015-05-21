@@ -7,6 +7,7 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
 
 import com.shootr.android.domain.User;
@@ -75,4 +76,6 @@ public interface ShootrService {
     UserEntity getUserByUsername(String username) throws IOException;
 
     int getEventMediaCount(String idEvent, String idUser) throws IOException;
+
+    List<ShotEntity> getEventMedia(String idEvent, String userId) throws IOException;
 }

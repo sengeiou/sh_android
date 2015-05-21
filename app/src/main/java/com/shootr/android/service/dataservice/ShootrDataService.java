@@ -13,6 +13,7 @@ import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
@@ -541,6 +542,24 @@ public class ShootrDataService implements ShootrService {
             numberOfMedia = metadata.getTotalItems().intValue();
         }
         return numberOfMedia;
+    }
+
+    @Override public List<ShotEntity> getEventMedia(String idEvent, String userId) throws IOException {
+        List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
+        GenericDto requestDto = shotDtoFactory.getMediaShotByEventAndUser(idEvent, userId);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            MetadataDto md = ops[0].getMetadata();
+            Long items = md.getItems();
+            for(int i = 0; i< items; i++){
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                shotsByUserInEvent.add(shotEntityMapper.fromDto(dataItem));
+            }
+        }
+        return shotsByUserInEvent;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

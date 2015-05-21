@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
@@ -71,6 +72,15 @@ public class ServiceShotDatasource implements ShotDataSource {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override public List<ShotEntity> getEventMedia(String idEvent, String userId) {
+        try {
+            return shootrService.getEventMedia(idEvent, userId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private List<ShotEntity> filterSyncShots(List<ShotEntity> shotEntities) {
