@@ -15,7 +15,6 @@ public class CheckinPresenter implements Presenter {
     private final PerformCheckinInteractor performCheckinInteractor;
 
     private CheckinView checkinView;
-    protected Boolean checkedInEvent;
     protected boolean showingCheckinButton;
     private String idEvent;
 
@@ -46,16 +45,11 @@ public class CheckinPresenter implements Presenter {
     private void loadCheckinStatus() {
         getCheckinStatusInteractor.loadCheckinStatus(idEvent, new Interactor.Callback<Boolean>() {
             @Override public void onLoaded(Boolean checkedIn) {
-                checkedInEvent = checkedIn;
-                onCheckinStatusLoaded();
+                if(!checkedIn){
+                    showViewCheckinButton();
+                }
             }
         });
-    }
-
-    private void onCheckinStatusLoaded() {
-        if (!checkedInEvent) {
-            this.showViewCheckinButton();
-        }
     }
 
     public void checkIn() {
@@ -70,7 +64,6 @@ public class CheckinPresenter implements Presenter {
         hideViewCheckinButton();
         performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                checkedInEvent = true;
                 checkinView.showCheckinDone();
             }
         }, new Interactor.ErrorCallback() {
