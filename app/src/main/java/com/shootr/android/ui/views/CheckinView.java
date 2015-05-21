@@ -10,7 +10,7 @@ public interface CheckinView {
 
     void enableCheckinButton();
 
-    void showErrorWhileCheckingNotification();
+    void showCheckinError();
 
     void showCheckinNotification(Boolean userWantsNotification);
 

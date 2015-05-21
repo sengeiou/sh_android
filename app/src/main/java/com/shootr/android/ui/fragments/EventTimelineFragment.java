@@ -380,7 +380,7 @@ public class EventTimelineFragment extends BaseFragment
         checkinButton.setEnabled(true);
     }
 
-    @Override public void showErrorWhileCheckingNotification() {
+    @Override public void showCheckinError() {
         Toast.makeText(getActivity(),
           getActivity().getString(R.string.problem_while_checkin),
           Toast.LENGTH_SHORT).show();
