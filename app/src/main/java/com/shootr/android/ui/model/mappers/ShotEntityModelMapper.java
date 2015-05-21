@@ -33,9 +33,9 @@ public class ShotEntityModelMapper {
         return shotModel;
     }
 
-    public ShotModel toShotModelFromShot(ShotEntity shot){
+    public ShotModel toShotModel(ShotEntity shot){
         ShotModel shotModel = new ShotModel();
-        String userPhotoUrl = userAvatarUrlBuilder.calculateUserPhotoUrlFromIdUser(shot.getIdUser());
+        String userPhotoUrl = userAvatarUrlBuilder.thumbnail(shot.getIdUser());
         shotModel.setPhoto(userPhotoUrl);
         shotModel.setIdUser(shot.getIdUser());
         shotModel.setComment(shot.getComment());
