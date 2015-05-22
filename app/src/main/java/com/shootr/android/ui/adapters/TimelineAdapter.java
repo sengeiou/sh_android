@@ -27,6 +27,7 @@ import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
+    public static final String NO_COMMENT_BUT_SHOULD_SHOW_TAG = "";
     List<ShotModel> shots;
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
@@ -126,13 +127,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
                 String comment = item.getComment();
                 if (comment != null) {
-                    vh.text.setVisibility(View.VISIBLE);
-                    CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                            clickListener);
-                    vh.text.setText(spannedComment);
-                    vh.text.addLinks();
+                    addShotComment(vh, comment);
                 } else {
-                    vh.text.setVisibility(View.GONE);
+                    addShotCommentIfNecessary(vh);
                 }
 
                 if (shouldShowTag() && item.getEventTag() != null) {
@@ -172,6 +169,22 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             default:
                 break;
         }
+    }
+
+    private void addShotCommentIfNecessary(ViewHolder vh) {
+        if(shouldShowTag()){
+            addShotComment(vh, NO_COMMENT_BUT_SHOULD_SHOW_TAG);
+        }else{
+            vh.text.setVisibility(View.GONE);
+        }
+    }
+
+    private void addShotComment(ViewHolder vh, String comment) {
+        vh.text.setVisibility(View.VISIBLE);
+        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+                clickListener);
+        vh.text.setText(spannedComment);
+        vh.text.addLinks();
     }
 
     private String getReplyName(ShotModel item) {
