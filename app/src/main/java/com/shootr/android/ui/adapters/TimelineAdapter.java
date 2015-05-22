@@ -1,6 +1,7 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -27,6 +28,7 @@ import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
+    public static final String NO_COMMENT_BUT_SHOULD_SHOW_TAG = "";
     List<ShotModel> shots;
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
@@ -125,18 +127,17 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 String comment = item.getComment();
-                if (comment != null) {
-                    vh.text.setVisibility(View.VISIBLE);
-                    CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                            clickListener);
-                    vh.text.setText(spannedComment);
-                    vh.text.addLinks();
-                } else {
-                    vh.text.setVisibility(View.GONE);
+                String tag = null;
+                if (shouldShowTag() && item.getEventTag() != null) {
+                    tag = item.getEventTag();
                 }
 
-                if (shouldShowTag() && item.getEventTag() != null) {
-                    addShotTag(vh, item);
+                SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
+                if (commentWithTag != null) {
+                    addShotComment(vh, commentWithTag);
+                    vh.text.setVisibility(View.VISIBLE);
+                } else {
+                    vh.text.setVisibility(View.GONE);
                 }
 
                 long timestamp = item.getCsysBirth().getTime();
@@ -174,27 +175,44 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         }
     }
 
-    private String getReplyName(ShotModel item) {
-        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
+    private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        if (comment == null && tag == null) {
+            return null;
+        }
+        if (comment != null) {
+            builder.append(comment);
+        }
+        if (comment != null && tag != null) {
+            builder.append(" ");
+        }
+        if (tag != null) {
+            builder.append(formatTag(tag));
+        }
+        return builder;
     }
+
 
     protected boolean shouldShowTag() {
         return false;
     }
 
-    private void addShotTag(ViewHolder vh, ShotModel shotModel) {
-        String tag = shotModel.getEventTag();
-        CharSequence currentText = vh.text.getText();
-
-        SpannableStringBuilder spanBuilder = new SpannableStringBuilder(currentText);
+    private SpannableString formatTag(String tag) {
         ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
 
         SpannableString tagSpan = new SpannableString(tag);
         tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return tagSpan;
+    }
 
-        spanBuilder.append(" ");
-        spanBuilder.append(tagSpan);
-        vh.text.setText(spanBuilder);
+    private void addShotComment(ViewHolder vh, CharSequence comment) {
+        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, clickListener);
+        vh.text.setText(spannedComment);
+        vh.text.addLinks();
+    }
+
+    private String getReplyName(ShotModel item) {
+        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
     }
 
     public void addShotsBelow(List<ShotModel> newShots) {
