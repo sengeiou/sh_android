@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -50,6 +49,7 @@ import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
+import com.shootr.android.ui.views.nullview.NullCheckinView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
@@ -131,6 +131,7 @@ public class EventTimelineFragment extends BaseFragment
         super.onDestroyView();
         ButterKnife.reset(this);
         timelinePresenter.setView(new NullTimelineView());
+        checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
     }
