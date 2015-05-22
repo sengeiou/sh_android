@@ -166,6 +166,9 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private boolean commentHasLinks(String comment) {
+        if (comment == null) {
+            return false;
+        }
         Matcher matcher = Patterns.WEB_URL.matcher(comment);
         return matcher.find();
     }
