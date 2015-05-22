@@ -79,7 +79,6 @@ public class EventsListPresenter implements Presenter {
     }
 
     protected void loadDefaultEventList() {
-        eventsListView.showLoading();
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
             @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
                 onDefaultEventListLoaded(eventSearchResultList);
@@ -95,7 +94,6 @@ public class EventsListPresenter implements Presenter {
         List<EventSearchResult> eventSearchResults = resultList.getEventSearchResults();
         if (!eventSearchResults.isEmpty()) {
             List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
-            eventsListView.hideLoading();
             this.renderViewEventsList(eventResultModels);
             this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
             this.setViewCurrentVisibleWatchingEvent(resultList.getCurrentWatchingEventId());
