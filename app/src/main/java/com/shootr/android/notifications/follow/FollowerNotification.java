@@ -24,11 +24,20 @@ public class FollowerNotification extends CommonNotification {
 
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentTitle(getResources().getString(R.string.notification_follow_title, user.getUsername()));
+        builder.setContentTitle(getTitle());
         String message = getResources().getString(R.string.following_notif_text);
         builder.setContentText(message);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         builder.setContentIntent(getOpenProfileNotificationPendingIntent());
+    }
+
+    private String getTitle() {
+        return getResources().getString(R.string.notification_follow_title, user.getUsername());
+    }
+
+    @Override
+    protected CharSequence getTickerText() {
+        return getTitle();
     }
 
     @Override

@@ -60,6 +60,11 @@ public class SingleShotNotification extends AbstractShotNotification {
     }
 
     @Override
+    protected CharSequence getTickerText() {
+        return getTitle()+": "+getContent();
+    }
+
+    @Override
     public Bitmap getLargeIcon() {
         return getUserPhoto(shot.getPhoto());
     }

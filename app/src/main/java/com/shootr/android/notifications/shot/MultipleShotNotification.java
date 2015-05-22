@@ -53,6 +53,11 @@ public class MultipleShotNotification extends AbstractShotNotification {
         return getResources().getString(R.string.notification_shot_multiple_title, shots.size());
     }
 
+    @Override
+    protected CharSequence getTickerText() {
+        return getTitle();
+    }
+
     protected NotificationCompat.InboxStyle getInboxStyleFromShots() {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
         for (ShotModel shot : shots) {

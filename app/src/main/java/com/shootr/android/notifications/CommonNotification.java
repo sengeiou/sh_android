@@ -30,8 +30,11 @@ public abstract class CommonNotification {
         builder.setSmallIcon(getSmallIcon());
         builder.setLargeIcon(getLargeIcon());
         builder.setAutoCancel(true);
+        builder.setTicker(getTickerText());
         builder.setColor(resources.getColor(R.color.primary));
     }
+
+    protected abstract CharSequence getTickerText();
 
     public abstract void setNotificationValues(NotificationCompat.Builder builder);
 
