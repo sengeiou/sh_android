@@ -81,6 +81,7 @@ public class EventsListPresenter implements Presenter {
     protected void loadDefaultEventList() {
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
             @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+                eventsListView.hideLoading();
                 onDefaultEventListLoaded(eventSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
@@ -97,6 +98,8 @@ public class EventsListPresenter implements Presenter {
             this.renderViewEventsList(eventResultModels);
             this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
             this.setViewCurrentVisibleWatchingEvent(resultList.getCurrentWatchingEventId());
+        }else{
+            eventsListView.showLoading();
         }
     }
 
