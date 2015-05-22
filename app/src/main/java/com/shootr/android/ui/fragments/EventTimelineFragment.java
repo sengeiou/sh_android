@@ -543,9 +543,7 @@ public class EventTimelineFragment extends BaseFragment
     }
 
     @Override public void showCheckinButton() {
-        if(checkinButton != null){
-            checkinButton.setVisibility(View.VISIBLE);
-        }
+        checkinButton.setVisibility(View.VISIBLE);
     }
     //endregion
 }
