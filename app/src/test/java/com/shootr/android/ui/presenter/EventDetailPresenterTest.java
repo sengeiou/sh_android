@@ -43,7 +43,8 @@ public class EventDetailPresenterTest {
 
         presenter = new EventDetailPresenter(bus,
           eventInfoInteractor,
-          changeEventPhotoInteractor, sessionRepository, eventModelMapper,
+          changeEventPhotoInteractor,
+          eventModelMapper,
           userModelMapper,
           errorMessageFactory,
           watchersTimeFormatter);
