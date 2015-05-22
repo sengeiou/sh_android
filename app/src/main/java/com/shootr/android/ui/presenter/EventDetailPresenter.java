@@ -183,11 +183,13 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-        currentUserWatchingModel.setJoinEventDateText(
-                watchersTimeFormatter.jointDateText(
-                        currentUserWatchingModel.getJoinEventDate()));
-        eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+        if(currentUserWatch != null){
+            currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
+            currentUserWatchingModel.setJoinEventDateText(
+              watchersTimeFormatter.jointDateText(
+                currentUserWatchingModel.getJoinEventDate()));
+            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+        }
     }
 
     private void renderEventInfo(Event event) {
