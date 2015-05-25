@@ -7,19 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
-import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.domain.TimelineParameters;
-import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ShotManager extends  AbstractManager{
 
@@ -113,21 +111,62 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE, 3, 1000, 0);
     }
 
-    public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) {
-        List<String> userIds = parameters.getAllUserIds();
+    public List<ShotEntity> getShotsByActivityParameters(ActivityTimelineParameters parameters) {
+        List<String> userIds = parameters.getUserIds();
+        List<String> includedTypes = parameters.getIncludedTypes();
+
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
-        String eventSelection = ShotTable.ID_EVENT + (parameters.getEventId() != null ? " = ?" : " IS NULL");
+        String typeSelection = ShotTable.TYPE + " IN ("+ createListPlaceholders(includedTypes.size()) +")";
+        String rootTypeSelection = ShotTable.ROOT_TYPE + " <> ?";
         //TODO since & max
         //TODO limit
 
-        String[] whereArguments = new String[parameters.getEventId() != null? userIds.size()+1 : userIds.size()];
+        int whereArgumentsSize = userIds.size() + includedTypes.size() + 1;
+        String[] whereArguments = new String[whereArgumentsSize];
         for (int i = 0; i < userIds.size(); i++) {
             whereArguments[i] = String.valueOf(userIds.get(i));
         }
-        if (parameters.getEventId() != null) {
-            whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
+        int typeArgumentStartIndex = userIds.size();
+        for (int i = 0; i < includedTypes.size(); i++) {
+            whereArguments[typeArgumentStartIndex + i] = includedTypes.get(i);
         }
-        String whereClause = usersSelection + " AND " + eventSelection;
+        int rootTypeArgumentIndex = typeArgumentStartIndex + includedTypes.size();
+        whereArguments[rootTypeArgumentIndex] = parameters.getExcludedRootType();
+
+        String whereClause = usersSelection + " AND " + typeSelection + " AND " + rootTypeSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultShots;
+    }
+
+    public List<ShotEntity> getShotsByEventParameters(EventTimelineParameters parameters) {
+        List<String> userIds = parameters.getUserIds();
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
+        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String rootTypeSelection = ShotTable.ROOT_TYPE + " = ?";
+        //TODO since & max
+        //TODO limit
+
+        String[] whereArguments = new String[userIds.size()+2];
+        for (int i = 0; i < userIds.size(); i++) {
+            whereArguments[i] = String.valueOf(userIds.get(i));
+        }
+        whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
+        whereArguments[userIds.size()+1] = String.valueOf(parameters.getShotRootType());
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + rootTypeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,

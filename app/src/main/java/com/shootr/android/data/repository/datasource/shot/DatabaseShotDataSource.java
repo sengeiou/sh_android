@@ -2,7 +2,8 @@ package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.exception.RepositoryException;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,8 +30,14 @@ public class DatabaseShotDataSource implements ShotDataSource {
         shotManager.saveShots(shotEntities);
     }
 
-    @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
-        return shotManager.getShotsByParameters(parameters);
+    @Override
+    public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
+        return shotManager.getShotsByEventParameters(parameters);
+    }
+
+    @Override
+    public List<ShotEntity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
+        return shotManager.getShotsByActivityParameters(parameters);
     }
 
     @Override public ShotEntity getShot(String shotId) {
