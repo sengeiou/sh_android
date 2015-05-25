@@ -1,7 +1,8 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -40,9 +41,18 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForTimeline(TimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
         try {
-            return filterSyncShots(shootrService.getShotsByParameters(parameters));
+            return filterSyncShots(shootrService.getEventShotsByParameters(parameters));
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public List<ShotEntity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
+        try {
+            return filterSyncShots(shootrService.getActivityShotsByParameters(parameters));
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
