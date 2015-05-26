@@ -55,7 +55,7 @@ public class EventsListAdapter extends HeaderRecyclerViewAdapter<RecyclerView.Vi
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_event, viewGroup, false);
-        return new EventViewHolder(view);
+        return new EventResultViewHolder(view, onEventClickListener, picasso);
     }
 
     @Override
@@ -65,60 +65,14 @@ public class EventsListAdapter extends HeaderRecyclerViewAdapter<RecyclerView.Vi
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        EventViewHolder holder = (EventViewHolder) viewHolder;
         EventResultModel event = events.get(position);
-        holder.title.setText(event.getEventModel().getTitle());
-        holder.date.setText(event.getEventModel().getDatetime());
-        int watchers = event.getWatchers();
-        if (watchers > 0) {
-            holder.watchers.setVisibility(View.VISIBLE);
-            holder.watchers.setText(getWatchersText(watchers));
-        } else {
-            holder.watchers.setVisibility(View.GONE);
-        }
-        holder.author.setText(event.getEventModel().getAuthorUsername());
-
-        //TODO usar tamaño predefinido con picasso para mejorar rendimiento
-        String pictureUrl = event.getEventModel().getPicture();
-        picasso.loadEventPicture(pictureUrl).into(holder.picture);
-        markEvents(holder, event);
-    }
-
-    private void markEvents(EventViewHolder holder, EventResultModel event) {
         String idEvent = event.getEventModel().getIdEvent();
-        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
         boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
-
-        if (isCheckedInEvent) {
-            setNotificationIconVisibility(holder, true);
-        } else {
-            setNotificationIconVisibility(holder, false);
-        }
-
-        if (isWatchingEvent) {
-            setHighlightColorVisibility(holder, true);
-        } else {
-            setHighlightColorVisibility(holder, false);
-        }
+        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
+        ((EventResultViewHolder) viewHolder).render(event, isWatchingEvent, isCheckedInEvent);
     }
 
-    private void setNotificationIconVisibility(EventViewHolder holder, boolean visible) {
-        holder.notificationIndicator.setVisibility(visible? View.VISIBLE : View.GONE);
-    }
 
-    private void setHighlightColorVisibility(EventViewHolder holder, boolean showHighlight) {
-        if (showHighlight) {
-            CharSequence text = holder.title.getText();
-            SpannableStringBuilder sp = new SpannableStringBuilder(text);
-            int selectedColor = resources.getColor(R.color.primary);
-            sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.title.setText(sp);
-        }
-    }
-
-    private String getWatchersText(int watchers) {
-        return String.valueOf(watchers);
-    }
 
     @Override public int getItemCount() {
         return events.size();
@@ -136,7 +90,10 @@ public class EventsListAdapter extends HeaderRecyclerViewAdapter<RecyclerView.Vi
         this.onEventClickListener = onEventClickListener;
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder {
+    public static class EventResultViewHolder extends RecyclerView.ViewHolder {
+
+        private final OnEventClickListener onEventClickListener;
+        private final PicassoWrapper picasso;
 
         @InjectView(R.id.event_picture) ImageView picture;
         @InjectView(R.id.event_title) TextView title;
@@ -145,15 +102,67 @@ public class EventsListAdapter extends HeaderRecyclerViewAdapter<RecyclerView.Vi
         @InjectView(R.id.event_watchers) TextView watchers;
         @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
-        public EventViewHolder(View itemView) {
+        public EventResultViewHolder(View itemView, OnEventClickListener onEventClickListener, PicassoWrapper picasso) {
             super(itemView);
+            this.onEventClickListener = onEventClickListener;
+            this.picasso = picasso;
             ButterKnife.inject(this, itemView);
+        }
+
+        public void render(EventResultModel event, boolean isWatching, boolean isCheckedIn) {
+            this.setClickListener(event);
+            title.setText(event.getEventModel().getTitle());
+            date.setText(event.getEventModel().getDatetime());
+            int watchersCount = event.getWatchers();
+            if (watchersCount > 0) {
+                watchers.setVisibility(View.VISIBLE);
+                watchers.setText(getWatchersText(watchersCount));
+            } else {
+                watchers.setVisibility(View.GONE);
+            }
+            author.setText(event.getEventModel().getAuthorUsername());
+
+            //TODO usar tamaño predefinido con picasso para mejorar rendimiento
+            String pictureUrl = event.getEventModel().getPicture();
+            picasso.loadEventPicture(pictureUrl).into(picture);
+
+            if (isCheckedIn) {
+                setNotificationIconVisibility(true);
+            } else {
+                setNotificationIconVisibility(false);
+            }
+
+            if (isWatching) {
+                setHighlightColorVisibility(true);
+            } else {
+                setHighlightColorVisibility(false);
+            }
+        }
+
+        private void setClickListener(final EventResultModel eventResult) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    EventResultModel eventSelected = events.get(EventViewHolder.this.getPosition());
-                    onEventClickListener.onEventClick(eventSelected.getEventModel());
+                    onEventClickListener.onEventClick(eventResult.getEventModel());
                 }
             });
+        }
+
+        private String getWatchersText(int watchers) {
+            return String.valueOf(watchers);
+        }
+
+        private void setNotificationIconVisibility(boolean visible) {
+            notificationIndicator.setVisibility(visible? View.VISIBLE : View.GONE);
+        }
+
+        private void setHighlightColorVisibility(boolean showHighlight) {
+            if (showHighlight) {
+                CharSequence text = title.getText();
+                SpannableStringBuilder sp = new SpannableStringBuilder(text);
+                int selectedColor = itemView.getContext().getResources().getColor(R.color.primary);
+                sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                title.setText(sp);
+            }
         }
     }
 
