@@ -25,7 +25,6 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     public void postNewShotAsReply(String comment, File image, String replyParentId, CompletedCallback callback, ErrorCallback errorCallback) {
         this.replyParentId = replyParentId;
-        super.setRootType(getParentShot().getRootType());
         super.postNewShot(comment, image, callback, errorCallback);
     }
 
@@ -40,6 +39,10 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
             throw new IllegalArgumentException(String.format("Parent shot not found with id=%d", replyParentId));
         }
         shot.setEventInfo(parentShot.getEventInfo());
+    }
+
+    @Override protected String getRootType() {
+        return getParentShot().getRootType();
     }
 
     private void fillReplyInfo(Shot shot) {

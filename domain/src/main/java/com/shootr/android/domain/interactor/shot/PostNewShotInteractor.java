@@ -110,11 +110,6 @@ public abstract class PostNewShotInteractor implements Interactor {
         });
     }
 
-    private String getRootType() {
-        return rootType;
-    }
+    protected abstract String getRootType();
 
-    public void setRootType(String rootType){
-        this.rootType = rootType;
-    }
 }

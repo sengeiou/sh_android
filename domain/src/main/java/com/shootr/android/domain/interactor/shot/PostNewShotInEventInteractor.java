@@ -27,7 +27,6 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
     }
 
     public void postNewShotInEvent(String comment, File image, CompletedCallback callback, ErrorCallback errorCallback) {
-        super.setRootType(ShotType.COMMENT);
         super.postNewShot(comment, image, callback, errorCallback);
     }
 
@@ -40,6 +39,10 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
             eventInfo.setEventTag(event.getTag());
             shot.setEventInfo(eventInfo);
         }
+    }
+
+    @Override protected String getRootType() {
+        return ShotType.COMMENT;
     }
 
     private Event currentVisibleEvent() {
