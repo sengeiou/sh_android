@@ -99,6 +99,8 @@ public class EventTimelineFragment extends BaseFragment
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
+
+    private String idEvent;
     //endregion
 
     public static EventTimelineFragment newInstance(String eventId, String eventTitle) {
@@ -138,7 +140,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        String idEvent = getArguments().getString(EXTRA_EVENT_ID);
+        idEvent = getArguments().getString(EXTRA_EVENT_ID);
         initializeToolbar();
         initializePresenters(idEvent);
     }
@@ -164,7 +166,9 @@ public class EventTimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                startActivity(new Intent(getActivity(), EventDetailActivity.class));
+                Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+                intent.putExtra("event", idEvent);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -105,7 +105,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
+        Bundle bundle = getIntent().getExtras();
+        idEvent = bundle.getString(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 

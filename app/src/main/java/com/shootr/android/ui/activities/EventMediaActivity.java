@@ -39,7 +39,8 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
-        String idEvent = intent.getStringExtra(EXTRA_EVENT_ID);
+        Bundle bundle = getIntent().getExtras();
+        String idEvent = bundle.getString(EXTRA_EVENT_ID);
         presenter.initialize(this, idEvent);
     }
 
@@ -48,7 +49,6 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void setMedia(List<ShotModel> shotsWithMedia) {
-        //mediaGridView.setVisibility(View.VISIBLE);
         MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(),shotsWithMedia);
         mediaView.setAdapter(mediaAdapter);
     }
