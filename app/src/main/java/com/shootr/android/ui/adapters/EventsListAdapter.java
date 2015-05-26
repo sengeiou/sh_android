@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.karumi.headerrecyclerview.HeaderRecyclerViewAdapter;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -19,7 +20,7 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
+public class EventsListAdapter extends HeaderRecyclerViewAdapter<RecyclerView.ViewHolder, EventModel, EventModel> {
 
     private final PicassoWrapper picasso;
     private final Resources resources;
@@ -46,12 +47,25 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         }
     }
 
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event, parent, false);
-        return new ViewHolder(view);
+    @Override
+    protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup, int i) {
+        return null; //TODO
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, int position) {
+    @Override
+    protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_event, viewGroup, false);
+        return new EventViewHolder(view);
+    }
+
+    @Override
+    protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        //TODO
+    }
+
+    @Override
+    protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        EventViewHolder holder = (EventViewHolder) viewHolder;
         EventResultModel event = events.get(position);
         holder.title.setText(event.getEventModel().getTitle());
         holder.date.setText(event.getEventModel().getDatetime());
@@ -70,7 +84,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         markEvents(holder, event);
     }
 
-    private void markEvents(ViewHolder holder, EventResultModel event) {
+    private void markEvents(EventViewHolder holder, EventResultModel event) {
         String idEvent = event.getEventModel().getIdEvent();
         boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
         boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
@@ -88,11 +102,11 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         }
     }
 
-    private void setNotificationIconVisibility(ViewHolder holder, boolean visible) {
+    private void setNotificationIconVisibility(EventViewHolder holder, boolean visible) {
         holder.notificationIndicator.setVisibility(visible? View.VISIBLE : View.GONE);
     }
 
-    private void setHighlightColorVisibility(ViewHolder holder, boolean showHighlight) {
+    private void setHighlightColorVisibility(EventViewHolder holder, boolean showHighlight) {
         if (showHighlight) {
             CharSequence text = holder.title.getText();
             SpannableStringBuilder sp = new SpannableStringBuilder(text);
@@ -122,7 +136,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         this.onEventClickListener = onEventClickListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class EventViewHolder extends RecyclerView.ViewHolder {
 
         @InjectView(R.id.event_picture) ImageView picture;
         @InjectView(R.id.event_title) TextView title;
@@ -131,12 +145,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         @InjectView(R.id.event_watchers) TextView watchers;
         @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
-        public ViewHolder(View itemView) {
+        public EventViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    EventResultModel eventSelected = events.get(ViewHolder.this.getPosition());
+                    EventResultModel eventSelected = events.get(EventViewHolder.this.getPosition());
                     onEventClickListener.onEventClick(eventSelected.getEventModel());
                 }
             });
