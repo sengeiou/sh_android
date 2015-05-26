@@ -66,9 +66,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     public List<ShotModel> getLatestShotModels(List<ShotEntity> shotEntities){
         List<ShotModel> shotModels = new ArrayList<>(shotEntities.size());
         for(ShotEntity shot:shotEntities) {
-            if (shot.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
-                shotModels.add(shotEntityModelMapper.toShotModel(user, shot));
-            }
+            shotModels.add(shotEntityModelMapper.toShotModel(user, shot));
         }
         return shotModels;
     }

@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,8 @@ public class ShotQueueEntityMapper {
         entity.setVideoTitle(shot.getVideoTitle());
         entity.setVideoDuration(shot.getVideoDuration());
 
-        entity.setType(ShotEntity.TYPE_COMMENT);
+        entity.setType(shot.getType());
+        entity.setRootType(shot.getRootType());
         return entity;
     }
 
@@ -98,6 +100,9 @@ public class ShotQueueEntityMapper {
         shot.setVideoUrl(entity.getVideoUrl());
         shot.setVideoTitle(entity.getVideoTitle());
         shot.setVideoDuration(entity.getVideoDuration());
+
+        shot.setType(entity.getType());
+        shot.setRootType(entity.getRootType());
 
         queuedShot.setShot(shot);
         return queuedShot;
