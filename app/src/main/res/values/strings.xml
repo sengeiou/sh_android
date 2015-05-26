@@ -249,8 +249,10 @@
            – %d friends
         </item>
     </plurals>
-    <string name="title_activity_event_media">Event Media</string>
+    <string name="title_activity_event_media">Media</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="event_media_empty_title">No photos or videos.</string>
+    <string name="event_detail_media">Media</string>
+    <string name="event_detail_media_number">0</string>
 </resources>

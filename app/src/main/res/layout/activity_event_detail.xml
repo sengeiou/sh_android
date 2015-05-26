@@ -117,8 +117,8 @@
                               android:paddingLeft="@dimen/keyline_2"
                               android:textAppearance="@style/TextAppearance.Switch"
                               android:textColor="?android:attr/textColorPrimary"
-                              android:text="Loading media"
-                              tools:text="media" />
+                              android:text="@string/event_detail_media"
+                              tools:text="Media" />
 
                             <TextView android:id="@+id/event_detail_media_number"
                             android:layout_width="match_parent"
@@ -129,8 +129,7 @@
                             android:paddingRight="16dp"
                             android:textAppearance="@style/TextAppearance.Switch"
                             android:textColor="?android:attr/textColorPrimary"
-                            android:visibility="gone"
-                            android:text="0"
+                            android:text="@string/event_detail_media_number"
                             tools:text="7" />
 
                         </FrameLayout>
