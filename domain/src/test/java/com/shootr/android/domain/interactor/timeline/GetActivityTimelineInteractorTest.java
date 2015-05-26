@@ -1,9 +1,9 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -15,22 +15,19 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
@@ -74,7 +71,17 @@ public class GetActivityTimelineInteractorTest {
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadActivityTimeline(spyCallback, errorCallback);
+        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+    }
+
+    @Test
+    public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoEventWatching() throws Exception {
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadActivityTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();

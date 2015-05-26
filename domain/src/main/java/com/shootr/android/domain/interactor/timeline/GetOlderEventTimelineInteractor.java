@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.TimelineParameters;
@@ -55,8 +56,8 @@ public class GetOlderEventTimelineInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         try {
-            TimelineParameters timelineParameters = buildTimelineParameters();
-            List<Shot> olderShots = remoteShotRepository.getShotsForTimeline(timelineParameters);
+            EventTimelineParameters timelineParameters = buildTimelineParameters();
+            List<Shot> olderShots = remoteShotRepository.getShotsForEventTimeline(timelineParameters);
             sortShotsByPublishDate(olderShots);
             notifyTimelineFromShots(olderShots);
         } catch (ShootrException error) {
@@ -64,9 +65,9 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         }
     }
 
-    private TimelineParameters buildTimelineParameters() {
+    private EventTimelineParameters buildTimelineParameters() {
         Event visibleEvent = getVisibleEvent();
-        return TimelineParameters.builder() //
+        return EventTimelineParameters.builder() //
                 .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
                 .forEvent(visibleEvent) //
                 .maxDate(currentOldestDate) //
