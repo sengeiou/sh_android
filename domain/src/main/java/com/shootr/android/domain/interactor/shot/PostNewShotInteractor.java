@@ -26,7 +26,6 @@ public abstract class PostNewShotInteractor implements Interactor {
     private File imageFile;
     private CompletedCallback callback;
     private ErrorCallback errorCallback;
-    private String rootType;
 
     public PostNewShotInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
       SessionRepository sessionRepository, @Background ShotSender shotSender) {
