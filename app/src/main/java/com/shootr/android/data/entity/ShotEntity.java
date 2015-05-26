@@ -2,10 +2,6 @@ package com.shootr.android.data.entity;
 
 public class ShotEntity extends Synchronized{
 
-    public static final int TYPE_COMMENT = 0;
-    public static final int TYPE_TRIGGER_SYNC = 1;
-    public static final int TYPE_TRIGGER_SYNC_NOT_SHOW = 2;
-
     private String idShot;
     private String idUser;
     private String username;
@@ -14,7 +10,9 @@ public class ShotEntity extends Synchronized{
     private String idEvent;
     private String eventTag;
     private String eventTitle;
-    private Integer type;
+
+    private String type;
+    private String rootType;
 
     private String idShotParent;
     private String idUserParent;
@@ -64,11 +62,11 @@ public class ShotEntity extends Synchronized{
         this.idEvent = idEvent;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -142,5 +140,13 @@ public class ShotEntity extends Synchronized{
 
     public void setVideoDuration(Long videoDuration) {
         this.videoDuration = videoDuration;
+    }
+
+    public String getRootType() {
+        return rootType;
+    }
+
+    public void setRootType(String rootType) {
+        this.rootType = rootType;
     }
 }
