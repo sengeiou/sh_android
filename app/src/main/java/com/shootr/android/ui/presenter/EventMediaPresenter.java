@@ -13,15 +13,13 @@ import javax.inject.Inject;
 public class EventMediaPresenter implements Presenter {
 
     private final GetEventMediaInteractor getEventMediaInteractor;
-    private final VisibleEventInfoInteractor eventInfoInteractor;
     private final ShotModelMapper shotModelMapper;
     private EventMediaView eventMediaView;
     private String idEvent;
 
     @Inject public EventMediaPresenter(GetEventMediaInteractor getEventMediaInteractor,
-      VisibleEventInfoInteractor eventInfoInteractor, ShotModelMapper shotModelMapper) {
+      ShotModelMapper shotModelMapper) {
         this.getEventMediaInteractor = getEventMediaInteractor;
-        this.eventInfoInteractor = eventInfoInteractor;
         this.shotModelMapper = shotModelMapper;
     }
 
@@ -33,10 +31,10 @@ public class EventMediaPresenter implements Presenter {
         this.setView(eventMediaView);
         this.idEvent = idEvent;
         eventMediaView.showEmpty();
-        retrieveMedia(idEvent);
+        retrieveMedia();
     }
 
-    public void retrieveMedia(String idEvent){
+    public void retrieveMedia(){
         renderMedia(idEvent);
     }
 
