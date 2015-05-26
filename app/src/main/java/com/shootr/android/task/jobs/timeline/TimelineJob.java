@@ -36,9 +36,7 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
     public static List<ShotEntity> filterShots(List<ShotEntity> updatedTimeline) {
         List<ShotEntity> filtered = new ArrayList<>();
         for (ShotEntity shotEntity : updatedTimeline) {
-            if (shotEntity.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
-                filtered.add(shotEntity);
-            }
+            filtered.add(shotEntity);
         }
         return filtered;
     }
