@@ -89,10 +89,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     }
 
     private void setNotificationIconVisibility(ViewHolder holder, boolean visible) {
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(0,
-          0,
-          visible ? R.drawable.ic_notifications_on_16_grey70 : 0,
-          0);
+        holder.notificationIndicator.setVisibility(visible? View.VISIBLE : View.GONE);
     }
 
     private void setHighlightColorVisibility(ViewHolder holder, boolean showHighlight) {
@@ -132,6 +129,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         @InjectView(R.id.event_author) TextView author;
         @InjectView(R.id.event_date) TextView date;
         @InjectView(R.id.event_watchers) TextView watchers;
+        @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
         public ViewHolder(View itemView) {
             super(itemView);
