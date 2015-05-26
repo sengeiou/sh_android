@@ -130,6 +130,7 @@
                             android:textAppearance="@style/TextAppearance.Switch"
                             android:textColor="?android:attr/textColorPrimary"
                             android:text="@string/event_detail_media_number"
+                            android:visibility="gone"
                             tools:text="7" />
 
                         </FrameLayout>
