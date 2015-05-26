@@ -53,7 +53,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private static final int REQUEST_TAKE_PHOTO = 5;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
-    private static final String EXTRA_EVENT_ID = "event";
+    private static final String EXTRA_EVENT_ID = "eventId";
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
@@ -490,8 +490,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setMediaCount(Integer mediaCount) {
-        eventMedia.setText("Media");
-        eventMediaNumber.setVisibility(View.VISIBLE);
         eventMediaNumber.setText(mediaCount.toString());
     }
 
@@ -499,6 +497,10 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         Intent intent = new Intent(this, EventMediaActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, idEvent);
         this.startActivity(intent);
+    }
+
+    @Override public void showMediaCount() {
+        eventMediaNumber.setVisibility(View.VISIBLE);
     }
 
     @Override public void showEmpty() {
