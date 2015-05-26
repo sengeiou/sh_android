@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,9 @@ public class ShotQueueEntityMapper {
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
         entity.setCsysBirth(shot.getPublishDate());
-        String parentShotId = shot.getParentShotId();
-        entity.setIdShotParent(parentShotId);
-        String parentShotUserId = shot.getParentShotUserId();
-        entity.setIdUserParent(parentShotUserId);
-        String parentShotUsername = shot.getParentShotUsername();
-        entity.setUserNameParent(parentShotUsername);
+        entity.setIdShotParent(shot.getParentShotId());
+        entity.setIdUserParent(shot.getParentShotUserId());
+        entity.setUserNameParent(shot.getParentShotUsername());
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
@@ -52,7 +50,12 @@ public class ShotQueueEntityMapper {
         entity.setIdUser(shot.getUserInfo().getIdUser());
         entity.setUsername(shot.getUserInfo().getUsername());
 
-        entity.setType(ShotEntity.TYPE_COMMENT);
+        entity.setVideoUrl(shot.getVideoUrl());
+        entity.setVideoTitle(shot.getVideoTitle());
+        entity.setVideoDuration(shot.getVideoDuration());
+
+        entity.setType(shot.getType());
+        entity.setRootType(shot.getRootType());
         return entity;
     }
 
@@ -90,12 +93,16 @@ public class ShotQueueEntityMapper {
             shot.setEventInfo(eventInfo);
         }
 
-        String idShotParent = entity.getIdShotParent();
-        shot.setParentShotId(idShotParent);
-        String idUserParent = entity.getIdUserParent();
-        shot.setParentShotUserId(idUserParent);
-        String userNameParent = entity.getUserNameParent();
-        shot.setParentShotUsername(userNameParent);
+        shot.setParentShotId(entity.getIdShotParent());
+        shot.setParentShotUserId(entity.getIdUserParent());
+        shot.setParentShotUsername(entity.getUserNameParent());
+
+        shot.setVideoUrl(entity.getVideoUrl());
+        shot.setVideoTitle(entity.getVideoTitle());
+        shot.setVideoDuration(entity.getVideoDuration());
+
+        shot.setType(entity.getType());
+        shot.setRootType(entity.getRootType());
 
         queuedShot.setShot(shot);
         return queuedShot;

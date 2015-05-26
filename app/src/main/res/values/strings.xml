@@ -177,7 +177,7 @@
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>
-    <string name="checkin_confirmation_message">Check In will shoot a notification to your followers.</string>
+    <string name="checkin_notification_message">Check In will shoot a notification to your followers.</string>
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
@@ -193,19 +193,36 @@
     <string name="drawer_events_title">Events</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
+
     <string name="entered">Entered&#160;</string>
-    <string name="hours_ago">&#160;hours ago</string>
-    <string name="days_ago">&#160;days ago</string>
-    <string name="minutes_ago">&#160;minutes ago</string>
     <string name="long_time_ago">long time ago</string>
     <string name="just_now">just now</string>
     <string name="day_ago">1 day ago</string>
     <string name="hour_ago">1 hour ago</string>
     <string name="minute_ago">1 minute ago</string>
+    <string name="minutes_ago">&#160;minutes ago</string>
+    <string name="user_not_found">User not found</string>
+    <string name="dont_show_again">Ok, don\'t show again</string>
+    <string name="problem_while_checkin">There was a problem while checking in</string>
+    <string name="successfully_checked_in">Checked in</string>
+
+    <string name="starting_in">Starting in&#160;</string>
+    <string name="space_and_minutes">&#160;min</string>
+    <string name="started">Started&#160;</string>
+    <string name="min_ago">&#160;min ago</string>
+    <string name="starting_now">Starting now</string>
+    <string name="an_hour">1 hour</string>
+    <string name="space_and_hours">&#160;hours</string>
+    <string name="yesterday_at">Yesterday&#160;</string>
+    <string name="days_ago">&#160;days ago</string>
+    <string name="an_hour_ago">1 hour ago</string>
+    <string name="hours_ago">&#160;hours ago</string>
+    <string name="today_at">Today&#160;</string>
+    <string name="tomorrow_at">Tomorrow&#160;</string>
+
     <string name="checked_in">Checked In</string>
     <string name="check_in_action">Check In</string>
     <string name="check_out_action">Check Out</string>
-    <string name="user_not_found">User not found</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
@@ -235,4 +252,5 @@
     <string name="title_activity_event_media">Event Media</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="event_media_empty_title">No photos or videos.</string>
 </resources>

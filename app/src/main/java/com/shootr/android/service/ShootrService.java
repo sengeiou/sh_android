@@ -7,10 +7,8 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.TimelineParameters;
-
-import com.shootr.android.domain.User;
+import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,9 @@ public interface ShootrService {
 
     ShotEntity getShotById(String idShot) throws IOException;
 
-    List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException;
+    List<ShotEntity> getEventShotsByParameters(EventTimelineParameters parameters) throws IOException;
+
+    List<ShotEntity> getActivityShotsByParameters(ActivityTimelineParameters parameters) throws IOException;
 
     List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 
@@ -70,8 +70,6 @@ public interface ShootrService {
     void performCheckin(String idUser, String idEvent) throws IOException;
 
     void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
-
-    void performCheckout(String idUser, String watchingEventId) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
 

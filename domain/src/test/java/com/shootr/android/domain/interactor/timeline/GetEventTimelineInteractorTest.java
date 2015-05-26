@@ -1,9 +1,9 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -37,7 +36,7 @@ import static org.mockito.Mockito.when;
 public class GetEventTimelineInteractorTest {
 
     private static final String ID_SHOT_WITHOUT_EVENT = "shot_without_event";
-    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String WATCHING_EVENT_ID = "watching_event";
     private static final String ID_SHOT_WITH_EVENT = "shot_with_event";
     private static final String EVENT_AUTHOR_ID = "event_author";
     private static final String ID_SHOT_FROM_AUTHOR = "shot_from_author";
@@ -76,28 +75,18 @@ public class GetEventTimelineInteractorTest {
     }
 
     @Test
-    public void shouldNotRetrieveTimelineWhenNoEventVisible() throws Exception {
+    public void shouldNotRetrieveTimelineWhenNoEventWatching() throws Exception {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
 
-        verify(localShotRepository, never()).getShotsForTimeline(any(TimelineParameters.class));
-    }
-
-    @Test
-    public void shouldRetrieveTimelineWithEventIdAndAuthorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-
-        interactor.loadEventTimeline(spyCallback, errorCallback);
-
-        TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
-        assertThat(localParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
+        verify(localShotRepository, never()).getShotsForEventTimeline(any(EventTimelineParameters.class));
     }
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupVisibleEvent();
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
@@ -115,7 +104,7 @@ public class GetEventTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -129,17 +118,12 @@ public class GetEventTimelineInteractorTest {
         return shot;
     }
 
-    private void setupVisibleEvent() {
+    private void setupWatchingEvent() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
+        when(eventRepository.getEventById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
     }
 
     //region Stubs
-    private List<Shot> shotsWithVisibleEventAndAuthor() {
-        List<Shot> shots = shotsWithVisibleEvent();
-        shots.addAll(shotsFromAuthor());
-        return shots;
-    }
 
     private List<Shot> shotsFromAuthor() {
         return Arrays.asList(shotFromAuthor());
@@ -155,30 +139,22 @@ public class GetEventTimelineInteractorTest {
         return shot;
     }
 
-    private List<Shot> shotsWithVisibleEvent() {
-        List<Shot> shots = new ArrayList<>();
-        shots.add(shotWithEvent());
-        shots.add(shotWithEvent());
-        shots.add(shotWithEvent());
-        return shots;
-    }
-
     private Shot shotWithEvent() {
         Shot shot = new Shot();
         shot.setIdShot(ID_SHOT_WITH_EVENT);
-        shot.setEventInfo(visibleEventInfo());
+        shot.setEventInfo(watchingEventInfo());
         return shot;
     }
 
-    private Shot.ShotEventInfo visibleEventInfo() {
+    private Shot.ShotEventInfo watchingEventInfo() {
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(VISIBLE_EVENT_ID);
+        eventInfo.setIdEvent(WATCHING_EVENT_ID);
         return eventInfo;
     }
 
-    private Event visibleEvent() {
+    private Event watchingEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
+        event.setId(WATCHING_EVENT_ID);
         event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }
@@ -186,9 +162,9 @@ public class GetEventTimelineInteractorTest {
     //endregion
 
     //region Spies
-    private TimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
-        ArgumentCaptor<TimelineParameters> captor = ArgumentCaptor.forClass(TimelineParameters.class);
-        verify(shotRepository).getShotsForTimeline(captor.capture());
+    private EventTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
+        ArgumentCaptor<EventTimelineParameters> captor = ArgumentCaptor.forClass(EventTimelineParameters.class);
+        verify(shotRepository).getShotsForEventTimeline(captor.capture());
         return captor.getValue();
     }
 

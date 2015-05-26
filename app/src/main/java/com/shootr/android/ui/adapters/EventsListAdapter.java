@@ -25,7 +25,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     private final Resources resources;
 
     private List<EventResultModel> events;
-    private String currentVisibleEvent;
+    private String currentCheckedInEvent;
+    private String currentWathingEvent;
 
     private OnEventClickListener onEventClickListener;
 
@@ -66,15 +67,41 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(holder.picture);
-        boolean isSelectedEvent = event.getEventModel().getIdEvent().equals(currentVisibleEvent);
-        markSelectedEvent(holder, isSelectedEvent);
+        markEvents(holder, event);
     }
 
-    private void markSelectedEvent(ViewHolder holder, boolean isSelectedEvent) {
-        if (isSelectedEvent) {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_notifications_on_16_grey70, 0);
+    private void markEvents(ViewHolder holder, EventResultModel event) {
+        String idEvent = event.getEventModel().getIdEvent();
+        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
+        boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
+
+        if (isCheckedInEvent) {
+            setNotificationIconVisibility(holder, true);
         } else {
-            holder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            setNotificationIconVisibility(holder, false);
+        }
+
+        if (isWatchingEvent) {
+            setHighlightColorVisibility(holder, true);
+        } else {
+            setHighlightColorVisibility(holder, false);
+        }
+    }
+
+    private void setNotificationIconVisibility(ViewHolder holder, boolean visible) {
+        holder.title.setCompoundDrawablesWithIntrinsicBounds(0,
+          0,
+          visible ? R.drawable.ic_notifications_on_16_grey70 : 0,
+          0);
+    }
+
+    private void setHighlightColorVisibility(ViewHolder holder, boolean showHighlight) {
+        if (showHighlight) {
+            CharSequence text = holder.title.getText();
+            SpannableStringBuilder sp = new SpannableStringBuilder(text);
+            int selectedColor = resources.getColor(R.color.primary);
+            sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.title.setText(sp);
         }
     }
 
@@ -86,8 +113,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         return events.size();
     }
 
-    public void setCurrentVisibleEvent(String eventId) {
-        this.currentVisibleEvent = eventId;
+    public void setCurrentCheckedInEvent(String eventId) {
+        this.currentCheckedInEvent = eventId;
+    }
+
+    public void setCurrentWatchingEvent(String eventId) {
+        this.currentWathingEvent = eventId;
     }
 
     public void setOnEventClickListener(OnEventClickListener onEventClickListener) {

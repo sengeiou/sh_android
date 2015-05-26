@@ -41,6 +41,10 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
         shot.setEventInfo(parentShot.getEventInfo());
     }
 
+    @Override protected String getRootType() {
+        return getParentShot().getRootType();
+    }
+
     private void fillReplyInfo(Shot shot) {
         Shot parentShot = getParentShot();
         shot.setParentShotId(parentShot.getIdShot());

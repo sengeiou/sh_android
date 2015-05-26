@@ -1,6 +1,7 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -27,21 +28,29 @@ import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
+    public static final String NO_COMMENT_BUT_SHOULD_SHOW_TAG = "";
     List<ShotModel> shots;
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
+    private final VideoClickListener videoClickListener;
     private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-                           View.OnClickListener imageClickListener, UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
+    public TimelineAdapter(Context context,
+      PicassoWrapper picasso,
+      View.OnClickListener avatarClickListener,
+      View.OnClickListener imageClickListener,
+      VideoClickListener videoClickListener,
+      UsernameClickListener clickListener,
+      AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
+        this.videoClickListener = videoClickListener;
         this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
@@ -103,7 +112,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     @Override
-    public void bindView(ShotModel item, int position, View view) {
+    public void bindView(final ShotModel item, int position, View view) {
         switch (getItemViewType(position)) {
             case 0: // Shot
 
@@ -118,18 +127,17 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 }
 
                 String comment = item.getComment();
-                if (comment != null) {
-                    vh.text.setVisibility(View.VISIBLE);
-                    CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                            clickListener);
-                    vh.text.setText(spannedComment);
-                    vh.text.addLinks();
-                } else {
-                    vh.text.setVisibility(View.GONE);
+                String tag = null;
+                if (shouldShowTag() && item.getEventTag() != null) {
+                    tag = item.getEventTag();
                 }
 
-                if (shouldShowTag() && item.getEventTag() != null) {
-                    addShotTag(vh, item);
+                SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
+                if (commentWithTag != null) {
+                    addShotComment(vh, commentWithTag);
+                    vh.text.setVisibility(View.VISIBLE);
+                } else {
+                    vh.text.setVisibility(View.GONE);
                 }
 
                 long timestamp = item.getCsysBirth().getTime();
@@ -147,33 +155,64 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 } else {
                     vh.image.setVisibility(View.GONE);
                 }
+
+                if (item.hasVideo()) {
+                    vh.videoFrame.setVisibility(View.VISIBLE);
+                    vh.videoDuration.setText(item.getVideoDuration());
+                    vh.videoFrame.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            videoClickListener.onClick(item.getVideoUrl());
+                        }
+                    });
+                } else {
+                    vh.videoFrame.setVisibility(View.GONE);
+                    vh.videoFrame.setOnClickListener(null);
+                }
                 break;
             default:
                 break;
         }
     }
 
-    private String getReplyName(ShotModel item) {
-        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
+    private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        if (comment == null && tag == null) {
+            return null;
+        }
+        if (comment != null) {
+            builder.append(comment);
+        }
+        if (comment != null && tag != null) {
+            builder.append(" ");
+        }
+        if (tag != null) {
+            builder.append(formatTag(tag));
+        }
+        return builder;
     }
+
 
     protected boolean shouldShowTag() {
         return false;
     }
 
-    private void addShotTag(ViewHolder vh, ShotModel shotModel) {
-        String tag = shotModel.getEventTag();
-        CharSequence currentText = vh.text.getText();
-
-        SpannableStringBuilder spanBuilder = new SpannableStringBuilder(currentText);
+    private SpannableString formatTag(String tag) {
         ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
 
         SpannableString tagSpan = new SpannableString(tag);
         tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return tagSpan;
+    }
 
-        spanBuilder.append(" ");
-        spanBuilder.append(tagSpan);
-        vh.text.setText(spanBuilder);
+    private void addShotComment(ViewHolder vh, CharSequence comment) {
+        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, clickListener);
+        vh.text.setText(spannedComment);
+        vh.text.addLinks();
+    }
+
+    private String getReplyName(ShotModel item) {
+        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
     }
 
     public void addShotsBelow(List<ShotModel> newShots) {
@@ -203,12 +242,25 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
+        @InjectView(R.id.shot_video_frame) public View videoFrame;
+        @InjectView(R.id.shot_video_duration) public TextView videoDuration;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
             ButterKnife.inject(this, view);
+
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
         }
+
+        public void setVideoClickListener(View.OnClickListener videoClickListener) {
+            videoFrame.setOnClickListener(videoClickListener);
+        }
+    }
+
+    public interface VideoClickListener {
+
+        void onClick(String url);
+
     }
 }

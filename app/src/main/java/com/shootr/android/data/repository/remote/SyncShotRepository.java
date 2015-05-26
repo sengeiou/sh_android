@@ -3,8 +3,9 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
+import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -30,9 +31,15 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(responseShotEntity);
     }
 
-    @Override public List<Shot> getShotsForTimeline(TimelineParameters parameters) {
-        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForTimeline(parameters);
-        //TODO wanna put only in some cases? Say that through TimelineParameters
+    @Override public List<Shot> getShotsForEventTimeline(EventTimelineParameters parameters) {
+        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForEventTimeline(parameters);
+        localShotDataSource.putShots(shotEntitiesFromTimeline);
+        return shotEntityMapper.transform(shotEntitiesFromTimeline);
+    }
+
+    @Override
+    public List<Shot> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
+        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForActivityTimeline(parameters);
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }

@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -19,6 +21,8 @@ import javax.inject.Inject;
 public class EventMediaActivity extends BaseToolbarDecoratedActivity implements EventMediaView {
 
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
+
+    @InjectView(R.id.media_empty) View emptyView;
 
     @Inject EventMediaPresenter presenter;
 
@@ -47,5 +51,13 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
         //mediaGridView.setVisibility(View.VISIBLE);
         MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(),shotsWithMedia);
         mediaView.setAdapter(mediaAdapter);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
     }
 }

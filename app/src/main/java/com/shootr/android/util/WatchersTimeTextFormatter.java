@@ -39,7 +39,7 @@ public class WatchersTimeTextFormatter {
             dateInText += resources.getString(R.string.minute_ago);
         }else if (minutesAgo >= 2){
             dateInText += String.valueOf(minutesAgo);
-            dateInText += resources.getString(R.string.minutes_ago);
+            dateInText += resources.getString(R.string.min_ago);
         }
         return dateInText;
     }

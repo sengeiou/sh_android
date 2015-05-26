@@ -1,8 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetEventMediaInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
@@ -34,6 +32,7 @@ public class EventMediaPresenter implements Presenter {
     public void initialize(EventMediaView eventMediaView, String idEvent) {
         this.setView(eventMediaView);
         this.idEvent = idEvent;
+        eventMediaView.showEmpty();
         retrieveMedia(idEvent);
     }
 
@@ -45,8 +44,11 @@ public class EventMediaPresenter implements Presenter {
         getEventMediaInteractor.getEventMedia(idEvent, new Interactor.Callback() {
             @Override public void onLoaded(Object o) {
                 List<Shot> shotsWithMedia = (List<Shot>) o;
-                List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
-                eventMediaView.setMedia(shotModels);
+                if(shotsWithMedia.size() > 0) {
+                    eventMediaView.hideEmpty();
+                    List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
+                    eventMediaView.setMedia(shotModels);
+                }
             }
         });
     }

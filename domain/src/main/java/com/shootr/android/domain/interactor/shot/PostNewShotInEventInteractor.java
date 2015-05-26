@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
@@ -38,6 +39,10 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
             eventInfo.setEventTag(event.getTag());
             shot.setEventInfo(eventInfo);
         }
+    }
+
+    @Override protected String getRootType() {
+        return ShotType.COMMENT;
     }
 
     private Event currentVisibleEvent() {

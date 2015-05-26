@@ -1,9 +1,9 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -15,27 +15,24 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
 
-    private static final String VISIBLE_EVENT_ID = "visible_event";
+    private static final String WATCHING_EVENT_ID = "watching_event";
     private static final String EVENT_AUTHOR_ID = "event_author";
     private static final String ID_CURRENT_USER = "current_user";
 
@@ -73,8 +70,18 @@ public class GetActivityTimelineInteractorTest {
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupVisibleEvent();
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
+
+        interactor.loadActivityTimeline(spyCallback, errorCallback);
+        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+
+        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+    }
+
+    @Test
+    public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoEventWatching() throws Exception {
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadActivityTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
@@ -85,7 +92,7 @@ public class GetActivityTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -99,9 +106,9 @@ public class GetActivityTimelineInteractorTest {
         return shot;
     }
 
-    private void setupVisibleEvent() {
+    private void setupWatchingEvent() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(eventRepository.getEventById(eq(VISIBLE_EVENT_ID))).thenReturn(visibleEvent());
+        when(eventRepository.getEventById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
     }
 
     //region Stubs
@@ -109,15 +116,9 @@ public class GetActivityTimelineInteractorTest {
         return Arrays.asList(new User());
     }
 
-    private Shot.ShotEventInfo visibleEventInfo() {
-        Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(VISIBLE_EVENT_ID);
-        return eventInfo;
-    }
-
-    private Event visibleEvent() {
+    private Event watchingEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
+        event.setId(WATCHING_EVENT_ID);
         event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }

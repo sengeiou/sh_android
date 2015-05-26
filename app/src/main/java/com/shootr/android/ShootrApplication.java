@@ -2,19 +2,18 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.Context;
-
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
-import dagger.ObjectGraph;
-import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.util.DatabaseVersionUtils;
 import com.shootr.android.util.LogTreeFactory;
+import dagger.ObjectGraph;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
+    @Inject DatabaseVersionUtils databaseVersionUtils;
 
     @Override
     public void onCreate() {
@@ -24,11 +23,12 @@ public class ShootrApplication extends Application {
         if(!BuildConfig.DEBUG) {
             Crashlytics.start(this);
         }
-        Stetho.initialize(
-          Stetho.newInitializerBuilder(this)
+        Stetho.initialize(Stetho.newInitializerBuilder(this)
             .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
             .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
             .build());
+
+        databaseVersionUtils.clearDataOnNewerVersion();
     }
 
     public void plantLoggerTrees() {

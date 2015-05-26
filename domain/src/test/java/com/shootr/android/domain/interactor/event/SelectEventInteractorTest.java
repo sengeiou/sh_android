@@ -61,7 +61,7 @@ public class SelectEventInteractorTest {
 
     @Test
     public void shouldSetNewEventIdInSessionRepository() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
@@ -71,7 +71,7 @@ public class SelectEventInteractorTest {
 
     @Test
     public void shouldSetNewEventIdInLocalRepository() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
@@ -81,7 +81,7 @@ public class SelectEventInteractorTest {
 
     @Test
     public void shouldSetNewEventIdInRemoteRepository() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
@@ -96,7 +96,7 @@ public class SelectEventInteractorTest {
 
     @Test
     public void selectingCurrentEventDoesNotifyUi() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
@@ -105,7 +105,7 @@ public class SelectEventInteractorTest {
     }
 
     @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentEvent() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
@@ -133,7 +133,7 @@ public class SelectEventInteractorTest {
 
         User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
 
-        assertThat(updatedUser).hasVisibleEventId(NEW_EVENT_ID);
+        assertThat(updatedUser).hasWatchingEventId(NEW_EVENT_ID);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class SelectEventInteractorTest {
     }
 
     @Test public void shouldSetCheckinAsFalseInLocalRepository() throws Exception {
-        setupOldVisibleEvent();
+        setupOldWatchingEvent();
         when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
@@ -157,7 +157,7 @@ public class SelectEventInteractorTest {
         assertThat(userCaptor.getValue().getIdCheckedEvent()).isNullOrEmpty();
     }
 
-    private void setupOldVisibleEvent() {
+    private void setupOldWatchingEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatchingOldEvent());
     }
 

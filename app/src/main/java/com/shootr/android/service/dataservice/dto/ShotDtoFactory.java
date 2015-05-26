@@ -1,15 +1,16 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
+import java.util.Arrays;
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -69,7 +70,8 @@ public class ShotDtoFactory {
             throw new IllegalArgumentException("idUser must not be null");
         }
 
-        FilterDto shotsFilter = and(or(ShotTable.ID_USER).isEqualTo(idUser))
+        FilterDto shotsFilter = and(ShotTable.ID_USER).isEqualTo(idUser)
+          .and(or(ShotTable.TYPE).isIn(Arrays.asList(ShotType.TYPES_SHOWN)))
           .and(ShotTable.CSYS_DELETED).isEqualTo(null)
           .and(ShotTable.CSYS_MODIFIED).greaterThan(0L).build();
 

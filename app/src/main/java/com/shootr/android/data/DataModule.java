@@ -25,6 +25,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.EventDateTimeTextProvider;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -46,7 +47,6 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
@@ -66,6 +66,8 @@ import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
+import com.shootr.android.util.Version;
+import com.shootr.android.util.ResourcesEventDateTimeTextProvider;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -98,8 +100,6 @@ import static android.content.Context.MODE_PRIVATE;
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
-
-    TimelineJob.class,
 
     GCMRegistrationJob.class,
 
@@ -151,8 +151,12 @@ public class DataModule {
         return resourcesLocaleProvider;
     }
 
-    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
-        return new ShootrDbOpenHelper(application.getApplicationContext(), null);
+    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application, Version version) {
+        return new ShootrDbOpenHelper(application.getApplicationContext(), version);
+    }
+
+    @Provides @Singleton EventDateTimeTextProvider provideEventTimeFormatter(ResourcesEventDateTimeTextProvider timeTextFormatter) {
+        return timeTextFormatter;
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {

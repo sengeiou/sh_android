@@ -1,16 +1,21 @@
 package com.shootr.android.domain.service.shot;
 
+import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,16 +23,13 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
+import static com.shootr.android.domain.asserts.EventTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 public class ShootrTimelineServiceTest {
 
@@ -35,9 +37,14 @@ public class ShootrTimelineServiceTest {
     private static final Long DATE_MIDDLE = 2L;
     private static final Long DATE_NEWER = 3L;
 
-    private static final String VISIBLE_EVENT_ID = "visible_event";
-    private static final String VISIBLE_EVENT_AUTHOR = "event_author";
-    private static final Long VISIBLE_EVENT_REFRESH_DATE = 1000L;
+    private static final String WATCHING_EVENT_ID = "watching_event";
+    private static final String WATCHING_EVENT_AUTHOR = "event_author";
+    private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
+
+    private static final String EVENT_SHOT_ID = "event_shot";
+    private static final String ACTIVITY_SHOT_ID = "activity_shot";
+    private static final String CURRENT_USER_ID = "current_user";
+    private static final Date DATE_STUB = new Date();
 
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
@@ -45,102 +52,133 @@ public class ShootrTimelineServiceTest {
     @Mock ShotRepository remoteShotRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
 
-    @Captor ArgumentCaptor<List<TimelineParameters>> timelineParametersCaptor;
+    @Captor ArgumentCaptor<List<EventTimelineParameters>> timelineParametersCaptor;
 
     private ShootrTimelineService shootrTimelineService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrTimelineService = new ShootrTimelineService(sessionRepository, localEventRepository, localUserRepository, remoteShotRepository,
+        shootrTimelineService = new ShootrTimelineService(sessionRepository,
+          localEventRepository,
+          localUserRepository,
+          remoteShotRepository,
           timelineSynchronizationRepository);
     }
 
     @Test
-    public void shouldReturnFirstTimelineWithEventIdAndAuthorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
+    public void shouldReturnEventTimelineWhenRefreshEventTimeline() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(
+          eventShotListWithMultipleShots());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
-        TimelineParameters timelineParameters = timelinesResult.get(0).getParameters();
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        assertThat(timelineParameters).hasEventId(VISIBLE_EVENT_ID).hasEventAuthorId(VISIBLE_EVENT_AUTHOR);
+        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
     }
 
     @Test
-    public void shouldReturnFirstTimelinehWithEventRefreshDateWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-        when(timelineSynchronizationRepository.getEventTimelineRefreshDate(VISIBLE_EVENT_ID)).thenReturn(VISIBLE_EVENT_REFRESH_DATE);
+    public void shouldRefreshActivityShotsWhenRefreshEventTimeline() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
-        TimelineParameters timelineParameters = timelinesResult.get(0).getParameters();
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        assertThat(timelineParameters).hasSinceDate(VISIBLE_EVENT_REFRESH_DATE);
+        verify(remoteShotRepository).getShotsForActivityTimeline(anyActivityParameters());
     }
 
     @Test
-    public void shoudReturnTwoTimelinesWhenEventVisible() throws Exception {
-        setupVisibleEvent();
+    public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
+          eventShotListWithMultipleShots());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(timelinesResult).hasSize(2);
+        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
     }
 
     @Test
-    public void shoudReturnOnlyOneTimelineWhenNoEventVisible() throws Exception {
-        setupNoVisibleEvent();
+    public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
+        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
+          eventShotListWithMultipleShots());
+        when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
+        when(localUserRepository.getUserById(anyString())).thenReturn(new User());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(timelinesResult).hasSize(1);
+        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
     }
 
     @Test
-    public void shouldReturnSecondTimelineWithoutEventIdAndAuthorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
+    public void shouldRefreshEventShotsWhenRefreshActivityTimeline() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
-        TimelineParameters timelineParameters = timelinesResult.get(1).getParameters();
+        shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(timelineParameters).hasNoEventId().hasNoEventAuthorId();
+        verify(remoteShotRepository).getShotsForEventTimeline(anyEventParameters());
     }
 
     @Test
-    public void shouldReturnFirstTimelineWithoutEventIdAndAuthorWhenNoEventVisible() throws Exception {
-        setupNoVisibleEvent();
+    public void shouldNotRefreshEventShotsWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
+        when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
+        when(localUserRepository.getUserById(anyString())).thenReturn(new User());
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
-        TimelineParameters timelineParameters = timelinesResult.get(0).getParameters();
+        shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(timelineParameters).hasNoEventId().hasNoEventAuthorId();
+        verify(remoteShotRepository, never()).getShotsForEventTimeline(anyEventParameters());
+    }
+
+
+    @Test
+    public void shouldRequestTimelineWithEventIdAndAuthorWhenWatchingEvent() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
+
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        assertThat(captureTimelineParameters()) //
+          .hasEventId(WATCHING_EVENT_ID) //
+          .hasEventAuthorId(WATCHING_EVENT_AUTHOR);
     }
 
     @Test
-    public void shouldReturnTwoTimelinesShotsInOrderWithPublishDateComparatorWhenEventVisible() throws Exception {
-        setupVisibleEvent();
-        when(remoteShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+    public void shouldRequestTimelinehWithEventRefreshDateWhenWatchingEvent() throws Exception {
+        setupWatchingEvent();
+        when(timelineSynchronizationRepository.getEventTimelineRefreshDate(WATCHING_EVENT_ID)).thenReturn(
+          WATCHING_EVENT_REFRESH_DATE);
 
-        List<Timeline> timelinesResult = shootrTimelineService.refreshTimelines();
-        List<Shot> firstTimelineShots = timelinesResult.get(0).getShots();
-        List<Shot> secondTimelineShots = timelinesResult.get(1).getShots();
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        assertThat(firstTimelineShots).isSortedAccordingTo(new Shot.NewerAboveComparator());
-        assertThat(secondTimelineShots).isSortedAccordingTo(new Shot.NewerAboveComparator());
+        assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_EVENT_REFRESH_DATE);
+    }
+
+    @Test
+    public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingEvent() throws Exception {
+        setupWatchingEvent();
+        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(unorderedShots());
+
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
     //region Setups and stubs
-    private void setupVisibleEvent() {
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-        when(localEventRepository.getEventById(VISIBLE_EVENT_ID)).thenReturn(visibleEvent());
+    private void setupWatchingEvent() {
+        when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
+        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatching());
+        when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
-    private void setupNoVisibleEvent() {
+    private void setupNoWatchingEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserNotWatching());
     }
 
     private User currentUserWatching() {
         User user = new User();
-        user.setIdWatchingEvent(VISIBLE_EVENT_ID);
+        user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -148,10 +186,10 @@ public class ShootrTimelineServiceTest {
         return new User();
     }
 
-    private Event visibleEvent() {
+    private Event watchingEvent() {
         Event event = new Event();
-        event.setId(VISIBLE_EVENT_ID);
-        event.setAuthorId(VISIBLE_EVENT_AUTHOR);
+        event.setId(WATCHING_EVENT_ID);
+        event.setAuthorId(WATCHING_EVENT_AUTHOR);
         return event;
     }
 
@@ -164,5 +202,46 @@ public class ShootrTimelineServiceTest {
         shot.setPublishDate(new Date(date));
         return shot;
     }
+
+    private EventTimelineParameters captureTimelineParameters() {
+        ArgumentCaptor<EventTimelineParameters> parametersCaptor =
+          ArgumentCaptor.forClass(EventTimelineParameters.class);
+        verify(remoteShotRepository).getShotsForEventTimeline(parametersCaptor.capture());
+        return parametersCaptor.getValue();
+    }
+
+    private List<Shot> eventShotList() {
+        return Collections.singletonList(eventShot());
+    }
+
+    private List<Shot> eventShotListWithMultipleShots(){
+        List<Shot> shots = new ArrayList<>();
+        shots.add(eventShot());
+        shots.add(eventShot());
+        return shots;
+    }
+
+    private Shot eventShot() {
+        Shot shot = new Shot();
+        shot.setIdShot(EVENT_SHOT_ID);
+        shot.setPublishDate(DATE_STUB);
+        return shot;
+    }
+
+    private EventTimelineParameters anyEventParameters() {
+        return any(EventTimelineParameters.class);
+    }
+
+    private ActivityTimelineParameters anyActivityParameters() {
+        return any(ActivityTimelineParameters.class);
+    }
+
+    private Shot activityShot() {
+        Shot shot = new Shot();
+        shot.setIdShot(ACTIVITY_SHOT_ID);
+        shot.setPublishDate(DATE_STUB);
+        return shot;
+    }
+
     //endregion
 }

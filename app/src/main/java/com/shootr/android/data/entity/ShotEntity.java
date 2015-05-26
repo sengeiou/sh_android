@@ -2,10 +2,6 @@ package com.shootr.android.data.entity;
 
 public class ShotEntity extends Synchronized{
 
-    public static final int TYPE_COMMENT = 0;
-    public static final int TYPE_TRIGGER_SYNC = 1;
-    public static final int TYPE_TRIGGER_SYNC_NOT_SHOW = 2;
-
     private String idShot;
     private String idUser;
     private String username;
@@ -14,11 +10,17 @@ public class ShotEntity extends Synchronized{
     private String idEvent;
     private String eventTag;
     private String eventTitle;
-    private Integer type;
+
+    private String type;
+    private String rootType;
 
     private String idShotParent;
     private String idUserParent;
     private String userNameParent;
+
+    private String videoUrl;
+    private String videoTitle;
+    private Long videoDuration;
 
     public String getIdShot() {
         return idShot;
@@ -60,11 +62,11 @@ public class ShotEntity extends Synchronized{
         this.idEvent = idEvent;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -114,5 +116,37 @@ public class ShotEntity extends Synchronized{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public Long getVideoDuration() {
+        return videoDuration;
+    }
+
+    public void setVideoDuration(Long videoDuration) {
+        this.videoDuration = videoDuration;
+    }
+
+    public String getRootType() {
+        return rootType;
+    }
+
+    public void setRootType(String rootType) {
+        this.rootType = rootType;
     }
 }

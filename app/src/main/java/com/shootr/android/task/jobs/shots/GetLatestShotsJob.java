@@ -11,7 +11,6 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -45,6 +44,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
 
     public void init(String idUser){
         this.idUser = idUser;
+
     }
 
     @Override public void run() throws SQLException, IOException {
@@ -66,22 +66,19 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     public List<ShotModel> getLatestShotModels(List<ShotEntity> shotEntities){
         List<ShotModel> shotModels = new ArrayList<>(shotEntities.size());
         for(ShotEntity shot:shotEntities) {
-            if (shot.getType() != ShotEntity.TYPE_TRIGGER_SYNC_NOT_SHOW) {
-                shotModels.add(shotEntityModelMapper.toShotModel(user, shot));
-            }
+            shotModels.add(shotEntityModelMapper.toShotModel(user, shot));
         }
         return shotModels;
     }
 
     public List<ShotEntity> getLatestsShotsFromService() throws IOException {
         List<ShotEntity> shotEntities = service.getLatestsShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
-        shotEntities = TimelineJob.filterShots(shotEntities);
         shotManager.saveShots(shotEntities);
         return getLatestShotsFromDatabase();
     }
 
     public List<ShotEntity> getLatestShotsFromDatabase(){
-        return shotManager.getLatestShotsFromIdUser(idUser,LATEST_SHOTS_NUMBER);
+        return shotManager.getLatestShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
     }
 
 
@@ -93,7 +90,6 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     public UserEntity getUserByIdFromService() throws IOException {
         return service.getUserByIdUser(idUser);
     }
-
 
     @Override public boolean isNetworkRequired() {
         return false;

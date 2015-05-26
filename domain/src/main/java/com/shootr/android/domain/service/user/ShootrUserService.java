@@ -83,26 +83,6 @@ public class ShootrUserService {
         }
     }
 
-    public void checkOutFromEvent(String idEvent) {
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        String idCheckedEvent = currentUser.getIdCheckedEvent();
-        if (!idEvent.equals(idCheckedEvent)) {
-            throw new InvalidCheckinException(String.format(
-              "Can't perform check-out from event with id %s because user is not checked-in it",
-              idEvent));
-        }
-
-        try {
-            checkinGateway.performCheckout(currentUser.getIdUser(), idEvent);
-        } catch (IOException e) {
-            throw new InvalidCheckinException(e);
-        }
-
-        currentUser.setIdCheckedEvent(null);
-        localUserRepository.putUser(currentUser);
-        sessionRepository.setCurrentUser(currentUser);
-    }
-
     private void storeSession(LoginResult loginResult) {
         String idUser = loginResult.getUser().getIdUser();
         String sessionToken = loginResult.getSessionToken();

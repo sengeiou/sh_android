@@ -6,4 +6,8 @@ import java.util.List;
 public interface EventMediaView {
 
     void setMedia(List<ShotModel> shotsWithMedia);
+
+    void hideEmpty();
+
+    void showEmpty();
 }

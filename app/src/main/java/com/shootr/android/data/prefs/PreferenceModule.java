@@ -27,6 +27,11 @@ public class PreferenceModule {
         return new StringPreference(preferences, "current_user_id", null);
     }
 
+    @Provides @Singleton @AskCheckinConfirmation
+    BooleanPreference provideCheckinUserNotification(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "ask_checkin_notification", true);
+    }
+
     @Provides @Singleton @SessionToken StringPreference provideSessionToken(SharedPreferences preferences) {
         return new StringPreference(preferences, "session_token", null);
     }
@@ -39,5 +44,10 @@ public class PreferenceModule {
     @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
+    }
+
+    @Provides @Singleton @LastDatabaseVersion IntPreference providePreferencesDatabaseVersion(
+      SharedPreferences preferences) {
+        return new IntPreference(preferences, "preferences_database_version", 0);
     }
 }

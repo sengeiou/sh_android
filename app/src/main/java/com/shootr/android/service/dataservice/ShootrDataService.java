@@ -13,8 +13,8 @@ import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -39,14 +39,11 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class ShootrDataService implements ShootrService {
@@ -182,8 +179,26 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public List<ShotEntity> getShotsByParameters(TimelineParameters parameters) throws IOException {
-        GenericDto genericDto = timelineDtoFactory.getTimelineOperationDto(parameters);
+    @Override public List<ShotEntity> getEventShotsByParameters(EventTimelineParameters parameters) throws IOException {
+        GenericDto genericDto = timelineDtoFactory.getEventTimelineOperationDto(parameters);
+        GenericDto responseDto = postRequest(genericDto);
+        OperationDto[] ops = responseDto.getOps();
+
+        List<ShotEntity> resultShots = new ArrayList<>();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else if(ops[0].getMetadata() != null) {
+            Map<String, Object>[] data = ops[0].getData();
+            for (Map<String, Object> aData : data) {
+                ShotEntity shot = shotEntityMapper.fromDto(aData);
+                resultShots.add(shot);
+            }
+        }
+        return resultShots;
+    }
+
+    @Override public List<ShotEntity> getActivityShotsByParameters(ActivityTimelineParameters parameters) throws IOException {
+        GenericDto genericDto = timelineDtoFactory.getActivityTimelineOperationDto(parameters);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
 
@@ -505,12 +520,6 @@ public class ShootrDataService implements ShootrService {
     @Override public void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException{
         GenericDto createAccountDto = userDtoFactory.getCreateAccountOperationDto(userCreateAccountEntity);
         GenericDto responseDto = postRequest(createAccountDto);
-    }
-
-    @Override
-    public void performCheckout(String idUser, String watchingEventId) throws IOException {
-        GenericDto checkoutDto = userDtoFactory.getCheckoutOperationDto(idUser, watchingEventId);
-        GenericDto responseDto = postRequest(checkoutDto);
     }
 
     @Override

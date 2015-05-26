@@ -131,6 +131,7 @@ public class ProfileFragment extends BaseFragment {
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
@@ -172,6 +173,15 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onClick(String username) {
                 goToUserProfile(username);
+            }
+        };
+
+        videoClickListener = new TimelineAdapter.VideoClickListener() {
+            @Override
+            public void onClick(String url) {
+                Uri uri = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         };
     }
@@ -596,7 +606,7 @@ public class ProfileFragment extends BaseFragment {
             shotsList.removeAllViews();
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                      imageClickListener, usernameClickListener, timeUtils){
+                      imageClickListener, videoClickListener, usernameClickListener, timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }

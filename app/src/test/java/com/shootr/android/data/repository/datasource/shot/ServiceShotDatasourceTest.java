@@ -1,7 +1,8 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 public class ServiceShotDatasourceTest {
 
-    private static final TimelineParameters TIMELINE_PARAMETERS_STUB = null;
+    private static final EventTimelineParameters TIMELINE_PARAMETERS_STUB = null;
     private static final String ID_USER_STUB = "1L";
     private static final Date DATE_NEWER = new Date(2000);
     private static final Date DATE_OLDER = new Date(1000);
@@ -45,9 +46,9 @@ public class ServiceShotDatasourceTest {
 
     @Test
     public void shouldPostEventToBusWhenSyncTriggerShotReceived() throws Exception {
-        when(shootrService.getShotsByParameters(any(TimelineParameters.class))).thenReturn(oneTriggerShot());
+        when(shootrService.getEventShotsByParameters(any(EventTimelineParameters.class))).thenReturn(oneTriggerShot());
 
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher).post(captor.capture());
@@ -56,10 +57,10 @@ public class ServiceShotDatasourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenTwhoSyncTriggerShotsReceived() throws Exception {
-        when(shootrService.getShotsByParameters(any(TimelineParameters.class))).thenReturn(twoTriggerShots());
+        when(shootrService.getEventShotsByParameters(any(EventTimelineParameters.class))).thenReturn(twoTriggerShots());
 
 
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -68,10 +69,10 @@ public class ServiceShotDatasourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenReceivedShotWithSameDateThanPreviousTime() throws Exception {
-        when(shootrService.getShotsByParameters(any(TimelineParameters.class))).thenReturn(twoTriggerShots());
+        when(shootrService.getEventShotsByParameters(any(EventTimelineParameters.class))).thenReturn(twoTriggerShots());
 
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
@@ -80,11 +81,11 @@ public class ServiceShotDatasourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenReceivedShotWithOlderDateThanPreviousTime() throws Exception {
-        when(shootrService.getShotsByParameters(any(TimelineParameters.class))).thenReturn(Arrays.asList(
+        when(shootrService.getEventShotsByParameters(any(EventTimelineParameters.class))).thenReturn(Arrays.asList(
           syncShotWithDate(DATE_NEWER), syncShotWithDate(DATE_OLDER)));
 
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
 
         ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher).post(captor.capture());
@@ -93,10 +94,10 @@ public class ServiceShotDatasourceTest {
 
     @Test
     public void shouldNotPostEventWhenTriggerShotFromCurrentUser() throws Exception {
-        when(shootrService.getShotsByParameters(any(TimelineParameters.class))).thenReturn(oneTriggerShot());
+        when(shootrService.getEventShotsByParameters(any(EventTimelineParameters.class))).thenReturn(oneTriggerShot());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER_STUB);
 
-        datasource.getShotsForTimeline(TIMELINE_PARAMETERS_STUB);
+        datasource.getShotsForEventTimeline(TIMELINE_PARAMETERS_STUB);
 
         verify(busPublisher, never()).post(any(WatchUpdateRequest.Event.class));
     }
@@ -111,7 +112,7 @@ public class ServiceShotDatasourceTest {
 
     private ShotEntity syncShot() {
         ShotEntity shotEntity = new ShotEntity();
-        shotEntity.setType(ShotEntity.TYPE_TRIGGER_SYNC);
+        shotEntity.setType(ShotType.TYPES_SYNC_TRIGGER[0]);
         shotEntity.setIdUser(ID_USER_STUB);
         shotEntity.setCsysBirth(DATE_NEWER);
         return shotEntity;

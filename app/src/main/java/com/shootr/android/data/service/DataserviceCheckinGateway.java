@@ -16,9 +16,4 @@ public class DataserviceCheckinGateway implements CheckinGateway {
     @Override public void performCheckin(String idUser, String idEvent) throws IOException {
         shootrService.performCheckin(idUser, idEvent);
     }
-
-    @Override
-    public void performCheckout(String idUser, String watchingEventId) throws IOException {
-        shootrService.performCheckout(idUser, watchingEventId);
-    }
 }
