@@ -167,7 +167,7 @@ public class EventTimelineFragment extends BaseFragment
         switch (item.getItemId()) {
             case R.id.menu_info:
                 Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                intent.putExtra("event", idEvent);
+                intent.putExtra(EXTRA_EVENT_ID, idEvent);
                 startActivity(intent);
                 return true;
             default:

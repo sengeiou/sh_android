@@ -26,7 +26,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Inject EventMediaPresenter presenter;
 
-    private static final String EXTRA_EVENT_ID = "event";
+    private static final String EXTRA_EVENT_ID = "eventId";
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_event_media;
