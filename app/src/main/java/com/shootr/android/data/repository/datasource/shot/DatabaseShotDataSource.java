@@ -51,10 +51,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
     }
 
     @Override public int getEventMediaCount(String idEvent, String idUser) {
-        return 0;
+        return shotManager.getEventMediaCount(idEvent, idUser);
     }
 
     @Override public List<ShotEntity> getEventMedia(String idEvent, String userId) {
-        return new ArrayList<>();
+        return shotManager.getEventMedia(idEvent, userId);
     }
 }

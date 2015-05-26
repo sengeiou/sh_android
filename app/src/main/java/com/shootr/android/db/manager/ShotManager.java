@@ -266,4 +266,62 @@ public class ShotManager extends  AbstractManager{
             return 0L;
         }
     }
+
+    public int getEventMediaCount(String idEvent, String idUser) {
+        String usersSelection = ShotTable.ID_USER + " = ?";
+        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+        //TODO since & max
+        //TODO limit
+        String[] whereArguments = new String[2];
+
+        whereArguments[0] = String.valueOf(idUser);
+        whereArguments[1] = String.valueOf(idEvent);
+
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+
+        return resultShots.size();
+    }
+
+    public List<ShotEntity> getEventMedia(String idEvent, String userId) {
+        String usersSelection = ShotTable.ID_USER + " = " + "'" + userId + "'";
+        String eventSelection = ShotTable.ID_EVENT + " = " + "'" + idEvent + "'";
+        String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+        //TODO since & max
+        //TODO limit
+
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+
+        return resultShots;
+    }
 }
