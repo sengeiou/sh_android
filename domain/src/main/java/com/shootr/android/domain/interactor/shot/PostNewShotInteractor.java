@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -34,7 +35,8 @@ public abstract class PostNewShotInteractor implements Interactor {
         this.shotSender = shotSender;
     }
 
-    protected void postNewShot(String comment, File image, CompletedCallback callback, ErrorCallback errorCallback) {
+    protected void postNewShot(String comment, File image,
+      CompletedCallback callback, ErrorCallback errorCallback) {
         this.comment = comment;
         this.imageFile = image;
         this.callback = callback;
@@ -61,6 +63,8 @@ public abstract class PostNewShotInteractor implements Interactor {
         shot.setComment(filterComment(comment));
         shot.setPublishDate(new Date());
         fillShotContextualInfo(shot);
+        shot.setType(ShotType.COMMENT);
+        shot.setRootType(getRootType());
         return shot;
     }
 
@@ -104,4 +108,7 @@ public abstract class PostNewShotInteractor implements Interactor {
             }
         });
     }
+
+    protected abstract String getRootType();
+
 }

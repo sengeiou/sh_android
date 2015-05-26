@@ -40,21 +40,11 @@ public class RefreshActivityTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            List<Timeline> timelines = shootrTimelineService.refreshTimelines();
-            Timeline activityTimeline = filterActivityTimeline(timelines);
+            Timeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
             notifyLoaded(activityTimeline);
         } catch (ShootrException error) {
             notifyError(error);
         }
-    }
-
-    private Timeline filterActivityTimeline(List<Timeline> timelines) {
-        for (Timeline timeline : timelines) {
-            if (timeline.getParameters().getEventId() == null) {
-                return timeline;
-            }
-        }
-        throw new TimelineException(String.format("Timeline with event not found in timeline list <%s>", timelines.toString()));
     }
 
     //region Result

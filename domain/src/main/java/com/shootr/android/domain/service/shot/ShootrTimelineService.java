@@ -1,9 +1,11 @@
 package com.shootr.android.domain.service.shot;
 
+import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
@@ -14,6 +16,7 @@ import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +30,12 @@ public class ShootrTimelineService {
     private final ShotRepository remoteShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
-    @Inject public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
+    @Inject
+    public ShootrTimelineService(SessionRepository sessionRepository,
+      @Local EventRepository localEventRepository,
+      @Local UserRepository localUserRepository,
+      @Remote ShotRepository remoteShotRepository,
+      TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
@@ -35,40 +43,57 @@ public class ShootrTimelineService {
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
-    public List<Timeline> refreshTimelines() {
-        List<Timeline> resultTimelines = new ArrayList<>();
+    public Timeline refreshTimelinesForActivity() {
+        List<Shot> shotsForActivity = refreshActivityShots();
 
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(visibleEvent.getId());
+        refreshWatchingEventShots();
 
-            TimelineParameters eventTimelineParameters = TimelineParameters.builder() //
-                    .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
-                    .forEvent(visibleEvent) //
-                    .since(eventRefreshDateSince) //
-                    .includeSyncTriggers(true)
-                    .build();
-            List<Shot> shotsForEvent = remoteShotRepository.getShotsForTimeline(eventTimelineParameters);
-            resultTimelines.add(buildSortedTimeline(eventTimelineParameters, shotsForEvent));
-        }
-
-        Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
-        TimelineParameters activityTimelineParameters = TimelineParameters.builder() //
-                .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
-                .forActivity() //
-                .since(activityRefreshDateSince) //
-                .includeSyncTriggers(false)
-                .build();
-        List<Shot> shotsForActivity = remoteShotRepository.getShotsForTimeline(activityTimelineParameters);
-        resultTimelines.add(buildSortedTimeline(activityTimelineParameters, shotsForActivity));
-
-        return resultTimelines;
+        return buildSortedTimeline(shotsForActivity);
     }
 
-    private Timeline buildSortedTimeline(TimelineParameters timelineParameters, List<Shot> shots) {
+    private List<Shot> refreshActivityShots() {
+        Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
+        ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
+          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .since(activityRefreshDateSince) //
+          .build();
+        return remoteShotRepository.getShotsForActivityTimeline(activityTimelineParameters);
+    }
+
+    public Timeline refreshTimelinesForWatchingEvent() {
+        List<Shot> shotsForEvent = refreshWatchingEventShots();
+
+        refreshActivityShots();
+
+        return buildSortedTimeline(shotsForEvent);
+    }
+
+    private List<Shot> refreshWatchingEventShots() {
+        Event watchingEvent = getWatchingEvent();
+        if (watchingEvent != null) {
+            return refreshEventShots(watchingEvent);
+        }
+        return null;
+    }
+
+    private List<Shot> refreshEventShots(Event event) {
+        if (event == null) {
+            throw new IllegalArgumentException("Can't refresh null event");
+        }
+
+        Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(event.getId());
+
+        EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
+          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .forEvent(event) //
+          .since(eventRefreshDateSince) //
+          .build();
+        return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
+    }
+
+    private Timeline buildSortedTimeline(List<Shot> shots) {
         Timeline timeline = new Timeline();
         timeline.setShots(sortByPublishDate(shots));
-        timeline.setParameters(timelineParameters);
         return timeline;
     }
 
@@ -85,12 +110,13 @@ public class ShootrTimelineService {
         return ids;
     }
 
-    private Event getVisibleEvent() {
-        String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
-        if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
+    private Event getWatchingEvent() {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        User currentUser = localUserRepository.getUserById(currentUserId);
+        String watchingEventId = currentUser.getIdWatchingEvent();
+        if (watchingEventId != null) {
+            return localEventRepository.getEventById(watchingEventId);
         }
         return null;
     }
-
 }

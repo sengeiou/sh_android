@@ -2,35 +2,24 @@ package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RefreshEventTimelineInteractorTest {
-
-    private static final String EVENT_ID = "event";
-    private static final String EVENT_AUTHOR = "author";
 
     private RefreshEventTimelineInteractor interactor;
 
@@ -51,47 +40,17 @@ public class RefreshEventTimelineInteractorTest {
 
     @Test
     public void shouldCallbackEventTimelineWhenServiceReturnsTimelineForEvent() throws Exception {
-        when(shootrTimelineService.refreshTimelines()).thenReturn(Arrays.asList(timelineForEvent(), timelineForActivity()));
+        when(shootrTimelineService.refreshTimelinesForWatchingEvent()).thenReturn(timelineForEvent());
 
         interactor.refreshEventTimeline(spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForEvent());
     }
 
-    @Test
-    public void shouldCallbackErrorWhenServiceDontReturnTimelineForEvent() throws Exception {
-        when(shootrTimelineService.refreshTimelines()).thenReturn(Collections.singletonList(timelineForActivity()));
-
-        interactor.refreshEventTimeline(spyCallback, errorCallback);
-
-        verify(errorCallback).onError(any(ShootrException.class));
-    }
-
-    @Test
-    public void shouldNotCallbackResultWhenServiceDontReturnsTimelineForEvent() throws Exception {
-        when(shootrTimelineService.refreshTimelines()).thenReturn(Collections.singletonList(timelineForActivity()));
-
-        interactor.refreshEventTimeline(spyCallback, errorCallback);
-
-        verify(spyCallback, never()).onLoaded(any(Timeline.class));
-    }
-
     private Timeline timelineForEvent() {
         Timeline timeline = new Timeline();
         timeline.setShots(new ArrayList<Shot>());
-        timeline.setParameters(TimelineParameters.builder().forEvent(EVENT_ID, EVENT_AUTHOR).forUsers(dummyThreeUserList()).build());
         return timeline;
-    }
-
-    private Timeline timelineForActivity() {
-        Timeline timeline = new Timeline();
-        timeline.setShots(new ArrayList<Shot>());
-        timeline.setParameters(TimelineParameters.builder().forActivity().forUsers(dummyThreeUserList()).build());
-        return timeline;
-    }
-
-    private List<String> dummyThreeUserList() {
-        return Arrays.asList("a", "b", "c");
     }
 
     static class SpyCallback implements Interactor.Callback<Timeline> {

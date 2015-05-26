@@ -1,9 +1,9 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import static com.shootr.android.domain.asserts.TimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -81,23 +80,13 @@ public class GetEventTimelineInteractorTest {
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
 
-        verify(localShotRepository, never()).getShotsForTimeline(any(TimelineParameters.class));
-    }
-
-    @Test
-    public void shouldRetrieveTimelineWithEventIdAndAuthorWhenEventWatching() throws Exception {
-        setupWatchingEvent();
-
-        interactor.loadEventTimeline(spyCallback, errorCallback);
-
-        TimelineParameters localParameters = captureTimelineParametersFromRepositoryCall(localShotRepository);
-        assertThat(localParameters).hasEventId(WATCHING_EVENT_ID).hasEventAuthorId(EVENT_AUTHOR_ID);
+        verify(localShotRepository, never()).getShotsForEventTimeline(any(EventTimelineParameters.class));
     }
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForTimeline(any(TimelineParameters.class))).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
@@ -173,9 +162,9 @@ public class GetEventTimelineInteractorTest {
     //endregion
 
     //region Spies
-    private TimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
-        ArgumentCaptor<TimelineParameters> captor = ArgumentCaptor.forClass(TimelineParameters.class);
-        verify(shotRepository).getShotsForTimeline(captor.capture());
+    private EventTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
+        ArgumentCaptor<EventTimelineParameters> captor = ArgumentCaptor.forClass(EventTimelineParameters.class);
+        verify(shotRepository).getShotsForEventTimeline(captor.capture());
         return captor.getValue();
     }
 
