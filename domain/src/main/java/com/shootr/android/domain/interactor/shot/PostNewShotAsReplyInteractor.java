@@ -25,6 +25,7 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     public void postNewShotAsReply(String comment, File image, String replyParentId, CompletedCallback callback, ErrorCallback errorCallback) {
         this.replyParentId = replyParentId;
+        super.setRootType(getParentShot().getRootType());
         super.postNewShot(comment, image, callback, errorCallback);
     }
 
