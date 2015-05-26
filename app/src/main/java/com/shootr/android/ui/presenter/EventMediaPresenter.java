@@ -16,6 +16,7 @@ public class EventMediaPresenter implements Presenter {
     private final ShotModelMapper shotModelMapper;
     private EventMediaView eventMediaView;
     private String idEvent;
+    private Integer eventMediaCount;
 
     @Inject public EventMediaPresenter(GetEventMediaInteractor getEventMediaInteractor,
       ShotModelMapper shotModelMapper) {
@@ -27,14 +28,19 @@ public class EventMediaPresenter implements Presenter {
         this.eventMediaView = eventMediaView;
     }
 
-    public void initialize(EventMediaView eventMediaView, String idEvent) {
+    public void initialize(EventMediaView eventMediaView, String idEvent, Integer eventMediaCount) {
         this.setView(eventMediaView);
         this.idEvent = idEvent;
+        this.eventMediaCount = eventMediaCount;
         eventMediaView.showEmpty();
         retrieveMedia();
     }
 
     public void retrieveMedia(){
+        if(eventMediaCount > 0){
+            eventMediaView.showLoading();
+            eventMediaView.hideEmpty();
+        }
         renderMedia(idEvent);
     }
 
@@ -46,6 +52,7 @@ public class EventMediaPresenter implements Presenter {
                     eventMediaView.hideEmpty();
                     List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
                     eventMediaView.setMedia(shotModels);
+                    eventMediaView.hideLoading();
                 }
             }
         });

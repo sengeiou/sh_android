@@ -10,4 +10,8 @@ public interface EventMediaView {
     void hideEmpty();
 
     void showEmpty();
+
+    void showLoading();
+
+    void hideLoading();
 }

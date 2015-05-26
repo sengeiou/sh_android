@@ -18,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -54,6 +57,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
     private static final String EXTRA_EVENT_ID = "eventId";
+    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
@@ -92,6 +96,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private boolean showEditButton;
     private float headerMaxElevation;
     private String idEvent;
+    private Integer eventMediaCount;
 
     public static Intent getIntent(Context context, String eventId) {
         Intent intent = new Intent(context, EventDetailActivity.class);
@@ -490,12 +495,14 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setMediaCount(Integer mediaCount) {
+        eventMediaCount = mediaCount;
         eventMediaNumber.setText(mediaCount.toString());
     }
 
     @Override public void navigateToMedia() {
         Intent intent = new Intent(this, EventMediaActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, idEvent);
+        intent.putExtra(EXTRA_EVENT_MEDIA_COUNT, eventMediaCount);
         this.startActivity(intent);
     }
 
