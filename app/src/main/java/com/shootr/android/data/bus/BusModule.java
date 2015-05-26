@@ -8,7 +8,6 @@ import dagger.Provides;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
-import com.shootr.android.task.jobs.timeline.TimelineJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
@@ -32,7 +31,6 @@ import javax.inject.Singleton;
                 ProfileFragment.class,
                 ProfileContainerActivity.class,
 
-                TimelineJob.class,
                 GCMIntentService.class,
         },
         complete = false
