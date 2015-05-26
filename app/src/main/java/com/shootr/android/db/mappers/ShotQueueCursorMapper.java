@@ -32,7 +32,8 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setEventTag(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TAG)));
         shotQueueEntity.setEventTitle(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TITLE)));
         shotQueueEntity.setIdEvent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
-        shotQueueEntity.setType(cursor.getInt(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
+        shotQueueEntity.setType(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
+        shotQueueEntity.setRootType(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ROOT_TYPE)));
 
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT))) {
             shotQueueEntity.setIdShotParent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT)));
@@ -64,6 +65,7 @@ public class ShotQueueCursorMapper extends GenericMapper{
         contentValues.put(DatabaseContract.ShotQueueTable.EVENT_TITLE, entity.getEventTitle());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_EVENT, entity.getIdEvent());
         contentValues.put(DatabaseContract.ShotQueueTable.TYPE, entity.getType());
+        contentValues.put(DatabaseContract.ShotQueueTable.ROOT_TYPE, entity.getRootType());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT, entity.getIdShotParent());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_USER_PARENT, entity.getIdUserParent());
         contentValues.put(DatabaseContract.ShotQueueTable.USERNAME_PARENT, entity.getUserNameParent());

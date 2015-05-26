@@ -3,6 +3,7 @@ package com.shootr.android.data.mapper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -48,6 +49,9 @@ public class ShotEntityMapper {
         shot.setVideoTitle(shotEntity.getVideoTitle());
         shot.setVideoDuration(shotEntity.getVideoDuration());
 
+        shot.setType(shotEntity.getType());
+        shot.setRootType(shotEntity.getRootType());
+
         return shot;
     }
 
@@ -71,7 +75,8 @@ public class ShotEntityMapper {
         shotEntity.setIdShot(idShot);
         shotEntity.setComment(shot.getComment());
         shotEntity.setImage(shot.getImage());
-        shotEntity.setType(ShotEntity.TYPE_COMMENT);
+        shotEntity.setType(shot.getType());
+        shotEntity.setRootType(shot.getRootType());
         String idUser = shot.getUserInfo().getIdUser();
         shotEntity.setIdUser(idUser);
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
