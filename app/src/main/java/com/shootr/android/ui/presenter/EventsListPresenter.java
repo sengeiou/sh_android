@@ -105,12 +105,14 @@ public class EventsListPresenter implements Presenter {
 
     public void search(String queryText) {
         eventsListView.hideKeyboard();
+        eventsListView.showLoading();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                eventsListView.hideLoading();
                 showViewError(error);
             }
         });
@@ -128,6 +130,7 @@ public class EventsListPresenter implements Presenter {
         } else {
             this.showViewEmpty();
         }
+        eventsListView.hideLoading();
     }
 
     private void setViewCurrentVisibleCheckedInEvent(String currentVisibleEventId) {
