@@ -22,7 +22,6 @@ public class GetEventMediaInteractor implements Interactor {
     private final SessionRepository sessionRepository;
 
     private String idEvent;
-    private String idUser;
     private Callback callback;
 
     @Inject
