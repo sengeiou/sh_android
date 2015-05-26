@@ -16,7 +16,7 @@ public class ShotModel implements Serializable{
     private String photo;
     private String eventTag;
     private String eventTitle;
-    private Integer type;
+    private String type;
 
     private String replyUsername;
     private String parentShotId;
@@ -81,11 +81,11 @@ public class ShotModel implements Serializable{
         this.image = image;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
