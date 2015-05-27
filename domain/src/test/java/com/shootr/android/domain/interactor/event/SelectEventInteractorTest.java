@@ -50,7 +50,8 @@ public class SelectEventInteractorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
+        when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
+        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectEventInteractor(interactorHandler, postExecutionThread,
           eventRepository,
@@ -147,7 +148,8 @@ public class SelectEventInteractorTest {
     }
 
     private void setupOldWatchingEvent() {
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatchingOldEvent());
+        when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
+        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatchingOldEvent());
     }
 
     private User currentUserWatchingOldEvent() {
