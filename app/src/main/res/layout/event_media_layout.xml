@@ -3,16 +3,17 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:paddingTop="3dp"
-  android:paddingBottom="3dp"
-  android:paddingRight="3dp"
-  android:paddingLeft="3dp">
+  android:paddingTop="2dp"
+  android:paddingBottom="2dp"
+  android:paddingRight="2dp"
+  android:paddingLeft="2dp"
+  >
 
   <ImageView
     android:id="@+id/event_media_item"
     android:layout_width="match_parent"
     android:scaleType="centerCrop"
-    android:layout_height="125dp"
+    android:layout_height="120dp"
     />
 
   <FrameLayout android:id="@+id/shot_video_frame"
@@ -30,7 +31,7 @@
       android:id="@+id/event_media_item_video"
       android:layout_width="match_parent"
       android:scaleType="centerCrop"
-      android:layout_height="125dp"
+      android:layout_height="120dp"
       />
 
     <ImageView android:layout_width="wrap_content"
@@ -46,7 +47,6 @@
       android:layout_margin="8dp"
       android:textColor="@color/white"
       tools:text="0:00" />
-
   </FrameLayout>
 
 </RelativeLayout>
