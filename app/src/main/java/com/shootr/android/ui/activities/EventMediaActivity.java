@@ -19,6 +19,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     private static final String EXTRA_EVENT_ID = "eventId";
     private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
+    public static final int NUMBER_OF_ELEMENTS_PER_ROW = 3;
 
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
     @InjectView(R.id.media_empty) View emptyView;
@@ -32,7 +33,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
-        mediaView.setLayoutManager(new GridLayoutManager(this, 3));
+        mediaView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_ELEMENTS_PER_ROW));
     }
 
     @Override protected void initializePresenter() {
