@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GetEventMediaCountInteractor implements Interactor {
     private final ShotRepository localShotRepository;
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
+    private final SessionRepository sessionRepository;
 
     private String idEvent;
     private String idUser;
@@ -28,19 +30,20 @@ public class GetEventMediaCountInteractor implements Interactor {
     @Inject public GetEventMediaCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote ShotRepository remoteShotRepository,
       @Local ShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository) {
+      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteShotRepository = remoteShotRepository;
         this.localShotRepository = localShotRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;
+        this.sessionRepository = sessionRepository;
     }
 
-    public void getEventMediaCount(String idEvent, String idUser, Callback callback) {
+    public void getEventMediaCount(String idEvent, Callback callback) {
         this.idEvent = idEvent;
         this.callback = callback;
-        this.idUser = idUser;
+        this.idUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 

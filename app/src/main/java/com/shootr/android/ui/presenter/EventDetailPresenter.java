@@ -147,7 +147,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void renderMediaCount(String idEvent) {
         eventMediaCountInteractor.getEventMediaCount(idEvent,
-          currentUserWatchingModel.getIdUser(),
           new Interactor.Callback() {
               @Override public void onLoaded(Object o) {
                   Integer mediaCount = (Integer) o;
