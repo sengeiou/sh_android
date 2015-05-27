@@ -271,8 +271,7 @@ public class ShotManager extends  AbstractManager{
         String usersSelection = ShotTable.ID_USER + " = ?";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
-        //TODO since & max
-        //TODO limit
+
         String[] whereArguments = new String[2];
 
         whereArguments[0] = String.valueOf(idUser);
@@ -299,16 +298,19 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getEventMedia(String idEvent, String userId) {
-        String usersSelection = ShotTable.ID_USER + " = " + "'" + userId + "'";
-        String eventSelection = ShotTable.ID_EVENT + " = " + "'" + idEvent + "'";
+        String usersSelection = ShotTable.ID_USER + " = ?";
+        String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
-        //TODO since & max
-        //TODO limit
+
+        String[] whereArguments = new String[2];
+
+        whereArguments[0] = String.valueOf(userId);
+        whereArguments[1] = String.valueOf(idEvent);
 
         String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
 
         Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null,
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
             ShotTable.CSYS_BIRTH+" DESC");
 
         List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
