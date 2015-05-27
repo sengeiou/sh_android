@@ -128,8 +128,8 @@
                             android:gravity="center_vertical|right"
                             android:paddingRight="16dp"
                             android:textAppearance="@style/TextAppearance.Switch"
-                            android:textColor="?android:attr/textColorPrimary"
                             android:text="@string/event_detail_media_number"
+                            android:textColor="@color/gray_60"
                             android:visibility="gone"
                             tools:text="7" />
 
