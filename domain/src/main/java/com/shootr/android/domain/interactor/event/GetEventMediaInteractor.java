@@ -5,6 +5,7 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -17,42 +18,70 @@ public class GetEventMediaInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final ShotRepository shotRepository;
-    private final UserRepository userRepository;
+    private final ShotRepository remoteShotRepository;
+    private final ShotRepository localShotRepository;
+    private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
 
     private String idEvent;
     private Callback callback;
+    private String currentidUser;
 
     @Inject
     public GetEventMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository shotRepository, @Remote UserRepository userRepository, SessionRepository sessionRepository) {
+      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.shotRepository = shotRepository;
-        this.userRepository = userRepository;
+        this.remoteShotRepository = remoteShotRepository;
+        this.localShotRepository = localShotRepository;
+        this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
     }
 
     public void getEventMedia(String idEvent, Callback callback) {
         this.idEvent = idEvent;
         this.callback = callback;
+        this.currentidUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<User> people = userRepository.getPeople();
-        List<String> peopleIds = new ArrayList<>();
+        getMediaFromLocal();
+        getMediaFromRemote();
+    }
+
+    private void getMediaFromLocal() {
+        List<User> people = localUserRepository.getPeople();
+        List<String> peopleIds = getPeopleInEvent(people);
+        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository);
+        notifyLoaded(shots);
+    }
+
+    private void getMediaFromRemote() {
+        List<User> people = remoteUserRepository.getPeople();
+        List<String> peopleIds = getPeopleInEvent(people);
+        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository);
+        notifyLoaded(shots);
+    }
+
+    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
         List<Shot> shots = new ArrayList<>();
-        for (User user : people) {
-            peopleIds.add(user.getIdUser());
-        }
-        peopleIds.add(currentUserId);
         for (String userId : peopleIds) {
             shots.addAll(shotRepository.getMediaByIdEvent(idEvent, userId));
         }
-        notifyLoaded(shots);
+        return shots;
+    }
+
+    private List<String> getPeopleInEvent(List<User> people) {
+        List<String> peopleIds = new ArrayList<>();
+        for (User user : people) {
+            peopleIds.add(user.getIdUser());
+        }
+        peopleIds.add(currentidUser);
+        return peopleIds;
     }
 
     private void notifyLoaded(final List<Shot> shots) {
