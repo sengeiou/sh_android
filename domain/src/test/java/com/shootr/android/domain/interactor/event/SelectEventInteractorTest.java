@@ -146,17 +146,6 @@ public class SelectEventInteractorTest {
         assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
     }
 
-    @Test public void shouldSetCheckinAsFalseInLocalRepository() throws Exception {
-        setupOldWatchingEvent();
-        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
-
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
-
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(localUserRepository).putUser(userCaptor.capture());
-        assertThat(userCaptor.getValue().getIdCheckedEvent()).isNullOrEmpty();
-    }
-
     private void setupOldWatchingEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatchingOldEvent());
     }

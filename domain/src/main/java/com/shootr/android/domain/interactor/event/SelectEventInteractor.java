@@ -49,7 +49,7 @@ public class SelectEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        User currentUser = sessionRepository.getCurrentUser();
+        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
         if (selectedEvent == null) {
             throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
@@ -59,8 +59,6 @@ public class SelectEventInteractor implements Interactor {
             notifyLoaded(selectedEvent);
         } else {
             User updatedUser = updateUserWithEventInfo(currentUser, selectedEvent);
-
-            deleteCheckin(updatedUser);
 
             sessionRepository.setCurrentUser(updatedUser);
             localUserRepository.putUser(updatedUser);
