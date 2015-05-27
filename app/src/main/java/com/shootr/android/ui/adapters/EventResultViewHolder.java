@@ -34,7 +34,7 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
     }
 
-    public void render(EventResultModel event, boolean isWatching, boolean isCheckedIn) {
+    public void render(EventResultModel event, boolean isCheckedIn) {
         this.setClickListener(event);
         title.setText(event.getEventModel().getTitle());
         date.setText(event.getEventModel().getDatetime());
@@ -55,12 +55,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
             setNotificationIconVisibility(true);
         } else {
             setNotificationIconVisibility(false);
-        }
-
-        if (isWatching) {
-            setHighlightColorVisibility(true);
-        } else {
-            setHighlightColorVisibility(false);
         }
     }
 
