@@ -223,6 +223,8 @@
     <string name="checked_in">Checked In</string>
     <string name="check_in_action">Check In</string>
     <string name="check_out_action">Check Out</string>
+    <string name="reset_password_button">Enter your username or email</string>
+    <string name="title_activity_reset_password">Reset Password</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
