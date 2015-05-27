@@ -68,7 +68,6 @@ public class MediaAdapter extends RecyclerView.Adapter {
 
         @InjectView(R.id.shot_video_frame) View videoFrame;
         @InjectView(R.id.shot_video_duration) TextView videoDuration;
-        @InjectView(R.id.event_media_item_video) ImageView eventMediaItemVideo;
 
         private TimelineAdapter.VideoClickListener videoClickListener;
 
@@ -76,7 +75,7 @@ public class MediaAdapter extends RecyclerView.Adapter {
             super(itemView);
             ButterKnife.inject(this, itemView);
             this.videoClickListener = videoClickListener;
-            mediaImage = (ImageView) itemView.findViewById(R.id.event_media_item);
+            this.mediaImage = (ImageView) itemView.findViewById(R.id.event_media_item);
         }
 
         public void bindMedia(final ShotModel shotModel){
@@ -87,7 +86,6 @@ public class MediaAdapter extends RecyclerView.Adapter {
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Picasso.with(v.getContext()).load(shotModel.getImage()).into(eventMediaItemVideo);
                         videoClickListener.onClick(shotModel.getVideoUrl());
                     }
                 });

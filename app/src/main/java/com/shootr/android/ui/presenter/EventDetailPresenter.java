@@ -9,8 +9,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
 import com.shootr.android.domain.interactor.event.GetEventMediaCountInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
-import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;

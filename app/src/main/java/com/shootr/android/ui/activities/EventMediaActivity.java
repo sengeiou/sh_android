@@ -3,18 +3,14 @@ package com.shootr.android.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.EventMediaPresenter;
 import com.shootr.android.ui.views.EventMediaView;
@@ -23,14 +19,14 @@ import javax.inject.Inject;
 
 public class EventMediaActivity extends BaseToolbarDecoratedActivity implements EventMediaView {
 
+    private static final String EXTRA_EVENT_ID = "eventId";
+    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
+
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
     @InjectView(R.id.media_empty) View emptyView;
     @InjectView(R.id.media_loading) View loadingView;
 
     @Inject EventMediaPresenter presenter;
-
-    private static final String EXTRA_EVENT_ID = "eventId";
-    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_event_media;
@@ -42,7 +38,6 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected void initializePresenter() {
-        Intent intent = getIntent();
         Bundle bundle = getIntent().getExtras();
         String idEvent = bundle.getString(EXTRA_EVENT_ID);
         Integer eventMediaCount = bundle.getInt(EXTRA_EVENT_MEDIA_COUNT);
@@ -72,12 +67,6 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
-    }
-
-    private void onVideoClick(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
     }
 
     @Override
