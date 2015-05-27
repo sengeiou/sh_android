@@ -95,13 +95,11 @@
             android:id="@+id/email_login_forgot"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:gravity="center_vertical"
-            android:visibility="gone"
             android:text="@string/activity_login_email_forgot"
-            android:textColor="@color/primary"
-            />
+            android:textColor="@color/gray_60"
+          android:layout_gravity="center_horizontal" />
 
         <!--<ProgressBar
             android:id="@+id/email_login_progress"
