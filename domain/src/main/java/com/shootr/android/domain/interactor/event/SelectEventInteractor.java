@@ -67,10 +67,6 @@ public class SelectEventInteractor implements Interactor {
         }
     }
 
-    private void deleteCheckin(User updatedUser) {
-        updatedUser.setIdCheckedEvent(null);
-    }
-
     private boolean isSelectingCurrentWatchingEvent(User currentUser) {
         return idSelectedEvent.equals(currentUser.getIdWatchingEvent());
     }
