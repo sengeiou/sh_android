@@ -65,12 +65,8 @@
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_marginLeft="6dp"
-          android:drawableRight="@drawable/ic_watchers_gray60_18"
-          android:fontFamily="sans-serif-medium"
-          android:gravity="center"
-          android:textColor="@color/gray_60"
-          android:textSize="14sp"
-          tools:text="2" />
+          tools:text="2"
+          style="@style/WatchersIndicator" />
     </RelativeLayout>
 </FrameLayout>
 
