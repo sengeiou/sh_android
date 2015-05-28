@@ -244,4 +244,22 @@ public class DatabaseContract {
                 ID, ID_CHECKED_EVENT
         };
     }
+
+    public static final class ForgotPasswordMongo implements SyncColumns {
+
+        private ForgotPasswordMongo() {
+
+        }
+
+        public static final String TABLE = "ForgotPasswordMongo";
+
+        public static final String ID = "idUser";
+        public static final String USER_NAME = "userName";
+        public static final String EMAIL_ENCRYPTED = "emailEncrypted";
+        public static final String USERNAME_OR_EMAIL = "userNameOrEmail";
+
+        public static final String[] PROJECTION = {
+          ID, USER_NAME, EMAIL_ENCRYPTED, USERNAME_OR_EMAIL
+        };
+    }
 }

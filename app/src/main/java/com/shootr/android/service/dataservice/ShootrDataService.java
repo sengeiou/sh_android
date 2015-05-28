@@ -5,12 +5,14 @@ import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
@@ -68,6 +70,7 @@ public class ShootrDataService implements ShootrService {
     private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
+    public final ForgotPasswordMapper forgotPasswordMapper;
 
     private final TimeUtils timeUtils;
 
@@ -77,8 +80,8 @@ public class ShootrDataService implements ShootrService {
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
       UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
-      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, EventEntityMapper eventEntityMapper, TimeUtils timeUtils,
-      VersionUpdater versionUpdater) {
+      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, EventEntityMapper eventEntityMapper,
+      ForgotPasswordMapper forgotPasswordMapper, TimeUtils timeUtils, VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -92,7 +95,7 @@ public class ShootrDataService implements ShootrService {
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
         this.eventEntityMapper = eventEntityMapper;
-
+        this.forgotPasswordMapper = forgotPasswordMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
     }
@@ -560,15 +563,32 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else {
+        } else {
             MetadataDto md = ops[0].getMetadata();
             Long items = md.getItems();
-            for(int i = 0; i< items; i++){
+            for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 shotsByUserInEvent.add(shotEntityMapper.fromDto(dataItem));
             }
         }
         return shotsByUserInEvent;
+    }
+
+
+    @Override public ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException {
+        GenericDto requestDto = userDtoFactory.getForgotPasswordResultByUsernameOrEmail(usernameOrEmail);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            Map<String, Object>[] data = ops[0].getData();
+            if (data.length > 0) {
+                Map<String, Object> dataItem = data[0];
+                return forgotPasswordMapper.fromDto(dataItem);
+            }
+        }
+        return null;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

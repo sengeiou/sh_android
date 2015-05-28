@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
 import android.support.v4.util.ArrayMap;
-
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
@@ -11,16 +10,15 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -48,6 +46,7 @@ public class UserDtoFactory {
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
+    private static final String ALIAS_FORGOT_PASSWORD = "FORGOT_PASSWORD";
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
@@ -57,14 +56,17 @@ public class UserDtoFactory {
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
     FollowMapper followMapper;
+    ForgotPasswordMapper forgotPasswordMapper;
 
     public static final String ID_USER_FOLLOWING = "idUserFollowing";
     public static final String ID_USER_WHO_IS_FOLLOWED = "idUserFollowed";
 
-    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
+    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper,
+      ForgotPasswordMapper forgotPasswordMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
+        this.forgotPasswordMapper = forgotPasswordMapper;
     }
 
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
@@ -305,5 +307,24 @@ public class UserDtoFactory {
         OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
+    }
+
+    public GenericDto getForgotPasswordResultByUsernameOrEmail(String usernameOrEmail) {
+        Map<String, Object> key = new HashMap<>();
+        key.put(DatabaseContract.ForgotPasswordMongo.USERNAME_OR_EMAIL,usernameOrEmail);
+
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(DatabaseContract.ForgotPasswordMongo.TABLE) //
+          .includeDeleted(false) //
+          .setKeys(key)
+          .build();
+
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(forgotPasswordMapper.toDto(null)) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FORGOT_PASSWORD, operation);
     }
 }
