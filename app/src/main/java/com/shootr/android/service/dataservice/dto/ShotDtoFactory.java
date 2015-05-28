@@ -117,7 +117,7 @@ public class ShotDtoFactory {
         return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
     }
 
-    public GenericDto getMediaShotsCountByEventAndUser(String idEvent, String idUser) {
+    public GenericDto getUserMediaShotsCountByEventAndUser(String idEvent, String idUser) {
         FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(idUser) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
@@ -139,7 +139,7 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
 
-    public GenericDto getMediaShotByEventAndUser(String idEvent, String userId) {
+    public GenericDto getUserMediaShotsByEventAndUser(String idEvent, String userId) {
         FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(userId) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
