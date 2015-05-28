@@ -81,21 +81,8 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
         this.currentCheckedInEvent = eventId;
     }
 
-    public void setCurrentWatchingEvent(String eventId) {
-        // FIXME metodo poco optimo. Estaria genial si recibiera el EventModel, pero eso implica cambiar el Presener de EventList y quiza el Interactor
-        this.setHeader(getEventWithId(eventId));
-    }
-
-    private EventResultModel getEventWithId(String eventId) {
-        if (eventId == null) {
-            return null;
-        }
-        for (EventResultModel event : getItems()) {
-            if (event.getEventModel().getIdEvent().equals(eventId)) {
-                return event;
-            }
-        }
-        return null;
+    public void setCurrentWatchingEvent(EventResultModel event) {
+        this.setHeader(event);
     }
 
     public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
