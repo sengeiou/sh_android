@@ -9,6 +9,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.domain.utils.SecurityUtils;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -102,7 +103,7 @@ public class ShootrUserService {
         try {
             return resetPasswordGateway.performPasswordReset(usernameOrEmail);
         } catch (Exception e) {
-            throw new AccountCreationException(e);
+            throw new ResetPasswordException(e);
         }
     }
 }
