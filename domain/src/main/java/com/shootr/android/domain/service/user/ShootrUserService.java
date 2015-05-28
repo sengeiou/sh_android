@@ -1,5 +1,6 @@
 package com.shootr.android.domain.service.user;
 
+import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidCheckinException;
@@ -19,17 +20,19 @@ public class ShootrUserService {
     private final CheckinGateway checkinGateway;
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
+    private final ResetPasswordGateway resetPasswordGateway;
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      @Remote EventRepository remoteEventRepository, @Remote UserRepository remoteUserRepository) {
+      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository, @Remote UserRepository remoteUserRepository) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
+        this.resetPasswordGateway = resetPasswordGateway;
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
     }
@@ -93,5 +96,13 @@ public class ShootrUserService {
 
     private boolean isCheckedInEvent(User user, String idEvent) {
         return user.getIdCheckedEvent() != null && user.getIdCheckedEvent().equals(idEvent);
+    }
+
+    public ForgotPasswordResult performResetPassword(String usernameOrEmail) {
+        try {
+            return resetPasswordGateway.performPasswordReset(usernameOrEmail);
+        } catch (Exception e) {
+            throw new AccountCreationException(e);
+        }
     }
 }
