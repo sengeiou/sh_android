@@ -22,7 +22,7 @@ public class ShotDtoFactory {
     private static final String ALIAS_GET_SHOT = "GET_SHOT";
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
     private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
-    private static final String ALIAS_GET_MEDIA = "GET_MEDIAS_OF_EVENT_BY_USER";
+    private static final String ALIAS_GET_MEDIA = "GET_MEDIA_SHOTS_FOR_EVENT";
     private static final int REPLIES_MAX_ITEMS = 50;
 
     private UtilityDtoFactory utilityDtoFactory;
@@ -117,7 +117,7 @@ public class ShotDtoFactory {
         return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
     }
 
-    public GenericDto getMediaByEventAndUser(String idEvent, String idUser) {
+    public GenericDto getMediaShotsCountByEventAndUser(String idEvent, String idUser) {
         FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(idUser) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
