@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -9,12 +10,12 @@ import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -41,11 +42,12 @@ public class SelectEventInteractorTest {
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock Interactor.Callback<Event> dummyCallback;
+    @Mock Interactor.Callback<EventSearchResult> dummyCallback;
     @Mock TimeUtils timeUtils;
+    @Mock WatchersRepository localWatchersRepository;
 
     private SelectEventInteractor interactor;
-    
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -53,11 +55,14 @@ public class SelectEventInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
-        interactor = new SelectEventInteractor(interactorHandler, postExecutionThread,
+        interactor = new SelectEventInteractor(interactorHandler,
+          postExecutionThread,
           eventRepository,
           localUserRepository,
           remoteUserRepository,
-          sessionRepository, timeUtils);
+          localWatchersRepository,
+          sessionRepository,
+          timeUtils);
     }
 
     @Test
@@ -187,8 +192,8 @@ public class SelectEventInteractorTest {
         return user;
     }
 
-    private Event anyEvent() {
-        return any(Event.class);
+    private EventSearchResult anyEvent() {
+        return any(EventSearchResult.class);
     }
     //endregion
 }
