@@ -90,7 +90,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private MenuItem editMenuItem;
     private boolean showEditButton;
     private float headerMaxElevation;
-    private String idEvent;
     private Integer eventMediaCount;
 
     public static Intent getIntent(Context context, String eventId) {
@@ -105,7 +104,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
+        String idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 
@@ -493,7 +492,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         eventMediaNumber.setText(mediaCount.toString());
     }
 
-    @Override public void navigateToMedia() {
+    @Override public void navigateToMedia(String idEvent) {
         Intent intent = new Intent(this, EventMediaActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, idEvent);
         intent.putExtra(EXTRA_EVENT_MEDIA_COUNT, eventMediaCount);

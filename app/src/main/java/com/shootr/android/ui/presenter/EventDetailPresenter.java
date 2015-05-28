@@ -265,6 +265,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void clickMedia() {
-        eventDetailView.navigateToMedia();
+        eventDetailView.navigateToMedia(idEvent);
     }
 }
