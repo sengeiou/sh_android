@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
+import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.User;
@@ -8,11 +9,13 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
+import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
@@ -31,14 +34,23 @@ public class EventsListInteractor implements Interactor {
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
     private final LocaleProvider localeProvider;
+    private final WatchersRepository watchersRepository;
+    private final EventRepository localEventRepository;
 
     private Callback<EventSearchResultList> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public EventsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject
+    public EventsListInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
       @Remote EventSearchRepository remoteEventSearchRepository,
-      @Local EventSearchRepository localEventSearchRepository, EventListSynchronizationRepository eventListSynchronizationRepository,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils,
+      @Local EventSearchRepository localEventSearchRepository,
+      EventListSynchronizationRepository eventListSynchronizationRepository,
+      @Local EventRepository localEventRepository,
+      @Local WatchersRepository watchersRepository,
+      SessionRepository sessionRepository,
+      @Local UserRepository localUserRepository,
+      TimeUtils timeUtils,
       LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -49,6 +61,8 @@ public class EventsListInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
         this.timeUtils = timeUtils;
         this.localeProvider = localeProvider;
+        this.watchersRepository = watchersRepository;
+        this.localEventRepository = localEventRepository;
     }
 
     public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback) {
@@ -57,7 +71,8 @@ public class EventsListInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override
+    public void execute() throws Throwable {
         List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
         notifyLoaded(localEvents);
 
@@ -87,9 +102,11 @@ public class EventsListInteractor implements Interactor {
 
     //region Result
     private void notifyLoaded(final List<EventSearchResult> results) {
-        final EventSearchResultList searchResultList = new EventSearchResultList(results, getCheckedEventId(), getWatchingEventId());
+        final EventSearchResultList searchResultList =
+          new EventSearchResultList(results, getCheckedEventId(), getWatchingEventWithWatchNumber());
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 callback.onLoaded(searchResultList);
             }
         });
@@ -100,14 +117,25 @@ public class EventsListInteractor implements Interactor {
         return currentUser.getIdCheckedEvent();
     }
 
-    private String getWatchingEventId() {
+    private EventSearchResult getWatchingEventWithWatchNumber() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        return currentUser.getIdWatchingEvent();
+        String idWatchingEvent = currentUser.getIdWatchingEvent();
+        if (idWatchingEvent != null) {
+            Event event = localEventRepository.getEventById(idWatchingEvent);
+            Integer watchers = watchersRepository.getWatchers(idWatchingEvent);
+            EventSearchResult eventSearchResult = new EventSearchResult();
+            eventSearchResult.setEvent(event);
+            eventSearchResult.setWatchersNumber(watchers);
+            return eventSearchResult;
+        } else {
+            return null;
+        }
     }
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 errorCallback.onError(error);
             }
         });

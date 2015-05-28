@@ -6,17 +6,17 @@ public class EventSearchResultList {
 
     private List<EventSearchResult> eventSearchResults;
     private String currentCheckedInEventId;
-    private String currentWatchingEventId;
+    private EventSearchResult currentWatchingEvent;
 
     public EventSearchResultList(List<EventSearchResult> eventSearchResults) {
         this.eventSearchResults = eventSearchResults;
     }
 
     public EventSearchResultList(List<EventSearchResult> eventSearchResults, String currentCheckedInEventId,
-      String currentWatchingEventId) {
+      EventSearchResult currentWatchingEvent) {
         this.eventSearchResults = eventSearchResults;
         this.currentCheckedInEventId = currentCheckedInEventId;
-        this.currentWatchingEventId = currentWatchingEventId;
+        this.currentWatchingEvent = currentWatchingEvent;
     }
 
     public List<EventSearchResult> getEventSearchResults() {
@@ -30,16 +30,17 @@ public class EventSearchResultList {
     public String getCurrentCheckedInEventId() {
         return currentCheckedInEventId;
     }
-    public String getCurrentWatchingEventId() {
-        return currentWatchingEventId;
+
+    public EventSearchResult getCurrentWatchingEvent() {
+        return currentWatchingEvent;
     }
 
     public void setCurrentCheckedInEventId(String currentCheckedInEventId) {
         this.currentCheckedInEventId = currentCheckedInEventId;
     }
 
-    public void setCurrentWatchingEventId(String currentWatchingEventId) {
-        this.currentWatchingEventId = currentWatchingEventId;
+    public void setCurrentWatchingEvent(EventSearchResult currentWatchingEvent) {
+        this.currentWatchingEvent = currentWatchingEvent;
     }
 
     @Override public boolean equals(Object o) {
@@ -56,14 +57,14 @@ public class EventSearchResultList {
           : that.currentCheckedInEventId != null) {
             return false;
         }
-        return !(currentWatchingEventId != null ? !currentWatchingEventId.equals(that.currentWatchingEventId)
-          : that.currentWatchingEventId != null);
+        return !(currentWatchingEvent != null ? !currentWatchingEvent.equals(that.currentWatchingEvent)
+          : that.currentWatchingEvent != null);
     }
 
     @Override public int hashCode() {
         int result = eventSearchResults != null ? eventSearchResults.hashCode() : 0;
         result = 31 * result + (currentCheckedInEventId != null ? currentCheckedInEventId.hashCode() : 0);
-        result = 31 * result + (currentWatchingEventId != null ? currentWatchingEventId.hashCode() : 0);
+        result = 31 * result + (currentWatchingEvent != null ? currentWatchingEvent.hashCode() : 0);
         return result;
     }
 
@@ -71,7 +72,7 @@ public class EventSearchResultList {
         return "EventSearchResultList{" +
           "eventSearchResults=" + eventSearchResults +
           ", currentCheckedInEventId='" + currentCheckedInEventId + '\'' +
-          ", currentWatchingEventId='" + currentWatchingEventId + '\'' +
+          ", currentWatchingEvent='" + currentWatchingEvent + '\'' +
           '}';
     }
 }
