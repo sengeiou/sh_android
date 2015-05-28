@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.EventMediaPresenter;
 import com.shootr.android.ui.views.EventMediaView;
+import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -23,9 +25,10 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
     @InjectView(R.id.media_empty) View emptyView;
-    @InjectView(R.id.media_loading) View loadingView;
+    @InjectView(R.id.event_media_loading) View loadingView;
 
     @Inject EventMediaPresenter presenter;
+    @Inject PicassoWrapper picasso;
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_event_media;
@@ -33,13 +36,14 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
+        // TODO Este número se podría obtener por recursos, permitiendo mostrar un número distinto de columnas según orientación y tamaño de pantalla. No lo pide la historia, pero sería una buena práctica.
         mediaView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_ELEMENTS_PER_ROW));
     }
 
     @Override protected void initializePresenter() {
-        Bundle bundle = getIntent().getExtras();
-        String idEvent = bundle.getString(EXTRA_EVENT_ID);
-        Integer eventMediaCount = bundle.getInt(EXTRA_EVENT_MEDIA_COUNT);
+        Intent intent = getIntent();
+        String idEvent = intent.getStringExtra(EXTRA_EVENT_ID);
+        Integer eventMediaCount = intent.getIntExtra(EXTRA_EVENT_MEDIA_COUNT, 0);
         presenter.initialize(this, idEvent, eventMediaCount);
     }
 
@@ -48,7 +52,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void setMedia(List<ShotModel> shotsWithMedia) {
-        MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(), shotsWithMedia);
+        MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(), shotsWithMedia, picasso);
         mediaView.setAdapter(mediaAdapter);
     }
 
