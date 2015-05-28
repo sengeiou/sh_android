@@ -81,11 +81,11 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity implemen
         resetButton.setProgress(BUTTON_LOADING);
     }
 
-    @Override public void hideLogin() {
+    @Override public void resetButtonToNormalStatus() {
         resetButton.setProgress(BUTTON_NORMAL);
     }
 
-    @Override public void showError() {
+    @Override public void showError(String errorMessage) {
         resetButton.setProgress(BUTTON_ERROR);
     }
 }

@@ -10,7 +10,7 @@ public interface ResetPasswordView {
 
     void showLoading();
 
-    void hideLogin();
+    void resetButtonToNormalStatus();
 
-    void showError();
+    void showError(String errorMessage);
 }
