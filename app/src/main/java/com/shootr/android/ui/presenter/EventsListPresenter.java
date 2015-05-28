@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -66,10 +65,10 @@ public class EventsListPresenter implements Presenter {
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<Event>() {
-            @Override public void onLoaded(Event selectedEvent) {
-                onEventSelected(eventModelMapper.transform(selectedEvent));
-                setViewCurrentVisibleWatchingEvent(idEvent);
+        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<EventSearchResult>() {
+            @Override public void onLoaded(EventSearchResult selectedEvent) {
+                onEventSelected(eventModelMapper.transform(selectedEvent.getEvent()));
+                setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(selectedEvent));
             }
         });
     }
@@ -98,7 +97,7 @@ public class EventsListPresenter implements Presenter {
             eventsListView.hideLoading();
             this.renderViewEventsList(eventResultModels);
             this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
-            this.setViewCurrentVisibleWatchingEvent(resultList.getCurrentWatchingEventId());
+            this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(resultList.getCurrentWatchingEvent()));
         }
     }
 
@@ -133,8 +132,8 @@ public class EventsListPresenter implements Presenter {
         eventsListView.setCurrentCheckedInEventId(currentVisibleEventId);
     }
 
-    private void setViewCurrentVisibleWatchingEvent(String currentVisibleEventId) {
-        eventsListView.setCurrentWatchingEventId(currentVisibleEventId);
+    private void setViewCurrentVisibleWatchingEvent(EventResultModel currentVisibleEvent) {
+        eventsListView.setCurrentWatchingEventId(currentVisibleEvent);
     }
 
     private void renderViewEventsList(List<EventResultModel> eventModels) {

@@ -2,13 +2,14 @@ package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.sync.SyncDispatcher;
 import com.shootr.android.data.repository.sync.SyncDispatcherImpl;
+import com.shootr.android.domain.repository.WatchersRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
   includes = {
-    UserRepositoryModule.class, EventRepositoryModule.class, ShotRepositoryModule.class,
+    UserRepositoryModule.class, EventRepositoryModule.class, ShotRepositoryModule.class, WatchersRepositoryModule.class
   },
   complete = false,
   library = true

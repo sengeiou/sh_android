@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/white"
   android:animateLayoutChanges="true">
 
     <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/events_list_swipe_refresh"
@@ -14,6 +15,9 @@
         <android.support.v7.widget.RecyclerView android:id="@+id/events_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:clipToPadding="false"
+          android:paddingBottom="8dp"
+          android:paddingTop="8dp"
           android:scrollbars="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -28,7 +32,7 @@
     <!-- emtpy -->
     <TextView android:id="@+id/events_empty"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:gravity="center"
       android:padding="16dp"

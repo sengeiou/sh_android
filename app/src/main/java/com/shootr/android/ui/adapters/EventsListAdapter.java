@@ -1,44 +1,30 @@
 package com.shootr.android.ui.adapters;
 
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
-import java.util.ArrayList;
 import java.util.List;
 
-public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
+public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, EventResultModel, EventResultModel> {
 
     private final PicassoWrapper picasso;
-    private final Resources resources;
 
-    private List<EventResultModel> events;
     private String currentCheckedInEvent;
-    private String currentWathingEvent;
-
     private OnEventClickListener onEventClickListener;
 
-    public EventsListAdapter(PicassoWrapper picasso, Resources resources) {
+    public EventsListAdapter(PicassoWrapper picasso) {
         this.picasso = picasso;
-        this.resources = resources;
-        events = new ArrayList<>(0);
     }
 
     public void setEvents(List<EventResultModel> events) {
-        boolean wasEmpty = this.events.isEmpty();
-        this.events = events;
+        boolean wasEmpty = getItems().isEmpty();
+        setItems(events);
         if (wasEmpty) {
             notifyItemRangeInserted(0, events.size());
         } else {
@@ -46,103 +32,61 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         }
     }
 
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event,
+          parent,
+          false);
+        return new EventResultViewHolder(view, onEventClickListener, picasso);
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_card_separator,
+          parent,
+          false);
+        return new SubheaderViewHolder(view);
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event, parent, false);
-        return new ViewHolder(view);
+        return new EventResultViewHolder(view, onEventClickListener, picasso);
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, int position) {
-        EventResultModel event = events.get(position);
-        holder.title.setText(event.getEventModel().getTitle());
-        holder.date.setText(event.getEventModel().getDatetime());
-        int watchers = event.getWatchers();
-        if (watchers > 0) {
-            holder.watchers.setVisibility(View.VISIBLE);
-            holder.watchers.setText(getWatchersText(watchers));
-        } else {
-            holder.watchers.setVisibility(View.GONE);
-        }
-        holder.author.setText(event.getEventModel().getAuthorUsername());
+    @Override
+    protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        EventResultModel event = getHeader();
+        String idEvent = event.getEventModel().getIdEvent();
 
-        //TODO usar tamaño predefinido con picasso para mejorar rendimiento
-        String pictureUrl = event.getEventModel().getPicture();
-        picasso.loadEventPicture(pictureUrl).into(holder.picture);
-        markEvents(holder, event);
+        EventResultViewHolder headerHolder = (EventResultViewHolder) viewHolder;
+        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
+        headerHolder.render(event, isCheckedInEvent);
     }
 
-    private void markEvents(ViewHolder holder, EventResultModel event) {
+    @Override
+    protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        /* no-op */
+    }
+
+    @Override
+    protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        EventResultModel event = getItem(position);
         String idEvent = event.getEventModel().getIdEvent();
         boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
-        boolean isWatchingEvent = idEvent.equals(currentWathingEvent);
-
-        if (isCheckedInEvent) {
-            setNotificationIconVisibility(holder, true);
-        } else {
-            setNotificationIconVisibility(holder, false);
-        }
-
-        if (isWatchingEvent) {
-            setHighlightColorVisibility(holder, true);
-        } else {
-            setHighlightColorVisibility(holder, false);
-        }
-    }
-
-    private void setNotificationIconVisibility(ViewHolder holder, boolean visible) {
-        holder.title.setCompoundDrawablesWithIntrinsicBounds(0,
-          0,
-          visible ? R.drawable.ic_notifications_on_16_grey70 : 0,
-          0);
-    }
-
-    private void setHighlightColorVisibility(ViewHolder holder, boolean showHighlight) {
-        if (showHighlight) {
-            CharSequence text = holder.title.getText();
-            SpannableStringBuilder sp = new SpannableStringBuilder(text);
-            int selectedColor = resources.getColor(R.color.primary);
-            sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.title.setText(sp);
-        }
-    }
-
-    private String getWatchersText(int watchers) {
-        return String.valueOf(watchers);
-    }
-
-    @Override public int getItemCount() {
-        return events.size();
+        ((EventResultViewHolder) viewHolder).render(event, isCheckedInEvent);
     }
 
     public void setCurrentCheckedInEvent(String eventId) {
         this.currentCheckedInEvent = eventId;
     }
 
-    public void setCurrentWatchingEvent(String eventId) {
-        this.currentWathingEvent = eventId;
+    public void setCurrentWatchingEvent(EventResultModel event) {
+        this.setHeader(event);
     }
 
     public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
         this.onEventClickListener = onEventClickListener;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        @InjectView(R.id.event_picture) ImageView picture;
-        @InjectView(R.id.event_title) TextView title;
-        @InjectView(R.id.event_author) TextView author;
-        @InjectView(R.id.event_date) TextView date;
-        @InjectView(R.id.event_watchers) TextView watchers;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.inject(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    EventResultModel eventSelected = events.get(ViewHolder.this.getPosition());
-                    onEventClickListener.onEventClick(eventSelected.getEventModel());
-                }
-            });
-        }
     }
 
     public interface OnEventClickListener {

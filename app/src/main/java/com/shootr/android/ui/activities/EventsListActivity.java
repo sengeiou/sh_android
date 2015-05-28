@@ -63,7 +63,7 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new EventsListAdapter(picasso, getResources());
+        adapter = new EventsListAdapter(picasso);
         eventsList.setAdapter(adapter);
 
         adapter.setOnEventClickListener(new EventsListAdapter.OnEventClickListener() {
@@ -170,8 +170,8 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
         adapter.setCurrentCheckedInEvent(eventId);
     }
 
-    @Override public void setCurrentWatchingEventId(String eventId) {
-        adapter.setCurrentWatchingEvent(eventId);
+    @Override public void setCurrentWatchingEventId(EventResultModel event) {
+        adapter.setCurrentWatchingEvent(event);
     }
 
     @Override public void showContent() {

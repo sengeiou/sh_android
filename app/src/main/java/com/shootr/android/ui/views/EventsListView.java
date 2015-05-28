@@ -10,7 +10,7 @@ public interface EventsListView extends LoadDataView {
 
     void setCurrentCheckedInEventId(String eventId);
 
-    void setCurrentWatchingEventId(String eventId);
+    void setCurrentWatchingEventId(EventResultModel eventId);
 
     void showContent();
 
