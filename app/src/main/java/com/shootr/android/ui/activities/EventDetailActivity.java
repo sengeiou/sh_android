@@ -18,10 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,7 +28,6 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
-import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.views.EventDetailView;
@@ -110,8 +105,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         initializeViews();
         setupActionbar();
 
-        Bundle bundle = getIntent().getExtras();
-        idEvent = bundle.getString(EXTRA_EVENT_ID);
+        idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
         initializePresenter(idEvent);
     }
 
@@ -165,7 +159,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         presenter.clickAuthor();
     }
 
-    @OnClick({R.id.event_detail_media, R.id.event_detail_media_number})
+    @OnClick(R.id.event_detail_media)
     public void onMediaClick() {
         presenter.clickMedia();
     }
