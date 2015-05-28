@@ -6,10 +6,8 @@ public class ForgotPasswordResult {
     private String userName;
     private String emailEncripted;
 
-    public ForgotPasswordResult(String idUser, String userName, String emailEncripted) {
-        this.idUser = idUser;
-        this.userName = userName;
-        this.emailEncripted = emailEncripted;
+    public ForgotPasswordResult() {
+
     }
 
     public String getIdUser() {
