@@ -139,13 +139,13 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
-            this.renderMediaCount(idEvent);
+            this.loadMediaCount();
             this.showViewDetail();
         }
         this.hideViewLoading();
     }
 
-    private void renderMediaCount(String idEvent) {
+    private void loadMediaCount() {
         eventMediaCountInteractor.getEventMediaCount(idEvent, new Interactor.Callback<Integer>() {
               @Override public void onLoaded(Integer count) {
                   Integer mediaCount = count;
