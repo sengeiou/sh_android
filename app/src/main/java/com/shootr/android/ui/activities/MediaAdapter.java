@@ -14,25 +14,27 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
-import com.squareup.picasso.Picasso;
+import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 
-public class MediaAdapter extends RecyclerView.Adapter {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private Context context;
     private List<ShotModel> shotsWithMedia;
+    private final PicassoWrapper picasso;
 
-    public MediaAdapter(Context context, List<ShotModel> shotsWithMedia) {
+    public MediaAdapter(Context context, List<ShotModel> shotsWithMedia, PicassoWrapper picasso) {
         this.context = context;
         this.shotsWithMedia = shotsWithMedia;
+        this.picasso = picasso;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View layoutView = LayoutInflater
           .from(viewGroup.getContext())
-          .inflate(R.layout.event_media_layout, null);
-        return new MediaItemHolder(layoutView, new TimelineAdapter.VideoClickListener() {
+          .inflate(R.layout.event_media_layout, viewGroup, false);
+        return new ViewHolder(layoutView, new TimelineAdapter.VideoClickListener() {
             @Override
             public void onClick(String url) {
                 onVideoClick(url);
@@ -41,11 +43,11 @@ public class MediaAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final ShotModel shotModel = shotsWithMedia.get(position);
-        MediaItemHolder mediaItemHolder = (MediaItemHolder) viewHolder;
+        ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
         mediaItemHolder.shotModel = shotModel;
-        Picasso.with(context).load(shotModel.getImage()).into(mediaItemHolder.mediaImage);
+        picasso.load(shotModel.getImage()).into(mediaItemHolder.mediaImage);
         mediaItemHolder.bindMedia(shotModel);
     }
 
@@ -61,21 +63,20 @@ public class MediaAdapter extends RecyclerView.Adapter {
         return shotsWithMedia.size();
     }
 
-    public static class MediaItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ShotModel shotModel;
-        public ImageView mediaImage;
 
         @InjectView(R.id.shot_video_frame) View videoFrame;
         @InjectView(R.id.shot_video_duration) TextView videoDuration;
+        @InjectView(R.id.event_media_item) ImageView mediaImage;
 
         private TimelineAdapter.VideoClickListener videoClickListener;
 
-        public MediaItemHolder(View itemView, final TimelineAdapter.VideoClickListener videoClickListener) {
+        public ViewHolder(View itemView, final TimelineAdapter.VideoClickListener videoClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             this.videoClickListener = videoClickListener;
-            this.mediaImage = (ImageView) itemView.findViewById(R.id.event_media_item);
         }
 
         public void bindMedia(final ShotModel shotModel){
