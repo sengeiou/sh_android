@@ -18,19 +18,18 @@ public class ResetPasswordPresenter implements Presenter {
     private final ResetPasswordInteractor resetPasswordInteractor;
     private final ErrorMessageFactory errorMessageFactory;
 
-    //TODO implementar el constructor
     @Inject public ResetPasswordPresenter(ResetPasswordInteractor resetPasswordInteractor,
       ErrorMessageFactory errorMessageFactory){
         this.resetPasswordInteractor = resetPasswordInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(ResetPasswordView resetPasswordView){
-        setView(resetPasswordView);
+    protected void setView(ResetPasswordView view) {
+        this.resetPasswordView = view;
     }
 
-    public void setView(ResetPasswordView view) {
-        this.resetPasswordView = view;
+    public void initialize(ResetPasswordView resetPasswordView){
+        this.setView(resetPasswordView);
     }
 
     public void inputTextChanged() {
