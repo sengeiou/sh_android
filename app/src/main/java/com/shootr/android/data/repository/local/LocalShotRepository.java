@@ -8,7 +8,6 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -52,11 +51,11 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Integer getMediaCountByIdEvent(String idEvent, String idUser) {
-        return localShotDataSource.getEventMediaCount(idEvent, idUser);
+        return localShotDataSource.getEventMediaShotsByUserCount(idEvent, idUser);
     }
 
     @Override public List<Shot> getMediaByIdEvent(String idEvent, String userId) {
-        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getEventMedia(idEvent, userId);
+        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getEventMediaShotsByUser(idEvent, userId);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }

@@ -50,11 +50,11 @@ public class DatabaseShotDataSource implements ShotDataSource {
         return shotManager.getRepliesTo(shotId);
     }
 
-    @Override public Integer getEventMediaCount(String idEvent, String idUser) {
+    @Override public Integer getEventMediaShotsByUserCount(String idEvent, String idUser) {
         return shotManager.getEventMediaCount(idEvent, idUser);
     }
 
-    @Override public List<ShotEntity> getEventMedia(String idEvent, String userId) {
+    @Override public List<ShotEntity> getEventMediaShotsByUser(String idEvent, String userId) {
         return shotManager.getEventMedia(idEvent, userId);
     }
 }

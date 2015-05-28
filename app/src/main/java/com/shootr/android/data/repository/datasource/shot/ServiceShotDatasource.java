@@ -76,22 +76,20 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public Integer getEventMediaCount(String idEvent, String idUser) {
+    @Override public Integer getEventMediaShotsByUserCount(String idEvent, String idUser) {
         try {
             return shootrService.getEventMediaCount(idEvent, idUser);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ServerCommunicationException(e);
         }
-        return 0;
     }
 
-    @Override public List<ShotEntity> getEventMedia(String idEvent, String userId) {
+    @Override public List<ShotEntity> getEventMediaShotsByUser(String idEvent, String userId) {
         try {
             return shootrService.getEventMedia(idEvent, userId);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ServerCommunicationException(e);
         }
-        return null;
     }
 
     private List<ShotEntity> filterSyncShots(List<ShotEntity> shotEntities) {
