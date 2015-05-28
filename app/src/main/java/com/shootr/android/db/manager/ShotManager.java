@@ -298,15 +298,18 @@ public class ShotManager extends  AbstractManager{
         return resultShots.size();
     }
 
-    public List<ShotEntity> getEventMedia(String idEvent, String userId) {
-        String usersSelection = ShotTable.ID_USER + " = ?";
+    public List<ShotEntity> getEventMediaShots(String idEvent, List<String> idUsers) {
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
-        String[] whereArguments = new String[2];
+        String[] whereArguments = new String[idUsers.size()+1];
 
-        whereArguments[0] = String.valueOf(userId);
-        whereArguments[1] = String.valueOf(idEvent);
+        for (int i = 0; i < idUsers.size(); i++) {
+            whereArguments[i] = String.valueOf(idUsers.get(i));
+        }
+
+        whereArguments[idUsers.size()] = String.valueOf(idEvent);
 
         String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
 

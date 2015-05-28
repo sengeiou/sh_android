@@ -60,8 +60,8 @@ public class SyncShotRepository implements ShotRepository {
         return remoteShotDataSource.getEventMediaShotsCount(idEvent, idUsers);
     }
 
-    @Override public List<Shot> getMediaByIdEvent(String idEvent, String userId) {
-        List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getEventMediaShotsByUser(idEvent, userId);
+    @Override public List<Shot> getMediaByIdEvent(String idEvent, List<String> userId) {
+        List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getEventMediaShots(idEvent, userId);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }

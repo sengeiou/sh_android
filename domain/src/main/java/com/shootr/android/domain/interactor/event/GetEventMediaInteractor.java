@@ -68,11 +68,7 @@ public class GetEventMediaInteractor implements Interactor {
     }
 
     private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
-        List<Shot> shots = new ArrayList<>();
-        for (String userId : peopleIds) {
-            shots.addAll(shotRepository.getMediaByIdEvent(idEvent, userId));
-        }
-        return shots;
+        return shotRepository.getMediaByIdEvent(idEvent, peopleIds);
     }
 
     private List<String> getPeopleInEvent(List<User> people) {

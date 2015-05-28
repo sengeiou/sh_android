@@ -21,5 +21,5 @@ public interface ShotDataSource {
 
     Integer getEventMediaShotsCount(String idEvent, List<String> idUser);
 
-    List<ShotEntity> getEventMediaShotsByUser(String idEvent, String userId);
+    List<ShotEntity> getEventMediaShots(String idEvent, List<String> userId);
 }

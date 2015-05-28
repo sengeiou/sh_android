@@ -141,8 +141,8 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
 
-    public GenericDto getUserMediaShotsByEventAndUser(String idEvent, String userId) {
-        FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(userId) //
+    public GenericDto getMediaShotsByEvent(String idEvent, List<String> idUsers) {
+        FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
