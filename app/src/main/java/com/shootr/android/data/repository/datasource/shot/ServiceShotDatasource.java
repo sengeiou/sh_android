@@ -76,7 +76,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public int getEventMediaCount(String idEvent, String idUser) {
+    @Override public Integer getEventMediaCount(String idEvent, String idUser) {
         try {
             return shootrService.getEventMediaCount(idEvent, idUser);
         } catch (IOException e) {

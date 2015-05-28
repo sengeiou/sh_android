@@ -267,7 +267,7 @@ public class ShotManager extends  AbstractManager{
         }
     }
 
-    public int getEventMediaCount(String idEvent, String idUser) {
+    public Integer getEventMediaCount(String idEvent, String idUser) {
         String usersSelection = ShotTable.ID_USER + " = ?";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";

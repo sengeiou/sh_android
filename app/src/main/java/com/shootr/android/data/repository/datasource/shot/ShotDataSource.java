@@ -19,7 +19,7 @@ public interface ShotDataSource {
 
     List<ShotEntity> getReplies(String shotId);
 
-    int getEventMediaCount(String idEvent, String idUser);
+    Integer getEventMediaCount(String idEvent, String idUser);
 
     List<ShotEntity> getEventMedia(String idEvent, String userId);
 }

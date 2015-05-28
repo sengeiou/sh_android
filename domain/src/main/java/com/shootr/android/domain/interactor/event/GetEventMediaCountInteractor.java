@@ -25,7 +25,7 @@ public class GetEventMediaCountInteractor implements Interactor {
 
     private String idEvent;
     private String idUser;
-    private Callback callback;
+    private Callback<Integer> callback;
 
     @Inject public GetEventMediaCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote ShotRepository remoteShotRepository,
