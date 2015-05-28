@@ -11,6 +11,7 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -117,8 +118,9 @@ public class ShotDtoFactory {
         return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
     }
 
-    public GenericDto getUserMediaShotsCountByEventAndUser(String idEvent, String idUser) {
-        FilterDto eventsFilter = and(ShotTable.ID_USER).isEqualTo(idUser) //
+    public GenericDto getMediaShotsCountByEvent(String idEvent, List<String> idUsers) {
+        FilterDto eventsFilter = and(
+          or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //

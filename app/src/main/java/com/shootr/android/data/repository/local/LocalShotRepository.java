@@ -4,8 +4,8 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
 import java.util.List;
@@ -50,8 +50,8 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 
-    @Override public Integer getMediaCountByIdEvent(String idEvent, String idUser) {
-        return localShotDataSource.getEventMediaShotsByUserCount(idEvent, idUser);
+    @Override public Integer getMediaCountByIdEvent(String idEvent, List<String> idUser) {
+        return localShotDataSource.getEventMediaShotsCount(idEvent, idUser);
     }
 
     @Override public List<Shot> getMediaByIdEvent(String idEvent, String userId) {

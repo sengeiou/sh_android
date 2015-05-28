@@ -67,11 +67,7 @@ public class GetEventMediaCountInteractor implements Interactor {
     }
 
     private Integer getMediaCountFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
-        Integer mediaCountByIdEvent = 0;
-        for (String userId : peopleIds) {
-            mediaCountByIdEvent += shotRepository.getMediaCountByIdEvent(idEvent, userId);
-        }
-        return mediaCountByIdEvent;
+        return shotRepository.getMediaCountByIdEvent(idEvent, peopleIds);
     }
 
     private List<String> getPeopleInEvent(List<User> people) {

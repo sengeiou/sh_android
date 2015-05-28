@@ -73,7 +73,7 @@ public interface ShootrService {
 
     UserEntity getUserByUsername(String username) throws IOException;
 
-    Integer getEventMediaCount(String idEvent, String idUser) throws IOException;
+    Integer getEventMediaShotsCount(String idEvent, List<String> idUser) throws IOException;
 
     List<ShotEntity> getEventMedia(String idEvent, String userId) throws IOException;
 }

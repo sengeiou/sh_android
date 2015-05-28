@@ -3,16 +3,14 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
@@ -267,15 +265,18 @@ public class ShotManager extends  AbstractManager{
         }
     }
 
-    public Integer getEventMediaCount(String idEvent, String idUser) {
-        String usersSelection = ShotTable.ID_USER + " = ?";
+    public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
-        String[] whereArguments = new String[2];
+        String[] whereArguments = new String[idUsers.size()+1];
 
-        whereArguments[0] = String.valueOf(idUser);
-        whereArguments[1] = String.valueOf(idEvent);
+        for (int i = 0; i < idUsers.size(); i++) {
+            whereArguments[i] = String.valueOf(idUsers.get(i));
+        }
+
+        whereArguments[idUsers.size()] = String.valueOf(idEvent);
 
         String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
 
