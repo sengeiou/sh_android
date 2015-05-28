@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -99,8 +98,6 @@ public class EventTimelineFragment extends BaseFragment
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
-
-    private String idEvent;
     //endregion
 
     public static EventTimelineFragment newInstance(String eventId, String eventTitle) {
@@ -140,7 +137,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        idEvent = getArguments().getString(EXTRA_EVENT_ID);
+        String idEvent = getArguments().getString(EXTRA_EVENT_ID);
         initializeToolbar();
         initializePresenters(idEvent);
     }
@@ -166,9 +163,7 @@ public class EventTimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                intent.putExtra(EXTRA_EVENT_ID, idEvent);
-                startActivity(intent);
+                watchNumberPresenter.optionsItemSelected();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -204,7 +199,7 @@ public class EventTimelineFragment extends BaseFragment
     private void initializePresenters(String idEvent) {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
-        watchNumberPresenter.initialize(this);
+        watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);
     }
 
@@ -481,6 +476,12 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void hideLoadingOldShots() {
         footerProgress.setVisibility(View.GONE);
+    }
+
+    @Override public void navigateToEventDetail(String idEvent) {
+        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, idEvent);
+        startActivity(intent);
     }
 
     @Override public void showEmpty() {

@@ -9,4 +9,8 @@ public class NullWatchNumberView implements WatchNumberView {
     @Override public void hideWatchingPeopleCount() {
         /* no-op */
     }
+
+    @Override public void navigateToEventDetail(String idEvent) {
+        /* no-op */
+    }
 }
