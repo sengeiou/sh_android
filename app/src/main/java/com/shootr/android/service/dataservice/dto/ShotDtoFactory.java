@@ -1,10 +1,10 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -123,6 +123,7 @@ public class ShotDtoFactory {
           or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
+          .and(ShotTable.ROOT_TYPE).isEqualTo(ShotType.COMMENT) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .build();
 
@@ -145,6 +146,7 @@ public class ShotDtoFactory {
         FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
+          .and(ShotTable.ROOT_TYPE).isEqualTo(ShotType.COMMENT) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .build();
 
