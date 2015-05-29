@@ -163,7 +163,7 @@ public class EventTimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                watchNumberPresenter.optionsItemSelected();
+                watchNumberPresenter.onWatchNumberClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

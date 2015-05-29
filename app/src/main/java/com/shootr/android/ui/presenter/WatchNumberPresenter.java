@@ -77,7 +77,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         }
     }
 
-    public void optionsItemSelected() {
+    public void onWatchNumberClick() {
         watchNumberView.navigateToEventDetail(idEvent);
     }
 }
