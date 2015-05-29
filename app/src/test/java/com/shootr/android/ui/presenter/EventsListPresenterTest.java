@@ -148,8 +148,8 @@ public class EventsListPresenterTest {
     private void setupSelectEventInteractorCallbacksEvent() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Event> callback = (Interactor.Callback<Event>) invocation.getArguments()[1];
-                callback.onLoaded(selectedEvent());
+                Interactor.Callback<EventSearchResult> callback = (Interactor.Callback<EventSearchResult>) invocation.getArguments()[1];
+                callback.onLoaded(eventResult());
                 return null;
             }
         }).when(selectEventInteractor).selectEvent(anyString(), any(Interactor.Callback.class));

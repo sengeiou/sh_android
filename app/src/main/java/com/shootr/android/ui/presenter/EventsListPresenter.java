@@ -97,7 +97,10 @@ public class EventsListPresenter implements Presenter {
             eventsListView.hideLoading();
             this.renderViewEventsList(eventResultModels);
             this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
-            this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(resultList.getCurrentWatchingEvent()));
+            EventSearchResult currentWatchingEvent = resultList.getCurrentWatchingEvent();
+            if (currentWatchingEvent != null) {
+                this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
+            }
         }
     }
 
