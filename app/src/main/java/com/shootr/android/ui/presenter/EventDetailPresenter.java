@@ -44,6 +44,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
+    private Integer eventMediaCount;
+
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
@@ -148,6 +150,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private void loadMediaCount() {
         eventMediaCountInteractor.getEventMediaCount(idEvent, new Interactor.Callback<Integer>() {
               @Override public void onLoaded(Integer count) {
+                  eventMediaCount = count;
                   eventDetailView.showMediaCount();
                   eventDetailView.setMediaCount(count);
               }
@@ -264,6 +267,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void clickMedia() {
-        eventDetailView.navigateToMedia(idEvent);
+        eventDetailView.navigateToMedia(idEvent, eventMediaCount);
     }
 }

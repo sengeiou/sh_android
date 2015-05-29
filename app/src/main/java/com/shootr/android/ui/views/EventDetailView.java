@@ -50,7 +50,7 @@ public interface EventDetailView extends LoadDataView {
 
     void setMediaCount(Integer mediaCount);
 
-    void navigateToMedia(String idEvent);
+    void navigateToMedia(String idEvent, Integer eventMediaCount);
 
     void showMediaCount();
 }
