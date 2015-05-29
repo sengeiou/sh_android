@@ -47,4 +47,12 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public List<ShotEntity> getReplies(String shotId) {
         return shotManager.getRepliesTo(shotId);
     }
+
+    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+        return shotManager.getEventMediaShotsCount(idEvent, idUsers);
+    }
+
+    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
+        return shotManager.getEventMediaShots(idEvent, userIds);
+    }
 }

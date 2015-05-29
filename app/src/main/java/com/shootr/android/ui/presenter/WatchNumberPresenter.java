@@ -17,6 +17,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     private final WatchNumberInteractor watchNumberInteractor;
 
     private WatchNumberView watchNumberView;
+    private String idEvent;
 
     @Inject public WatchNumberPresenter(@Main Bus bus, WatchNumberInteractor watchNumberInteractor) {
         this.bus = bus;
@@ -27,8 +28,9 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         this.watchNumberView = watchNumberView;
     }
 
-    public void initialize(WatchNumberView watchNumberView) {
+    public void initialize(WatchNumberView watchNumberView, String idEvent) {
         this.setView(watchNumberView);
+        this.idEvent = idEvent;
         this.retrieveData();
     }
 
@@ -73,5 +75,9 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         } else {
             watchNumberView.hideWatchingPeopleCount();
         }
+    }
+
+    public void onWatchNumberClick() {
+        watchNumberView.navigateToEventDetail(idEvent);
     }
 }

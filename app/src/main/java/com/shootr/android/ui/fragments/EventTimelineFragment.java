@@ -164,7 +164,7 @@ public class EventTimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                startActivity(new Intent(getActivity(), EventDetailActivity.class));
+                watchNumberPresenter.onWatchNumberClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -200,7 +200,7 @@ public class EventTimelineFragment extends BaseFragment
     private void initializePresenters(String idEvent) {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
-        watchNumberPresenter.initialize(this);
+        watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);
     }
 
@@ -477,6 +477,12 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void hideLoadingOldShots() {
         footerProgress.setVisibility(View.GONE);
+    }
+
+    @Override public void navigateToEventDetail(String idEvent) {
+        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, idEvent);
+        startActivity(intent);
     }
 
     @Override public void showEmpty() {

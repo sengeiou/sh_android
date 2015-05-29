@@ -1,6 +1,5 @@
 package com.shootr.android.ui.views;
 
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
@@ -48,4 +47,10 @@ public interface EventDetailView extends LoadDataView {
     void showEditEventButton();
 
     void hideEditEventButton();
+
+    void setMediaCount(Integer mediaCount);
+
+    void navigateToMedia(String idEvent, Integer eventMediaCount);
+
+    void showMediaCount();
 }

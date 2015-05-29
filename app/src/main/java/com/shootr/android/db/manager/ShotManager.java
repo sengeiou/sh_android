@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.data.entity.ShotEntity;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class ShotManager extends  AbstractManager{
 
@@ -265,5 +267,71 @@ public class ShotManager extends  AbstractManager{
         } else {
             return 0L;
         }
+    }
+
+    public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
+        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+
+        String[] whereArguments = new String[idUsers.size()+1];
+
+        for (int i = 0; i < idUsers.size(); i++) {
+            whereArguments[i] = String.valueOf(idUsers.get(i));
+        }
+
+        whereArguments[idUsers.size()] = String.valueOf(idEvent);
+
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+
+        return resultShots.size();
+    }
+
+    public List<ShotEntity> getEventMediaShots(String idEvent, List<String> idUsers) {
+        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
+        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+
+        String[] whereArguments = new String[idUsers.size()+1];
+
+        for (int i = 0; i < idUsers.size(); i++) {
+            whereArguments[i] = String.valueOf(idUsers.get(i));
+        }
+
+        whereArguments[idUsers.size()] = String.valueOf(idEvent);
+
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC");
+
+        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                resultShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+
+        return resultShots;
     }
 }

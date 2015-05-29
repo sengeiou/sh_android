@@ -3,6 +3,7 @@ package com.shootr.android.ui;
 import com.shootr.android.ui.activities.ActivityTimelineActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.EventMediaActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -53,6 +54,7 @@ import dagger.Provides;
                 WatchersView.class,
                 EventsListActivity.class,
                 NewEventActivity.class,
+                EventMediaActivity.class,
                 UpdateWarningActivity.class, TimezonePickerActivity.class, DraftsActivity.class, DraftsPresenter.class
         },
         complete = false

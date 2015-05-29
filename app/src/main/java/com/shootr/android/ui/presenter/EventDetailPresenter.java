@@ -7,9 +7,8 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
+import com.shootr.android.domain.interactor.event.GetEventMediaCountInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
-import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;
-import com.shootr.android.domain.interactor.user.PerformCheckinInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -37,6 +36,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final WatchersTimeFormatter watchersTimeFormatter;
+    private final GetEventMediaCountInteractor eventMediaCountInteractor;
 
     private EventDetailView eventDetailView;
     private String idEvent;
@@ -44,10 +44,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private UserModel currentUserWatchingModel;
     private EventModel eventModel;
 
+    private Integer eventMediaCount;
+
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
-      WatchersTimeFormatter watchersTimeFormatter) {
+      WatchersTimeFormatter watchersTimeFormatter, GetEventMediaCountInteractor eventMediaCountInteractor) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.changeEventPhotoInteractor = changeEventPhotoInteractor;
@@ -55,6 +57,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.watchersTimeFormatter = watchersTimeFormatter;
+        this.eventMediaCountInteractor = eventMediaCountInteractor;
     }
     //endregion
 
@@ -72,7 +75,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //region Edit event
     public void editEventClick() {
         eventDetailView.showEditEventPhotoOrInfo();
-
     }
 
     public void editEventInfo() {
@@ -92,23 +94,23 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
-        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(), photoFile,
-                new ChangeEventPhotoInteractor.Callback() {
-                    @Override
-                    public void onLoaded(Event event) {
-                        renderEventInfo(event);
-                        eventDetailView.hideLoadingPictureUpload();
-                        eventDetailView.showEditPicture(event.getPicture());
-                    }
-                }, new Interactor.ErrorCallback() {
-                    @Override
-                    public void onError(ShootrException error) {
-                        eventDetailView.showEditPicture(eventModel.getPicture());
-                        eventDetailView.hideLoadingPictureUpload();
-                        showImageUploadError();
-                        Timber.e(error, "Error changing event photo");
-                    }
-                });
+        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(),
+          photoFile,
+          new ChangeEventPhotoInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  renderEventInfo(event);
+                  eventDetailView.hideLoadingPictureUpload();
+                  eventDetailView.showEditPicture(event.getPicture());
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventDetailView.showEditPicture(eventModel.getPicture());
+                  eventDetailView.hideLoadingPictureUpload();
+                  showImageUploadError();
+                  Timber.e(error, "Error changing event photo");
+              }
+          });
     }
     //endregion
 
@@ -124,8 +126,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void getEventInfo() {
         eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(EventInfo eventInfo) {
+            @Override public void onLoaded(EventInfo eventInfo) {
                 onEventInfoLoaded(eventInfo);
             }
         });
@@ -140,9 +141,20 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
+            this.loadMediaCount();
             this.showViewDetail();
         }
         this.hideViewLoading();
+    }
+
+    private void loadMediaCount() {
+        eventMediaCountInteractor.getEventMediaCount(idEvent, new Interactor.Callback<Integer>() {
+              @Override public void onLoaded(Integer count) {
+                  eventMediaCount = count;
+                  eventDetailView.showMediaCount();
+                  eventDetailView.setMediaCount(count);
+              }
+          });
     }
 
     private void showViewDetail() {
@@ -252,5 +264,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     @Override public void pause() {
         bus.unregister(this);
+    }
+
+    public void clickMedia() {
+        eventDetailView.navigateToMedia(idEvent, eventMediaCount);
     }
 }

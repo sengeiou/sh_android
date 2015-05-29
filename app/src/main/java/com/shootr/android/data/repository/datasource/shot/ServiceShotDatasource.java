@@ -76,6 +76,22 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
+    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+        try {
+            return shootrService.getEventMediaShotsCount(idEvent, idUsers);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
+        try {
+            return shootrService.getEventMediaShots(idEvent, userIds);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     private List<ShotEntity> filterSyncShots(List<ShotEntity> shotEntities) {
         notifySyncTrigger(shotEntities);
         List<ShotEntity> filtered = new ArrayList<>();

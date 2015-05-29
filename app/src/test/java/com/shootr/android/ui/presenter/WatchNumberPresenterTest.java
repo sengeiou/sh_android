@@ -31,7 +31,7 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
     private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
-    private static final String EVENT_ID = "3L";
+    public static final String EVENT_ID_STUB = "event_id";
 
     @Mock WatchNumberInteractor watchNumberInteractor;
     @Mock Bus bus;
@@ -52,7 +52,7 @@ public class WatchNumberPresenterTest {
 
     @Test
     public void shouldLoadWatchNumberWhenInitialized() throws Exception {
-        presenter.initialize(watchNumberView);
+        presenter.initialize(watchNumberView, EVENT_ID_STUB);
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
@@ -142,7 +142,7 @@ public class WatchNumberPresenterTest {
     }
 
     private EventChanged.Event eventChangedEvent() {
-        return new EventChanged.Event(EVENT_ID);
+        return new EventChanged.Event(EVENT_ID_STUB);
     }
 
     private EventChanged.Event exitEventEvent() {

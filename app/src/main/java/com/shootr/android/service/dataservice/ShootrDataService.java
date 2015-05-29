@@ -39,14 +39,11 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class ShootrDataService implements ShootrService {
@@ -540,6 +537,38 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return null;
+    }
+
+    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
+        Integer numberOfMedia = 0;
+        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByEvent(idEvent, idUsers);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            MetadataDto metadata = ops[0].getMetadata();
+            numberOfMedia = metadata.getTotalItems().intValue();
+        }
+        return numberOfMedia;
+    }
+
+    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) throws IOException {
+        List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
+        GenericDto requestDto = shotDtoFactory.getMediaShotsByEvent(idEvent, userIds);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            MetadataDto md = ops[0].getMetadata();
+            Long items = md.getItems();
+            for(int i = 0; i< items; i++){
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                shotsByUserInEvent.add(shotEntityMapper.fromDto(dataItem));
+            }
+        }
+        return shotsByUserInEvent;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

@@ -6,4 +6,6 @@ public interface WatchNumberView {
     void showWatchingPeopleCount(Integer peopleWatchingCount);
 
     void hideWatchingPeopleCount();
+
+    void navigateToEventDetail(String idEvent);
 }

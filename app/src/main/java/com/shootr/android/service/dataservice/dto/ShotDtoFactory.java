@@ -11,6 +11,7 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -22,6 +23,7 @@ public class ShotDtoFactory {
     private static final String ALIAS_GET_SHOT = "GET_SHOT";
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
     private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
+    private static final String ALIAS_GET_MEDIA = "GET_MEDIA_SHOTS_FOR_EVENT";
     private static final int REPLIES_MAX_ITEMS = 50;
 
     private UtilityDtoFactory utilityDtoFactory;
@@ -114,5 +116,50 @@ public class ShotDtoFactory {
      */
     private long futureModifiedTimeToSkipServerCache() {
         return System.currentTimeMillis() + (1000L * 60L * 60L * 60L * 24L);
+    }
+
+    public GenericDto getMediaShotsCountByEvent(String idEvent, List<String> idUsers) {
+        FilterDto eventsFilter = and(
+          or(ShotTable.ID_USER).isIn(idUsers)) //
+          .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
+          .and(ShotTable.IMAGE).isNotEqualTo(null) //
+          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder() //
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .entity(ShotTable.TABLE)
+          .filter(eventsFilter)
+          .items(0)
+          .build();
+
+        OperationDto op = new OperationDto.Builder() //
+          .metadata(md) //
+          .putData(shotEntityMapper.toDto(null)) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
+    }
+
+    public GenericDto getMediaShotsByEvent(String idEvent, List<String> idUsers) {
+        FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
+          .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
+          .and(ShotTable.IMAGE).isNotEqualTo(null) //
+          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder() //
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .entity(ShotTable.TABLE)
+          .items(100)
+          .filter(eventsFilter)
+          .build();
+
+        OperationDto op = new OperationDto.Builder() //
+          .metadata(md) //
+          .putData(shotEntityMapper.toDto(null)) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
 }

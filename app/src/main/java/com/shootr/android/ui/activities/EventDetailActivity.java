@@ -51,7 +51,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private static final int REQUEST_TAKE_PHOTO = 5;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
-    private static final String EXTRA_EVENT_ID = "event";
+    private static final String EXTRA_EVENT_ID = "eventId";
+    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
 
     @InjectView(R.id.scroll) ObservableScrollView scrollView;
     @InjectView(R.id.scroll_child) View scrollChild;
@@ -76,6 +77,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
+
+    @InjectView(R.id.event_detail_media) TextView eventMedia;
+    @InjectView(R.id.event_detail_media_number) TextView eventMediaNumber;
 
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -151,6 +155,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @OnClick(R.id.event_author)
     public void onAuthorClick() {
         presenter.clickAuthor();
+    }
+
+    @OnClick(R.id.event_detail_media)
+    public void onMediaClick() {
+        presenter.clickMedia();
     }
 
     //region Edit photo
@@ -475,6 +484,21 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (editMenuItem != null) {
             updateEditIcon();
         }
+    }
+
+    @Override public void setMediaCount(Integer mediaCount) {
+        eventMediaNumber.setText(mediaCount.toString());
+    }
+
+    @Override public void navigateToMedia(String idEvent, Integer eventMediaCount) {
+        Intent intent = new Intent(this, EventMediaActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, idEvent);
+        intent.putExtra(EXTRA_EVENT_MEDIA_COUNT, eventMediaCount);
+        this.startActivity(intent);
+    }
+
+    @Override public void showMediaCount() {
+        eventMediaNumber.setVisibility(View.VISIBLE);
     }
 
     @Override public void showEmpty() {
