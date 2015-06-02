@@ -19,8 +19,6 @@ public class EventModelMapper {
         eventModel.setTitle(event.getTitle());
         eventModel.setPicture(event.getPicture());
         eventModel.setTag(event.getTag());
-        long startDateMilliseconds = event.getStartDate().getTime();
-        eventModel.setStartDate(startDateMilliseconds);
         eventModel.setAmIAuthor(event.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         eventModel.setTimezone(event.getTimezone());
         eventModel.setAuthorId(event.getAuthorId());

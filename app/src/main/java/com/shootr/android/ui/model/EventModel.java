@@ -11,7 +11,6 @@ public class EventModel {
     private String picture;
     private String tag;
     private String timezone;
-    private long startDate;
     private boolean amIAuthor;
 
     public String getIdEvent() {
@@ -61,14 +60,6 @@ public class EventModel {
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public long getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(long startDate) {
-        this.startDate = startDate;
     }
 
     public boolean amIAuthor() {
