@@ -17,7 +17,7 @@ import javax.inject.Singleton;
   complete = false,
   library = true,
   injects = {
-    WatchingRequestModelMapper.class, EventResultModelMapper.class
+    EventResultModelMapper.class
   }
 )
 public class MapperModule {
