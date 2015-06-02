@@ -31,8 +31,12 @@ public class LocalWatchersRepository implements WatchersRepository {
         return watchers;
     }
 
-    private Map<String, Integer> getWatchersCountByEvents() {
+    @Override
+    public Map<String, Integer> getWatchers() {
+        return getWatchersCountByEvents();
+    }
 
+    private Map<String, Integer> getWatchersCountByEvents() {
         List<User> people = localUserRepository.getPeople();
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
 
