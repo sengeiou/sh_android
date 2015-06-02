@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import org.joda.time.MutableDateTime;
-import org.joda.time.base.AbstractDateTime;
 import timber.log.Timber;
 
 public class NewEventPresenter implements Presenter {
@@ -37,10 +36,8 @@ public class NewEventPresenter implements Presenter {
     private NewEventView newEventView;
 
     private boolean isNewEvent;
-    private MutableDateTime selectedStartDateTime;
     private TimeZone selectedTimeZone;
     private String preloadedTitle;
-    private long preloadedStartDate;
     private String preloadedEventId;
     private String preloadedTimezone;
     private String currentTitle;
@@ -65,7 +62,6 @@ public class NewEventPresenter implements Presenter {
         this.isNewEvent = optionalIdEventToEdit == null;
         if (isNewEvent) {
             this.setDefaultTimezone();
-            this.setDefaultStartDateTime();
         } else {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
@@ -94,15 +90,6 @@ public class NewEventPresenter implements Presenter {
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
-
-        preloadedStartDate = fakeDateFromRealTimezone(eventModel.getStartDate());
-        setStartDateTime(new MutableDateTime(preloadedStartDate));
-    }
-
-    private void setDefaultStartDateTime() {
-        MutableDateTime currentDateTime = new MutableDateTime();
-        roundDateUp(currentDateTime);
-        setStartDateTime(currentDateTime);
     }
 
     private void roundDateUp(MutableDateTime currentDateTime) {
@@ -128,19 +115,6 @@ public class NewEventPresenter implements Presenter {
         this.updateDoneButtonStatus();
     }
 
-    public void startDateSelected(int year, int month, int day) {
-        selectedStartDateTime.setYear(year);
-        selectedStartDateTime.setMonthOfYear(month);
-        selectedStartDateTime.setDayOfMonth(day);
-        setStartDateTime(selectedStartDateTime);
-    }
-
-    public void startTimeSelected(int hour, int minutes) {
-        selectedStartDateTime.setHourOfDay(hour);
-        selectedStartDateTime.setMinuteOfHour(minutes);
-        setStartDateTime(selectedStartDateTime);
-    }
-
     public void pickTimezone() {
         newEventView.navigateToPickTimezone(selectedTimeZone.getID());
     }
@@ -152,23 +126,12 @@ public class NewEventPresenter implements Presenter {
 
     public void done() {
         newEventView.hideKeyboard();
-        if (isNewEvent && isInTimeRangeForNotification()) {
+        if (isNewEvent) {
             this.askNotificationConfirmation();
         } else {
             newEventView.showLoading();
             this.editEvent(preloadedEventId);
         }
-    }
-
-    private boolean isInTimeRangeForNotification() {
-        long realStartDate = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
-        long currentDate = System.currentTimeMillis();
-        long sixHoursAgo = currentDate - SIX_HOURS_MILLIS;
-        long sixHoursAhead = currentDate + SIX_HOURS_MILLIS;
-        boolean startsBefore6Hours = realStartDate < sixHoursAhead;
-        boolean startedAfter6HoursAgo = realStartDate > sixHoursAgo;
-        return startsBefore6Hours &&  startedAfter6HoursAgo;
-
     }
 
     private void askNotificationConfirmation() {
@@ -190,11 +153,9 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void sendEvent(String preloadedEventId) {
-        long startTimestamp = realDateFromFakeTimezone(selectedStartDateTime.getMillis());
         String title = filterTitle(newEventView.getEventTitle());
         createEventInteractor.sendEvent(preloadedEventId,
           title,
-          startTimestamp,
           selectedTimeZone.getID(),
           notifyCreation,
           new CreateEventInteractor.Callback() {
@@ -251,7 +212,6 @@ public class NewEventPresenter implements Presenter {
                     showViewTitleError(errorMessage);
                     break;
                 case EventValidator.FIELD_START_DATE:
-                    showViewStartDateError(errorMessage);
                     break;
                 default:
                     showViewError(errorMessage);
@@ -261,10 +221,6 @@ public class NewEventPresenter implements Presenter {
 
     private void showViewTitleError(String errorMessage) {
         newEventView.showTitleError(errorMessage);
-    }
-
-    private void showViewStartDateError(String errorMessage) {
-        newEventView.showStartDateError(errorMessage);
     }
 
     private void showViewError(String errorMessage) {
@@ -291,12 +247,6 @@ public class NewEventPresenter implements Presenter {
         return title.trim();
     }
 
-    private void setStartDateTime(MutableDateTime dateTime) {
-        selectedStartDateTime = dateTime;
-        this.setViewStartDateTime(dateTime);
-        this.updateDoneButtonStatus();
-    }
-
     private void setTimezone(TimeZone timeZone) {
         this.selectedTimeZone = timeZone;
         this.updateViewTimezone();
@@ -309,18 +259,8 @@ public class NewEventPresenter implements Presenter {
 
     private String timezoneDisplayText() {
         long timezoneTime;
-        if (selectedStartDateTime != null) {
-            timezoneTime = selectedStartDateTime.getMillis();
-        } else {
-            timezoneTime = System.currentTimeMillis();
-        }
+        timezoneTime = System.currentTimeMillis();
         return selectedTimeZone.getID() +" "+ dateFormatter.getGMT(selectedTimeZone, timezoneTime);
-    }
-
-    private void setViewStartDateTime(AbstractDateTime dateTime) {
-        long selectedDateTimeMillis = dateTime.getMillis();
-        newEventView.setStartDate(dateFormatter.getAbsoluteDate(selectedDateTimeMillis));
-        newEventView.setStartTime(timeFormatter.getAbsoluteTime(selectedDateTimeMillis));
     }
 
     private void updateDoneButtonStatus() {
@@ -329,7 +269,6 @@ public class NewEventPresenter implements Presenter {
 
     private boolean canSendEvent() {
         return isValidTitle() && (hasChangedTitle()
-          || hasChangedStartDate()
           || hasChangedTimezone());
     }
 
@@ -339,10 +278,6 @@ public class NewEventPresenter implements Presenter {
 
     private boolean isValidTitle() {
         return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
-    }
-
-    private boolean hasChangedStartDate() {
-        return selectedStartDateTime != null && selectedStartDateTime.getMillis() != preloadedStartDate;
     }
 
     private boolean hasChangedTitle() {

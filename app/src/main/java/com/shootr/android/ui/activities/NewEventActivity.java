@@ -16,16 +16,11 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
 import com.shootr.android.ui.views.NewEventView;
-import com.shootr.android.ui.widgets.DatePickerBuilder;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
-import com.shootr.android.ui.widgets.TimePickerBuilder;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
-
 import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
@@ -39,11 +34,8 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @InjectView(R.id.new_event_title) EditText titleView;
     @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
-    @InjectView(R.id.new_event_start_date) TextView startDateView;
-    @InjectView(R.id.new_event_start_time) TextView startTimeView;
     @InjectView(R.id.new_event_title_error) TextView titleErrorView;
     @InjectView(R.id.new_event_start_date_timezone) TextView timezoneView;
-    @InjectView(R.id.new_event_start_date_error) TextView startDateErrorView;
 
     private MenuItem doneMenuItem;
 
@@ -92,25 +84,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     //endregion
 
     //region Listeners
-    @OnClick(R.id.new_event_start_date)
-    public void onStartDateClick() {
-        DatePickerDialog datePickerDialog = DatePickerBuilder.builder().listener(new DatePickerBuilder.DateListener() {
-            @Override public void onDateSelected(int year, int month, int day) {
-                presenter.startDateSelected(year, month, day);
-            }
-        }).build();
-        datePickerDialog.show(getSupportFragmentManager(), "datepicker");
-    }
-
-    @OnClick(R.id.new_event_start_time)
-    public void onStartTimeClick() {
-        TimePickerDialog timePickerDialog = TimePickerBuilder.builder().listener(new TimePickerBuilder.TimeListener() {
-            @Override public void onTimeSelected(int hour, int minute) {
-                presenter.startTimeSelected(hour, minute);
-            }
-        }).build();
-        timePickerDialog.show(getSupportFragmentManager(), "timepicker");
-    }
 
     @OnClick(R.id.new_event_start_date_timezone)
     public void onTimezoneClick() {
@@ -147,15 +120,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     //endregion
 
     //region View Methods
-    @Override public void setStartDate(String dateText) {
-        resetStartDateError();
-        startDateView.setText(dateText);
-    }
-
-    @Override public void setStartTime(String timeText) {
-        resetStartDateError();
-        startTimeView.setText(timeText);
-    }
 
     @Override public void setEventTitle(String title) {
         titleLabelView.showLabelWithoutAnimation();
@@ -172,10 +136,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override public void showTitleError(String errorMessage) {
         titleErrorView.setText(errorMessage);
-    }
-
-    @Override public void showStartDateError(String errorMessage) {
-        startDateErrorView.setText(errorMessage);
     }
 
     @Override public void closeScreenWithResult(String eventId, String title) {
@@ -234,8 +194,5 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         titleErrorView.setError(null);
     }
 
-    private void resetStartDateError() {
-        startDateErrorView.setText(null);
-    }
     //endregion
 }
