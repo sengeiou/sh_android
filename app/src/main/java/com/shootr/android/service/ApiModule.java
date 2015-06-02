@@ -25,7 +25,7 @@ import retrofit.converter.JacksonConverter;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_API_URL = BuildConfig.DATA_SERVICES_ENDPOINT_BASE;
+    public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.DATA_SERVICES_ENDPOINT_BASE;
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
@@ -51,7 +51,7 @@ public final class ApiModule {
         return new Endpoint() {
             @Override
             public String getUrl() {
-                return PRODUCTION_API_URL;
+                return PRODUCTION_ENDPOINT_URL;
             }
 
             @Override
