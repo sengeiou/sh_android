@@ -1,7 +1,9 @@
 package com.shootr.android.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
+import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
 import com.squareup.okhttp.OkHttpClient;
@@ -26,6 +28,7 @@ import retrofit.converter.JacksonConverter;
 public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.DATA_SERVICES_ENDPOINT_BASE;
+    public static final String API_PATH_BASE = "/shootr-api/rest";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
@@ -37,10 +40,17 @@ public final class ApiModule {
 
     @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient) {
         return new RestAdapter.Builder() //
-          .setEndpoint(endpoint.getUrl()) //
+          .setEndpoint(endpoint.getUrl() + API_PATH_BASE) //
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
+          .setErrorHandler(new LoggableRetrofitErrorHandler()) //
+          .setLogLevel(RestAdapter.LogLevel.FULL) //TODO solo en debug
           .build();
+    }
+
+    @Provides
+    EventApiService provideEventApiService(RestAdapter restAdapter) {
+        return restAdapter.create(EventApiService.class);
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {
