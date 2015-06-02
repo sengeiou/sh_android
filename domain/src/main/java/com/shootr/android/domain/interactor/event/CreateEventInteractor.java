@@ -14,7 +14,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,7 +27,6 @@ public class CreateEventInteractor implements Interactor {
 
     private String idEvent;
     private String title;
-    private long startDate;
     private String timezoneId;
     private boolean notifyCreation;
     private Callback callback;
@@ -43,11 +41,10 @@ public class CreateEventInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendEvent(String idEvent, String title, long startDate, String timezoneId, boolean notifyCreation,
+    public void sendEvent(String idEvent, String title, String timezoneId, boolean notifyCreation,
       Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
-        this.startDate = startDate;
         this.timezoneId = timezoneId;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
@@ -80,8 +77,6 @@ public class CreateEventInteractor implements Interactor {
         String currentUserId = sessionRepository.getCurrentUserId();
         event.setAuthorId(currentUserId);
         event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
-        event.setStartDate(new Date(startDate));
-        event.setTimezone(timezoneId);
         event.setTag(makeTag(title));
         return event;
     }
@@ -163,8 +158,6 @@ public class CreateEventInteractor implements Interactor {
             case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT:
             case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG:
                 return EventValidator.FIELD_TITLE;
-            case ShootrError.ERROR_CODE_EVENT_START_DATE_TOO_LATE:
-                return EventValidator.FIELD_START_DATE;
         }
         return 0;
     }
