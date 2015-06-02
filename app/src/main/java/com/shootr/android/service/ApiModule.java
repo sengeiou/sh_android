@@ -44,7 +44,6 @@ public final class ApiModule {
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
           .setErrorHandler(new LoggableRetrofitErrorHandler()) //
-          .setLogLevel(RestAdapter.LogLevel.FULL) //TODO solo en debug
           .build();
     }
 
