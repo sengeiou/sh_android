@@ -150,7 +150,7 @@
     <string name="menu_search_events">Search</string>
     <string name="events_list_empty">No results.</string>
     <string name="add_photo">Add Photo</string>
-    <string name="edit_event">Edit Event</string>
+    <string name="edit_event">Edit Box</string>
     <string name="activity_new_event_title">New box</string>
     <string name="activity_edit_event_title">Edit box</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
