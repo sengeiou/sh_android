@@ -27,7 +27,6 @@ public class CreateEventInteractor implements Interactor {
 
     private String idEvent;
     private String title;
-    private String timezoneId;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -41,11 +40,10 @@ public class CreateEventInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendEvent(String idEvent, String title, String timezoneId, boolean notifyCreation,
+    public void sendEvent(String idEvent, String title, boolean notifyCreation,
       Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.title = title;
-        this.timezoneId = timezoneId;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
