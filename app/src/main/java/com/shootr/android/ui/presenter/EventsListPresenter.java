@@ -126,6 +126,7 @@ public class EventsListPresenter implements Presenter {
         if (!eventSearchResults.isEmpty()) {
             List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
             renderViewEventsList(eventModels);
+            this.setViewCurrentVisibleWatchingEvent(null);
         } else {
             this.showViewEmpty();
         }
