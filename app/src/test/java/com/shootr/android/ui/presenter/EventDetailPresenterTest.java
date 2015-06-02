@@ -10,8 +10,6 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.WatchersTimeFormatter;
-import com.shootr.android.domain.utils.EventDateFormatter;
-import com.shootr.android.utils.EventDateFormatterStub;
 import com.squareup.otto.Bus;
 import org.junit.Before;
 import org.mockito.Mock;
@@ -28,8 +26,6 @@ public class EventDetailPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock EventDetailView eventDetailView;
 
-    @Mock EventDateFormatter timeFormatter;
-
     @Mock SessionRepository sessionRepository;
 
     EventModelMapper eventModelMapper;
@@ -41,7 +37,7 @@ public class EventDetailPresenterTest {
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
-        eventModelMapper = new EventModelMapper(new EventDateFormatterStub(), sessionRepository);
+        eventModelMapper = new EventModelMapper(sessionRepository);
         userModelMapper= new UserModelMapper();
 
         presenter = new EventDetailPresenter(bus,

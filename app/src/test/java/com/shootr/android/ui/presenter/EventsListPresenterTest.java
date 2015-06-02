@@ -14,7 +14,6 @@ import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.shootr.android.utils.EventDateFormatterStub;
 import com.squareup.otto.Bus;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +53,7 @@ public class EventsListPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        EventModelMapper eventModelMapper = new EventModelMapper(new EventDateFormatterStub(), sessionRepository);
+        EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
         presenter = new EventsListPresenter(eventsListInteractor,
