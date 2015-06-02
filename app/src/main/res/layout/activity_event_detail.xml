@@ -182,16 +182,6 @@
                       android:textStyle="bold"
                       tools:text="Sevilla-Betis 18:30 - Sánchez Pizjuán, Nervión" />
 
-                    <TextView android:id="@+id/event_date"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_marginLeft="@dimen/keyline_2"
-                      android:layout_marginRight="@dimen/keyline_1"
-                      android:textColor="@color/primary_disabled"
-                      android:textSize="16sp"
-                      android:visibility="invisible"
-                      tools:text="MIÉ. 18:30"
-                      tools:visibility="visible" />
                 </LinearLayout>
             </FrameLayout>
 
