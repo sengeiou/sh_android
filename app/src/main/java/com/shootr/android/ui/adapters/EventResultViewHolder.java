@@ -21,7 +21,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.event_picture) ImageView picture;
     @InjectView(R.id.event_title) TextView title;
     @InjectView(R.id.event_author) TextView author;
-    @InjectView(R.id.event_date) TextView date;
     @InjectView(R.id.event_watchers) TextView watchers;
     @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
@@ -37,7 +36,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     public void render(EventResultModel event, boolean isCheckedIn) {
         this.setClickListener(event);
         title.setText(event.getEventModel().getTitle());
-        date.setText(event.getEventModel().getDatetime());
         int watchersCount = event.getWatchers();
         if (watchersCount > 0) {
             watchers.setVisibility(View.VISIBLE);

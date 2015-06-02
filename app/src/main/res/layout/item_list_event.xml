@@ -50,6 +50,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="@color/gray_60"
+              android:visibility="gone"
               tools:text="Started 43 minutes ago" />
 
             <TextView android:id="@+id/event_author"

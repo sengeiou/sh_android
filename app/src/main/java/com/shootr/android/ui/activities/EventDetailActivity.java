@@ -68,7 +68,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_title_container) View titleContainer;
     @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
     @InjectView(R.id.event_title) TextView titleText;
-    @InjectView(R.id.event_date) TextView dateText;
     @InjectView(R.id.event_author) TextView authorText;
 
     @InjectView(R.id.event_content_container) View contentContainer;
@@ -330,15 +329,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     //region View methods
     @Override public void setEventTitle(String title) {
         titleText.setText(title);
-    }
-
-    @Override public void setEventDate(String date) {
-        if (date != null && !date.isEmpty()) {
-            dateText.setText(date);
-            dateText.setVisibility(View.VISIBLE);
-        } else {
-            dateText.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override public void setEventAuthor(String author) {
