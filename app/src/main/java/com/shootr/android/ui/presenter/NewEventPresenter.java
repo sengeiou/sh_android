@@ -14,20 +14,16 @@ import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.shootr.android.util.TimeFormatter;
 import java.util.List;
 import java.util.TimeZone;
 import javax.inject.Inject;
-import org.joda.time.MutableDateTime;
 import timber.log.Timber;
 
 public class NewEventPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
-    private static final long SIX_HOURS_MILLIS = 6 * 60 * 60 * 1000;
 
     private final DateFormatter dateFormatter;
-    private final TimeFormatter timeFormatter;
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
     private final EventModelMapper eventModelMapper;
@@ -43,14 +39,11 @@ public class NewEventPresenter implements Presenter {
     private String currentTitle;
     private boolean notifyCreation;
 
-    private static int TWENTY_THREE = 23;
-
     //region Initialization
-    @Inject public NewEventPresenter(DateFormatter dateFormatter, TimeFormatter timeFormatter,
+    @Inject public NewEventPresenter(DateFormatter dateFormatter,
       CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
       EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.dateFormatter = dateFormatter;
-        this.timeFormatter = timeFormatter;
         this.createEventInteractor = createEventInteractor;
         this.getEventInteractor = getEventInteractor;
         this.eventModelMapper = eventModelMapper;
@@ -90,22 +83,6 @@ public class NewEventPresenter implements Presenter {
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
-    }
-
-    private void roundDateUp(MutableDateTime currentDateTime) {
-        if (currentDateTime.getMinuteOfHour() != 0) {
-            currentDateTime.setMinuteOfHour(0);
-            currentDateTime.setHourOfDay(nextAbsoluteHour(currentDateTime.getHourOfDay()));
-
-        }
-    }
-
-    private int nextAbsoluteHour(int baseHour){
-        if(baseHour == TWENTY_THREE){
-            return TWENTY_THREE;
-        }else{
-            return baseHour + 1;
-        }
     }
     //endregion
 
@@ -210,8 +187,6 @@ public class NewEventPresenter implements Presenter {
             switch (validationError.getField()) {
                 case EventValidator.FIELD_TITLE:
                     showViewTitleError(errorMessage);
-                    break;
-                case EventValidator.FIELD_START_DATE:
                     break;
                 default:
                     showViewError(errorMessage);
