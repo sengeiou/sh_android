@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
+import com.squareup.okhttp.OkHttpClient;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.service.dataservice.ShootrDataService;
 import com.shootr.android.service.dataservice.DataServiceModule;
 import javax.inject.Singleton;
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
+import retrofit.converter.JacksonConverter;
 
 @Module(
         injects = {
@@ -29,6 +33,14 @@ public final class ApiModule {
 
     @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
         return photoService;
+    }
+
+    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient) {
+        return new RestAdapter.Builder() //
+          .setEndpoint(endpoint.getUrl()) //
+          .setConverter(new JacksonConverter(objectMapper)) //
+          .setClient(new OkClient(okHttpClient)) //
+          .build();
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {
