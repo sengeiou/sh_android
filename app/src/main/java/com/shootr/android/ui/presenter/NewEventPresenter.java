@@ -32,10 +32,8 @@ public class NewEventPresenter implements Presenter {
     private NewEventView newEventView;
 
     private boolean isNewEvent;
-    private TimeZone selectedTimeZone;
     private String preloadedTitle;
     private String preloadedEventId;
-    private String preloadedTimezone;
     private String currentTitle;
     private boolean notifyCreation;
 
@@ -53,15 +51,10 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.isNewEvent = optionalIdEventToEdit == null;
-        if (isNewEvent) {
-            this.setDefaultTimezone();
-        } else {
+        if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
-        }
-    }
 
-    private void setDefaultTimezone() {
-        this.setTimezone(TimeZone.getDefault());
+        }
     }
 
     private void preloadEventToEdit(String optionalIdEventToEdit) {
@@ -73,13 +66,6 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void setDefaultEventInfo(EventModel eventModel) {
-        preloadedTimezone = eventModel.getTimezone();
-        if (preloadedTimezone != null) {
-            setTimezone(TimeZone.getTimeZone(preloadedTimezone));
-        } else {
-            setDefaultTimezone();
-        }
-
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
@@ -90,15 +76,6 @@ public class NewEventPresenter implements Presenter {
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
         this.updateDoneButtonStatus();
-    }
-
-    public void pickTimezone() {
-        newEventView.navigateToPickTimezone(selectedTimeZone.getID());
-    }
-
-    public void timezoneSelected(String selectedTimezoneId) {
-        TimeZone timeZone = TimeZone.getTimeZone(selectedTimezoneId);
-        this.setTimezone(timeZone);
     }
 
     public void done() {
@@ -133,7 +110,6 @@ public class NewEventPresenter implements Presenter {
         String title = filterTitle(newEventView.getEventTitle());
         createEventInteractor.sendEvent(preloadedEventId,
           title,
-          selectedTimeZone.getID(),
           notifyCreation,
           new CreateEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
@@ -145,15 +121,6 @@ public class NewEventPresenter implements Presenter {
                   eventCreationError(error);
               }
           });
-    }
-
-    private int realTimezoneOffset(long date) {
-        TimeZone deviceTimeZone = TimeZone.getDefault();
-        return deviceTimeZone.getOffset(date);
-    }
-
-    private int fakeTimezoneOffset(long date) {
-        return selectedTimeZone.getOffset(date);
     }
 
     private void eventCreated(Event event) {
@@ -203,39 +170,9 @@ public class NewEventPresenter implements Presenter {
     }
     //endregion
 
-    //region Date timezone offsets
-    private long realDateFromFakeTimezone(long fakeDate) {
-        return fakeDate + eventDateOffset(fakeDate);
-    }
-
-    private long fakeDateFromRealTimezone(long realDate) {
-        return realDate - eventDateOffset(realDate);
-    }
-
-    private long eventDateOffset(long eventDate) {
-        return realTimezoneOffset(eventDate) - fakeTimezoneOffset(eventDate);
-    }
-    //endregion
-
     //region Utils
     private String filterTitle(String title) {
         return title.trim();
-    }
-
-    private void setTimezone(TimeZone timeZone) {
-        this.selectedTimeZone = timeZone;
-        this.updateViewTimezone();
-        this.updateDoneButtonStatus();
-    }
-
-    private void updateViewTimezone() {
-        newEventView.setTimeZone(timezoneDisplayText());
-    }
-
-    private String timezoneDisplayText() {
-        long timezoneTime;
-        timezoneTime = System.currentTimeMillis();
-        return selectedTimeZone.getID() +" "+ dateFormatter.getGMT(selectedTimeZone, timezoneTime);
     }
 
     private void updateDoneButtonStatus() {
@@ -243,12 +180,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     private boolean canSendEvent() {
-        return isValidTitle() && (hasChangedTitle()
-          || hasChangedTimezone());
-    }
-
-    private boolean hasChangedTimezone() {
-        return !selectedTimeZone.getID().equals(preloadedTimezone);
+        return isValidTitle() && hasChangedTitle();
     }
 
     private boolean isValidTitle() {

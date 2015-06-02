@@ -6,8 +6,6 @@ public interface NewEventView extends DataTransferView{
 
     void setEventTitle(String title);
 
-    void setTimeZone(String timezoneName);
-
     String getEventTitle();
 
     void showTitleError(String errorMessage);
@@ -17,8 +15,6 @@ public interface NewEventView extends DataTransferView{
     void doneButtonEnabled(boolean enable);
 
     void hideKeyboard();
-
-    void navigateToPickTimezone(String currentTimezoneID);
 
     void showNotificationConfirmation();
 }

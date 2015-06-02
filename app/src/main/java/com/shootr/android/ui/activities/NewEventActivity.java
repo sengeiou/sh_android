@@ -35,7 +35,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @InjectView(R.id.new_event_title) EditText titleView;
     @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @InjectView(R.id.new_event_title_error) TextView titleErrorView;
-    @InjectView(R.id.new_event_start_date_timezone) TextView timezoneView;
 
     private MenuItem doneMenuItem;
 
@@ -83,14 +82,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     //endregion
 
-    //region Listeners
-
-    @OnClick(R.id.new_event_start_date_timezone)
-    public void onTimezoneClick() {
-        presenter.pickTimezone();
-    }
-    //endregion
-
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_event, menu);
@@ -112,10 +103,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_PICK_TIMEZONE && resultCode == RESULT_OK) {
-            String selectedTimezone = data.getStringExtra(TimezonePickerActivity.KEY_TIMEZONE);
-            presenter.timezoneSelected(selectedTimezone);
-        }
     }
     //endregion
 
@@ -124,10 +111,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Override public void setEventTitle(String title) {
         titleLabelView.showLabelWithoutAnimation();
         titleView.setText(title);
-    }
-
-    @Override public void setTimeZone(String timezoneName) {
-        timezoneView.setText(timezoneName);
     }
 
     @Override public String getEventTitle() {
@@ -154,12 +137,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(titleView.getWindowToken(), 0);
-    }
-
-    @Override public void navigateToPickTimezone(String currentTimezoneID) {
-        Intent intent = new Intent(this, TimezonePickerActivity.class);
-        intent.putExtra(TimezonePickerActivity.KEY_TIMEZONE, currentTimezoneID);
-        startActivityForResult(intent, REQUEST_PICK_TIMEZONE);
     }
 
     @Override public void showNotificationConfirmation() {
