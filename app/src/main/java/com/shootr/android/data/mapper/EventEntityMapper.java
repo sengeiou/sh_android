@@ -20,9 +20,7 @@ public class EventEntityMapper {
         event.setId(eventEntity.getIdEvent());
         event.setAuthorId(eventEntity.getIdUser());
         event.setTitle(eventEntity.getTitle());
-        event.setStartDate(eventEntity.getBeginDate());
         event.setPicture(eventEntity.getPhoto());
-        event.setTimezone(eventEntity.getTimezone());
         event.setTag(eventEntity.getTag());
         event.setAuthorUsername(eventEntity.getUserName());
         event.setLocale(eventEntity.getLocale());
@@ -47,9 +45,7 @@ public class EventEntityMapper {
         entityTemplate.setIdEvent(event.getId());
         entityTemplate.setIdUser(event.getAuthorId());
         entityTemplate.setTitle(event.getTitle());
-        entityTemplate.setBeginDate(event.getStartDate());
         entityTemplate.setPhoto(event.getPicture());
-        entityTemplate.setTimezone(event.getTimezone());
         entityTemplate.setTag(event.getTag());
         entityTemplate.setUserName(event.getAuthorUsername());
         entityTemplate.setLocale(event.getLocale());

@@ -1,15 +1,11 @@
 package com.shootr.android.data.entity;
 
-import java.util.Date;
-
 public class EventEntity extends Synchronized implements Comparable<EventEntity> {
 
     private String idEvent;
     private String idUser;
     private String userName;
-    private String timezone;
     private String tag;
-    private Date beginDate;
     private String title;
     private String photo;
     private Integer notifyCreation;
@@ -29,14 +25,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
     }
 
     @Override
@@ -65,13 +53,8 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
         if (areSameEvent) {
             return 0;
         }
-        int dateComparison = this.getBeginDate().compareTo(another.getBeginDate());
-        if (dateComparison == 0) {
-            int idComparison = this.getIdEvent().compareTo(another.getIdEvent());
-            return idComparison;
-        } else {
-            return dateComparison;
-        }
+        int idComparison = this.getIdEvent().compareTo(another.getIdEvent());
+        return idComparison;
     }
 
     public String getTitle() {
@@ -88,14 +71,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
     }
 
     public String getIdUser() {
