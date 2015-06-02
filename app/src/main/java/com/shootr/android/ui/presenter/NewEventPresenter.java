@@ -12,10 +12,8 @@ import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.NewEventView;
-import com.shootr.android.util.DateFormatter;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
-import java.util.TimeZone;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -23,7 +21,6 @@ public class NewEventPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
 
-    private final DateFormatter dateFormatter;
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
     private final EventModelMapper eventModelMapper;
@@ -38,10 +35,8 @@ public class NewEventPresenter implements Presenter {
     private boolean notifyCreation;
 
     //region Initialization
-    @Inject public NewEventPresenter(DateFormatter dateFormatter,
-      CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
+    @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
       EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.dateFormatter = dateFormatter;
         this.createEventInteractor = createEventInteractor;
         this.getEventInteractor = getEventInteractor;
         this.eventModelMapper = eventModelMapper;

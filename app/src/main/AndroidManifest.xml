@@ -133,11 +133,6 @@
                 android:value=".ui.activities.EventsListActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.TimezonePickerActivity"
-            android:label="@string/activity_pick_timezone_title"
-            android:theme="@style/ShootrTheme.Closable" >
-        </activity>
-        <activity
             android:name=".ui.activities.DraftsActivity"
             android:label="@string/activity_drafts_title"
             android:theme="@style/ShootrTheme.DarkToolbar" >

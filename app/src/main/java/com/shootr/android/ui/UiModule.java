@@ -14,7 +14,6 @@ import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.TimezonePickerActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
@@ -25,11 +24,9 @@ import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 @Module(
         injects = {
@@ -55,7 +52,7 @@ import dagger.Provides;
                 EventsListActivity.class,
                 NewEventActivity.class,
                 EventMediaActivity.class,
-                UpdateWarningActivity.class, TimezonePickerActivity.class, DraftsActivity.class, DraftsPresenter.class
+                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class
         },
         complete = false
 )

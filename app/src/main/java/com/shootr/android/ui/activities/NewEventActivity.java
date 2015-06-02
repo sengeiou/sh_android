@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
@@ -27,8 +26,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     public static final String KEY_EVENT_ID = "event_id";
     public static final String KEY_EVENT_TITLE = "event_title";
-
-    private static final int REQUEST_PICK_TIMEZONE = 2;
 
     @Inject NewEventPresenter presenter;
 
