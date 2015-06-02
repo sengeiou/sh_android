@@ -54,7 +54,9 @@ public final class ApiModule {
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {
-        return new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
     }
 
     @Provides @Singleton Endpoint provideEndpoint() {
