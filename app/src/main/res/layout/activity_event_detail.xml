@@ -119,7 +119,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="16dp"
-                            android:src="@drawable/ic_image_photo_library" />
+                            android:src="@drawable/ic_action_event_gallery_gray_24" />
                           <TextView android:id="@+id/event_detail_media"
                             android:layout_width="match_parent"
                             android:layout_height="56dp"
