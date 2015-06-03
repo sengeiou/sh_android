@@ -45,7 +45,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
 
     @Override
     protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        //TODO
+        toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
+        toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
