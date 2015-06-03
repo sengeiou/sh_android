@@ -17,13 +17,17 @@ public class BaseFragment extends Fragment {
 
     private void injectDependenciesOnFirstAttach() {
         if (mFistAttach) {
-            if (getActivity() instanceof BaseActivity) {
-                ((BaseActivity) getActivity()).inject(this);
-            } else {
-                //TODO delete this case when all activities have been migrated to BaseActivity
-                ShootrApplication.get(getActivity()).inject(this);
-            }
+            this.getObjectGraph().inject(this);
             mFistAttach = false;
+        }
+    }
+
+    protected ObjectGraph getObjectGraph() {
+        if (getActivity() instanceof BaseActivity) {
+            return ((BaseActivity) getActivity()).getObjectGraph();
+        } else {
+            //TODO delete this case when all activities have been migrated to BaseActivity
+            return ShootrApplication.get(getActivity()).getObjectGraph();
         }
     }
 }

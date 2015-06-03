@@ -82,7 +82,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         getObjectGraph().inject(object);
     }
 
-    private ObjectGraph getObjectGraph() {
+    public ObjectGraph getObjectGraph() {
         if (activityGraph == null) {
             activityGraph = buildObjectGraph();
         }
