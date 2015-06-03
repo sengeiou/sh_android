@@ -22,6 +22,7 @@ import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.ui.fragments.EventsListFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -53,7 +54,8 @@ import javax.inject.Singleton;
                 EventsListActivity.class,
                 NewEventActivity.class,
                 EventMediaActivity.class,
-                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class
+                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class,
+                EventsListFragment.class
         },
         complete = false
 )

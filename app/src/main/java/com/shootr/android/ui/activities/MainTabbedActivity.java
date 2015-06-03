@@ -5,6 +5,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
+import com.shootr.android.ui.fragments.EventsListFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import java.util.Locale;
 
@@ -59,7 +60,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
                 case 0:
                     return ActivityTimelineFragment.newInstance();
                 case 1:
-                    return ActivityTimelineFragment.newInstance(); //TODO
+                    return EventsListFragment.newInstance(); //TODO
                 case 2:
                     return PeopleFragment.newInstance();
                 default:
