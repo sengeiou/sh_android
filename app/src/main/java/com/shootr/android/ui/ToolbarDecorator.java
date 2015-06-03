@@ -42,6 +42,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         supportActionBar.setDisplayShowTitleEnabled(false);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setDisplayShowHomeEnabled(true);
+        titleContainer.setVisibility(View.VISIBLE);
     }
 
     public void setTitle(@StringRes int titleResource) {
