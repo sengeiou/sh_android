@@ -4,8 +4,8 @@ package com.shootr.android.data;
 import com.shootr.android.service.ApiModule;
 
 public enum ApiEndpoints {
-  PRODUCTION("Tst", ApiModule.PRODUCTION_API_URL),
-  TEST("Tst también", ApiModule.PRODUCTION_API_URL),
+  PRODUCTION("Tst", ApiModule.PRODUCTION_ENDPOINT_URL),
+  TEST("Tst también", ApiModule.PRODUCTION_ENDPOINT_URL),
   MOCK_MODE("Mock Mode", "mock://"),
   CUSTOM("Custom", null);
 
