@@ -35,6 +35,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
         viewPager.setPageMarginDrawable(R.drawable.page_margin);
 
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(1);
     }
 
     @Override
