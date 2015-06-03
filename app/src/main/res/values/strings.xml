@@ -235,7 +235,7 @@
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">
-            %d friend
+            Friends
         </item>
         <item quantity="other">
             %d friends
