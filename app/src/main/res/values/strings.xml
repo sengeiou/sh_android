@@ -164,8 +164,8 @@
     <string name="event_notification_confirmation_yes">Notify</string>
     <string name="event_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
-    <string name="menu_event_edit_info">Edit box</string>
-    <string name="menu_event_edit_photo">Edit photo</string>
+    <string name="menu_event_edit_info">Box</string>
+    <string name="menu_event_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
     <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
@@ -255,4 +255,5 @@
     <string name="event_media_empty_title">No photos or videos.</string>
     <string name="event_detail_media">Media</string>
     <string name="event_detail_media_number">0</string>
+    <string name="event_detail_edit_menu_title">Edit</string>
 </resources>

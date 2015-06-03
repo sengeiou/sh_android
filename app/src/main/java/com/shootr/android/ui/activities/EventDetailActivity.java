@@ -355,7 +355,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void showEditEventPhotoOrInfo() {
-        new BottomSheet.Builder(this)
+        new BottomSheet.Builder(this).title(getString(R.string.event_detail_edit_menu_title))
           .sheet(R.menu.event_edit_photo_or_info)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
