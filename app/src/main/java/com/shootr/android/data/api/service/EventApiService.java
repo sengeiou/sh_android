@@ -9,5 +9,5 @@ import retrofit.http.Query;
 public interface EventApiService {
 
     @GET("/events/popular")
-    List<EventEntity> getEventList(@Query("idUser") String idUser, @Query("locale") String locale) throws IOException;
+    List<EventEntity> getEventList(@Query("me") String idUser, @Query("locale") String locale) throws IOException;
 }
