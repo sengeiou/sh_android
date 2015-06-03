@@ -8,8 +8,6 @@ public interface EventDetailView extends LoadDataView {
 
     void setEventTitle(String title);
 
-    void setEventDate(String date);
-
     void setEventAuthor(String author);
 
     void setEventPicture(String picture);

@@ -164,8 +164,6 @@ public class DatabaseContract {
         public static final String ID_USER = "idUser";
         public static final String ID_USER_EVENT = "idUserEvent";
         public static final String USERNAME = "userName";
-        public static final String BEGIN_DATE = "beginDate";
-        public static final String TIMEZONE = "timeZone";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
         public static final String TAG = "tag";
@@ -174,7 +172,7 @@ public class DatabaseContract {
         public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-                ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, BEGIN_DATE, TIMEZONE, TITLE,
+                ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, TITLE,
                 PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER, LOCALE,
                 CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
@@ -188,7 +186,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           WATCHERS, LOCALE,
-          ID_EVENT, ID_USER, USERNAME, BEGIN_DATE, TIMEZONE, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
+          ID_EVENT, ID_USER, USERNAME, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
           CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
         };
 

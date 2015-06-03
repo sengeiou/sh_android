@@ -10,16 +10,13 @@ import javax.inject.Inject;
 @Deprecated
 public class EventEntityModelMapper {
 
-    private final TimeFormatter timeFormatter;
+    @Inject public EventEntityModelMapper() {
 
-    @Inject public EventEntityModelMapper(TimeFormatter timeFormatter) {
-        this.timeFormatter = timeFormatter;
     }
 
     public EventModel toEventModel(EventEntity eventEntity) {
         EventModel eventModel = new EventModel();
         eventModel.setTitle(eventEntity.getTitle());
-        eventModel.setDatetime(timeFormatter.getDateAndTimeTextRelative(eventEntity.getBeginDate().getTime()));
         eventModel.setIdEvent(eventEntity.getIdEvent());
         return eventModel;
     }

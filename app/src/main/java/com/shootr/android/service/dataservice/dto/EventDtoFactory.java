@@ -38,8 +38,7 @@ public class EventDtoFactory {
 
     public GenericDto getEventsNotEndedByIds(List<Long> eventsIds) {
         FilterDto eventsWatchFollowingFilter = and(orIsNotDeleted(),
-          or(DatabaseContract.EventTable.ID_EVENT).isIn(eventsIds),
-          or(DatabaseContract.EventTable.BEGIN_DATE).isNotEqualTo(null)).build();
+          or(DatabaseContract.EventTable.ID_EVENT).isIn(eventsIds)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(DatabaseContract.EventTable.TABLE)

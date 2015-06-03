@@ -207,7 +207,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private void renderEventInfo(Event event) {
         eventModel = eventModelMapper.transform(event);
         eventDetailView.setEventTitle(eventModel.getTitle());
-        eventDetailView.setEventDate(eventModel.getDatetime());
         eventDetailView.setEventPicture(eventModel.getPicture());
         eventDetailView.setEventAuthor(eventModel.getAuthorUsername());
         if (eventModel.amIAuthor()) {
