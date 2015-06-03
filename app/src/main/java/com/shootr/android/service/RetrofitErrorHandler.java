@@ -4,7 +4,7 @@ import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class LoggableRetrofitErrorHandler implements ErrorHandler {
+public class RetrofitErrorHandler implements ErrorHandler {
 
     @Override
     public Throwable handleError(RetrofitError cause) {

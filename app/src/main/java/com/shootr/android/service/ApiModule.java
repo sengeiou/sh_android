@@ -43,7 +43,7 @@ public final class ApiModule {
           .setEndpoint(endpoint.getUrl() + API_PATH_BASE) //
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
-          .setErrorHandler(new LoggableRetrofitErrorHandler()) //
+          .setErrorHandler(new RetrofitErrorHandler()) //
           .build();
     }
 
