@@ -23,6 +23,8 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
     public static final int NUMBER_OF_ELEMENTS_PER_ROW = 3;
 
+    private MediaAdapter mediaAdapter;
+
     @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
     @InjectView(R.id.media_empty) View emptyView;
     @InjectView(R.id.event_media_loading) View loadingView;
@@ -36,8 +38,13 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
-        // TODO Este número se podría obtener por recursos, permitiendo mostrar un número distinto de columnas según orientación y tamaño de pantalla. No lo pide la historia, pero sería una buena práctica.
-        mediaView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_ELEMENTS_PER_ROW));
+        mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_collumns)));
+        getMediaAdapter();
+    }
+
+    private void getMediaAdapter() {
+        mediaAdapter = new MediaAdapter(this, picasso);
+        mediaView.setAdapter(mediaAdapter);
     }
 
     @Override protected void initializePresenter() {
@@ -52,8 +59,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void setMedia(List<ShotModel> shotsWithMedia) {
-        MediaAdapter mediaAdapter = new MediaAdapter(getBaseContext(), shotsWithMedia, picasso);
-        mediaView.setAdapter(mediaAdapter);
+        mediaAdapter.setShotsWithMedia(shotsWithMedia);
     }
 
     @Override public void hideEmpty() {

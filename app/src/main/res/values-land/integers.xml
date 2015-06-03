@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="media_adapter_number_of_collumns">4</integer>
+</resources>
