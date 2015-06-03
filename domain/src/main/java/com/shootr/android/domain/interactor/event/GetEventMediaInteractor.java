@@ -28,6 +28,9 @@ public class GetEventMediaInteractor implements Interactor {
     private Callback callback;
     private String currentidUser;
 
+    private List<Shot> mediaShotsFromLocal;
+    private List<Shot> mediaShotsFromRemote;
+
     @Inject
     public GetEventMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
@@ -56,15 +59,27 @@ public class GetEventMediaInteractor implements Interactor {
     private void getMediaFromLocal() {
         List<User> people = localUserRepository.getPeople();
         List<String> peopleIds = getPeopleInEvent(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository);
-        notifyLoaded(shots);
+        mediaShotsFromLocal = getShotsFromRepository(peopleIds, localShotRepository);
+        notifyLoaded(mediaShotsFromLocal);
     }
 
     private void getMediaFromRemote() {
         List<User> people = remoteUserRepository.getPeople();
         List<String> peopleIds = getPeopleInEvent(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository);
-        notifyLoaded(shots);
+        mediaShotsFromRemote = getShotsFromRepository(peopleIds, remoteShotRepository);
+        if(areThereNewShotsFromRemote()){
+            notifyLoaded(mediaShotsFromRemote);
+        }
+    }
+
+    private Boolean areThereNewShotsFromRemote() {
+        List<Shot> shotsNotContainedinMediaShotsFromLocal = new ArrayList<>();
+        for(Shot shot:mediaShotsFromRemote){
+            if(mediaShotsFromLocal.contains(shot)){
+                shotsNotContainedinMediaShotsFromLocal.add(shot);
+            }
+        }
+        return shotsNotContainedinMediaShotsFromLocal.size()>0;
     }
 
     private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
