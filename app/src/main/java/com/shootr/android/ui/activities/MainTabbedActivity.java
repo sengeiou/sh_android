@@ -1,27 +1,24 @@
 package com.shootr.android.ui.activities;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import java.util.Locale;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import com.shootr.android.R;
-
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
 
     @InjectView(R.id.pager) ViewPager viewPager;
     @InjectView(R.id.tab_layout) TabLayout tabLayout;
-
-    private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     protected int getLayoutResource() {
@@ -32,9 +29,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
+        viewPager.setPageMarginDrawable(R.drawable.page_margin);
+
         tabLayout.setupWithViewPager(viewPager);
     }
 
