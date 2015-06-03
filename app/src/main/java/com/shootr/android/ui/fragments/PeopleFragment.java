@@ -44,6 +44,10 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @InjectView(R.id.userlist_empty) TextView emptyTextView;
     private FriendsAdapter peopleAdapter;
 
+    public static PeopleFragment newInstance() {
+        return new PeopleFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
