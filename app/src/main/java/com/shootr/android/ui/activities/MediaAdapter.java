@@ -97,6 +97,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     }
                 });
             }else{
+                this.videoFrame.setVisibility(View.GONE);
                 bindVideoOrPicture();
             }
         }
