@@ -41,5 +41,7 @@
     <dimen name="checkin_bar_height">56dp</dimen>
     <dimen name="shot_item_image_height">185dp</dimen>
     <dimen name="view_pager_margin">16dp</dimen>
+    <dimen name="toolbar_title_padding">16dp</dimen>
+    <dimen name="tabbar_shadow_height">4dp</dimen>
 
 </resources>
