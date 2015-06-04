@@ -21,7 +21,6 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     private static final String EXTRA_EVENT_ID = "eventId";
     private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
-    public static final int NUMBER_OF_ELEMENTS_PER_ROW = 3;
 
     private MediaAdapter mediaAdapter;
 
@@ -38,7 +37,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
-        mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_collumns)));
+        mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns)));
         mediaAdapter = new MediaAdapter(this, picasso);
         mediaView.setAdapter(mediaAdapter);
     }
