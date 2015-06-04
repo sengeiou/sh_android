@@ -41,17 +41,31 @@ public class ResetPasswordRequestPresenterTest {
     }
 
     @Test
-    public void shouldNotEnableNextButtonWhenUsernameOremailChangedIfHasEmptyText() throws Exception {
+    public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
         presenter.onUsernameOrEmailChanged(EMPTY);
 
         verify(resetPasswordRequestView, never()).enableNextButton();
     }
 
     @Test
-    public void shouldNotEnableNextButtonWhenUsernameOremailChangedIfHasWhitespacesOnly() throws Exception {
+    public void shouldNotEnableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
         presenter.onUsernameOrEmailChanged(WHITESPACES);
 
         verify(resetPasswordRequestView, never()).enableNextButton();
+    }
+
+    @Test
+    public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasEmptyText() throws Exception {
+        presenter.onUsernameOrEmailChanged(EMPTY);
+
+        verify(resetPasswordRequestView).disableNextButton();
+    }
+
+    @Test
+    public void shouldDisableNextButtonWhenUsernameOrEmailChangedIfHasWhitespacesOnly() throws Exception {
+        presenter.onUsernameOrEmailChanged(WHITESPACES);
+
+        verify(resetPasswordRequestView).disableNextButton();
     }
 
 
