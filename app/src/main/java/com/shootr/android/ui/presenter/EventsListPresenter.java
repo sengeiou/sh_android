@@ -106,6 +106,7 @@ public class EventsListPresenter implements Presenter {
     }
 
     public void search(String queryText) {
+        eventsListView.hideContent();
         eventsListView.hideKeyboard();
         eventsListView.showLoading();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
