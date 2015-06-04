@@ -40,6 +40,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
               @Override
               public void onCompleted() {
                   resetPasswordConfirmationView.showDoneButton();
+                  resetPasswordConfirmationView.hideConfirmationButton();
               }
           }, //
           new Interactor.ErrorCallback() {

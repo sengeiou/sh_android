@@ -59,6 +59,15 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showDoneButton();
     }
 
+    @Test
+    public void shouldHideConfirmButtonWhenConfirmIfInteractorCallbacksResult() throws Exception {
+        setupInteractorCallbacksCompleted();
+
+        presenter.confirm();
+
+        verify(resetPasswordConfirmationView).hideConfirmationButton();
+    }
+
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override
