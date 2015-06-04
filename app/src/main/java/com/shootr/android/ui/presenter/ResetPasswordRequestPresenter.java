@@ -8,6 +8,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
 
     public void initialize(ResetPasswordRequestView resetPasswordRequestView) {
         this.resetPasswordRequestView = resetPasswordRequestView;
+        resetPasswordRequestView.disableNextButton();
     }
 
     public void next() {
