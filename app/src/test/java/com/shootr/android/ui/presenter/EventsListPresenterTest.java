@@ -33,6 +33,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 
 public class EventsListPresenterTest {
 
@@ -108,6 +109,14 @@ public class EventsListPresenterTest {
         presenter.loadDefaultEventList();
 
         verify(eventsListView).hideLoading();
+    }
+
+    @Test public void shouldNotShowLoadingWhenEventListInteractorCallbacksResults() throws Exception {
+        setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
+
+        presenter.loadDefaultEventList();
+
+        verify(eventsListView, never()).showLoading();
     }
 
     @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {

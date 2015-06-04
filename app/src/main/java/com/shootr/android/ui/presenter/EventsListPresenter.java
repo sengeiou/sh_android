@@ -78,9 +78,9 @@ public class EventsListPresenter implements Presenter {
     }
 
     protected void loadDefaultEventList() {
-        eventsListView.showLoading();
         eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
             @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+                eventsListView.hideLoading();
                 onDefaultEventListLoaded(eventSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
@@ -94,24 +94,27 @@ public class EventsListPresenter implements Presenter {
         List<EventSearchResult> eventSearchResults = resultList.getEventSearchResults();
         if (!eventSearchResults.isEmpty()) {
             List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
-            eventsListView.hideLoading();
             this.renderViewEventsList(eventResultModels);
             this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
             EventSearchResult currentWatchingEvent = resultList.getCurrentWatchingEvent();
             if (currentWatchingEvent != null) {
                 this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
             }
+        }else{
+            eventsListView.showLoading();
         }
     }
 
     public void search(String queryText) {
         eventsListView.hideKeyboard();
+        eventsListView.showLoading();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                eventsListView.hideLoading();
                 showViewError(error);
             }
         });
@@ -130,6 +133,7 @@ public class EventsListPresenter implements Presenter {
         } else {
             this.showViewEmpty();
         }
+        eventsListView.hideLoading();
     }
 
     private void setViewCurrentVisibleCheckedInEvent(String currentVisibleEventId) {

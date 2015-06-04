@@ -28,7 +28,7 @@ public class CheckinPresenter implements Presenter {
         this.askCheckinConfirmation = askCheckinConfirmation;
     }
 
-    protected void setView(CheckinView checkinView) {
+    public void setView(CheckinView checkinView) {
         this.checkinView = checkinView;
     }
 
