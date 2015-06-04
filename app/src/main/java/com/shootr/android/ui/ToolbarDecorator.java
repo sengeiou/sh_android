@@ -11,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.util.PicassoWrapper;
+import de.hdodenhof.circleimageview.CircleImageView;
+import javax.inject.Inject;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
@@ -20,6 +25,10 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private TextView titleText;
     private TextView subtitleText;
     private ViewGroup titleContainer;
+    private CircleImageView circleImageView;
+
+    @Inject PicassoWrapper picasso;
+    @Inject SessionRepository sessionRepository;
 
     public ToolbarDecorator(Context context) {
         this.context = context;
@@ -31,6 +40,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
+        circleImageView = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
         setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
@@ -42,6 +52,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         supportActionBar.setDisplayShowTitleEnabled(false);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setDisplayShowHomeEnabled(true);
+        setTitle(getCurrentUser().getName());
+        setSubtitle(getCurrentUser().getUsername());
+        setAvatarImage(getCurrentUser().getPhoto());
     }
 
     public void setTitle(@StringRes int titleResource) {
@@ -75,6 +88,20 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         } else {
             subtitleText.setText(subtitle);
             subtitleText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public User getCurrentUser(){
+        User user = sessionRepository.getCurrentUser();
+        return user;
+    }
+
+    public void setAvatarImage(String imageURL) {
+        if (imageURL == null) {
+            hideSubtitle();
+        } else {
+            circleImageView.setVisibility(View.VISIBLE);
+            picasso.loadProfilePhoto(imageURL).into(circleImageView);
         }
     }
 
