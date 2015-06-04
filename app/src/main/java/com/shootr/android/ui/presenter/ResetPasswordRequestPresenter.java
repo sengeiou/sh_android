@@ -39,6 +39,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
 
     public void next() {
         resetPasswordRequestView.disableNextButton();
+        resetPasswordRequestView.showLoading();
         resetPasswordInteractor.attempResetPassword(resetPasswordRequestView.getUsernameOrEmail(), //
           new Interactor.Callback<ForgotPasswordResult>() {
               @Override
@@ -51,6 +52,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
               @Override
               public void onError(ShootrException error) {
                   resetPasswordRequestView.enableNextButton();
+                  resetPasswordRequestView.hideLoading();
                   showErrorInView(error);
               }
           });

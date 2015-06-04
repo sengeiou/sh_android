@@ -98,6 +98,22 @@ public class ResetPasswordRequestPresenterTest {
     }
 
     @Test
+    public void shouldShowLoadingWhenNext() throws Exception {
+        presenter.next();
+
+        verify(resetPasswordRequestView).showLoading();
+    }
+
+    @Test
+    public void shouldHideLoadingWhenNextIfCallbacksException() throws Exception {
+        setupResetPasswordInteractorCallbacksShootrException();
+
+        presenter.next();
+
+        verify(resetPasswordRequestView).hideLoading();
+    }
+
+    @Test
     public void shouldDisableNextButtonWhenNext() throws Exception {
         presenter.next();
 
