@@ -1,6 +1,8 @@
 package com.shootr.android.ui.views;
 
-public interface ResetPasswordConfirmationView {
+import com.shootr.android.ui.views.base.DataTransferView;
+
+public interface ResetPasswordConfirmationView extends DataTransferView{
 
     void showAvatar(String avatarUrl);
 

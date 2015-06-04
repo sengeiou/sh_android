@@ -35,13 +35,15 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
     }
 
     public void confirm() {
+        resetPasswordConfirmationView.showLoading();
         confirmResetPasswordInteractor.confirmResetPassword(forgotPasswordUserModel.getIdUser(), //
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
                   resetPasswordConfirmationView.showDoneButton();
-                  resetPasswordConfirmationView.hideConfirmationButton();
                   resetPasswordConfirmationView.showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
+                  resetPasswordConfirmationView.hideConfirmationButton();
+                  resetPasswordConfirmationView.hideLoading();
               }
           }, //
           new Interactor.ErrorCallback() {
