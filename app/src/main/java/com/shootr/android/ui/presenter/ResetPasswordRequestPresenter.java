@@ -20,7 +20,9 @@ public class ResetPasswordRequestPresenter implements Presenter {
     }
 
     public void onUsernameOrEmailChanged(String usernameOrEmail) {
-        resetPasswordRequestView.enableNextButton();
+        if (!usernameOrEmail.isEmpty()) {
+            resetPasswordRequestView.enableNextButton();
+        }
     }
 
     @Override

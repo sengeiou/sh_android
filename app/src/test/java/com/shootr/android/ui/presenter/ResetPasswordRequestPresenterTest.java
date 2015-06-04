@@ -6,11 +6,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class ResetPasswordRequestPresenterTest {
 
     private static final String STUB_USERNAME_OR_EMAIL = "username_or_email";
+    private static final String EMPTY = "";
 
     @Mock ResetPasswordRequestView resetPasswordRequestView;
 
@@ -35,5 +37,12 @@ public class ResetPasswordRequestPresenterTest {
         presenter.onUsernameOrEmailChanged(STUB_USERNAME_OR_EMAIL);
 
         verify(resetPasswordRequestView).enableNextButton();
+    }
+
+    @Test
+    public void shouldNotEnableNextButtonWhenUsernameOremailChangedIfHasEmptyText() throws Exception {
+        presenter.onUsernameOrEmailChanged(EMPTY);
+
+        verify(resetPasswordRequestView, never()).enableNextButton();
     }
 }
