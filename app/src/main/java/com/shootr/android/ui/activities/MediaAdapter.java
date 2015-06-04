@@ -16,12 +16,13 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private Context context;
-    private List<ShotModel> shotsWithMedia = new ArrayList<>();
+    private List<ShotModel> shotsWithMedia = Collections.EMPTY_LIST;
     private final PicassoWrapper picasso;
 
     public MediaAdapter(Context context, PicassoWrapper picasso) {
