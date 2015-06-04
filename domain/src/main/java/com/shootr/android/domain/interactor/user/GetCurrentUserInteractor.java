@@ -12,7 +12,6 @@ public class GetCurrentUserInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final PostExecutionThread postExecutionThread;
     private Callback<User> callback;
-    private ErrorCallback errorCallback;
 
     @Inject public GetCurrentUserInteractor(SessionRepository sessionRepository,
       PostExecutionThread postExecutionThread) {
@@ -20,9 +19,8 @@ public class GetCurrentUserInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void getCurrentUser(Callback<User> callback, ErrorCallback errorCallback) throws Throwable {
+    public void getCurrentUser(Callback<User> callback) throws Throwable {
         this.callback = callback;
-        this.errorCallback = errorCallback;
         execute();
     }
 
@@ -31,25 +29,13 @@ public class GetCurrentUserInteractor implements Interactor {
     }
 
     private void loadSessionUser() {
-        try{
-            notifyResult(sessionRepository.getCurrentUser());
-        }catch (ShootrException error){
-            notifyError(error);
-        }
+        notifyResult(sessionRepository.getCurrentUser());
     }
 
     private void notifyResult(final User user) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(user);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
             }
         });
     }
