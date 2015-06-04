@@ -10,4 +10,5 @@ public interface ResetPasswordConfirmationView {
 
     void showDoneButton();
 
+    void showPostConfirmationMessage(String email);
 }

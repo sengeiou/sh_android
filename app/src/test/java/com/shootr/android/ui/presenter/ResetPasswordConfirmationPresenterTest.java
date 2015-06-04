@@ -68,6 +68,15 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).hideConfirmationButton();
     }
 
+    @Test
+    public void shouldShowPostConfirmationMessageWithEmailWhenConfirmIfInteractorCallbacksResult() throws Exception {
+        setupInteractorCallbacksCompleted();
+
+        presenter.confirm();
+
+        verify(resetPasswordConfirmationView).showPostConfirmationMessage(STUB_EMAIL);
+    }
+
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override

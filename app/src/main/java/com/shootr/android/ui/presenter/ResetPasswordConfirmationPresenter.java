@@ -41,6 +41,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
               public void onCompleted() {
                   resetPasswordConfirmationView.showDoneButton();
                   resetPasswordConfirmationView.hideConfirmationButton();
+                  resetPasswordConfirmationView.showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
               }
           }, //
           new Interactor.ErrorCallback() {
