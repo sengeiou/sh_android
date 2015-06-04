@@ -1,21 +1,24 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
 public class GetCurrentUserInteractor implements Interactor {
 
     private final SessionRepository sessionRepository;
+    private final UserRepository localUserRepository;
     private final PostExecutionThread postExecutionThread;
     private Callback<User> callback;
 
-    @Inject public GetCurrentUserInteractor(SessionRepository sessionRepository,
+    @Inject public GetCurrentUserInteractor(SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       PostExecutionThread postExecutionThread) {
         this.sessionRepository = sessionRepository;
+        this.localUserRepository = localUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -25,11 +28,13 @@ public class GetCurrentUserInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        loadSessionUser();
+        loadCurrentUser();
     }
 
-    private void loadSessionUser() {
-        notifyResult(sessionRepository.getCurrentUser());
+    private void loadCurrentUser() {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        User user = localUserRepository.getUserById(currentUserId);
+        notifyResult(user);
     }
 
     private void notifyResult(final User user) {
