@@ -5,18 +5,22 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ConfirmResetPasswordInteractor;
 import com.shootr.android.ui.model.ForgotPasswordUserModel;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
+import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ResetPasswordConfirmationPresenter implements Presenter {
 
     private final ConfirmResetPasswordInteractor confirmResetPasswordInteractor;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
     private ForgotPasswordUserModel forgotPasswordUserModel;
 
     @Inject
-    public ResetPasswordConfirmationPresenter(ConfirmResetPasswordInteractor confirmResetPasswordInteractor) {
+    public ResetPasswordConfirmationPresenter(ConfirmResetPasswordInteractor confirmResetPasswordInteractor,
+      ErrorMessageFactory errorMessageFactory) {
         this.confirmResetPasswordInteractor = confirmResetPasswordInteractor;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     protected void setView(ResetPasswordConfirmationView resetPasswordConfirmationView) {
@@ -49,7 +53,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
           new Interactor.ErrorCallback() {
               @Override
               public void onError(ShootrException error) {
-                  //TODO
+                  showErrorInView(error);
               }
           });
     }
@@ -61,6 +65,11 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
     private void showUserDataInView() {
         resetPasswordConfirmationView.showAvatar(forgotPasswordUserModel.getAvatarUrl());
         resetPasswordConfirmationView.showUsername(forgotPasswordUserModel.getUsername());
+    }
+
+    private void showErrorInView(ShootrException error) {
+        String errorMessage = errorMessageFactory.getMessageForError(error);
+        resetPasswordConfirmationView.showError(errorMessage);
     }
 
     @Override

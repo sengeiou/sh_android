@@ -1,9 +1,11 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ConfirmResetPasswordInteractor;
 import com.shootr.android.ui.model.ForgotPasswordUserModel;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
+import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,13 +27,14 @@ public class ResetPasswordConfirmationPresenterTest {
 
     @Mock ResetPasswordConfirmationView resetPasswordConfirmationView;
     @Mock ConfirmResetPasswordInteractor confirmResetPasswordInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private ResetPasswordConfirmationPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new ResetPasswordConfirmationPresenter(confirmResetPasswordInteractor);
+        presenter = new ResetPasswordConfirmationPresenter(confirmResetPasswordInteractor, errorMessageFactory);
         presenter.setView(resetPasswordConfirmationView);
         presenter.setUserModel(stubForgotPasswordUserModel());
     }
@@ -93,11 +96,30 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).hideConfirmationButton();
     }
 
+    @Test
+    public void shouldShowErrorWhenConfirmIfInteractorCallbacksError() throws Exception {
+        setupInteractorCallbacksError();
+
+        presenter.confirm();
+
+        verify(resetPasswordConfirmationView).showError(anyString());
+    }
+
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
+                return null;
+            }
+        }).when(confirmResetPasswordInteractor).confirmResetPassword(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    protected void setupInteractorCallbacksError() {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException() {});
                 return null;
             }
         }).when(confirmResetPasswordInteractor).confirmResetPassword(anyString(), anyCallback(), anyErrorCallback());
