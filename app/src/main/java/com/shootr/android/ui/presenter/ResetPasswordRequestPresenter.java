@@ -20,9 +20,13 @@ public class ResetPasswordRequestPresenter implements Presenter {
     }
 
     public void onUsernameOrEmailChanged(String usernameOrEmail) {
-        if (!usernameOrEmail.isEmpty()) {
+        if (!filterInput(usernameOrEmail).isEmpty()) {
             resetPasswordRequestView.enableNextButton();
         }
+    }
+
+    private String filterInput(String inputText) {
+        return inputText.trim();
     }
 
     @Override

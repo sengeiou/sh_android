@@ -13,6 +13,7 @@ public class ResetPasswordRequestPresenterTest {
 
     private static final String STUB_USERNAME_OR_EMAIL = "username_or_email";
     private static final String EMPTY = "";
+    private static final String WHITESPACES = "   ";
 
     @Mock ResetPasswordRequestView resetPasswordRequestView;
 
@@ -45,4 +46,13 @@ public class ResetPasswordRequestPresenterTest {
 
         verify(resetPasswordRequestView, never()).enableNextButton();
     }
+
+    @Test
+    public void shouldNotEnableNextButtonWhenUsernameOremailChangedIfHasWhitespacesOnly() throws Exception {
+        presenter.onUsernameOrEmailChanged(WHITESPACES);
+
+        verify(resetPasswordRequestView, never()).enableNextButton();
+    }
+
+
 }
