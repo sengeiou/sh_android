@@ -12,8 +12,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.util.PicassoWrapper;
+import com.squareup.picasso.RequestCreator;
 import de.hdodenhof.circleimageview.CircleImageView;
 import javax.inject.Inject;
 
@@ -28,7 +32,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private CircleImageView circleImageView;
 
     @Inject PicassoWrapper picasso;
-    @Inject SessionRepository sessionRepository;
 
     public ToolbarDecorator(Context context) {
         this.context = context;
@@ -52,9 +55,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         supportActionBar.setDisplayShowTitleEnabled(false);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setDisplayShowHomeEnabled(true);
-        setTitle(getCurrentUser().getName());
-        setSubtitle(getCurrentUser().getUsername());
-        setAvatarImage(getCurrentUser().getPhoto());
     }
 
     public void setTitle(@StringRes int titleResource) {
@@ -86,22 +86,17 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         if (subtitle == null) {
             hideSubtitle();
         } else {
-            subtitleText.setText(subtitle);
             subtitleText.setVisibility(View.VISIBLE);
+            subtitleText.setText(subtitle);
         }
     }
 
-    public User getCurrentUser(){
-        User user = sessionRepository.getCurrentUser();
-        return user;
-    }
-
     public void setAvatarImage(String imageURL) {
-        if (imageURL == null) {
-            hideSubtitle();
-        } else {
-            circleImageView.setVisibility(View.VISIBLE);
-            picasso.loadProfilePhoto(imageURL).into(circleImageView);
+        circleImageView.setVisibility(View.VISIBLE);
+        RequestCreator requestCreator;
+        if(imageURL != null) {
+            requestCreator = picasso.loadProfilePhoto(imageURL);
+            requestCreator.into(circleImageView);
         }
     }
 
