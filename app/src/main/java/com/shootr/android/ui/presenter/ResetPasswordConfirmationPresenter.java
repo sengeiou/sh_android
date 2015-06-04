@@ -53,6 +53,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
           new Interactor.ErrorCallback() {
               @Override
               public void onError(ShootrException error) {
+                  resetPasswordConfirmationView.hideLoading();
                   showErrorInView(error);
               }
           });

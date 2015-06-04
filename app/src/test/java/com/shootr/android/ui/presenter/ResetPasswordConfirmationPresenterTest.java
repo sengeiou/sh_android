@@ -105,6 +105,15 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).showError(anyString());
     }
 
+    @Test
+    public void shouldHideLoadingWhenConfirmIfInteractorCallbacksError() throws Exception {
+        setupInteractorCallbacksError();
+
+        presenter.confirm();
+
+        verify(resetPasswordConfirmationView).hideLoading();
+    }
+
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override
