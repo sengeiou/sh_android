@@ -11,5 +11,7 @@ public interface ResetPasswordRequestView extends DataTransferView {
 
     void navigateToResetPasswordConfirmation(ForgotPasswordUserModel forgotPasswordUserModel);
 
+    void showResetPasswordError();
+
     String getUsernameOrEmail();
 }

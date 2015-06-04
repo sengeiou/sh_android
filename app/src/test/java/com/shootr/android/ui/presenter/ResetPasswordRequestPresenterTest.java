@@ -1,11 +1,14 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.ForgotPasswordResult;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ResetPasswordInteractor;
+import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.ui.model.ForgotPasswordUserModel;
 import com.shootr.android.ui.model.mappers.ForgotPasswordUserModelMapper;
 import com.shootr.android.ui.views.ResetPasswordRequestView;
+import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,6 +30,7 @@ public class ResetPasswordRequestPresenterTest {
 
     @Mock ResetPasswordInteractor resetPasswordInteractor;
     @Mock ResetPasswordRequestView resetPasswordRequestView;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private ResetPasswordRequestPresenter presenter;
 
@@ -34,7 +38,8 @@ public class ResetPasswordRequestPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ForgotPasswordUserModelMapper forgotPasswordMapper = new ForgotPasswordUserModelMapper();
-        presenter = new ResetPasswordRequestPresenter(resetPasswordInteractor, forgotPasswordMapper);
+        presenter = new ResetPasswordRequestPresenter(resetPasswordInteractor, forgotPasswordMapper,
+          errorMessageFactory);
         presenter.setView(resetPasswordRequestView);
     }
 
@@ -83,7 +88,7 @@ public class ResetPasswordRequestPresenterTest {
     //endregion
 
     @Test
-    public void shouldNavigateToConfirmationWhenNextIfUserFound() throws Exception {
+    public void shouldNavigateToConfirmationWhenNextIfInteractorCallbacksResult() throws Exception {
         setupResetPasswordInteractorCallbacksResult();
 
         presenter.next();
@@ -91,7 +96,45 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).navigateToResetPasswordConfirmation(any(ForgotPasswordUserModel.class));
     }
 
-    protected void setupResetPasswordInteractorCallbacksResult() {
+    @Test
+    public void shouldShowResetPasswordErrorWhenNextIfInteractorCallbacksResetPasswordException() throws Exception {
+        setupResetPasswordInteractorCallbacksResetPasswordException();
+
+        presenter.next();
+
+        verify(resetPasswordRequestView).showResetPasswordError();
+    }
+
+    @Test
+    public void shouldShowErrorWhenNextIfInteractorCallbacksException() throws Exception {
+        setupResetPasswordInteractorCallbacksShootrException();
+
+        presenter.next();
+
+        verify(resetPasswordRequestView).showError(anyString());
+    }
+
+    private void setupResetPasswordInteractorCallbacksResetPasswordException() {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ResetPasswordException("test"));
+                return null;
+            }
+        }).when(resetPasswordInteractor).attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupResetPasswordInteractorCallbacksShootrException() {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.ErrorCallback) invocation.getArguments()[2]).onError(new ShootrException(){});
+                return null;
+            }
+        }).when(resetPasswordInteractor).attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupResetPasswordInteractorCallbacksResult() {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -104,15 +147,15 @@ public class ResetPasswordRequestPresenterTest {
           .attempResetPassword(anyString(), anyCallback(), anyErrorCallback());
     }
 
-    protected ForgotPasswordResult dummyResult() {
+    private ForgotPasswordResult dummyResult() {
         return new ForgotPasswordResult();
     }
 
-    protected Interactor.Callback<ForgotPasswordResult> anyCallback() {
+    private Interactor.Callback<ForgotPasswordResult> anyCallback() {
         return any(Interactor.Callback.class);
     }
 
-    protected Interactor.ErrorCallback anyErrorCallback() {
+    private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
     }
 }

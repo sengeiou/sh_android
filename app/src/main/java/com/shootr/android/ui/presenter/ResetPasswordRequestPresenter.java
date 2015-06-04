@@ -5,23 +5,27 @@ import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ResetPasswordInteractor;
+import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.ui.model.ForgotPasswordUserModel;
 import com.shootr.android.ui.model.mappers.ForgotPasswordUserModelMapper;
 import com.shootr.android.ui.views.ResetPasswordRequestView;
+import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ResetPasswordRequestPresenter implements Presenter {
 
     private final ResetPasswordInteractor resetPasswordInteractor;
     private final ForgotPasswordUserModelMapper forgotPasswordUserModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private ResetPasswordRequestView resetPasswordRequestView;
 
     @Inject
     public ResetPasswordRequestPresenter(ResetPasswordInteractor resetPasswordInteractor,
-      ForgotPasswordUserModelMapper forgotPasswordUserModelMapper) {
+      ForgotPasswordUserModelMapper forgotPasswordUserModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.resetPasswordInteractor = resetPasswordInteractor;
         this.forgotPasswordUserModelMapper = forgotPasswordUserModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     protected void setView(ResetPasswordRequestView resetPasswordRequestView) {
@@ -45,7 +49,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
           new Interactor.ErrorCallback() {
               @Override
               public void onError(ShootrException error) {
-                  //TODO
+                  showErrorInView(error);
               }
           });
     }
@@ -55,6 +59,14 @@ public class ResetPasswordRequestPresenter implements Presenter {
             resetPasswordRequestView.enableNextButton();
         } else {
             resetPasswordRequestView.disableNextButton();
+        }
+    }
+
+    private void showErrorInView(ShootrException error) {
+        if (error instanceof ResetPasswordException) {
+            resetPasswordRequestView.showResetPasswordError();
+        } else {
+            resetPasswordRequestView.showError(errorMessageFactory.getMessageForError(error));
         }
     }
 
