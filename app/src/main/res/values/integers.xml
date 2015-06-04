@@ -4,4 +4,5 @@
     <integer name="draft_buttons_fade_in_duration">200</integer>
     <integer name="draft_buttons_fade_out_duration">20</integer>
     <integer name="draft_expand_collapse_duration">200</integer>
+    <integer name="media_adapter_number_of_columns">3</integer>
 </resources>

@@ -15,17 +15,18 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.PicassoWrapper;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private Context context;
-    private List<ShotModel> shotsWithMedia;
+    private List<ShotModel> shotsWithMedia = Collections.EMPTY_LIST;
     private final PicassoWrapper picasso;
 
-    public MediaAdapter(Context context, List<ShotModel> shotsWithMedia, PicassoWrapper picasso) {
+    public MediaAdapter(Context context, PicassoWrapper picasso) {
         this.context = context;
-        this.shotsWithMedia = shotsWithMedia;
         this.picasso = picasso;
     }
 
@@ -63,6 +64,11 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         return shotsWithMedia.size();
     }
 
+    public void setShotsWithMedia(List<ShotModel> shotsWithMedia) {
+        this.shotsWithMedia = shotsWithMedia;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ShotModel shotModel;
@@ -91,6 +97,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     }
                 });
             }else{
+                this.videoFrame.setVisibility(View.GONE);
                 bindVideoOrPicture();
             }
         }
