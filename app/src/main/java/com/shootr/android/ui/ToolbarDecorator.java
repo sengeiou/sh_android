@@ -2,6 +2,7 @@ package com.shootr.android.ui;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -11,30 +12,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
-import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
-import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.RequestCreator;
 import de.hdodenhof.circleimageview.CircleImageView;
-import javax.inject.Inject;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
     private final Context context;
+    private final PicassoWrapper picasso;
+
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
     private TextView subtitleText;
     private ViewGroup titleContainer;
+
     private CircleImageView circleImageView;
 
-    @Inject PicassoWrapper picasso;
-
-    public ToolbarDecorator(Context context) {
+    public ToolbarDecorator(Context context, PicassoWrapper picasso) {
         this.context = context;
+        this.picasso = picasso;
     }
 
     @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
@@ -93,11 +91,8 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void setAvatarImage(String imageURL) {
         circleImageView.setVisibility(View.VISIBLE);
-        RequestCreator requestCreator;
-        if(imageURL != null) {
-            requestCreator = picasso.loadProfilePhoto(imageURL);
-            requestCreator.into(circleImageView);
-        }
+        RequestCreator requestCreator = picasso.loadProfilePhoto(imageURL);
+        requestCreator.into(circleImageView);
     }
 
     public Toolbar getToolbar() {
@@ -120,5 +115,14 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
         layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
         layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
+    }
+
+    public void makeUserInformationClickable(final String idUser) {
+        titleContainer.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                Intent intent = ProfileContainerActivity.getIntent(context, idUser);
+                context.startActivity(intent);
+            }
+        });
     }
 }

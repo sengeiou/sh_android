@@ -2,7 +2,6 @@ package com.shootr.android.ui.activities;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
-import com.shootr.android.R;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.NavigationDrawerDecorator;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -35,7 +34,7 @@ public abstract class BaseNavDrawerToolbarActivity extends BaseDecoratedActivity
 
     @Override protected List<ViewContainerDecorator> getDecorators() {
         navigationDrawerDecorator = new NavigationDrawerDecorator(this, picasso, getNavDrawerItemId());
-        toolbarDecorator = new ToolbarDecorator(this);
+        toolbarDecorator = new ToolbarDecorator(this, picasso);
         return Arrays.asList(navigationDrawerDecorator, toolbarDecorator);
     }
 

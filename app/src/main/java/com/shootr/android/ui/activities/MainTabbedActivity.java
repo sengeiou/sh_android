@@ -66,6 +66,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         toolbarDecorator.setTitle(userModel.getName());
         toolbarDecorator.setSubtitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());
+        toolbarDecorator.makeUserInformationClickable(userModel.getIdUser());
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
