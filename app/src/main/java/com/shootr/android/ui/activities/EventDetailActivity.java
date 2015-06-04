@@ -68,7 +68,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @InjectView(R.id.event_title_container) View titleContainer;
     @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
     @InjectView(R.id.event_title) TextView titleText;
-    @InjectView(R.id.event_date) TextView dateText;
     @InjectView(R.id.event_author) TextView authorText;
 
     @InjectView(R.id.event_content_container) View contentContainer;
@@ -332,15 +331,6 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         titleText.setText(title);
     }
 
-    @Override public void setEventDate(String date) {
-        if (date != null && !date.isEmpty()) {
-            dateText.setText(date);
-            dateText.setVisibility(View.VISIBLE);
-        } else {
-            dateText.setVisibility(View.INVISIBLE);
-        }
-    }
-
     @Override public void setEventAuthor(String author) {
         authorText.setText(author);
     }
@@ -365,7 +355,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void showEditEventPhotoOrInfo() {
-        new BottomSheet.Builder(this)
+        new BottomSheet.Builder(this).title(getString(R.string.event_detail_edit_menu_title))
           .sheet(R.menu.event_edit_photo_or_info)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {

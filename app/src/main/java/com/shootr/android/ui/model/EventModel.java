@@ -6,12 +6,9 @@ public class EventModel {
     private String idEvent;
     private String authorId;
     private String authorUsername;
-    private String datetime;
     private String title;
     private String picture;
     private String tag;
-    private String timezone;
-    private long startDate;
     private boolean amIAuthor;
 
     public String getIdEvent() {
@@ -20,14 +17,6 @@ public class EventModel {
 
     public void setIdEvent(String idEvent) {
         this.idEvent = idEvent;
-    }
-
-    public String getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
     }
 
     public String getTitle() {
@@ -63,14 +52,6 @@ public class EventModel {
         this.picture = picture;
     }
 
-    public long getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(long startDate) {
-        this.startDate = startDate;
-    }
-
     public boolean amIAuthor() {
         return amIAuthor;
     }
@@ -85,14 +66,6 @@ public class EventModel {
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
     }
 
     public String getAuthorId() {

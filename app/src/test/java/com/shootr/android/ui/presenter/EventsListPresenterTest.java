@@ -14,12 +14,10 @@ import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.shootr.android.utils.EventDateFormatterStub;
 import com.squareup.otto.Bus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +52,7 @@ public class EventsListPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        EventModelMapper eventModelMapper = new EventModelMapper(new EventDateFormatterStub(), sessionRepository);
+        EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
         presenter = new EventsListPresenter(eventsListInteractor,
@@ -183,7 +181,6 @@ public class EventsListPresenterTest {
         Event event = new Event();
         event.setId(SELECTED_EVENT_ID);
         event.setTitle(SELECTED_EVENT_TITLE);
-        event.setStartDate(new Date());
         event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }
