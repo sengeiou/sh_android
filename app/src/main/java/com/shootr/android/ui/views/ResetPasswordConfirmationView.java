@@ -6,8 +6,6 @@ public interface ResetPasswordConfirmationView {
 
     void showUsername(String username);
 
-    void showEmail(String email);
-
     void hideConfirmationButton();
 
     void showDoneButton();
