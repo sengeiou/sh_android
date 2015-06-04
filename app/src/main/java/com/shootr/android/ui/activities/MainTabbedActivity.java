@@ -9,22 +9,23 @@ import android.support.v4.view.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
-import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.presenter.CurrentUserPresenter;
+import com.shootr.android.ui.views.MainTabbedView;
 import java.util.Locale;
 import javax.inject.Inject;
 
-public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
+public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainTabbedView{
 
     @InjectView(R.id.pager) ViewPager viewPager;
     @InjectView(R.id.tab_layout) TabLayout tabLayout;
-    @Inject GetCurrentUserInteractor getCurrentUserInteractor;
+    @Inject CurrentUserPresenter currentUserPresenter;
+
+    private ToolbarDecorator toolbarDecorator;
 
     @Override
     protected int getLayoutResource() {
@@ -46,30 +47,25 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity {
 
     @Override
     protected void initializePresenter() {
-        //TODO
+        currentUserPresenter.initialize(this);
     }
 
     @Override
-    protected void setupToolbar(final ToolbarDecorator toolbarDecorator) {
-        toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
-        toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
-
+    protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        this.toolbarDecorator = toolbarDecorator;
+        this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
+        this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
         try {
-            getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
-                @Override public void onLoaded(User user) {
-                    toolbarDecorator.setTitle(user.getName());
-                    toolbarDecorator.setSubtitle(user.getUsername());
-                    toolbarDecorator.setAvatarImage(user.getPhoto());
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    //TODO)
-                }
-            });
+            currentUserPresenter.getCurrentUser();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
 
+    @Override public void setUserInformationInToolbar(UserModel userModel) {
+        toolbarDecorator.setTitle(userModel.getName());
+        toolbarDecorator.setSubtitle(userModel.getUsername());
+        toolbarDecorator.setAvatarImage(userModel.getPhoto());
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
