@@ -87,6 +87,7 @@ public class ResetPasswordRequestPresenterTest {
     }
     //endregion
 
+    //region Next action
     @Test
     public void shouldNavigateToConfirmationWhenNextIfInteractorCallbacksResult() throws Exception {
         setupResetPasswordInteractorCallbacksResult();
@@ -96,6 +97,33 @@ public class ResetPasswordRequestPresenterTest {
         verify(resetPasswordRequestView).navigateToResetPasswordConfirmation(any(ForgotPasswordUserModel.class));
     }
 
+    @Test
+    public void shouldDisableNextButtonWhenNext() throws Exception {
+        presenter.next();
+
+        verify(resetPasswordRequestView).disableNextButton();
+    }
+
+    @Test
+    public void shouldEnableNextButtonWhenNextIfInteractorCallbackResetPasswordException() throws Exception {
+        setupResetPasswordInteractorCallbacksResetPasswordException();
+
+        presenter.next();
+
+        verify(resetPasswordRequestView).enableNextButton();
+    }
+
+    @Test
+    public void shouldEnableNextButtonWhenNextIfInteractorCallbackShootrException() throws Exception {
+        setupResetPasswordInteractorCallbacksShootrException();
+
+        presenter.next();
+
+        verify(resetPasswordRequestView).enableNextButton();
+    }
+    //endregion
+
+    //region Errors
     @Test
     public void shouldShowResetPasswordErrorWhenNextIfInteractorCallbacksResetPasswordException() throws Exception {
         setupResetPasswordInteractorCallbacksResetPasswordException();
@@ -113,6 +141,7 @@ public class ResetPasswordRequestPresenterTest {
 
         verify(resetPasswordRequestView).showError(anyString());
     }
+    //endregion
 
     private void setupResetPasswordInteractorCallbacksResetPasswordException() {
         doAnswer(new Answer() {
