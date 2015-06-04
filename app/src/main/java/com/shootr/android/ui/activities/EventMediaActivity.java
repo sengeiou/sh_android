@@ -39,10 +39,6 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_collumns)));
-        getMediaAdapter();
-    }
-
-    private void getMediaAdapter() {
         mediaAdapter = new MediaAdapter(this, picasso);
         mediaView.setAdapter(mediaAdapter);
     }
