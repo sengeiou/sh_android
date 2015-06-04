@@ -166,12 +166,7 @@ public class DataModule {
     @Provides @Singleton Picasso providePicasso(Application app) {
         return new Picasso.Builder(app)
           //                .downloader(new OkHttpDownloader(client))
-          .listener(new Picasso.Listener() {
-              @Override
-              public void onImageLoadFailed(Picasso picasso, Uri uri, Exception e) {
-                  Timber.w(e, "Failed to load image: %s", uri);
-              }
-          }).build();
+          .build();
     }
 
     @Provides @Singleton PicassoWrapper providePicassoWrapper(Picasso picasso) {

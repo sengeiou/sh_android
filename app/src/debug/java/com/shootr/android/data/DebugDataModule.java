@@ -74,7 +74,7 @@ public class DebugDataModule {
     }
 
     @Provides @Singleton @CustomEndpoint StringPreference provideCustomEndpoint(SharedPreferences preferences) {
-        return new StringPreference(preferences, "debug_custom_endpoint", ApiModule.PRODUCTION_API_URL);
+        return new StringPreference(preferences, "debug_custom_endpoint", ApiModule.PRODUCTION_ENDPOINT_URL);
     }
 
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {

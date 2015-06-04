@@ -5,6 +5,14 @@ public class EventSearchResult {
     private Event event;
     private int watchersNumber;
 
+    public EventSearchResult() {
+    }
+
+    public EventSearchResult(Event event, int watchersNumber) {
+        this.event = event;
+        this.watchersNumber = watchersNumber;
+    }
+
     public Event getEvent() {
         return event;
     }

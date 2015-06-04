@@ -84,10 +84,8 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
     private Map<String, Integer> getWatchersCountByEvents()  {
         String currentUserId = sessionRepository.getCurrentUserId();
 
-        List<String> followingAndCurrentUserIds = followManager.getUserFollowingIds(currentUserId);
-        followingAndCurrentUserIds.add(currentUserId);
-
-        List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingAndCurrentUserIds);
+        List<String> followingUserIds = followManager.getUserFollowingIds(currentUserId);
+        List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingUserIds);
 
         Map<String, Integer> eventsWatchesCounts = new HashMap<>();
         for (UserEntity watcher : watchers) {

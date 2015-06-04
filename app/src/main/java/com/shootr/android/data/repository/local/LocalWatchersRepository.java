@@ -31,16 +31,16 @@ public class LocalWatchersRepository implements WatchersRepository {
         return watchers;
     }
 
+    @Override
+    public Map<String, Integer> getWatchers() {
+        return getWatchersCountByEvents();
+    }
+
     private Map<String, Integer> getWatchersCountByEvents() {
-
         List<User> people = localUserRepository.getPeople();
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-
-        List<User> potentialWatchers = new ArrayList<>(people);
-        potentialWatchers.add(currentUser);
 
         Map<String, Integer> eventsWatchesCounts = new HashMap<>();
-        for (User watcher : potentialWatchers) {
+        for (User watcher : people) {
             if (watcher.getIdWatchingEvent() != null) {
                 Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
                 if (currentCount != null) {
