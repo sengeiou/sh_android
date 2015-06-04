@@ -13,4 +13,6 @@ public interface ResetPasswordConfirmationView extends DataTransferView{
     void showDoneButton();
 
     void showPostConfirmationMessage(String email);
+
+    void navigateToLogin();
 }

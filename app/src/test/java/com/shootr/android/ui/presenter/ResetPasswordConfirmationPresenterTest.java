@@ -114,6 +114,14 @@ public class ResetPasswordConfirmationPresenterTest {
         verify(resetPasswordConfirmationView).hideLoading();
     }
 
+    @Test
+    public void shouldNavigateToLoginWhenDone() throws Exception {
+        presenter.done();
+
+        verify(resetPasswordConfirmationView).navigateToLogin();
+
+    }
+
     protected void setupInteractorCallbacksCompleted() {
         doAnswer(new Answer() {
             @Override

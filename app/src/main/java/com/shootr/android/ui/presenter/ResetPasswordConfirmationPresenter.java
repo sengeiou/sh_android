@@ -60,7 +60,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
     }
 
     public void done() {
-        //TODO
+        resetPasswordConfirmationView.navigateToLogin();
     }
 
     private void showUserDataInView() {
