@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.RequestCreator;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
@@ -91,8 +90,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void setAvatarImage(String imageURL) {
         avatar.setVisibility(View.VISIBLE);
-        RequestCreator requestCreator = picasso.loadProfilePhoto(imageURL);
-        requestCreator.into(avatar);
+        picasso.loadProfilePhoto(imageURL).into(avatar);
     }
 
     public Toolbar getToolbar() {
