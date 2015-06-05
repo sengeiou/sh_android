@@ -28,7 +28,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private TextView subtitleText;
     private ViewGroup titleContainer;
 
-    private CircleImageView circleImageView;
+    private CircleImageView avatar;
 
     public ToolbarDecorator(Context context, PicassoWrapper picasso) {
         this.context = context;
@@ -41,7 +41,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
-        circleImageView = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
+        avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
         setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
@@ -90,9 +90,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     }
 
     public void setAvatarImage(String imageURL) {
-        circleImageView.setVisibility(View.VISIBLE);
+        avatar.setVisibility(View.VISIBLE);
         RequestCreator requestCreator = picasso.loadProfilePhoto(imageURL);
-        requestCreator.into(circleImageView);
+        requestCreator.into(avatar);
     }
 
     public Toolbar getToolbar() {
@@ -124,5 +124,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
                 context.startActivity(intent);
             }
         });
+    }
+
+    public void hideAvatarImage() {
+        toolbar.setVisibility(View.GONE);
     }
 }
