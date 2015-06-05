@@ -22,6 +22,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventTimelineActivity;
+import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
@@ -134,6 +135,19 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         SearchView.SearchAutoComplete searchAutoComplete =
           (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
         searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white_disabled));
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                ((MainTabbedActivity) getActivity()).hideUserInfo();
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override public boolean onClose() {
+                ((MainTabbedActivity) getActivity()).showUserInfo();
+                return false;
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {

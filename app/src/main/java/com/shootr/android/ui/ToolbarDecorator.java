@@ -124,7 +124,11 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         });
     }
 
-    public void hideAvatarImage() {
-        toolbar.setVisibility(View.GONE);
+    public void hideUserInfo() {
+        titleContainer.setVisibility(View.GONE);
+    }
+
+    public void showUserInfo() {
+        titleContainer.setVisibility(View.VISIBLE);
     }
 }

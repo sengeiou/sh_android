@@ -76,6 +76,13 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         toolbarDecorator.makeUserInformationClickable(userModel.getIdUser());
     }
 
+    public void hideUserInfo(){
+        toolbarDecorator.hideUserInfo();
+    }
+    public void showUserInfo(){
+        toolbarDecorator.showUserInfo();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
