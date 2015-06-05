@@ -25,7 +25,7 @@ public class CurrentUserPresenter implements Presenter {
         this.mainTabbedView = mainTabbedView;
     }
 
-    public void getCurrentUser() throws Throwable {
+    public void getCurrentUser() {
         getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
                 UserModel userModel = userModelMapper.transform(user);

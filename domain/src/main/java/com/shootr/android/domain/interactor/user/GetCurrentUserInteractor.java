@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.user;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -10,21 +11,26 @@ import javax.inject.Inject;
 
 public class GetCurrentUserInteractor implements Interactor {
 
+    private final InteractorHandler interactorHandler;
+    private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
-    private final PostExecutionThread postExecutionThread;
+
     private Callback<User> callback;
 
-    @Inject public GetCurrentUserInteractor(SessionRepository sessionRepository, @Local UserRepository localUserRepository,
-      PostExecutionThread postExecutionThread) {
+    @Inject public GetCurrentUserInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository,
+      @Local UserRepository localUserRepository) {
+        this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void getCurrentUser(Callback<User> callback) throws Throwable {
+    public void getCurrentUser(Callback<User> callback) {
         this.callback = callback;
-        execute();
+        interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {

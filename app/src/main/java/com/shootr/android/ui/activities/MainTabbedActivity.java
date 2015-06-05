@@ -55,11 +55,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         this.toolbarDecorator = toolbarDecorator;
         this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
-        try {
-            currentUserPresenter.getCurrentUser();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        currentUserPresenter.getCurrentUser();
     }
 
     @Override public void setUserInformationInToolbar(UserModel userModel) {
