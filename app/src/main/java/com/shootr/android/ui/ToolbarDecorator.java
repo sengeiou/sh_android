@@ -115,7 +115,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
     }
 
-    public void makeUserInformationClickable(final String idUser) {
+    public void setTitleContainerClickListener(final String idUser) {
         titleContainer.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 Intent intent = ProfileContainerActivity.getIntent(context, idUser);
@@ -124,11 +124,11 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         });
     }
 
-    public void hideUserInfo() {
+    public void hideTitleContainerInfo() {
         titleContainer.setVisibility(View.GONE);
     }
 
-    public void showUserInfo() {
+    public void showTitleContainerInfo() {
         titleContainer.setVisibility(View.VISIBLE);
     }
 }
