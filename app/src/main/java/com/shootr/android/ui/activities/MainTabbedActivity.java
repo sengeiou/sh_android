@@ -79,7 +79,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setToolbarClickListener(final UserModel userModel) {
-        toolbarDecorator.getToolbar().setOnClickListener(new View.OnClickListener() {
+        toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 Intent intent = ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
                 startActivity(intent);
