@@ -40,6 +40,9 @@ public class GetCurrentUserInteractor implements Interactor {
     private void loadCurrentUser() {
         String currentUserId = sessionRepository.getCurrentUserId();
         User user = localUserRepository.getUserById(currentUserId);
+        if (user == null) {
+            throw new IllegalStateException("Current user can't be null when using this Interactor");
+        }
         notifyResult(user);
     }
 
