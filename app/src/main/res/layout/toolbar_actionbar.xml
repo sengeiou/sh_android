@@ -4,7 +4,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="?actionBarSize">
+  android:layout_height="?actionBarSize"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout android:id="@+id/toolbar_title_container"
       android:layout_width="match_parent"
@@ -19,7 +20,9 @@
           android:layout_height="@dimen/userlist_avatar_size"
           android:src="@drawable/ic_contact_picture_default"
           android:visibility="gone"
-          tools:visibility="visible"/>
+          tools:visibility="visible"
+          app:border_width="2dp"
+          app:border_color="@color/white"/>
 
       <TextView android:id="@+id/toolbar_title"
           style="@style/ActionBar.TitleText"
