@@ -20,7 +20,6 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
@@ -33,7 +32,6 @@ import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.ui.views.nullview.NullEventListView;
 import com.shootr.android.util.PicassoWrapper;
-import hugo.weaving.DebugLog;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -72,6 +70,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        presenter.setView(this);
         initializePresenter();
     }
 
@@ -109,7 +108,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     }
 
     protected void initializePresenter() {
-        presenter.initialize(this);
+        presenter.initialize();
     }
 
     @OnClick(R.id.events_add_event)
@@ -124,7 +123,9 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         inflater.inflate(R.menu.events_list, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
-        setupSearchView();
+        if(isAdded()){
+            setupSearchView();
+        }
     }
 
     private void setupSearchView() {

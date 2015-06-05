@@ -88,7 +88,8 @@ public class EventsListActivity extends BaseNavDrawerToolbarActivity implements 
     }
 
     @Override protected void initializePresenter() {
-        presenter.initialize(this);
+        presenter.setView(this);
+        presenter.initialize();
 
         //TODO well... the method's name is a lie right now. GCM Registration should be done from the actual presenter I guess
         startGCMRegistration();
