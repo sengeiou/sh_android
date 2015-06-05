@@ -55,10 +55,21 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         this.toolbarDecorator = toolbarDecorator;
         this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(false);
-        currentUserPresenter.getCurrentUser();
     }
 
-    @Override public void setUserInformationInToolbar(UserModel userModel) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        currentUserPresenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        currentUserPresenter.pause();
+    }
+
+    @Override public void setUserData(UserModel userModel) {
         toolbarDecorator.setTitle(userModel.getName());
         toolbarDecorator.setSubtitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());

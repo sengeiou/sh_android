@@ -4,5 +4,5 @@ import com.shootr.android.ui.model.UserModel;
 
 public interface MainTabbedView {
 
-    void setUserInformationInToolbar(UserModel userModel);
+    void setUserData(UserModel userModel);
 }

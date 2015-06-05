@@ -1,7 +1,6 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.ui.model.UserModel;
@@ -15,30 +14,34 @@ public class CurrentUserPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
 
     private MainTabbedView mainTabbedView;
+    private boolean hasBeenPaused = false;
 
     @Inject public CurrentUserPresenter(GetCurrentUserInteractor getCurrentUserInteractor, UserModelMapper userModelMapper) {
         this.getCurrentUserInteractor = getCurrentUserInteractor;
         this.userModelMapper = userModelMapper;
     }
 
-    public void initialize(MainTabbedView mainTabbedView){
+    public void initialize(MainTabbedView mainTabbedView) {
         this.mainTabbedView = mainTabbedView;
+        this.loadCurrentUser();
     }
 
-    public void getCurrentUser() {
+    private void loadCurrentUser() {
         getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
                 UserModel userModel = userModelMapper.transform(user);
-                mainTabbedView.setUserInformationInToolbar(userModel);
+                mainTabbedView.setUserData(userModel);
             }
         });
     }
 
     @Override public void resume() {
-
+        if (hasBeenPaused) {
+            loadCurrentUser();
+        }
     }
 
     @Override public void pause() {
-
+        hasBeenPaused = true;
     }
 }
