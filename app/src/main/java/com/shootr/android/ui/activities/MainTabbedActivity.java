@@ -10,7 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
@@ -26,6 +29,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @InjectView(R.id.pager) ViewPager viewPager;
     @InjectView(R.id.tab_layout) TabLayout tabLayout;
     @Inject CurrentUserPresenter currentUserPresenter;
+    @Inject JobManager jobManager;
 
     private ToolbarDecorator toolbarDecorator;
 
@@ -50,6 +54,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     protected void initializePresenter() {
         currentUserPresenter.initialize(this);
+        startGCMRegistration();
     }
 
     @Override
@@ -71,7 +76,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         currentUserPresenter.pause();
     }
 
-    @Override public void setUserData(final UserModel userModel) {
+    @Deprecated
+    private void startGCMRegistration() {
+        GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
+        jobManager.addJobInBackground(job);
+    }
+
+    @Override
+    public void setUserData(final UserModel userModel) {
         toolbarDecorator.setTitle(userModel.getName());
         toolbarDecorator.setSubtitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());
