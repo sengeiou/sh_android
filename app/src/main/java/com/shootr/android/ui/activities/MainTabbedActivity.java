@@ -1,11 +1,13 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -69,11 +71,20 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         currentUserPresenter.pause();
     }
 
-    @Override public void setUserData(UserModel userModel) {
+    @Override public void setUserData(final UserModel userModel) {
         toolbarDecorator.setTitle(userModel.getName());
         toolbarDecorator.setSubtitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());
-        toolbarDecorator.setTitleContainerClickListener(userModel.getIdUser());
+        setToolbarClickListener(userModel);
+    }
+
+    private void setToolbarClickListener(final UserModel userModel) {
+        toolbarDecorator.getToolbar().setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                Intent intent = ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
+                startActivity(intent);
+            }
+        });
     }
 
     public void hideUserInfo(){
