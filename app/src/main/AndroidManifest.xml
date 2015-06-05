@@ -42,25 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activities.EventsListActivity"
-            android:label="@string/app_name"
-            android:launchMode="standard" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.activities.ActivityTimelineActivity"
-            android:label="@string/drawer_activity_title" >
-        </activity>
         <activity android:name=".ui.activities.EventTimelineActivity" >
         </activity>
-        <activity
-            android:name=".ui.activities.PeopleActivity"
-            android:label="@string/drawer_friends_title" />
         <activity
             android:name=".ui.activities.registro.WelcomeLoginActivity"
             android:label="@string/app_name"
@@ -93,7 +76,7 @@
         <activity android:name=".ui.activities.ProfileContainerActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.EventsListActivity" />
+                android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
         </activity>
@@ -103,7 +86,7 @@
             android:theme="@style/ShootrTheme.Closable" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.EventsListActivity" />
+                android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
             android:name=".ui.activities.EventDetailActivity"
@@ -111,7 +94,7 @@
             android:theme="@style/ShootrTheme.TranslucentToolbar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.EventsListActivity" />
+                android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
             android:name=".ui.activities.ProfileEditActivity"
@@ -139,7 +122,7 @@
             android:theme="@style/ShootrTheme.Closable" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.EventsListActivity" />
+                android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
             android:name=".ui.activities.DraftsActivity"

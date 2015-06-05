@@ -28,7 +28,6 @@ import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.activities.BaseNavDrawerToolbarActivity;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
@@ -189,11 +188,7 @@ public class EventTimelineFragment extends BaseFragment
 
     private void initializeToolbar() {
         //FIXME So coupling. Much bad. Such ugly.
-        if (getActivity() instanceof BaseNavDrawerToolbarActivity) {
-            toolbarDecorator = ((BaseNavDrawerToolbarActivity) getActivity()).getToolbarDecorator();
-        } else {
-            toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
-        }
+        toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
     }
 
 

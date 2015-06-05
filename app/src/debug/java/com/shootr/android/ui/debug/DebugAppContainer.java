@@ -32,7 +32,7 @@ import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
-import com.shootr.android.ui.activities.EventsListActivity;
+import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -698,7 +698,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void relaunch() {
-        Intent newApp = new Intent(app, EventsListActivity.class);
+        Intent newApp = new Intent(app, MainTabbedActivity.class);
         newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ShootrApplication.get(app).buildObjectGraphAndInject();

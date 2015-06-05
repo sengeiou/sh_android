@@ -123,7 +123,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 case 2:
                     return getString(R.string.drawer_friends_title).toUpperCase(l);
                 default:
-                    throw new IllegalStateException(String.format("Item title for position %d doesn't exists", position));
+                    throw new IllegalStateException(String.format("Item title for position %d doesn't exists",
+                      position));
             }
         }
     }
