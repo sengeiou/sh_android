@@ -42,7 +42,7 @@ public class EventsListPresenter implements Presenter {
     }
     //endregion
 
-    protected void setView(EventsListView eventsListView) {
+    public void setView(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
     }
 

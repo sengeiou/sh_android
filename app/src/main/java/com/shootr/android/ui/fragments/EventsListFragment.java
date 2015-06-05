@@ -31,6 +31,7 @@ import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.ui.views.nullview.NullEventListView;
 import com.shootr.android.util.PicassoWrapper;
 import hugo.weaving.DebugLog;
 import java.util.List;
@@ -78,6 +79,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        presenter.setView(new NullEventListView());
     }
     //endregion
 
