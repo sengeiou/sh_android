@@ -4,7 +4,9 @@ import android.support.annotation.LayoutRes;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.ViewContainerDecorator;
 import com.shootr.android.ui.base.BaseDecoratedActivity;
+import com.shootr.android.ui.dagger.ToolbarDecoratedModule;
 import com.shootr.android.util.PicassoWrapper;
+import dagger.ObjectGraph;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,6 +25,11 @@ public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity
     @Override protected List<ViewContainerDecorator> getDecorators() {
         toolbarDecorator = new ToolbarDecorator(this, picasso);
         return Collections.singletonList((ViewContainerDecorator) toolbarDecorator);
+    }
+
+    @Override
+    public ObjectGraph getObjectGraph() {
+        return super.getObjectGraph().plus(new ToolbarDecoratedModule(this));
     }
 
     protected abstract void setupToolbar(ToolbarDecorator toolbarDecorator);

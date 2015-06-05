@@ -55,7 +55,6 @@ import javax.inject.Singleton;
                 NewEventActivity.class,
                 EventMediaActivity.class,
                 UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class,
-                EventsListFragment.class
         },
         complete = false
 )

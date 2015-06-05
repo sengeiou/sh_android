@@ -87,13 +87,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         });
     }
 
-    public void hideUserInfo(){
-        toolbarDecorator.hideTitleContainerInfo();
-    }
-    public void showUserInfo(){
-        toolbarDecorator.showTitleContainerInfo();
-    }
-
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

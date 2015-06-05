@@ -1,0 +1,27 @@
+package com.shootr.android.ui.dagger;
+
+import com.shootr.android.ShootrModule;
+import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
+import com.shootr.android.ui.fragments.EventsListFragment;
+import dagger.Module;
+import dagger.Provides;
+
+@Module(
+  injects = {
+    EventsListFragment.class
+  },
+  addsTo = ShootrModule.class
+)
+public class ToolbarDecoratedModule {
+
+  private final BaseToolbarDecoratedActivity baseToolbarDecoratedActivity;
+
+  public ToolbarDecoratedModule(BaseToolbarDecoratedActivity baseToolbarDecoratedActivity) {
+    this.baseToolbarDecoratedActivity = baseToolbarDecoratedActivity;
+  }
+
+  @Provides ToolbarDecorator provideToolbarDecorator() {
+    return baseToolbarDecoratedActivity.getToolbarDecorator();
+  }
+}

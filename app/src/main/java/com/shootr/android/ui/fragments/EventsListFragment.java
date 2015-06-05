@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
@@ -47,6 +48,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     @Inject EventsListPresenter presenter;
     @Inject PicassoWrapper picasso;
+    @Inject ToolbarDecorator toolbarDecorator;
 
     private EventsListAdapter adapter;
     private SearchView searchView;
@@ -138,13 +140,13 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                ((MainTabbedActivity) getActivity()).hideUserInfo();
+                toolbarDecorator.hideTitleContainerInfo();
             }
         });
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override public boolean onClose() {
-                ((MainTabbedActivity) getActivity()).showUserInfo();
+                toolbarDecorator.showTitleContainerInfo();
                 return false;
             }
         });
