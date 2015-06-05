@@ -21,7 +21,7 @@
       android:id="@+id/tab_layout_shadow"
       android:layout_width="match_parent"
       android:layout_height="@dimen/tabbar_shadow_height"
-      android:background="@drawable/toolbar_dropshadow" />
+      android:background="@drawable/shadow_top_down" />
 
   </RelativeLayout>
 </LinearLayout>
