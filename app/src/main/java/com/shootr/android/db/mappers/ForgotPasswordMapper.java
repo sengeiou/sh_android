@@ -4,10 +4,11 @@ import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.db.DatabaseContract;
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
 
 public class ForgotPasswordMapper extends GenericMapper {
 
-    public ForgotPasswordMapper() {
+    @Inject public ForgotPasswordMapper() {
 
     }
 

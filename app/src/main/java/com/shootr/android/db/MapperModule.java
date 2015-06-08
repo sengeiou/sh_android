@@ -51,12 +51,4 @@ public class MapperModule {
         return new EventEntityMapper();
     }
 
-    @Provides ForgotPasswordResultEntityMapper forgotPasswordResultEntityMapper() {
-        return new ForgotPasswordResultEntityMapper();
-    }
-
-    @Provides ForgotPasswordMapper forgotPasswordMapper() {
-        return new ForgotPasswordMapper();
-    }
-
 }
