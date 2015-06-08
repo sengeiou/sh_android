@@ -46,7 +46,7 @@ public class EventsListPresenter implements Presenter {
         this.eventsListView = eventsListView;
     }
 
-    public void initialize() {
+    public void initialize(EventsListView eventsListView) {
         this.setView(eventsListView);
         this.loadDefaultEventList();
     }

@@ -73,7 +73,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        presenter.setView(this);
         initializePresenter();
     }
 
@@ -111,7 +110,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     }
 
     protected void initializePresenter() {
-        presenter.initialize();
+        presenter.initialize(this);
     }
 
     @OnClick(R.id.events_add_event)
