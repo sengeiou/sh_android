@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -22,15 +24,10 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
+import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.util.PicassoWrapper;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnItemClick;
 
 public class PeopleFragment extends BaseFragment implements PeopleView{
 
@@ -44,6 +41,10 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @InjectView(R.id.userlist_empty) TextView emptyTextView;
     private FriendsAdapter peopleAdapter;
 
+    public static PeopleFragment newInstance() {
+        return new PeopleFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        presenter.initialize(this);
+        presenter.setView(this);
+        presenter.initialize();
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -70,6 +72,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        presenter.setView(new NullPeopleView());
     }
 
     @Override public void onResume() {

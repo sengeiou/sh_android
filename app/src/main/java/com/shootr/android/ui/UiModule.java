@@ -1,14 +1,12 @@
 package com.shootr.android.ui;
 
-import com.shootr.android.ui.activities.ActivityTimelineActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
-import com.shootr.android.ui.activities.EventsListActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
-import com.shootr.android.ui.activities.PeopleActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -45,14 +43,11 @@ import javax.inject.Singleton;
                 ShotDetailActivity.class,
                 PhotoViewActivity.class,
                 EventTimelineActivity.class,
-                ActivityTimelineActivity.class,
-                PeopleActivity.class,
                 PeopleFragment.class,
                 WatchersView.class,
-                EventsListActivity.class,
                 NewEventActivity.class,
                 EventMediaActivity.class,
-                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class
+                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class,
         },
         complete = false
 )

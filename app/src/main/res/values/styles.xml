@@ -17,7 +17,7 @@
         <item name="toolbar">@style/ToolBar</item>
 
         <item name="bottomSheetStyle">@style/BottomSheetMaterial</item>
-        <item name="android:windowBackground">@color/white_backround</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="ShootrTheme.Closable">
@@ -57,6 +57,18 @@
 
     <style name="ToolBar.Translucent">
         <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="ShootrTabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/white_disabled</item>
     </style>
 
     <style name="ToolBar.Overlay">

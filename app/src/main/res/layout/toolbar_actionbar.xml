@@ -4,21 +4,27 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="?actionBarSize">
+  android:layout_height="?actionBarSize"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout android:id="@+id/toolbar_title_container"
+    <RelativeLayout android:id="@+id/toolbar_title_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center_vertical"
       android:animateLayoutChanges="true"
-      android:background="?selectableItemBackground"
-      android:orientation="vertical"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:visibility="gone"
-      tools:visibility="visible">
+      android:background="?selectableItemBackground">
 
-        <TextView android:id="@+id/toolbar_title"
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/toolbar_user_avatar"
+          android:layout_width="@dimen/userlist_avatar_size"
+          android:layout_height="@dimen/userlist_avatar_size"
+          android:src="@drawable/ic_contact_picture_default"
+          android:visibility="gone"
+          tools:visibility="visible"
+          app:border_width="2dp"
+          app:border_color="@color/white"/>
+
+      <TextView android:id="@+id/toolbar_title"
           style="@style/ActionBar.TitleText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -28,6 +34,8 @@
           android:gravity="center_vertical|start"
           android:singleLine="true"
           android:visibility="gone"
+          android:paddingLeft="@dimen/toolbar_title_padding"
+          android:layout_toRightOf="@+id/toolbar_user_avatar"
           tools:drawableRight="@drawable/spinner_triangle_white"
           tools:text="Title"
           tools:visibility="visible" />
@@ -36,9 +44,12 @@
           style="@style/ActionBar.SubtitleText"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:paddingLeft="@dimen/toolbar_title_padding"
+          android:layout_toRightOf="@+id/toolbar_user_avatar"
+          android:layout_below="@+id/toolbar_title"
           android:visibility="gone"
           tools:text="Subtitle"
           tools:visibility="visible" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

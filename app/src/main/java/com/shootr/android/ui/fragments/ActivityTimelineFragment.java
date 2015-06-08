@@ -21,6 +21,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.dagger.ActivityTimelineInteractorsModule;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.TimelinePresenter;
@@ -31,6 +32,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
 
+import dagger.ObjectGraph;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -119,6 +121,12 @@ public class ActivityTimelineFragment extends BaseFragment implements TimelineVi
         timelinePresenter.initialize(this);
     }
     //endregion
+
+    @Override
+    protected ObjectGraph getObjectGraph() {
+        ObjectGraph baseObjectGraph = super.getObjectGraph();
+        return baseObjectGraph.plus(new ActivityTimelineInteractorsModule());
+    }
 
     //region Views manipulation
     private void initializeViews() {

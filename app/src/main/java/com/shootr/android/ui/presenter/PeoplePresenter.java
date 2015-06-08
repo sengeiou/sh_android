@@ -32,9 +32,12 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
         this.userModelMapper = userModelMapper;
     }
 
-    public void initialize(PeopleView peopleView) {
-        this.peopleView = peopleView;
+    public void initialize() {
         this.loadPeopleList();
+    }
+
+    public void setView(PeopleView peopleView){
+        this.peopleView = peopleView;
     }
 
     public void refresh() {

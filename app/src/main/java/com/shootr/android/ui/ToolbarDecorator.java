@@ -2,6 +2,7 @@ package com.shootr.android.ui;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -11,18 +12,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.util.PicassoWrapper;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
     private final Context context;
+    private final PicassoWrapper picasso;
+
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
     private TextView subtitleText;
     private ViewGroup titleContainer;
 
-    public ToolbarDecorator(Context context) {
+    private CircleImageView avatar;
+
+    public ToolbarDecorator(Context context, PicassoWrapper picasso) {
         this.context = context;
+        this.picasso = picasso;
     }
 
     @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
@@ -31,6 +40,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
+        avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
         setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
     }
@@ -74,9 +84,14 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         if (subtitle == null) {
             hideSubtitle();
         } else {
-            subtitleText.setText(subtitle);
             subtitleText.setVisibility(View.VISIBLE);
+            subtitleText.setText(subtitle);
         }
+    }
+
+    public void setAvatarImage(String imageURL) {
+        avatar.setVisibility(View.VISIBLE);
+        picasso.loadProfilePhoto(imageURL).into(avatar);
     }
 
     public Toolbar getToolbar() {
@@ -99,5 +114,13 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
         layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
         layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
+    }
+
+    public void hideTitleContainerInfo() {
+        titleContainer.setVisibility(View.GONE);
+    }
+
+    public void showTitleContainerInfo() {
+        titleContainer.setVisibility(View.VISIBLE);
     }
 }
