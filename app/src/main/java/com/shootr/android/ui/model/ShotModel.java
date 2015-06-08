@@ -1,5 +1,6 @@
 package com.shootr.android.ui.model;
 
+import com.shootr.android.domain.ShotType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,6 +25,10 @@ public class ShotModel implements Serializable{
     private String videoUrl;
     private String videoTitle;
     private String videoDuration;
+
+    public Boolean isActivity() {
+        return !getType().equals(ShotType.COMMENT);
+    }
 
     public String getIdShot() {
         return idShot;

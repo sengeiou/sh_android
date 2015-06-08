@@ -40,6 +40,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     public static final String EXTRA_SHOT = "shot";
 
     @InjectView(R.id.shot_detail_list) RecyclerView detailList;
+    @InjectView(R.id.detail_new_shot_bar) View newShotBar;
     @InjectView(R.id.shot_bar_text) TextView replyPlaceholder;
     @InjectView(R.id.shot_bar_drafts) View replyDraftsButton;
 
@@ -170,7 +171,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             @Override public void openNewShotViewWithImage(File image) {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
-                    //TODO reply
                   .withImage(image) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .build();
@@ -244,6 +244,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void setReplyUsername(String username) {
         replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
+    }
+
+    @Override public void hideNewReply() {
+        newShotBar.setVisibility(View.GONE);
     }
 
     @Override public void scrollToBottom() {

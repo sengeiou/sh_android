@@ -15,6 +15,8 @@ public interface ShotDetailView  {
 
     void setReplyUsername(String username);
 
+    void hideNewReply();
+
     void scrollToBottom();
 
     void renderParent(ShotModel parentShot);

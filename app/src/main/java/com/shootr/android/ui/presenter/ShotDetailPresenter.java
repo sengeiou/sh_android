@@ -1,18 +1,12 @@
 package com.shootr.android.ui.presenter;
 
-import android.content.Intent;
-import android.widget.Toast;
-
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.ShotSent;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
-import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -22,8 +16,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
@@ -61,27 +53,34 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadReplies() {
-        getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
+        boolean canHaveReplies = !shotModel.isActivity();
+        if(canHaveReplies) {
+            getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
 
-            @Override
-            public void onLoaded(List<Shot> replies) {
-                int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
-                int newReplyCount = replies.size();
-                repliesModels = shotModelMapper.transform(replies);
-                shotDetailView.renderReplies(repliesModels);
-                if (justSentReply && previousReplyCount < newReplyCount) {
-                    shotDetailView.scrollToBottom();
-                    justSentReply = false;
+                @Override
+                public void onLoaded(List<Shot> replies) {
+                    int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
+                    int newReplyCount = replies.size();
+                    repliesModels = shotModelMapper.transform(replies);
+                    shotDetailView.renderReplies(repliesModels);
+                    if (justSentReply && previousReplyCount < newReplyCount) {
+                        shotDetailView.scrollToBottom();
+                        justSentReply = false;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void loadShotDetail() {
         shotDetailView.renderShot(shotModel);
-        shotDetailView.setReplyUsername(shotModel.getUsername());
-        if (shotModel.isReply()) {
-            this.loadParentShot();
+        if (shotModel.isActivity()) {
+            shotDetailView.hideNewReply();
+        } else {
+            shotDetailView.setReplyUsername(shotModel.getUsername());
+            if (shotModel.isReply()) {
+                this.loadParentShot();
+            }
         }
     }
 
