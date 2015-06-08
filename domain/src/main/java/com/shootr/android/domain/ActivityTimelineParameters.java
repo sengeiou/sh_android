@@ -71,14 +71,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         }
 
         private List<String> allKnownActivityTypes() {
-            return Arrays.asList(ShotType.CHECKIN,
-              ShotType.COMMENT,
-              ShotType.EXIT_EVENT,
-              ShotType.JOIN_EVENT,
-              ShotType.LISTED_EVENT,
-              ShotType.PROFILE_UPDATED,
-              ShotType.START_FOLLOW,
-              ShotType.UPDATE_EVENT);
+            return Arrays.asList(ShotType.TYPES_ACTIVITY);
         }
     }
 
