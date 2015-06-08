@@ -123,7 +123,6 @@ public class ShotDtoFactory {
           or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.ROOT_TYPE).isEqualTo(ShotType.COMMENT) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .build();
 
@@ -146,7 +145,6 @@ public class ShotDtoFactory {
         FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.ROOT_TYPE).isEqualTo(ShotType.COMMENT) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .build();
 

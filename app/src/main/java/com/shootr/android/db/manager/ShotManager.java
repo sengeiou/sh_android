@@ -11,7 +11,6 @@ import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -116,11 +115,10 @@ public class ShotManager extends  AbstractManager{
 
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String typeSelection = ShotTable.TYPE + " IN ("+ createListPlaceholders(includedTypes.size()) +")";
-        String rootTypeSelection = ShotTable.ROOT_TYPE + " <> ?";
         //TODO since & max
         //TODO limit
 
-        int whereArgumentsSize = userIds.size() + includedTypes.size() + 1;
+        int whereArgumentsSize = userIds.size() + includedTypes.size();
         String[] whereArguments = new String[whereArgumentsSize];
         for (int i = 0; i < userIds.size(); i++) {
             whereArguments[i] = String.valueOf(userIds.get(i));
@@ -129,10 +127,8 @@ public class ShotManager extends  AbstractManager{
         for (int i = 0; i < includedTypes.size(); i++) {
             whereArguments[typeArgumentStartIndex + i] = includedTypes.get(i);
         }
-        int rootTypeArgumentIndex = typeArgumentStartIndex + includedTypes.size();
-        whereArguments[rootTypeArgumentIndex] = parameters.getExcludedRootType();
 
-        String whereClause = usersSelection + " AND " + typeSelection + " AND " + rootTypeSelection;
+        String whereClause = usersSelection + " AND " + typeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -155,17 +151,15 @@ public class ShotManager extends  AbstractManager{
         List<String> userIds = parameters.getUserIds();
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
-        String rootTypeSelection = ShotTable.ROOT_TYPE + " = ?";
         //TODO since & max
         //TODO limit
 
-        String[] whereArguments = new String[userIds.size()+2];
+        String[] whereArguments = new String[userIds.size()+1];
         for (int i = 0; i < userIds.size(); i++) {
             whereArguments[i] = String.valueOf(userIds.get(i));
         }
         whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
-        whereArguments[userIds.size()+1] = String.valueOf(parameters.getShotRootType());
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + rootTypeSelection;
+        String whereClause = usersSelection + " AND " + eventSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -232,9 +226,8 @@ public class ShotManager extends  AbstractManager{
 
     public Long getLastModifiedDateForEvent(String eventId) {
         String eventIdClause = ShotTable.ID_EVENT + " = ?";
-        String commentTypeOnlyClause = ShotTable.ROOT_TYPE + " = '" + ShotType.COMMENT + "'";
 
-        String whereClause = eventIdClause + " AND " + commentTypeOnlyClause;
+        String whereClause = eventIdClause;
         String[] whereArguments = new String[]{String.valueOf(eventId)};
         String order = ShotTable.CSYS_MODIFIED + " desc";
 
@@ -250,11 +243,10 @@ public class ShotManager extends  AbstractManager{
     }
 
     public Long getLastModifiedDateForActivity() {
-        String whereClause = ShotTable.ROOT_TYPE + " <> " + ShotType.COMMENT;
         String order = ShotTable.CSYS_MODIFIED + " desc";
 
         Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null, order, "1");
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, null, null, null, null, order, "1");
 
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
@@ -269,7 +261,6 @@ public class ShotManager extends  AbstractManager{
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
-        String commentTypeOnlyClause = ShotTable.ROOT_TYPE + " = '" + ShotType.COMMENT + "'";
 
         String[] whereArguments = new String[idUsers.size()+1];
 
@@ -279,7 +270,7 @@ public class ShotManager extends  AbstractManager{
 
         whereArguments[idUsers.size()] = idEvent;
 
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection + " AND " + commentTypeOnlyClause;
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -303,7 +294,6 @@ public class ShotManager extends  AbstractManager{
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
-        String commentTypeOnlyClause = ShotTable.ROOT_TYPE + " = '" + ShotType.COMMENT + "'";
 
         String[] whereArguments = new String[idUsers.size()+1];
 
@@ -313,7 +303,7 @@ public class ShotManager extends  AbstractManager{
 
         whereArguments[idUsers.size()] = String.valueOf(idEvent);
 
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection + " AND " + commentTypeOnlyClause;
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
