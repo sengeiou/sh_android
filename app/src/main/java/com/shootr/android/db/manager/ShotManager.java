@@ -11,6 +11,7 @@ import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -151,15 +152,17 @@ public class ShotManager extends  AbstractManager{
         List<String> userIds = parameters.getUserIds();
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String typeSelection = ShotTable.TYPE + " = ?";
         //TODO since & max
         //TODO limit
 
-        String[] whereArguments = new String[userIds.size()+1];
+        String[] whereArguments = new String[userIds.size()+2];
         for (int i = 0; i < userIds.size(); i++) {
             whereArguments[i] = String.valueOf(userIds.get(i));
         }
         whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
-        String whereClause = usersSelection + " AND " + eventSelection;
+        whereArguments[userIds.size()+1] = String.valueOf(parameters.getShotType());
+        String whereClause = usersSelection + " AND " + eventSelection + " AND " + typeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -226,8 +229,9 @@ public class ShotManager extends  AbstractManager{
 
     public Long getLastModifiedDateForEvent(String eventId) {
         String eventIdClause = ShotTable.ID_EVENT + " = ?";
+        String commentTypeOnlyClause = ShotTable.TYPE + " = '" + ShotType.COMMENT + "'";
 
-        String whereClause = eventIdClause;
+        String whereClause = eventIdClause + " AND " + commentTypeOnlyClause;
         String[] whereArguments = new String[]{String.valueOf(eventId)};
         String order = ShotTable.CSYS_MODIFIED + " desc";
 
@@ -243,10 +247,11 @@ public class ShotManager extends  AbstractManager{
     }
 
     public Long getLastModifiedDateForActivity() {
+        String whereClause = ShotTable.TYPE + " <> " + ShotType.COMMENT;
         String order = ShotTable.CSYS_MODIFIED + " desc";
 
         Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, null, null, null, null, order, "1");
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null, order, "1");
 
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();

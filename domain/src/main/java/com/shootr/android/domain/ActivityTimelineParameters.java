@@ -6,14 +6,14 @@ import java.util.List;
 public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
-    private String excludedRootType;
+    private String excludedType;
 
     public List<String> getIncludedTypes() {
         return includedTypes;
     }
 
-    public String getExcludedRootType() {
-        return excludedRootType;
+    public String getExcludedType() {
+        return excludedType;
     }
 
 
@@ -33,7 +33,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         private void setDefaults() {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
-            parameters.excludedRootType = ShotType.COMMENT;
+            parameters.excludedType = ShotType.COMMENT;
             parameters.includedTypes = allKnownActivityTypes();
         }
 

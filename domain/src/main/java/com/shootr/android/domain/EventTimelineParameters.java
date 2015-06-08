@@ -10,7 +10,7 @@ public class EventTimelineParameters extends TimelineParameters {
 
     private String eventId;
 
-    private String shotRootType;
+    private String shotType;
 
     private EventTimelineParameters() {
         /* private constructor, use builder */
@@ -24,8 +24,8 @@ public class EventTimelineParameters extends TimelineParameters {
         return eventAuthorId;
     }
 
-    public String getShotRootType() {
-        return shotRootType;
+    public String getShotType() {
+        return shotType;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EventTimelineParameters extends TimelineParameters {
         if (eventAuthorId != null ? !eventAuthorId.equals(that.eventAuthorId) : that.eventAuthorId != null)
             return false;
         if (eventId != null ? !eventId.equals(that.eventId) : that.eventId != null) return false;
-        if (shotRootType != null ? !shotRootType.equals(that.shotRootType) : that.shotRootType != null) return false;
+        if (shotType != null ? !shotType.equals(that.shotType) : that.shotType != null) return false;
         if (sinceDate != null ? !sinceDate.equals(that.sinceDate) : that.sinceDate != null) return false;
         if (maxDate != null ? !maxDate.equals(that.maxDate) : that.maxDate != null) return false;
         return !(limit != null ? !limit.equals(that.limit) : that.limit != null);
@@ -61,7 +61,7 @@ public class EventTimelineParameters extends TimelineParameters {
         int result = userIds != null ? userIds.hashCode() : 0;
         result = 31 * result + (eventAuthorId != null ? eventAuthorId.hashCode() : 0);
         result = 31 * result + (eventId != null ? eventId.hashCode() : 0);
-        result = 31 * result + (shotRootType != null ? shotRootType.hashCode() : 0);
+        result = 31 * result + (shotType != null ? shotType.hashCode() : 0);
         result = 31 * result + (sinceDate != null ? sinceDate.hashCode() : 0);
         result = 31 * result + (maxDate != null ? maxDate.hashCode() : 0);
         result = 31 * result + (limit != null ? limit.hashCode() : 0);
@@ -74,7 +74,7 @@ public class EventTimelineParameters extends TimelineParameters {
           "userIds=" + userIds +
           ", eventAuthorId='" + eventAuthorId + '\'' +
           ", eventId='" + eventId + '\'' +
-          ", shotRootType='" + shotRootType + '\'' +
+          ", shotType='" + shotType + '\'' +
           ", sinceDate=" + sinceDate +
           ", maxDate=" + maxDate +
           ", limit=" + limit +
@@ -92,7 +92,7 @@ public class EventTimelineParameters extends TimelineParameters {
         private void setDefaults() {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
-            parameters.shotRootType = ShotType.COMMENT;
+            parameters.shotType = ShotType.COMMENT;
         }
 
         public Builder forUsers(List<String> userIds) {
