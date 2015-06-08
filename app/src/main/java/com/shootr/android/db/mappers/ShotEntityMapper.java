@@ -21,7 +21,6 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
         shot.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         shot.setType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
-        shot.setRootType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ROOT_TYPE)));
         shot.setIdShotParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
         shot.setIdUserParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
         shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
@@ -43,7 +42,6 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.EVENT_TITLE, shot.getEventTitle());
         cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
-        cv.put(DatabaseContract.ShotTable.ROOT_TYPE, shot.getRootType());
         cv.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot.getIdShotParent());
         cv.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot.getIdUserParent());
         cv.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot.getUserNameParent());
@@ -65,7 +63,6 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
         shot.setIdEvent((String) dto.get(DatabaseContract.ShotTable.ID_EVENT));
         shot.setType((String) dto.get(DatabaseContract.ShotTable.TYPE));
-        shot.setRootType((String) dto.get(DatabaseContract.ShotTable.ROOT_TYPE));
         shot.setIdShotParent((String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT));
         shot.setIdUserParent((String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT));
         shot.setUserNameParent((String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT));
@@ -91,7 +88,6 @@ public class ShotEntityMapper extends GenericMapper {
         dto.put(DatabaseContract.ShotTable.EVENT_TITLE, shot == null ? null : shot.getEventTitle());
         dto.put(DatabaseContract.ShotTable.ID_EVENT, shot == null ? null : shot.getIdEvent());
         dto.put(DatabaseContract.ShotTable.TYPE, shot == null ? null : shot.getType());
-        dto.put(DatabaseContract.ShotTable.ROOT_TYPE, shot == null ? null : shot.getRootType());
         dto.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot == null ? null : shot.getIdShotParent());
         dto.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot == null ? null : shot.getIdUserParent());
         dto.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot == null ? null : shot.getUserNameParent());

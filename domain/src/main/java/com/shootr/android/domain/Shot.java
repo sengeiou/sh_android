@@ -22,7 +22,6 @@ public class Shot {
     private Long videoDuration;
 
     private String type;
-    private String rootType;
 
     public String getIdShot() {
         return idShot;
@@ -138,14 +137,6 @@ public class Shot {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getRootType() {
-        return rootType;
-    }
-
-    public void setRootType(String rootType) {
-        this.rootType = rootType;
     }
 
     public static class ShotEventInfo {
@@ -272,8 +263,7 @@ public class Shot {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shot)) return false;
 
@@ -299,8 +289,7 @@ public class Shot {
         if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
         if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null)
             return false;
-        if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
-        return !(rootType != null ? !rootType.equals(shot.rootType) : shot.rootType != null);
+        return !(type != null ? !type.equals(shot.type) : shot.type != null);
     }
 
     @Override
@@ -319,7 +308,6 @@ public class Shot {
         result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
         result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (rootType != null ? rootType.hashCode() : 0);
         return result;
     }
 
