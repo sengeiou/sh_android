@@ -12,7 +12,6 @@ public class ShotEntity extends Synchronized{
     private String eventTitle;
 
     private String type;
-    private String rootType;
 
     private String idShotParent;
     private String idUserParent;
@@ -142,11 +141,4 @@ public class ShotEntity extends Synchronized{
         this.videoDuration = videoDuration;
     }
 
-    public String getRootType() {
-        return rootType;
-    }
-
-    public void setRootType(String rootType) {
-        this.rootType = rootType;
-    }
 }
