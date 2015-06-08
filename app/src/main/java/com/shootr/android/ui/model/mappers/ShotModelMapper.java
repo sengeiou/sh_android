@@ -36,6 +36,8 @@ public class ShotModelMapper {
         shotModel.setVideoTitle(shot.getVideoTitle());
         shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
 
+        shotModel.setType(shot.getType());
+
         return shotModel;
     }
 
