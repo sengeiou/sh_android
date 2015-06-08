@@ -256,5 +256,4 @@
     <string name="event_detail_media">Media</string>
     <string name="event_detail_media_number">0</string>
     <string name="event_detail_edit_menu_title">Edit</string>
-    <string name="title_activity_main_tabbed">Shootr tabs</string>
 </resources>
