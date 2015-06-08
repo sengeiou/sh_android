@@ -311,11 +311,11 @@ public class UserDtoFactory {
 
     public GenericDto getForgotPasswordResultByUsernameOrEmail(String usernameOrEmail) {
         Map<String, Object> key = new HashMap<>();
-        key.put(DatabaseContract.ForgotPasswordMongo.USERNAME_OR_EMAIL,usernameOrEmail);
+        key.put(DatabaseContract.ForgotPassword.USERNAME_OR_EMAIL,usernameOrEmail);
 
         MetadataDto metadata = new MetadataDto.Builder() //
           .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(DatabaseContract.ForgotPasswordMongo.TABLE) //
+          .entity(DatabaseContract.ForgotPassword.TABLE) //
           .includeDeleted(false) //
           .setKeys(key)
           .build();

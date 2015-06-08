@@ -13,20 +13,17 @@ public class ForgotPasswordMapper extends GenericMapper {
 
     public Map<String, Object> toDto(ForgotPasswordResultEntity forgotPasswordResultEntity) {
         Map<String, Object> dto = new HashMap<>();
-        dto.put(DatabaseContract.ForgotPasswordMongo.EMAIL_ENCRYPTED, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getEmailEncripted());
-        dto.put(DatabaseContract.ForgotPasswordMongo.ID, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getIdUser());
-        dto.put(DatabaseContract.ForgotPasswordMongo.USER_NAME, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getUserName());
+        dto.put(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getEmailEncripted());
+        dto.put(DatabaseContract.ForgotPassword.ID, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getIdUser());
+        dto.put(DatabaseContract.ForgotPassword.USER_NAME, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getUserName());
         return dto;
     }
 
     public ForgotPasswordResultEntity fromDto(Map<String, Object> dataItem) {
         ForgotPasswordResultEntity forgotPasswordResultEntity = new ForgotPasswordResultEntity();
-        forgotPasswordResultEntity.setIdUser(
-          dataItem.containsKey(DatabaseContract.ForgotPasswordMongo.ID) ? (String) dataItem.get(DatabaseContract.UserTable.ID) : null);
-        forgotPasswordResultEntity.setUserName(
-          dataItem.containsKey(DatabaseContract.ForgotPasswordMongo.USER_NAME) ? (String) dataItem.get(DatabaseContract.UserTable.USER_NAME) : null);
-        forgotPasswordResultEntity.setEmailEncripted(
-          dataItem.containsKey(DatabaseContract.ForgotPasswordMongo.EMAIL_ENCRYPTED) ? (String) dataItem.get(DatabaseContract.UserTable.EMAIL) : null);
+        forgotPasswordResultEntity.setIdUser((String) dataItem.get(DatabaseContract.ForgotPassword.ID));
+        forgotPasswordResultEntity.setUserName((String) dataItem.get(DatabaseContract.ForgotPassword.USER_NAME));
+        forgotPasswordResultEntity.setEmailEncripted((String) dataItem.get(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED));
         return forgotPasswordResultEntity;
     }
 }

@@ -245,9 +245,9 @@ public class DatabaseContract {
         };
     }
 
-    public static final class ForgotPasswordMongo implements SyncColumns {
+    public static final class ForgotPassword implements SyncColumns {
 
-        private ForgotPasswordMongo() {
+        private ForgotPassword() {
 
         }
 
