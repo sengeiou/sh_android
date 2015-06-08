@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -12,10 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestBase{
@@ -78,7 +76,8 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         setupParentShot();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
-          IMAGE_STUB, PARENT_SHOT_ID,
+          IMAGE_STUB,
+          PARENT_SHOT_ID,
           new DummyCallback(),
           new DummyErrorCallback());
 
@@ -116,6 +115,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         shot.setIdShot(PARENT_SHOT_ID);
         shot.setEventInfo(parentEventInfo());
         shot.setUserInfo(parentUserInfo());
+        shot.setType(ShotType.COMMENT);
         return shot;
     }
 

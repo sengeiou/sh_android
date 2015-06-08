@@ -41,10 +41,6 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
         }
     }
 
-    @Override protected String getRootType() {
-        return ShotType.COMMENT;
-    }
-
     private Event currentVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {

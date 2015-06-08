@@ -55,7 +55,6 @@ public class ShotQueueEntityMapper {
         entity.setVideoDuration(shot.getVideoDuration());
 
         entity.setType(shot.getType());
-        entity.setRootType(shot.getRootType());
         return entity;
     }
 
@@ -102,7 +101,6 @@ public class ShotQueueEntityMapper {
         shot.setVideoDuration(entity.getVideoDuration());
 
         shot.setType(entity.getType());
-        shot.setRootType(entity.getRootType());
 
         queuedShot.setShot(shot);
         return queuedShot;

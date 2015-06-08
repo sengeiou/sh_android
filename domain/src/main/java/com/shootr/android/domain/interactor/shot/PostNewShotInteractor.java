@@ -64,7 +64,6 @@ public abstract class PostNewShotInteractor implements Interactor {
         shot.setPublishDate(new Date());
         fillShotContextualInfo(shot);
         shot.setType(ShotType.COMMENT);
-        shot.setRootType(getRootType());
         return shot;
     }
 
@@ -108,7 +107,5 @@ public abstract class PostNewShotInteractor implements Interactor {
             }
         });
     }
-
-    protected abstract String getRootType();
 
 }

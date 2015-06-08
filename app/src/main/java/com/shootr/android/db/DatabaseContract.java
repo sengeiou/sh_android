@@ -93,7 +93,6 @@ public class DatabaseContract {
         public static final String EVENT_TAG = "eventTag";
         public static final String EVENT_TITLE = "eventTitle";
         public static final String TYPE = "type";
-        public static final String ROOT_TYPE = "rootType";
 
         public static final String ID_SHOT_PARENT = "idShotParent";
         public static final String ID_USER_PARENT = "idUserParent";
@@ -105,7 +104,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
-          TYPE, ROOT_TYPE,
+          TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
@@ -210,7 +209,6 @@ public class DatabaseContract {
         public static final String EVENT_TAG = "eventTag";
         public static final String EVENT_TITLE = "eventTitle";
         public static final String TYPE = "type";
-        public static final String ROOT_TYPE = "rootType";
 
         public static final String ID_SHOT_PARENT = "idShotParent";
         public static final String ID_USER_PARENT = "idUserParent";
@@ -222,7 +220,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
-          TYPE, ROOT_TYPE,
+          TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
           CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED

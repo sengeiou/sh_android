@@ -111,7 +111,6 @@ public class TimelineDtoFactory {
           or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
         ) //
           .and(or(ShotTable.TYPE).isIn(parameters.getIncludedTypes())) //
-          .and(ShotTable.ROOT_TYPE).isNotEqualTo(parameters.getExcludedRootType()) //
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
@@ -146,7 +145,7 @@ public class TimelineDtoFactory {
           or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
         ) //
           .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
-          .and(ShotTable.ROOT_TYPE).isEqualTo(parameters.getShotRootType())
+          .and(ShotTable.TYPE).isEqualTo(parameters.getShotType())
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
           .and(ShotTable.CSYS_MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
