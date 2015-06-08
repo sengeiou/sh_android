@@ -276,7 +276,7 @@
     </style>
 
     <style name="BorderlessButton.Primary">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/primary_selector</item>
     </style>
 
     <style name="BorderlessButton.Secondary">
@@ -289,6 +289,11 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/gray_60</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ErrorSubtitle">
+        <item name="android:textColor">@color/error</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

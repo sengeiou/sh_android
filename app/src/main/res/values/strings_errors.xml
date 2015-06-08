@@ -47,4 +47,7 @@
     <string name="error_message_registration_password_equals_username">Password and username must not match</string>
     <string name="error_message_registration_password_invalid">Invalid characters</string>
 
+    <!-- Forgot password -->
+    <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
+
 </resources>
