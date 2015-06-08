@@ -36,7 +36,7 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
     @Override protected void fillShotEventInfo(Shot shot) {
         Shot parentShot = getParentShot();
         if (parentShot == null) {
-            throw new IllegalArgumentException(String.format("Parent shot not found with id=%d", replyParentId));
+            throw new IllegalArgumentException(String.format("Parent shot not found with id=%s", replyParentId));
         }
         shot.setEventInfo(parentShot.getEventInfo());
     }
