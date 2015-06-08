@@ -10,6 +10,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.service.ResetPasswordException;
+import com.shootr.android.domain.service.SendPasswordResetEmailException;
 import com.shootr.android.domain.utils.SecurityUtils;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -24,10 +25,12 @@ public class ShootrUserService {
     private final ResetPasswordGateway resetPasswordGateway;
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
+    private final ResetPasswordEmailGateway resetPasswordEmailGateway;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository, @Remote UserRepository remoteUserRepository) {
+      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
@@ -36,6 +39,7 @@ public class ShootrUserService {
         this.resetPasswordGateway = resetPasswordGateway;
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
+        this.resetPasswordEmailGateway = resetPasswordEmailGateway;
     }
 
     public void checkInEvent(String idEvent) {
@@ -104,6 +108,14 @@ public class ShootrUserService {
             return resetPasswordGateway.performPasswordReset(usernameOrEmail);
         } catch (Exception e) {
             throw new ResetPasswordException(e);
+        }
+    }
+
+    public void sendPasswordResetEmail(String idUser) {
+        try {
+            resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
+        } catch (IOException e) {
+            throw new SendPasswordResetEmailException(e);
         }
     }
 }
