@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -37,6 +38,9 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
         Shot parentShot = getParentShot();
         if (parentShot == null) {
             throw new IllegalArgumentException(String.format("Parent shot not found with id=%s", replyParentId));
+        }
+        if(!parentShot.getType().equals(ShotType.COMMENT)){
+            throw new IllegalArgumentException("Replying to Activity shots is not allowed");
         }
         shot.setEventInfo(parentShot.getEventInfo());
     }
