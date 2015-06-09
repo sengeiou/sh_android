@@ -328,4 +328,25 @@ public class UserDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FORGOT_PASSWORD, operation);
     }
+
+    public GenericDto sendResetPasswordEmail(String idUser) {
+        Map<String, Object> key = new HashMap<>();
+        key.put(DatabaseContract.ResetPassword.ID,idUser);
+
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(DatabaseContract.ResetPassword.TABLE) //
+          .includeDeleted(false) //
+          .setKeys(key)
+          .build();
+
+        Map<String, Object> dto = new HashMap<>();
+
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(dto) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_PASSWORD_RESET_EMAIL, operation);
+    }
 }

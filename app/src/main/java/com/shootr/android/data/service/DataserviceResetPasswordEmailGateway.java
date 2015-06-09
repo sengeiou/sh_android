@@ -14,6 +14,6 @@ public class DataserviceResetPasswordEmailGateway implements ResetPasswordEmailG
     }
 
     @Override public void sendPasswordResetEmail(String idUser) throws IOException {
-        //TODO: llamada al service
+        shootrService.sendResetPasswordEmail(idUser);
     }
 }
