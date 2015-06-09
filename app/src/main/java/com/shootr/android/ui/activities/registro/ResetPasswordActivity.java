@@ -215,7 +215,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            //TODO
+            Toast.makeText(ResetPasswordActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     }
 }
