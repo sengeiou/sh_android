@@ -104,7 +104,6 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     }
 
     private void transitionToConfirmationView(ForgotPasswordUserModel forgotPasswordUserModel) {
-        //TODO con animacion de transicion
         resetPasswordRequestLayout.setVisibility(View.GONE);
         resetPasswordConfirmationLayout.setVisibility(View.VISIBLE);
         resetPasswordConfirmationPresenter.initialize(resetPasswordConfirmationView, forgotPasswordUserModel);
@@ -112,7 +111,6 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     private void closeScreenAndLaunchLogin() {
         finish();
-        //TODO open login
     }
 
     public class InnerResetPasswordRequestView implements ResetPasswordRequestView {
