@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -40,6 +39,7 @@ public class ResetPasswordRequestPresenter implements Presenter {
     public void next() {
         resetPasswordRequestView.disableNextButton();
         resetPasswordRequestView.showLoading();
+        resetPasswordRequestView.hideKeyboard();
         resetPasswordInteractor.attempResetPassword(resetPasswordRequestView.getUsernameOrEmail(), //
           new Interactor.Callback<ForgotPasswordResult>() {
               @Override

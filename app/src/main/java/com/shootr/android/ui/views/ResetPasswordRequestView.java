@@ -13,5 +13,7 @@ public interface ResetPasswordRequestView extends DataTransferView {
 
     void showResetPasswordError();
 
+    void hideKeyboard();
+
     String getUsernameOrEmail();
 }

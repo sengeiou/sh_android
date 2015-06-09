@@ -88,6 +88,14 @@ public class ResetPasswordRequestPresenterTest {
     //endregion
 
     //region Next action
+
+    @Test
+    public void shouldHideKeyboardWhenNext() throws Exception {
+        presenter.next();
+
+        verify(resetPasswordRequestView).hideKeyboard();
+    }
+
     @Test
     public void shouldNavigateToConfirmationWhenNextIfInteractorCallbacksResult() throws Exception {
         setupResetPasswordInteractorCallbacksResult();

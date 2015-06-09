@@ -1,8 +1,10 @@
 package com.shootr.android.ui.activities.registro;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -138,6 +140,12 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         @Override
         public void showResetPasswordError() {
             resetPasswordError.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void hideKeyboard() {
+            InputMethodManager imm = (InputMethodManager) ResetPasswordActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(usernameOrEmailInput.getWindowToken(), 0);
         }
 
         @Override
