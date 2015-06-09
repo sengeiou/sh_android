@@ -168,8 +168,12 @@
             android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662" />
 
         <activity
-            android:name=".ui.activities.EventMediaActivity"
-            android:label="@string/title_activity_event_media" >
+          android:name=".ui.activities.EventMediaActivity"
+          android:label="@string/title_activity_event_media"></activity>
+
+        <activity
+            android:name=".ui.activities.registro.ResetPasswordActivity"
+            android:label="@string/title_activity_reset_password" >
         </activity>
     </application>
 

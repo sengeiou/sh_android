@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -33,6 +34,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView emailUsername;
     @InjectView(R.id.email_login_password) EditText password;
     @InjectView(R.id.email_login_button) CircularProgressButton loginButton;
+    @InjectView(R.id.email_login_forgot) TextView resetPassword;
 
     @Inject EmailLoginPresenter presenter;
 
@@ -68,6 +70,13 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     public void onLoginWithEmailButtonClick(){
         presenter.attempLogin();
     }
+
+    @OnClick(R.id.email_login_forgot)
+    public void onLoginForgotButtonClick(){
+        Intent resetPasswordIntent = new Intent(this, ResetPasswordActivity.class);
+        startActivity(resetPasswordIntent);
+    }
+
 
     public void goToTimeline(){
         finish();

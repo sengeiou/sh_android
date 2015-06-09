@@ -223,6 +223,8 @@
     <string name="checked_in">Checked In</string>
     <string name="check_in_action">Check In</string>
     <string name="check_out_action">Check Out</string>
+    <string name="reset_password_button">Enter your username or email</string>
+    <string name="title_activity_reset_password">Reset Password</string>
 
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
@@ -256,4 +258,9 @@
     <string name="event_detail_media">Media</string>
     <string name="event_detail_media_number">0</string>
     <string name="event_detail_edit_menu_title">Edit</string>
+    <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
+    <string name="done">Done</string>
+    <string name="reset_password_send_email">Send a Password Reset Email</string>
+    <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
+    <string name="next">Next</string>
 </resources>

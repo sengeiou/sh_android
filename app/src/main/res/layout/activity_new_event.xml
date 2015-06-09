@@ -41,10 +41,9 @@
       android:layout_marginBottom="4dp"
       android:layout_marginLeft="@dimen/keyline_1"
       android:paddingLeft="4dp"
-      android:textColor="@color/error"
-      android:textSize="12sp"
       android:visibility="visible"
-      tools:text="Error title" />
+      tools:text="Error title"
+      style="@style/ErrorSubtitle" />
 
     <TextView
       android:layout_width="wrap_content"

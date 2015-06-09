@@ -27,15 +27,18 @@ public class ShootrUserServiceCheckinTest {
     @Mock CheckinGateway checkinGateway;
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
+    @Mock ResetPasswordGateway resetPasswordGateway;
     @Mock EventRepository remoteEventRepository;
     @Mock UserRepository remoteUserRepository;
+    @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
 
     private ShootrUserService shootrUserService;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, remoteEventRepository, remoteUserRepository);
+          createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
+          resetPasswordEmailGateway);
     }
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedInSameEvent() throws Exception {

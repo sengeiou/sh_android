@@ -4,6 +4,8 @@ import com.shootr.android.domain.service.shot.ShotGateway;
 import com.shootr.android.domain.service.user.CheckinGateway;
 import com.shootr.android.domain.service.user.CreateAccountGateway;
 import com.shootr.android.domain.service.user.LoginGateway;
+import com.shootr.android.domain.service.user.ResetPasswordEmailGateway;
+import com.shootr.android.domain.service.user.ResetPasswordGateway;
 import dagger.Module;
 import dagger.Provides;
 
@@ -27,5 +29,14 @@ public class ServiceModule {
 
     @Provides ShotGateway provideShotGateway(SpecialserviceShotGateway specialserviceShotGateway) {
         return specialserviceShotGateway;
+    }
+
+    @Provides
+    ResetPasswordGateway provideForgotPasswordGateway(DataserviceResetPasswordGateway dataserviceForgotPasswordGateway){
+        return dataserviceForgotPasswordGateway;
+    }
+
+    @Provides ResetPasswordEmailGateway provideResetPasswordEmailGateway(DataserviceResetPasswordEmailGateway dataserviceForgotPasswordEmailGateway){
+        return dataserviceForgotPasswordEmailGateway;
     }
 }

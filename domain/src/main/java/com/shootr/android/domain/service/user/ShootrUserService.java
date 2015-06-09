@@ -1,5 +1,6 @@
 package com.shootr.android.domain.service.user;
 
+import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidCheckinException;
@@ -8,6 +9,8 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.service.ResetPasswordException;
+import com.shootr.android.domain.service.SendPasswordResetEmailException;
 import com.shootr.android.domain.utils.SecurityUtils;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -19,19 +22,24 @@ public class ShootrUserService {
     private final CheckinGateway checkinGateway;
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
+    private final ResetPasswordGateway resetPasswordGateway;
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
+    private final ResetPasswordEmailGateway resetPasswordEmailGateway;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      @Remote EventRepository remoteEventRepository, @Remote UserRepository remoteUserRepository) {
+      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
+        this.resetPasswordGateway = resetPasswordGateway;
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
+        this.resetPasswordEmailGateway = resetPasswordEmailGateway;
     }
 
     public void checkInEvent(String idEvent) {
@@ -93,5 +101,21 @@ public class ShootrUserService {
 
     private boolean isCheckedInEvent(User user, String idEvent) {
         return user.getIdCheckedEvent() != null && user.getIdCheckedEvent().equals(idEvent);
+    }
+
+    public ForgotPasswordResult performResetPassword(String usernameOrEmail) {
+        try {
+            return resetPasswordGateway.performPasswordReset(usernameOrEmail);
+        } catch (Exception e) {
+            throw new ResetPasswordException(e);
+        }
+    }
+
+    public void sendPasswordResetEmail(String idUser) {
+        try {
+            resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
+        } catch (IOException e) {
+            throw new SendPasswordResetEmailException(e);
+        }
     }
 }
