@@ -40,13 +40,13 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
 
     public void confirm() {
         resetPasswordConfirmationView.showLoading();
+        resetPasswordConfirmationView.hideConfirmationButton();
         sendPasswordResetEmailInteractor.sendPasswordResetEmail(forgotPasswordUserModel.getIdUser(), //
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
                   resetPasswordConfirmationView.showDoneButton();
                   resetPasswordConfirmationView.showPostConfirmationMessage(forgotPasswordUserModel.getEncryptedEmail());
-                  resetPasswordConfirmationView.hideConfirmationButton();
                   resetPasswordConfirmationView.hideLoading();
               }
           }, //
@@ -54,6 +54,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
               @Override
               public void onError(ShootrException error) {
                   resetPasswordConfirmationView.hideLoading();
+                  resetPasswordConfirmationView.showConfirmationButton();
                   showErrorInView(error);
               }
           });

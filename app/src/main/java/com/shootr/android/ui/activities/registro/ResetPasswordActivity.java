@@ -188,6 +188,11 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         }
 
         @Override
+        public void showConfirmationButton() {
+            confirmButton.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         public void showDoneButton() {
             doneButton.setVisibility(View.VISIBLE);
         }

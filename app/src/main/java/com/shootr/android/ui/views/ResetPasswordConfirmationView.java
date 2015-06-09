@@ -10,6 +10,8 @@ public interface ResetPasswordConfirmationView extends DataTransferView{
 
     void hideConfirmationButton();
 
+    void showConfirmationButton();
+
     void showDoneButton();
 
     void showPostConfirmationMessage(String email);
