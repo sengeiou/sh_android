@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
-public class ResetPasswordEmailInteractorTest {
+public class SendPasswordResetEmailInteractorTest {
 
     public static final String FAKE_USER_ID = "fake_user_id";
 
