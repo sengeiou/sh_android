@@ -259,4 +259,8 @@
     <string name="event_detail_media_number">0</string>
     <string name="event_detail_edit_menu_title">Edit</string>
     <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
+    <string name="done">Done</string>
+    <string name="reset_password_send_email">Send a Password Reset Email</string>
+    <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
+    <string name="next">Next</string>
 </resources>

@@ -43,5 +43,6 @@
     <dimen name="view_pager_margin">16dp</dimen>
     <dimen name="toolbar_title_padding">16dp</dimen>
     <dimen name="tabbar_shadow_height">4dp</dimen>
+    <dimen name="reset_password_avatar_size">80dp</dimen>
 
 </resources>
