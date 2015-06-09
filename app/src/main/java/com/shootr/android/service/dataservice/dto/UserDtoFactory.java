@@ -50,8 +50,9 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
-    private static final String USER_SIGN_IN = "UserSignInMongo";
+    private static final String ALIAS_PASSWORD_RESET_EMAIL = "SEND_PASSWORD_RESET_EMAIL";
     private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
+    private static final String USER_SIGN_IN = "UserSignInMongo";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
