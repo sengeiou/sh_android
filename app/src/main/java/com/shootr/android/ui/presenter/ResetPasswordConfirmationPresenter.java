@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.user.ConfirmResetPasswordInteractor;
+import com.shootr.android.domain.interactor.user.SendPasswordResetEmailInteractor;
 import com.shootr.android.ui.model.ForgotPasswordUserModel;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -10,16 +10,16 @@ import javax.inject.Inject;
 
 public class ResetPasswordConfirmationPresenter implements Presenter {
 
-    private final ConfirmResetPasswordInteractor confirmResetPasswordInteractor;
+    private final SendPasswordResetEmailInteractor sendPasswordResetEmailInteractor;
     private final ErrorMessageFactory errorMessageFactory;
 
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
     private ForgotPasswordUserModel forgotPasswordUserModel;
 
     @Inject
-    public ResetPasswordConfirmationPresenter(ConfirmResetPasswordInteractor confirmResetPasswordInteractor,
+    public ResetPasswordConfirmationPresenter(SendPasswordResetEmailInteractor sendPasswordResetEmailInteractor,
       ErrorMessageFactory errorMessageFactory) {
-        this.confirmResetPasswordInteractor = confirmResetPasswordInteractor;
+        this.sendPasswordResetEmailInteractor = sendPasswordResetEmailInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -40,7 +40,7 @@ public class ResetPasswordConfirmationPresenter implements Presenter {
 
     public void confirm() {
         resetPasswordConfirmationView.showLoading();
-        confirmResetPasswordInteractor.confirmResetPassword(forgotPasswordUserModel.getIdUser(), //
+        sendPasswordResetEmailInteractor.sendPasswordResetEmail(forgotPasswordUserModel.getIdUser(), //
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
