@@ -262,4 +262,19 @@ public class DatabaseContract {
           ID, USER_NAME, EMAIL_ENCRYPTED, USERNAME_OR_EMAIL
         };
     }
+
+    public static final class ResetPassword implements SyncColumns {
+
+        private ResetPassword() {
+
+        }
+
+        public static final String TABLE = "ResetPasswordMongo";
+
+        public static final String ID = "idUser";
+
+        public static final String[] PROJECTION = {
+          ID
+        };
+    }
 }
