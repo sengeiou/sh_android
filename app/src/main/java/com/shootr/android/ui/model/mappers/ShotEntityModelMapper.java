@@ -3,17 +3,14 @@ package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.data.mapper.UserAvatarUrlBuilder;
+import com.shootr.android.data.mapper.GeneratedUserAvatarUrlProvider;
 import com.shootr.android.ui.model.ShotModel;
 import javax.inject.Inject;
 
 @Deprecated
 public class ShotEntityModelMapper {
 
-    private final UserAvatarUrlBuilder userAvatarUrlBuilder;
-
-    @Inject public ShotEntityModelMapper(UserAvatarUrlBuilder userAvatarUrlBuilder) {
-        this.userAvatarUrlBuilder = userAvatarUrlBuilder;
+    @Inject public ShotEntityModelMapper() {
     }
 
     public ShotModel toShotModel(UserEntity user,ShotEntity shot){
@@ -45,7 +42,7 @@ public class ShotEntityModelMapper {
 
     public ShotModel toShotModel(ShotEntity shot){
         ShotModel shotModel = new ShotModel();
-        String userPhotoUrl = userAvatarUrlBuilder.thumbnail(shot.getIdUser());
+        String userPhotoUrl = shot.getUserPhoto();
         shotModel.setPhoto(userPhotoUrl);
         shotModel.setIdUser(shot.getIdUser());
         shotModel.setComment(shot.getComment());

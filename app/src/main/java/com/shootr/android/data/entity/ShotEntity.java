@@ -5,6 +5,7 @@ public class ShotEntity extends Synchronized{
     private String idShot;
     private String idUser;
     private String username;
+    private String userPhoto; /* Only local and api, not datasource. Super clean, right? */
     private String comment;
     private String image;
     private String idEvent;
@@ -141,4 +142,11 @@ public class ShotEntity extends Synchronized{
         this.videoDuration = videoDuration;
     }
 
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
 }
