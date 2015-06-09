@@ -170,6 +170,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
         @InjectView(R.id.reset_password_email_confirmation_message) TextView confirmationMessage;
         @InjectView(R.id.reset_password_confirm) View confirmButton;
         @InjectView(R.id.reset_password_done) View doneButton;
+        @InjectView(R.id.reset_password_progress) View progressView;
 
         @Override
         public void showAvatar(String avatarUrl) {
@@ -204,12 +205,12 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showLoading() {
-            //TODO
+            progressView.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void hideLoading() {
-            //TODO
+            progressView.setVisibility(View.GONE);
         }
 
         @Override
