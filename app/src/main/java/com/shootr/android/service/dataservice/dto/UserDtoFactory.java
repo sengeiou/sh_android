@@ -53,6 +53,10 @@ public class UserDtoFactory {
     private static final String ALIAS_PASSWORD_RESET_EMAIL = "SEND_PASSWORD_RESET_EMAIL";
     private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
     private static final String USER_SIGN_IN = "UserSignInMongo";
+    public static final String RESET_PASSWORD_ID_USER = "idUser";
+    public static final String RESET_PASSWORD_TABLE_NAME = "ResetPasswordMongo";
+    public static final String CHECK_IN_ID_USER = "idUser";
+    public static final String CHECK_IN_ID_EVENT_CHECKED = "idEvent";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -72,8 +76,8 @@ public class UserDtoFactory {
 
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
-          .putKey(DatabaseContract.CheckInMongo.ID, idUser)
-          .putKey(DatabaseContract.CheckInMongo.ID_CHECKED_EVENT, idEvent)
+          .putKey(CHECK_IN_ID_USER, idUser)
+          .putKey(CHECK_IN_ID_EVENT_CHECKED, idEvent)
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .build();
 
@@ -331,11 +335,11 @@ public class UserDtoFactory {
 
     public GenericDto sendResetPasswordEmail(String idUser) {
         Map<String, Object> key = new HashMap<>();
-        key.put(DatabaseContract.ResetPassword.ID,idUser);
+        key.put(RESET_PASSWORD_ID_USER,idUser);
 
         MetadataDto metadata = new MetadataDto.Builder() //
           .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(DatabaseContract.ResetPassword.TABLE) //
+          .entity(RESET_PASSWORD_TABLE_NAME) //
           .includeDeleted(false) //
           .setKeys(key)
           .build();
