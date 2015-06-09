@@ -15,6 +15,7 @@ import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.user.SendPasswordResetEmailInteractor;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -27,7 +28,7 @@ import javax.inject.Singleton;
     EventsSearchInteractor.class, CreateEventInteractor.class, GetEventInteractor.class,
     ChangeEventPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class, SendDraftInteractor.class,
     DeleteDraftInteractor.class,
-    InteractorModule.class
+    InteractorModule.class, SendPasswordResetEmailInteractor.class,
   },
   complete = false
 )
