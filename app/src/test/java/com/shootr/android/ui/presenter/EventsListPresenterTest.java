@@ -146,32 +146,32 @@ public class EventsListPresenterTest {
 
     @Test
     public void shouldHideEventListWhileSearching() throws Exception {
-        presenter.initialize(eventsListView, QUERY);
+        presenter.search(QUERY);
 
         verify(eventsListView, times(1)).hideContent();
     }
 
     @Test
     public void shouldShowLoadingWhileSearching() throws Exception {
-        presenter.initialize(eventsListView, QUERY);
+        presenter.search(QUERY);
 
         verify(eventsListView, times(1)).showLoading();
     }
 
     @Test
-    public void shouldCallHideLoadingWhenFinishSearching() throws Exception {
+    public void shouldHideLoadingWhenFinishSearching() throws Exception {
         setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        presenter.initialize(eventsListView, QUERY);
+        presenter.search(QUERY);
 
         verify(eventsListView, times(1)).hideLoading();
     }
 
     @Test
-    public void shouldCallHideLoadingWhenErrorWhileSearching() throws Exception {
+    public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
         setupSearchEventInteractorErrorCallbacks(Collections.singletonList(eventResult()));
 
-        presenter.initialize(eventsListView, QUERY);
+        presenter.search(QUERY);
 
         verify(eventsListView, times(1)).hideLoading();
     }
@@ -180,7 +180,7 @@ public class EventsListPresenterTest {
     public void shouldShowEventListWhenFinishSearching() throws Exception {
         setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        presenter.initialize(eventsListView, QUERY);
+        presenter.search(QUERY);
 
         verify(eventsListView, times(1)).showContent();
     }
@@ -243,9 +243,7 @@ public class EventsListPresenterTest {
                 });
                 return null;
             }
-        }).when(eventsSearchInteractor).searchEvents(anyString(),
-          anyEventSearchCallback(),
-          anyErrorCallback());
+        }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
     }
 
     private EventSearchResult eventResult() {
