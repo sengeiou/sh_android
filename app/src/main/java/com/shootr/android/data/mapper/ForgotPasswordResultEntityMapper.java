@@ -6,10 +6,10 @@ import javax.inject.Inject;
 
 public class ForgotPasswordResultEntityMapper {
 
-    private UserAvatarUrlBuilder userAvatarUrlBuilder;
+    private UserAvatarUrlProvider userAvatarUrlProvider;
 
-    @Inject public ForgotPasswordResultEntityMapper(UserAvatarUrlBuilder userAvatarUrlBuilder) {
-        this.userAvatarUrlBuilder = userAvatarUrlBuilder;
+    @Inject public ForgotPasswordResultEntityMapper(UserAvatarUrlProvider userAvatarUrlProvider) {
+        this.userAvatarUrlProvider = userAvatarUrlProvider;
     }
 
     public ForgotPasswordResult transform(ForgotPasswordResultEntity forgotPasswordResultEntity) {
@@ -17,7 +17,7 @@ public class ForgotPasswordResultEntityMapper {
         forgotPasswordResult.setIdUser(forgotPasswordResultEntity.getIdUser());
         forgotPasswordResult.setEmailEncripted(forgotPasswordResultEntity.getEmailEncripted());
         forgotPasswordResult.setUserName(forgotPasswordResultEntity.getUserName());
-        forgotPasswordResult.setAvatar(userAvatarUrlBuilder.thumbnail(forgotPasswordResultEntity.getIdUser()));
+        forgotPasswordResult.setAvatar(userAvatarUrlProvider.thumbnail(forgotPasswordResultEntity.getIdUser()));
         return forgotPasswordResult;
     }
 }

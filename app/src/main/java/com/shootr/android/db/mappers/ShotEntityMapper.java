@@ -3,7 +3,7 @@ package com.shootr.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.shootr.android.data.mapper.UserAvatarUrlBuilder;
+import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.data.entity.ShotEntity;
 import java.util.HashMap;
@@ -12,11 +12,11 @@ import javax.inject.Inject;
 
 public class ShotEntityMapper extends GenericMapper {
 
-    private  final UserAvatarUrlBuilder avatarBuilder;
+    private  final UserAvatarUrlProvider avatarProvider;
 
     @Inject
-    public ShotEntityMapper(UserAvatarUrlBuilder avatarBuilder) {
-        this.avatarBuilder = avatarBuilder;
+    public ShotEntityMapper(UserAvatarUrlProvider avatarProvider) {
+        this.avatarProvider = avatarProvider;
     }
 
     public ShotEntity fromCursor(Cursor c) {
@@ -69,7 +69,7 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setIdUser((String) dto.get(DatabaseContract.ShotTable.ID_USER));
         shot.setUsername(((String) dto.get(DatabaseContract.ShotTable.USERNAME)));
         // no user photo from dataservice
-        shot.setUserPhoto(avatarBuilder.thumbnail(shot.getIdUser()));
+        shot.setUserPhoto(avatarProvider.thumbnail(shot.getIdUser()));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
         shot.setEventTag((String) dto.get(DatabaseContract.ShotTable.EVENT_TAG));
