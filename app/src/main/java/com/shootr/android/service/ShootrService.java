@@ -80,4 +80,6 @@ public interface ShootrService {
     List<ShotEntity> getEventMediaShots(String idEvent, List<String> userId) throws IOException;
 
     ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException;
+
+    void sendResetPasswordEmail(String idUser) throws IOException;
 }

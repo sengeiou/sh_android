@@ -591,6 +591,11 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
+    @Override public void sendResetPasswordEmail(String idUser) throws IOException {
+        GenericDto sendResetPasswordEmailDto = userDtoFactory.sendResetPasswordEmail(idUser);
+        GenericDto responseDto = postRequest(sendResetPasswordEmailDto);
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

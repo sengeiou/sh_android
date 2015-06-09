@@ -62,7 +62,7 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldLoadEventListOnInitialized() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize();
 
         verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
@@ -128,14 +128,14 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldLoadEventListOnceWhenInitializedAndResumed() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize();
         presenter.resume();
 
         verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
     @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize();
         presenter.pause();
         presenter.resume();
 

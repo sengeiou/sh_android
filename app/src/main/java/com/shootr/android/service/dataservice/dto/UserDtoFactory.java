@@ -50,8 +50,13 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
-    private static final String USER_SIGN_IN = "UserSignInMongo";
+    private static final String ALIAS_PASSWORD_RESET_EMAIL = "SEND_PASSWORD_RESET_EMAIL";
     private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
+    private static final String USER_SIGN_IN = "UserSignInMongo";
+    public static final String RESET_PASSWORD_ID_USER = "idUser";
+    public static final String RESET_PASSWORD_TABLE_NAME = "ResetPasswordMongo";
+    public static final String CHECK_IN_ID_USER = "idUser";
+    public static final String CHECK_IN_ID_EVENT_CHECKED = "idEvent";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -71,8 +76,8 @@ public class UserDtoFactory {
 
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
-          .putKey(DatabaseContract.CheckInMongo.ID, idUser)
-          .putKey(DatabaseContract.CheckInMongo.ID_CHECKED_EVENT, idEvent)
+          .putKey(CHECK_IN_ID_USER, idUser)
+          .putKey(CHECK_IN_ID_EVENT_CHECKED, idEvent)
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .build();
 
@@ -326,5 +331,26 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FORGOT_PASSWORD, operation);
+    }
+
+    public GenericDto sendResetPasswordEmail(String idUser) {
+        Map<String, Object> key = new HashMap<>();
+        key.put(RESET_PASSWORD_ID_USER,idUser);
+
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(RESET_PASSWORD_TABLE_NAME) //
+          .includeDeleted(false) //
+          .setKeys(key)
+          .build();
+
+        Map<String, Object> dto = new HashMap<>();
+
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(dto) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_PASSWORD_RESET_EMAIL, operation);
     }
 }
