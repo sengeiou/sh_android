@@ -1,5 +1,7 @@
 package com.shootr.android.data.repository.datasource.shot;
 
+import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
+import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.ShotType;
@@ -33,13 +35,17 @@ public class ServiceShotDatasourceTest {
     @Mock ShootrService shootrService;
     @Mock BusPublisher busPublisher;
     @Mock SessionRepository sessionRepository;
+    @Mock ShotApiService shotApiService;
 
     private ServiceShotDatasource datasource;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        datasource = new ServiceShotDatasource(shootrService, busPublisher, sessionRepository);
+        ShotApiEntityMapper shotApiEntityMapper = new ShotApiEntityMapper();
+        datasource = new ServiceShotDatasource(shootrService, shotApiService,
+          shotApiEntityMapper,
+          busPublisher, sessionRepository);
     }
 
     //TODO tests with hidden sync
