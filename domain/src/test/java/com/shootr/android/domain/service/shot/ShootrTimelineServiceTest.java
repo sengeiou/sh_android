@@ -51,8 +51,7 @@ public class ShootrTimelineServiceTest {
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-
-    @Captor ArgumentCaptor<List<EventTimelineParameters>> timelineParametersCaptor;
+    @Mock ShotRepository localShotRepository;
 
     private ShootrTimelineService shootrTimelineService;
 
@@ -63,6 +62,7 @@ public class ShootrTimelineServiceTest {
           localEventRepository,
           localUserRepository,
           remoteShotRepository,
+          localShotRepository,
           timelineSynchronizationRepository);
     }
 
@@ -131,6 +131,27 @@ public class ShootrTimelineServiceTest {
         verify(remoteShotRepository, never()).getShotsForEventTimeline(anyEventParameters());
     }
 
+    @Test
+    public void shouldRequestFewerNiceShotsWhenWatchingEventHasShotsInLocalRepository() throws Exception {
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(unorderedShots());
+
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        EventTimelineParameters parameters = captureTimelineParameters();
+        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.FEWER_NICE_SHOTS);
+    }
+
+    @Test
+    public void shouldRequestFullNiceShotsWhenWatchingEventDoesntHaveShotsInLocalRepository() throws Exception {
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(Collections.<Shot>emptyList());
+
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        EventTimelineParameters parameters = captureTimelineParameters();
+        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.FULL_NICE_SHOTS);
+    }
 
     @Test
     public void shouldRequestTimelineWithEventIdAndAuthorWhenWatchingEvent() throws Exception {

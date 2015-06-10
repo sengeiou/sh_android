@@ -22,12 +22,14 @@ import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
-    public static final int FEWER_NICE_SHOTS = 2;
+    public static final Integer FEWER_NICE_SHOTS = 2;
+    public static final Integer FULL_NICE_SHOTS = null;
 
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
+    private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
@@ -35,11 +37,13 @@ public class ShootrTimelineService {
       @Local EventRepository localEventRepository,
       @Local UserRepository localUserRepository,
       @Remote ShotRepository remoteShotRepository,
+      @Local ShotRepository localShotRepository,
       TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
@@ -89,6 +93,11 @@ public class ShootrTimelineService {
           .niceShots(FEWER_NICE_SHOTS) //
           .since(eventRefreshDateSince) //
           .build();
+
+        List<Shot> localShots = localShotRepository.getShotsForEventTimeline(eventTimelineParameters);
+        if (localShots.isEmpty()) {
+            eventTimelineParameters.setMaxNice(FULL_NICE_SHOTS);
+        }
         return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
     }
 
