@@ -9,7 +9,7 @@ import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shots/boxTimeline")
+    @GET("/shots/boxTimeline?includeLinks=false")
     List<ShotApiEntity> getEventTimeline(@Query("idEvent") String event,
       @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp,
