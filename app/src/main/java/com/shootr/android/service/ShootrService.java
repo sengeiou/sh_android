@@ -29,8 +29,6 @@ public interface ShootrService {
 
     ShotEntity getShotById(String idShot) throws IOException;
 
-    List<ShotEntity> getEventShotsByParameters(EventTimelineParameters parameters) throws IOException;
-
     List<ShotEntity> getActivityShotsByParameters(ActivityTimelineParameters parameters) throws IOException;
 
     List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
