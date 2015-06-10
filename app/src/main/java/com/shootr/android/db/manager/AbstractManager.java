@@ -1,18 +1,14 @@
 package com.shootr.android.db.manager;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.objects.TableSync;
 import com.shootr.android.util.AndroidTimeUtils;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public abstract class AbstractManager {
 
@@ -62,11 +58,13 @@ public abstract class AbstractManager {
         if(isTableEmpty(entity)){
             firstDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
         }else{
-            String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
+            String sql = "SELECT "+ DatabaseContract.SyncColumns.MODIFIED
+              + " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.MODIFIED
+              +" ASC LIMIT 1";
             Cursor c = getReadableDatabase().rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                firstDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
+                firstDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.MODIFIED));
             } else {
                 firstDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
             }
@@ -80,11 +78,13 @@ public abstract class AbstractManager {
         if(isTableEmpty(entity)){
             lastDateModified = 0L;
         }else{
-            String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
+            String sql = "SELECT "+ DatabaseContract.SyncColumns.MODIFIED
+              + " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.MODIFIED
+              +" DESC LIMIT 1";
             Cursor c = getReadableDatabase().rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                lastDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
+                lastDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.MODIFIED));
             } else {
                 lastDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
             }

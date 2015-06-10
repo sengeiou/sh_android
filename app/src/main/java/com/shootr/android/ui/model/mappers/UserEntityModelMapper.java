@@ -25,7 +25,7 @@ public class UserEntityModelMapper {
     }
 
     private int getRelationShip(FollowEntity f){
-        if(f!=null && f.getCsysBirth()!=null && f.getCsysDeleted() == null){
+        if(f!=null && f.getBirth()!=null && f.getDeleted() == null){
             return FollowEntity.RELATIONSHIP_FOLLOWING;
         }else{
             return FollowEntity.RELATIONSHIP_NONE;

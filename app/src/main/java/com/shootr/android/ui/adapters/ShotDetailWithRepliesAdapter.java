@@ -238,7 +238,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         public void bindView(final ShotModel shotModel) {
             username.setText(getUsernameTitle(shotModel));
-            timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
+            timestamp.setText(getTimestampForDate(shotModel.getBirth()));
             String comment = shotModel.getComment();
             if (comment != null) {
                 CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
@@ -368,7 +368,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.text.setVisibility(View.GONE);
             }
 
-            long creationDate = shotModel.getCsysBirth().getTime();
+            long creationDate = shotModel.getBirth().getTime();
             this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
 
             String photo = shotModel.getPhoto();
@@ -454,7 +454,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.text.setVisibility(View.GONE);
             }
 
-            long creationDate = reply.getCsysBirth().getTime();
+            long creationDate = reply.getBirth().getTime();
             this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
 
             String photo = reply.getPhoto();

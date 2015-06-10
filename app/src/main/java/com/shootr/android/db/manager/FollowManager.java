@@ -19,8 +19,6 @@ public class FollowManager extends AbstractManager{
 
 
     FollowMapper followMapper;
-    private static final String CSYS_DELETED = DatabaseContract.SyncColumns.CSYS_DELETED;
-    private static final String CSYS_SYNCHRONIZED = DatabaseContract.SyncColumns.CSYS_SYNCHRONIZED;
     private static final String FOLLOW_TABLE = FollowTable.TABLE;
     private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
     private static final String ID_USER = FollowTable.ID_USER;
@@ -40,10 +38,10 @@ public class FollowManager extends AbstractManager{
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
 
-            if (contentValues.get(CSYS_DELETED) != null) {
+            if (contentValues.get(DatabaseContract.SyncColumns.DELETED) != null) {
                 deleteFollow(follow);
             } else {
-                contentValues.put(CSYS_SYNCHRONIZED, "S");
+                contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
                 id = getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
@@ -69,10 +67,10 @@ public class FollowManager extends AbstractManager{
     public void saveFollowsFromServer(List<FollowEntity> followList) {
         for (FollowEntity follow : followList) {
             ContentValues contentValues = followMapper.toContentValues(follow);
-            if (contentValues.getAsLong(CSYS_DELETED) != null) {
+            if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
                  deleteFollow(follow);
             } else {
-                contentValues.put(CSYS_SYNCHRONIZED,"S");
+                contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED,"S");
                 getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
@@ -80,7 +78,7 @@ public class FollowManager extends AbstractManager{
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
-        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ CSYS_DELETED+" IS NULL";
+        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ DatabaseContract.SyncColumns.DELETED+" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
         Cursor  c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
@@ -98,7 +96,7 @@ public class FollowManager extends AbstractManager{
     public List<String> getUserFollowingIds(String idUser) {
         List<String> userIds = new ArrayList<>();
 
-        String args = ID_USER+"=? AND "+CSYS_DELETED +" IS NULL";
+        String args = ID_USER+"=? AND "+DatabaseContract.SyncColumns.DELETED +" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUser)};
         if(isTableEmpty(FOLLOW_TABLE)){
             Timber.e("La tabla follow está vacia");
@@ -183,9 +181,9 @@ public class FollowManager extends AbstractManager{
                 queryResults.moveToFirst();
                 do {
                     FollowEntity follow = followMapper.fromCursor(queryResults);
-                    if (follow != null && follow.getCsysDeleted() == null) {
+                    if (follow != null && follow.getDeleted() == null) {
                         resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
-                    }else if(follow!=null && follow.getCsysDeleted() !=null){
+                    }else if(follow!=null && follow.getDeleted() !=null){
                         resultRelationship = FollowEntity.RELATIONSHIP_NONE;
                     }
                 } while (queryResults.moveToNext());
@@ -223,7 +221,7 @@ public class FollowManager extends AbstractManager{
     * **/
     public List<FollowEntity> getDatasForSendToServerInCase(){
         List<FollowEntity> followsToUpdate = new ArrayList<>();
-        String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'D' OR "+CSYS_SYNCHRONIZED+"='U'";
+        String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
         Cursor c = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();

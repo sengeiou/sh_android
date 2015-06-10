@@ -115,7 +115,7 @@ public class ServiceShotDatasource implements ShotDataSource {
               && isNewerThanLastTrigger(newShot)
               && !newShot.getIdUser().equals(currentUserId)) {
                 busPublisher.post(new WatchUpdateRequest.Event());
-                lastTriggerDate = newShot.getCsysBirth().getTime();
+                lastTriggerDate = newShot.getBirth().getTime();
                 break;
             }
         }
@@ -127,6 +127,6 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     private boolean isNewerThanLastTrigger(ShotEntity newShot) {
-        return newShot.getCsysBirth().getTime() > lastTriggerDate;
+        return newShot.getBirth().getTime() > lastTriggerDate;
     }
 }

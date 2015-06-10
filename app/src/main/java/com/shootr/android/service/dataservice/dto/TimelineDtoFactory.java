@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.Constants;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
@@ -39,8 +38,8 @@ public class TimelineDtoFactory {
         FilterDto shotsFilter = and(
                 or(ShotTable.ID_USER).isIn(usersIds)
         )
-                .and(ShotTable.CSYS_DELETED).isEqualTo(null)
-                .and(ShotTable.CSYS_MODIFIED).greaterThan(0L)
+                .and(ShotTable.DELETED).isEqualTo(null)
+                .and(ShotTable.MODIFIED).greaterThan(0L)
                 .build();
 
         MetadataDto md = new MetadataDto.Builder()
@@ -87,8 +86,8 @@ public class TimelineDtoFactory {
 
     public GenericDto getOlderShotsOperationDto(List<Long> usersIds, Long referenceDate, Long limit) {
         FilterDto oldShotsFilter = and(or(ShotTable.ID_USER).isIn(usersIds))
-                .and(ShotTable.CSYS_MODIFIED).lessThan(referenceDate) //TODO antiguos por fecha de modificación o de creación?
-                .and(ShotTable.CSYS_DELETED).isEqualTo(null)
+                .and(ShotTable.MODIFIED).lessThan(referenceDate) //TODO antiguos por fecha de modificación o de creación?
+                .and(ShotTable.DELETED).isEqualTo(null)
                 .build();
 
         MetadataDto md = new MetadataDto.Builder()
@@ -111,9 +110,9 @@ public class TimelineDtoFactory {
           or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
         ) //
           .and(or(ShotTable.TYPE).isIn(parameters.getIncludedTypes())) //
-          .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
-          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
-          .and(ShotTable.CSYS_MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
+          .and(ShotTable.MODIFIED).greaterThan(parameters.getSinceDate()) //
+          .and(ShotTable.DELETED).isEqualTo(null) //
+          .and(ShotTable.MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
               @Override
               public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
                   if (parameters.getMaxDate() != null) {
@@ -146,9 +145,9 @@ public class TimelineDtoFactory {
         ) //
           .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
           .and(ShotTable.TYPE).isEqualTo(parameters.getShotType())
-          .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
-          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
-          .and(ShotTable.CSYS_MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
+          .and(ShotTable.MODIFIED).greaterThan(parameters.getSinceDate()) //
+          .and(ShotTable.DELETED).isEqualTo(null) //
+          .and(ShotTable.MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
               @Override
               public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
                   if (parameters.getMaxDate() != null) {

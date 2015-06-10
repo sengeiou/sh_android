@@ -65,8 +65,8 @@ public class FilterBuilder {
      * @return OrItem for attaching to a builder.
      */
     public static OrItem orModifiedOrDeletedAfter(Long lastModifiedDate) {
-        return or(SyncColumns.CSYS_DELETED).greaterThan(lastModifiedDate)
-                .or(SyncColumns.CSYS_MODIFIED).greaterThan(lastModifiedDate);
+        return or(SyncColumns.DELETED).greaterThan(lastModifiedDate)
+                .or(SyncColumns.MODIFIED).greaterThan(lastModifiedDate);
     }
 
     /**
@@ -76,7 +76,7 @@ public class FilterBuilder {
      * @return OrItem for attaching to a builder.
      */
     public static OrItem orIsNotDeleted() {
-        return or(SyncColumns.CSYS_DELETED).isEqualTo(null);
+        return or(SyncColumns.DELETED).isEqualTo(null);
     }
 
 

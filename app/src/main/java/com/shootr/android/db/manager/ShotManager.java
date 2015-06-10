@@ -25,8 +25,6 @@ public class ShotManager extends  AbstractManager{
     @Inject ShotEntityModelMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
-    private static final String CSYS_DELETED = DatabaseContract.SyncColumns.CSYS_DELETED;
-    private static final String CSYS_BIRTH = DatabaseContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
     public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotEntityModelMapper shotVOMapper){
@@ -41,7 +39,7 @@ public class ShotManager extends  AbstractManager{
      */
     public void saveShot(ShotEntity shot) throws SQLException {
         ContentValues contentValues = shotEntityMapper.toContentValues(shot);
-        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+        if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
             deleteShot(shot);
         } else {
             getWritableDatabase().insertWithOnConflict(SHOT_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -61,7 +59,7 @@ public class ShotManager extends  AbstractManager{
             whereArguments,
             null,
             null,
-            ShotTable.CSYS_BIRTH + " DESC",
+            ShotTable.BIRTH + " DESC",
             String.valueOf(latestShotsNumber));
 
         ShotEntity shotEntity;
@@ -82,7 +80,7 @@ public class ShotManager extends  AbstractManager{
     public void saveShots(List<ShotEntity> shotList) {
         SQLiteDatabase database = getWritableDatabase();
         for (ShotEntity shot : shotList) {
-            if (shot.getCsysDeleted() != null) {
+            if (shot.getDeleted() != null) {
                 deleteShot(shot);
             } else {
                 ContentValues contentValues = shotEntityMapper.toContentValues(shot);
@@ -133,7 +131,7 @@ public class ShotManager extends  AbstractManager{
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.CSYS_BIRTH+" DESC");
+            ShotTable.BIRTH +" DESC");
 
         List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
         ShotEntity shotEntity;
@@ -166,7 +164,7 @@ public class ShotManager extends  AbstractManager{
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.CSYS_BIRTH+" DESC");
+            ShotTable.BIRTH +" DESC");
 
         List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
         ShotEntity shotEntity;
@@ -233,14 +231,14 @@ public class ShotManager extends  AbstractManager{
 
         String whereClause = eventIdClause + " AND " + commentTypeOnlyClause;
         String[] whereArguments = new String[]{String.valueOf(eventId)};
-        String order = ShotTable.CSYS_MODIFIED + " desc";
+        String order = ShotTable.MODIFIED + " desc";
 
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null, order, "1");
 
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
-            return lastShot.getCsysModified().getTime();
+            return lastShot.getModified().getTime();
         } else {
             return 0L;
         }
@@ -248,7 +246,7 @@ public class ShotManager extends  AbstractManager{
 
     public Long getLastModifiedDateForActivity() {
         String whereClause = ShotTable.TYPE + " <> " + ShotType.COMMENT;
-        String order = ShotTable.CSYS_MODIFIED + " desc";
+        String order = ShotTable.MODIFIED + " desc";
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null, order, "1");
@@ -256,7 +254,7 @@ public class ShotManager extends  AbstractManager{
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
-            return lastShot.getCsysModified().getTime();
+            return lastShot.getModified().getTime();
         } else {
             return 0L;
         }
@@ -279,7 +277,7 @@ public class ShotManager extends  AbstractManager{
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.CSYS_BIRTH+" DESC");
+            ShotTable.BIRTH +" DESC");
 
         List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
         ShotEntity shotEntity;
@@ -312,7 +310,7 @@ public class ShotManager extends  AbstractManager{
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.CSYS_BIRTH+" DESC");
+            ShotTable.BIRTH +" DESC");
 
         List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
         ShotEntity shotEntity;

@@ -65,8 +65,8 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private UserEntity setCurrentUserPhoto(String photoUrl) throws IOException {
         UserEntity currentUserEntity = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
         currentUserEntity.setPhoto(photoUrl);
-        currentUserEntity.setCsysModified(timeUtils.getCurrentDate());
-        currentUserEntity.setCsysRevision(currentUserEntity.getCsysRevision()+1);
+        currentUserEntity.setModified(timeUtils.getCurrentDate());
+        currentUserEntity.setRevision(currentUserEntity.getRevision() + 1);
         userManager.saveUser(currentUserEntity);
         currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
         userManager.saveUser(currentUserEntity);

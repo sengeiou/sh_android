@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class EventSearchEntityMapper {
 
@@ -43,8 +42,8 @@ public class EventSearchEntityMapper {
 
         eventSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
 
-        eventSearchEntity.setCsysBirth(new Date());
-        eventSearchEntity.setCsysModified(new Date());
+        eventSearchEntity.setBirth(new Date());
+        eventSearchEntity.setModified(new Date());
 
         return eventSearchEntity;
     }

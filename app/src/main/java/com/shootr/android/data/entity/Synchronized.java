@@ -9,53 +9,53 @@ public class Synchronized {
     public static final String SYNC_UPDATED = "U";
     public static final String SYNC_SYNCHRONIZED = "S";
 
-    protected Date csysBirth;
-    protected Date csysModified;
-    protected Date csysDeleted;
-    protected Integer csysRevision;
-    protected String csysSynchronized;
+    protected Date birth;
+    protected Date modified;
+    protected Date deleted;
+    protected Integer revision;
+    protected String synchronizedStatus;
 
     public Synchronized() {
 
     }
 
-    public Date getCsysBirth() {
-        return csysBirth;
+    public Date getBirth() {
+        return birth;
     }
 
-    public void setCsysBirth(Date csysBirth) {
-        this.csysBirth = csysBirth;
+    public void setBirth(Date birth) {
+        this.birth = birth;
     }
 
-    public Date getCsysModified() {
-        return csysModified != null ? csysModified : getCsysBirth();
+    public Date getModified() {
+        return modified != null ? modified : getBirth();
     }
 
-    public void setCsysModified(Date csysModified) {
-        this.csysModified = csysModified;
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
-    public Date getCsysDeleted() {
-        return csysDeleted;
+    public Date getDeleted() {
+        return deleted;
     }
 
-    public void setCsysDeleted(Date csysDeleted) {
-        this.csysDeleted = csysDeleted;
+    public void setDeleted(Date deleted) {
+        this.deleted = deleted;
     }
 
-    public Integer getCsysRevision() {
-        return csysRevision != null ? csysRevision : 0;
+    public Integer getRevision() {
+        return revision != null ? revision : 0;
     }
 
-    public void setCsysRevision(Integer csysRevision) {
-        this.csysRevision = csysRevision;
+    public void setRevision(Integer revision) {
+        this.revision = revision;
     }
 
-    public String getCsysSynchronized() {
-        return csysSynchronized;
+    public String getSynchronizedStatus() {
+        return synchronizedStatus;
     }
 
-    public void setCsysSynchronized(String csysSynchronized) {
-        this.csysSynchronized = csysSynchronized;
+    public void setSynchronizedStatus(String synchronizedStatus) {
+        this.synchronizedStatus = synchronizedStatus;
     }
 }

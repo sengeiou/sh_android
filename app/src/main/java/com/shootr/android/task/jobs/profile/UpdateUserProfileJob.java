@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
 
@@ -155,8 +154,8 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private void sendUpdatedProfileToServer() throws IOException {
         UserEntity updatedUserEntity = updateEntityWithValues(updatedUserModel);
 
-        updatedUserEntity.setCsysModified(timeUtils.getCurrentDate());
-        updatedUserEntity.setCsysRevision(updatedUserEntity.getCsysRevision() + 1);
+        updatedUserEntity.setModified(timeUtils.getCurrentDate());
+        updatedUserEntity.setRevision(updatedUserEntity.getRevision() + 1);
 
         updatedUserEntity = service.saveUserProfile(updatedUserEntity);
         userManager.saveUser(updatedUserEntity);

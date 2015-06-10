@@ -22,9 +22,7 @@ public class UserManager extends AbstractManager {
 
     UserMapper userMapper;
     private SessionRepository sessionRepository;
-    private static final String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
     private static final String USER_TABLE = UserTable.TABLE;
-    private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
 
     @Inject
     public UserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionRepository sessionRepository) {
@@ -39,8 +37,8 @@ public class UserManager extends AbstractManager {
     public void saveUsersAndDeleted(List<UserEntity> users) throws SQLException {
         for (UserEntity user : users) {
             ContentValues contentValues = userMapper.toContentValues(user);
-            contentValues.put(CSYS_SYNCHRONIZED, "S");
-            if (contentValues.getAsLong(CSYS_DELETED) != null) {
+            contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
+            if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
                 deleteUser(user);
             } else {
                 getWritableDatabase().insertWithOnConflict(USER_TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
@@ -60,7 +58,7 @@ public class UserManager extends AbstractManager {
      */
     public void saveUser(UserEntity user) {
         ContentValues contentValues = userMapper.toContentValues(user);
-        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+        if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
             deleteUser(user);
         } else {
             getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -70,7 +68,7 @@ public class UserManager extends AbstractManager {
 
     public void saveCurrentUser(UserEntity user) throws  SQLException{
         ContentValues contentValues = userMapper.toContentValues(user);
-        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+        if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
             deleteUser(user);
         } else {
             getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -197,7 +195,7 @@ public class UserManager extends AbstractManager {
 
     public List<UserEntity> getUsersNotSynchronized() {
         String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
-          .put("field", UserTable.CSYS_SYNCHRONIZED)
+          .put("field", UserTable.SYNCHRONIZED)
           .put("n", Synchronized.SYNC_NEW)
           .put("u", Synchronized.SYNC_UPDATED)
           .format().toString();

@@ -16,7 +16,7 @@ public class ShotModelMapper {
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setComment(shot.getComment());
         shotModel.setImage(shot.getImage());
-        shotModel.setCsysBirth(shot.getPublishDate());
+        shotModel.setBirth(shot.getPublishDate());
 
         Shot.ShotUserInfo userInfo = shot.getUserInfo();
         shotModel.setUsername(userInfo.getUsername());

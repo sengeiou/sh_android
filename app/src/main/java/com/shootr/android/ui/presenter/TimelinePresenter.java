@@ -107,7 +107,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void showingLastShot(ShotModel lastShot) {
         if (!isLoadingOlderShots && mightHaveMoreShots) {
-            this.loadOlderShots(lastShot.getCsysBirth().getTime());
+            this.loadOlderShots(lastShot.getBirth().getTime());
         }
     }
 

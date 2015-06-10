@@ -50,11 +50,11 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
             FollowEntity f = new FollowEntity();
             f.setIdUser(sessionRepository.getCurrentUserId());
             f.setFollowedUser(u.getIdUser());
-            f.setCsysBirth(u.getCsysBirth());
-            f.setCsysModified(u.getCsysModified());
-            f.setCsysRevision(u.getCsysRevision());
-            f.setCsysDeleted(u.getCsysDeleted());
-            f.setCsysSynchronized(u.getCsysSynchronized());
+            f.setBirth(u.getBirth());
+            f.setModified(u.getModified());
+            f.setRevision(u.getRevision());
+            f.setDeleted(u.getDeleted());
+            f.setSynchronizedStatus(u.getSynchronizedStatus());
             followsByFollowing.add(f);
         }
         return followsByFollowing;

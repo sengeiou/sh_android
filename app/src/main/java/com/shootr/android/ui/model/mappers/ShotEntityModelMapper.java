@@ -27,7 +27,7 @@ public class ShotEntityModelMapper {
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setUsername(user.getUserName());
         shotModel.setType(shot.getType());
-        shotModel.setCsysBirth(shot.getCsysBirth());
+        shotModel.setBirth(shot.getBirth());
         shotModel.setReplyUsername(shot.getUserNameParent());
         shotModel.setParentShotId(shot.getIdShotParent());
         shotModel.setVideoUrl(shot.getVideoUrl());
@@ -55,7 +55,7 @@ public class ShotEntityModelMapper {
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setUsername(shot.getUsername());
         shotModel.setType(shot.getType());
-        shotModel.setCsysBirth(shot.getCsysBirth());
+        shotModel.setBirth(shot.getBirth());
         shotModel.setReplyUsername(shot.getUserNameParent());
         shotModel.setParentShotId(shot.getIdShotParent());
         return shotModel;

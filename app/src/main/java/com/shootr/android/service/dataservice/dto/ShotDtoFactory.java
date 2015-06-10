@@ -73,8 +73,8 @@ public class ShotDtoFactory {
 
         FilterDto shotsFilter = and(ShotTable.ID_USER).isEqualTo(idUser)
           .and(or(ShotTable.TYPE).isIn(Arrays.asList(ShotType.TYPES_SHOWN)))
-          .and(ShotTable.CSYS_DELETED).isEqualTo(null)
-          .and(ShotTable.CSYS_MODIFIED).greaterThan(0L).build();
+          .and(ShotTable.DELETED).isEqualTo(null)
+          .and(ShotTable.MODIFIED).greaterThan(0L).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(ServiceConstants.OPERATION_RETRIEVE)
           .entity(ShotTable.TABLE)
@@ -87,7 +87,7 @@ public class ShotDtoFactory {
 
     public GenericDto getRepliesOperationDto(String shotId) {
         FilterDto repliesFilter = and(ShotTable.ID_SHOT_PARENT).isEqualTo(shotId) //
-          .and(ShotTable.CSYS_MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
+          .and(ShotTable.MODIFIED).lessOrEqualThan(futureModifiedTimeToSkipServerCache()) // //TODO se podria optimizar usando el modified del timeline, pero de momento no me fio, hay que pensarlo bien
           .build();
 
         MetadataDto md = new MetadataDto.Builder() //
@@ -123,7 +123,7 @@ public class ShotDtoFactory {
           or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
+          .and(ShotTable.DELETED).isEqualTo(null) //
           .build();
 
         MetadataDto md = new MetadataDto.Builder() //
@@ -145,7 +145,7 @@ public class ShotDtoFactory {
         FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
           .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.CSYS_DELETED).isEqualTo(null) //
+          .and(ShotTable.DELETED).isEqualTo(null) //
           .build();
 
         MetadataDto md = new MetadataDto.Builder() //

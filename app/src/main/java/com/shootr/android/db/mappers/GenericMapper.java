@@ -2,6 +2,7 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.data.entity.Synchronized;
 import java.util.Date;
@@ -9,57 +10,51 @@ import java.util.Map;
 
 public abstract class GenericMapper {
 
-    public static final String CSYS_BIRTH = SyncColumns.CSYS_BIRTH;
-    public static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
-    public static final String CSYS_MODIFIED = SyncColumns.CSYS_MODIFIED;
-    public static final String CSYS_REVISION = SyncColumns.CSYS_REVISION;
-    public static final String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
-
     protected void setSynchronizedfromCursor(Cursor c, Synchronized s) {
-        long birthDate = c.getLong(c.getColumnIndex(CSYS_BIRTH));
-        s.setCsysBirth(birthDate != 0L ? new Date(birthDate) : null);
+        long birthDate = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.BIRTH));
+        s.setBirth(birthDate != 0L ? new Date(birthDate) : null);
 
-        long deletedDate = c.getLong(c.getColumnIndex(CSYS_DELETED));
-        s.setCsysDeleted(deletedDate != 0L ? new Date(deletedDate) : null);
+        long deletedDate = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.DELETED));
+        s.setDeleted(deletedDate != 0L ? new Date(deletedDate) : null);
 
-        long modifiedDate = c.getLong(c.getColumnIndex(CSYS_MODIFIED));
-        s.setCsysModified(modifiedDate != 0L ? new Date(modifiedDate) : new Date(birthDate));
+        long modifiedDate = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.MODIFIED));
+        s.setModified(modifiedDate != 0L ? new Date(modifiedDate) : new Date(birthDate));
 
-        s.setCsysRevision(c.getInt(c.getColumnIndex(CSYS_REVISION)));
-        s.setCsysSynchronized(c.getString(c.getColumnIndex(CSYS_SYNCHRONIZED)));
+        s.setRevision(c.getInt(c.getColumnIndex(DatabaseContract.SyncColumns.REVISION)));
+        s.setSynchronizedStatus(c.getString(c.getColumnIndex(DatabaseContract.SyncColumns.SYNCHRONIZED)));
     }
 
     protected void setSynchronizedtoContentValues(Synchronized s, ContentValues cv) {
-        Date birth = s.getCsysBirth();
-        cv.put(CSYS_BIRTH, birth!=null ? birth.getTime() : null);
-        Date deleted = s.getCsysDeleted();
-        cv.put(CSYS_DELETED, deleted!=null ? deleted.getTime() : null);
-        Date modified = s.getCsysModified();
+        Date birth = s.getBirth();
+        cv.put(DatabaseContract.SyncColumns.BIRTH, birth!=null ? birth.getTime() : null);
+        Date deleted = s.getDeleted();
+        cv.put(DatabaseContract.SyncColumns.DELETED, deleted!=null ? deleted.getTime() : null);
+        Date modified = s.getModified();
         if (modified != null || birth != null) {
-            cv.put(CSYS_MODIFIED, modified!=null ? modified.getTime() : birth.getTime());
+            cv.put(DatabaseContract.SyncColumns.MODIFIED, modified!=null ? modified.getTime() : birth.getTime());
         }
 
-        cv.put(CSYS_REVISION, s.getCsysRevision());
-        cv.put(CSYS_SYNCHRONIZED, s.getCsysSynchronized());
+        cv.put(DatabaseContract.SyncColumns.REVISION, s.getRevision());
+        cv.put(DatabaseContract.SyncColumns.SYNCHRONIZED, s.getSynchronizedStatus());
     }
 
     protected void setSynchronizedfromDto(Map<String, Object> dto, Synchronized s) {
-        Number date =  (Number)dto.get(CSYS_BIRTH);
-        s.setCsysBirth(date != null ? new Date(date.longValue()) : null);
+        Number date =  (Number)dto.get(DatabaseContract.SyncColumns.BIRTH);
+        s.setBirth(date != null ? new Date(date.longValue()) : null);
 
-        date = (Number) dto.get(CSYS_DELETED);
-        s.setCsysDeleted(date != null ? new Date(date.longValue()) : null);
+        date = (Number) dto.get(DatabaseContract.SyncColumns.DELETED);
+        s.setDeleted(date != null ? new Date(date.longValue()) : null);
 
-        date = (Number) dto.get(CSYS_MODIFIED);
-        s.setCsysModified(date != null ? new Date(date.longValue()) : null);
+        date = (Number) dto.get(DatabaseContract.SyncColumns.MODIFIED);
+        s.setModified(date != null ? new Date(date.longValue()) : null);
 
-        s.setCsysRevision((Integer) dto.get(CSYS_REVISION));
+        s.setRevision((Integer) dto.get(DatabaseContract.SyncColumns.REVISION));
     }
 
     protected void setSynchronizedtoDto(Synchronized s, Map<String, Object> dto) {
-        dto.put(CSYS_BIRTH, s == null ? null : s.getCsysBirth());
-        dto.put(CSYS_DELETED, s == null ? null : s.getCsysDeleted());
-        dto.put(CSYS_MODIFIED, s == null ? null : s.getCsysModified());
-        dto.put(CSYS_REVISION, s == null ? null : s.getCsysRevision());
+        dto.put(DatabaseContract.SyncColumns.BIRTH, s == null ? null : s.getBirth());
+        dto.put(DatabaseContract.SyncColumns.DELETED, s == null ? null : s.getDeleted());
+        dto.put(DatabaseContract.SyncColumns.MODIFIED, s == null ? null : s.getModified());
+        dto.put(DatabaseContract.SyncColumns.REVISION, s == null ? null : s.getRevision());
     }
 }

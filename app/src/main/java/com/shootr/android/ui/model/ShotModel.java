@@ -10,7 +10,7 @@ public class ShotModel implements Serializable{
     private String idShot;
     private String comment;
     private String image;
-    private Date csysBirth;
+    private Date birth;
     //User attributes
     private String idUser;
     private String userName;
@@ -46,12 +46,12 @@ public class ShotModel implements Serializable{
         this.comment = comment;
     }
 
-    public Date getCsysBirth() {
-        return csysBirth;
+    public Date getBirth() {
+        return birth;
     }
 
-    public void setCsysBirth(Date csysBirth) {
-        this.csysBirth = csysBirth;
+    public void setBirth(Date birth) {
+        this.birth = birth;
     }
 
     public String getIdUser() {

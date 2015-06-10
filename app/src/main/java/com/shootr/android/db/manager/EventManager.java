@@ -13,7 +13,6 @@ import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -72,7 +71,7 @@ public class EventManager extends AbstractManager{
         SQLiteDatabase database = getWritableDatabase();
         for (EventEntity eventEntity : eventEntities) {
             ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
-            if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {
+            if (contentValues.getAsLong(DatabaseContract.EventTable.DELETED) != null) {
                 deleteEvent(eventEntity);
             } else {
                 database.insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -82,7 +81,7 @@ public class EventManager extends AbstractManager{
 
     public void saveEvent(EventEntity eventEntity) {
         ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
-        if (contentValues.getAsLong(DatabaseContract.EventTable.CSYS_DELETED) != null) {
+        if (contentValues.getAsLong(DatabaseContract.EventTable.DELETED) != null) {
             deleteEvent(eventEntity);
         } else {
             getWritableDatabase().insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);

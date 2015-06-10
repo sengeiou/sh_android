@@ -218,7 +218,7 @@ public class UserDtoFactory {
 
     public GenericDto getUserByUsername(String username){
         FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
-                .and(UserTable.CSYS_DELETED).isEqualTo(null) //
+                .and(UserTable.DELETED).isEqualTo(null) //
                 .build();
 
         MetadataDto metadata = new MetadataDto.Builder() //

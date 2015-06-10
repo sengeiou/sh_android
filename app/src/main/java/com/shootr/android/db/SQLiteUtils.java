@@ -33,11 +33,11 @@ public class SQLiteUtils {
             + UserTable.WATCHING_EVENT_TITLE +" TEXT NULL,"
             + UserTable.ID_CHECKED_EVENT +" TEXT NULL,"
             + UserTable.JOIN_EVENT_DATE+" INTEGER NULL,"
-            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED + " DATETIME,"
-            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1));";
+            + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.DELETED + " DATETIME,"
+            + SyncColumns.REVISION + " INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED + " CHAR(1));";
 
     public static final String CREATE_TABLE_SHOT = "CREATE TABLE IF NOT EXISTS " + ShotTable.TABLE + " ("
             + ShotTable.ID_SHOT + " TEXT NOT NULL PRIMARY KEY,"
@@ -55,11 +55,11 @@ public class SQLiteUtils {
             + ShotTable.VIDEO_URL+ " TEXT NULL,"
             + ShotTable.VIDEO_TITLE+ " TEXT NULL,"
             + ShotTable.VIDEO_DURATION+ " NUMBER NULL,"
-            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
+            + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.DELETED + " DATETIME NULL,"
+            + SyncColumns.REVISION + " INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS " + ShotQueueTable.TABLE + " ("
           + ShotQueueTable.ID_QUEUE + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -80,21 +80,21 @@ public class SQLiteUtils {
           + ShotTable.VIDEO_URL+ " TEXT NULL,"
           + ShotTable.VIDEO_TITLE+ " TEXT NULL,"
           + ShotTable.VIDEO_DURATION+ " NUMBER NULL,"
-          + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-          + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-          + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-          + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-          + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL" +
+          + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+          + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+          + SyncColumns.DELETED + " DATETIME NULL,"
+          + SyncColumns.REVISION + " INT NOT NULL,"
+          + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL" +
           ")";
 
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS " + FollowTable.TABLE + " ("
             + FollowTable.ID_USER + " TEXT NOT NULL,"
             + FollowTable.ID_FOLLOWED_USER + " TEXT NOT NULL,"
-            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL,"
+            + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.DELETED + " DATETIME NULL,"
+            + SyncColumns.REVISION + " INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL,"
             + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + "))";
 
     public static final String CREATE_TABLE_TABLESSYNC = "CREATE TABLE IF NOT EXISTS "+ TablesSync.TABLE+" ("
@@ -115,11 +115,11 @@ public class SQLiteUtils {
             + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
             + DeviceTable.MODEL+" VARCHAR(255) NULL,"
             + DeviceTable.OS_VERSION+" VARCHAR(255),"
-            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
+            + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.DELETED + " DATETIME NULL,"
+            + SyncColumns.REVISION + " INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_EVENT = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventTable.TABLE+" ("
             + DatabaseContract.EventTable.ID_EVENT +" TEXT NOT NULL PRIMARY KEY,"
@@ -131,11 +131,11 @@ public class SQLiteUtils {
             + DatabaseContract.EventTable.TAG +" TEXT NULL,"
             + DatabaseContract.EventTable.LAST_UPDATED_USER +" TEXT NULL,"
             + DatabaseContract.EventTable.LOCALE +" TEXT NULL,"
-            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
+            + SyncColumns.BIRTH +" DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED +" DATETIME NOT NULL,"
+            + SyncColumns.DELETED +" DATETIME NULL,"
+            + SyncColumns.REVISION +" INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED +" CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_EVENT_SEARCH = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventSearchTable.TABLE+" ("
             + DatabaseContract.EventTable.ID_EVENT +" TEXT NOT NULL PRIMARY KEY,"
@@ -145,10 +145,15 @@ public class SQLiteUtils {
             + DatabaseContract.EventTable.PHOTO +" TEXT NULL,"
             + DatabaseContract.EventTable.LOCALE +" TEXT NULL,"
             + DatabaseContract.EventTable.TAG +" TEXT NULL,"
-            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL,"
+            + SyncColumns.BIRTH
+      +" DATETIME NOT NULL,"
+            + SyncColumns.MODIFIED
+      +" DATETIME NOT NULL,"
+            + SyncColumns.DELETED
+      +" DATETIME NULL,"
+            + SyncColumns.REVISION
+      +" INT NOT NULL,"
+            + SyncColumns.SYNCHRONIZED
+      +" CHAR(1) NULL,"
             + DatabaseContract.EventSearchTable.WATCHERS +" INT NOT NULL)";
     }

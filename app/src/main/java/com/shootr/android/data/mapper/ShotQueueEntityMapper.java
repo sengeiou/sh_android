@@ -1,10 +1,8 @@
 package com.shootr.android.data.mapper;
 
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.ShotType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,7 @@ public class ShotQueueEntityMapper {
         entity.setIdShot(idShot);
         entity.setComment(shot.getComment());
         entity.setImage(shot.getImage());
-        entity.setCsysBirth(shot.getPublishDate());
+        entity.setBirth(shot.getPublishDate());
         entity.setIdShotParent(shot.getParentShotId());
         entity.setIdUserParent(shot.getParentShotUserId());
         entity.setUserNameParent(shot.getParentShotUsername());
@@ -74,7 +72,7 @@ public class ShotQueueEntityMapper {
         shot.setIdShot(entity.getIdShot());
         shot.setComment(entity.getComment());
         shot.setImage(entity.getImage());
-        shot.setPublishDate(entity.getCsysBirth());
+        shot.setPublishDate(entity.getBirth());
 
         shot.setIdQueue(entity.getIdQueue());
 

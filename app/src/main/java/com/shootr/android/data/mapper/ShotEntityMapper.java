@@ -25,7 +25,7 @@ public class ShotEntityMapper {
         shot.setIdShot(shotEntity.getIdShot());
         shot.setComment(shotEntity.getComment());
         shot.setImage(shotEntity.getImage());
-        shot.setPublishDate(shotEntity.getCsysBirth());
+        shot.setPublishDate(shotEntity.getBirth());
         if (shotEntity.getIdEvent() != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
             eventInfo.setIdEvent(shotEntity.getIdEvent());
@@ -91,7 +91,7 @@ public class ShotEntityMapper {
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
 
-        shotEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
+        shotEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
         return shotEntity;
     }
 }

@@ -50,6 +50,6 @@ public class EventEntityMapper {
         entityTemplate.setUserName(event.getAuthorUsername());
         entityTemplate.setLocale(event.getLocale());
 
-        entityTemplate.setCsysSynchronized(Synchronized.SYNC_NEW);
+        entityTemplate.setSynchronizedStatus(Synchronized.SYNC_NEW);
     }
 }

@@ -140,7 +140,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     vh.text.setVisibility(View.GONE);
                 }
 
-                long timestamp = item.getCsysBirth().getTime();
+                long timestamp = item.getBirth().getTime();
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
 
                 String photo = item.getPhoto();

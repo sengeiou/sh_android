@@ -10,11 +10,11 @@ public class DatabaseContract {
 
     public static interface SyncColumns extends BaseColumns {
 
-        static final String CSYS_BIRTH = "birth";
-        static final String CSYS_MODIFIED = "modified";
-        static final String CSYS_DELETED = "deleted";
-        static final String CSYS_REVISION = "revision";
-        static final String CSYS_SYNCHRONIZED = "synchronized";
+        static final String BIRTH = "birth";
+        static final String MODIFIED = "modified";
+        static final String DELETED = "deleted";
+        static final String REVISION = "revision";
+        static final String SYNCHRONIZED = "synchronizedStatus";
     }
 
     public static final class TablesSync implements SyncColumns {
@@ -71,8 +71,7 @@ public class DatabaseContract {
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
           NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, ID_CHECKED_EVENT, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
-          CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
-          CSYS_SYNCHRONIZED
+          BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -106,8 +105,7 @@ public class DatabaseContract {
           ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
           TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
-          VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
-          CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+          VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -122,7 +120,7 @@ public class DatabaseContract {
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
 
         public static final String[] PROJECTION = {
-          ID_USER, ID_FOLLOWED_USER, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+          ID_USER, ID_FOLLOWED_USER, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -147,8 +145,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_DEVICE, ID_USER, TOKEN, ID_PUSH_ENGINE, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
-          APP_VERSION, LOCALE, CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION,
-          CSYS_SYNCHRONIZED
+          APP_VERSION, LOCALE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -172,8 +169,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
                 ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, TITLE,
-                PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED, LAST_UPDATED_USER, LOCALE,
-                CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+                PHOTO, TAG, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -185,8 +181,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           WATCHERS, LOCALE,
-          ID_EVENT, ID_USER, USERNAME, TITLE, PHOTO, TAG, CSYS_BIRTH, CSYS_MODIFIED,
-          CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+          ID_EVENT, ID_USER, USERNAME, TITLE, PHOTO, TAG, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
 
     }
@@ -222,8 +217,7 @@ public class DatabaseContract {
           ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
           TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
-          VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION,
-          CSYS_BIRTH, CSYS_MODIFIED, CSYS_DELETED, CSYS_REVISION, CSYS_SYNCHRONIZED
+          VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 

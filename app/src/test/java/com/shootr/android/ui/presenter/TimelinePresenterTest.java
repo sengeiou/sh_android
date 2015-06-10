@@ -250,7 +250,7 @@ public class TimelinePresenterTest {
     //region Stubs
     private ShotModel lastShotModel() {
         ShotModel shotModel = new ShotModel();
-        shotModel.setCsysBirth(LAST_SHOT_DATE);
+        shotModel.setBirth(LAST_SHOT_DATE);
         return shotModel;
     }
 

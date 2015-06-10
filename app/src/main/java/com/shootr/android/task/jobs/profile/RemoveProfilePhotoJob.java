@@ -52,7 +52,7 @@ public class RemoveProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         User currentUser= sessionRepository.getCurrentUser();
         UserEntity currentUserEntity = userEntityMapper.transform(currentUser);
         currentUserEntity.setPhoto(null);
-        currentUserEntity.setCsysModified(timeUtils.getCurrentDate());
+        currentUserEntity.setModified(timeUtils.getCurrentDate());
         userManager.saveUser(currentUserEntity);
         currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
         userManager.saveUser(currentUserEntity);

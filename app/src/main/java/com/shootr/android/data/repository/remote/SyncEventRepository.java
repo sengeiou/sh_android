@@ -3,10 +3,7 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.Cached;
-import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
-import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
@@ -70,7 +67,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     private void markEntityAsSynchronized(EventEntity event) {
-        event.setCsysSynchronized(Synchronized.SYNC_SYNCHRONIZED);
+        event.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
     }
 
     @Override public void dispatchSync() {

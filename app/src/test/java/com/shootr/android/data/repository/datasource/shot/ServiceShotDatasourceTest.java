@@ -114,13 +114,13 @@ public class ServiceShotDatasourceTest {
         ShotEntity shotEntity = new ShotEntity();
         shotEntity.setType(ShotType.TYPES_SYNC_TRIGGER[0]);
         shotEntity.setIdUser(ID_USER_STUB);
-        shotEntity.setCsysBirth(DATE_NEWER);
+        shotEntity.setBirth(DATE_NEWER);
         return shotEntity;
     }
 
     private ShotEntity syncShotWithDate(Date date) {
         ShotEntity shot = syncShot();
-        shot.setCsysBirth(date);
+        shot.setBirth(date);
         return shot;
     }
 }

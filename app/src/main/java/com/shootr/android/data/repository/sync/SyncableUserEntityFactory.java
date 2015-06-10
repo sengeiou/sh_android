@@ -26,21 +26,21 @@ public class SyncableUserEntityFactory extends SyncableEntityFactory<User, UserE
 
     @Override protected UserEntity updateValues(UserEntity currentEntity, User user) {
         UserEntity userEntityFromDomain = userEntityMapper.transform(user);
-        userEntityFromDomain.setCsysModified(new Date());
-        userEntityFromDomain.setCsysRevision(currentEntity.getCsysRevision() + 1);
-        userEntityFromDomain.setCsysBirth(currentEntity.getCsysBirth());
-        userEntityFromDomain.setCsysSynchronized(Synchronized.SYNC_UPDATED);
-        userEntityFromDomain.setCsysDeleted(currentEntity.getCsysDeleted());
+        userEntityFromDomain.setModified(new Date());
+        userEntityFromDomain.setRevision(currentEntity.getRevision() + 1);
+        userEntityFromDomain.setBirth(currentEntity.getBirth());
+        userEntityFromDomain.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
+        userEntityFromDomain.setDeleted(currentEntity.getDeleted());
         return userEntityFromDomain;
     }
 
     @Override protected UserEntity createNewEntity(User user) {
         UserEntity newEntityFromDomain = userEntityMapper.transform(user);
-        newEntityFromDomain.setCsysSynchronized(Synchronized.SYNC_NEW);
+        newEntityFromDomain.setSynchronizedStatus(Synchronized.SYNC_NEW);
         Date birth = new Date();
-        newEntityFromDomain.setCsysBirth(birth); //TODO dates from timeutils
-        newEntityFromDomain.setCsysModified(birth);
-        newEntityFromDomain.setCsysRevision(0);
+        newEntityFromDomain.setBirth(birth); //TODO dates from timeutils
+        newEntityFromDomain.setModified(birth);
+        newEntityFromDomain.setRevision(0);
         return newEntityFromDomain;
     }
 }

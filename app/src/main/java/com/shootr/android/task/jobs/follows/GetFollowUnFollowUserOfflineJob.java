@@ -89,8 +89,8 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     private FollowEntity performUnfollow(String idUserToUnfollow) {
         FollowEntity followWithUser = getExistingFollow(idUserToUnfollow);
-        followWithUser.setCsysDeleted(timeUtils.getCurrentDate());
-        followWithUser.setCsysSynchronized("D");
+        followWithUser.setDeleted(timeUtils.getCurrentDate());
+        followWithUser.setSynchronizedStatus("D");
         return followWithUser;
     }
 
@@ -119,17 +119,17 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         FollowEntity follow = getExistingFollow(idUserToFollow);
         if (follow == null) {
             follow = new FollowEntity();
-            follow.setCsysSynchronized("N");
+            follow.setSynchronizedStatus("N");
             follow.setIdUser(currentUserId());
             follow.setFollowedUser(idUserToFollow);
-            follow.setCsysRevision(0);
-            follow.setCsysBirth(currentDate);
+            follow.setRevision(0);
+            follow.setBirth(currentDate);
         } else {
-            follow.setCsysSynchronized("U");
-            follow.setCsysRevision(follow.getCsysRevision() + 1);
-            follow.setCsysDeleted(null);
+            follow.setSynchronizedStatus("U");
+            follow.setRevision(follow.getRevision() + 1);
+            follow.setDeleted(null);
         }
-        follow.setCsysModified(currentDate);
+        follow.setModified(currentDate);
         return follow;
 
     }
