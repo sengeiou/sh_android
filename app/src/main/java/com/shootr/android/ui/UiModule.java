@@ -5,6 +5,7 @@ import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -50,7 +51,7 @@ import javax.inject.Singleton;
 
                 EventMediaActivity.class,
                 UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class,
-                ResetPasswordActivity.class
+                ResetPasswordActivity.class, ListingActivity.class,
         },
         complete = false
 )
