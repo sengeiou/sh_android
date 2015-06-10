@@ -139,7 +139,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
         EventTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.FEWER_NICE_SHOTS);
+        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
         EventTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.FULL_NICE_SHOTS);
+        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
     }
 
     @Test

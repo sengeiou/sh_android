@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
-    public static final Integer FEWER_NICE_SHOTS = 2;
-    public static final Integer FULL_NICE_SHOTS = null;
+    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY = 2;
+    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
 
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
@@ -90,13 +90,13 @@ public class ShootrTimelineService {
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
           .forEvent(event) //
-          .niceShots(FEWER_NICE_SHOTS) //
+          .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //
           .build();
 
         List<Shot> localShots = localShotRepository.getShotsForEventTimeline(eventTimelineParameters);
         if (localShots.isEmpty()) {
-            eventTimelineParameters.setMaxNice(FULL_NICE_SHOTS);
+            eventTimelineParameters.setMaxNice(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
         }
         return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
     }
