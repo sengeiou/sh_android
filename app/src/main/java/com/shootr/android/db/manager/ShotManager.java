@@ -149,20 +149,15 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByEventParameters(EventTimelineParameters parameters) {
-        List<String> userIds = parameters.getUserIds();
-        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String typeSelection = ShotTable.TYPE + " = ?";
         //TODO since & max
         //TODO limit
 
-        String[] whereArguments = new String[userIds.size()+2];
-        for (int i = 0; i < userIds.size(); i++) {
-            whereArguments[i] = String.valueOf(userIds.get(i));
-        }
-        whereArguments[userIds.size()] = String.valueOf(parameters.getEventId());
-        whereArguments[userIds.size()+1] = String.valueOf(parameters.getShotType());
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + typeSelection;
+        String[] whereArguments = new String[2];
+        whereArguments[0] = String.valueOf(parameters.getEventId());
+        whereArguments[1] = String.valueOf(parameters.getShotType());
+        String whereClause = eventSelection + " AND " + typeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,

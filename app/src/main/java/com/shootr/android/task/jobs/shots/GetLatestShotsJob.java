@@ -72,9 +72,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
     }
 
     public List<ShotEntity> getLatestsShotsFromService() throws IOException {
-        List<ShotEntity> shotEntities = service.getLatestsShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
-        shotManager.saveShots(shotEntities);
-        return getLatestShotsFromDatabase();
+        return service.getLatestsShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
     }
 
     public List<ShotEntity> getLatestShotsFromDatabase(){
