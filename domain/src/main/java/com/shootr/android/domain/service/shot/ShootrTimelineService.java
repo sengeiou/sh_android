@@ -96,7 +96,7 @@ public class ShootrTimelineService {
 
         List<Shot> localShots = localShotRepository.getShotsForEventTimeline(eventTimelineParameters);
         if (localShots.isEmpty()) {
-            eventTimelineParameters.setMaxNice(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
+            eventTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
         }
         return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
     }

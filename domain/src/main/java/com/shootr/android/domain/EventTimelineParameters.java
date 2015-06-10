@@ -12,9 +12,9 @@ public class EventTimelineParameters extends TimelineParameters {
 
     private String shotType;
 
-    private Integer maxNice;
+    private Integer maxNiceShotsIncluded;
 
-    private Boolean includeNice;
+    private Boolean includeNiceShots;
 
     private EventTimelineParameters() {
         /* private constructor, use builder */
@@ -39,20 +39,20 @@ public class EventTimelineParameters extends TimelineParameters {
         return ids;
     }
 
-    public Integer getMaxNice() {
-        return maxNice;
+    public Integer getMaxNiceShotsIncluded() {
+        return maxNiceShotsIncluded;
     }
 
-    public void setMaxNice(Integer maxNice) {
-        this.maxNice = maxNice;
+    public void setMaxNiceShotsIncluded(Integer maxNiceShotsIncluded) {
+        this.maxNiceShotsIncluded = maxNiceShotsIncluded;
     }
 
-    public Boolean getIncludeNice() {
-        return includeNice;
+    public Boolean getIncludeNiceShots() {
+        return includeNiceShots;
     }
 
-    public void setIncludeNice(Boolean includeNice) {
-        this.includeNice = includeNice;
+    public void setIncludeNiceShots(Boolean includeNiceShots) {
+        this.includeNiceShots = includeNiceShots;
     }
 
     public static Builder builder() {
@@ -154,8 +154,8 @@ public class EventTimelineParameters extends TimelineParameters {
         }
 
         public Builder niceShots(Integer maxNice) {
-            parameters.setIncludeNice(maxNice>0);
-            parameters.setMaxNice(maxNice);
+            parameters.setIncludeNiceShots(maxNice > 0);
+            parameters.setMaxNiceShotsIncluded(maxNice);
             return this;
         }
 

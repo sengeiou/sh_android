@@ -19,7 +19,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -139,7 +138,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
         EventTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
+        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
     }
 
     @Test
@@ -150,7 +149,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
         EventTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNice()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
+        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
     }
 
     @Test

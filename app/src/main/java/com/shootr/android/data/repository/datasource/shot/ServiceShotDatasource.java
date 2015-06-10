@@ -59,8 +59,8 @@ public class ServiceShotDatasource implements ShotDataSource {
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),
-              parameters.getIncludeNice(),
-              parameters.getMaxNice(),
+              parameters.getIncludeNiceShots(),
+              parameters.getMaxNiceShotsIncluded(),
               sessionRepository.getCurrentUserId());
             return shotApiEntityMapper.transform(shots);
         } catch (IOException e) {
