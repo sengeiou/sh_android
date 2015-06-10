@@ -138,40 +138,4 @@ public class TimelineDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, op);
     }
-
-    public GenericDto getEventTimelineOperationDto(final EventTimelineParameters parameters) {
-        FilterDto timelineFilter = and( //
-          or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
-        ) //
-          .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
-          .and(ShotTable.TYPE).isEqualTo(parameters.getShotType())
-          .and(ShotTable.MODIFIED).greaterThan(parameters.getSinceDate()) //
-          .and(ShotTable.DELETED).isEqualTo(null) //
-          .and(ShotTable.MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {
-              @Override
-              public FilterBuilder.AndItem match(FilterBuilder.ItemField<FilterBuilder.AndItem> itemField) {
-                  if (parameters.getMaxDate() != null) {
-                      return itemField.lessThan(parameters.getMaxDate());
-                  } else {
-                      return itemField.isNotEqualTo(null);
-                  }
-              }
-          })
-          .build();
-
-        MetadataDto md = new MetadataDto.Builder() //
-          .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(ShotTable.TABLE) //
-          .items(parameters.getLimit()) //
-          .totalItems(parameters.getLimit()) //
-          .filter(timelineFilter) //
-          .build();
-
-        OperationDto op = new Builder() //
-          .metadata(md) //
-          .putData(shotEntityMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, op);
-    }
 }

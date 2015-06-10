@@ -1,5 +1,8 @@
 package com.shootr.android.data.repository.datasource.shot;
 
+import com.shootr.android.data.api.entity.ShotApiEntity;
+import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
+import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
@@ -18,13 +21,20 @@ import javax.inject.Inject;
 public class ServiceShotDatasource implements ShotDataSource {
 
     private final ShootrService shootrService;
+    private final ShotApiService shotApiService;
+    private final ShotApiEntityMapper shotApiEntityMapper;
     private final BusPublisher busPublisher;
     private final SessionRepository sessionRepository;
     private long lastTriggerDate;
 
-    @Inject public ServiceShotDatasource(ShootrService shootrService, BusPublisher busPublisher,
+    @Inject public ServiceShotDatasource(ShootrService shootrService,
+      ShotApiService shotApiService,
+      ShotApiEntityMapper shotApiEntityMapper,
+      BusPublisher busPublisher,
       SessionRepository sessionRepository) {
         this.shootrService = shootrService;
+        this.shotApiService = shotApiService;
+        this.shotApiEntityMapper = shotApiEntityMapper;
         this.busPublisher = busPublisher;
         this.sessionRepository = sessionRepository;
     }
@@ -45,7 +55,14 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
         try {
-            return filterSyncShots(shootrService.getEventShotsByParameters(parameters));
+            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getEventId(),
+              parameters.getLimit(),
+              parameters.getSinceDate(),
+              parameters.getMaxDate(),
+              parameters.getIncludeNiceShots(),
+              parameters.getMaxNiceShotsIncluded(),
+              parameters.getCurrentUserId());
+            return shotApiEntityMapper.transform(shots);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

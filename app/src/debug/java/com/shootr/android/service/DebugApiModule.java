@@ -46,7 +46,7 @@ public class DebugApiModule {
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
           .setErrorHandler(new RetrofitErrorHandler()) //
-          .setLogLevel(RestAdapter.LogLevel.FULL) //
+          .setLogLevel(RestAdapter.LogLevel.BASIC) //
           .build();
     }
 }

@@ -74,7 +74,7 @@ public class GetEventTimelineInteractor implements Interactor {
 
     private EventTimelineParameters buildParameters(Event event) {
         return EventTimelineParameters.builder()
-          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId())
+          .currentUser(sessionRepository.getCurrentUserId())
           .forEvent(event)
           .build();
     }

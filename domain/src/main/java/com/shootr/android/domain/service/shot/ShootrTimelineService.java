@@ -3,7 +3,6 @@ package com.shootr.android.domain.service.shot;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.User;
@@ -16,7 +15,6 @@ import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,10 +22,14 @@ import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
+    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY = 2;
+    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
+
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
+    private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
@@ -35,11 +37,13 @@ public class ShootrTimelineService {
       @Local EventRepository localEventRepository,
       @Local UserRepository localUserRepository,
       @Remote ShotRepository remoteShotRepository,
+      @Local ShotRepository localShotRepository,
       TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
@@ -84,10 +88,16 @@ public class ShootrTimelineService {
         Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(event.getId());
 
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
-          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .currentUser(sessionRepository.getCurrentUserId()) //
           .forEvent(event) //
+          .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //
           .build();
+
+        List<Shot> localShots = localShotRepository.getShotsForEventTimeline(eventTimelineParameters);
+        if (localShots.isEmpty()) {
+            eventTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
+        }
         return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
     }
 

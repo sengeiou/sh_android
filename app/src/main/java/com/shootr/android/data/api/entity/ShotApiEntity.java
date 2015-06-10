@@ -1,11 +1,8 @@
-package com.shootr.android.data.entity;
+package com.shootr.android.data.api.entity;
 
-public class ShotEntity extends Synchronized{
+public class ShotApiEntity {
 
     private String idShot;
-    private String idUser;
-    private String username;
-    private String userPhoto; /* Only local and api, not datasource. Super clean, right? */
     private String comment;
     private String image;
     private String idEvent;
@@ -22,20 +19,18 @@ public class ShotEntity extends Synchronized{
     private String videoTitle;
     private Long videoDuration;
 
+    private EmbedUserApiEntity user;
+
+    private Long birth;
+    private Long modified;
+    private Integer revision;
+
     public String getIdShot() {
         return idShot;
     }
 
     public void setIdShot(String idShot) {
         this.idShot = idShot;
-    }
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
     }
 
     public String getComment() {
@@ -62,14 +57,6 @@ public class ShotEntity extends Synchronized{
         this.idEvent = idEvent;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getEventTag() {
         return eventTag;
     }
@@ -84,6 +71,14 @@ public class ShotEntity extends Synchronized{
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getIdShotParent() {
@@ -110,14 +105,6 @@ public class ShotEntity extends Synchronized{
         this.userNameParent = userNameParent;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getVideoUrl() {
         return videoUrl;
     }
@@ -142,11 +129,35 @@ public class ShotEntity extends Synchronized{
         this.videoDuration = videoDuration;
     }
 
-    public String getUserPhoto() {
-        return userPhoto;
+    public EmbedUserApiEntity getUser() {
+        return user;
     }
 
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
+    public void setUser(EmbedUserApiEntity user) {
+        this.user = user;
+    }
+
+    public Long getBirth() {
+        return birth;
+    }
+
+    public void setBirth(Long birth) {
+        this.birth = birth;
+    }
+
+    public Long getModified() {
+        return modified;
+    }
+
+    public void setModified(Long modified) {
+        this.modified = modified;
+    }
+
+    public Integer getRevision() {
+        return revision;
+    }
+
+    public void setRevision(Integer revision) {
+        this.revision = revision;
     }
 }

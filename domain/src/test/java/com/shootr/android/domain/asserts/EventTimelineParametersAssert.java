@@ -32,44 +32,6 @@ public class EventTimelineParametersAssert extends AbstractAssert<EventTimelineP
     }
 
     /**
-     * Verifies that the actual TimelineParameters's eventAuthorId is equal to the given one.
-     *
-     * @param eventAuthorId the given eventAuthorId to compare the actual TimelineParameters's eventAuthorId to.
-     * @return this assertion object.
-     * @throws AssertionError - if the actual TimelineParameters's eventAuthorId is not equal to the given one.
-     */
-    public EventTimelineParametersAssert hasEventAuthorId(String eventAuthorId) {
-        // check that actual TimelineParameters we want to make assertions on is not null.
-        isNotNull();
-
-        // overrides the default error message with a more explicit one
-        String assertjErrorMessage = "\nExpected eventAuthorId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-
-        // null safe check
-        String actualEventAuthorId = actual.getEventAuthorId();
-        if (!Objects.areEqual(actualEventAuthorId, eventAuthorId)) {
-            failWithMessage(assertjErrorMessage, actual, eventAuthorId, actualEventAuthorId);
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    public EventTimelineParametersAssert hasNoEventAuthorId() {
-        isNotNull();
-
-        String assertjErrorMessage = "\nExpected :\n  <%s>\nnot to have eventAuthorId but had :\n  <%s>";
-
-        // check
-        if (actual.getEventAuthorId() != null) {
-            failWithMessage(assertjErrorMessage, actual, actual.getEventAuthorId());
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    /**
      * Verifies that the actual TimelineParameters's eventId is equal to the given one.
      *
      * @param eventId the given eventId to compare the actual TimelineParameters's eventId to.
@@ -155,46 +117,4 @@ public class EventTimelineParametersAssert extends AbstractAssert<EventTimelineP
         return this;
     }
 
-    /**
-     * Verifies that the actual TimelineParameters's userIds contains the given String elements.
-     *
-     * @param userIds the given elements that should be contained in actual TimelineParameters's userIds.
-     * @return this assertion object.
-     * @throws AssertionError if the actual TimelineParameters's userIds does not contain all given String elements.
-     */
-    public EventTimelineParametersAssert hasUserIds(String... userIds) {
-        // check that actual TimelineParameters we want to make assertions on is not null.
-        isNotNull();
-
-        // check that given String varargs is not null.
-        if (userIds == null) throw new AssertionError("Expecting userIds parameter not to be null.");
-
-        // check with standard error message, to set another message call: info.overridingErrorMessage("my error message");
-        Iterables.instance().assertContains(info, actual.getUserIds(), userIds);
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    /**
-     * Verifies that the actual TimelineParameters has no userIds.
-     *
-     * @return this assertion object.
-     * @throws AssertionError if the actual TimelineParameters's userIds is not empty.
-     */
-    public EventTimelineParametersAssert hasNoUserIds() {
-        // check that actual TimelineParameters we want to make assertions on is not null.
-        isNotNull();
-
-        // we override the default error message with a more explicit one
-        String assertjErrorMessage = "\nExpected :\n  <%s>\nnot to have userIds but had :\n  <%s>";
-
-        // check
-        if (actual.getUserIds().iterator().hasNext()) {
-            failWithMessage(assertjErrorMessage, actual, actual.getUserIds());
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
 }

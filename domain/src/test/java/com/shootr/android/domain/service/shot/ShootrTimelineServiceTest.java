@@ -19,7 +19,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -38,7 +37,6 @@ public class ShootrTimelineServiceTest {
     private static final Long DATE_NEWER = 3L;
 
     private static final String WATCHING_EVENT_ID = "watching_event";
-    private static final String WATCHING_EVENT_AUTHOR = "event_author";
     private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
 
     private static final String EVENT_SHOT_ID = "event_shot";
@@ -51,8 +49,7 @@ public class ShootrTimelineServiceTest {
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-
-    @Captor ArgumentCaptor<List<EventTimelineParameters>> timelineParametersCaptor;
+    @Mock ShotRepository localShotRepository;
 
     private ShootrTimelineService shootrTimelineService;
 
@@ -63,6 +60,7 @@ public class ShootrTimelineServiceTest {
           localEventRepository,
           localUserRepository,
           remoteShotRepository,
+          localShotRepository,
           timelineSynchronizationRepository);
     }
 
@@ -131,17 +129,36 @@ public class ShootrTimelineServiceTest {
         verify(remoteShotRepository, never()).getShotsForEventTimeline(anyEventParameters());
     }
 
+    @Test
+    public void shouldRequestFewerNiceShotsWhenWatchingEventHasShotsInLocalRepository() throws Exception {
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(unorderedShots());
+
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        EventTimelineParameters parameters = captureTimelineParameters();
+        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
+    }
 
     @Test
-    public void shouldRequestTimelineWithEventIdAndAuthorWhenWatchingEvent() throws Exception {
+    public void shouldRequestFullNiceShotsWhenWatchingEventDoesntHaveShotsInLocalRepository() throws Exception {
+        setupWatchingEvent();
+        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(Collections.<Shot>emptyList());
+
+        shootrTimelineService.refreshTimelinesForWatchingEvent();
+
+        EventTimelineParameters parameters = captureTimelineParameters();
+        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
+    }
+
+    @Test
+    public void shouldRequestTimelineWithEventIdWhenWatchingEvent() throws Exception {
         setupWatchingEvent();
         when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        assertThat(captureTimelineParameters()) //
-          .hasEventId(WATCHING_EVENT_ID) //
-          .hasEventAuthorId(WATCHING_EVENT_AUTHOR);
+        assertThat(captureTimelineParameters()).hasEventId(WATCHING_EVENT_ID);
     }
 
     @Test
@@ -189,7 +206,6 @@ public class ShootrTimelineServiceTest {
     private Event watchingEvent() {
         Event event = new Event();
         event.setId(WATCHING_EVENT_ID);
-        event.setAuthorId(WATCHING_EVENT_AUTHOR);
         return event;
     }
 

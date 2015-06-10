@@ -68,7 +68,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     private EventTimelineParameters buildTimelineParameters() {
         Event visibleEvent = getVisibleEvent();
         return EventTimelineParameters.builder() //
-                .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+                .currentUser(sessionRepository.getCurrentUserId()) //
                 .forEvent(visibleEvent) //
                 .maxDate(currentOldestDate) //
                 .build();

@@ -10,10 +10,7 @@ import javax.inject.Inject;
 
 public class ShotQueueEntityMapper {
 
-    private final UserAvatarUrlBuilder avatarBuilder;
-
-    @Inject public ShotQueueEntityMapper(UserAvatarUrlBuilder avatarBuilder) {
-        this.avatarBuilder = avatarBuilder;
+    @Inject public ShotQueueEntityMapper() {
     }
 
     public ShotQueueEntity transform(QueuedShot queuedShot) {
@@ -79,7 +76,7 @@ public class ShotQueueEntityMapper {
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
         userInfo.setIdUser(entity.getIdUser());
         userInfo.setUsername(entity.getUsername());
-        userInfo.setAvatar(avatarBuilder.thumbnail(entity.getIdUser()));
+        userInfo.setAvatar(entity.getUserPhoto());
         shot.setUserInfo(userInfo);
 
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();

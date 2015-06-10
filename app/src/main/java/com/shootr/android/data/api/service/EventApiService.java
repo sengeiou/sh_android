@@ -8,6 +8,6 @@ import retrofit.http.Query;
 
 public interface EventApiService {
 
-    @GET("/events/popular")
+    @GET("/events/popular?includeLinks=false&includeEmbed=false")
     List<EventEntity> getEventList(@Query("me") String idUser, @Query("locale") String locale) throws IOException;
 }
