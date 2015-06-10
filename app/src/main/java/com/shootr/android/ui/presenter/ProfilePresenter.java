@@ -12,6 +12,7 @@ public class ProfilePresenter implements Presenter {
     private final SessionRepository sessionRepository;
     private ProfileView profileView;
     private String idUser;
+    private String profileIdUser;
     private Integer listingCount;
 
     @Inject public ProfilePresenter(GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor,
@@ -24,14 +25,15 @@ public class ProfilePresenter implements Presenter {
         this.profileView = profileView;
     }
 
-    public void initialize(ProfileView profileView){
+    public void initialize(ProfileView profileView, String idUser){
         this.setView(profileView);
         this.idUser = sessionRepository.getCurrentUserId();
+        this.profileIdUser = idUser;
         getCurrentUserListing();
     }
 
     public void getCurrentUserListing() {
-        getUserListingEventsNumberInteractor.getUserListingEventsNumber(new Interactor.Callback<Integer>() {
+        getUserListingEventsNumberInteractor.getUserListingEventsNumber(profileIdUser, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer numberOfListingEvents) {
                 listingCount = numberOfListingEvents;
                 if (numberOfListingEvents > 0) {

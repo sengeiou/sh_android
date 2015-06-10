@@ -252,7 +252,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
-        profilePresenter.initialize(this);
+        profilePresenter.initialize(this, idUser);
     }
 
 
@@ -698,7 +698,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override public void navigateToListing(String idUser) {
         Intent intent = new Intent(this.getActivity(), ListingActivity.class);
-        intent.putExtra(EXTRA_ID_USER, idUser);
+        intent.putExtra(EXTRA_ID_USER, user.getIdUser());
         this.startActivity(intent);
     }
 
