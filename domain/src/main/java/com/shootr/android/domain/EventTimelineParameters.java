@@ -153,7 +153,7 @@ public class EventTimelineParameters extends TimelineParameters {
             return this;
         }
 
-        public Builder nice(Integer maxNice) {
+        public Builder niceShots(Integer maxNice) {
             parameters.setIncludeNice(maxNice>0);
             parameters.setMaxNice(maxNice);
             return this;

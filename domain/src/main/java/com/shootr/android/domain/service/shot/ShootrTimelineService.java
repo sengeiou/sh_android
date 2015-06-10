@@ -3,7 +3,6 @@ package com.shootr.android.domain.service.shot;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.User;
@@ -16,13 +15,14 @@ import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class ShootrTimelineService {
+
+    public static final int FEWER_NICE_SHOTS = 2;
 
     private final SessionRepository sessionRepository;
     private final EventRepository localEventRepository;
@@ -86,6 +86,7 @@ public class ShootrTimelineService {
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
           .forEvent(event) //
+          .niceShots(FEWER_NICE_SHOTS) //
           .since(eventRefreshDateSince) //
           .build();
         return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
