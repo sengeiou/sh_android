@@ -24,6 +24,7 @@ public class EventDtoFactory {
     private static final String ALIAS_GET_EVENT_BY_ID_EVENT = "GET_EVENT_BY_ID_EVENT";
     private static final String ALIAS_SEARCH_EVENT = "SEARCH_EVENT";
     private static final String ALIAS_CREATE_EVENT = "CREATE_EVENT";
+    public static final String ALIAS_LISTING_EVENTS = "GET_ALL_EVENTS_CREATED_BYUSER";
 
     private UtilityDtoFactory utilityDtoFactory;
     private EventEntityMapper eventEntityMapper;
@@ -92,5 +93,18 @@ public class EventDtoFactory {
         }
         OperationDto op = operationBuilder.metadata(md).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_EVENT, op);
+    }
+
+    public GenericDto getEventsListingNumber(String idUser) {
+        FilterDto eventsListingFilter = and(
+          or(DatabaseContract.EventTable.ID_USER).isEqualTo(idUser))
+          .build();
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+          .entity(DatabaseContract.EventTable.TABLE)
+          .filter(eventsListingFilter)
+          .items(0)
+          .build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LISTING_EVENTS, op);
     }
 }

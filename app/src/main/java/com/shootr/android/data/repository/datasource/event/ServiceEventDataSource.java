@@ -42,4 +42,12 @@ public class ServiceEventDataSource implements EventDataSource {
     @Override public List<EventEntity> putEvents(List<EventEntity> events) {
         throw new RuntimeException("Method not implemented yet!");
     }
+
+    @Override public Integer getEventsListingNumber(String idUser) {
+        try {
+            return service.getEventsListingNumber(idUser);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }

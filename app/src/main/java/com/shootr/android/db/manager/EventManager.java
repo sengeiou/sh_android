@@ -178,4 +178,24 @@ public class EventManager extends AbstractManager{
     public void deleteDefaultEventSearch() {
         getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
     }
+
+    public Integer getEventsListingNumber(String idUser) {
+        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String[] whereArguments = new String[] { idUser };
+
+        Cursor queryResult =
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+
+        List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                EventEntity eventEntity = eventEntityMapper.fromCursor(queryResult);
+                resultEvents.add(eventEntity);
+            } while (queryResult.moveToNext());
+        }
+
+        queryResult.close();
+        return resultEvents.size();
+    }
 }

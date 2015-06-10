@@ -30,4 +30,8 @@ public class DatabaseEventDataSource implements EventDataSource {
         eventManager.saveEvents(events);
         return events;
     }
+
+    @Override public Integer getEventsListingNumber(String idUser) {
+        return eventManager.getEventsListingNumber(idUser);
+    }
 }
