@@ -88,7 +88,7 @@ public class ShootrTimelineService {
         Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(event.getId());
 
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
-          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .currentUser(sessionRepository.getCurrentUserId()) //
           .forEvent(event) //
           .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //

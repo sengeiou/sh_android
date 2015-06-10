@@ -141,10 +141,7 @@ public class TimelineDtoFactory {
     }
 
     public GenericDto getEventTimelineOperationDto(final EventTimelineParameters parameters) {
-        FilterDto timelineFilter = and( //
-          or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
-        ) //
-          .and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
+        FilterDto timelineFilter = and(ShotTable.ID_EVENT).isEqualTo(parameters.getEventId()) //
           .and(ShotTable.TYPE).isEqualTo(parameters.getShotType())
           .and(ShotTable.CSYS_MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.CSYS_DELETED).isEqualTo(null) //

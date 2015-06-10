@@ -7,6 +7,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
     private String excludedType;
+    private List<String> userIds;
 
     public List<String> getIncludedTypes() {
         return includedTypes;
@@ -16,11 +17,13 @@ public class ActivityTimelineParameters extends TimelineParameters {
         return excludedType;
     }
 
-
     public static Builder builder() {
         return new Builder();
     }
 
+    public List<String> getUserIds() {
+        return userIds;
+    }
 
     public static class Builder {
 
@@ -74,6 +77,4 @@ public class ActivityTimelineParameters extends TimelineParameters {
             return Arrays.asList(ShotType.TYPES_ACTIVITY);
         }
     }
-
-
 }

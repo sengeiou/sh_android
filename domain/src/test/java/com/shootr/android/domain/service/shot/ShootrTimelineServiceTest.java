@@ -37,7 +37,6 @@ public class ShootrTimelineServiceTest {
     private static final Long DATE_NEWER = 3L;
 
     private static final String WATCHING_EVENT_ID = "watching_event";
-    private static final String WATCHING_EVENT_AUTHOR = "event_author";
     private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
 
     private static final String EVENT_SHOT_ID = "event_shot";
@@ -153,15 +152,13 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldRequestTimelineWithEventIdAndAuthorWhenWatchingEvent() throws Exception {
+    public void shouldRequestTimelineWithEventIdWhenWatchingEvent() throws Exception {
         setupWatchingEvent();
         when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        assertThat(captureTimelineParameters()) //
-          .hasEventId(WATCHING_EVENT_ID) //
-          .hasEventAuthorId(WATCHING_EVENT_AUTHOR);
+        assertThat(captureTimelineParameters()).hasEventId(WATCHING_EVENT_ID);
     }
 
     @Test
@@ -209,7 +206,6 @@ public class ShootrTimelineServiceTest {
     private Event watchingEvent() {
         Event event = new Event();
         event.setId(WATCHING_EVENT_ID);
-        event.setAuthorId(WATCHING_EVENT_AUTHOR);
         return event;
     }
 
