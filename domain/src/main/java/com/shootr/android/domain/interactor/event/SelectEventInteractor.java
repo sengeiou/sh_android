@@ -22,6 +22,7 @@ public class SelectEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final EventRepository localEventRepository;
+    private final EventRepository remoteEventRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final WatchersRepository localWatchersRepository;
@@ -32,17 +33,15 @@ public class SelectEventInteractor implements Interactor {
     private Callback<EventSearchResult> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local EventRepository localEventRepository,
-      @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository,
-      @Local WatchersRepository localWatchersRepository,
-      SessionRepository sessionRepository,
-      TimeUtils timeUtils) {
+      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
+      @Remote EventRepository remoteEventRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
+        this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localWatchersRepository = localWatchersRepository;
         this.sessionRepository = sessionRepository;
@@ -58,11 +57,7 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
-        if (selectedEvent == null) {
-            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
-        }
-
+        Event selectedEvent = getSelectedEvent();
         if (isSelectingCurrentWatchingEvent(currentUser)) {
             notifyLoaded(selectedEvent);
         } else {
@@ -73,6 +68,17 @@ public class SelectEventInteractor implements Interactor {
             notifyLoaded(selectedEvent);
             remoteUserRepository.putUser(updatedUser);
         }
+    }
+
+    private Event getSelectedEvent() {
+        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
+        if (selectedEvent == null) {
+            selectedEvent = remoteEventRepository.getEventById(idSelectedEvent);
+            if(selectedEvent == null){
+                throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
+            }
+        }
+        return selectedEvent;
     }
 
     private boolean isSelectingCurrentWatchingEvent(User currentUser) {
