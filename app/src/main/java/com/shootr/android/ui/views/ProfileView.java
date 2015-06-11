@@ -2,7 +2,7 @@ package com.shootr.android.ui.views;
 
 public interface ProfileView {
 
-    void showListing(Integer numberOfListingEvents);
+    void showListingCount(Integer listingCount);
 
     void navigateToListing(String idUser);
 }

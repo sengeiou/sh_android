@@ -29,15 +29,15 @@ public class ProfilePresenter implements Presenter {
         this.setView(profileView);
         this.idUser = sessionRepository.getCurrentUserId();
         this.profileIdUser = idUser;
-        getCurrentUserListing();
+        loadCurrentUserListing();
     }
 
-    public void getCurrentUserListing() {
+    public void loadCurrentUserListing() {
         getUserListingEventsNumberInteractor.getUserListingEventsNumber(profileIdUser, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer numberOfListingEvents) {
                 listingCount = numberOfListingEvents;
                 if (numberOfListingEvents > 0) {
-                    profileView.showListing(numberOfListingEvents);
+                    profileView.showListingCount(numberOfListingEvents);
                 }
             }
         });

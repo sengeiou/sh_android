@@ -691,9 +691,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 
-    @Override public void showListing(Integer numberOfListingEvents) {
+    @Override public void showListingCount(Integer listingCount) {
         listingContainerView.setVisibility(View.VISIBLE);
-        listingNumber.setText(String.valueOf(numberOfListingEvents));
+        listingNumber.setText(String.valueOf(listingCount));
     }
 
     @Override public void navigateToListing(String idUser) {
