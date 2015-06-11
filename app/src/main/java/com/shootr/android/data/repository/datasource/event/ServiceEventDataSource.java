@@ -54,10 +54,10 @@ public class ServiceEventDataSource implements EventDataSource {
         }
     }
 
-    @Override public List<EventEntity> getEventsListing(String idUser, String creatorIdUser, String locale,
+    @Override public List<EventEntity> getEventsListing(String me, String idUser, String locale,
       Integer maxNumberOfListingEvents) {
         try {
-            return eventService.getEventListing(idUser, creatorIdUser, locale, maxNumberOfListingEvents);
+            return eventService.getEventListing(me, idUser, locale, maxNumberOfListingEvents);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
