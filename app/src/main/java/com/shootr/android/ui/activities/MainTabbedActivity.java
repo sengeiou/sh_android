@@ -17,6 +17,7 @@ import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
+import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.CurrentUserPresenter;
@@ -109,9 +110,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ActivityTimelineFragment.newInstance();
+                    return FavoritesFragment.newInstance();
                 case 1:
-                    return EventsListFragment.newInstance(); //TODO
+                    return EventsListFragment.newInstance();
                 case 2:
                     return PeopleFragment.newInstance();
                 default:
@@ -129,7 +130,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.drawer_activity_title).toUpperCase(l);
+                    return getString(R.string.drawer_favorites_title).toUpperCase(l);
                 case 1:
                     return getString(R.string.drawer_events_title).toUpperCase(l);
                 case 2:

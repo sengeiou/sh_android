@@ -21,6 +21,7 @@ import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
 import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -48,7 +49,6 @@ import javax.inject.Singleton;
                 PeopleFragment.class,
                 WatchersView.class,
                 NewEventActivity.class,
-
                 EventMediaActivity.class,
                 UpdateWarningActivity.class,
                 DraftsActivity.class,
@@ -56,6 +56,7 @@ import javax.inject.Singleton;
                 MainTabbedActivity.class,
                 ResetPasswordActivity.class,
                 ListingActivity.class,
+                FavoritesFragment.class
         },
         complete = false
 )
