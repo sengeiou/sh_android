@@ -22,7 +22,6 @@ public class SelectEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final EventRepository localEventRepository;
-    private final EventRepository remoteEventRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final WatchersRepository localWatchersRepository;
@@ -34,14 +33,13 @@ public class SelectEventInteractor implements Interactor {
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
-      @Remote EventRepository remoteEventRepository, @Local UserRepository localUserRepository,
+      @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
-        this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localWatchersRepository = localWatchersRepository;
         this.sessionRepository = sessionRepository;
@@ -73,10 +71,7 @@ public class SelectEventInteractor implements Interactor {
     private Event getSelectedEvent() {
         Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
         if (selectedEvent == null) {
-            selectedEvent = remoteEventRepository.getEventById(idSelectedEvent);
-            if(selectedEvent == null){
-                throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
-            }
+            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
         }
         return selectedEvent;
     }

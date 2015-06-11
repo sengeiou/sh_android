@@ -49,25 +49,27 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadListingList() {
+        listingView.showLoading();
         Locale locale = listingView.getLocale();
-        getUserListingEventsInteractor.getUserListingEvents(new Interactor.Callback<List<Event>>() {
-            @Override public void onLoaded(List<Event> events) {
+        getUserListingEventsInteractor.getUserListingEvents(new Interactor.Callback<List<EventSearchResult>>() {
+            @Override public void onLoaded(List<EventSearchResult> events) {
                 listingView.hideLoading();
                 onListingLoaded(events);
             }
         }, profileIdUser, locale.toString());
     }
 
-    private void onListingLoaded(List<Event> events) {
+    private void onListingLoaded(List<EventSearchResult> events) {
         if (!events.isEmpty()) {
-            List<EventModel> eventModels = eventModelMapper.transform(events);
+            List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
             this.renderViewEventsList(eventModels);
+            listingView.hideLoading();
         }else{
             listingView.showLoading();
         }
     }
 
-    private void renderViewEventsList(List<EventModel> eventModels) {
+    private void renderViewEventsList(List<EventResultModel> eventModels) {
         listingView.showContent();
         listingView.renderEvents(eventModels);
     }

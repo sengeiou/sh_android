@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public interface ListingView {
 
-    void renderEvents(List<EventModel> events);
+    void renderEvents(List<EventResultModel> events);
 
     void showContent();
 
@@ -18,4 +18,6 @@ public interface ListingView {
     void showLoading();
 
     Locale getLocale();
+
+    void hideContent();
 }

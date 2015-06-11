@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -23,7 +24,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     private String idUser;
     private String listingIdUser;
     private String locale;
-    private Callback<List<Event>> callback;
+    private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepositoty,
@@ -35,7 +36,7 @@ public class GetUserListingEventsInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getUserListingEvents(Callback<List<Event>> callback, String listingIdUser, String locale){
+    public void getUserListingEvents(Callback<List<EventSearchResult>> callback, String listingIdUser, String locale){
         this.callback = callback;
         this.idUser = sessionRepository.getCurrentUserId();
         this.listingIdUser = listingIdUser;
@@ -57,12 +58,12 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     public void getUserListingEventsFromRepository(EventRepository eventRepository){
-        List<Event> listingEvents = eventRepository.getEventsListing(idUser, listingIdUser, locale,
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, listingIdUser, locale,
           MAX_NUMBER_OF_LISTING_EVENTS);
         notifyLoaded(listingEvents);
     }
 
-    private void notifyLoaded(final List<Event> listingEvents) {
+    private void notifyLoaded(final List<EventSearchResult> listingEvents) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingEvents);
