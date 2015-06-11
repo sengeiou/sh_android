@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.domain.Event;
 import java.util.List;
 
 public interface EventDataSource {
@@ -14,4 +15,7 @@ public interface EventDataSource {
     List<EventEntity> putEvents(List<EventEntity> events);
 
     Integer getEventsListingNumber(String idUser);
+
+    List<EventEntity> getEventsListing(String idUser, String creatorIdUser, String locale,
+      Integer maxNumberOfListingEvents);
 }
