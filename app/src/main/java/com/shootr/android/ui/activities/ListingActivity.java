@@ -11,10 +11,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.EventsAdapter;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Inject ListingListPresenter presenter;
 
-    private EventsAdapter adapter;
+    private EventsListAdapter adapter;
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_listing;
@@ -43,10 +43,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         listingList.setLayoutManager(new LinearLayoutManager(this));
         listingList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new EventsAdapter(picasso);
+        adapter = new EventsListAdapter(picasso);
         listingList.setAdapter(adapter);
 
-        adapter.setOnEventClickListener(new EventsAdapter.OnEventClickListener() {
+        adapter.setOnEventClickListener(new EventsListAdapter.OnEventClickListener() {
             @Override public void onEventClick(EventModel event) {
                 presenter.selectEvent(event);
             }
@@ -77,27 +77,31 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         /* no-op */
     }
 
-    @Override public void renderEvents(List<EventModel> events) {
+    @Override public void renderEvents(List<EventResultModel> events) {
         adapter.setEvents(events);
     }
 
-    @Override public void showContent() {
-        listingList.setVisibility(View.VISIBLE);
-    }
-
     @Override public void navigateToEventTimeline(String idEvent, String title) {
-        //TODO
+        startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
     }
 
     @Override public void hideLoading() {
-        //TODO
+        loadingView.setVisibility(View.GONE);
     }
 
     @Override public void showLoading() {
-        //TODO
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override public Locale getLocale() {
         return getResources().getConfiguration().locale;
+    }
+
+    @Override public void hideContent() {
+        listingList.setVisibility(View.GONE);
+    }
+
+    @Override public void showContent() {
+        listingList.setVisibility(View.VISIBLE);
     }
 }
