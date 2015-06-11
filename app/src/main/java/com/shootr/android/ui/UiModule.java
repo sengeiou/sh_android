@@ -50,8 +50,12 @@ import javax.inject.Singleton;
                 NewEventActivity.class,
 
                 EventMediaActivity.class,
-                UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class, MainTabbedActivity.class,
-                ResetPasswordActivity.class, ListingActivity.class,
+                UpdateWarningActivity.class,
+                DraftsActivity.class,
+                DraftsPresenter.class,
+                MainTabbedActivity.class,
+                ResetPasswordActivity.class,
+                ListingActivity.class,
         },
         complete = false
 )
