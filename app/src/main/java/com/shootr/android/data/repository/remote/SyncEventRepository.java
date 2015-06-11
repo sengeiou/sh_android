@@ -7,10 +7,14 @@ import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.WatchersRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class SyncEventRepository implements EventRepository, SyncableRepository {
@@ -18,13 +22,16 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     private final EventEntityMapper eventEntityMapper;
     private final EventDataSource localEventDataSource;
     private final EventDataSource remoteEventDataSource;
+    private final WatchersRepository localWatchersRepository;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
     @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper, @Local EventDataSource localEventDataSource,
-      @Remote EventDataSource remoteEventDataSource, SyncableEventEntityFactory syncableEventEntityFactory) {
+      @Remote EventDataSource remoteEventDataSource, @Local WatchersRepository localWatchersRepository,
+      SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
+        this.localWatchersRepository = localWatchersRepository;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
@@ -64,10 +71,25 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         return remoteEventDataSource.getEventsListingNumber(idUser);
     }
 
-    @Override public List<Event> getEventsListing(String idUser, String listingIdUser, String locale,
+    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale,
       Integer maxNumberOfListingEvents) {
         List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(idUser, listingIdUser, locale, maxNumberOfListingEvents);
-        return eventEntityMapper.transform(eventEntitiesListing);
+        localEventDataSource.putEvents(eventEntitiesListing);
+        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
+        return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
+    }
+
+    private List<EventSearchResult> transformEventEntitiesWithWatchers(List<EventEntity> eventEntities,
+      Map<String, Integer> watchers) {
+        List<EventSearchResult> results = new ArrayList<>(eventEntities.size());
+        for (EventEntity eventEntity : eventEntities) {
+            Event event = eventEntityMapper.transform(eventEntity);
+            Integer eventWatchers = watchers.get(event.getId());
+            EventSearchResult eventSearchResult =
+              new EventSearchResult(event, eventWatchers != null ? eventWatchers : 0);
+            results.add(eventSearchResult);
+        }
+        return results;
     }
 
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {

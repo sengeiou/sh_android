@@ -2,6 +2,7 @@ package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.Event;
 
+import com.shootr.android.domain.EventSearchResult;
 import java.util.List;
 
 public interface EventRepository {
@@ -16,5 +17,6 @@ public interface EventRepository {
 
     Integer getEventsListingNumber(String idUser);
 
-    List<Event> getEventsListing(String idUser, String listingIdUser, String locale, Integer maxNumberOfListingEvents);
+    List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale,
+      Integer maxNumberOfListingEvents);
 }
