@@ -30,9 +30,9 @@ public class GetUserListingEventsNumberInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getUserListingEventsNumber(Callback<Integer> callback){
+    public void getUserListingEventsNumber(String idUser, Callback<Integer> callback){
         this.callback = callback;
-        this.idUser = sessionRepository.getCurrentUserId();
+        this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
