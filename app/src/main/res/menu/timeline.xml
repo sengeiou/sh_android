@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res/"
-    >
+  xmlns:app="http://schemas.android.com/apk/res/">
+
     <item
-        android:id="@+id/menu_info"
-        android:icon="@drawable/ic_action_ic_one_people"
-        android:title="@string/menu_info"
-        app:showAsAction="always"
-        />
+      android:id="@+id/menu_add_favorite"
+      android:icon="@drawable/ic_action_add_favorite"
+      android:title="Add to favorites"
+      app:showAsAction="always" />
+
+    <item
+      android:id="@+id/menu_info"
+      android:icon="@drawable/ic_action_ic_one_people"
+      android:title="@string/menu_info"
+      app:showAsAction="always" />
+
 </menu>
