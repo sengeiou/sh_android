@@ -15,4 +15,6 @@ public interface EventRepository {
     Event putEvent(Event event, boolean notify);
 
     Integer getEventsListingNumber(String idUser);
+
+    List<Event> getEventsListing(String idUser, String listingIdUser, String locale, Integer maxNumberOfListingEvents);
 }

@@ -57,4 +57,12 @@ public class LocalEventRepository implements EventRepository {
     @Override public Integer getEventsListingNumber(String idUser) {
         return localEventDataSource.getEventsListingNumber(idUser);
     }
+
+    @Override public List<Event> getEventsListing(String idUser, String listingIdUser, String locale,
+      Integer maxNumberOfListingEvents) {
+        List<EventEntity> eventEntitiesListing = localEventDataSource.getEventsListing(idUser, listingIdUser,
+          locale,
+          maxNumberOfListingEvents);
+        return eventEntityMapper.transform(eventEntitiesListing);
+    }
 }
