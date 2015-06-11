@@ -141,18 +141,18 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="activity_info_title_pattern">%1$s (%2$d)</string>
-    <string name="watching_notifications_alert">You will receive notifications from people watching this box</string>
+    <string name="watching_notifications_alert">You will receive notifications from people watching this stream</string>
     <string name="menu_notifications">Notifications</string>
-    <string name="single_event_empty">Load a box to see who\'s Watching</string>
-    <string name="event_title_default">Select Box</string>
+    <string name="single_event_empty">Load a stream to see who\'s Watching</string>
+    <string name="event_title_default">Select Stream</string>
     <string name="menu_events">Watching…</string>
     <string name="activity_event_list_title">Watching…</string>
     <string name="menu_search_events">Search</string>
     <string name="events_list_empty">No results.</string>
     <string name="add_photo">Add Photo</string>
-    <string name="edit_event">Edit Box</string>
-    <string name="activity_new_event_title">New box</string>
-    <string name="activity_edit_event_title">Edit box</string>
+    <string name="edit_event">Edit Stream</string>
+    <string name="activity_new_event_title">New stream</string>
+    <string name="activity_edit_event_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
     <string name="activity_pick_timezone_title">Select time zone</string>
     <string name="new_event_title_label">Title</string>
@@ -164,7 +164,7 @@
     <string name="event_notification_confirmation_yes">Notify</string>
     <string name="event_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
-    <string name="menu_event_edit_info">Box</string>
+    <string name="menu_event_edit_info">Stream</string>
     <string name="menu_event_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
     <string name="shoot_photo">Shoot photo</string>
@@ -190,7 +190,7 @@
     <string name="registration_create_button_text">Create account</string>
     <string name="account_confirmation_title">Is this correct?</string>
     <string name="error_login_credentials_invalid">ID OR PASSWORD ARE NOT VALID</string>
-    <string name="drawer_events_title">Boxes</string>
+    <string name="drawer_events_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
 
