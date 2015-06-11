@@ -153,12 +153,14 @@ public class EventTimelineFragment extends BaseFragment
         watchersMenuItem = menu.findItem(R.id.menu_info);
         watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
-        icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
-        setupWatchNumberBadgeIcon(getActivity(), icon);
-        watchersMenuItem.setIcon(icon);
-        watchersMenuItem.getIcon();
-        updateWatchNumberIcon();
+        if (isAdded()) {
+            LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
+            icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+            setupWatchNumberBadgeIcon(getActivity(), icon);
+            watchersMenuItem.setIcon(icon);
+            watchersMenuItem.getIcon();
+            updateWatchNumberIcon();
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
