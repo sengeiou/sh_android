@@ -40,54 +40,54 @@
       android:layout_marginBottom="32dp"
       android:orientation="horizontal">
 
-            <TextView
-              android:id="@+id/profile_marks_following"
-              style="@style/ProfileMarkValue"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:paddingLeft="8dp"
-              android:paddingRight="4dp"
-              android:text="-"
-              tools:text="749" />
+        <TextView
+          android:id="@+id/profile_marks_following"
+          style="@style/ProfileMarkValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?android:selectableItemBackground"
+          android:clickable="true"
+          android:paddingLeft="8dp"
+          android:paddingRight="4dp"
+          android:text="-"
+          tools:text="749" />
 
-            <TextView
-              style="@style/ProfileMarkTitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:text="@string/profile_marks_following" />
+        <TextView
+          style="@style/ProfileMarkTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:text="@string/profile_marks_following" />
 
-            <TextView
-              style="@style/ProfileMarkTitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginLeft="8dp"
-              android:gravity="center"
-              android:text="|" />
+        <TextView
+          style="@style/ProfileMarkTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginLeft="8dp"
+          android:gravity="center"
+          android:text="|" />
 
-            <TextView
-              android:id="@+id/profile_marks_followers"
-              style="@style/ProfileMarkValue"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:paddingLeft="8dp"
-              android:paddingRight="4dp"
-              android:text="-"
-              tools:text="23" />
+        <TextView
+          android:id="@+id/profile_marks_followers"
+          style="@style/ProfileMarkValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?android:selectableItemBackground"
+          android:clickable="true"
+          android:paddingLeft="8dp"
+          android:paddingRight="4dp"
+          android:text="-"
+          tools:text="23" />
 
-            <TextView
-              style="@style/ProfileMarkTitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:text="@string/profile_marks_followers" />
+        <TextView
+          style="@style/ProfileMarkTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:text="@string/profile_marks_followers" />
     </LinearLayout>
 
     <View
@@ -96,42 +96,42 @@
       android:layout_below="@+id/profile_scores_bar"
       android:background="?dividerHorizontal" />
 
-  <FrameLayout android:id="@+id/profile_listing_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/profile_scores_bar"
-    android:visibility="gone"
-    tools:visibility="visible">
-
-    <TextView android:id="@+id/profile_listing_number"
-      android:layout_width="wrap_content"
-      android:layout_height="56dp"
-      android:gravity="center_vertical"
-      android:paddingRight="16dp"
-      android:layout_gravity="end|center_vertical"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:text="@string/profile_listing_number"
-      android:textColor="@color/gray_60"
-      android:visibility="visible"
-      tools:text="7" />
-    <ImageView android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:layout_marginLeft="16dp"
-      android:src="@drawable/ic_action_profile_listing_gray_24" />
-    <TextView android:id="@+id/profile_listing"
+    <FrameLayout android:id="@+id/profile_listing_container"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:background="?selectableItemBackground"
-      android:clickable="true"
-      android:gravity="center_vertical"
-      android:paddingLeft="@dimen/keyline_2"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_30"
-      android:text="@string/profile_listing"
-      tools:text="Listing" />
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/profile_scores_bar"
+      android:visibility="gone"
+      tools:visibility="visible">
 
-  </FrameLayout>
+        <TextView android:id="@+id/profile_listing_number"
+          android:layout_width="wrap_content"
+          android:layout_height="56dp"
+          android:gravity="center_vertical"
+          android:paddingRight="16dp"
+          android:layout_gravity="end|center_vertical"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:text="@string/profile_listing_number"
+          android:textColor="@color/gray_60"
+          android:visibility="visible"
+          tools:text="7" />
+        <ImageView android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginLeft="16dp"
+          android:src="@drawable/ic_action_profile_listing_gray_24" />
+        <TextView android:id="@+id/profile_listing"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:background="?selectableItemBackground"
+          android:clickable="true"
+          android:gravity="center_vertical"
+          android:paddingLeft="@dimen/keyline_2"
+          android:textAppearance="@style/TextAppearance.Switch"
+          android:textColor="@color/gray_30"
+          android:text="@string/profile_listing"
+          tools:text="Listing" />
+
+    </FrameLayout>
 
     <LinearLayout
       android:id="@+id/profile_watching_container"
