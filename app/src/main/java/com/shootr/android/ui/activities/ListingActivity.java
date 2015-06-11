@@ -2,7 +2,6 @@ package com.shootr.android.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -12,7 +11,6 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
-import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
@@ -26,7 +24,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     public static final String EXTRA_ID_USER = "idUser";
 
     @InjectView(R.id.listing_list) RecyclerView listingList;
-    @InjectView(R.id.listing_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.listing_loading) View loadingView;
 
     @Inject ListingListPresenter presenter;
@@ -41,7 +38,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         ButterKnife.inject(this);
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
-        listingList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
         adapter = new EventsListAdapter(picasso);
         listingList.setAdapter(adapter);
@@ -51,11 +47,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                 presenter.selectEvent(event);
             }
         });
-
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-          R.color.refresh_2,
-          R.color.refresh_3,
-          R.color.refresh_4);
     }
 
     @Override protected void initializePresenter() {
