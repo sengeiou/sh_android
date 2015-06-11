@@ -37,7 +37,6 @@ public class SelectEventInteractorTest {
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock EventRepository localEventRepository;
-    @Mock EventRepository remoteEventRepository;
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
@@ -55,7 +54,7 @@ public class SelectEventInteractorTest {
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectEventInteractor(interactorHandler,
-          postExecutionThread, localEventRepository, remoteEventRepository, localUserRepository,
+          postExecutionThread, localEventRepository, localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
           sessionRepository,
