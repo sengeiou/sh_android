@@ -13,7 +13,6 @@ public class ProfilePresenter implements Presenter {
     private ProfileView profileView;
     private String idUser;
     private String profileIdUser;
-    private Integer listingCount;
 
     @Inject public ProfilePresenter(GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor,
       SessionRepository sessionRepository) {
@@ -35,7 +34,6 @@ public class ProfilePresenter implements Presenter {
     public void loadCurrentUserListing() {
         getUserListingEventsNumberInteractor.getUserListingEventsNumber(profileIdUser, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer numberOfListingEvents) {
-                listingCount = numberOfListingEvents;
                 if (numberOfListingEvents > 0) {
                     profileView.showListingCount(numberOfListingEvents);
                 }
