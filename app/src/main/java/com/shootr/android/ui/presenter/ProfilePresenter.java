@@ -11,7 +11,6 @@ public class ProfilePresenter implements Presenter {
     private final GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor;
     private final SessionRepository sessionRepository;
     private ProfileView profileView;
-    private String idUser;
     private String profileIdUser;
 
     @Inject public ProfilePresenter(GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor,
@@ -26,7 +25,6 @@ public class ProfilePresenter implements Presenter {
 
     public void initialize(ProfileView profileView, String idUser){
         this.setView(profileView);
-        this.idUser = sessionRepository.getCurrentUserId();
         this.profileIdUser = idUser;
         loadCurrentUserListing();
     }
@@ -50,6 +48,6 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void clickListing() {
-        profileView.navigateToListing(idUser);
+        profileView.navigateToListing(profileIdUser);
     }
 }
