@@ -12,4 +12,7 @@ public interface EventSearchRepository {
     void putDefaultEvents(List<EventSearchResult> eventSearchResults);
 
     void deleteDefaultEvents();
+
+    List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale,
+      Integer maxNumberOfListingEvents);
 }

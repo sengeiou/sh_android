@@ -1,11 +1,10 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -17,8 +16,8 @@ public class GetUserListingEventsInteractor implements Interactor {
     public static final Integer MAX_NUMBER_OF_LISTING_EVENTS = 100;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventRepository localEventRepository;
-    private final EventRepository remoteEventRepository;
+    private final EventSearchRepository localEventSearchRepository;
+    private final EventSearchRepository remoteEventSearchRepository;
     private final SessionRepository sessionRepository;
 
     private String idUser;
@@ -27,12 +26,12 @@ public class GetUserListingEventsInteractor implements Interactor {
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepositoty,
-      @Remote EventRepository remoteEventRepositoty, SessionRepository sessionRepository) {
+      PostExecutionThread postExecutionThread, @Local EventSearchRepository localEventRepositoty,
+      @Remote EventSearchRepository remoteEventRepositoty, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepositoty;
-        this.remoteEventRepository = remoteEventRepositoty;
+        this.localEventSearchRepository = localEventRepositoty;
+        this.remoteEventSearchRepository = remoteEventRepositoty;
         this.sessionRepository = sessionRepository;
     }
 
@@ -50,14 +49,14 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     private void getUserListingEventsFromRemote() {
-        getUserListingEventsFromRepository(remoteEventRepository);
+        getUserListingEventsFromRepository(remoteEventSearchRepository);
     }
 
     public void getUserListingEventsFromLocal() {
-        getUserListingEventsFromRepository(localEventRepository);
+        getUserListingEventsFromRepository(localEventSearchRepository);
     }
 
-    public void getUserListingEventsFromRepository(EventRepository eventRepository){
+    public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
         List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, listingIdUser, locale,
           MAX_NUMBER_OF_LISTING_EVENTS);
         notifyLoaded(listingEvents);

@@ -22,16 +22,13 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     private final EventEntityMapper eventEntityMapper;
     private final EventDataSource localEventDataSource;
     private final EventDataSource remoteEventDataSource;
-    private final WatchersRepository localWatchersRepository;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
     @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper, @Local EventDataSource localEventDataSource,
-      @Remote EventDataSource remoteEventDataSource, @Local WatchersRepository localWatchersRepository,
-      SyncableEventEntityFactory syncableEventEntityFactory) {
+      @Remote EventDataSource remoteEventDataSource, SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
-        this.localWatchersRepository = localWatchersRepository;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
@@ -69,27 +66,6 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
 
     @Override public Integer getEventsListingNumber(String idUser) {
         return remoteEventDataSource.getEventsListingNumber(idUser);
-    }
-
-    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale,
-      Integer maxNumberOfListingEvents) {
-        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(idUser, listingIdUser, locale, maxNumberOfListingEvents);
-        localEventDataSource.putEvents(eventEntitiesListing);
-        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
-    }
-
-    private List<EventSearchResult> transformEventEntitiesWithWatchers(List<EventEntity> eventEntities,
-      Map<String, Integer> watchers) {
-        List<EventSearchResult> results = new ArrayList<>(eventEntities.size());
-        for (EventEntity eventEntity : eventEntities) {
-            Event event = eventEntityMapper.transform(eventEntity);
-            Integer eventWatchers = watchers.get(event.getId());
-            EventSearchResult eventSearchResult =
-              new EventSearchResult(event, eventWatchers != null ? eventWatchers : 0);
-            results.add(eventSearchResult);
-        }
-        return results;
     }
 
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {
