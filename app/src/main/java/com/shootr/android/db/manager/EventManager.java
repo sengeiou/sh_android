@@ -187,17 +187,10 @@ public class EventManager extends AbstractManager{
         Cursor queryResult =
           getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
-        List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                EventEntity eventEntity = eventEntityMapper.fromCursor(queryResult);
-                resultEvents.add(eventEntity);
-            } while (queryResult.moveToNext());
-        }
+        int listingCount = queryResult.getCount();
 
         queryResult.close();
-        return resultEvents.size();
+        return listingCount;
     }
 
     public List<EventEntity> getEventsListing(String idUser, String locale) {
