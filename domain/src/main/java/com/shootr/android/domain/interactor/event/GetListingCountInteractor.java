@@ -27,26 +27,26 @@ public class GetListingCountInteractor implements Interactor {
         this.remoteEventRepository = remoteEventRepositoty;
     }
 
-    public void getListingCount(String idUser, Callback<Integer> callback){
+    public void loadListingCount(String idUser, Callback<Integer> callback){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        getListingCountFromLocal();
-        getListingCountFromRemote();
+        loadListingCountFromLocal();
+        loadListingCountFromRemote();
     }
 
-    private void getListingCountFromRemote() {
-        getListingCountFromRepositoty(remoteEventRepository);
+    private void loadListingCountFromRemote() {
+        loadListingCountFromRepositoty(remoteEventRepository);
     }
 
-    public void getListingCountFromLocal() {
-        getListingCountFromRepositoty(localEventRepository);
+    public void loadListingCountFromLocal() {
+        loadListingCountFromRepositoty(localEventRepository);
     }
 
-    public void getListingCountFromRepositoty(EventRepository eventRepository){
+    public void loadListingCountFromRepositoty(EventRepository eventRepository){
         Integer listingEventsNumber = eventRepository.getListingCount(idUser);
         notifyLoaded(listingEventsNumber);
     }

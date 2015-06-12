@@ -32,26 +32,26 @@ public class GetUserListingEventsInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void getUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
+    public void loadUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        getUserListingEventsFromLocal();
-        getUserListingEventsFromRemote();
+        loadUserListingEventsFromLocal();
+        loadUserListingEventsFromRemote();
     }
 
-    private void getUserListingEventsFromRemote() {
-        getUserListingEventsFromRepository(remoteEventSearchRepository);
+    private void loadUserListingEventsFromRemote() {
+        loadUserListingEventsFromRepository(remoteEventSearchRepository);
     }
 
-    public void getUserListingEventsFromLocal() {
-        getUserListingEventsFromRepository(localEventSearchRepository);
+    public void loadUserListingEventsFromLocal() {
+        loadUserListingEventsFromRepository(localEventSearchRepository);
     }
 
-    public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
+    public void loadUserListingEventsFromRepository(EventSearchRepository eventRepository){
         String locale = localeProvider.getLocale();
         List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, locale);
         notifyLoaded(listingEvents);
