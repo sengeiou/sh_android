@@ -21,9 +21,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final LocaleProvider localeProvider;
 
-    private String me;
     private String idUser;
-    private String locale;
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
@@ -45,8 +43,6 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        this.me = sessionRepository.getCurrentUserId();
-        this.locale = localeProvider.getLocale();
         getUserListingEventsFromLocal();
         getUserListingEventsFromRemote();
     }
@@ -60,7 +56,9 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(me, idUser, locale);
+        String currentUserId = sessionRepository.getCurrentUserId();
+        String locale = localeProvider.getLocale();
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(currentUserId, idUser, locale);
         notifyLoaded(listingEvents);
     }
 
