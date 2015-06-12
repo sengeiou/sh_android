@@ -29,6 +29,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private EventsListAdapter adapter;
 
+    public static Intent getIntent(Context context, String idUser) {
+        Intent intent = new Intent(context, ListingActivity.class);
+        intent.putExtra(ProfileFragment.EXTRA_ID_USER, idUser);
+        return intent;
+    }
+
     @Override protected int getLayoutResource() {
         return R.layout.activity_listing;
     }
@@ -85,11 +91,5 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showContent() {
         listingList.setVisibility(View.VISIBLE);
-    }
-
-    public static Intent getIntent(Context context, String idUser) {
-        Intent intent = new Intent(context, ListingActivity.class);
-        intent.putExtra(ProfileFragment.EXTRA_ID_USER, idUser);
-        return intent;
     }
 }
