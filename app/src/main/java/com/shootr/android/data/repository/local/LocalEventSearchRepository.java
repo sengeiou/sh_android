@@ -10,6 +10,7 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +24,18 @@ public class LocalEventSearchRepository implements EventSearchRepository {
     private final EventDataSource localEventDataSource;
     private final WatchersRepository localWatchersRepository;
     private final EventEntityMapper eventEntityMapper;
+    private final SessionRepository sessionRepository;
 
     @Inject public LocalEventSearchRepository(@Local EventSearchDataSource localEventSearchDataSource,
       EventSearchEntityMapper eventSearchEntityMapper, @Local EventDataSource localEventDataSource,
-      @Local WatchersRepository localWatchersRepository, EventEntityMapper eventEntityMapper) {
+      @Local WatchersRepository localWatchersRepository, EventEntityMapper eventEntityMapper,
+      SessionRepository sessionRepository) {
         this.localEventSearchDataSource = localEventSearchDataSource;
         this.eventSearchEntityMapper = eventSearchEntityMapper;
         this.localEventDataSource = localEventDataSource;
         this.localWatchersRepository = localWatchersRepository;
         this.eventEntityMapper = eventEntityMapper;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override public List<EventSearchResult> getDefaultEvents(String locale) {
@@ -52,8 +56,9 @@ public class LocalEventSearchRepository implements EventSearchRepository {
         localEventSearchDataSource.deleteDefaultEvents();
     }
 
-    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale) {
-        List<EventEntity> eventEntitiesListing = localEventDataSource.getEventsListing(idUser, listingIdUser,
+    @Override public List<EventSearchResult> getEventsListing(String listingIdUser, String locale) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        List<EventEntity> eventEntitiesListing = localEventDataSource.getEventsListing(currentUserId, listingIdUser,
           locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);

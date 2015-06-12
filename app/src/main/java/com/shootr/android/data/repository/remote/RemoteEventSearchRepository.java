@@ -81,8 +81,9 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
         throw new IllegalStateException("Method not implemented in remote repository");
     }
 
-    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale) {
-        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(idUser, listingIdUser, locale);
+    @Override public List<EventSearchResult> getEventsListing(String listingIdUser, String locale) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(currentUserId, listingIdUser, locale);
         localEventDataSource.putEvents(eventEntitiesListing);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);

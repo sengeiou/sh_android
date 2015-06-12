@@ -56,9 +56,8 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        String currentUserId = sessionRepository.getCurrentUserId();
         String locale = localeProvider.getLocale();
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(currentUserId, idUser, locale);
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, locale);
         notifyLoaded(listingEvents);
     }
 
