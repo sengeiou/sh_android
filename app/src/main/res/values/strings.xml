@@ -263,4 +263,7 @@
     <string name="reset_password_send_email">Send a Password Reset Email</string>
     <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
     <string name="next">Next</string>
+    <string name="profile_listing_number">0</string>
+    <string name="profile_listing">Streams</string>
+    <string name="title_activity_listing">Streams</string>
 </resources>

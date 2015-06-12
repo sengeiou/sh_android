@@ -23,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
@@ -51,6 +53,7 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
@@ -62,6 +65,8 @@ import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
+import com.shootr.android.ui.presenter.ProfilePresenter;
+import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -70,19 +75,13 @@ import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment implements ProfileView {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -96,6 +95,10 @@ public class ProfileFragment extends BaseFragment {
     @InjectView(R.id.profile_bio) TextView bioTextView;
     @InjectView(R.id.profile_website) TextView websiteTextView;
     @InjectView(R.id.profile_avatar) ImageView avatarImageView;
+
+    @InjectView(R.id.profile_listing_container) View listingContainerView;
+    @InjectView(R.id.profile_listing) TextView listingText;
+    @InjectView(R.id.profile_listing_number) TextView listingNumber;
 
     @InjectView(R.id.profile_watching_container) View watchingContainerView;
     @InjectView(R.id.profile_watching_title) TextView watchingTitleView;
@@ -122,6 +125,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject
     UserModelMapper userModelMapper;
 
+    @Inject ProfilePresenter profilePresenter;
     //endregion
 
     // Args
@@ -247,6 +251,7 @@ public class ProfileFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
+        profilePresenter.initialize(this, idUser);
     }
 
 
@@ -683,5 +688,20 @@ public class ProfileFragment extends BaseFragment {
 
     private boolean isCurrentUser() {
         return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
+    }
+
+    @Override public void showListingCount(Integer listingCount) {
+        listingContainerView.setVisibility(View.VISIBLE);
+        listingNumber.setText(String.valueOf(listingCount));
+    }
+
+    @Override public void navigateToListing(String idUser) {
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser);
+        this.startActivity(intent);
+    }
+
+    @OnClick(R.id.profile_listing)
+    public void onListingClick() {
+        profilePresenter.clickListing();
     }
 }

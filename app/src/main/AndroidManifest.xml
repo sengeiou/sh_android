@@ -34,8 +34,8 @@
         android:label="@string/app_name"
         android:theme="@style/ShootrTheme" >
         <activity
-          android:name=".ui.activities.MainTabbedActivity"
-          android:label="@string/app_name" >
+            android:name=".ui.activities.MainTabbedActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -168,12 +168,15 @@
             android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662" />
 
         <activity
-          android:name=".ui.activities.EventMediaActivity"
-          android:label="@string/title_activity_event_media"></activity>
-
+            android:name=".ui.activities.EventMediaActivity"
+            android:label="@string/title_activity_event_media" />
         <activity
             android:name=".ui.activities.registro.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password" >
+        </activity>
+        <activity
+            android:name=".ui.activities.ListingActivity"
+            android:label="@string/title_activity_listing" >
         </activity>
     </application>
 

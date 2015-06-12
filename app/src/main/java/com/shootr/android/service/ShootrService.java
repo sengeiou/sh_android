@@ -80,4 +80,6 @@ public interface ShootrService {
     ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException;
 
     void sendResetPasswordEmail(String idUser) throws IOException;
+
+    Integer getListingCount(String idUser) throws IOException;
 }

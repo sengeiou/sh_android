@@ -5,6 +5,7 @@ import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.mapper.EventSearchEntityMapper;
 import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.datasource.event.EventListDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.domain.Event;
@@ -12,12 +13,10 @@ import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
 import javax.inject.Inject;
 
@@ -30,13 +29,14 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     private final WatchersRepository localWatchersRepository;
     private final EventEntityMapper eventEntityMapper;
     private final SessionRepository sessionRepository;
+    private final EventDataSource localEventDataSource;
+    private final EventDataSource remoteEventDataSource;
 
     @Inject public RemoteEventSearchRepository(@Remote EventSearchDataSource remoteEventSearchDataSource,
-      DatabaseMemoryEventSearchDataSource localEventSearchDataSource,
-      EventSearchEntityMapper eventSearchEntityMapper,
-      @Remote EventListDataSource remoteEventListDataSource,
-      @Local WatchersRepository localWatchersRepository,
-      EventEntityMapper eventEntityMapper, SessionRepository sessionRepository) {
+      DatabaseMemoryEventSearchDataSource localEventSearchDataSource, EventSearchEntityMapper eventSearchEntityMapper,
+      @Remote EventListDataSource remoteEventListDataSource, @Local WatchersRepository localWatchersRepository,
+      EventEntityMapper eventEntityMapper, SessionRepository sessionRepository, @Local EventDataSource localEventDataSource,
+      @Remote EventDataSource remoteEventDataSource) {
         this.remoteEventSearchDataSource = remoteEventSearchDataSource;
         this.localEventSearchDataSource = localEventSearchDataSource;
         this.eventSearchEntityMapper = eventSearchEntityMapper;
@@ -44,6 +44,8 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
         this.localWatchersRepository = localWatchersRepository;
         this.eventEntityMapper = eventEntityMapper;
         this.sessionRepository = sessionRepository;
+        this.localEventDataSource = localEventDataSource;
+        this.remoteEventDataSource = remoteEventDataSource;
     }
 
     @Override public List<EventSearchResult> getDefaultEvents(String locale) {
@@ -77,5 +79,13 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
 
     @Override public void deleteDefaultEvents() {
         throw new IllegalStateException("Method not implemented in remote repository");
+    }
+
+    @Override public List<EventSearchResult> getEventsListing(String listingIdUser, String locale) {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(currentUserId, listingIdUser, locale);
+        localEventDataSource.putEvents(eventEntitiesListing);
+        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
+        return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
     }
 }

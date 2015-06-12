@@ -32,13 +32,10 @@ public class SelectEventInteractor implements Interactor {
     private Callback<EventSearchResult> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Local EventRepository localEventRepository,
+      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
       @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository,
-      @Local WatchersRepository localWatchersRepository,
-      SessionRepository sessionRepository,
-      TimeUtils timeUtils) {
+      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepository;
@@ -58,11 +55,7 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
-        if (selectedEvent == null) {
-            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
-        }
-
+        Event selectedEvent = getSelectedEvent();
         if (isSelectingCurrentWatchingEvent(currentUser)) {
             notifyLoaded(selectedEvent);
         } else {
@@ -73,6 +66,14 @@ public class SelectEventInteractor implements Interactor {
             notifyLoaded(selectedEvent);
             remoteUserRepository.putUser(updatedUser);
         }
+    }
+
+    private Event getSelectedEvent() {
+        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
+        if (selectedEvent == null) {
+            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
+        }
+        return selectedEvent;
     }
 
     private boolean isSelectingCurrentWatchingEvent(User currentUser) {

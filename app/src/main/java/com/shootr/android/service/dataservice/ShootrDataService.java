@@ -577,6 +577,20 @@ public class ShootrDataService implements ShootrService {
         GenericDto responseDto = postRequest(sendResetPasswordEmailDto);
     }
 
+    @Override public Integer getListingCount(String idUser) throws IOException {
+        Integer numberOfEvents = 0;
+        GenericDto requestDto = eventDtoFactory.getListingCount(idUser);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        }else {
+            MetadataDto metadata = ops[0].getMetadata();
+            numberOfEvents = metadata.getTotalItems().intValue();
+        }
+        return numberOfEvents;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

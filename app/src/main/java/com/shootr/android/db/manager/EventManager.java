@@ -10,6 +10,7 @@ import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
 
+import com.shootr.android.domain.Event;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -177,5 +178,41 @@ public class EventManager extends AbstractManager{
 
     public void deleteDefaultEventSearch() {
         getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
+    }
+
+    public Integer getListingCount(String idUser) {
+        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String[] whereArguments = new String[] { idUser };
+
+        Cursor queryResult =
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+
+        int listingCount = queryResult.getCount();
+
+        queryResult.close();
+        return listingCount;
+    }
+
+    public List<EventEntity> getEventsListing(String idUser, String locale) {
+        String localeSelection = DatabaseContract.EventTable.LOCALE + " = ?";
+        String userSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+
+        String whereSelection = userSelection + " AND " + localeSelection;
+        String[] whereArguments = new String[] { idUser,locale };
+
+        Cursor queryResult =
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+
+        List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                EventEntity eventEntity = eventEntityMapper.fromCursor(queryResult);
+                resultEvents.add(eventEntity);
+            } while (queryResult.moveToNext());
+        }
+
+        queryResult.close();
+        return resultEvents;
     }
 }

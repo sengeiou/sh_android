@@ -60,6 +60,10 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         return eventEntityMapper.transform(remoteEventEntity);
     }
 
+    @Override public Integer getListingCount(String idUser) {
+        return remoteEventDataSource.getListingCount(idUser);
+    }
+
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {
         for (EventEntity event : remoteEvents) {
             markEntityAsSynchronized(event);
