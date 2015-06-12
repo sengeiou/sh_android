@@ -2,21 +2,17 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.views.ProfileView;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
     private final GetListingCountInteractor getListingCountInteractor;
-    private final SessionRepository sessionRepository;
     private ProfileView profileView;
     private String profileIdUser;
 
-    @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      SessionRepository sessionRepository) {
+    @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor) {
         this.getListingCountInteractor = getListingCountInteractor;
-        this.sessionRepository = sessionRepository;
     }
 
     protected void setView(ProfileView profileView){
