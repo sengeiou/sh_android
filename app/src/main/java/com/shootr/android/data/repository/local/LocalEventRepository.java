@@ -5,13 +5,9 @@ import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.domain.Event;
-import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.WatchersRepository;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class LocalEventRepository implements EventRepository {
@@ -58,7 +54,7 @@ public class LocalEventRepository implements EventRepository {
         throw new RuntimeException("Notify not allowed in local repository.");
     }
 
-    @Override public Integer getEventsListingNumber(String idUser) {
-        return localEventDataSource.getEventsListingNumber(idUser);
+    @Override public Integer getListingCount(String idUser) {
+        return localEventDataSource.getListingCount(idUser);
     }
 }

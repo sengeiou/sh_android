@@ -180,7 +180,7 @@ public class EventManager extends AbstractManager{
         getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
     }
 
-    public Integer getEventsListingNumber(String idUser) {
+    public Integer getListingCount(String idUser) {
         String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
         String[] whereArguments = new String[] { idUser };
 

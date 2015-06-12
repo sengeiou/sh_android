@@ -6,51 +6,48 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
 import javax.inject.Inject;
 
-public class GetUserListingEventsNumberInteractor implements Interactor {
+public class GetListingCountInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final EventRepository localEventRepository;
     private final EventRepository remoteEventRepository;
-    private final SessionRepository sessionRepository;
 
     private String idUser;
     private Callback<Integer> callback;
 
-    @Inject public GetUserListingEventsNumberInteractor(InteractorHandler interactorHandler,
+    @Inject public GetListingCountInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventRepository localEventRepositoty,
-      @Remote EventRepository remoteEventRepositoty, SessionRepository sessionRepository) {
+      @Remote EventRepository remoteEventRepositoty) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventRepository = localEventRepositoty;
         this.remoteEventRepository = remoteEventRepositoty;
-        this.sessionRepository = sessionRepository;
     }
 
-    public void getUserListingEventsNumber(String idUser, Callback<Integer> callback){
+    public void getListingCount(String idUser, Callback<Integer> callback){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
-        getUserListingEventsNumberFromLocal();
-        getUserListingEventsNumberFromRemote();
+        getListingCountFromLocal();
+        getListingCountFromRemote();
     }
 
-    private void getUserListingEventsNumberFromRemote() {
-        getUserListingEventsNumberFromRepositoty(remoteEventRepository);
+    private void getListingCountFromRemote() {
+        getListingCountFromRepositoty(remoteEventRepository);
     }
 
-    public void getUserListingEventsNumberFromLocal() {
-        getUserListingEventsNumberFromRepositoty(localEventRepository);
+    public void getListingCountFromLocal() {
+        getListingCountFromRepositoty(localEventRepository);
     }
 
-    public void getUserListingEventsNumberFromRepositoty(EventRepository eventRepository){
-        Integer listingEventsNumber = eventRepository.getEventsListingNumber(idUser);
+    public void getListingCountFromRepositoty(EventRepository eventRepository){
+        Integer listingEventsNumber = eventRepository.getListingCount(idUser);
         notifyLoaded(listingEventsNumber);
     }
 

@@ -15,5 +15,5 @@ public interface EventRepository {
 
     Event putEvent(Event event, boolean notify);
 
-    Integer getEventsListingNumber(String idUser);
+    Integer getListingCount(String idUser);
 }

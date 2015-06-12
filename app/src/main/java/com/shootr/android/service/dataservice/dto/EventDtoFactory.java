@@ -95,7 +95,7 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_EVENT, op);
     }
 
-    public GenericDto getEventsListingNumber(String idUser) {
+    public GenericDto getListingCount(String idUser) {
         FilterDto eventsListingFilter = and(
           or(DatabaseContract.EventTable.ID_USER).isEqualTo(idUser))
           .build();

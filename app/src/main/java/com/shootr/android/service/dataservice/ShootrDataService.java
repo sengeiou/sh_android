@@ -577,9 +577,9 @@ public class ShootrDataService implements ShootrService {
         GenericDto responseDto = postRequest(sendResetPasswordEmailDto);
     }
 
-    @Override public Integer getEventsListingNumber(String idUser) throws IOException {
+    @Override public Integer getListingCount(String idUser) throws IOException {
         Integer numberOfEvents = 0;
-        GenericDto requestDto = eventDtoFactory.getEventsListingNumber(idUser);
+        GenericDto requestDto = eventDtoFactory.getListingCount(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

@@ -81,5 +81,5 @@ public interface ShootrService {
 
     void sendResetPasswordEmail(String idUser) throws IOException;
 
-    Integer getEventsListingNumber(String idUser) throws IOException;
+    Integer getListingCount(String idUser) throws IOException;
 }

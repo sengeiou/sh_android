@@ -7,14 +7,10 @@ import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
-import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.WatchersRepository;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class SyncEventRepository implements EventRepository, SyncableRepository {
@@ -64,8 +60,8 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         return eventEntityMapper.transform(remoteEventEntity);
     }
 
-    @Override public Integer getEventsListingNumber(String idUser) {
-        return remoteEventDataSource.getEventsListingNumber(idUser);
+    @Override public Integer getListingCount(String idUser) {
+        return remoteEventDataSource.getListingCount(idUser);
     }
 
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {

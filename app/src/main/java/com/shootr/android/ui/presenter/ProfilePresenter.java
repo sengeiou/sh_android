@@ -1,21 +1,21 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetUserListingEventsNumberInteractor;
+import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.views.ProfileView;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
-    private final GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor;
+    private final GetListingCountInteractor getListingCountInteractor;
     private final SessionRepository sessionRepository;
     private ProfileView profileView;
     private String profileIdUser;
 
-    @Inject public ProfilePresenter(GetUserListingEventsNumberInteractor getUserListingEventsNumberInteractor,
+    @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
       SessionRepository sessionRepository) {
-        this.getUserListingEventsNumberInteractor = getUserListingEventsNumberInteractor;
+        this.getListingCountInteractor = getListingCountInteractor;
         this.sessionRepository = sessionRepository;
     }
 
@@ -30,7 +30,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void loadCurrentUserListing() {
-        getUserListingEventsNumberInteractor.getUserListingEventsNumber(profileIdUser, new Interactor.Callback<Integer>() {
+        getListingCountInteractor.getListingCount(profileIdUser, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer numberOfListingEvents) {
                 if (numberOfListingEvents > 0) {
                     profileView.showListingCount(numberOfListingEvents);
