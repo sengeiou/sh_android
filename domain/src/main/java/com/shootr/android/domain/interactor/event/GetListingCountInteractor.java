@@ -42,11 +42,11 @@ public class GetListingCountInteractor implements Interactor {
         loadListingCountFromRepositoty(remoteEventRepository);
     }
 
-    public void loadListingCountFromLocal() {
+    private void loadListingCountFromLocal() {
         loadListingCountFromRepositoty(localEventRepository);
     }
 
-    public void loadListingCountFromRepositoty(EventRepository eventRepository){
+    private void loadListingCountFromRepositoty(EventRepository eventRepository){
         Integer listingEventsNumber = eventRepository.getListingCount(idUser);
         notifyLoaded(listingEventsNumber);
     }

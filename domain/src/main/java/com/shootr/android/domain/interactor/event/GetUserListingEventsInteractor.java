@@ -47,11 +47,11 @@ public class GetUserListingEventsInteractor implements Interactor {
         loadUserListingEventsFromRepository(remoteEventSearchRepository);
     }
 
-    public void loadUserListingEventsFromLocal() {
+    private void loadUserListingEventsFromLocal() {
         loadUserListingEventsFromRepository(localEventSearchRepository);
     }
 
-    public void loadUserListingEventsFromRepository(EventSearchRepository eventRepository){
+    private void loadUserListingEventsFromRepository(EventSearchRepository eventRepository){
         String locale = localeProvider.getLocale();
         List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, locale);
         notifyLoaded(listingEvents);
