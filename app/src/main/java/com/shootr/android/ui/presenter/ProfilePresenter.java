@@ -26,7 +26,7 @@ public class ProfilePresenter implements Presenter {
     }
 
     public void loadCurrentUserListing() {
-        getListingCountInteractor.getListingCount(profileIdUser, new Interactor.Callback<Integer>() {
+        getListingCountInteractor.loadListingCount(profileIdUser, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer numberOfListingEvents) {
                 if (numberOfListingEvents > 0) {
                     profileView.showListingCount(numberOfListingEvents);

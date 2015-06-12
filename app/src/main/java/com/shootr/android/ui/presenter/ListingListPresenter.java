@@ -43,7 +43,7 @@ public class ListingListPresenter implements Presenter{
 
     private void loadListingList() {
         listingView.showLoading();
-        getUserListingEventsInteractor.getUserListingEvents(new Interactor.Callback<List<EventSearchResult>>() {
+        getUserListingEventsInteractor.loadUserListingEvents(new Interactor.Callback<List<EventSearchResult>>() {
             @Override public void onLoaded(List<EventSearchResult> events) {
                 listingView.hideLoading();
                 onListingLoaded(events);
@@ -55,7 +55,6 @@ public class ListingListPresenter implements Presenter{
         if (!events.isEmpty()) {
             List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
             this.renderViewEventsList(eventModels);
-            listingView.hideLoading();
         }else{
             listingView.showLoading();
         }
