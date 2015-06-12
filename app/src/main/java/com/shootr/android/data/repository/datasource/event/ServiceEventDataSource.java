@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class ServiceEventDataSource implements EventDataSource {
 
+    public static final int MAX_NUMBER_OF_LISTING_EVENTS = 100;
     private final ShootrService service;
     private final EventApiService eventService;
 
@@ -54,10 +55,9 @@ public class ServiceEventDataSource implements EventDataSource {
         }
     }
 
-    @Override public List<EventEntity> getEventsListing(String me, String idUser, String locale,
-      Integer maxNumberOfListingEvents) {
+    @Override public List<EventEntity> getEventsListing(String me, String idUser, String locale) {
         try {
-            return eventService.getEventListing(me, idUser, locale, maxNumberOfListingEvents);
+            return eventService.getEventListing(me, idUser, locale, MAX_NUMBER_OF_LISTING_EVENTS);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

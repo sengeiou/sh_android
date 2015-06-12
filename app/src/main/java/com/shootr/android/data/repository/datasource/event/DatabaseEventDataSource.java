@@ -35,8 +35,7 @@ public class DatabaseEventDataSource implements EventDataSource {
         return eventManager.getEventsListingNumber(idUser);
     }
 
-    @Override public List<EventEntity> getEventsListing(String me, String idUser, String locale,
-      Integer maxNumberOfListingEvents) {
+    @Override public List<EventEntity> getEventsListing(String me, String idUser, String locale) {
         return eventManager.getEventsListing(idUser, locale);
     }
 }

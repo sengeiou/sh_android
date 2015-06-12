@@ -14,7 +14,6 @@ import javax.inject.Inject;
 
 public class GetUserListingEventsInteractor implements Interactor {
 
-    public static final Integer MAX_NUMBER_OF_LISTING_EVENTS = 100;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final EventSearchRepository localEventSearchRepository;
@@ -61,8 +60,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(me, idUser, locale,
-          MAX_NUMBER_OF_LISTING_EVENTS);
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(me, idUser, locale);
         notifyLoaded(listingEvents);
     }
 

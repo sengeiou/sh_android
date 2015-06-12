@@ -52,11 +52,9 @@ public class LocalEventSearchRepository implements EventSearchRepository {
         localEventSearchDataSource.deleteDefaultEvents();
     }
 
-    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale,
-      Integer maxNumberOfListingEvents) {
+    @Override public List<EventSearchResult> getEventsListing(String idUser, String listingIdUser, String locale) {
         List<EventEntity> eventEntitiesListing = localEventDataSource.getEventsListing(idUser, listingIdUser,
-          locale,
-          maxNumberOfListingEvents);
+          locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
     }

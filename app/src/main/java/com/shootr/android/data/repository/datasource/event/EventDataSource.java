@@ -16,6 +16,5 @@ public interface EventDataSource {
 
     Integer getEventsListingNumber(String idUser);
 
-    List<EventEntity> getEventsListing(String me, String idUser, String locale,
-      Integer maxNumberOfListingEvents);
+    List<EventEntity> getEventsListing(String me, String idUser, String locale);
 }

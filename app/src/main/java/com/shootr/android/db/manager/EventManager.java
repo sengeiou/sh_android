@@ -197,7 +197,7 @@ public class EventManager extends AbstractManager{
         String localeSelection = DatabaseContract.EventTable.LOCALE + " = ?";
         String userSelection = DatabaseContract.EventTable.ID_USER + " = ?";
 
-        String whereSelection = userSelection + " AND " + localeSelection + "LIMIT 100";
+        String whereSelection = userSelection + " AND " + localeSelection;
         String[] whereArguments = new String[] { idUser,locale };
 
         Cursor queryResult =
