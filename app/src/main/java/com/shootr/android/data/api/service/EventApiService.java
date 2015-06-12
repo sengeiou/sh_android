@@ -11,7 +11,7 @@ public interface EventApiService {
     @GET("/events/popular?includeLinks=false&includeEmbed=false")
     List<EventEntity> getEventList(@Query("me") String idUser, @Query("locale") String locale) throws IOException;
 
-    @GET("/events/popular")
+    @GET("/events/popular?includeLinks=false&includeEmbed=false")
     List<EventEntity> getEventListing(@Query("me") String idUser, @Query("idUser") String idUserEvent,
       @Query("locale") String locale, @Query("count") Integer maxNumberOfListingEvents) throws IOException;
 }
