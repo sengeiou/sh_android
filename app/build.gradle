@@ -193,6 +193,7 @@ sonarRunner {
         property "sonar.login", "admin"
         property "sonar.password", "14041981"
         property "sonar.projectName", "Shootr Android"
+        property "sonar.projectVersion", android.defaultConfig.versionName
         properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
     }
 }
