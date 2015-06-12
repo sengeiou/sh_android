@@ -89,7 +89,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
-    public static final String EXTRA_ID_USER = "idUser";
 
     //region injected
     @InjectView(R.id.profile_name) TextView nameTextView;
