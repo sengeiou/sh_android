@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
@@ -19,8 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
-
-    public static final String EXTRA_ID_USER = "idUser";
 
     @InjectView(R.id.listing_list) RecyclerView listingList;
     @InjectView(R.id.listing_loading) View loadingView;
@@ -50,7 +50,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
-        String idUser = intent.getStringExtra(EXTRA_ID_USER);
+        String idUser = intent.getStringExtra(ProfileFragment.EXTRA_ID_USER);
         presenter.initialize(this, idUser);
     }
 
@@ -85,5 +85,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showContent() {
         listingList.setVisibility(View.VISIBLE);
+    }
+
+    public static Intent getIntent(Context context, String idUser) {
+        Intent intent = new Intent(context, ListingActivity.class);
+        intent.putExtra(ProfileFragment.EXTRA_ID_USER, idUser);
+        return intent;
     }
 }

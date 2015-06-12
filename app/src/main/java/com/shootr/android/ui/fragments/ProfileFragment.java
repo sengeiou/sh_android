@@ -697,8 +697,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Override public void navigateToListing(String idUser) {
-        Intent intent = new Intent(this.getActivity(), ListingActivity.class);
-        intent.putExtra(EXTRA_ID_USER, idUser);
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser);
         this.startActivity(intent);
     }
 
