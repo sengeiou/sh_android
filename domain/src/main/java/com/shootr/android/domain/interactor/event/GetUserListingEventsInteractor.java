@@ -8,6 +8,7 @@ import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -19,31 +20,34 @@ public class GetUserListingEventsInteractor implements Interactor {
     private final EventSearchRepository localEventSearchRepository;
     private final EventSearchRepository remoteEventSearchRepository;
     private final SessionRepository sessionRepository;
+    private final LocaleProvider localeProvider;
 
+    private String me;
     private String idUser;
-    private String listingIdUser;
     private String locale;
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventSearchRepository localEventRepositoty,
-      @Remote EventSearchRepository remoteEventRepositoty, SessionRepository sessionRepository) {
+      @Remote EventSearchRepository remoteEventRepositoty, SessionRepository sessionRepository,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventSearchRepository = localEventRepositoty;
         this.remoteEventSearchRepository = remoteEventRepositoty;
         this.sessionRepository = sessionRepository;
+        this.localeProvider = localeProvider;
     }
 
-    public void getUserListingEvents(Callback<List<EventSearchResult>> callback, String listingIdUser, String locale){
+    public void getUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
         this.callback = callback;
-        this.idUser = sessionRepository.getCurrentUserId();
-        this.listingIdUser = listingIdUser;
-        this.locale = locale;
+        this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
+        this.me = sessionRepository.getCurrentUserId();
+        this.locale = localeProvider.getLocale();
         getUserListingEventsFromLocal();
         getUserListingEventsFromRemote();
     }
@@ -57,7 +61,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     public void getUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, listingIdUser, locale,
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(me, idUser, locale,
           MAX_NUMBER_OF_LISTING_EVENTS);
         notifyLoaded(listingEvents);
     }

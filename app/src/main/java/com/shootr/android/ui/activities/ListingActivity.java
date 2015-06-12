@@ -16,7 +16,6 @@ import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
@@ -82,14 +81,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public Locale getLocale() {
-        return getResources().getConfiguration().locale;
-    }
-
-    @Override public void hideContent() {
-        listingList.setVisibility(View.GONE);
     }
 
     @Override public void showContent() {

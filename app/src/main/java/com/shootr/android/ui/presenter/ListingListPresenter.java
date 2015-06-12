@@ -1,9 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetUserListingEventsInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
@@ -12,9 +9,7 @@ import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
-import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 
 public class ListingListPresenter implements Presenter{
@@ -23,19 +18,17 @@ public class ListingListPresenter implements Presenter{
     private final GetUserListingEventsInteractor getUserListingEventsInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final EventModelMapper eventModelMapper;
-    private final ErrorMessageFactory errorMessageFactory;
 
     private ListingView listingView;
     private String profileIdUser;
 
     @Inject public ListingListPresenter(SelectEventInteractor selectEventInteractor,
       GetUserListingEventsInteractor getUserListingEventsInteractor, EventResultModelMapper eventResultModelMapper,
-      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventModelMapper eventModelMapper) {
         this.selectEventInteractor = selectEventInteractor;
         this.getUserListingEventsInteractor = getUserListingEventsInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.eventModelMapper = eventModelMapper;
-        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(ListingView listingView) {
@@ -50,13 +43,12 @@ public class ListingListPresenter implements Presenter{
 
     private void loadListingList() {
         listingView.showLoading();
-        Locale locale = listingView.getLocale();
         getUserListingEventsInteractor.getUserListingEvents(new Interactor.Callback<List<EventSearchResult>>() {
             @Override public void onLoaded(List<EventSearchResult> events) {
                 listingView.hideLoading();
                 onListingLoaded(events);
             }
-        }, profileIdUser, locale.toString());
+        }, profileIdUser);
     }
 
     private void onListingLoaded(List<EventSearchResult> events) {
