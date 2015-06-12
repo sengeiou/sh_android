@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
-    public static final String EXTRA_ID_USER = "idUser";
+    private static final String EXTRA_ID_USER = "idUser";
 
     @InjectView(R.id.listing_list) RecyclerView listingList;
     @InjectView(R.id.listing_loading) View loadingView;
