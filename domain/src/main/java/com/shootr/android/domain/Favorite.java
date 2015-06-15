@@ -40,4 +40,11 @@ public class Favorite {
         result = 31 * result + (order != null ? order.hashCode() : 0);
         return result;
     }
+
+    @Override public String toString() {
+        return "Favorite{" +
+          "idEvent='" + idEvent + '\'' +
+          ", order=" + order +
+          '}';
+    }
 }
