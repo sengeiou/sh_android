@@ -9,6 +9,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final FavoriteRepository localFavoriteRepository;
+    private final FavoriteRepository remoteFavoriteRepository;
     private final EventRepository localEventRepository;
     private final WatchersRepository watchersRepository;
 
@@ -26,10 +28,11 @@ public class GetFavoriteEventsInteractor implements Interactor {
 
     @Inject public GetFavoriteEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
-      @Local EventRepository localEventRepository, WatchersRepository watchersRepository) {
+      @Remote FavoriteRepository remoteFavoriteRepository, @Local EventRepository localEventRepository, WatchersRepository watchersRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
+        this.remoteFavoriteRepository = remoteFavoriteRepository;
         this.localEventRepository = localEventRepository;
         this.watchersRepository = watchersRepository;
     }
@@ -41,13 +44,39 @@ public class GetFavoriteEventsInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         loadFavoriteEventsFromLocalRepository();
+        loadFavoriteEventsFromRemoteRepository();
     }
 
     private void loadFavoriteEventsFromLocalRepository() {
-        List<String> idEvents = getFavoriteEventIds();
+        List<String> idEvents = getLocalFavoriteEventIds();
         List<Event> eventsByIds = localEventRepository.getEventsByIds(idEvents);
         List<EventSearchResult> eventSearchResults = obtainEventSearchResultsFromEvents(eventsByIds);
         notifyLoaded(eventSearchResults);
+    }
+
+    private void loadFavoriteEventsFromRemoteRepository() {
+        List<String> idEvents = getRemoteFavoriteEventIds();
+        List<Event> eventsByIds = localEventRepository.getEventsByIds(idEvents);
+        List<EventSearchResult> eventSearchResults = obtainEventSearchResultsFromEvents(eventsByIds);
+        notifyLoaded(eventSearchResults);
+    }
+
+    private List<String> getLocalFavoriteEventIds() {
+        List<Favorite> favorites = localFavoriteRepository.getFavorites();
+        List<String> idEvents = new ArrayList<>();
+        for (Favorite favorite : favorites) {
+            idEvents.add(favorite.getIdEvent());
+        }
+        return idEvents;
+    }
+
+    public List<String> getRemoteFavoriteEventIds() {
+        List<Favorite> favorites = remoteFavoriteRepository.getFavorites();
+        List<String> idEvents = new ArrayList<>();
+        for (Favorite favorite : favorites) {
+            idEvents.add(favorite.getIdEvent());
+        }
+        return idEvents;
     }
 
     private List<EventSearchResult> obtainEventSearchResultsFromEvents(List<Event> eventsByIds) {
@@ -60,15 +89,6 @@ public class GetFavoriteEventsInteractor implements Interactor {
             eventSearchResults.add(eventSearchResult);
         }
         return eventSearchResults;
-    }
-
-    private List<String> getFavoriteEventIds() {
-        List<Favorite> favorites = localFavoriteRepository.getFavorites();
-        List<String> idEvents = new ArrayList<>();
-        for (Favorite favorite : favorites) {
-            idEvents.add(favorite.getIdEvent());
-        }
-        return idEvents;
     }
 
     private void notifyLoaded(final List<EventSearchResult> eventSearchResults) {
