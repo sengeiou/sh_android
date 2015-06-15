@@ -5,7 +5,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
-import com.shootr.android.domain.repository.SessionRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,14 +12,12 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class AddToFavoritesInteractorTest {
 
     @Mock Interactor.CompletedCallback callback;
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock Favorite favorite;
-    @Mock SessionRepository sessionRepository;
 
     private AddToFavoritesInteractor addToFavoritesInteractor;
 
@@ -39,7 +36,6 @@ public class AddToFavoritesInteractorTest {
 
     @Test
     public void shouldAddFavoriteToLocal(){
-        when(sessionRepository.getCurrentUserId()).thenReturn("id_user");
         addToFavoritesInteractor.addToFavorites("id_event", callback);
         verify(localFavoriteRepository).putFavorite(any(Favorite.class));
     }

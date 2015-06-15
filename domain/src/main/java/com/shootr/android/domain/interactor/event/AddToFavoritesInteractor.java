@@ -4,14 +4,12 @@ import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
-import com.shootr.android.domain.repository.SessionRepository;
 import javax.inject.Inject;
 
 public class AddToFavoritesInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final FavoriteRepository localFavoriteRepository;
-    private final SessionRepository sessionRepository;
 
     private Interactor.CompletedCallback callback;
 
@@ -37,9 +35,7 @@ public class AddToFavoritesInteractor implements Interactor {
     }
 
     private Favorite favoriteFromParameters() {
-        String currentUserId = sessionRepository.getCurrentUserId();
         Favorite favorite = new Favorite();
-        favorite.setIdUser(currentUserId);
         favorite.setIdEvent(idEvent);
         return favorite;
     }
