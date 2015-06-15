@@ -1,10 +1,10 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.List;
 import javax.inject.Inject;
@@ -12,17 +12,17 @@ import javax.inject.Inject;
 public class FavoritesListPresenter implements Presenter{
 
     private final GetFavoriteEventsInteractor getFavoriteEventsInteractor;
-    private final EventModelMapper eventModelMapper;
+    private final EventResultModelMapper eventResultModelMapper;
 
     private FavoritesListView favoritesListView;
 
     @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor,
-      EventModelMapper eventModelMapper) {
+      EventResultModelMapper eventResultModelMapper) {
         this.getFavoriteEventsInteractor = getFavoriteEventsInteractor;
-        this.eventModelMapper = eventModelMapper;
+        this.eventResultModelMapper = eventResultModelMapper;
     }
 
-    protected void setView(FavoritesListView favoritesListView) {
+    public void setView(FavoritesListView favoritesListView) {
         this.favoritesListView = favoritesListView;
     }
 
@@ -33,14 +33,14 @@ public class FavoritesListPresenter implements Presenter{
 
     private void loadFavorites() {
         favoritesListView.showLoading();
-        getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<Event>>() {
+        getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<EventSearchResult>>() {
             @Override
-            public void onLoaded(List<Event> events) {
+            public void onLoaded(List<EventSearchResult> events) {
                 favoritesListView.hideLoading();
                 if (events.isEmpty()) {
                     favoritesListView.showEmpty();
                 } else {
-                    List<EventModel> eventModels = eventModelMapper.transform(events);
+                    List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
                     favoritesListView.showFavorites(eventModels);
                 }
             }

@@ -1,10 +1,10 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,14 +24,14 @@ public class FavoritesListPresenterTest {
 
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteEventsInteractor getFavoriteEventsInteractor;
-    @Mock EventModelMapper eventModelMapper;
+    @Mock EventResultModelMapper eventResultModelMapper;
 
     private FavoritesListPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventModelMapper);
+        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventResultModelMapper);
     }
 
     @Test
@@ -75,31 +75,31 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).showFavorites(stubResultModel());
     }
 
-    private Event stubEvent() {
-        return new Event();
+    private EventSearchResult stubEvent() {
+        return new EventSearchResult();
     }
 
-    private List<Event> stubResult() {
+    private List<EventSearchResult> stubResult() {
         return Arrays.asList(stubEvent());
     }
 
-    private List<EventModel> stubResultModel() {
-        return eventModelMapper.transform(stubResult());
+    private List<EventResultModel> stubResultModel() {
+        return eventResultModelMapper.transform(stubResult());
     }
 
-    private List<Event> empty() {
+    private List<EventSearchResult> empty() {
         return Collections.EMPTY_LIST;
     }
 
-    protected Interactor.Callback<List<Event>> anyCallback() {
+    protected Interactor.Callback<List<EventSearchResult>> anyCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupInteractorCallbacks(final List<Event> result) {
+    private void setupInteractorCallbacks(final List<EventSearchResult> result) {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<Event>> callback = (Interactor.Callback) invocation.getArguments()[0];
+                Interactor.Callback<List<EventSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(result);
                 return null;
             }
