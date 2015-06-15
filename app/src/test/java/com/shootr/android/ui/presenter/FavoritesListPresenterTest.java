@@ -3,6 +3,8 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
+import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,13 +24,14 @@ public class FavoritesListPresenterTest {
 
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteEventsInteractor getFavoriteEventsInteractor;
+    @Mock EventModelMapper eventModelMapper;
 
     private FavoritesListPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor);
+        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventModelMapper);
     }
 
     @Test
@@ -63,12 +66,25 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).showEmpty();
     }
 
+    @Test
+    public void shouldShowFavoritesWhenInitializedIfInteractorCallbacksResults() throws Exception {
+        setupInteractorCallbacks(stubResult());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).showFavorites(stubResultModel());
+    }
+
     private Event stubEvent() {
         return new Event();
     }
 
     private List<Event> stubResult() {
         return Arrays.asList(stubEvent());
+    }
+
+    private List<EventModel> stubResultModel() {
+        return eventModelMapper.transform(stubResult());
     }
 
     private List<Event> empty() {

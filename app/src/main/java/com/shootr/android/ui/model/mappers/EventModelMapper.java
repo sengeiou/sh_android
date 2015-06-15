@@ -3,6 +3,8 @@ package com.shootr.android.ui.model.mappers;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class EventModelMapper {
@@ -25,4 +27,11 @@ public class EventModelMapper {
         return eventModel;
     }
 
+    public List<EventModel> transform(List<Event> events) {
+        List<EventModel> models = new ArrayList<>(events.size());
+        for (Event event : events) {
+            models.add(transform(event));
+        }
+        return models;
+    }
 }

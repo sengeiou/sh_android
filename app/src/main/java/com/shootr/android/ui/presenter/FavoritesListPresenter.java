@@ -3,6 +3,8 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
+import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.List;
 import javax.inject.Inject;
@@ -10,11 +12,14 @@ import javax.inject.Inject;
 public class FavoritesListPresenter implements Presenter{
 
     private final GetFavoriteEventsInteractor getFavoriteEventsInteractor;
+    private final EventModelMapper eventModelMapper;
 
     private FavoritesListView favoritesListView;
 
-    @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor) {
+    @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor,
+      EventModelMapper eventModelMapper) {
         this.getFavoriteEventsInteractor = getFavoriteEventsInteractor;
+        this.eventModelMapper = eventModelMapper;
     }
 
     protected void setView(FavoritesListView favoritesListView) {
@@ -34,6 +39,9 @@ public class FavoritesListPresenter implements Presenter{
                 favoritesListView.hideLoading();
                 if (events.isEmpty()) {
                     favoritesListView.showEmpty();
+                } else {
+                    List<EventModel> eventModels = eventModelMapper.transform(events);
+                    favoritesListView.showFavorites(eventModels);
                 }
             }
         });
