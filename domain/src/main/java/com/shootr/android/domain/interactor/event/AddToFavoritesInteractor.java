@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import java.util.List;
 import javax.inject.Inject;
 
 public class AddToFavoritesInteractor implements Interactor {
@@ -41,6 +42,25 @@ public class AddToFavoritesInteractor implements Interactor {
     private Favorite favoriteFromParameters() {
         Favorite favorite = new Favorite();
         favorite.setIdEvent(idEvent);
+        favorite.setOrder(getNextOrder());
         return favorite;
+    }
+
+    private int getNextOrder() {
+        Favorite lastLocalFavorite = getLastLocalFavorite();
+        if(lastLocalFavorite != null){
+            return lastLocalFavorite.getOrder() + 1;
+        }else{
+            return 0;
+        }
+    }
+
+    private Favorite getLastLocalFavorite() {
+        List<Favorite> favorites = localFavoriteRepository.getFavorites();
+        if(!favorites.isEmpty()){
+            return favorites.get(favorites.size() - 1);
+        }else{
+            return null;
+        }
     }
 }
