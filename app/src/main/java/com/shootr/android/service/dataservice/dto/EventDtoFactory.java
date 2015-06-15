@@ -4,7 +4,6 @@ import com.shootr.android.constant.Constants;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
-import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -28,13 +27,10 @@ public class EventDtoFactory {
 
     private UtilityDtoFactory utilityDtoFactory;
     private EventEntityMapper eventEntityMapper;
-    private TimeUtils timeUtils;
 
-    @Inject public EventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper,
-      TimeUtils timeUtils) {
+    @Inject public EventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.eventEntityMapper = eventEntityMapper;
-        this.timeUtils = timeUtils;
     }
 
     public GenericDto getEventsNotEndedByIds(List<String> eventsIds) {
