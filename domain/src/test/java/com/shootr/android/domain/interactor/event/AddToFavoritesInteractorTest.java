@@ -17,6 +17,7 @@ public class AddToFavoritesInteractorTest {
 
     @Mock Interactor.CompletedCallback callback;
     @Mock FavoriteRepository localFavoriteRepository;
+    @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Favorite favorite;
 
     private AddToFavoritesInteractor addToFavoritesInteractor;
@@ -25,7 +26,8 @@ public class AddToFavoritesInteractorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
-        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository, interactorHandler, sessionRepository);
+        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
+          interactorHandler);
     }
 
     @Test
@@ -38,6 +40,12 @@ public class AddToFavoritesInteractorTest {
     public void shouldAddFavoriteToLocal(){
         addToFavoritesInteractor.addToFavorites("id_event", callback);
         verify(localFavoriteRepository).putFavorite(any(Favorite.class));
+    }
+
+    @Test
+    public void shouldAddFavoriteToRemote(){
+        addToFavoritesInteractor.addToFavorites("id_event", callback);
+        verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
     }
 
 }
