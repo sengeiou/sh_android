@@ -5,6 +5,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,12 +54,25 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).hideLoading();
     }
 
+    @Test
+    public void shouldShowEmptyWhenInitializedIfInteractorCallbacksEmpty() throws Exception {
+        setupInteractorCallbacks(empty());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).showEmpty();
+    }
+
     private Event stubEvent() {
         return new Event();
     }
 
     private List<Event> stubResult() {
         return Arrays.asList(stubEvent());
+    }
+
+    private List<Event> empty() {
+        return Collections.EMPTY_LIST;
     }
 
     protected Interactor.Callback<List<Event>> anyCallback() {

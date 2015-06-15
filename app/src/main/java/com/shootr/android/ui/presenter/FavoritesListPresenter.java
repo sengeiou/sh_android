@@ -32,6 +32,9 @@ public class FavoritesListPresenter implements Presenter{
             @Override
             public void onLoaded(List<Event> events) {
                 favoritesListView.hideLoading();
+                if (events.isEmpty()) {
+                    favoritesListView.showEmpty();
+                }
             }
         });
     }
