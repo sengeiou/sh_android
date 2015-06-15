@@ -5,6 +5,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +55,7 @@ public class AddToFavoritesInteractorTest {
     }
 
     @Test
-    public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnTwoFavorites(){
+    public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavorites(){
         when(localFavoriteRepository.getFavorites()).thenReturn(twoFavorites());
         addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
@@ -65,6 +66,17 @@ public class AddToFavoritesInteractorTest {
         when(localFavoriteRepository.getFavorites()).thenReturn(twoFavoritesReversed());
         addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
+    }
+
+    @Test
+    public void shouldAddFavoriteWithOrderZeroWhenLocalRepositoryReturnsEmpty(){
+        when(localFavoriteRepository.getFavorites()).thenReturn(empty());
+        addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
+        verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
+    }
+
+    private List<Favorite> empty() {
+        return new ArrayList<>();
     }
 
     private List<Favorite> twoFavoritesReversed() {
