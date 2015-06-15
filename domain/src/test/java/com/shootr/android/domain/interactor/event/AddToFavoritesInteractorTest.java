@@ -11,10 +11,12 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,6 +75,15 @@ public class AddToFavoritesInteractorTest {
         when(localFavoriteRepository.getFavorites()).thenReturn(empty());
         addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(0));
+    }
+
+    @Test
+    public void shouldNotifyCompletedBeforePutFavoriteInRemote(){
+        addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
+
+        InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
+        inOrder.verify(callback).onCompleted();
+        inOrder.verify(remoteFavoriteRepository).putFavorite(any(Favorite.class));
     }
 
     private List<Favorite> empty() {
