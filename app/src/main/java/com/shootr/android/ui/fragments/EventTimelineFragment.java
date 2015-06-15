@@ -1,5 +1,7 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,6 +56,7 @@ import com.shootr.android.ui.views.nullview.NullAddToFavoritesView;
 import com.shootr.android.ui.views.nullview.NullCheckinView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.ui.widgets.FavoriteIconView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.MenuItemValueHolder;
@@ -162,6 +165,13 @@ public class EventTimelineFragment extends BaseFragment
 
         addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_add_favorite));
         addToFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        addToFavoritesMenuItem.setActionView(R.layout.favorite_icon_container);
+        addToFavoritesMenuItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFavoritesPresenter.addToFavorites();
+            }
+        });
 
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
@@ -178,8 +188,6 @@ public class EventTimelineFragment extends BaseFragment
             case R.id.menu_info:
                 watchNumberPresenter.onWatchNumberClick();
                 return true;
-            case R.id.menu_add_favorite:
-                addToFavoritesPresenter.addToFavorites();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -571,7 +579,12 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override
     public void hideAddToFavoritesButton() {
-        addToFavoritesMenuItem.setVisible(false);
+        ((FavoriteIconView) addToFavoritesMenuItem.getActionView()).hideAnimated(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                addToFavoritesMenuItem.setVisible(false);
+            }
+        });
     }
 
     @Override
