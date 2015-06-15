@@ -9,8 +9,6 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.EventTimelineParameters;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
