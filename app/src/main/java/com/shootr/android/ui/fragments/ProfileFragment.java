@@ -52,7 +52,6 @@ import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
-import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -99,9 +98,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @InjectView(R.id.profile_listing_container) View listingContainerView;
     @InjectView(R.id.profile_listing) TextView listingText;
     @InjectView(R.id.profile_listing_number) TextView listingNumber;
-
-    @InjectView(R.id.profile_watching_container) View watchingContainerView;
-    @InjectView(R.id.profile_watching_title) TextView watchingTitleView;
 
     @InjectView(R.id.profile_marks_followers) TextView followersTextView;
     @InjectView(R.id.profile_marks_following) TextView followingTextView;
@@ -324,7 +320,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_gallery)),
-                REQUEST_CHOOSE_PHOTO);
+          REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -492,13 +488,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             websiteTextView.setVisibility(View.GONE);
         }
 
-        if (user.getEventWatchingTitle() != null) {
-            watchingTitleView.setText(user.getEventWatchingTitle());
-            watchingContainerView.setVisibility(View.VISIBLE);
-        } else {
-            watchingContainerView.setVisibility(View.GONE);
-        }
-
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
@@ -564,11 +553,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         }
         linkIntent.setData(Uri.parse(url));
         startActivity(linkIntent);
-    }
-
-    @OnClick(R.id.profile_watching_container)
-    public void onWatchingClick() {
-        startActivity(EventDetailActivity.getIntent(getActivity(), user.getEventWatchingId()));
     }
 
     public void followUser() {
