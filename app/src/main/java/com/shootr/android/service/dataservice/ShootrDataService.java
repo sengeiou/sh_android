@@ -411,7 +411,7 @@ public class ShootrDataService implements ShootrService {
         return eventsReceived;
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {
+    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException {
         List<EventEntity> eventsReceived = new ArrayList<>();
         GenericDto requestDto = eventDtoFactory.getEventsNotEndedByIds(eventIds);
         GenericDto responseDto = postRequest(requestDto);

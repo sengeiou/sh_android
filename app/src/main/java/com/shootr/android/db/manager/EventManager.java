@@ -45,12 +45,12 @@ public class EventManager extends AbstractManager{
         return eventEntity;
     }
 
-    public List<EventEntity> getEventsByIds(List<Long> eventIds) {
+    public List<EventEntity> getEventsByIds(List<String> eventIds) {
         String whereSelection = DatabaseContract.EventTable.ID_EVENT
           + " IN (" + createListPlaceholders(eventIds.size())+")";
         String[] whereArguments = new String[eventIds.size()];
         for (int i = 0; i < eventIds.size(); i++) {
-            whereArguments[i] = String.valueOf(eventIds.get(i));
+            whereArguments[i] = eventIds.get(i);
         }
 
         Cursor queryResult =

@@ -37,7 +37,7 @@ public class EventDtoFactory {
         this.timeUtils = timeUtils;
     }
 
-    public GenericDto getEventsNotEndedByIds(List<Long> eventsIds) {
+    public GenericDto getEventsNotEndedByIds(List<String> eventsIds) {
         FilterDto eventsWatchFollowingFilter = and(orIsNotDeleted(),
           or(DatabaseContract.EventTable.ID_EVENT).isIn(eventsIds)).build();
 

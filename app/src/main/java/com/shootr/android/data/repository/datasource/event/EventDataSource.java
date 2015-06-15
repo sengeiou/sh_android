@@ -8,7 +8,7 @@ public interface EventDataSource {
 
     EventEntity getEventById(String idEvent);
 
-    List<EventEntity> getEventsByIds(List<Long> eventIds);
+    List<EventEntity> getEventsByIds(List<String> eventIds);
 
     EventEntity putEvent(EventEntity eventEntity);
 

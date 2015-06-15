@@ -56,7 +56,7 @@ public interface ShootrService {
 
     EventEntity saveEvent(EventEntity eventEntity) throws IOException;
 
-    List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException;
+    List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException;
 
     EventEntity getEventById(String idEvent) throws IOException;
 

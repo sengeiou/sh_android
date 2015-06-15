@@ -39,7 +39,7 @@ public class LocalEventRepository implements EventRepository {
         return eventEntity;
     }
 
-    @Override public List<Event> getEventsByIds(List<Long> eventIds) {
+    @Override public List<Event> getEventsByIds(List<String> eventIds) {
         List<EventEntity> eventEntities = localEventDataSource.getEventsByIds(eventIds);
         return eventEntityMapper.transform(eventEntities);
     }
