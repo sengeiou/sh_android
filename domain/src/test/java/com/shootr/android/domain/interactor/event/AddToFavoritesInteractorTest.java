@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +58,19 @@ public class AddToFavoritesInteractorTest {
         when(localFavoriteRepository.getFavorites()).thenReturn(twoFavorites());
         addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
         verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
+    }
+
+    @Test
+    public void shouldAddFavoriteWithOrderThreeWhenLocalRepositoryReturnsTwoFavoritesWithInverseOrder() {
+        when(localFavoriteRepository.getFavorites()).thenReturn(twoFavoritesReversed());
+        addToFavoritesInteractor.addToFavorites(ID_EVENT, callback);
+        verify(localFavoriteRepository).putFavorite(favoriteWithOrder(2));
+    }
+
+    private List<Favorite> twoFavoritesReversed() {
+        List<Favorite> twoFavorites = twoFavorites();
+        Collections.reverse(twoFavorites);
+        return twoFavorites;
     }
 
     private List<Favorite> twoFavorites() {
