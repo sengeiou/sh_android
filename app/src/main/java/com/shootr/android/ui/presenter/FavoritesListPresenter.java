@@ -31,7 +31,7 @@ public class FavoritesListPresenter implements Presenter{
         getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<Event>>() {
             @Override
             public void onLoaded(List<Event> events) {
-                //TODO
+                favoritesListView.hideLoading();
             }
         });
     }

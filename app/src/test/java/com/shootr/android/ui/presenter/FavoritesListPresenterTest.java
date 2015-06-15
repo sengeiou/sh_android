@@ -4,13 +4,17 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
 import com.shootr.android.ui.views.FavoritesListView;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 public class FavoritesListPresenterTest {
@@ -40,7 +44,35 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).showLoading();
     }
 
+    @Test
+    public void shouldHideLoadingWhenInitializedIfInteractorCallbacksResult() throws Exception {
+        setupInteractorCallbacks(stubResult());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).hideLoading();
+    }
+
+    private Event stubEvent() {
+        return new Event();
+    }
+
+    private List<Event> stubResult() {
+        return Arrays.asList(stubEvent());
+    }
+
     protected Interactor.Callback<List<Event>> anyCallback() {
         return any(Interactor.Callback.class);
+    }
+
+    private void setupInteractorCallbacks(final List<Event> result) {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<Event>> callback = (Interactor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(result);
+                return null;
+            }
+        }).when(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
     }
 }
