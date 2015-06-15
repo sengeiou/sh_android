@@ -9,7 +9,7 @@ public interface EventRepository {
 
     Event getEventById(String idEvent);
 
-    List<Event> getEventsByIds(List<Long> eventIds);
+    List<Event> getEventsByIds(List<String> eventIds);
 
     Event putEvent(Event event);
 
