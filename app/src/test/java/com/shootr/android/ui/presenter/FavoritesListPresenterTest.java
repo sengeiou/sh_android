@@ -33,6 +33,13 @@ public class FavoritesListPresenterTest {
         verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
     }
 
+    @Test
+    public void shouldShowLoadingWhenInitialized() throws Exception {
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).showLoading();
+    }
+
     protected Interactor.Callback<List<Event>> anyCallback() {
         return any(Interactor.Callback.class);
     }
