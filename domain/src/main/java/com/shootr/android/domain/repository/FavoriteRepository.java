@@ -8,4 +8,6 @@ public interface FavoriteRepository {
     void putFavorite(Favorite favorite);
 
     List<Favorite> getFavorites();
+
+    Favorite getFavoriteStatus(String eventId);
 }
