@@ -5,6 +5,8 @@ import javax.inject.Inject;
 
 public class AddToFavoritesInteractor {
 
+    private Interactor.CompletedCallback callback;
+
     @Inject public AddToFavoritesInteractor() {
     }
 
