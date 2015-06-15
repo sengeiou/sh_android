@@ -47,36 +47,33 @@ public class GetFavoriteEventsInteractor implements Interactor {
         loadFavoriteEventsFromRemoteRepository();
     }
 
+    //region Load Favorites
     private void loadFavoriteEventsFromLocalRepository() {
-        List<String> idEvents = getLocalFavoriteEventIds();
-        List<Event> eventsByIds = localEventRepository.getEventsByIds(idEvents);
-        List<EventSearchResult> eventSearchResults = obtainEventSearchResultsFromEvents(eventsByIds);
-        notifyLoaded(eventSearchResults);
+        List<String> idEvents = getFavoriteEventIdsFromRepository(localFavoriteRepository);
+        obtainEventSearchResultsFromIdEvents(idEvents);
     }
 
     private void loadFavoriteEventsFromRemoteRepository() {
-        List<String> idEvents = getRemoteFavoriteEventIds();
+        List<String> idEvents = getFavoriteEventIdsFromRepository(remoteFavoriteRepository);
+        obtainEventSearchResultsFromIdEvents(idEvents);
+    }
+
+    public List<String> getFavoriteEventIdsFromRepository(FavoriteRepository favoriteRepository) {
+        List<Favorite> favorites = favoriteRepository.getFavorites();
+        List<String> idEvents = new ArrayList<>();
+        for (Favorite favorite : favorites) {
+            idEvents.add(favorite.getIdEvent());
+        }
+        return idEvents;
+    }
+
+    //endregion
+
+    //region Obtain Event Search Results
+    private void obtainEventSearchResultsFromIdEvents(List<String> idEvents) {
         List<Event> eventsByIds = localEventRepository.getEventsByIds(idEvents);
         List<EventSearchResult> eventSearchResults = obtainEventSearchResultsFromEvents(eventsByIds);
         notifyLoaded(eventSearchResults);
-    }
-
-    private List<String> getLocalFavoriteEventIds() {
-        List<Favorite> favorites = localFavoriteRepository.getFavorites();
-        List<String> idEvents = new ArrayList<>();
-        for (Favorite favorite : favorites) {
-            idEvents.add(favorite.getIdEvent());
-        }
-        return idEvents;
-    }
-
-    public List<String> getRemoteFavoriteEventIds() {
-        List<Favorite> favorites = remoteFavoriteRepository.getFavorites();
-        List<String> idEvents = new ArrayList<>();
-        for (Favorite favorite : favorites) {
-            idEvents.add(favorite.getIdEvent());
-        }
-        return idEvents;
     }
 
     private List<EventSearchResult> obtainEventSearchResultsFromEvents(List<Event> eventsByIds) {
@@ -90,6 +87,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         }
         return eventSearchResults;
     }
+    //endregion
 
     private void notifyLoaded(final List<EventSearchResult> eventSearchResults) {
         postExecutionThread.post(new Runnable() {
