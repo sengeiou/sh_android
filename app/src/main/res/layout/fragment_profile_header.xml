@@ -133,55 +133,6 @@
 
     </FrameLayout>
 
-    <LinearLayout
-      android:id="@+id/profile_watching_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/profile_listing_container"
-      android:background="?selectableItemBackground"
-      android:clickable="true"
-      android:orientation="horizontal"
-      android:paddingBottom="8dp"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:visibility="gone"
-      tools:visibility="visible"
-      android:paddingTop="8dp">
-
-        <ImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center_vertical"
-          android:src="@drawable/ic_watching_24" />
-
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/keyline_2_minus_icon"
-          android:gravity="center_vertical"
-          android:orientation="vertical">
-
-            <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:text="@string/profile_watching_label"
-              android:textAppearance="@style/TextAppearance.FloatLabel" />
-
-            <TextView
-              android:id="@+id/profile_watching_title"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:textSize="16sp"
-              tools:text="Barbacoa en casa de tu tía"
-              android:textColor="@color/gray_30" />
-        </LinearLayout>
-
-    </LinearLayout>
-
     <!-- Follow buttons -->
     <com.shootr.android.ui.widgets.FollowButton
       android:id="@+id/profile_follow_button"
