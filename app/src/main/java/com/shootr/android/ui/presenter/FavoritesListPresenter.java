@@ -32,7 +32,7 @@ public class FavoritesListPresenter implements Presenter{
         this.loadFavorites();
     }
 
-    private void loadFavorites() {
+    protected void loadFavorites() {
         favoritesListView.showLoading();
         getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<EventSearchResult>>() {
             @Override

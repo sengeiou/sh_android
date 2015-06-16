@@ -51,62 +51,62 @@ public class FavoritesListPresenterTest {
     }
 
     @Test
-    public void shouldShowLoadingWhenInitialized() throws Exception {
-        presenter.initialize(favoritesListView);
+    public void shouldShowLoadingWhenLoadFavorites() throws Exception {
+        presenter.loadFavorites();
 
         verify(favoritesListView).showLoading();
     }
 
     @Test
-    public void shouldShowContentWhenInitializedIfInteractorCallbacksResult() throws Exception {
+    public void shouldShowContentWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacks(stubResult());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).showContent();
     }
 
     @Test
-    public void shouldHideContentWhenInitializedIfInteractorCallbacksEmpty() throws Exception {
+    public void shouldHideContentWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
         setupInteractorCallbacks(empty());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).hideContent();
     }
 
     @Test
-    public void shouldHideLoadingWhenInitializedIfInteractorCallbacksResult() throws Exception {
+    public void shouldHideLoadingWhenLoadFavoritesIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacks(stubResult());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).hideLoading();
     }
 
     @Test
-    public void shouldShowEmptyWhenInitializedIfInteractorCallbacksEmpty() throws Exception {
+    public void shouldShowEmptyWhenLoadFavoritesIfInteractorCallbacksEmpty() throws Exception {
         setupInteractorCallbacks(empty());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).showEmpty();
     }
 
     @Test
-    public void shouldHideEmptyWhenInitializedIfInteractorCallbacksResults() throws Exception {
+    public void shouldHideEmptyWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
         setupInteractorCallbacks(stubResult());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).hideEmpty();
     }
 
     @Test
-    public void shouldShowFavoritesWhenInitializedIfInteractorCallbacksResults() throws Exception {
+    public void shouldShowFavoritesWhenLoadFavoritesIfInteractorCallbacksResults() throws Exception {
         setupInteractorCallbacks(stubResult());
 
-        presenter.initialize(favoritesListView);
+        presenter.loadFavorites();
 
         verify(favoritesListView).renderFavorites(stubResultModel());
     }
