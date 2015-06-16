@@ -75,8 +75,18 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void showFavorites(List<EventResultModel> eventModels) {
+    public void renderFavorites(List<EventResultModel> eventModels) {
         adapter.setEvents(eventModels);
+    }
+
+    @Override
+    public void showContent() {
+        favoritesList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideContent() {
+        favoritesList.setVisibility(View.GONE);
     }
 
     @Override

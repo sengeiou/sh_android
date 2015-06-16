@@ -7,7 +7,17 @@ import java.util.List;
 public class NullFavoritesListView implements FavoritesListView {
 
     @Override
-    public void showFavorites(List<EventResultModel> eventModels) {
+    public void renderFavorites(List<EventResultModel> eventModels) {
+        /* no-op */
+    }
+
+    @Override
+    public void showContent() {
+        /* no-op */
+    }
+
+    @Override
+    public void hideContent() {
         /* no-op */
     }
 
