@@ -9,5 +9,5 @@ public interface FavoriteRepository {
 
     List<Favorite> getFavorites();
 
-    Favorite getFavoriteStatus(String eventId);
+    Favorite getFavoriteByEvent(String eventId);
 }

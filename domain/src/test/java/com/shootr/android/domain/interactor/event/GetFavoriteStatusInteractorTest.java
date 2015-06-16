@@ -44,32 +44,32 @@ public class GetFavoriteStatusInteractorTest {
 
     @Test
     public void shouldLoadLocalEventStatus() {
-        when(localFavoriteRepository.getFavoriteStatus(EVENT_ID)).thenReturn(new Favorite());
+        when(localFavoriteRepository.getFavoriteByEvent(EVENT_ID)).thenReturn(new Favorite());
         getFavoriteStatusInteractor.loadFavoriteStatus(EVENT_ID, callback);
         verify(callback).onLoaded(anyBoolean());
     }
 
     @Test
     public void shouldCallbackTrueIfEventIsFavorited() {
-        when(localFavoriteRepository.getFavoriteStatus(EVENT_ID)).thenReturn(new Favorite());
+        when(localFavoriteRepository.getFavoriteByEvent(EVENT_ID)).thenReturn(new Favorite());
         getFavoriteStatusInteractor.loadFavoriteStatus(EVENT_ID, callback);
         verify(callback).onLoaded(true);
     }
 
     @Test
     public void shouldCallbackFalseIfEventIsNotFavorited() {
-        when(localFavoriteRepository.getFavoriteStatus(EVENT_ID)).thenReturn(null);
+        when(localFavoriteRepository.getFavoriteByEvent(EVENT_ID)).thenReturn(null);
         getFavoriteStatusInteractor.loadFavoriteStatus(EVENT_ID, callback);
         verify(callback).onLoaded(false);
     }
 
     @Test
     public void shouldLoadLocalEventStatusBeforeCallback() {
-        when(localFavoriteRepository.getFavoriteStatus(EVENT_ID)).thenReturn(new Favorite());
+        when(localFavoriteRepository.getFavoriteByEvent(EVENT_ID)).thenReturn(new Favorite());
         getFavoriteStatusInteractor.loadFavoriteStatus(EVENT_ID, callback);
 
         InOrder inOrder = inOrder(callback, localFavoriteRepository);
-        inOrder.verify(localFavoriteRepository).getFavoriteStatus(anyString());
+        inOrder.verify(localFavoriteRepository).getFavoriteByEvent(anyString());
         inOrder.verify(callback).onLoaded(anyBoolean());
     }
 }
