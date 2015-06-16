@@ -44,51 +44,48 @@ public class GetFavoriteEventsInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        loadFavoriteEventsFromLocalRepository();
-        loadFavoriteEventsFromRemoteRepository();
+        loadLocalFavorites();
+        loadRemoteFavorites();
     }
 
-    //region Load Favorites
-    private void loadFavoriteEventsFromLocalRepository() {
-        List<String> idEvents = getFavoriteEventIdsFromRepository(localFavoriteRepository);
-        obtainEventSearchResultsFromIdEvents(idEvents);
+    private void loadLocalFavorites() {
+        loadFavoritesFrom(localFavoriteRepository);
     }
 
-    private void loadFavoriteEventsFromRemoteRepository() {
-        List<String> idEvents = getFavoriteEventIdsFromRepository(remoteFavoriteRepository);
-        obtainEventSearchResultsFromIdEvents(idEvents);
+    private void loadRemoteFavorites() {
+        loadFavoritesFrom(remoteFavoriteRepository);
     }
 
-    public List<String> getFavoriteEventIdsFromRepository(FavoriteRepository favoriteRepository) {
+    private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
+        // Cargar favoritos
         List<Favorite> favorites = favoriteRepository.getFavorites();
+        // Ordenar favoritos
+        //TODO
+        // Cargar eventos de los favoritos
+        List<Event> favoriteEvents = eventsFromFavorites(favorites);
+        // Adjuntar watchers
+        List<EventSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteEvents);
+        // Devolver eventos
+        notifyLoaded(favoriteEventsWithWatchers);
+    }
+
+    private List<Event> eventsFromFavorites(List<Favorite> favorites) {
         List<String> idEvents = new ArrayList<>();
         for (Favorite favorite : favorites) {
             idEvents.add(favorite.getIdEvent());
         }
-        return idEvents;
+        return localEventRepository.getEventsByIds(idEvents);
+
     }
 
-    //endregion
-
-    //region Obtain Event Search Results
-    private void obtainEventSearchResultsFromIdEvents(List<String> idEvents) {
-        List<Event> eventsByIds = localEventRepository.getEventsByIds(idEvents);
-        List<EventSearchResult> eventSearchResults = obtainEventSearchResultsFromEvents(eventsByIds);
-        notifyLoaded(eventSearchResults);
-    }
-
-    private List<EventSearchResult> obtainEventSearchResultsFromEvents(List<Event> eventsByIds) {
-        List<EventSearchResult> eventSearchResults = new ArrayList<>();
-        for (Event eventsById : eventsByIds) {
-            Integer watchers = watchersRepository.getWatchers(eventsById.getId());
-            EventSearchResult eventSearchResult = new EventSearchResult();
-            eventSearchResult.setEvent(eventsById);
-            eventSearchResult.setWatchersNumber(watchers);
-            eventSearchResults.add(eventSearchResult);
+    private List<EventSearchResult> addWatchersToEvents(List<Event> events) {
+        List<EventSearchResult> eventsWithWatchers = new ArrayList<>(events.size());
+        for (Event event : events) {
+            Integer watchers = watchersRepository.getWatchers(event.getId());
+            eventsWithWatchers.add(new EventSearchResult(event, watchers));
         }
-        return eventSearchResults;
+        return eventsWithWatchers;
     }
-    //endregion
 
     private void notifyLoaded(final List<EventSearchResult> eventSearchResults) {
         postExecutionThread.post(new Runnable() {
