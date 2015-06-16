@@ -54,6 +54,12 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         return favoriteEntityMapper.transformEntities(remoteFavoriteDataSource.getFavorites());
     }
 
+    @Override
+    public Favorite getFavoriteByEvent(String eventId) {
+        FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdEvent(eventId);
+        return favoriteEntityMapper.transform(favoriteEntity);
+    }
+
     private void markEntitySynchronized(FavoriteEntity favoriteEntity) {
         favoriteEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
     }
