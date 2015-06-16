@@ -67,6 +67,15 @@ public class FavoritesListPresenterTest {
     }
 
     @Test
+    public void shouldHideEmptyWhenInitializedIfInteractorCallbacksResults() throws Exception {
+        setupInteractorCallbacks(stubResult());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).hideEmpty();
+    }
+
+    @Test
     public void shouldShowFavoritesWhenInitializedIfInteractorCallbacksResults() throws Exception {
         setupInteractorCallbacks(stubResult());
 

@@ -42,6 +42,7 @@ public class FavoritesListPresenter implements Presenter{
                 } else {
                     List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
                     favoritesListView.showFavorites(eventModels);
+                    favoritesListView.hideEmpty();
                 }
             }
         });
