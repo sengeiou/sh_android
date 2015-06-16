@@ -13,6 +13,9 @@ public class FavoriteEntityMapper {
     }
 
     public FavoriteEntity transform(Favorite favorite) {
+        if (favorite == null) {
+            return null;
+        }
         FavoriteEntity entity = new FavoriteEntity();
         entity.setIdEvent(favorite.getIdEvent());
         entity.setOrder(favorite.getOrder());
@@ -20,6 +23,9 @@ public class FavoriteEntityMapper {
     }
 
     public Favorite transform(FavoriteEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         Favorite favorite = new Favorite();
         favorite.setIdEvent(entity.getIdEvent());
         favorite.setOrder(entity.getOrder());
