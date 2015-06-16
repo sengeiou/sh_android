@@ -13,6 +13,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class GetFavoriteEventsInteractor implements Interactor {
@@ -79,10 +80,11 @@ public class GetFavoriteEventsInteractor implements Interactor {
     }
 
     private List<EventSearchResult> addWatchersToEvents(List<Event> events) {
+        Map<String, Integer> watchersInEvents = watchersRepository.getWatchers();
         List<EventSearchResult> eventsWithWatchers = new ArrayList<>(events.size());
         for (Event event : events) {
-            Integer watchers = watchersRepository.getWatchers(event.getId());
-            eventsWithWatchers.add(new EventSearchResult(event, watchers));
+            Integer eventWatchers = watchersInEvents.get(event.getId());
+            eventsWithWatchers.add(new EventSearchResult(event, eventWatchers));
         }
         return eventsWithWatchers;
     }
