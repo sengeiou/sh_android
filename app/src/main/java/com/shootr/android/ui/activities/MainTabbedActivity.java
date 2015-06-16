@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,7 +17,6 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
@@ -75,6 +76,26 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     protected void onPause() {
         super.onPause();
         currentUserPresenter.pause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_activity) {
+            navigateToActivity();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void navigateToActivity() {
+        startActivity(new Intent(this, ActivityTimelineContainerActivity.class));
     }
 
     @Deprecated
