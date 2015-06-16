@@ -13,6 +13,11 @@ public class EventSearchResult {
         this.watchersNumber = watchersNumber;
     }
 
+    public EventSearchResult(Event event, Integer watchersNumber) {
+        this.event = event;
+        this.watchersNumber = watchersNumber != null ? watchersNumber : 0;
+    }
+
     public Event getEvent() {
         return event;
     }

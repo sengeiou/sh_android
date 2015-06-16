@@ -73,7 +73,7 @@ public class GetFavoriteEventsInteractorTest {
     public void shouldLoadWatchers(){
         when(localEventRepository.getEventsByIds(anyList())).thenReturn(listWithOneEvent());
         getFavoriteEventsInteractor.loadFavoriteEvents(callback);
-        verify(watchersRepository, atLeastOnce()).getWatchers(anyString());
+        verify(watchersRepository, atLeastOnce()).getWatchers();
     }
 
     private List<Event> listWithOneEvent() {
