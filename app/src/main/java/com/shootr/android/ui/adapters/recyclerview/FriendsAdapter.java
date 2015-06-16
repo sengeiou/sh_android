@@ -7,8 +7,6 @@ import com.shootr.android.util.PicassoWrapper;
 
 public class FriendsAdapter extends UserListAdapter {
 
-    public static final String AT_CHARACTER = "@";
-
     public FriendsAdapter(Context context, PicassoWrapper picasso) {
         super(context, picasso);
     }
@@ -26,6 +24,6 @@ public class FriendsAdapter extends UserListAdapter {
     }
 
     private String usernameInSubtitleFormat(UserModel item) {
-        return AT_CHARACTER.concat(item.getUsername());
+        return "@"+item.getUsername();
     }
 }
