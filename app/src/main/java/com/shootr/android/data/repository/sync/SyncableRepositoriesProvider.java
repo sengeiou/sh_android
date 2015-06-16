@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.sync;
 
+import com.shootr.android.data.repository.remote.SyncFavoriteRepository;
 import com.shootr.android.data.repository.remote.SyncUserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,10 @@ public class SyncableRepositoriesProvider {
 
     private final List<SyncableRepository> syncableRepositories;
 
-    @Inject public SyncableRepositoriesProvider(SyncUserRepository syncUserRepository) {
+    @Inject public SyncableRepositoriesProvider(SyncUserRepository syncUserRepository, SyncFavoriteRepository syncFavoriteRepository) {
         syncableRepositories = new ArrayList<>();
         syncableRepositories.add(syncUserRepository);
+        syncableRepositories.add(syncFavoriteRepository);
     }
 
     public List<SyncableRepository> getSyncableRepositories() {
