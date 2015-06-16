@@ -58,16 +58,26 @@ public class GetFavoriteEventsInteractor implements Interactor {
     }
 
     private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
-        // Cargar favoritos
         List<Favorite> favorites = favoriteRepository.getFavorites();
-        // Ordenar favoritos
-        //TODO
-        // Cargar eventos de los favoritos
         List<Event> favoriteEvents = eventsFromFavorites(favorites);
-        // Adjuntar watchers
+        favoriteEvents = sortEventsByFavoriteOrder(favoriteEvents, favorites);
         List<EventSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteEvents);
-        // Devolver eventos
         notifyLoaded(favoriteEventsWithWatchers);
+    }
+
+    private List<Event> sortEventsByFavoriteOrder(List<Event> events, List<Favorite> favorites) {
+        favorites.sort(new Favorite.AscendingOrderComparator());
+        List<String> sortedEventIds = idsFromFavorites(favorites);
+        events.sort(new Event.EventExplicitComparator(sortedEventIds));
+        return events;
+    }
+
+    private List<String> idsFromFavorites(List<Favorite> favorites) {
+        List<String> ids = new ArrayList<>(favorites.size());
+        for (Favorite favorite : favorites) {
+            ids.add(favorite.getIdEvent());
+        }
+        return ids;
     }
 
     private List<Event> eventsFromFavorites(List<Favorite> favorites) {
@@ -76,7 +86,6 @@ public class GetFavoriteEventsInteractor implements Interactor {
             idEvents.add(favorite.getIdEvent());
         }
         return localEventRepository.getEventsByIds(idEvents);
-
     }
 
     private List<EventSearchResult> addWatchersToEvents(List<Event> events) {

@@ -1,5 +1,10 @@
 package com.shootr.android.domain;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Event {
 
     private String id;
@@ -69,7 +74,8 @@ public class Event {
         this.authorUsername = authorUsername;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Event)) return false;
 
@@ -86,7 +92,8 @@ public class Event {
         return !(locale != null ? !locale.equals(event.locale) : event.locale != null);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (authorId != null ? authorId.hashCode() : 0);
         result = 31 * result + (authorUsername != null ? authorUsername.hashCode() : 0);
@@ -97,10 +104,37 @@ public class Event {
         return result;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "Event{" +
           "id=" + id +
           ", title='" + title + '\'' +
           '}';
+    }
+
+    public static class EventExplicitComparator implements Comparator<Event> {
+
+        private Map<String, Integer> indexMap = new HashMap<>();
+
+        public EventExplicitComparator(List<String> orderedEventIds) {
+            for (int i = 0; i < orderedEventIds.size(); i++) {
+                String id = orderedEventIds.get(i);
+                indexMap.put(id, i);
+            }
+        }
+
+        @Override
+        public int compare(Event ev1, Event ev2) {
+            return rank(ev1) - rank(ev2);
+        }
+
+        private int rank(Event event) {
+            Integer rank = indexMap.get(event.getId());
+            if (rank == null) {
+                throw new IllegalStateException(String.format("Event id not found in explicit list: %s",
+                  event.toString()));
+            }
+            return rank;
+        }
     }
 }
