@@ -15,6 +15,7 @@ public class FavoritesListPresenter implements Presenter{
     private final EventResultModelMapper eventResultModelMapper;
 
     private FavoritesListView favoritesListView;
+    private boolean hasBeenPaused = false;
 
     @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor,
       EventResultModelMapper eventResultModelMapper) {
@@ -52,11 +53,13 @@ public class FavoritesListPresenter implements Presenter{
 
     @Override
     public void resume() {
-
+        if (hasBeenPaused) {
+            this.loadFavorites();
+        }
     }
 
     @Override
     public void pause() {
-
+        hasBeenPaused = true;
     }
 }

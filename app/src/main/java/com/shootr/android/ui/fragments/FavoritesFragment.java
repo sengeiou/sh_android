@@ -64,6 +64,18 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         initializePresenter();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        favoritesListPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        favoritesListPresenter.pause();
+    }
+
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new EventsListAdapter(picasso);

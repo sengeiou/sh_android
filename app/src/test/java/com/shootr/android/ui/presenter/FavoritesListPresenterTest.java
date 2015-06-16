@@ -32,11 +32,20 @@ public class FavoritesListPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventResultModelMapper);
+        presenter.setView(favoritesListView);
     }
 
     @Test
     public void shouldLoadFavoritesWhenInitialized() throws Exception {
         presenter.initialize(favoritesListView);
+
+        verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+    }
+
+    @Test
+    public void shouldLoadFavoritesWhenPausedAndResumed() throws Exception {
+        presenter.pause();
+        presenter.resume();
 
         verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
     }
