@@ -51,7 +51,12 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     @Override
     public List<Favorite> getFavorites() {
-        return favoriteEntityMapper.transformEntities(remoteFavoriteDataSource.getFavorites());
+        List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites();
+        // TODO Use method for putting the entire collection at once
+        for (FavoriteEntity remoteFavorite : remoteFavorites) {
+            localFavoriteDataSource.putFavorite(remoteFavorite);
+        }
+        return favoriteEntityMapper.transformEntities(remoteFavorites);
     }
 
     @Override
