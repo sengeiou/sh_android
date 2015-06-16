@@ -6,5 +6,9 @@ import java.util.List;
 
 public interface FavoritesListView extends LoadDataView {
 
-    void showFavorites(List<EventResultModel> eventModels);
+    void renderFavorites(List<EventResultModel> eventModels);
+
+    void showContent();
+
+    void hideContent();
 }

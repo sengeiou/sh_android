@@ -39,9 +39,11 @@ public class FavoritesListPresenter implements Presenter{
                 favoritesListView.hideLoading();
                 if (events.isEmpty()) {
                     favoritesListView.showEmpty();
+                    favoritesListView.hideContent();
                 } else {
                     List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
-                    favoritesListView.showFavorites(eventModels);
+                    favoritesListView.renderFavorites(eventModels);
+                    favoritesListView.showContent();
                     favoritesListView.hideEmpty();
                 }
             }

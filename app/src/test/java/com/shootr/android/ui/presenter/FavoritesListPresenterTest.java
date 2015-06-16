@@ -49,6 +49,24 @@ public class FavoritesListPresenterTest {
     }
 
     @Test
+    public void shouldShowContentWhenInitializedIfInteractorCallbacksResult() throws Exception {
+        setupInteractorCallbacks(stubResult());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).showContent();
+    }
+
+    @Test
+    public void shouldHideContentWhenInitializedIfInteractorCallbacksEmpty() throws Exception {
+        setupInteractorCallbacks(empty());
+
+        presenter.initialize(favoritesListView);
+
+        verify(favoritesListView).hideContent();
+    }
+
+    @Test
     public void shouldHideLoadingWhenInitializedIfInteractorCallbacksResult() throws Exception {
         setupInteractorCallbacks(stubResult());
 
@@ -81,7 +99,7 @@ public class FavoritesListPresenterTest {
 
         presenter.initialize(favoritesListView);
 
-        verify(favoritesListView).showFavorites(stubResultModel());
+        verify(favoritesListView).renderFavorites(stubResultModel());
     }
 
     private EventSearchResult stubEvent() {
