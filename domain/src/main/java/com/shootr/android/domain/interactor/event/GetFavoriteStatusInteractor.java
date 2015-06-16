@@ -5,6 +5,7 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
+import com.shootr.android.domain.repository.Local;
 import javax.inject.Inject;
 
 public class GetFavoriteStatusInteractor implements Interactor {
@@ -17,7 +18,7 @@ public class GetFavoriteStatusInteractor implements Interactor {
     private String eventId;
 
     @Inject public GetFavoriteStatusInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, FavoriteRepository localFavoriteRepository) {
+      PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;

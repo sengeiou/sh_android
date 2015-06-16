@@ -28,7 +28,8 @@ public class GetFavoriteEventsInteractor implements Interactor {
 
     @Inject public GetFavoriteEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository, @Local EventRepository localEventRepository, WatchersRepository watchersRepository) {
+      @Remote FavoriteRepository remoteFavoriteRepository, @Local EventRepository localEventRepository,
+      @Local WatchersRepository watchersRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
