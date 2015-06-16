@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
@@ -56,7 +57,8 @@ import javax.inject.Singleton;
                 MainTabbedActivity.class,
                 ResetPasswordActivity.class,
                 ListingActivity.class,
-                FavoritesFragment.class
+                FavoritesFragment.class,
+                ActivityTimelineContainerActivity.class
         },
         complete = false
 )
