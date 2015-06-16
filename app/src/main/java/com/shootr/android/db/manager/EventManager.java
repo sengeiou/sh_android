@@ -42,6 +42,9 @@ public class EventManager extends AbstractManager{
     }
 
     public List<EventEntity> getEventsByIds(List<String> eventIds) {
+        if (eventIds.isEmpty()) {
+            return new ArrayList<>();
+        }
         String whereSelection = DatabaseContract.EventTable.ID_EVENT
           + " IN (" + createListPlaceholders(eventIds.size())+")";
         String[] whereArguments = new String[eventIds.size()];
