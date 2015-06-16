@@ -99,6 +99,14 @@ public class GetFavoriteEventsInteractorTest {
         assertThat(results).containsSequence(orderedEventResults());
     }
 
+    @Test
+    public void shouldLoadLocalEventsFromFavorites() {
+        when(localFavoriteRepository.getFavorites()).thenReturn(listWithOneFavorite());
+        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        verify(localEventRepository).getEventsByIds(favoriteEventsIds());
+    }
+
+
     private List<Favorite> unorderedFavorites() {
         return Arrays.asList(
           favorite(EVENT_ID_2, 2),
@@ -128,6 +136,21 @@ public class GetFavoriteEventsInteractorTest {
         favorite.setIdEvent(eventId);
         favorite.setOrder(order);
         return favorite;
+    }
+
+    private List<Favorite> listWithOneFavorite() {
+        ArrayList<Favorite> favorites = new ArrayList<>();
+        Favorite favorite = new Favorite();
+        favorite.setIdEvent(EVENT_ID);
+        favorite.setOrder(0);
+        favorites.add(favorite);
+        return favorites;
+    }
+
+    private List<String> favoriteEventsIds() {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add(EVENT_ID);
+        return strings;
     }
 
     private List<Event> listWithOneEvent() {
