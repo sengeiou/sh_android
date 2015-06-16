@@ -12,6 +12,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -66,9 +67,9 @@ public class GetFavoriteEventsInteractor implements Interactor {
     }
 
     private List<Event> sortEventsByFavoriteOrder(List<Event> events, List<Favorite> favorites) {
-        favorites.sort(new Favorite.AscendingOrderComparator());
+        Collections.sort(favorites, new Favorite.AscendingOrderComparator());
         List<String> sortedEventIds = idsFromFavorites(favorites);
-        events.sort(new Event.EventExplicitComparator(sortedEventIds));
+        Collections.sort(events, new Event.EventExplicitComparator(sortedEventIds));
         return events;
     }
 
