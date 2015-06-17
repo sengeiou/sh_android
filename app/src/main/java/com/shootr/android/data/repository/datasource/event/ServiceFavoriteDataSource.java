@@ -36,7 +36,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
     @Override
     public FavoriteEntity getFavoriteByIdEvent(String idEvent) {
-        throw new IllegalStateException("Method not implemented id service datasource");
+        throw new IllegalStateException("Method not implemented in service datasource");
     }
 
     @Override
