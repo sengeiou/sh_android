@@ -29,7 +29,7 @@ public class SyncActivityRepository implements ActivityRepository {
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public List<Activity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         String currentUserId = sessionRepository.getCurrentUserId();
         List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters, currentUserId,
           MAX_ACTIVITIES);

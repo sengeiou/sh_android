@@ -25,7 +25,7 @@ public class LocalActivityRepository implements ActivityRepository{
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public List<Activity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
+    @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         String currentUserId = sessionRepository.getCurrentUserId();
         localActivityDataSource.getActivityTimeline(parameters,currentUserId, MAX_ACTIVITIES);
         return null;

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ActivityRepository {
 
-    List<Activity> getShotsForActivityTimeline(ActivityTimelineParameters parameters);
+    List<Activity> getActivityTimeline(ActivityTimelineParameters parameters);
 
 }
