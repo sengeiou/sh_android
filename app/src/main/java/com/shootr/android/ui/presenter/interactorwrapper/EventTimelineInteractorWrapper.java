@@ -7,13 +7,13 @@ import com.shootr.android.domain.interactor.timeline.GetOlderEventTimelineIntera
 import com.shootr.android.domain.interactor.timeline.RefreshEventTimelineInteractor;
 import javax.inject.Inject;
 
-public class EventTimelineInteractorsWrapper implements TimelineInteractorsWrapper {
+public class EventTimelineInteractorWrapper implements TimelineInteractorWrapper {
 
     private final RefreshEventTimelineInteractor refreshEventTimelineInteractor;
     private final GetEventTimelineInteractor getEventTimelineInteractor;
     private final GetOlderEventTimelineInteractor getOlderEventTimelineInteractor;
 
-    @Inject public EventTimelineInteractorsWrapper(RefreshEventTimelineInteractor refreshEventTimelineInteractor,
+    @Inject public EventTimelineInteractorWrapper(RefreshEventTimelineInteractor refreshEventTimelineInteractor,
       GetEventTimelineInteractor getEventTimelineInteractor,
       GetOlderEventTimelineInteractor getOlderEventTimelineInteractor) {
         this.refreshEventTimelineInteractor = refreshEventTimelineInteractor;
