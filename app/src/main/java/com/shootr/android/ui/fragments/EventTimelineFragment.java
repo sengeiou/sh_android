@@ -596,7 +596,7 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override
     public void showAddedToFavorites() {
-        Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
     //endregion
 }

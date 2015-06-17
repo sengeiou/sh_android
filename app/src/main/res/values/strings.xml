@@ -268,4 +268,7 @@
     <string name="profile_listing">Streams</string>
     <string name="title_activity_listing">Streams</string>
     <string name="favorites_emtpy">No Favorites</string>
+    <string name="menu_add_favorite">Add to Favorites</string>
+    <string name="menu_remove_favorite">Remove from Favorites</string>
+    <string name="added_to_favorites">Added to Favorites</string>
 </resources>
