@@ -1,6 +1,5 @@
 package com.shootr.android.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
@@ -12,7 +11,7 @@ public class ActivityTimelineContainerActivity extends BaseToolbarDecoratedActiv
 
     @Override
     protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        // TODO
+        /* no-op */
     }
 
     @Override
