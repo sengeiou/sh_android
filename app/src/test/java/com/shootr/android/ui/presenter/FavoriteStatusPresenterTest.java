@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
-import com.shootr.android.ui.views.AddToFavoritesView;
+import com.shootr.android.ui.views.FavoriteStatusView;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,39 +16,39 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
-public class AddToFavoritesPresenterTest {
+public class FavoriteStatusPresenterTest {
 
     private static final String STUB_EVENT_ID = "event_id";
 
     @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
-    @Mock AddToFavoritesView addToFavoritesView;
+    @Mock FavoriteStatusView favoriteStatusView;
 
-    private AddToFavoritesPresenter presenter;
+    private FavoriteStatusPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new AddToFavoritesPresenter(getFavoriteStatusInteractor, addToFavoritesInteractor);
-        presenter.setView(addToFavoritesView);
+        presenter = new FavoriteStatusPresenter(getFavoriteStatusInteractor, addToFavoritesInteractor);
+        presenter.setView(favoriteStatusView);
     }
 
     @Test
     public void shouldHideAddToFavoritesButtonWhenInitializeIfEventIsFavorite() throws Exception {
         setupFavoriteStatusCallbacks(true);
 
-        presenter.initialize(addToFavoritesView, STUB_EVENT_ID);
+        presenter.initialize(favoriteStatusView, STUB_EVENT_ID);
 
-        verify(addToFavoritesView).hideAddToFavoritesButton();
+        verify(favoriteStatusView).hideAddToFavoritesButton();
     }
 
     @Test
     public void shouldShowAddToFavoritesButtonWhenInitializeIfEventIsNotFavorite() throws Exception {
         setupFavoriteStatusCallbacks(false);
 
-        presenter.initialize(addToFavoritesView, STUB_EVENT_ID);
+        presenter.initialize(favoriteStatusView, STUB_EVENT_ID);
 
-        verify(addToFavoritesView).showAddToFavoritesButton();
+        verify(favoriteStatusView).showAddToFavoritesButton();
     }
 
     @Test
@@ -57,7 +57,7 @@ public class AddToFavoritesPresenterTest {
 
         presenter.addToFavorites();
 
-        verify(addToFavoritesView).hideAddToFavoritesButton();
+        verify(favoriteStatusView).hideAddToFavoritesButton();
     }
 
     private void setupAddToFavoriteCallbacks() {

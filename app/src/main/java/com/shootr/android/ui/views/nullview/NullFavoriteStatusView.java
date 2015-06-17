@@ -1,8 +1,8 @@
 package com.shootr.android.ui.views.nullview;
 
-import com.shootr.android.ui.views.AddToFavoritesView;
+import com.shootr.android.ui.views.FavoriteStatusView;
 
-public class NullAddToFavoritesView implements AddToFavoritesView {
+public class NullFavoriteStatusView implements FavoriteStatusView {
 
     @Override
     public void showAddToFavoritesButton() {

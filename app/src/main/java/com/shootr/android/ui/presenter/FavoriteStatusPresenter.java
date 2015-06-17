@@ -3,31 +3,31 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
-import com.shootr.android.ui.views.AddToFavoritesView;
+import com.shootr.android.ui.views.FavoriteStatusView;
 import javax.inject.Inject;
 
-public class AddToFavoritesPresenter implements Presenter {
+public class FavoriteStatusPresenter implements Presenter {
 
     private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
 
-    private AddToFavoritesView addToFavoritesView;
+    private FavoriteStatusView favoriteStatusView;
     private String idEvent;
 
     @Inject
-    public AddToFavoritesPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
+    public FavoriteStatusPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor) {
         this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
     }
 
-    public void setView(AddToFavoritesView addToFavoritesView) {
-        this.addToFavoritesView = addToFavoritesView;
+    public void setView(FavoriteStatusView favoriteStatusView) {
+        this.favoriteStatusView = favoriteStatusView;
     }
 
-    public void initialize(AddToFavoritesView addToFavoritesView, String idEvent) {
+    public void initialize(FavoriteStatusView favoriteStatusView, String idEvent) {
         this.idEvent = idEvent;
-        this.setView(addToFavoritesView);
+        this.setView(favoriteStatusView);
         this.loadFavoriteStatus();
     }
 
@@ -36,9 +36,9 @@ public class AddToFavoritesPresenter implements Presenter {
             @Override
             public void onLoaded(Boolean isFavorite) {
                 if (!isFavorite) {
-                    addToFavoritesView.showAddToFavoritesButton();
+                    favoriteStatusView.showAddToFavoritesButton();
                 } else {
-                    addToFavoritesView.hideAddToFavoritesButton();
+                    favoriteStatusView.hideAddToFavoritesButton();
                 }
             }
         });
@@ -48,8 +48,8 @@ public class AddToFavoritesPresenter implements Presenter {
         addToFavoritesInteractor.addToFavorites(idEvent, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
-                addToFavoritesView.hideAddToFavoritesButton();
-                addToFavoritesView.showAddedToFavorites();
+                favoriteStatusView.hideAddToFavoritesButton();
+                favoriteStatusView.showAddedToFavorites();
             }
         });
     }

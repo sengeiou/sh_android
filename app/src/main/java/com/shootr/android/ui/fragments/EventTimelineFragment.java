@@ -40,19 +40,19 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.presenter.AddToFavoritesPresenter;
+import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
-import com.shootr.android.ui.views.AddToFavoritesView;
+import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
-import com.shootr.android.ui.views.nullview.NullAddToFavoritesView;
+import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.views.nullview.NullCheckinView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
@@ -68,7 +68,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EventTimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView, AddToFavoritesView {
+  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView, FavoriteStatusView {
 
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
@@ -77,7 +77,7 @@ public class EventTimelineFragment extends BaseFragment
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
-    @Inject AddToFavoritesPresenter addToFavoritesPresenter;
+    @Inject FavoriteStatusPresenter favoriteStatusPresenter;
 
     @Inject CheckinPresenter checkinPresenter;
     @Inject PicassoWrapper picasso;
@@ -142,7 +142,7 @@ public class EventTimelineFragment extends BaseFragment
         checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
-        addToFavoritesPresenter.setView(new NullAddToFavoritesView());
+        favoriteStatusPresenter.setView(new NullFavoriteStatusView());
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class EventTimelineFragment extends BaseFragment
         addToFavoritesMenuItem.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToFavoritesPresenter.addToFavorites();
+                favoriteStatusPresenter.addToFavorites();
             }
         });
 
@@ -199,7 +199,7 @@ public class EventTimelineFragment extends BaseFragment
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
         checkinPresenter.resume();
-        addToFavoritesPresenter.resume();
+        favoriteStatusPresenter.resume();
     }
 
     @Override public void onPause() {
@@ -208,7 +208,7 @@ public class EventTimelineFragment extends BaseFragment
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
         checkinPresenter.pause();
-        addToFavoritesPresenter.pause();
+        favoriteStatusPresenter.pause();
     }
 
     private void initializeToolbar() {
@@ -221,7 +221,7 @@ public class EventTimelineFragment extends BaseFragment
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);
-        addToFavoritesPresenter.initialize(this, idEvent);
+        favoriteStatusPresenter.initialize(this, idEvent);
     }
 
     //endregion
