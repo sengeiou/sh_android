@@ -38,7 +38,7 @@ public class FavoriteStatusPresenter implements Presenter {
                 if (!isFavorite) {
                     favoriteStatusView.showAddToFavoritesButton();
                 } else {
-                    favoriteStatusView.hideAddToFavoritesButton();
+                    favoriteStatusView.showRemoveFromFavoritesButton();
                 }
             }
         });
@@ -49,9 +49,16 @@ public class FavoriteStatusPresenter implements Presenter {
             @Override
             public void onCompleted() {
                 favoriteStatusView.hideAddToFavoritesButton();
+                favoriteStatusView.showRemoveFromFavoritesButton();
                 favoriteStatusView.showAddedToFavorites();
             }
         });
+    }
+
+    public void removeFromFavorites() {
+        // TODO interactor
+        favoriteStatusView.showAddToFavoritesButton();
+        favoriteStatusView.hideRemoveFromFavoritesButton();
     }
 
     @Override

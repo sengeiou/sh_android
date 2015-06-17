@@ -6,5 +6,9 @@ public interface FavoriteStatusView {
 
     void hideAddToFavoritesButton();
 
+    void showRemoveFromFavoritesButton();
+
+    void hideRemoveFromFavoritesButton();
+
     void showAddedToFavorites();
 }

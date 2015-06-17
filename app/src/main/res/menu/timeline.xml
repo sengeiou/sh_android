@@ -7,6 +7,14 @@
       android:id="@+id/menu_add_favorite"
       android:icon="@drawable/ic_action_add_favorite"
       android:title="Add to favorites"
+      android:visible="false"
+      app:showAsAction="always" />
+
+    <item
+      android:id="@+id/menu_remove_favorite"
+      android:icon="@drawable/ic_action_remove_favorite"
+      android:title="Remove from favorites"
+      android:visible="false"
       app:showAsAction="always" />
 
     <item

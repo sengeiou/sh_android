@@ -34,12 +34,12 @@ public class FavoriteStatusPresenterTest {
     }
 
     @Test
-    public void shouldHideAddToFavoritesButtonWhenInitializeIfEventIsFavorite() throws Exception {
+    public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite() throws Exception {
         setupFavoriteStatusCallbacks(true);
 
         presenter.initialize(favoriteStatusView, STUB_EVENT_ID);
 
-        verify(favoriteStatusView).hideAddToFavoritesButton();
+        verify(favoriteStatusView).showRemoveFromFavoritesButton();
     }
 
     @Test
@@ -58,6 +58,37 @@ public class FavoriteStatusPresenterTest {
         presenter.addToFavorites();
 
         verify(favoriteStatusView).hideAddToFavoritesButton();
+    }
+
+    @Test
+    public void shouldShowRemoveFromFavoritesButtonWhenAddToFavorites() throws Exception {
+        setupAddToFavoriteCallbacks();
+
+        presenter.addToFavorites();
+
+        verify(favoriteStatusView).showRemoveFromFavoritesButton();
+    }
+
+    @Test
+    public void shouldHideRemoveFromFavoritesButtonWhenRemoveFromFavorites() throws Exception {
+        setupRemoveFromFavoriteCallbacks();
+
+        presenter.removeFromFavorites();
+
+        verify(favoriteStatusView).hideRemoveFromFavoritesButton();
+    }
+
+    @Test
+    public void shouldShowAddToFavoritesButtonWhenRemoveFromFavorites() throws Exception {
+        setupRemoveFromFavoriteCallbacks();
+
+        presenter.removeFromFavorites();
+
+        verify(favoriteStatusView).showAddToFavoritesButton();
+    }
+
+    private void setupRemoveFromFavoriteCallbacks() {
+        // TODO
     }
 
     private void setupAddToFavoriteCallbacks() {

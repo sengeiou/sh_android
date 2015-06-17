@@ -15,6 +15,16 @@ public class NullFavoriteStatusView implements FavoriteStatusView {
     }
 
     @Override
+    public void showRemoveFromFavoritesButton() {
+        /* no-op */
+    }
+
+    @Override
+    public void hideRemoveFromFavoritesButton() {
+        /* no-op */
+    }
+
+    @Override
     public void showAddedToFavorites() {
         /* no-op */
     }
