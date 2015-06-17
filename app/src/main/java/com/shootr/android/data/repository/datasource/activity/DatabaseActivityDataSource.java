@@ -18,4 +18,8 @@ public class DatabaseActivityDataSource implements ActivityDataSource {
       String currentUserId, Integer maxActivities) {
         return activityManager.getActivityTimelineFromParameters(parameters);
     }
+
+    @Override public void putActivities(List<ActivityEntity> activityEntities) {
+        activityManager.saveActivities(activityEntities);
+    }
 }

@@ -8,4 +8,5 @@ public interface ActivityDataSource {
 
     List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String currentUserId, Integer maxActivities);
 
+    void putActivities(List<ActivityEntity> activityEntities);
 }

@@ -1,6 +1,8 @@
 package com.shootr.android.db.manager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.db.DatabaseContract;
@@ -55,4 +57,13 @@ public class ActivityManager extends AbstractManager {
         queryResult.close();
         return resultActivities;
     }
+
+    public void saveActivities(List<ActivityEntity> activityEntities){
+        SQLiteDatabase database = getWritableDatabase();
+        for (ActivityEntity activityEntity : activityEntities) {
+            ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
+            database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+    }
+
 }
