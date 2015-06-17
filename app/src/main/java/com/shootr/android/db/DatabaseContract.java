@@ -260,8 +260,8 @@ public class DatabaseContract {
         public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
-          ID_ACTIVITY, ID_USER, USERNAME, USER_PHOTO, COMMENT, ID_EVENT, EVENT_TAG, EVENT_TITLE,
-          TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          ID_ACTIVITY, ID_USER, USERNAME, ID_EVENT, USER_PHOTO, EVENT_TAG, EVENT_TITLE,
+          COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 }
