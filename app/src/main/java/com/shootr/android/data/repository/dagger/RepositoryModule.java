@@ -9,7 +9,11 @@ import javax.inject.Singleton;
 
 @Module(
   includes = {
-    UserRepositoryModule.class, EventRepositoryModule.class, ShotRepositoryModule.class, WatchersRepositoryModule.class
+    UserRepositoryModule.class,
+    EventRepositoryModule.class,
+    ShotRepositoryModule.class,
+    WatchersRepositoryModule.class,
+    ActivityRepositoryModule.class
   },
   complete = false,
   library = true
