@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
+import com.shootr.android.domain.interactor.event.RemoveFromFavoritesInteractor;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import javax.inject.Inject;
 
@@ -10,15 +11,17 @@ public class FavoriteStatusPresenter implements Presenter {
 
     private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
+    private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
 
     private FavoriteStatusView favoriteStatusView;
     private String idEvent;
 
     @Inject
     public FavoriteStatusPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor) {
+      AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor) {
         this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
+        this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     }
 
     public void setView(FavoriteStatusView favoriteStatusView) {
@@ -56,9 +59,13 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     public void removeFromFavorites() {
-        // TODO interactor
-        favoriteStatusView.showAddToFavoritesButton();
-        favoriteStatusView.hideRemoveFromFavoritesButton();
+        removeFromFavoritesInteractor.removeFromFavorites(idEvent, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                favoriteStatusView.showAddToFavoritesButton();
+                favoriteStatusView.hideRemoveFromFavoritesButton();
+            }
+        });
     }
 
     @Override
