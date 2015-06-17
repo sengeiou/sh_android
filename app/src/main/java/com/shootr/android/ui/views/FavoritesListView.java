@@ -11,4 +11,6 @@ public interface FavoritesListView extends LoadDataView {
     void showContent();
 
     void hideContent();
+
+    void navigateToEventTimeline(String idEvent, String title);
 }

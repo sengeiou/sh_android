@@ -12,8 +12,10 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
@@ -78,7 +80,12 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new EventsListAdapter(picasso);
+        adapter = new EventsListAdapter(picasso, new EventsListAdapter.OnEventClickListener() {
+            @Override
+            public void onEventClick(EventModel event) {
+                favoritesListPresenter.selectEvent(event);
+            }
+        });
         favoritesList.setAdapter(adapter);
     }
 
@@ -99,6 +106,11 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void hideContent() {
         favoritesList.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void navigateToEventTimeline(String idEvent, String title) {
+        startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
     }
 
     @Override

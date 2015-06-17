@@ -3,7 +3,9 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
@@ -25,13 +27,17 @@ public class FavoritesListPresenterTest {
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteEventsInteractor getFavoriteEventsInteractor;
     @Mock EventResultModelMapper eventResultModelMapper;
+    @Mock SelectEventInteractor selectEventInteractor;
+    @Mock EventModelMapper eventModelMapper;
 
     private FavoritesListPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventResultModelMapper);
+        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor,
+          selectEventInteractor,
+          eventResultModelMapper, eventModelMapper);
         presenter.setView(favoritesListView);
     }
 

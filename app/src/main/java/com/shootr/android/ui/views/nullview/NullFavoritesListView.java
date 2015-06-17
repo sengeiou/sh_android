@@ -22,6 +22,11 @@ public class NullFavoritesListView implements FavoritesListView {
     }
 
     @Override
+    public void navigateToEventTimeline(String idEvent, String title) {
+        /* no-op */
+    }
+
+    @Override
     public void showEmpty() {
         /* no-op */
     }
