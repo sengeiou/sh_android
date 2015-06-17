@@ -25,6 +25,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.EventModel;
@@ -88,7 +89,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new EventsListAdapter(picasso, new EventsListAdapter.OnEventClickListener() {
+        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(EventModel event) {
                 presenter.selectEvent(event);

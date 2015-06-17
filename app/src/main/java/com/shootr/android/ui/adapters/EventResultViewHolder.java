@@ -10,12 +10,13 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
 public class EventResultViewHolder extends RecyclerView.ViewHolder {
 
-    private final EventsListAdapter.OnEventClickListener onEventClickListener;
+    private final OnEventClickListener onEventClickListener;
     private final PicassoWrapper picasso;
 
     @InjectView(R.id.event_picture) ImageView picture;
@@ -25,7 +26,7 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
     public EventResultViewHolder(View itemView,
-      EventsListAdapter.OnEventClickListener onEventClickListener,
+      OnEventClickListener onEventClickListener,
       PicassoWrapper picasso) {
         super(itemView);
         this.onEventClickListener = onEventClickListener;
