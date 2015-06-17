@@ -579,16 +579,18 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override
     public void hideAddToFavoritesButton() {
+        addToFavoritesMenuItem.setVisible(false);
+    }
+
+    @Override
+    public void showAddedToFavorites() {
+        addToFavoritesMenuItem.setVisible(true);
         ((FavoriteIconView) addToFavoritesMenuItem.getActionView()).hideAnimated(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 addToFavoritesMenuItem.setVisible(false);
             }
         });
-    }
-
-    @Override
-    public void showAddedToFavorites() {
         Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
     }
     //endregion
