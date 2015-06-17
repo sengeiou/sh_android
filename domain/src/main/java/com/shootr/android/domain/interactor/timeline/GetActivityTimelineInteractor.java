@@ -1,26 +1,21 @@
 package com.shootr.android.domain.interactor.timeline;
 
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.Event;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.TimelineParameters;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class GetActivityTimelineInteractor implements Interactor {
@@ -29,27 +24,24 @@ public class GetActivityTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final ShotRepository localShotRepository;
-    private final EventRepository localEventRepository;
+    private final ActivityRepository localActivityRepository;
     private final UserRepository localUserRepository;
     private Callback callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetActivityTimelineInteractor(InteractorHandler interactorHandler,
                                                  PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-                                                 @Local ShotRepository localShotRepository,
-                                                 @Local EventRepository localEventRepository,
+                                                 @Local ActivityRepository localActivityRepository,
                                                  @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
-        this.localShotRepository = localShotRepository;
+        this.localActivityRepository = localActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
     }
     //endregion
 
-    public void loadActivityTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadActivityTimeline(Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -60,13 +52,13 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     private void loadLocalShots() {
-        List<Shot> shots = loadLocalShots(buildParameters());
-        shots = sortShotsByPublishDate(shots);
-        notifyTimelineFromShots(shots);
+        List<Activity> activities = loadLocalShots(buildParameters());
+        activities = sortShotsByPublishDate(activities);
+        notifyTimelineFromShots(activities);
     }
 
-    private List<Shot> loadLocalShots(ActivityTimelineParameters timelineParameters) {
-        return localShotRepository.getShotsForActivityTimeline(timelineParameters);
+    private List<Activity> loadLocalShots(ActivityTimelineParameters timelineParameters) {
+        return localActivityRepository.getActivityTimeline(timelineParameters);
     }
 
     private ActivityTimelineParameters buildParameters() {
@@ -75,8 +67,8 @@ public class GetActivityTimelineInteractor implements Interactor {
           .build();
     }
 
-    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
-        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
+    private List<Activity> sortShotsByPublishDate(List<Activity> remoteShots) {
+        Collections.sort(remoteShots, new Activity.NewerAboveComparator());
         return remoteShots;
     }
 
@@ -89,18 +81,18 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     //region Result
-    private void notifyTimelineFromShots(List<Shot> shots) {
-        Timeline timeline = buildTimeline(shots);
+    private void notifyTimelineFromShots(List<Activity> activities) {
+        ActivityTimeline timeline = buildTimeline(activities);
         notifyLoaded(timeline);
     }
 
-    private Timeline buildTimeline(List<Shot> shots) {
-        Timeline timeline = new Timeline();
-        timeline.setShots(shots);
+    private ActivityTimeline buildTimeline(List<Activity> activities) {
+        ActivityTimeline timeline = new ActivityTimeline();
+        timeline.setActivities(activities);
         return timeline;
     }
 
-    private void notifyLoaded(final Timeline timeline) {
+    private void notifyLoaded(final ActivityTimeline timeline) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);

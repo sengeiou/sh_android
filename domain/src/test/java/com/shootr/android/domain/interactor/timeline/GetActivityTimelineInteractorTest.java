@@ -1,5 +1,8 @@
 package com.shootr.android.domain.interactor.timeline;
 
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
+import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
@@ -9,10 +12,11 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -40,9 +44,9 @@ public class GetActivityTimelineInteractorTest {
     private static final Long DATE_MIDDLE = 2000L;
     private static final Long DATE_NEWER = 3000L;
 
-    @Mock ShotRepository localShotRepository;
+    @Mock ActivityRepository localActivityRepository;
     @Mock UserRepository localUserRepository;
-    @Spy SpyCallback spyCallback = new SpyCallback();
+    @Spy com.shootr.android.domain.interactor.SpyCallback<ActivityTimeline> spyCallback = new com.shootr.android.domain.interactor.SpyCallback<>();
     @Mock EventRepository eventRepository;
     @Mock SessionRepository sessionRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
@@ -61,9 +65,7 @@ public class GetActivityTimelineInteractorTest {
 
         interactor = new GetActivityTimelineInteractor(interactorHandler,
                 postExecutionThread,
-                sessionRepository,
-                localShotRepository,
-                eventRepository,
+                sessionRepository, localActivityRepository,
                 localUserRepository
         );
     }
@@ -71,22 +73,24 @@ public class GetActivityTimelineInteractorTest {
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
+          unorderedActivities());
 
         interactor.loadActivityTimeline(spyCallback, errorCallback);
-        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
     }
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoEventWatching() throws Exception {
-        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
+        when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
+          unorderedActivities());
 
         interactor.loadActivityTimeline(spyCallback, errorCallback);
-        List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
+        List<Activity> localShotsReturned = spyCallback.lastResult().getActivities();
 
-        assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
+        assertThat(localShotsReturned).isSortedAccordingTo(new Activity.NewerAboveComparator());
     }
 
     private User currentUserWatching() {
@@ -96,14 +100,14 @@ public class GetActivityTimelineInteractorTest {
         return user;
     }
 
-    private List<Shot> unorderedShots() {
-        return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
+    private List<Activity> unorderedActivities() {
+        return Arrays.asList(activityWithDate(DATE_MIDDLE), activityWithDate(DATE_OLDER), activityWithDate(DATE_NEWER));
     }
 
-    private Shot shotWithDate(Long date) {
-        Shot shot = new Shot();
-        shot.setPublishDate(new Date(date));
-        return shot;
+    private Activity activityWithDate(Long date) {
+        Activity activity = new Activity();
+        activity.setPublishDate(new Date(date));
+        return activity;
     }
 
     private void setupWatchingEvent() {
