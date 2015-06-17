@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,8 +17,8 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventsListFragment;
+import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.CurrentUserPresenter;
@@ -76,6 +78,26 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         currentUserPresenter.pause();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_activity) {
+            navigateToActivity();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void navigateToActivity() {
+        startActivity(new Intent(this, ActivityTimelineContainerActivity.class));
+    }
+
     @Deprecated
     private void startGCMRegistration() {
         GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
@@ -109,9 +131,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ActivityTimelineFragment.newInstance();
+                    return FavoritesFragment.newInstance();
                 case 1:
-                    return EventsListFragment.newInstance(); //TODO
+                    return EventsListFragment.newInstance();
                 case 2:
                     return PeopleFragment.newInstance();
                 default:
@@ -129,7 +151,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.drawer_activity_title).toUpperCase(l);
+                    return getString(R.string.drawer_favorites_title).toUpperCase(l);
                 case 1:
                     return getString(R.string.drawer_events_title).toUpperCase(l);
                 case 2:

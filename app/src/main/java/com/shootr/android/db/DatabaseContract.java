@@ -240,4 +240,21 @@ public class DatabaseContract {
           ID, USER_NAME, EMAIL_ENCRYPTED, USERNAME_OR_EMAIL
         };
     }
+
+    public static final class FavoriteTable implements SyncColumns {
+
+        private FavoriteTable() {
+        }
+
+        public static final String TABLE = "Favorite";
+
+        public static final String ID_EVENT = "idEvent";
+        public static final String ORDER = "position";
+
+        public static final String[] PROJECTION = {
+          ID_EVENT, ORDER,
+          BIRTH, MODIFIED, DELETED, SYNCHRONIZED, REVISION
+        };
+
+    }
 }

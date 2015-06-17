@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.EventApiService;
+import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
@@ -56,6 +57,11 @@ public final class ApiModule {
     @Provides
     ShotApiService provideShotApiService(RestAdapter restAdapter) {
         return restAdapter.create(ShotApiService.class);
+    }
+
+    @Provides
+    FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter) {
+        return restAdapter.create(FavoriteApiService.class);
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {

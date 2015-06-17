@@ -18,8 +18,9 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
     private String currentCheckedInEvent;
     private OnEventClickListener onEventClickListener;
 
-    public EventsListAdapter(PicassoWrapper picasso) {
+    public EventsListAdapter(PicassoWrapper picasso, OnEventClickListener onEventClickListener) {
         this.picasso = picasso;
+        this.onEventClickListener = onEventClickListener;
     }
 
     public void setEvents(List<EventResultModel> events) {
@@ -83,10 +84,6 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     public void setCurrentWatchingEvent(EventResultModel event) {
         this.setHeader(event);
-    }
-
-    public void setOnEventClickListener(OnEventClickListener onEventClickListener) {
-        this.onEventClickListener = onEventClickListener;
     }
 
     public interface OnEventClickListener {

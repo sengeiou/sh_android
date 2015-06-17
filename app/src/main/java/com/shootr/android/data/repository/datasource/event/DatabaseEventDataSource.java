@@ -17,7 +17,7 @@ public class DatabaseEventDataSource implements EventDataSource {
         return eventManager.getEventById(idEvent);
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) {
+    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) {
         return eventManager.getEventsByIds(eventIds);
     }
 

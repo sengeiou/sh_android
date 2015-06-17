@@ -3,18 +3,14 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
-
-import com.shootr.android.domain.Event;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class EventManager extends AbstractManager{
@@ -45,12 +41,15 @@ public class EventManager extends AbstractManager{
         return eventEntity;
     }
 
-    public List<EventEntity> getEventsByIds(List<Long> eventIds) {
+    public List<EventEntity> getEventsByIds(List<String> eventIds) {
+        if (eventIds.isEmpty()) {
+            return new ArrayList<>();
+        }
         String whereSelection = DatabaseContract.EventTable.ID_EVENT
           + " IN (" + createListPlaceholders(eventIds.size())+")";
         String[] whereArguments = new String[eventIds.size()];
         for (int i = 0; i < eventIds.size(); i++) {
-            whereArguments[i] = String.valueOf(eventIds.get(i));
+            whereArguments[i] = eventIds.get(i);
         }
 
         Cursor queryResult =

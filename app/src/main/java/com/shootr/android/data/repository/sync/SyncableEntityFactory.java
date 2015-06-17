@@ -13,9 +13,9 @@ public abstract class SyncableEntityFactory<Domain, Entity extends Synchronized>
         }
     }
 
-    protected abstract Entity currentEntity(Domain watch);
+    protected abstract Entity currentEntity(Domain domain);
 
-    protected abstract Entity updateValues(Entity currentWatchEntity, Domain watch);
+    protected abstract Entity updateValues(Entity currentEntity, Domain watch);
 
-    protected abstract Entity createNewEntity(Domain watch);
+    protected abstract Entity createNewEntity(Domain domain);
 }

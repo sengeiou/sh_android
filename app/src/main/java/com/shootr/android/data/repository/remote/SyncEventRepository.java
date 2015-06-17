@@ -39,7 +39,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         }
     }
 
-    @Override public List<Event> getEventsByIds(List<Long> eventIds) {
+    @Override public List<Event> getEventsByIds(List<String> eventIds) {
         List<EventEntity> remoteEvents = remoteEventDataSource.getEventsByIds(eventIds);
         markEntitiesAsSynchronized(remoteEvents);
         localEventDataSource.putEvents(remoteEvents);

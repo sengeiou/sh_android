@@ -140,7 +140,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     //region Synchronization
     private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
-        Timber.w(reason, "User upload queued: idUser %d", userEntity.getIdUser());
+        Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());
         prepareEntityForSynchronization(userEntity);
         syncTrigger.notifyNeedsSync(this);
     }

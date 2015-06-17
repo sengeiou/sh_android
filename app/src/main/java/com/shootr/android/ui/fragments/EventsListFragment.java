@@ -23,7 +23,6 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.EventTimelineActivity;
-import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
@@ -89,14 +88,13 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new EventsListAdapter(picasso);
-        eventsList.setAdapter(adapter);
-
-        adapter.setOnEventClickListener(new EventsListAdapter.OnEventClickListener() {
-            @Override public void onEventClick(EventModel event) {
+        adapter = new EventsListAdapter(picasso, new EventsListAdapter.OnEventClickListener() {
+            @Override
+            public void onEventClick(EventModel event) {
                 presenter.selectEvent(event);
             }
         });
+        eventsList.setAdapter(adapter);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
           R.color.refresh_2,

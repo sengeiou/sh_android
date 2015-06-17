@@ -27,6 +27,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_EVENT);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT_QUEUE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_EVENT_SEARCH);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_FAVORITE);
 
     }
 

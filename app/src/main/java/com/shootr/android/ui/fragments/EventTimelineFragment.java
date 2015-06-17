@@ -1,5 +1,7 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,21 +40,25 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.TimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
+import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
+import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.views.nullview.NullCheckinView;
 import com.shootr.android.ui.views.nullview.NullTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
 import java.io.File;
@@ -61,7 +67,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EventTimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView {
+  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView, FavoriteStatusView {
 
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
@@ -70,6 +76,7 @@ public class EventTimelineFragment extends BaseFragment
     @Inject TimelinePresenter timelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
+    @Inject FavoriteStatusPresenter favoriteStatusPresenter;
 
     @Inject CheckinPresenter checkinPresenter;
     @Inject PicassoWrapper picasso;
@@ -98,6 +105,8 @@ public class EventTimelineFragment extends BaseFragment
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
     private View footerProgress;
+    private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
 
     public static EventTimelineFragment newInstance(String eventId, String eventTitle) {
@@ -133,6 +142,7 @@ public class EventTimelineFragment extends BaseFragment
         checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
+        favoriteStatusPresenter.setView(new NullFavoriteStatusView());
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -153,6 +163,12 @@ public class EventTimelineFragment extends BaseFragment
         watchersMenuItem = menu.findItem(R.id.menu_info);
         watchersMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
+        addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_add_favorite));
+        addToFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove_favorite));
+        removeFromFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         if (isAdded()) {
             LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
             icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
@@ -168,6 +184,12 @@ public class EventTimelineFragment extends BaseFragment
             case R.id.menu_info:
                 watchNumberPresenter.onWatchNumberClick();
                 return true;
+            case R.id.menu_add_favorite:
+                favoriteStatusPresenter.addToFavorites();
+                return true;
+            case R.id.menu_remove_favorite:
+                favoriteStatusPresenter.removeFromFavorites();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -179,6 +201,7 @@ public class EventTimelineFragment extends BaseFragment
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
         checkinPresenter.resume();
+        favoriteStatusPresenter.resume();
     }
 
     @Override public void onPause() {
@@ -187,6 +210,7 @@ public class EventTimelineFragment extends BaseFragment
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
         checkinPresenter.pause();
+        favoriteStatusPresenter.pause();
     }
 
     private void initializeToolbar() {
@@ -194,12 +218,12 @@ public class EventTimelineFragment extends BaseFragment
         toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
     }
 
-
     private void initializePresenters(String idEvent) {
         timelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);
+        favoriteStatusPresenter.initialize(this, idEvent);
     }
 
     //endregion
@@ -548,6 +572,31 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void showCheckinButton() {
         checkinButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showAddToFavoritesButton() {
+        addToFavoritesMenuItem.setVisible(true);
+    }
+
+    @Override
+    public void hideAddToFavoritesButton() {
+        addToFavoritesMenuItem.setVisible(false);
+    }
+
+    @Override
+    public void showRemoveFromFavoritesButton() {
+        removeFromFavoritesMenuItem.setVisible(true);
+    }
+
+    @Override
+    public void hideRemoveFromFavoritesButton() {
+        removeFromFavoritesMenuItem.setVisible(false);
+    }
+
+    @Override
+    public void showAddedToFavorites() {
+        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
     //endregion
 }

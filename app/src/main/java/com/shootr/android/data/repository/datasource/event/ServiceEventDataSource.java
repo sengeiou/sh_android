@@ -27,7 +27,7 @@ public class ServiceEventDataSource implements EventDataSource {
         }
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) {
+    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) {
         try {
             return service.getEventsByIds(eventIds);
         } catch (IOException e) {
