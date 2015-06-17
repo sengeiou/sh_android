@@ -22,6 +22,7 @@ public class ActivityEntityMapper {
         activity.setIdActivity(activityEntity.getIdActivity());
         activity.setComment(activityEntity.getComment());
         activity.setType(activityEntity.getType());
+        activity.setPublishDate(activityEntity.getBirth());
 
 
         if (activityEntity.getIdEvent() != null) {

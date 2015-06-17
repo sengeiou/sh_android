@@ -1,5 +1,8 @@
 package com.shootr.android.domain;
 
+import java.util.Comparator;
+import java.util.Date;
+
 public class Activity {
 
     private String idActivity;
@@ -10,9 +13,19 @@ public class Activity {
     private String eventTag;
     private String comment;
     private String type;
+    private Date publishDate;
 
     private ActivityUserInfo userInfo;
+
     private ActivityEventInfo eventInfo;
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
+    }
 
     public ActivityUserInfo getUserInfo() {
         return userInfo;
@@ -201,6 +214,13 @@ public class Activity {
               "eventTitle='" + eventTitle + '\'' +
               ", idEvent=" + idEvent +
               '}';
+        }
+    }
+
+    public static class NewerAboveComparator implements Comparator<Activity> {
+
+        @Override public int compare(Activity a1, Activity a2) {
+            return a2.getPublishDate().compareTo(a1.getPublishDate());
         }
     }
 }
