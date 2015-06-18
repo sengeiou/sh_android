@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.FavoriteEntity;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FavoriteTable;
 import com.shootr.android.db.mappers.FavoriteEntityCursorMapper;
 import java.util.ArrayList;
@@ -62,5 +63,11 @@ public class FavoriteManager extends AbstractManager {
         }
         queryResult.close();
         return results;
+    }
+
+    public void deleteEventByIdEvent(String eventId) {
+        String whereClause = FavoriteTable.ID_EVENT + " = ?";
+        String[] whereArgs = new String[] { eventId };
+        getWritableDatabase().delete(FavoriteTable.TABLE, whereClause, whereArgs);
     }
 }

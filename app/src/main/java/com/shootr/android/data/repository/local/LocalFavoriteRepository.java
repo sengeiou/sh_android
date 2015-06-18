@@ -40,4 +40,9 @@ public class LocalFavoriteRepository implements FavoriteRepository {
         FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdEvent(eventId);
         return favoriteEntityMapper.transform(favoriteByIdEvent);
     }
+
+    @Override
+    public void removeFavoriteByEvent(String eventId) {
+        localFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+    }
 }

@@ -32,6 +32,11 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
+    public void removeFavoriteByIdEvent(String eventId) {
+        favoriteManager.deleteEventByIdEvent(eventId);
+    }
+
+    @Override
     public List<FavoriteEntity> getEntitiesNotSynchronized() {
         List<FavoriteEntity> favorites = favoriteManager.getFavorites();
         List<FavoriteEntity> favoritesNotSynchronized = new ArrayList<>(favorites.size());
