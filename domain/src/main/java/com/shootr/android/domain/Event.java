@@ -137,4 +137,12 @@ public class Event {
             return rank;
         }
     }
+
+    public static class EventNameComparator implements Comparator<Event> {
+
+        @Override
+        public int compare(Event left, Event right) {
+            return left.getTitle().compareTo(right.getTitle());
+        }
+    }
 }
