@@ -64,7 +64,7 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public User putUser(User user) {
-        UserEntity currentOrNewEntity = syncableUserEntityFactory.currentOrNewEntity(user);
+        UserEntity currentOrNewEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
         localUserDataSource.putUser(currentOrNewEntity);
         return user;
     }

@@ -51,7 +51,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     @Override public Event putEvent(Event event, boolean notify) {
-        EventEntity currentOrNewEntity = syncableEventEntityFactory.currentOrNewEntity(event);
+        EventEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(event);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
         EventEntity remoteEventEntity = remoteEventDataSource.putEvent(currentOrNewEntity);

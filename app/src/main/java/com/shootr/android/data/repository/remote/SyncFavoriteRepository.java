@@ -39,13 +39,13 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     @Override
     public void putFavorite(Favorite favorite) {
-        FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.currentOrNewEntity(favorite);
+        FavoriteEntity updatedOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         try {
-            FavoriteEntity remoteFavoriteEntity = remoteFavoriteDataSource.putFavorite(currentOrNewEntity);
+            FavoriteEntity remoteFavoriteEntity = remoteFavoriteDataSource.putFavorite(updatedOrNewEntity);
             markEntitySynchronized(remoteFavoriteEntity);
             localFavoriteDataSource.putFavorite(remoteFavoriteEntity);
         } catch (ServerCommunicationException error) {
-            queueUpload(currentOrNewEntity, error);
+            queueUpload(updatedOrNewEntity, error);
         }
     }
 

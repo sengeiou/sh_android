@@ -25,7 +25,7 @@ public class LocalFavoriteRepository implements FavoriteRepository {
 
     @Override
     public void putFavorite(Favorite favorite) {
-        FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.currentOrNewEntity(favorite);
+        FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         localFavoriteDataSource.putFavorite(currentOrNewEntity);
     }
 

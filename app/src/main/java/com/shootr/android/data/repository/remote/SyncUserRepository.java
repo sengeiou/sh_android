@@ -125,7 +125,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public User putUser(User user) {
-        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.currentOrNewEntity(user);
+        UserEntity currentOrNewUserEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
         try {
             UserEntity remoteWatchEntity = remoteUserDataSource.putUser(currentOrNewUserEntity);
             markEntitySynchronized(remoteWatchEntity);

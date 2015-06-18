@@ -2,8 +2,7 @@ package com.shootr.android.data.repository.sync;
 
 public abstract class SyncableEntityFactory<Domain, Entity> {
 
-
-    public Entity currentOrNewEntity(Domain domain) {
+    public Entity updatedOrNewEntity(Domain domain) {
         Entity currentEntity = currentEntity(domain);
         if (currentEntity == null) {
             return createNewEntity(domain);
