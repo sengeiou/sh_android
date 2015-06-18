@@ -38,13 +38,6 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
 
     @Override
     public List<FavoriteEntity> getEntitiesNotSynchronized() {
-        List<FavoriteEntity> favorites = favoriteManager.getFavorites();
-        List<FavoriteEntity> favoritesNotSynchronized = new ArrayList<>(favorites.size());
-        for (FavoriteEntity favorite : favorites) {
-            if (!Synchronized.SYNC_SYNCHRONIZED.equals(favorite.getSynchronizedStatus())) {
-                favoritesNotSynchronized.add(favorite);
-            }
-        }
-        return favoritesNotSynchronized;
+        return favoriteManager.getFavoritesNotSynchronized();
     }
 }
