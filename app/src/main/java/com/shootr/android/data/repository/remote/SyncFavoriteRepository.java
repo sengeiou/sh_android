@@ -44,6 +44,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
             FavoriteEntity remoteFavoriteEntity = remoteFavoriteDataSource.putFavorite(updatedOrNewEntity);
             markEntitySynchronized(remoteFavoriteEntity);
             localFavoriteDataSource.putFavorite(remoteFavoriteEntity);
+            syncTrigger.triggerSync();
         } catch (ServerCommunicationException error) {
             queueUpload(updatedOrNewEntity, error);
         }
@@ -51,6 +52,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     @Override
     public List<Favorite> getFavorites() {
+        syncTrigger.triggerSync();
         List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites();
         // TODO Use method for putting the entire collection at once
         for (FavoriteEntity remoteFavorite : remoteFavorites) {
@@ -67,7 +69,20 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     @Override
     public void removeFavoriteByEvent(String eventId) {
-        remoteFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+        try {
+            syncTrigger.triggerSync();
+            remoteFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+            localFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+        } catch (ServerCommunicationException error) {
+            queueUpload(buildDeletedEntity(eventId), error);
+        }
+    }
+
+    private FavoriteEntity buildDeletedEntity(String eventId) {
+        FavoriteEntity deletedEntity = new FavoriteEntity();
+        deletedEntity.setIdEvent(eventId);
+        deletedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_DELETED);
+        return deletedEntity;
     }
 
     private void markEntitySynchronized(FavoriteEntity favoriteEntity) {
@@ -100,9 +115,14 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     public void dispatchSync() {
         List<FavoriteEntity> notSynchronized = localFavoriteDataSource.getEntitiesNotSynchronized();
         for (FavoriteEntity favoriteEntityEntity : notSynchronized) {
-            FavoriteEntity synchedEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
-            localFavoriteDataSource.putFavorite(synchedEntity);
+            if (LocalSynchronized.SYNC_DELETED.equals(favoriteEntityEntity.getSynchronizedStatus())) {
+                remoteFavoriteDataSource.removeFavoriteByIdEvent(favoriteEntityEntity.getIdEvent());
+                localFavoriteDataSource.removeFavoriteByIdEvent(favoriteEntityEntity.getIdEvent());
+            } else {
+                FavoriteEntity synchedEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
                 synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+                localFavoriteDataSource.putFavorite(synchedEntity);
+            }
         }
     }
 }
