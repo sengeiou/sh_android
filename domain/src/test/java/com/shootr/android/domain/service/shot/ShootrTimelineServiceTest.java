@@ -3,6 +3,7 @@ package com.shootr.android.domain.service.shot;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
@@ -190,7 +191,7 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldReturnAllTypesOfActivitiesIfIsNotTheFirstLoad(){
+    public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity(){
         setupWatchingEvent();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
 
@@ -198,11 +199,11 @@ public class ShootrTimelineServiceTest {
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue().getIncludedTypes().containsAll(allActivityTypes()));
+        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(allActivityTypes());
     }
 
     @Test
-    public void shouldReturnVisibleTypesOfActivitiesIfIsNotTheFirstLoad(){
+    public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity(){
         setupWatchingEvent();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
 
@@ -210,22 +211,19 @@ public class ShootrTimelineServiceTest {
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
-        assertThat(!argumentCaptor.getValue().getIncludedTypes().containsAll(allActivityTypes()));
+        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
+    }
+
+    private String[] visibleActivityTypes() {
+        return ActivityType.TYPES_ACTIVITY_SHOWN;
     }
 
     private List<Activity> emptyActivityList() {
         return Collections.EMPTY_LIST;
     }
 
-    private List<String> allActivityTypes() {
-        String[] TYPES_ACTIVITY = { "CHECKIN",
-          "EXITEVENT",
-          "JOINEVENT",
-          "LISTEDEVENT",
-          "PROFILEUPDATED",
-          "STARTFOLLOW",
-          "UPDATEEVENT" };
-        return Arrays.asList(TYPES_ACTIVITY);
+    private String[] allActivityTypes() {
+        return ActivityType.TYPES_ACTIVITY;
     }
 
     //region Setups and stubs
