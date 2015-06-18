@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.local;
 
+import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.data.mapper.ActivityEntityMapper;
 import com.shootr.android.data.repository.datasource.activity.ActivityDataSource;
 import com.shootr.android.domain.Activity;
@@ -27,7 +28,8 @@ public class LocalActivityRepository implements ActivityRepository{
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         String currentUserId = sessionRepository.getCurrentUserId();
-        localActivityDataSource.getActivityTimeline(parameters,currentUserId, MAX_ACTIVITIES);
-        return null;
+        List<ActivityEntity> activityTimeline =
+          localActivityDataSource.getActivityTimeline(parameters, currentUserId, MAX_ACTIVITIES);
+        return activityEntityMapper.transform(activityTimeline);
     }
 }
