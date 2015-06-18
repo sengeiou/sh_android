@@ -54,18 +54,18 @@ public class ActivityTimelinePresenter implements Presenter {
                 if (!shouldPoll) {
                     return;
                 }
-                loadNewShots();
+                loadNewActivities();
                 scheduleNextPolling();
             }
         };
     }
 
-    private void startPollingShots() {
+    private void startPollingActivities() {
         shouldPoll = true;
         scheduleNextPolling();
     }
 
-    private void stopPollingShots() {
+    private void stopPollingActivities() {
         shouldPoll = false;
         pollActivitiesHanlder.removeCallbacks(pollActivitiesRunnable);
     }
@@ -101,17 +101,16 @@ public class ActivityTimelinePresenter implements Presenter {
 
     public void refresh() {
         timelineView.showLoading();
-        this.loadNewShots();
+        this.loadNewActivities();
     }
 
-    public void showingLastShot(ActivityModel lastActivity) {
+    public void showingLastActivity(ActivityModel lastActivity) {
         if (!isLoadingOlderActivities && mightHaveMoreActivities) {
-            this.loadOlderShots(lastActivity.getPublishDate().getTime());
+            this.loadOlderActivities(lastActivity.getPublishDate().getTime());
         }
     }
 
-    private void
-    loadNewShots() {
+    private void loadNewActivities() {
         activityTimelineInteractorWrapper.refreshTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
@@ -130,10 +129,10 @@ public class ActivityTimelinePresenter implements Presenter {
         });
     }
 
-    private void loadOlderShots(long lastShotInScreenDate) {
+    private void loadOlderActivities(long lastActivityInScreenDate) {
         isLoadingOlderActivities = true;
         timelineView.showLoadingOldActivities();
-        activityTimelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<ActivityTimeline>() {
+        activityTimelineInteractorWrapper.obtainOlderTimeline(lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 isLoadingOlderActivities = false;
                 timelineView.hideLoadingOldActivities();
@@ -153,13 +152,13 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        loadNewShots();
+        loadNewActivities();
         bus.register(this);
-        startPollingShots();
+        startPollingActivities();
     }
 
     @Override public void pause() {
         bus.unregister(this);
-        stopPollingShots();
+        stopPollingActivities();
     }
 }
