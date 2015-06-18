@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -48,16 +47,16 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        loadLocalShots();
+        loadLocalActivities();
     }
 
-    private void loadLocalShots() {
-        List<Activity> activities = loadLocalShots(buildParameters());
-        activities = sortShotsByPublishDate(activities);
-        notifyTimelineFromShots(activities);
+    private void loadLocalActivities() {
+        List<Activity> activities = loadLocalActivities(buildParameters());
+        activities = sortActivitiesByPublishDate(activities);
+        notifyTimelineFromActivities(activities);
     }
 
-    private List<Activity> loadLocalShots(ActivityTimelineParameters timelineParameters) {
+    private List<Activity> loadLocalActivities(ActivityTimelineParameters timelineParameters) {
         return localActivityRepository.getActivityTimeline(timelineParameters);
     }
 
@@ -67,9 +66,9 @@ public class GetActivityTimelineInteractor implements Interactor {
           .build();
     }
 
-    private List<Activity> sortShotsByPublishDate(List<Activity> remoteShots) {
-        Collections.sort(remoteShots, new Activity.NewerAboveComparator());
-        return remoteShots;
+    private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
+        Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
+        return remoteActivities;
     }
 
     private List<String> getPeopleIds() {
@@ -81,7 +80,7 @@ public class GetActivityTimelineInteractor implements Interactor {
     }
 
     //region Result
-    private void notifyTimelineFromShots(List<Activity> activities) {
+    private void notifyTimelineFromActivities(List<Activity> activities) {
         ActivityTimeline timeline = buildTimeline(activities);
         notifyLoaded(timeline);
     }

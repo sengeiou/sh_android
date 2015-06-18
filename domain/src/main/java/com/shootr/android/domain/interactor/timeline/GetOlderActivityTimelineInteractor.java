@@ -52,8 +52,8 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
         try {
             ActivityTimelineParameters timelineParameters = buildTimelineParameters();
             List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters);
-            sortShotsByPublishDate(olderActivities);
-            notifyTimelineFromShots(olderActivities);
+            sortActivitiesByPublishDate(olderActivities);
+            notifyTimelineFromActivities(olderActivities);
         } catch (ShootrException error) {
             notifyError(error);
         }
@@ -66,7 +66,7 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
                 .build();
     }
 
-    private List<Activity> sortShotsByPublishDate(List<Activity> remoteActivities) {
+    private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
         Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
         return remoteActivities;
     }
@@ -80,7 +80,7 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     }
 
     //region Result
-    private void notifyTimelineFromShots(List<Activity> activities) {
+    private void notifyTimelineFromActivities(List<Activity> activities) {
         ActivityTimeline timeline = buildTimeline(activities);
         notifyLoaded(timeline);
     }
