@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.EmptyResponse;
 import com.shootr.android.data.api.entity.FavoriteApiEntity;
 import com.shootr.android.data.api.entity.mapper.FavoriteApiEntityMapper;
 import com.shootr.android.data.api.service.FavoriteApiService;
@@ -9,6 +10,9 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
@@ -44,6 +48,11 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
         List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(currentUserId());
         storeEmbedEvents(favorites);
         return favoriteApiEntityMapper.transform(favorites);
+    }
+
+    @Override
+    public void removeFavoriteByIdEvent(String eventId) {
+        favoriteApiService.deleteFavorite(currentUserId(), eventId, new EmptyResponse());
     }
 
     @Override
