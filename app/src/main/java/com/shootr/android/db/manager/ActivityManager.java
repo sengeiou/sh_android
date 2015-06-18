@@ -60,10 +60,17 @@ public class ActivityManager extends AbstractManager {
 
     public void saveActivities(List<ActivityEntity> activityEntities){
         SQLiteDatabase database = getWritableDatabase();
-        for (ActivityEntity activityEntity : activityEntities) {
-            ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
-            database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        try{
+            database.beginTransaction();
+            for (ActivityEntity activityEntity : activityEntities) {
+                ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
+                database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            database.setTransactionSuccessful();
+        }finally {
+            database.endTransaction();
         }
+
     }
 
 }
