@@ -1,11 +1,14 @@
 package com.shootr.android.domain.service.shot;
 
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -48,6 +51,8 @@ public class ShootrTimelineServiceTest {
     @Mock EventRepository localEventRepository;
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
+    @Mock ActivityRepository remoteActivityRepository;
+    @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock ShotRepository localShotRepository;
 
@@ -59,8 +64,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService = new ShootrTimelineService(sessionRepository,
           localEventRepository,
           localUserRepository,
-          remoteShotRepository,
-          localShotRepository,
+          remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
           timelineSynchronizationRepository);
     }
 
@@ -82,30 +86,32 @@ public class ShootrTimelineServiceTest {
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        verify(remoteShotRepository).getShotsForActivityTimeline(anyActivityParameters());
+        verify(remoteActivityRepository).getActivityTimeline(anyActivityParameters());
     }
 
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
-          eventShotListWithMultipleShots());
+        List<Activity> activities = activitiesList();
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
+        assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
+        List<Activity> activities = activitiesList();
         when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
           eventShotListWithMultipleShots());
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
+        assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
     @Test
@@ -235,6 +241,19 @@ public class ShootrTimelineServiceTest {
         shots.add(eventShot());
         shots.add(eventShot());
         return shots;
+    }
+
+    private List<Activity> activitiesList(){
+        List<Activity> shots = new ArrayList<>();
+        shots.add(activity());
+        shots.add(activity());
+        return shots;
+    }
+
+    private Activity activity() {
+        Activity activity = new Activity();
+        activity.setPublishDate(new Date());
+        return activity;
     }
 
     private Shot eventShot() {
