@@ -253,7 +253,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_EVENT, ORDER,
-          BIRTH, MODIFIED, DELETED, SYNCHRONIZED, REVISION
+          SYNCHRONIZED,
         };
 
     }

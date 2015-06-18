@@ -17,10 +17,6 @@ public class FavoriteApiEntityMapper {
         FavoriteEntity entity = new FavoriteEntity();
         entity.setIdEvent(apiEntity.getIdEvent());
         entity.setOrder(apiEntity.getOrder());
-        entity.setBirth(toDate(apiEntity.getBirth()));
-        entity.setModified(toDate(apiEntity.getModified()));
-        entity.setDeleted(toDate(apiEntity.getDeleted()));
-        entity.setRevision(apiEntity.getRevision());
         entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
         return entity;
     }
