@@ -55,6 +55,7 @@ public class ShootrTimelineServiceTest {
     @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock ActivityTimelineParameters activityTimelineParameters;
 
     private ShootrTimelineService shootrTimelineService;
 
@@ -186,6 +187,45 @@ public class ShootrTimelineServiceTest {
         Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
 
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
+    }
+
+    @Test
+    public void shouldReturnAllTypesOfActivitiesIfIsNotTheFirstLoad(){
+        setupWatchingEvent();
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
+
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getIncludedTypes().containsAll(allActivityTypes()));
+    }
+
+    @Test
+    public void shouldReturnVisibleTypesOfActivitiesIfIsNotTheFirstLoad(){
+        setupWatchingEvent();
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
+
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        assertThat(!argumentCaptor.getValue().getIncludedTypes().containsAll(allActivityTypes()));
+    }
+
+    private List<Activity> emptyActivityList() {
+        return Collections.EMPTY_LIST;
+    }
+
+    private List<String> allActivityTypes() {
+        String[] TYPES_ACTIVITY = { "CHECKIN",
+          "EXITEVENT",
+          "JOINEVENT",
+          "LISTEDEVENT",
+          "PROFILEUPDATED",
+          "STARTFOLLOW",
+          "UPDATEEVENT" };
+        return Arrays.asList(TYPES_ACTIVITY);
     }
 
     //region Setups and stubs
