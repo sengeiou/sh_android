@@ -2,13 +2,10 @@ package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
-import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
 import java.util.ArrayList;
@@ -26,7 +23,7 @@ public class RefreshActivityTimelineInteractorTest {
 
     private RefreshActivityTimelineInteractor interactor;
 
-    @Spy com.shootr.android.domain.interactor.SpyCallback<ActivityTimeline> spyCallback = new com.shootr.android.domain.interactor.SpyCallback<>();
+    @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
 
@@ -56,11 +53,11 @@ public class RefreshActivityTimelineInteractorTest {
         return timeline;
     }
 
-    static class SpyCallback implements Interactor.Callback<Timeline> {
+    static class SpyCallback implements Interactor.Callback<ActivityTimeline> {
 
-        public List<Timeline> timelinesReturned = new ArrayList<>();
+        public List<ActivityTimeline> timelinesReturned = new ArrayList<>();
 
-        @Override public void onLoaded(Timeline timeline) {
+        @Override public void onLoaded(ActivityTimeline timeline) {
             timelinesReturned.add(timeline);
         }
     }
