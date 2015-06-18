@@ -107,6 +107,57 @@ public class Activity {
         this.type = type;
     }
 
+    @Override public String toString() {
+        return "Activity{" +
+          "idActivity='" + idActivity + '\'' +
+          ", idUser='" + idUser + '\'' +
+          ", username='" + username + '\'' +
+          ", idEvent='" + idEvent + '\'' +
+          ", eventTitle='" + eventTitle + '\'' +
+          ", eventTag='" + eventTag + '\'' +
+          ", comment='" + comment + '\'' +
+          ", type='" + type + '\'' +
+          ", publishDate=" + publishDate +
+          ", userInfo=" + userInfo +
+          ", eventInfo=" + eventInfo +
+          '}';
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Activity)) return false;
+
+        Activity activity = (Activity) o;
+
+        if (idActivity != null ? !idActivity.equals(activity.idActivity) : activity.idActivity != null) return false;
+        if (idUser != null ? !idUser.equals(activity.idUser) : activity.idUser != null) return false;
+        if (username != null ? !username.equals(activity.username) : activity.username != null) return false;
+        if (idEvent != null ? !idEvent.equals(activity.idEvent) : activity.idEvent != null) return false;
+        if (eventTitle != null ? !eventTitle.equals(activity.eventTitle) : activity.eventTitle != null) return false;
+        if (eventTag != null ? !eventTag.equals(activity.eventTag) : activity.eventTag != null) return false;
+        if (comment != null ? !comment.equals(activity.comment) : activity.comment != null) return false;
+        if (type != null ? !type.equals(activity.type) : activity.type != null) return false;
+        if (publishDate != null ? !publishDate.equals(activity.publishDate) : activity.publishDate != null)
+            return false;
+        if (userInfo != null ? !userInfo.equals(activity.userInfo) : activity.userInfo != null) return false;
+        return !(eventInfo != null ? !eventInfo.equals(activity.eventInfo) : activity.eventInfo != null);
+    }
+
+    @Override public int hashCode() {
+        int result = idActivity != null ? idActivity.hashCode() : 0;
+        result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (idEvent != null ? idEvent.hashCode() : 0);
+        result = 31 * result + (eventTitle != null ? eventTitle.hashCode() : 0);
+        result = 31 * result + (eventTag != null ? eventTag.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
+        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
+        return result;
+    }
+
     public static class ActivityUserInfo {
 
         private String idUser;
