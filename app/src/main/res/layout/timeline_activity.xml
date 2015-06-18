@@ -15,6 +15,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/include_timeline_empty" />
+    <include layout="@layout/include_timeline_activity_empty" />
 
 </FrameLayout>
