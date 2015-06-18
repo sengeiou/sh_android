@@ -24,7 +24,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters,
       String currentUserId) {
         try {
-            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(currentUserId, parameters.getIncludedTypes(), parameters.getLimit());
+            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(currentUserId, parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
             return activityApiEntityMapper.transform(activities);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
