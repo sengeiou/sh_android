@@ -62,6 +62,7 @@ public class ShootrTimelineService {
         Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
 
         ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
+          .currentUser(sessionRepository.getCurrentUserId()) //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
           .since(activityRefreshDateSince) //
           .build();
@@ -76,6 +77,7 @@ public class ShootrTimelineService {
     private ActivityTimelineParameters visibleActivityParameters(Long activityRefreshDateSince) {
         ActivityTimelineParameters activityTimelineParameters;
         activityTimelineParameters = ActivityTimelineParameters.builder() //
+          .currentUser(sessionRepository.getCurrentUserId()) //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
           .forShownAcitivityTypes() //
           .since(activityRefreshDateSince) //

@@ -25,9 +25,8 @@ public class LocalActivityRepository implements ActivityRepository{
     }
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
-        String currentUserId = sessionRepository.getCurrentUserId();
         List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters, currentUserId);
+          localActivityDataSource.getActivityTimeline(parameters);
         return activityEntityMapper.transform(activityTimeline);
     }
 }

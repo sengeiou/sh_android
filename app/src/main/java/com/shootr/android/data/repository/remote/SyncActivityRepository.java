@@ -29,8 +29,7 @@ public class SyncActivityRepository implements ActivityRepository {
     }
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters, currentUserId);
+        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters);
         localActivityDataSource.putActivities(activityEntities);
         return activityEntityMapper.transform(activityEntities);
     }
