@@ -22,5 +22,6 @@ public interface ActivityType {
       LISTED_EVENT,
       PROFILE_UPDATED,
       START_FOLLOW};
+    String[] TYPES_SYNC_TRIGGER = { PROFILE_UPDATED, JOIN_EVENT, EXIT_EVENT, UPDATE_EVENT };
 
 }
