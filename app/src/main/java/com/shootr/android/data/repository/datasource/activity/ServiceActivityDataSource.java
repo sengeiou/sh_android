@@ -6,28 +6,25 @@ import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceActivityDataSource implements ActivityDataSource{
 
-    private final ShootrService shootrService;
     private final ActivityApiService activityApiService;
     private final ActivityApiEntityMapper activityApiEntityMapper;
 
-    @Inject public ServiceActivityDataSource(ShootrService shootrService, ActivityApiService activityApiService,
+    @Inject public ServiceActivityDataSource(ActivityApiService activityApiService,
       ActivityApiEntityMapper activityApiEntityMapper) {
-        this.shootrService = shootrService;
         this.activityApiService = activityApiService;
         this.activityApiEntityMapper = activityApiEntityMapper;
     }
 
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters,
-      String currentUserId, Integer maxActivities) {
+      String currentUserId) {
         try {
-            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(currentUserId, parameters.getIncludedTypes(),maxActivities);
+            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(currentUserId, parameters.getIncludedTypes(), parameters.getLimit());
             return activityApiEntityMapper.transform(activities);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);

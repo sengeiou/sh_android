@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ActivityDataSource {
 
-    List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String currentUserId, Integer maxActivities);
+    List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters, String currentUserId);
 
     void putActivities(List<ActivityEntity> activityEntities);
 }

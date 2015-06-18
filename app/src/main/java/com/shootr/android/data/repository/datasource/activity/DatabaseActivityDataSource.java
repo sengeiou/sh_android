@@ -15,7 +15,7 @@ public class DatabaseActivityDataSource implements ActivityDataSource {
     }
 
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters,
-      String currentUserId, Integer maxActivities) {
+      String currentUserId) {
         return activityManager.getActivityTimelineFromParameters(parameters);
     }
 

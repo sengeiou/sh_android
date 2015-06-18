@@ -14,7 +14,6 @@ import javax.inject.Inject;
 
 public class SyncActivityRepository implements ActivityRepository {
 
-    public static final int MAX_ACTIVITIES = 100;
     private final ActivityDataSource localActivityDataSource;
     private final ActivityDataSource remoteActivityDataSource;
     private final ActivityEntityMapper activityEntityMapper;
@@ -31,8 +30,7 @@ public class SyncActivityRepository implements ActivityRepository {
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         String currentUserId = sessionRepository.getCurrentUserId();
-        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters, currentUserId,
-          MAX_ACTIVITIES);
+        List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters, currentUserId);
         localActivityDataSource.putActivities(activityEntities);
         return activityEntityMapper.transform(activityEntities);
     }

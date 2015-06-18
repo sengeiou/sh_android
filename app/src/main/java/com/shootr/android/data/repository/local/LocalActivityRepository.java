@@ -13,8 +13,6 @@ import javax.inject.Inject;
 
 public class LocalActivityRepository implements ActivityRepository{
 
-    public static final int MAX_ACTIVITIES = 100;
-
     private final ActivityDataSource localActivityDataSource;
     private final ActivityEntityMapper activityEntityMapper;
     private final SessionRepository sessionRepository;
@@ -29,7 +27,7 @@ public class LocalActivityRepository implements ActivityRepository{
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         String currentUserId = sessionRepository.getCurrentUserId();
         List<ActivityEntity> activityTimeline =
-          localActivityDataSource.getActivityTimeline(parameters, currentUserId, MAX_ACTIVITIES);
+          localActivityDataSource.getActivityTimeline(parameters, currentUserId);
         return activityEntityMapper.transform(activityTimeline);
     }
 }
