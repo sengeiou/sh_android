@@ -1,6 +1,6 @@
 package com.shootr.android.domain;
 
-public interface ShotType {
+public interface ActivityType {
 
     String COMMENT = "COMMENT";
     String CHECKIN = "CHECKIN";
@@ -11,7 +11,16 @@ public interface ShotType {
     String EXIT_EVENT = "EXITEVENT";
     String UPDATE_EVENT = "UPDATEEVENT";
 
-    String[] TYPES_SHOWN = {COMMENT, CHECKIN, START_FOLLOW, LISTED_EVENT, PROFILE_UPDATED};
-    String[] TYPES_HIDDEN = { JOIN_EVENT, EXIT_EVENT, UPDATE_EVENT };
-    String[] TYPES_SYNC_TRIGGER = { PROFILE_UPDATED, JOIN_EVENT, EXIT_EVENT, UPDATE_EVENT };
+    String[] TYPES_ACTIVITY = { CHECKIN,
+      EXIT_EVENT,
+      JOIN_EVENT,
+      LISTED_EVENT,
+      PROFILE_UPDATED,
+      START_FOLLOW,
+      UPDATE_EVENT };
+    String[] TYPES_ACTIVITY_SHOWN = { CHECKIN,
+      LISTED_EVENT,
+      PROFILE_UPDATED,
+      START_FOLLOW};
+
 }

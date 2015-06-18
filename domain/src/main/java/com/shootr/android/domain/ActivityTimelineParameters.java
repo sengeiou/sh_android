@@ -36,7 +36,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         private void setDefaults() {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
-            parameters.excludedType = ShotType.COMMENT;
+            parameters.excludedType = ActivityType.COMMENT;
             parameters.includedTypes = allKnownActivityTypes();
         }
 
@@ -52,7 +52,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         }
 
         public Builder forShownAcitivityTypes() {
-            parameters.includedTypes = Arrays.asList(ShotType.TYPES_ACTIVITY_SHOWN);
+            parameters.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
             return this;
         }
 
@@ -79,7 +79,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         }
 
         private List<String> allKnownActivityTypes() {
-            return Arrays.asList(ShotType.TYPES_ACTIVITY);
+            return Arrays.asList(ActivityType.TYPES_ACTIVITY);
         }
     }
 }
