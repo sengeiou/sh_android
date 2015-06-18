@@ -30,6 +30,7 @@ public class ShootrTimelineService {
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
+    private final ActivityRepository localActivityRepository;
     private final ActivityRepository remoteActivityRepository;
     private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
@@ -37,12 +38,13 @@ public class ShootrTimelineService {
     @Inject
     public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository,
       @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository,
-      @Remote ActivityRepository remoteActivityRepository, @Local ShotRepository localShotRepository,
-      TimelineSynchronizationRepository timelineSynchronizationRepository) {
+      @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
+      @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.localActivityRepository = localActivityRepository;
         this.remoteActivityRepository = remoteActivityRepository;
         this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
@@ -58,10 +60,20 @@ public class ShootrTimelineService {
 
     private List<Activity> refreshActivityShots() {
         Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
+
         ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
           .since(activityRefreshDateSince) //
           .build();
+
+        if(localActivityRepository.getActivityTimeline(activityTimelineParameters).size()==0){
+            activityTimelineParameters = ActivityTimelineParameters.builder() //
+              .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+              .forShownAcitivityTypes() //
+              .since(activityRefreshDateSince) //
+              .build();
+        }
+
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
     }
 

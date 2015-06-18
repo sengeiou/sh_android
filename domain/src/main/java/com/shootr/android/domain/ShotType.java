@@ -21,4 +21,8 @@ public interface ShotType {
       ShotType.PROFILE_UPDATED,
       ShotType.START_FOLLOW,
       ShotType.UPDATE_EVENT };
+    String[] TYPES_ACTIVITY_SHOWN = { ShotType.CHECKIN,
+      ShotType.LISTED_EVENT,
+      ShotType.PROFILE_UPDATED,
+      ShotType.START_FOLLOW};
 }

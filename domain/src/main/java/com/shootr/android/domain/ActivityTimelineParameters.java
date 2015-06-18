@@ -51,6 +51,11 @@ public class ActivityTimelineParameters extends TimelineParameters {
             return this;
         }
 
+        public Builder forShownAcitivityTypes() {
+            parameters.includedTypes = Arrays.asList(ShotType.TYPES_ACTIVITY_SHOWN);
+            return this;
+        }
+
         public Builder forUsers(String... userIds) {
             parameters.userIds = Arrays.asList(userIds);
             return this;
