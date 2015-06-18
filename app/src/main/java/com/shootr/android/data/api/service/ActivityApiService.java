@@ -8,7 +8,7 @@ import retrofit.http.Query;
 
 public interface ActivityApiService {
 
-    @GET("/activity?includeLinks=false") List<ActivityApiEntity> getActivityTimeline(@Query("me") String idUser,
+    @GET("/activity?includeFollowing=true&includeLinks=false") List<ActivityApiEntity> getActivityTimeline(@Query("me") String idUser,
       @Query("types") List<String> types,
       @Query("count") Integer count) throws IOException;
 
