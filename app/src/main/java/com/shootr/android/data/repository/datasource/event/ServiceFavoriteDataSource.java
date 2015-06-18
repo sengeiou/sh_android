@@ -1,18 +1,16 @@
 package com.shootr.android.data.repository.datasource.event;
 
-import com.shootr.android.data.api.EmptyResponse;
 import com.shootr.android.data.api.entity.FavoriteApiEntity;
 import com.shootr.android.data.api.entity.mapper.FavoriteApiEntityMapper;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FavoriteEntity;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
+import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
-import retrofit.ResponseCallback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
@@ -34,8 +32,12 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
     @Override
     public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity) {
-        FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(currentUserId(), favoriteEntity);
-        return favoriteApiEntityMapper.transform(favoriteFromApi);
+        try {
+            FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(currentUserId(), favoriteEntity);
+            return favoriteApiEntityMapper.transform(favoriteFromApi);
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
     }
 
     @Override
@@ -45,14 +47,23 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
     @Override
     public List<FavoriteEntity> getFavorites() {
-        List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(currentUserId());
-        storeEmbedEvents(favorites);
-        return favoriteApiEntityMapper.transform(favorites);
+        try {
+            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(currentUserId());
+            storeEmbedEvents(favorites);
+            return favoriteApiEntityMapper.transform(favorites);
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+
     }
 
     @Override
     public void removeFavoriteByIdEvent(String eventId) {
-        favoriteApiService.deleteFavorite(currentUserId(), eventId, new EmptyResponse());
+        try {
+            favoriteApiService.deleteFavorite(currentUserId(), eventId);
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
     }
 
     @Override
