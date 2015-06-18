@@ -6,15 +6,11 @@ import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.bus.BusPublisher;
-import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -71,7 +67,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     @Override
     public List<ShotEntity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
         try {
-            return filterSyncShots(shootrService.getActivityShotsByParameters(parameters));
+            return shootrService.getActivityShotsByParameters(parameters);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -107,43 +103,5 @@ public class ServiceShotDatasource implements ShotDataSource {
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
-    }
-
-    private List<ShotEntity> filterSyncShots(List<ShotEntity> shotEntities) {
-        notifySyncTrigger(shotEntities);
-        List<ShotEntity> filtered = new ArrayList<>();
-        for (ShotEntity shotEntity : shotEntities) {
-            if (!isHiddenShot(shotEntity)) {
-                filtered.add(shotEntity);
-            }
-        }
-        return filtered;
-    }
-
-    private boolean isHiddenShot(ShotEntity shotEntity) {
-        String type = shotEntity.getType();
-        return Arrays.asList(ShotType.TYPES_HIDDEN).contains(type);
-    }
-
-    private void notifySyncTrigger(List<ShotEntity> newShots) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        for (ShotEntity newShot : newShots) {
-            if (isSyncTriggerShot(newShot)
-              && isNewerThanLastTrigger(newShot)
-              && !newShot.getIdUser().equals(currentUserId)) {
-                busPublisher.post(new WatchUpdateRequest.Event());
-                lastTriggerDate = newShot.getBirth().getTime();
-                break;
-            }
-        }
-    }
-
-    private boolean isSyncTriggerShot(ShotEntity newShot) {
-        String type = newShot.getType();
-        return Arrays.asList(ShotType.TYPES_SYNC_TRIGGER).contains(type);
-    }
-
-    private boolean isNewerThanLastTrigger(ShotEntity newShot) {
-        return newShot.getBirth().getTime() > lastTriggerDate;
     }
 }
