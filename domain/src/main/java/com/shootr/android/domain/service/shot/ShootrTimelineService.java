@@ -67,7 +67,7 @@ public class ShootrTimelineService {
           .since(activityRefreshDateSince) //
           .build();
 
-        if(localActivityRepository.getActivityTimeline(activityTimelineParameters).size()==0){
+        if(localActivityRepository.getActivityTimeline(activityTimelineParameters).isEmpty()){
             activityTimelineParameters = visibleActivityParameters(activityRefreshDateSince);
         }
 
