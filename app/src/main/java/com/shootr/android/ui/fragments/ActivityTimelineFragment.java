@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
+import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -132,7 +133,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void setupListAdapter() {
         avatarClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ActivityTimelineAdapter.ViewHolder) v.getTag()).position;
                 openProfile(position);
             }
         };
