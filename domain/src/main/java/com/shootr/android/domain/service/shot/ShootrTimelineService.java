@@ -67,14 +67,20 @@ public class ShootrTimelineService {
           .build();
 
         if(localActivityRepository.getActivityTimeline(activityTimelineParameters).size()==0){
-            activityTimelineParameters = ActivityTimelineParameters.builder() //
-              .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
-              .forShownAcitivityTypes() //
-              .since(activityRefreshDateSince) //
-              .build();
+            activityTimelineParameters = visibleActivityParameters(activityRefreshDateSince);
         }
 
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
+    }
+
+    private ActivityTimelineParameters visibleActivityParameters(Long activityRefreshDateSince) {
+        ActivityTimelineParameters activityTimelineParameters;
+        activityTimelineParameters = ActivityTimelineParameters.builder() //
+          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .forShownAcitivityTypes() //
+          .since(activityRefreshDateSince) //
+          .build();
+        return activityTimelineParameters;
     }
 
     public Timeline refreshTimelinesForWatchingEvent() {
