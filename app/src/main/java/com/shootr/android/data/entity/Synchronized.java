@@ -2,18 +2,12 @@ package com.shootr.android.data.entity;
 
 import java.util.Date;
 
-public class Synchronized {
-
-    public static final String SYNC_NEW = "N";
-    public static final String SYNC_DELETED = "D";
-    public static final String SYNC_UPDATED = "U";
-    public static final String SYNC_SYNCHRONIZED = "S";
+public class Synchronized extends LocalSynchronized {
 
     protected Date birth;
     protected Date modified;
     protected Date deleted;
     protected Integer revision;
-    protected String synchronizedStatus;
 
     public Synchronized() {
 
@@ -49,13 +43,5 @@ public class Synchronized {
 
     public void setRevision(Integer revision) {
         this.revision = revision;
-    }
-
-    public String getSynchronizedStatus() {
-        return synchronizedStatus;
-    }
-
-    public void setSynchronizedStatus(String synchronizedStatus) {
-        this.synchronizedStatus = synchronizedStatus;
     }
 }

@@ -8,13 +8,17 @@ public class DatabaseContract {
 
     }
 
-    public static interface SyncColumns extends BaseColumns {
+    public interface LocalSyncColumns {
 
-        static final String BIRTH = "birth";
-        static final String MODIFIED = "modified";
-        static final String DELETED = "deleted";
-        static final String REVISION = "revision";
-        static final String SYNCHRONIZED = "synchronizedStatus";
+     String SYNCHRONIZED = "synchronizedStatus";
+    }
+
+    public interface SyncColumns extends LocalSyncColumns {
+
+        String BIRTH = "birth";
+        String MODIFIED = "modified";
+        String DELETED = "deleted";
+        String REVISION = "revision";
     }
 
     public static final class TablesSync implements SyncColumns {

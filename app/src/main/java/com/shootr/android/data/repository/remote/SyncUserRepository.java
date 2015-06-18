@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.bus.Default;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.CachedUserDataSource;
@@ -147,21 +147,21 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     private void prepareEntityForSynchronization(UserEntity userEntity) {
         if (!isReadyForSync(userEntity)) {
-            userEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
+            userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
         }
         localUserDataSource.putUser(userEntity);
     }
 
     private boolean isReadyForSync(UserEntity userEntity) {
-        return Synchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus()) || Synchronized.SYNC_NEW.equals(
-          userEntity.getSynchronizedStatus()) || Synchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
+        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_NEW.equals(
+          userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
     }
 
     @Override public void dispatchSync() {
         List<UserEntity> notSynchronized = localUserDataSource.getEntitiesNotSynchronized();
         for (UserEntity userEntity : notSynchronized) {
             UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
-            synchedEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+            synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
             localUserDataSource.putUser(synchedEntity);
             Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
         }
@@ -188,7 +188,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     private void markEntitySynchronized(UserEntity userEntity) {
-        userEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+        userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
     }
 
     private void forceUpdatePeopleAndMe() {

@@ -2,7 +2,7 @@ package com.shootr.android.data.api.entity.mapper;
 
 import com.shootr.android.data.api.entity.FavoriteApiEntity;
 import com.shootr.android.data.entity.FavoriteEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +17,7 @@ public class FavoriteApiEntityMapper {
         FavoriteEntity entity = new FavoriteEntity();
         entity.setIdEvent(apiEntity.getIdEvent());
         entity.setOrder(apiEntity.getOrder());
-        entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+        entity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
         return entity;
     }
 

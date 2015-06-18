@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.sync;
 
 import com.shootr.android.data.entity.FavoriteEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.FavoriteEntityMapper;
 import com.shootr.android.data.repository.datasource.event.FavoriteDataSource;
 import com.shootr.android.domain.Favorite;
@@ -28,22 +28,14 @@ public class SyncableFavoriteEntityFactory extends SyncableEntityFactory<Favorit
     @Override
     protected FavoriteEntity updateValues(FavoriteEntity currentFavoriteEntity, Favorite favorite) {
         FavoriteEntity favoriteEntityFromDomain = favoriteEntityMapper.transform(favorite);
-        favoriteEntityFromDomain.setBirth(currentFavoriteEntity.getBirth());
-        favoriteEntityFromDomain.setModified(new Date());
-        favoriteEntityFromDomain.setRevision(currentFavoriteEntity.getRevision() + 1);
-        favoriteEntityFromDomain.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
-        favoriteEntityFromDomain.setDeleted(currentFavoriteEntity.getDeleted());
+        favoriteEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
         return favoriteEntityFromDomain;
     }
 
     @Override
     protected FavoriteEntity createNewEntity(Favorite favorite) {
         FavoriteEntity newEntityFromDomain = favoriteEntityMapper.transform(favorite);
-        newEntityFromDomain.setSynchronizedStatus(Synchronized.SYNC_NEW);
-        Date now = new Date();
-        newEntityFromDomain.setBirth(now);
-        newEntityFromDomain.setModified(now);
-        newEntityFromDomain.setRevision(0);
+        newEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         return newEntityFromDomain;
     }
 }

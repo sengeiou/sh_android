@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.entity.FavoriteEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.FavoriteEntityMapper;
 import com.shootr.android.data.repository.datasource.event.FavoriteDataSource;
 import com.shootr.android.data.repository.sync.SyncTrigger;
@@ -71,7 +71,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     }
 
     private void markEntitySynchronized(FavoriteEntity favoriteEntity) {
-        favoriteEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+        favoriteEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
     }
 
     private void queueUpload(FavoriteEntity favoriteEntity, ServerCommunicationException reason) {
@@ -85,15 +85,15 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     private void prepareEntityForSynchronization(FavoriteEntity favoriteEntity) {
         if (!isReadyForSync(favoriteEntity)) {
-            favoriteEntity.setSynchronizedStatus(Synchronized.SYNC_UPDATED);
+            favoriteEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
         }
         localFavoriteDataSource.putFavorite(favoriteEntity);
     }
 
     private boolean isReadyForSync(FavoriteEntity favoriteEntity) {
-        return Synchronized.SYNC_UPDATED.equals(favoriteEntity.getSynchronizedStatus())
-          || Synchronized.SYNC_NEW.equals(favoriteEntity.getSynchronizedStatus())
-          || Synchronized.SYNC_DELETED.equals(favoriteEntity.getSynchronizedStatus());
+        return LocalSynchronized.SYNC_UPDATED.equals(favoriteEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_NEW.equals(favoriteEntity.getSynchronizedStatus())
+          || LocalSynchronized.SYNC_DELETED.equals(favoriteEntity.getSynchronizedStatus());
     }
 
     @Override
@@ -101,8 +101,8 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         List<FavoriteEntity> notSynchronized = localFavoriteDataSource.getEntitiesNotSynchronized();
         for (FavoriteEntity favoriteEntityEntity : notSynchronized) {
             FavoriteEntity synchedEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
-            synchedEntity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
             localFavoriteDataSource.putFavorite(synchedEntity);
+                synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
         }
     }
 }
