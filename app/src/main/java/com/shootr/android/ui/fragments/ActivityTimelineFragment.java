@@ -13,16 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 import com.shootr.android.R;
-import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.dagger.ActivityTimelineInteractorsModule;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
@@ -119,8 +116,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override
     protected ObjectGraph getObjectGraph() {
-        ObjectGraph baseObjectGraph = super.getObjectGraph();
-        return baseObjectGraph.plus(new ActivityTimelineInteractorsModule());
+        return super.getObjectGraph();
     }
 
     //region Views manipulation

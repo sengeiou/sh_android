@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.presenter.interactorwrapper.TimelineInteractorWrapper;
+import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorWrapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -20,7 +20,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
-    private final TimelineInteractorWrapper timelineInteractorWrapper;
+    private final EventTimelineInteractorWrapper timelineInteractorWrapper;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -33,7 +33,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean shouldPoll;
     private Handler pollShotsHanlder;
 
-    @Inject public TimelinePresenter(TimelineInteractorWrapper timelineInteractorWrapper, ShotModelMapper shotModelMapper,
+    @Inject public TimelinePresenter(EventTimelineInteractorWrapper timelineInteractorWrapper, ShotModelMapper shotModelMapper,
       @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.shotModelMapper = shotModelMapper;

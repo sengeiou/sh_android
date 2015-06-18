@@ -7,7 +7,7 @@ import com.shootr.android.domain.interactor.timeline.GetOlderEventTimelineIntera
 import com.shootr.android.domain.interactor.timeline.RefreshEventTimelineInteractor;
 import javax.inject.Inject;
 
-public class EventTimelineInteractorWrapper implements TimelineInteractorWrapper {
+public class EventTimelineInteractorWrapper {
 
     private final RefreshEventTimelineInteractor refreshEventTimelineInteractor;
     private final GetEventTimelineInteractor getEventTimelineInteractor;
@@ -21,16 +21,15 @@ public class EventTimelineInteractorWrapper implements TimelineInteractorWrapper
         this.getOlderEventTimelineInteractor = getOlderEventTimelineInteractor;
     }
 
-    @Override public void loadTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+    public void loadTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
         getEventTimelineInteractor.loadEventTimeline(callback, errorCallback);
     }
 
-    @Override
     public void refreshTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
         refreshEventTimelineInteractor.refreshEventTimeline(callback, errorCallback);
     }
 
-    @Override public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<Timeline> callback,
+    public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<Timeline> callback,
       Interactor.ErrorCallback errorCallback) {
         getOlderEventTimelineInteractor.loadOlderEventTimeline(currentOldestDate, callback, errorCallback);
     }

@@ -6,7 +6,7 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.presenter.interactorwrapper.TimelineInteractorWrapper;
+import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorWrapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -39,7 +39,7 @@ public class TimelinePresenterTest {
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
 
     @Mock TimelineView timelineView;
-    @Mock TimelineInteractorWrapper timelineInteractorWrapper;
+    @Mock EventTimelineInteractorWrapper timelineInteractorWrapper;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
 
