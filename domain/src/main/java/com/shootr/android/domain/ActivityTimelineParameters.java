@@ -8,6 +8,15 @@ public class ActivityTimelineParameters extends TimelineParameters {
     private List<String> includedTypes;
     private String excludedType;
     private List<String> userIds;
+    private String currentUserId;
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
 
     public List<String> getIncludedTypes() {
         return includedTypes;
@@ -71,9 +80,17 @@ public class ActivityTimelineParameters extends TimelineParameters {
             return this;
         }
 
+        public Builder currentUser(String userId) {
+            parameters.currentUserId = userId;
+            return this;
+        }
+
         public ActivityTimelineParameters build() {
             if (parameters.getUserIds() == null || parameters.getUserIds().isEmpty()) {
                 throw new IllegalArgumentException("User list in TimelineParameters must not be null or empty");
+            }
+            if (parameters.currentUserId == null) {
+                throw new IllegalArgumentException("Must specify the current user id");
             }
             return parameters;
         }
