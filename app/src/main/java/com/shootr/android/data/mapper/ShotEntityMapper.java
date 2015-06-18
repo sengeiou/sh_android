@@ -1,7 +1,7 @@
 package com.shootr.android.data.mapper;
 
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.Shot;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,7 @@ public class ShotEntityMapper {
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
 
-        shotEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
+        shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         return shotEntity;
     }
 }

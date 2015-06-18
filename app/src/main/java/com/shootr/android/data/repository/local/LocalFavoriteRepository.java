@@ -25,7 +25,7 @@ public class LocalFavoriteRepository implements FavoriteRepository {
 
     @Override
     public void putFavorite(Favorite favorite) {
-        FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.currentOrNewEntity(favorite);
+        FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         localFavoriteDataSource.putFavorite(currentOrNewEntity);
     }
 
@@ -39,5 +39,10 @@ public class LocalFavoriteRepository implements FavoriteRepository {
     public Favorite getFavoriteByEvent(String eventId) {
         FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdEvent(eventId);
         return favoriteEntityMapper.transform(favoriteByIdEvent);
+    }
+
+    @Override
+    public void removeFavoriteByEvent(String eventId) {
+        localFavoriteDataSource.removeFavoriteByIdEvent(eventId);
     }
 }

@@ -89,7 +89,7 @@ public class GetFavoriteEventsInteractorTest {
     }
 
     @Test
-    public void shouldCallbackEventsByFavoriteOrderWhenFavoriteRepositoryReturnsUnorderedFavorites() throws Exception {
+    public void shouldCallbackEventsSortedByName() throws Exception {
         setupEventRepositoryReturnsEventsWithInputIds();
         when(localFavoriteRepository.getFavorites()).thenReturn(unorderedFavorites());
 
@@ -128,6 +128,7 @@ public class GetFavoriteEventsInteractorTest {
     private Event event(String eventId) {
         Event event = new Event();
         event.setId(eventId);
+        event.setTitle("title_"+eventId);
         return event;
     }
 

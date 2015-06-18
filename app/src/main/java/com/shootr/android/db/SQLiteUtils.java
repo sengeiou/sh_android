@@ -161,11 +161,7 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_FAVORITE = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.FavoriteTable.TABLE + " ("
       + DatabaseContract.FavoriteTable.ID_EVENT + " TEXT NOT NULL PRIMARY KEY,"
-      + DatabaseContract.FavoriteTable.ORDER + " NUMBER NOT NULL,"
-      + SyncColumns.BIRTH +" DATETIME NOT NULL,"
-      + SyncColumns.MODIFIED +" DATETIME NOT NULL,"
-      + SyncColumns.DELETED +" DATETIME NULL,"
-      + SyncColumns.REVISION +" INT NOT NULL,"
+      + DatabaseContract.FavoriteTable.ORDER + " NUMBER NULL,"
       + SyncColumns.SYNCHRONIZED +" TEXT NULL)";
 
     }

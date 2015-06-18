@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.FavoriteEntity;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.db.DatabaseContract.FavoriteTable;
 import com.shootr.android.db.mappers.FavoriteEntityCursorMapper;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class FavoriteManager extends AbstractManager {
     }
 
     public FavoriteEntity getFavoriteByIdEvent(String idEvent) {
-        String whereSelection = FavoriteTable.ID_EVENT + " = ?";
+        String whereSelection = FavoriteTable.ID_EVENT + " = ? AND " + whereNotDeleted();
         String[] whereArgumens = new String[] { idEvent };
 
         Cursor queryResult = getReadableDatabase().query(FavoriteTable.TABLE,
@@ -50,8 +51,13 @@ public class FavoriteManager extends AbstractManager {
     }
 
     public List<FavoriteEntity> getFavorites() {
-        Cursor queryResult =
-          getReadableDatabase().query(FavoriteTable.TABLE, FavoriteTable.PROJECTION, null, null, null, null, null);
+        Cursor queryResult = getReadableDatabase().query(FavoriteTable.TABLE,
+          FavoriteTable.PROJECTION,
+          whereNotDeleted(),
+          null,
+          null,
+          null,
+          null);
 
         List<FavoriteEntity> results = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -62,5 +68,39 @@ public class FavoriteManager extends AbstractManager {
         }
         queryResult.close();
         return results;
+    }
+
+    public void deleteEventByIdEvent(String eventId) {
+        String whereClause = FavoriteTable.ID_EVENT + " = ?";
+        String[] whereArgs = new String[] { eventId };
+        getWritableDatabase().delete(FavoriteTable.TABLE, whereClause, whereArgs);
+    }
+
+    public List<FavoriteEntity> getFavoritesNotSynchronized() {
+        Cursor queryResult = getReadableDatabase().query(FavoriteTable.TABLE,
+          FavoriteTable.PROJECTION,
+          whereNotSynchronized(),
+          null,
+          null,
+          null,
+          null);
+
+        List<FavoriteEntity> results = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                results.add(favoriteEntityCursorMapper.fromCursor(queryResult));
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return results;
+    }
+
+    protected String whereNotDeleted() {
+        return FavoriteTable.SYNCHRONIZED + " <> '" + LocalSynchronized.SYNC_DELETED + "'";
+    }
+
+    private String whereNotSynchronized() {
+        return FavoriteTable.SYNCHRONIZED + " <> '" + LocalSynchronized.SYNC_SYNCHRONIZED + "'";
     }
 }

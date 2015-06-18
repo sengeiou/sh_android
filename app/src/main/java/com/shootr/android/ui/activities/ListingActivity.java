@@ -12,6 +12,7 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
@@ -45,7 +46,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new EventsListAdapter(picasso, new EventsListAdapter.OnEventClickListener() {
+        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override public void onEventClick(EventModel event) {
                 presenter.selectEvent(event);
             }

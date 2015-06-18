@@ -8,11 +8,6 @@ public class FavoriteApiEntity {
     private String idEvent;
     private Integer order;
 
-    private Long birth;
-    private Long modified;
-    private Long deleted;
-    private Integer revision;
-
     private EventEntity event;
 
     public String getIdUser() {
@@ -47,35 +42,4 @@ public class FavoriteApiEntity {
         this.event = event;
     }
 
-    public Long getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Long birth) {
-        this.birth = birth;
-    }
-
-    public Long getModified() {
-        return modified;
-    }
-
-    public void setModified(Long modified) {
-        this.modified = modified;
-    }
-
-    public Long getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Long deleted) {
-        this.deleted = deleted;
-    }
-
-    public Integer getRevision() {
-        return revision;
-    }
-
-    public void setRevision(Integer revision) {
-        this.revision = revision;
-    }
 }

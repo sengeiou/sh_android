@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
@@ -51,7 +51,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     @Override public Event putEvent(Event event, boolean notify) {
-        EventEntity currentOrNewEntity = syncableEventEntityFactory.currentOrNewEntity(event);
+        EventEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(event);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
         EventEntity remoteEventEntity = remoteEventDataSource.putEvent(currentOrNewEntity);
@@ -71,7 +71,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     private void markEntityAsSynchronized(EventEntity event) {
-        event.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);
+        event.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
     }
 
     @Override public void dispatchSync() {

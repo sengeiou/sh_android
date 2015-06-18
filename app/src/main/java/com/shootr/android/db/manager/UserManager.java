@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserMapper;
 import com.squareup.phrase.Phrase;
@@ -196,8 +195,8 @@ public class UserManager extends AbstractManager {
     public List<UserEntity> getUsersNotSynchronized() {
         String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
           .put("field", UserTable.SYNCHRONIZED)
-          .put("n", Synchronized.SYNC_NEW)
-          .put("u", Synchronized.SYNC_UPDATED)
+          .put("n", LocalSynchronized.SYNC_NEW)
+          .put("u", LocalSynchronized.SYNC_UPDATED)
           .format().toString();
         Cursor queryResult =
           getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);

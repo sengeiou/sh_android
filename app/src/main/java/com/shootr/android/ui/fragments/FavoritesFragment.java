@@ -14,6 +14,8 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
+import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -33,7 +35,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @InjectView(R.id.favorites_empty) View empty;
     @InjectView(R.id.favorites_loading) View loading;
 
-    private EventsListAdapter adapter;
+    private FavoriteEventsAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -80,7 +82,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new EventsListAdapter(picasso, new EventsListAdapter.OnEventClickListener() {
+        adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(EventModel event) {
                 favoritesListPresenter.selectEvent(event);

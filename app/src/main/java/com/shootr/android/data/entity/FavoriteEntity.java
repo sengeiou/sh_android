@@ -1,6 +1,6 @@
 package com.shootr.android.data.entity;
 
-public class FavoriteEntity extends Synchronized {
+public class FavoriteEntity extends LocalSynchronized {
 
     private String idEvent;
     private Integer order;

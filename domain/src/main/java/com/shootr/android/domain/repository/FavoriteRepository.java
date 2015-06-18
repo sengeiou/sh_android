@@ -10,4 +10,6 @@ public interface FavoriteRepository {
     List<Favorite> getFavorites();
 
     Favorite getFavoriteByEvent(String eventId);
+
+    void removeFavoriteByEvent(String eventId);
 }

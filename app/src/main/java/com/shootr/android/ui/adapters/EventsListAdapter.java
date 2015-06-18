@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
@@ -84,10 +84,5 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     public void setCurrentWatchingEvent(EventResultModel event) {
         this.setHeader(event);
-    }
-
-    public interface OnEventClickListener {
-
-        void onEventClick(EventModel event);
     }
 }

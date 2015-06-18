@@ -1,7 +1,7 @@
 package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.domain.Event;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,6 @@ public class EventEntityMapper {
         entityTemplate.setUserName(event.getAuthorUsername());
         entityTemplate.setLocale(event.getLocale());
 
-        entityTemplate.setSynchronizedStatus(Synchronized.SYNC_NEW);
+        entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }
 }

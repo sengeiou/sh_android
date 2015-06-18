@@ -17,11 +17,7 @@ public class FavoriteEntityCursorMapper {
         entity.setIdEvent(stringFromColumn(FavoriteTable.ID_EVENT, cursor));
         entity.setOrder(intFromColumn(FavoriteTable.ORDER, cursor));
 
-        entity.setBirth(toDate(longFromColumn(FavoriteTable.BIRTH, cursor)));
-        entity.setModified(toDate(longFromColumn(FavoriteTable.MODIFIED, cursor)));
-        entity.setDeleted(toDate(longFromColumn(FavoriteTable.DELETED, cursor)));
         entity.setSynchronizedStatus(stringFromColumn(FavoriteTable.SYNCHRONIZED, cursor));
-        entity.setRevision(intFromColumn(FavoriteTable.REVISION, cursor));
 
         return entity;
     }
@@ -31,11 +27,7 @@ public class FavoriteEntityCursorMapper {
         values.put(FavoriteTable.ID_EVENT, entity.getIdEvent());
         values.put(FavoriteTable.ORDER, entity.getOrder());
 
-        values.put(FavoriteTable.BIRTH, timestamp(entity.getBirth()));
-        values.put(FavoriteTable.MODIFIED, timestamp(entity.getModified()));
-        values.put(FavoriteTable.DELETED, timestamp(entity.getDeleted()));
         values.put(FavoriteTable.SYNCHRONIZED, entity.getSynchronizedStatus());
-        values.put(FavoriteTable.REVISION, entity.getRevision());
 
         return values;
     }
