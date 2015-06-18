@@ -79,7 +79,7 @@ public class ShootrTimelineService {
         activityTimelineParameters = ActivityTimelineParameters.builder() //
           .currentUser(sessionRepository.getCurrentUserId()) //
           .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
-          .forShownAcitivityTypes() //
+          .excludeHiddenTypes() //
           .since(activityRefreshDateSince) //
           .build();
         return activityTimelineParameters;

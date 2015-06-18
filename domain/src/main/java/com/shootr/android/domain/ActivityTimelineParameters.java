@@ -60,7 +60,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
             return this;
         }
 
-        public Builder forShownAcitivityTypes() {
+        public Builder excludeHiddenTypes() {
             parameters.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
             return this;
         }
