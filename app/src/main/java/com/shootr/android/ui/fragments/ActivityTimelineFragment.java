@@ -201,11 +201,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
     //endregion
 
-    @OnItemClick(R.id.timeline_activity_list) public void openActivity(int position) {
-        ActivityModel activity = adapter.getItem(position);
-        //TODO if we are really going to do the Activiy Detail
-    }
-
     public void openProfile(int position) {
         ActivityModel activityVO = adapter.getItem(position);
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), activityVO.getIdUser());
