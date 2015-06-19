@@ -109,25 +109,17 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByActivityParameters(ActivityTimelineParameters parameters) {
-        List<String> userIds = parameters.getUserIds();
         List<String> includedTypes = parameters.getIncludedTypes();
 
-        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
         String typeSelection = ShotTable.TYPE + " IN ("+ createListPlaceholders(includedTypes.size()) +")";
-        //TODO since & max
-        //TODO limit
 
-        int whereArgumentsSize = userIds.size() + includedTypes.size();
+        int whereArgumentsSize = includedTypes.size();
         String[] whereArguments = new String[whereArgumentsSize];
-        for (int i = 0; i < userIds.size(); i++) {
-            whereArguments[i] = String.valueOf(userIds.get(i));
-        }
-        int typeArgumentStartIndex = userIds.size();
         for (int i = 0; i < includedTypes.size(); i++) {
-            whereArguments[typeArgumentStartIndex + i] = includedTypes.get(i);
+            whereArguments[i] = includedTypes.get(i);
         }
 
-        String whereClause = usersSelection + " AND " + typeSelection;
+        String whereClause = typeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,

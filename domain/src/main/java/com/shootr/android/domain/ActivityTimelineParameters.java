@@ -6,7 +6,6 @@ import java.util.List;
 public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
-    private List<String> userIds;
     private String currentUserId;
 
     public String getCurrentUserId() {
@@ -29,10 +28,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
         return new Builder();
     }
 
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
     public static class Builder {
 
         private ActivityTimelineParameters parameters = new ActivityTimelineParameters();
@@ -45,17 +40,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
             parameters.includedTypes = allKnownActivityTypes();
-        }
-
-        public Builder forUsers(List<String> userIds, String moreUserIds) {
-            parameters.userIds = userIds;
-            parameters.userIds.addAll(Arrays.asList(moreUserIds));
-            return this;
-        }
-
-        public Builder excludeHiddenTypes() {
-            parameters.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
-            return this;
         }
 
         public Builder since(Long sinceDate) {
@@ -74,9 +58,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
         }
 
         public ActivityTimelineParameters build() {
-            if (parameters.getUserIds() == null || parameters.getUserIds().isEmpty()) {
-                throw new IllegalArgumentException("User list in TimelineParameters must not be null or empty");
-            }
             if (parameters.currentUserId == null) {
                 throw new IllegalArgumentException("Must specify the current user id");
             }
