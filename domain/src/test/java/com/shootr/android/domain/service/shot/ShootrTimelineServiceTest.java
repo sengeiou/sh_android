@@ -105,8 +105,6 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
         List<Activity> activities = activitiesList();
-        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
-          eventShotListWithMultipleShots());
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
