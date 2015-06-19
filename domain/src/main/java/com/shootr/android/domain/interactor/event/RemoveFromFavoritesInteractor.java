@@ -36,7 +36,7 @@ public class RemoveFromFavoritesInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Favorite existingFavorite = localFavoriteRepository.getFavoriteByEvent(idEvent);
         checkNotNull(existingFavorite);
         localFavoriteRepository.removeFavoriteByEvent(existingFavorite.getIdEvent());

@@ -32,7 +32,7 @@ public class SendPasswordResetEmailInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try {
             shootrUserService.sendPasswordResetEmail(idUser);
             notifyCompleted();

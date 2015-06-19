@@ -19,5 +19,5 @@ public interface Interactor {
         void onCompleted();
     }
 
-    void execute() throws Throwable;
+    void execute() throws Exception;
 }

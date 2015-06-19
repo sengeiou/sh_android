@@ -41,7 +41,7 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try {
             ActivityTimelineParameters timelineParameters = buildTimelineParameters();
             List<Activity> olderActivities = remoteActivityRepository.getActivityTimeline(timelineParameters);

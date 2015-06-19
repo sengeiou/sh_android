@@ -29,7 +29,7 @@ public class DeleteDraftInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         QueuedShot queuedShot = shotQueueRepository.getShotQueue(queuedShotId);
         shotQueueRepository.remove(queuedShot);
         notifyDeleted();

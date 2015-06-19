@@ -28,7 +28,7 @@ public class GetDraftsInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         List<QueuedShot> failedShots = shotQueueRepository.getFailedShotQueue();
         notifyLoaded(failedShots);
     }

@@ -53,7 +53,7 @@ public class GetEventTimelineInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         loadLocalShots();
     }
 

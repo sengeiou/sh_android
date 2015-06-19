@@ -37,7 +37,7 @@ public class ExitEventInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         removeEventFromUser(currentUser);
         localUserRepository.putUser(currentUser);

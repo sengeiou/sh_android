@@ -45,7 +45,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         loadLocalFavorites();
         loadRemoteFavorites();
     }

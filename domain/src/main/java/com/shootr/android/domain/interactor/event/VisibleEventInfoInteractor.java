@@ -60,7 +60,7 @@ public class VisibleEventInfoInteractor implements Interactor {
         obtainEventInfo(VISIBLE_EVENT, callback);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         obtainLocalEventInfo();
         obtainRemoteEventInfo();
     }

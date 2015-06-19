@@ -54,7 +54,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try {
             EventTimelineParameters timelineParameters = buildTimelineParameters();
             List<Shot> olderShots = remoteShotRepository.getShotsForEventTimeline(timelineParameters);
