@@ -57,6 +57,7 @@ public class InteractorExecutor implements InteractorHandler {
                     interactor.execute();
                 } catch (Exception throwable) {
                     Timber.e(throwable, "IntractorExecutor error");
+                    throw new RuntimeException(throwable);
                 }
             }
         };
