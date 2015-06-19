@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class CheckinNotification extends CommonNotification {
 
-    private static final int REQUEST_OPEN = 2;
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
 
