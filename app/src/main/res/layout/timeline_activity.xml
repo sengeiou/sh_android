@@ -8,13 +8,14 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-        <com.shootr.android.ui.widgets.ScrollListView android:id="@+id/timeline_shot_list"
+        <com.shootr.android.ui.widgets.ScrollListView android:id="@+id/timeline_activity_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          tools:listitem="@layout/item_list_shot" />
+          android:listSelector="@android:color/transparent"
+          tools:listitem="@layout/item_list_activity" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/include_timeline_empty" />
+    <include layout="@layout/include_timeline_activity_empty" />
 
 </FrameLayout>

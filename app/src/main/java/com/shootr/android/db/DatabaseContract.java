@@ -261,4 +261,28 @@ public class DatabaseContract {
         };
 
     }
+
+    public static final class ActivityTable implements SyncColumns {
+
+        private ActivityTable() {
+
+        }
+
+        public static final String TABLE = "ActivityMongo";
+
+        public static final String ID_ACTIVITY = "idActivity";
+        public static final String ID_USER = "idUser";
+        public static final String USERNAME = "userName";
+        public static final String ID_EVENT = "idEvent";
+        public static final String USER_PHOTO = "userPhoto";
+        public static final String EVENT_TAG = "eventTag";
+        public static final String EVENT_TITLE = "eventTitle";
+        public static final String COMMENT = "comment";
+        public static final String TYPE = "type";
+
+        public static final String[] PROJECTION = {
+          ID_ACTIVITY, ID_USER, USERNAME, ID_EVENT, USER_PHOTO, EVENT_TAG, EVENT_TITLE,
+          COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        };
+    }
 }

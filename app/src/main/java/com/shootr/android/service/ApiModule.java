@@ -3,16 +3,17 @@ package com.shootr.android.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
+import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.domain.repository.PhotoService;
+import com.shootr.android.service.dataservice.DataServiceModule;
+import com.shootr.android.service.dataservice.ShootrDataService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
 import com.squareup.okhttp.OkHttpClient;
 import dagger.Module;
 import dagger.Provides;
-import com.shootr.android.service.dataservice.ShootrDataService;
-import com.shootr.android.service.dataservice.DataServiceModule;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -62,6 +63,10 @@ public final class ApiModule {
     @Provides
     FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter) {
         return restAdapter.create(FavoriteApiService.class);
+    }
+
+    @Provides ActivityApiService provideActivityApiService(RestAdapter restAdapter) {
+        return restAdapter.create(ActivityApiService.class);
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {

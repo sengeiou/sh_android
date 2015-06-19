@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.presenter.interactorwrapper.TimelineInteractorsWrapper;
+import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
 import com.shootr.android.ui.views.TimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -20,7 +20,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
-    private final TimelineInteractorsWrapper timelineInteractorsWrapper;
+    private final EventTimelineInteractorsWrapper timelineInteractorWrapper;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -33,9 +33,9 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean shouldPoll;
     private Handler pollShotsHanlder;
 
-    @Inject public TimelinePresenter(TimelineInteractorsWrapper timelineInteractorsWrapper, ShotModelMapper shotModelMapper,
+    @Inject public TimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper, ShotModelMapper shotModelMapper,
       @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
-        this.timelineInteractorsWrapper = timelineInteractorsWrapper;
+        this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -79,7 +79,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void loadTimeline() {
         timelineView.showLoading();
-        timelineInteractorsWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 timelineView.hideLoading();
@@ -112,7 +112,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadNewShots() {
-        timelineInteractorsWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
@@ -133,7 +133,7 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
         timelineView.showLoadingOldShots();
-        timelineInteractorsWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
               @Override public void onLoaded(Timeline timeline) {
                   isLoadingOlderShots = false;
                   timelineView.hideLoadingOldShots();

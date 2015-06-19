@@ -1,11 +1,14 @@
 package com.shootr.android.domain.service.shot;
 
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -13,11 +16,9 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class ShootrTimelineService {
@@ -29,39 +30,47 @@ public class ShootrTimelineService {
     private final EventRepository localEventRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
+    private final ActivityRepository localActivityRepository;
+    private final ActivityRepository remoteActivityRepository;
     private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
-    public ShootrTimelineService(SessionRepository sessionRepository,
-      @Local EventRepository localEventRepository,
-      @Local UserRepository localUserRepository,
-      @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository,
-      TimelineSynchronizationRepository timelineSynchronizationRepository) {
+    public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository,
+      @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository,
+      @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
+      @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localEventRepository = localEventRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.localActivityRepository = localActivityRepository;
+        this.remoteActivityRepository = remoteActivityRepository;
         this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
-    public Timeline refreshTimelinesForActivity() {
-        List<Shot> shotsForActivity = refreshActivityShots();
+    public ActivityTimeline refreshTimelinesForActivity() {
+        List<Activity> activities = refreshActivityShots();
 
         refreshWatchingEventShots();
 
-        return buildSortedTimeline(shotsForActivity);
+        return buildSortedActivityTimeline(activities);
     }
 
-    private List<Shot> refreshActivityShots() {
+    private List<Activity> refreshActivityShots() {
         Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
+
         ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
-          .forUsers(getPeopleIds(), sessionRepository.getCurrentUserId()) //
+          .currentUser(sessionRepository.getCurrentUserId()) //
           .since(activityRefreshDateSince) //
           .build();
-        return remoteShotRepository.getShotsForActivityTimeline(activityTimelineParameters);
+
+        if(localActivityRepository.getActivityTimeline(activityTimelineParameters).isEmpty()){
+            activityTimelineParameters.excludeHiddenTypes();
+        }
+
+        return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
     }
 
     public Timeline refreshTimelinesForWatchingEvent() {
@@ -103,13 +112,24 @@ public class ShootrTimelineService {
 
     private Timeline buildSortedTimeline(List<Shot> shots) {
         Timeline timeline = new Timeline();
-        timeline.setShots(sortByPublishDate(shots));
+        timeline.setShots(sortShotsByPublishDate(shots));
         return timeline;
     }
 
-    private List<Shot> sortByPublishDate(List<Shot> remoteShots) {
+    private ActivityTimeline buildSortedActivityTimeline(List<Activity> activities) {
+        ActivityTimeline timeline = new ActivityTimeline();
+        timeline.setActivities(sortActivitiesByPublishDate(activities));
+        return timeline;
+    }
+
+    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
         Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
+    }
+
+    private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
+        Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
+        return remoteActivities;
     }
 
     private List<String> getPeopleIds() {

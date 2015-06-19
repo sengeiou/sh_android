@@ -1,13 +1,13 @@
 package com.shootr.android.ui.presenter.interactorwrapper;
 
-import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.timeline.GetActivityTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderActivityTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshActivityTimelineInteractor;
 import javax.inject.Inject;
 
-public class ActivityTimelineInteractorsWrapper implements TimelineInteractorsWrapper {
+public class ActivityTimelineInteractorsWrapper {
 
     private final RefreshActivityTimelineInteractor refreshActivityTimelineInteractor;
     private final GetActivityTimelineInteractor getActivityTimelineInteractor;
@@ -22,16 +22,15 @@ public class ActivityTimelineInteractorsWrapper implements TimelineInteractorsWr
         this.getOlderActivityTimelineInteractor = getOlderActivityTimelineInteractor;
     }
 
-    @Override public void loadTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+    public void loadTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
         getActivityTimelineInteractor.loadActivityTimeline(callback, errorCallback);
     }
 
-    @Override
-    public void refreshTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+    public void refreshTimeline(Interactor.Callback<ActivityTimeline> callback, Interactor.ErrorCallback errorCallback) {
         refreshActivityTimelineInteractor.refreshActivityTimeline(callback, errorCallback);
     }
 
-    @Override public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<Timeline> callback,
+    public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<ActivityTimeline> callback,
       Interactor.ErrorCallback errorCallback) {
         getOlderActivityTimelineInteractor.loadOlderActivityTimeline(currentOldestDate, callback, errorCallback);
     }

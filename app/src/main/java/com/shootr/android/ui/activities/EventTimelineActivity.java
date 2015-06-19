@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.dagger.EventTimelineInteractorsModule;
 import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import dagger.ObjectGraph;
@@ -69,6 +68,6 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected ObjectGraph buildObjectGraph() {
-        return super.buildObjectGraph().plus(new EventTimelineInteractorsModule());
+        return super.buildObjectGraph();
     }
 }

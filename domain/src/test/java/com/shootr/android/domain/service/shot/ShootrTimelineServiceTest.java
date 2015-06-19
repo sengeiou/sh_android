@@ -1,11 +1,15 @@
 package com.shootr.android.domain.service.shot;
 
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -40,16 +44,19 @@ public class ShootrTimelineServiceTest {
     private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
 
     private static final String EVENT_SHOT_ID = "event_shot";
-    private static final String ACTIVITY_SHOT_ID = "activity_shot";
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
+    public static final String USER_ID = "user_id";
 
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
+    @Mock ActivityRepository remoteActivityRepository;
+    @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock ActivityTimelineParameters activityTimelineParameters;
 
     private ShootrTimelineService shootrTimelineService;
 
@@ -59,8 +66,7 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService = new ShootrTimelineService(sessionRepository,
           localEventRepository,
           localUserRepository,
-          remoteShotRepository,
-          localShotRepository,
+          remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
           timelineSynchronizationRepository);
     }
 
@@ -82,30 +88,31 @@ public class ShootrTimelineServiceTest {
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        verify(remoteShotRepository).getShotsForActivityTimeline(anyActivityParameters());
+        verify(remoteActivityRepository).getActivityTimeline(anyActivityParameters());
     }
 
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
-          eventShotListWithMultipleShots());
+        List<Activity> activities = activitiesList();
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
+        assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
-        when(remoteShotRepository.getShotsForActivityTimeline(anyActivityParameters())).thenReturn(
-          eventShotListWithMultipleShots());
+        List<Activity> activities = activitiesList();
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
+        when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
+        ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
-        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
+        assertThat(resultTimeline.getActivities()).isEqualTo(activities);
     }
 
     @Test
@@ -123,6 +130,7 @@ public class ShootrTimelineServiceTest {
         when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         shootrTimelineService.refreshTimelinesForActivity();
 
@@ -182,15 +190,47 @@ public class ShootrTimelineServiceTest {
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
 
+    @Test
+    public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity(){
+        setupWatchingEvent();
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
+
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(allActivityTypes());
+    }
+
+    @Test
+    public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity(){
+        setupWatchingEvent();
+        when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
+
+        ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+
+        ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
+        verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
+    }
+
+    private String[] visibleActivityTypes() {
+        return ActivityType.TYPES_ACTIVITY_SHOWN;
+    }
+
+    private List<Activity> emptyActivityList() {
+        return Collections.EMPTY_LIST;
+    }
+
+    private String[] allActivityTypes() {
+        return ActivityType.TYPES_ACTIVITY;
+    }
+
     //region Setups and stubs
     private void setupWatchingEvent() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatching());
         when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
-    }
-
-    private void setupNoWatchingEvent() {
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUserNotWatching());
     }
 
     private User currentUserWatching() {
@@ -237,6 +277,19 @@ public class ShootrTimelineServiceTest {
         return shots;
     }
 
+    private List<Activity> activitiesList(){
+        List<Activity> shots = new ArrayList<>();
+        shots.add(activity());
+        shots.add(activity());
+        return shots;
+    }
+
+    private Activity activity() {
+        Activity activity = new Activity();
+        activity.setPublishDate(new Date());
+        return activity;
+    }
+
     private Shot eventShot() {
         Shot shot = new Shot();
         shot.setIdShot(EVENT_SHOT_ID);
@@ -250,13 +303,6 @@ public class ShootrTimelineServiceTest {
 
     private ActivityTimelineParameters anyActivityParameters() {
         return any(ActivityTimelineParameters.class);
-    }
-
-    private Shot activityShot() {
-        Shot shot = new Shot();
-        shot.setIdShot(ACTIVITY_SHOT_ID);
-        shot.setPublishDate(DATE_STUB);
-        return shot;
     }
 
     //endregion

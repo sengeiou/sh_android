@@ -108,44 +108,6 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE, 3, 1000, 0);
     }
 
-    public List<ShotEntity> getShotsByActivityParameters(ActivityTimelineParameters parameters) {
-        List<String> userIds = parameters.getUserIds();
-        List<String> includedTypes = parameters.getIncludedTypes();
-
-        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(userIds.size()) + ")";
-        String typeSelection = ShotTable.TYPE + " IN ("+ createListPlaceholders(includedTypes.size()) +")";
-        //TODO since & max
-        //TODO limit
-
-        int whereArgumentsSize = userIds.size() + includedTypes.size();
-        String[] whereArguments = new String[whereArgumentsSize];
-        for (int i = 0; i < userIds.size(); i++) {
-            whereArguments[i] = String.valueOf(userIds.get(i));
-        }
-        int typeArgumentStartIndex = userIds.size();
-        for (int i = 0; i < includedTypes.size(); i++) {
-            whereArguments[typeArgumentStartIndex + i] = includedTypes.get(i);
-        }
-
-        String whereClause = usersSelection + " AND " + typeSelection;
-
-        Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.BIRTH +" DESC");
-
-        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
-        ShotEntity shotEntity;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                shotEntity = shotEntityMapper.fromCursor(queryResult);
-                resultShots.add(shotEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultShots;
-    }
-
     public List<ShotEntity> getShotsByEventParameters(EventTimelineParameters parameters) {
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String typeSelection = ShotTable.TYPE + " = ?";

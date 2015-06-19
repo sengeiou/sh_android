@@ -1,15 +1,11 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
-
-import java.util.List;
-
 import javax.inject.Inject;
 
 public class RefreshActivityTimelineInteractor implements Interactor {
@@ -18,7 +14,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShootrTimelineService shootrTimelineService;
 
-    private Callback<Timeline> callback;
+    private Callback<ActivityTimeline> callback;
     private ErrorCallback errorCallback;
 
     @Inject public RefreshActivityTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -28,7 +24,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         this.shootrTimelineService = shootrTimelineService;
     }
 
-    public void refreshActivityTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void refreshActivityTimeline(Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -40,7 +36,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            Timeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
+            ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
             notifyLoaded(activityTimeline);
         } catch (ShootrException error) {
             notifyError(error);
@@ -48,7 +44,7 @@ public class RefreshActivityTimelineInteractor implements Interactor {
     }
 
     //region Result
-    private void notifyLoaded(final Timeline timeline) {
+    private void notifyLoaded(final ActivityTimeline timeline) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(timeline);

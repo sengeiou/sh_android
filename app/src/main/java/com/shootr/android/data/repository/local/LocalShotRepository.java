@@ -31,12 +31,6 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(shotsForEvent);
     }
 
-    @Override
-    public List<Shot> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
-        List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForActivityTimeline(parameters);
-        return shotEntityMapper.transform(shotsForEvent);
-    }
-
     @Override public Shot getShot(String shotId) {
         ShotEntity shot = localShotDataSource.getShot(shotId);
         if (shot != null) {

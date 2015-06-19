@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -47,17 +47,17 @@ public class RefreshActivityTimelineInteractorTest {
         verify(spyCallback).onLoaded(timelineForActivity());
     }
 
-    private Timeline timelineForActivity() {
-        Timeline timeline = new Timeline();
-        timeline.setShots(new ArrayList<Shot>());
+    private ActivityTimeline timelineForActivity() {
+        ActivityTimeline timeline = new ActivityTimeline();
+        timeline.setActivities(new ArrayList<Activity>());
         return timeline;
     }
 
-    static class SpyCallback implements Interactor.Callback<Timeline> {
+    static class SpyCallback implements Interactor.Callback<ActivityTimeline> {
 
-        public List<Timeline> timelinesReturned = new ArrayList<>();
+        public List<ActivityTimeline> timelinesReturned = new ArrayList<>();
 
-        @Override public void onLoaded(Timeline timeline) {
+        @Override public void onLoaded(ActivityTimeline timeline) {
             timelinesReturned.add(timeline);
         }
     }

@@ -164,4 +164,21 @@ public class SQLiteUtils {
       + DatabaseContract.FavoriteTable.ORDER + " NUMBER NULL,"
       + SyncColumns.SYNCHRONIZED +" TEXT NULL)";
 
-    }
+
+    public static final String CREATE_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.ActivityTable.TABLE + " ("
+      + DatabaseContract.ActivityTable.ID_ACTIVITY + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.ActivityTable.ID_USER + " TEXT NOT NULL,"
+      + DatabaseContract.ActivityTable.USERNAME + " TEXT NOT NULL,"
+      + DatabaseContract.ActivityTable.ID_EVENT + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.USER_PHOTO + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.EVENT_TAG + " VARCHAR(255) NULL,"
+      + DatabaseContract.ActivityTable.EVENT_TITLE + " VARCHAR(255) NULL,"
+      + DatabaseContract.ActivityTable.COMMENT+ " VARCHAR(255) NULL,"
+      + DatabaseContract.ActivityTable.TYPE+ " TEXT NULL,"
+      + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+      + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+      + SyncColumns.DELETED + " DATETIME NULL,"
+      + SyncColumns.REVISION + " INT NOT NULL,"
+      + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
+
+}

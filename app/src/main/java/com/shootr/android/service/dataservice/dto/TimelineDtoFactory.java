@@ -4,16 +4,13 @@ import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.service.dataservice.generic.FilterBuilder;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.OperationDto.Builder;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -106,10 +103,7 @@ public class TimelineDtoFactory {
     }
 
     public GenericDto getActivityTimelineOperationDto(final ActivityTimelineParameters parameters) {
-        FilterDto timelineFilter = and( //
-          or(ShotTable.ID_USER).isIn(parameters.getUserIds()) //
-        ) //
-          .and(or(ShotTable.TYPE).isIn(parameters.getIncludedTypes())) //
+        FilterDto timelineFilter = and(or(ShotTable.TYPE).isIn(parameters.getIncludedTypes())) //
           .and(ShotTable.MODIFIED).greaterThan(parameters.getSinceDate()) //
           .and(ShotTable.DELETED).isEqualTo(null) //
           .and(ShotTable.MODIFIED).matches(new FilterBuilder.FilterMatcher<FilterBuilder.AndItem>() {

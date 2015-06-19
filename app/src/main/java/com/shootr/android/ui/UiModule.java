@@ -23,6 +23,8 @@ import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.fragments.FavoritesFragment;
+import com.shootr.android.ui.fragments.ActivityTimelineFragment;
+import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -58,7 +60,9 @@ import javax.inject.Singleton;
                 ResetPasswordActivity.class,
                 ListingActivity.class,
                 FavoritesFragment.class,
-                ActivityTimelineContainerActivity.class
+                ActivityTimelineContainerActivity.class,
+                ActivityTimelineFragment.class,
+                EventTimelineFragment.class
         },
         complete = false
 )

@@ -46,7 +46,7 @@
     <string name="activity_login_email_forgot">Forgot Password?</string>
     <string name="new_shot_placeholder">Shoot something</string>
     <string name="activity_timeline_empty_message"></string>
-    <string name="activity_timeline_empty_title">No Shots</string>
+    <string name="shot_timeline_empty_title">No Shots</string>
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
     <string name="following_list_empty">Not following anyone</string>
@@ -267,6 +267,7 @@
     <string name="profile_listing_number">0</string>
     <string name="profile_listing">Streams</string>
     <string name="title_activity_listing">Streams</string>
+    <string name="activity_timeline_empty_title">No Activities</string>
     <string name="favorites_emtpy">No Favorites</string>
     <string name="menu_add_favorite">Add to Favorites</string>
     <string name="menu_remove_favorite">Remove from Favorites</string>
