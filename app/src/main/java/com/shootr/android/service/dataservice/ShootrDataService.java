@@ -15,7 +15,6 @@ import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -179,24 +178,6 @@ public class ShootrDataService implements ShootrService {
 
         }
         return null;
-    }
-
-    @Override public List<ShotEntity> getActivityShotsByParameters(ActivityTimelineParameters parameters) throws IOException {
-        GenericDto genericDto = timelineDtoFactory.getActivityTimelineOperationDto(parameters);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-
-        List<ShotEntity> resultShots = new ArrayList<>();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                resultShots.add(shot);
-            }
-        }
-        return resultShots;
     }
 
     @Override

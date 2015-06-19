@@ -13,8 +13,6 @@ public interface ShotDataSource {
 
     List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters);
 
-    List<ShotEntity> getShotsForActivityTimeline(ActivityTimelineParameters parameters);
-
     ShotEntity getShot(String shotId);
 
     List<ShotEntity> getReplies(String shotId);

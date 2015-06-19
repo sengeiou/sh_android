@@ -57,15 +57,6 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override
-    public List<ShotEntity> getShotsForActivityTimeline(ActivityTimelineParameters parameters) {
-        try {
-            return shootrService.getActivityShotsByParameters(parameters);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public ShotEntity getShot(String shotId) {
         try {
             return shootrService.getShotById(shotId);
