@@ -8,5 +8,7 @@ public interface ActivityDataSource {
 
     List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters);
 
+    ActivityEntity getActivity(String activityId);
+
     void putActivities(List<ActivityEntity> activityEntities);
 }

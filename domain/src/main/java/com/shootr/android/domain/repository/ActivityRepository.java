@@ -8,4 +8,6 @@ public interface ActivityRepository {
 
     List<Activity> getActivityTimeline(ActivityTimelineParameters parameters);
 
+    Activity getActivity(String activityId);
+
 }

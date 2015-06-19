@@ -29,4 +29,9 @@ public class LocalActivityRepository implements ActivityRepository{
           localActivityDataSource.getActivityTimeline(parameters);
         return activityEntityMapper.transform(activityTimeline);
     }
+
+    @Override
+    public Activity getActivity(String activityId) {
+        return activityEntityMapper.transform(localActivityDataSource.getActivity(activityId));
+    }
 }

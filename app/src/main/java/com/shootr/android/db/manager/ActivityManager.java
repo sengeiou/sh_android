@@ -68,4 +68,25 @@ public class ActivityManager extends AbstractManager {
 
     }
 
+    public ActivityEntity getActivity(String activityId) {
+        String whereSelection = DatabaseContract.ActivityTable.ID_ACTIVITY + " = ?";
+        String[] whereArguments = new String[] { activityId };
+
+        Cursor queryResult = getReadableDatabase().query(ACTIVITY_TABLE,
+          DatabaseContract.ActivityTable.PROJECTION,
+          whereSelection,
+          whereArguments,
+          null,
+          null,
+          null);
+
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            ActivityEntity activityEntity = activityEntityMapper.fromCursor(queryResult);
+            queryResult.close();
+            return activityEntity;
+        } else {
+            return null;
+        }
+    }
 }

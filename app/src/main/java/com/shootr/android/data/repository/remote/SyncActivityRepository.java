@@ -33,4 +33,9 @@ public class SyncActivityRepository implements ActivityRepository {
         localActivityDataSource.putActivities(activityEntities);
         return activityEntityMapper.transform(activityEntities);
     }
+
+    @Override
+    public Activity getActivity(String activityId) {
+        return activityEntityMapper.transform(remoteActivityDataSource.getActivity(activityId));
+    }
 }

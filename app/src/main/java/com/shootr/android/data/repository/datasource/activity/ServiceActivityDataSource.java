@@ -41,6 +41,16 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         }
     }
 
+    @Override
+    public ActivityEntity getActivity(String activityId) {
+        try {
+            ActivityApiEntity activityApiEntity = activityApiService.getActivity(activityId);
+            return activityApiEntityMapper.transform(activityApiEntity);
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
     @Override public void putActivities(List<ActivityEntity> activityEntities) {
         throw new IllegalArgumentException("method not implemented");
     }

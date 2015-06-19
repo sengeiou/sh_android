@@ -18,6 +18,11 @@ public class DatabaseActivityDataSource implements ActivityDataSource {
         return activityManager.getActivityTimelineFromParameters(parameters);
     }
 
+    @Override
+    public ActivityEntity getActivity(String activityId) {
+        return activityManager.getActivity(activityId);
+    }
+
     @Override public void putActivities(List<ActivityEntity> activityEntities) {
         activityManager.saveActivities(activityEntities);
     }
