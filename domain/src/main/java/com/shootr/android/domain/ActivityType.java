@@ -2,7 +2,6 @@ package com.shootr.android.domain;
 
 public interface ActivityType {
 
-    String COMMENT = "COMMENT";
     String CHECKIN = "CHECKIN";
     String START_FOLLOW = "STARTFOLLOW";
     String LISTED_EVENT = "LISTEDEVENT";

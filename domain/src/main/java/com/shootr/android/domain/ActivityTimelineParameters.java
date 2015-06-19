@@ -45,7 +45,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
         private void setDefaults() {
             parameters.limit = DEFAULT_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
-            parameters.excludedType = ActivityType.COMMENT;
             parameters.includedTypes = allKnownActivityTypes();
         }
 

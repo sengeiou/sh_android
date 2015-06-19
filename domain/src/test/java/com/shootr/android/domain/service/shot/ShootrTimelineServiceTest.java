@@ -44,9 +44,9 @@ public class ShootrTimelineServiceTest {
     private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
 
     private static final String EVENT_SHOT_ID = "event_shot";
-    private static final String ACTIVITY_SHOT_ID = "activity_shot";
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
+    public static final String USER_ID = "user_id";
 
     @Mock SessionRepository sessionRepository;
     @Mock EventRepository localEventRepository;
@@ -110,6 +110,7 @@ public class ShootrTimelineServiceTest {
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
@@ -131,6 +132,7 @@ public class ShootrTimelineServiceTest {
         when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
         when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         shootrTimelineService.refreshTimelinesForActivity();
 
@@ -233,10 +235,6 @@ public class ShootrTimelineServiceTest {
         when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
-    private void setupNoWatchingEvent() {
-        when(sessionRepository.getCurrentUser()).thenReturn(currentUserNotWatching());
-    }
-
     private User currentUserWatching() {
         User user = new User();
         user.setIdWatchingEvent(WATCHING_EVENT_ID);
@@ -307,13 +305,6 @@ public class ShootrTimelineServiceTest {
 
     private ActivityTimelineParameters anyActivityParameters() {
         return any(ActivityTimelineParameters.class);
-    }
-
-    private Shot activityShot() {
-        Shot shot = new Shot();
-        shot.setIdShot(ACTIVITY_SHOT_ID);
-        shot.setPublishDate(DATE_STUB);
-        return shot;
     }
 
     //endregion

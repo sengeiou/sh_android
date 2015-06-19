@@ -19,20 +19,13 @@ public class ServiceShotDatasource implements ShotDataSource {
     private final ShootrService shootrService;
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
-    private final BusPublisher busPublisher;
-    private final SessionRepository sessionRepository;
-    private long lastTriggerDate;
 
     @Inject public ServiceShotDatasource(ShootrService shootrService,
       ShotApiService shotApiService,
-      ShotApiEntityMapper shotApiEntityMapper,
-      BusPublisher busPublisher,
-      SessionRepository sessionRepository) {
+      ShotApiEntityMapper shotApiEntityMapper) {
         this.shootrService = shootrService;
         this.shotApiService = shotApiService;
         this.shotApiEntityMapper = shotApiEntityMapper;
-        this.busPublisher = busPublisher;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override public ShotEntity putShot(ShotEntity shotEntity) {
