@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository;
 
+import com.shootr.android.db.manager.ActivityManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 
@@ -8,9 +9,11 @@ import javax.inject.Inject;
 public class DatabaseTimelineSynchronizationRepository implements TimelineSynchronizationRepository {
 
     private final ShotManager shotManager;
+    private final ActivityManager activityManager;
 
-    @Inject public DatabaseTimelineSynchronizationRepository(ShotManager shotManager) {
+    @Inject public DatabaseTimelineSynchronizationRepository(ShotManager shotManager, ActivityManager activityManager) {
         this.shotManager = shotManager;
+        this.activityManager = activityManager;
     }
 
     @Override
@@ -20,6 +23,6 @@ public class DatabaseTimelineSynchronizationRepository implements TimelineSynchr
 
     @Override
     public Long getActivityTimelineRefreshDate() {
-        return shotManager.getLastModifiedDateForActivity();
+        return activityManager.getLastModifiedDateForActivity();
     }
 }

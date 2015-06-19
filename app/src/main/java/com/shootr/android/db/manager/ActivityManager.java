@@ -8,6 +8,7 @@ import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.ActivityEntityMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.ActivityType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class ActivityManager extends AbstractManager {
 
         Cursor queryResult =
           getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.ActivityTable.PROJECTION, whereClause, whereArguments, null, null,
-            DatabaseContract.ShotTable.BIRTH +" DESC");
+            DatabaseContract.ActivityTable.BIRTH +" DESC");
 
         List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());
         ActivityEntity activityEntity;
@@ -87,6 +88,21 @@ public class ActivityManager extends AbstractManager {
             return activityEntity;
         } else {
             return null;
+        }
+    }
+
+    public Long getLastModifiedDateForActivity() {
+        String order = DatabaseContract.ActivityTable.MODIFIED + " desc";
+
+        Cursor queryResult =
+          getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE, DatabaseContract.ActivityTable.PROJECTION, null, null, null, null, order, "1");
+
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            ActivityEntity lastActivity = activityEntityMapper.fromCursor(queryResult);
+            return lastActivity.getModified().getTime();
+        } else {
+            return 0L;
         }
     }
 }
