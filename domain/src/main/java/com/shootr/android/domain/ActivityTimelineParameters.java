@@ -6,7 +6,6 @@ import java.util.List;
 public class ActivityTimelineParameters extends TimelineParameters {
 
     private List<String> includedTypes;
-    private String excludedType;
     private List<String> userIds;
     private String currentUserId;
 
@@ -22,8 +21,8 @@ public class ActivityTimelineParameters extends TimelineParameters {
         return includedTypes;
     }
 
-    public String getExcludedType() {
-        return excludedType;
+    public void excludeHiddenTypes(){
+        this.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
     }
 
     public static Builder builder() {
@@ -48,11 +47,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
             parameters.includedTypes = allKnownActivityTypes();
         }
 
-        public Builder forUsers(List<String> userIds) {
-            parameters.userIds = userIds;
-            return this;
-        }
-
         public Builder forUsers(List<String> userIds, String moreUserIds) {
             parameters.userIds = userIds;
             parameters.userIds.addAll(Arrays.asList(moreUserIds));
@@ -61,11 +55,6 @@ public class ActivityTimelineParameters extends TimelineParameters {
 
         public Builder excludeHiddenTypes() {
             parameters.includedTypes = Arrays.asList(ActivityType.TYPES_ACTIVITY_SHOWN);
-            return this;
-        }
-
-        public Builder forUsers(String... userIds) {
-            parameters.userIds = Arrays.asList(userIds);
             return this;
         }
 
