@@ -60,10 +60,12 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     }
 
     private ActivityTimelineParameters buildTimelineParameters() {
-        return ActivityTimelineParameters.builder() //
-                .currentUser(sessionRepository.getCurrentUserId()) //
-                .maxDate(currentOldestDate) //
-                .build();
+        ActivityTimelineParameters build = ActivityTimelineParameters.builder() //
+          .currentUser(sessionRepository.getCurrentUserId()) //
+          .maxDate(currentOldestDate) //
+          .build();
+        build.excludeHiddenTypes();
+        return build;
     }
 
     private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
