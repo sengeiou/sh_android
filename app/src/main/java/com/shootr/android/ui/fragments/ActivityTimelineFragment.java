@@ -18,7 +18,6 @@ import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -54,8 +53,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Deprecated private ActivityTimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
-    private View.OnClickListener imageClickListener;
-    private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
 
     private View footerProgress;

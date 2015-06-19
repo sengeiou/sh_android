@@ -1,6 +1,5 @@
 package com.shootr.android.data.repository.dagger;
 
-import com.shootr.android.data.repository.DatabaseTimelineSynchronizationRepository;
 import com.shootr.android.data.repository.datasource.activity.ActivityDataSource;
 import com.shootr.android.data.repository.datasource.activity.DatabaseActivityDataSource;
 import com.shootr.android.data.repository.datasource.activity.ServiceActivityDataSource;
@@ -9,7 +8,6 @@ import com.shootr.android.data.repository.remote.SyncActivityRepository;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

@@ -9,7 +9,6 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;

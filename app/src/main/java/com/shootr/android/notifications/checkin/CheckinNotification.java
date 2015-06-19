@@ -1,20 +1,15 @@
 package com.shootr.android.notifications.checkin;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
-import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
-import timber.log.Timber;
 
 public class CheckinNotification extends CommonNotification {
 
