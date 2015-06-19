@@ -201,22 +201,6 @@ public class ShotManager extends  AbstractManager{
         }
     }
 
-    public Long getLastModifiedDateForActivity() {
-        String whereClause = ShotTable.TYPE + " <> " + ShotType.COMMENT;
-        String order = ShotTable.MODIFIED + " desc";
-
-        Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, null, null, null, order, "1");
-
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
-            return lastShot.getModified().getTime();
-        } else {
-            return 0L;
-        }
-    }
-
     public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String eventSelection = ShotTable.ID_EVENT + " = ?";
