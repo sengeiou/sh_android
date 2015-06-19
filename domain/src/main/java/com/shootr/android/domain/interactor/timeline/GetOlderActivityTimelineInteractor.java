@@ -3,18 +3,13 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,7 +20,6 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ActivityRepository remoteActivityRepository;
-    private final UserRepository localUserRepository;
 
     private Long currentOldestDate;
     private Callback<ActivityTimeline> callback;
@@ -33,12 +27,11 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
 
     @Inject public GetOlderActivityTimelineInteractor(InteractorHandler interactorHandler,
                                                       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-                                                      @Remote ActivityRepository remoteActivityRepository, @Local EventRepository localEventRepository, @Local UserRepository localUserRepository) {
+                                                      @Remote ActivityRepository remoteActivityRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteActivityRepository = remoteActivityRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localUserRepository = localUserRepository;
     }
 
     public void loadOlderActivityTimeline(Long currentOldestDate, Callback<ActivityTimeline> callback, ErrorCallback errorCallback) {
@@ -71,14 +64,6 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
     private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
         Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
         return remoteActivities;
-    }
-
-    private List<String> getPeopleIds() {
-        List<String> ids = new ArrayList<>();
-        for (User user : localUserRepository.getPeople()) {
-            ids.add(user.getIdUser());
-        }
-        return ids;
     }
 
     //region Result
