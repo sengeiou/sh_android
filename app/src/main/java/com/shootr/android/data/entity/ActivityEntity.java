@@ -10,6 +10,7 @@ public class ActivityEntity extends Synchronized {
     private String eventTag;
     private String comment;
     private String type;
+    private String userPhoto;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -18,8 +19,6 @@ public class ActivityEntity extends Synchronized {
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
     }
-
-    private String userPhoto;
 
     public String getIdActivity() {
         return idActivity;
