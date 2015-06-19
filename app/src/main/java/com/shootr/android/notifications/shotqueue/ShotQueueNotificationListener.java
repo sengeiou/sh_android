@@ -18,6 +18,7 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
     }
 
     @Override public void onSendingShot(QueuedShot shot) {
+        /* no-op */
     }
 
     @Override public void onShotSent(QueuedShot shot) {

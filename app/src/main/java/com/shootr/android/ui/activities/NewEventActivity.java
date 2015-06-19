@@ -55,9 +55,11 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
 
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                /* no-op */
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /* no-op */
             }
         });
     }
