@@ -109,6 +109,7 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
                     timelineView.showEmpty();
                     timelineView.hideShots();
                 }
+                loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -171,7 +172,6 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Override public void resume() {
-        loadNewShots();
         bus.register(this);
         startPollingShots();
     }
