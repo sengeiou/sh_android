@@ -36,33 +36,30 @@ public class UnwatchEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         User currentUser = getCurrentUser();
-        removeWatching(currentUser);
-        saveUserInSession(currentUser);
-        saveUserInLocalRepository(currentUser);
+        User updatedUser = removeWatching(currentUser);
+        putInLocal(updatedUser);
         notifyCompleted();
-        saveUserInRemoteRepository(currentUser);
+        putInRemote(updatedUser);
     }
 
-    private void saveUserInSession(User currentUser) {
-        sessionRepository.setCurrentUser(currentUser);
+    private void putInRemote(User updatedUser) {
+        remoteUserRepository.putUser(updatedUser);
     }
 
-    private void saveUserInRemoteRepository(User currentUser) {
-        remoteUserRepository.putUser(currentUser);
-    }
-
-    private void saveUserInLocalRepository(User currentUser) {
-        localUserRepository.putUser(currentUser);
+    private void putInLocal(User updatedUser) {
+        sessionRepository.setCurrentUser(updatedUser);
+        localUserRepository.putUser(updatedUser);
     }
 
     private User getCurrentUser() {
         return localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     }
 
-    protected void removeWatching(User currentUser) {
+    protected User removeWatching(User currentUser) {
         currentUser.setIdWatchingEvent(null);
         currentUser.setWatchingEventTitle(null);
         currentUser.setJoinEventDate(null);
+        return currentUser;
     }
 
     private void notifyCompleted() {
