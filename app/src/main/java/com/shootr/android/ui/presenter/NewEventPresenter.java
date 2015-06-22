@@ -188,10 +188,10 @@ public class NewEventPresenter implements Presenter {
     //endregion
 
     @Override public void resume() {
-
+        /* no-op */
     }
 
     @Override public void pause() {
-
+        /* no-op */
     }
 }

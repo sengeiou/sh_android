@@ -66,11 +66,11 @@ public class ListingListPresenter implements Presenter{
     }
 
     @Override public void resume() {
-
+        /* no-op */
     }
 
     @Override public void pause() {
-
+        /* no-op */
     }
 
     public void selectEvent(EventModel event) {

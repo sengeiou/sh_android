@@ -36,11 +36,11 @@ public class ProfilePresenter implements Presenter {
     }
 
     @Override public void resume() {
-
+        /* no-op */
     }
 
     @Override public void pause() {
-
+        /* no-op */
     }
 
     public void clickListing() {
