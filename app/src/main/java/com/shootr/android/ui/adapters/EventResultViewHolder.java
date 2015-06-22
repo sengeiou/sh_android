@@ -7,10 +7,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.model.EventResultModel;
@@ -25,7 +23,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.event_title) TextView title;
     @InjectView(R.id.event_author) TextView author;
     @InjectView(R.id.event_watchers) TextView watchers;
-    @InjectView(R.id.event_remove) ImageView remove;
     @InjectView(R.id.event_notification_indicator) View notificationIndicator;
 
     public EventResultViewHolder(View itemView,
@@ -84,10 +81,5 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
             sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             title.setText(sp);
         }
-    }
-
-    @OnClick(R.id.event_remove)
-    public void onRemoveEvent(){
-        Toast.makeText(remove.getContext(),"REMOVE",Toast.LENGTH_SHORT).show();
     }
 }

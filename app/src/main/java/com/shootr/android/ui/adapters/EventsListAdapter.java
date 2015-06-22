@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
@@ -17,6 +18,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     private String currentCheckedInEvent;
     private OnEventClickListener onEventClickListener;
+    private OnUnwatchClickListener onUnwatchClickListener;
 
     public EventsListAdapter(PicassoWrapper picasso, OnEventClickListener onEventClickListener) {
         this.picasso = picasso;
@@ -35,9 +37,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event,
-          parent,
-          false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event, parent, false);
         return new EventResultViewHolder(view, onEventClickListener, picasso);
     }
 
@@ -60,10 +60,11 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
         EventResultModel event = getHeader();
         String idEvent = event.getEventModel().getIdEvent();
 
-        EventResultViewHolder headerHolder = (EventResultViewHolder) viewHolder;
+        WatchingEventResultViewHolder watchingEventResultViewHolder =
+          new WatchingEventResultViewHolder(viewHolder.itemView, onEventClickListener, picasso, onUnwatchClickListener);
+
         boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
-        headerHolder.remove.setVisibility(View.VISIBLE);
-        headerHolder.render(event, isCheckedInEvent);
+        watchingEventResultViewHolder.render(event, isCheckedInEvent);
     }
 
     @Override
@@ -85,5 +86,9 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     public void setCurrentWatchingEvent(EventResultModel event) {
         this.setHeader(event);
+    }
+
+    public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
+        this.onUnwatchClickListener = onUnwatchClickListener;
     }
 }
