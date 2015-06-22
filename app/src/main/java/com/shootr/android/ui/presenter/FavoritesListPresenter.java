@@ -3,8 +3,6 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
@@ -15,20 +13,15 @@ import javax.inject.Inject;
 public class FavoritesListPresenter implements Presenter{
 
     private final GetFavoriteEventsInteractor getFavoriteEventsInteractor;
-    private final SelectEventInteractor selectEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
-    private final EventModelMapper eventModelMapper;
 
     private FavoritesListView favoritesListView;
     private boolean hasBeenPaused = false;
 
     @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor,
-      SelectEventInteractor selectEventInteractor,
-      EventResultModelMapper eventResultModelMapper, EventModelMapper eventModelMapper) {
+      EventResultModelMapper eventResultModelMapper) {
         this.getFavoriteEventsInteractor = getFavoriteEventsInteractor;
-        this.selectEventInteractor = selectEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
-        this.eventModelMapper = eventModelMapper;
     }
 
     public void setView(FavoritesListView favoritesListView) {
@@ -64,15 +57,7 @@ public class FavoritesListPresenter implements Presenter{
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<EventSearchResult>() {
-            @Override public void onLoaded(EventSearchResult selectedEvent) {
-                onEventSelected(eventModelMapper.transform(selectedEvent.getEvent()));
-            }
-        });
-    }
-
-    private void onEventSelected(EventModel selectedEvent) {
-        favoritesListView.navigateToEventTimeline(selectedEvent.getIdEvent(), selectedEvent.getTitle());
+        favoritesListView.navigateToEventTimeline(idEvent, eventTitle);
     }
 
     @Override
