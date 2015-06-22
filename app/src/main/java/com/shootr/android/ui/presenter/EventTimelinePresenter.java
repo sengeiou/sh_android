@@ -16,7 +16,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelinePresenter implements Presenter, ShotSent.Receiver {
+public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
@@ -33,8 +33,10 @@ public class TimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean shouldPoll;
     private Handler pollShotsHanlder;
 
-    @Inject public TimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper, ShotModelMapper shotModelMapper,
-      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
+    @Inject public EventTimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper,
+      ShotModelMapper shotModelMapper,
+      @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;

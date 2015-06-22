@@ -1,7 +1,5 @@
 package com.shootr.android.ui.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,7 +41,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
-import com.shootr.android.ui.presenter.TimelinePresenter;
+import com.shootr.android.ui.presenter.EventTimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.CheckinView;
@@ -73,7 +71,7 @@ public class EventTimelineFragment extends BaseFragment
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
 
     //region Fields
-    @Inject TimelinePresenter timelinePresenter;
+    @Inject EventTimelinePresenter eventTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
@@ -138,7 +136,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        timelinePresenter.setView(new NullTimelineView());
+        eventTimelinePresenter.setView(new NullTimelineView());
         checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
@@ -197,7 +195,7 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void onResume() {
         super.onResume();
-        timelinePresenter.resume();
+        eventTimelinePresenter.resume();
         newShotBarPresenter.resume();
         watchNumberPresenter.resume();
         checkinPresenter.resume();
@@ -206,7 +204,7 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void onPause() {
         super.onPause();
-        timelinePresenter.pause();
+        eventTimelinePresenter.pause();
         newShotBarPresenter.pause();
         watchNumberPresenter.pause();
         checkinPresenter.pause();
@@ -219,7 +217,7 @@ public class EventTimelineFragment extends BaseFragment
     }
 
     private void initializePresenters(String idEvent) {
-        timelinePresenter.initialize(this);
+        eventTimelinePresenter.initialize(this);
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);
@@ -358,7 +356,7 @@ public class EventTimelineFragment extends BaseFragment
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                timelinePresenter.refresh();
+                eventTimelinePresenter.refresh();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
@@ -387,7 +385,7 @@ public class EventTimelineFragment extends BaseFragment
         int lastItemPosition = listView.getAdapter().getCount() - 1;
         int lastVisiblePosition = listView.getLastVisiblePosition();
         if (lastItemPosition == lastVisiblePosition) {
-            timelinePresenter.showingLastShot(adapter.getLastShot());
+            eventTimelinePresenter.showingLastShot(adapter.getLastShot());
         }
     }
     //endregion

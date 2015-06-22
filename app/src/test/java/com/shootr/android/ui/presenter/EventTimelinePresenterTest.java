@@ -33,7 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class TimelinePresenterTest {
+public class EventTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
@@ -43,13 +43,13 @@ public class TimelinePresenterTest {
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
 
-    private TimelinePresenter presenter;
+    private EventTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new TimelinePresenter(timelineInteractorWrapper, shotModelMapper, bus, errorMessageFactory);
+        presenter = new EventTimelinePresenter(timelineInteractorWrapper, shotModelMapper, bus, errorMessageFactory);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
     }
