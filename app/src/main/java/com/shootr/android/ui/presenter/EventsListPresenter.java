@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.domain.interactor.user.UnwatchEventInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -67,9 +67,14 @@ public class EventsListPresenter implements Presenter {
     public void unwatchEvent() {
         unwatchEventInteractor.unwatchEvent(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                // TODO
+                refresh();
+                removeHeader();
             }
         });
+    }
+
+    private void removeHeader() {
+        eventsListView.setCurrentWatchingEventId(null);
     }
 
     public void selectEvent(EventModel event) {
