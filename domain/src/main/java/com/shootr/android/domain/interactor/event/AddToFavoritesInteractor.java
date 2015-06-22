@@ -38,7 +38,7 @@ public class AddToFavoritesInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Favorite favorite = favoriteFromParameters();
         localFavoriteRepository.putFavorite(favorite);
         postExecutionThread.post(new Runnable() {

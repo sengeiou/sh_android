@@ -72,7 +72,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     @Override
-    public void execute() throws Throwable {
+    public void execute() throws Exception {
         List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
         notifyLoaded(localEvents);
 

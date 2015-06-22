@@ -35,7 +35,7 @@ public class SendDraftInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         for (Long queuedShotId : queuedShotIds) {
             QueuedShot queuedShot = shotQueueRepository.getShotQueue(queuedShotId);
             shotSender.sendShot(queuedShot.getShot(), queuedShot.getImageFile());

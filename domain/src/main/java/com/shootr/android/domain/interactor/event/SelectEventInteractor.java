@@ -53,7 +53,7 @@ public class SelectEventInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         Event selectedEvent = getSelectedEvent();
         if (isSelectingCurrentWatchingEvent(currentUser)) {

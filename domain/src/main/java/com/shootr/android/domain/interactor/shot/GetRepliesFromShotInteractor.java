@@ -35,7 +35,7 @@ public class GetRepliesFromShotInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         List<Shot> localReplies = localShotRepository.getReplies(shotId);
         if (!localReplies.isEmpty()) {
             notifyLoaded(orderShots(localReplies));

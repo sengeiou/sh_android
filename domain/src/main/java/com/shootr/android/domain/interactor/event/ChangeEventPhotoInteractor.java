@@ -48,7 +48,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
             String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, idEvent);

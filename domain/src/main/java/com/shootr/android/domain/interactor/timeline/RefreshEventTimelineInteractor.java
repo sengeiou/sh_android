@@ -39,7 +39,7 @@ public class RefreshEventTimelineInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         executeSynchronized();
     }
 

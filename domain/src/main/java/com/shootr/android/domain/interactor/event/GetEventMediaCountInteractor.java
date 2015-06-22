@@ -47,7 +47,7 @@ public class GetEventMediaCountInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         getMediaCountFromLocal();
         getMediaCountFromRemote();
     }

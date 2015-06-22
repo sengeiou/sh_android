@@ -39,7 +39,7 @@ public class WatchNumberInteractor implements Interactor{
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         String currentVisibleEventId = getCurrentVisibleEventId();
         if (currentVisibleEventId == null) {
             notifyLoaded(NO_EVENT);

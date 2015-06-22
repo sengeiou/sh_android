@@ -55,8 +55,9 @@ public class InteractorExecutor implements InteractorHandler {
                   Thread.currentThread().getName());
                 try {
                     interactor.execute();
-                } catch (Throwable throwable) {
-                    Timber.e(throwable, "IntractorExecutor error");
+                } catch (Exception unhandledException) {
+                    Timber.e(unhandledException, "Unhandled exception in Interactor Executor. If this is an expected exception, it should be handled inside the Interactor.");
+                    throw new RuntimeException(unhandledException);
                 }
             }
         };
@@ -65,10 +66,6 @@ public class InteractorExecutor implements InteractorHandler {
 
     @Override public void sendUiMessage(Object objectToUi) {
         bus.post(objectToUi);
-    }
-
-    @Override public void sendError(Throwable throwable) {
-        bus.post(throwable);
     }
 
     private static class JobThreadFactory implements ThreadFactory {

@@ -32,7 +32,7 @@ public class PerformCheckinInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try {
             shootrUserService.checkInEvent(idEvent);
             notifyCompleted();

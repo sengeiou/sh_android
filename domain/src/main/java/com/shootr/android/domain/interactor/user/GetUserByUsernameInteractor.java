@@ -39,7 +39,7 @@ public class GetUserByUsernameInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         User localUser = loadLocalUser();
         loadRemoteUser(localUser);
     }

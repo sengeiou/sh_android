@@ -33,7 +33,7 @@ public class GetCheckinStatusInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         boolean checkedIn = idEvent.equals(currentUser.getIdCheckedEvent());
         notifyResult(checkedIn);

@@ -50,7 +50,7 @@ public class CreateEventInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Event event = eventFromParameters();
 
         if (validateEvent(event)) {

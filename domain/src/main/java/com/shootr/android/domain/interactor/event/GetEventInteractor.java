@@ -33,7 +33,7 @@ public class GetEventInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Event localEvent = localEventRepository.getEventById(idEvent);
         if (localEvent != null) {
             notifyLoaded(localEvent);

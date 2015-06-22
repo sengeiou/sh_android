@@ -29,7 +29,7 @@ public class GetPeopleInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         obtainLocalPeople();
         obtainRemotePeople();
     }

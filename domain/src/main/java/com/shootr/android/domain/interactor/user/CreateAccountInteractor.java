@@ -42,7 +42,7 @@ public class CreateAccountInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         if (validateInput()) {
             try {
                 shootrUserService.createAccount(username, email, password);

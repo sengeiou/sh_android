@@ -30,7 +30,7 @@ public class GetReplyParentInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Shot replyParent = remoteShotRepository.getShot(parentId);
 
         notifyLoaded(replyParent);

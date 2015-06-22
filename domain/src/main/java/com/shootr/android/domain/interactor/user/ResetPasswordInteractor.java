@@ -33,7 +33,7 @@ public class ResetPasswordInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         try{
             ForgotPasswordResult forgotPasswordResult = shootrUserService.performResetPassword(usernameOrEmail);
             notifyLoaded(forgotPasswordResult);

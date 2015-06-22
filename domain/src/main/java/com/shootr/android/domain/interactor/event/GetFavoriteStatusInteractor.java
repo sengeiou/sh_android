@@ -30,7 +30,7 @@ public class GetFavoriteStatusInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         loadFavoriteStatusFromLocal();
     }
 

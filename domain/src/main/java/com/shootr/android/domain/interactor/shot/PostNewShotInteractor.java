@@ -44,7 +44,7 @@ public abstract class PostNewShotInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         Shot shotToPublish = createShotFromParameters();
         try {
             notifyReadyToSend();

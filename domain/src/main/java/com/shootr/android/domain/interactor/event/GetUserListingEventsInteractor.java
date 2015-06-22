@@ -38,7 +38,7 @@ public class GetUserListingEventsInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Throwable {
+    @Override public void execute() throws Exception {
         loadUserListingEventsFromLocal();
         loadUserListingEventsFromRemote();
     }
