@@ -55,9 +55,9 @@ public class InteractorExecutor implements InteractorHandler {
                   Thread.currentThread().getName());
                 try {
                     interactor.execute();
-                } catch (Exception throwable) {
-                    Timber.e(throwable, "IntractorExecutor error");
-                    throw new RuntimeException(throwable);
+                } catch (Exception unhandledException) {
+                    Timber.e(unhandledException, "IntractorExecutor error");
+                    throw new RuntimeException(unhandledException);
                 }
             }
         };
