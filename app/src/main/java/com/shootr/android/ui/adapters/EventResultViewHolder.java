@@ -60,7 +60,7 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     private void setClickListener(final EventResultModel eventResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onEventClickListener.onEventClick(eventResult.getEventModel());
+                onEventClickListener.onEventClick(eventResult);
             }
         });
     }

@@ -7,7 +7,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -30,7 +29,6 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -46,7 +44,6 @@ public class EventsListPresenterTest {
     @Mock Bus bus;
     @Mock EventsListInteractor eventsListInteractor;
     @Mock EventsSearchInteractor eventsSearchInteractor;
-    @Mock SelectEventInteractor selectEventInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock EventsListView eventsListView;
@@ -59,7 +56,7 @@ public class EventsListPresenterTest {
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
         presenter = new EventsListPresenter(eventsListInteractor,
-          eventsSearchInteractor, selectEventInteractor, eventResultModelMapper, eventModelMapper, errorMessageFactory);
+          eventsSearchInteractor, eventResultModelMapper, errorMessageFactory);
         presenter.setView(eventsListView);
     }
 
@@ -69,29 +66,19 @@ public class EventsListPresenterTest {
         verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
-    @Test public void shouldSelectEventWithInteractorWhenEventSelected() throws Exception {
-        presenter.selectEvent(selectedEventModel());
-
-        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), any(Interactor.Callback.class));
-    }
-
-    @Test public void shouldNavigateToEventTimelineWhenEventSelectedIfSelectEventInteractorCallbacksEventId() throws Exception {
-        setupSelectEventInteractorCallbacksEvent();
-
+    @Test public void shouldNavigateToEventTimelineWhenEventSelected() throws Exception {
         presenter.selectEvent(selectedEventModel());
 
         verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
-    @Test public void shouldSelectEventWithInteractorWhenNewEventCreated() throws Exception {
+    @Test public void shouldNavigateToEventTimelineWhenNewEventCreated() throws Exception {
         presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
-        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), any(Interactor.Callback.class));
+        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldNavigateToEventTimelineWhenNewEventCreatedIfSelectEventInteractorCallbacksEventId() throws Exception {
-        setupSelectEventInteractorCallbacksEvent();
-
         presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
         verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
@@ -199,16 +186,6 @@ public class EventsListPresenterTest {
         return any(EventsSearchInteractor.Callback.class);
     }
 
-    private void setupSelectEventInteractorCallbacksEvent() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<EventSearchResult> callback = (Interactor.Callback<EventSearchResult>) invocation.getArguments()[1];
-                callback.onLoaded(eventResult());
-                return null;
-            }
-        }).when(selectEventInteractor).selectEvent(anyString(), any(Interactor.Callback.class));
-    }
-
     private void setupEventListInteractorCallbacks(final List<EventSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -252,11 +229,13 @@ public class EventsListPresenterTest {
         return eventSearchResult;
     }
 
-    private EventModel selectedEventModel() {
+    private EventResultModel selectedEventModel() {
         EventModel eventModel = new EventModel();
         eventModel.setIdEvent(SELECTED_EVENT_ID);
         eventModel.setTitle(SELECTED_EVENT_TITLE);
-        return eventModel;
+        EventResultModel eventResultModel = new EventResultModel();
+        eventResultModel.setEventModel(eventModel);
+        return eventResultModel;
     }
 
     private Event selectedEvent() {

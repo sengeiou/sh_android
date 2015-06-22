@@ -28,7 +28,6 @@ import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
@@ -91,7 +90,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventModel event) {
+            public void onEventClick(EventResultModel event) {
                 presenter.selectEvent(event);
             }
         });

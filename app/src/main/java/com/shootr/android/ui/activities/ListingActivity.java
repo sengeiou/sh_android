@@ -13,7 +13,6 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
@@ -47,7 +46,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override public void onEventClick(EventModel event) {
+            @Override public void onEventClick(EventResultModel event) {
                 presenter.selectEvent(event);
             }
         });
