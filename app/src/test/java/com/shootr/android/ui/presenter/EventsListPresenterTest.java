@@ -8,7 +8,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
-import com.shootr.android.domain.interactor.user.UnwatchEventInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
