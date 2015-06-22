@@ -2,10 +2,12 @@ package com.shootr.android.ui.presenter;
 
 import android.os.Handler;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
@@ -21,11 +23,13 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
     private final EventTimelineInteractorsWrapper timelineInteractorWrapper;
+    private final SelectEventInteractor selectEventInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
 
     private TimelineView timelineView;
+    private String eventId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
 
@@ -34,10 +38,12 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private Handler pollShotsHanlder;
 
     @Inject public EventTimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper,
+      SelectEventInteractor selectEventInteractor,
       ShotModelMapper shotModelMapper,
       @Main Bus bus,
       ErrorMessageFactory errorMessageFactory) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
+        this.selectEventInteractor = selectEventInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -47,9 +53,10 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.timelineView = timelineView;
     }
 
-    public void initialize(TimelineView timelineView) {
+    public void initialize(TimelineView timelineView, String eventId) {
+        this.eventId = eventId;
         this.setView(timelineView);
-        this.loadTimeline();
+        this.selectEvent();
         this.pollShotsHanlder = new Handler();
         this.pollShotsRunnable = new Runnable() {
             @Override
@@ -77,6 +84,15 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         if (shouldPoll) {
             pollShotsHanlder.postDelayed(pollShotsRunnable, REFRESH_INTERVAL_MILLISECONDS);
         }
+    }
+
+    protected void selectEvent() {
+        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<EventSearchResult>() {
+            @Override
+            public void onLoaded(EventSearchResult eventSearchResult) {
+                loadTimeline();
+            }
+        });
     }
 
     protected void loadTimeline() {

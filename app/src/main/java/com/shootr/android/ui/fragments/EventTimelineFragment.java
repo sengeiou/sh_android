@@ -217,7 +217,7 @@ public class EventTimelineFragment extends BaseFragment
     }
 
     private void initializePresenters(String idEvent) {
-        eventTimelinePresenter.initialize(this);
+        eventTimelinePresenter.initialize(this, idEvent);
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idEvent);
         checkinPresenter.initialize(this, idEvent);

@@ -1,9 +1,12 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Event;
+import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
@@ -28,6 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -37,9 +42,11 @@ public class EventTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
+    private static final String SELECTED_EVENT_ID = "event";
 
     @Mock TimelineView timelineView;
     @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
+    @Mock SelectEventInteractor selectEventInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
 
@@ -49,14 +56,28 @@ public class EventTimelinePresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new EventTimelinePresenter(timelineInteractorWrapper, shotModelMapper, bus, errorMessageFactory);
+        presenter = new EventTimelinePresenter(timelineInteractorWrapper,
+          selectEventInteractor,
+          shotModelMapper, bus, errorMessageFactory);
         presenter.setView(timelineView);
         shotSentReceiver = presenter;
     }
 
+    //region Select event
+
+    @Test
+    public void shouldSelectEventWhenInitialized() throws Exception {
+        presenter.initialize(timelineView, SELECTED_EVENT_ID);
+
+        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), anySelectCallback());
+    }
+    //endregion
+
     //region Load timeline
-    @Test public void shouldLoadTimlelineWhenInitialized() throws Exception {
-        presenter.initialize(timelineView);
+    @Test public void shouldLoadTimlelineWhenSelectEventIfSelectEventCallbacks() throws Exception {
+        setupSelectEventInteractorCallbacksEvent();
+
+        presenter.selectEvent();
 
         verify(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
     }
@@ -245,6 +266,10 @@ public class EventTimelinePresenterTest {
     public Interactor.Callback<Timeline> anyCallback() {
         return any(Interactor.Callback.class);
     }
+
+    private Interactor.Callback<EventSearchResult> anySelectCallback() {
+        return any(Interactor.Callback.class);
+    }
     //endregion
 
     //region Stubs
@@ -275,6 +300,21 @@ public class EventTimelinePresenterTest {
         shot.setUserInfo(new Shot.ShotUserInfo());
         return shot;
     }
+
+    private Event selectedEvent() {
+        Event event = new Event();
+        event.setId(SELECTED_EVENT_ID);
+        //event.setTitle(SELECTED_EVENT_TITLE);
+        //event.setAuthorId(EVENT_AUTHOR_ID);
+        return event;
+    }
+
+    private EventSearchResult eventResult() {
+        EventSearchResult eventSearchResult = new EventSearchResult();
+        eventSearchResult.setEvent(selectedEvent());
+        return eventSearchResult;
+    }
+
     //endregion
 
     //region Setups
@@ -303,6 +343,16 @@ public class EventTimelinePresenterTest {
                 return null;
             }
         }).when(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
+    }
+
+    private void setupSelectEventInteractorCallbacksEvent() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<EventSearchResult> callback = (Interactor.Callback<EventSearchResult>) invocation.getArguments()[1];
+                callback.onLoaded(eventResult());
+                return null;
+            }
+        }).when(selectEventInteractor).selectEvent(anyString(), any(Interactor.Callback.class));
     }
     //endregion
 }
