@@ -98,8 +98,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         });
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
             @Override public void onUnwatchClick() {
-                // TODO real implementation
-                Toast.makeText(getActivity(),"Remove", Toast.LENGTH_SHORT).show();
+                presenter.unwatchEvent();
             }
         });
         eventsList.setAdapter(adapter);

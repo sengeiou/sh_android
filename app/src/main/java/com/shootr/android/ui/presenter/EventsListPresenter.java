@@ -9,6 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.user.UnwatchEventInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -23,6 +24,7 @@ public class EventsListPresenter implements Presenter {
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
     private final SelectEventInteractor selectEventInteractor;
+    private final UnwatchEventInteractor unwatchEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -31,11 +33,13 @@ public class EventsListPresenter implements Presenter {
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
+      EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor,
+      UnwatchEventInteractor unwatchEventInteractor, EventResultModelMapper eventResultModelMapper,
       EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
         this.selectEventInteractor = selectEventInteractor;
+        this.unwatchEventInteractor = unwatchEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -58,6 +62,14 @@ public class EventsListPresenter implements Presenter {
 
     public void refresh() {
         this.loadDefaultEventList();
+    }
+
+    public void unwatchEvent() {
+        unwatchEventInteractor.unwatchEvent(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                // TODO
+            }
+        });
     }
 
     public void selectEvent(EventModel event) {
