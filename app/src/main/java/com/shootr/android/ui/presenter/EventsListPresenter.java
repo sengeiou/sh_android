@@ -67,13 +67,13 @@ public class EventsListPresenter implements Presenter {
     public void unwatchEvent() {
         unwatchEventInteractor.unwatchEvent(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                refresh();
-                removeHeader();
+                loadDefaultEventList();
+                removeCurrentWatchingEvent();
             }
         });
     }
 
-    private void removeHeader() {
+    private void removeCurrentWatchingEvent() {
         eventsListView.setCurrentWatchingEventId(null);
     }
 
