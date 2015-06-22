@@ -43,46 +43,48 @@ public class UnwatchEventInteractorTest {
           sessionRepository, localUserRepository, remoteUserRepository);
     }
 
+    //region tests
     @Test
     public void shouldUpdateUserInfoInSessionRepositoryWhenUnwatch() throws Throwable {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        setupUserWithWatchingEvent();
+
         unwatchEventInteractor.unwatchEvent(completedCallback);
+
         verify(sessionRepository).setCurrentUser(user());
     }
 
     @Test
     public void shouldUpdateUserInfoInLocalRepositoryWhenUnwatch() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        setupUserWithWatchingEvent();
+
         unwatchEventInteractor.unwatchEvent(completedCallback);
+
         verify(localUserRepository).putUser(user());
     }
 
     @Test
     public void shouldUpdateUserInfoInRemoteRepositoryWhenUnwatch() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        setupUserWithWatchingEvent();
+
         unwatchEventInteractor.unwatchEvent(completedCallback);
+
         verify(remoteUserRepository).putUser(user());
     }
 
     @Test
-    public void shouldHaveNotWatchingEventAfterUpdatingUser() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+    public void shouldPutUserWithNoWatchingEventInSessionRepositoryWhenUnwatch() {
+        setupUserWithWatchingEvent();
 
         unwatchEventInteractor.unwatchEvent(completedCallback);
 
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
         verify(sessionRepository).setCurrentUser(argument.capture());
-        assertThat(argument.getValue().getIdWatchingEvent()).isNullOrEmpty();
+        assertThat(argument.getValue().getIdWatchingEvent()).isNull();
     }
 
     @Test
     public void shouldNotifyCompletedAfterLocalUserInfoUpdated() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        setupUserWithWatchingEvent();
 
         unwatchEventInteractor.unwatchEvent(completedCallback);
 
@@ -93,8 +95,7 @@ public class UnwatchEventInteractorTest {
 
     @Test
     public void shouldNotifyCompletedBeforeRemoteUserInfoUpdated() {
-        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        setupUserWithWatchingEvent();
 
         unwatchEventInteractor.unwatchEvent(completedCallback);
 
@@ -102,7 +103,9 @@ public class UnwatchEventInteractorTest {
         inOrder.verify(completedCallback).onCompleted();
         inOrder.verify(remoteUserRepository).putUser(user());
     }
+    //endregion
 
+    //region stubbers
     private User user() {
         User user = new User();
         user.setIdUser(USER_ID);
@@ -114,5 +117,12 @@ public class UnwatchEventInteractorTest {
         user.setIdUser(USER_ID);
         user.setIdWatchingEvent(WATCHING_EVENT_ID);
         return user;
+    }
+
+    //endregion
+
+    private void setupUserWithWatchingEvent() {
+        when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
     }
 }
