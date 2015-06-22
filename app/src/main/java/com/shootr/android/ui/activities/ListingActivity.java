@@ -47,7 +47,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override public void onEventClick(EventModel event) {
+            @Override public void onEventClick(EventResultModel event) {
                 presenter.selectEvent(event);
             }
         });

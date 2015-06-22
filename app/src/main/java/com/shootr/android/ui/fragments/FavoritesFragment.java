@@ -84,7 +84,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventModel event) {
+            public void onEventClick(EventResultModel event) {
                 favoritesListPresenter.selectEvent(event);
             }
         });

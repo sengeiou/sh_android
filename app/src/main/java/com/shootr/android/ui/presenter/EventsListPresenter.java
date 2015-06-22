@@ -8,7 +8,6 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -22,22 +21,17 @@ public class EventsListPresenter implements Presenter {
 
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
-    private final SelectEventInteractor selectEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
-    private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, SelectEventInteractor selectEventInteractor, EventResultModelMapper eventResultModelMapper,
-      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
-        this.selectEventInteractor = selectEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
-        this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
@@ -60,21 +54,13 @@ public class EventsListPresenter implements Presenter {
         this.loadDefaultEventList();
     }
 
-    public void selectEvent(EventModel event) {
-        selectEvent(event.getIdEvent(), event.getTitle());
+    public void selectEvent(EventResultModel event) {
+        eventsListView.setCurrentWatchingEventId(event);
+        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        selectEventInteractor.selectEvent(idEvent, new Interactor.Callback<EventSearchResult>() {
-            @Override public void onLoaded(EventSearchResult selectedEvent) {
-                onEventSelected(eventModelMapper.transform(selectedEvent.getEvent()));
-                setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(selectedEvent));
-            }
-        });
-    }
-
-    private void onEventSelected(EventModel selectedEvent) {
-        eventsListView.navigateToEventTimeline(selectedEvent.getIdEvent(), selectedEvent.getTitle());
+        eventsListView.navigateToEventTimeline(idEvent, eventTitle);
     }
 
     protected void loadDefaultEventList() {

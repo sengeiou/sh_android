@@ -73,8 +73,8 @@ public class ListingListPresenter implements Presenter{
         /* no-op */
     }
 
-    public void selectEvent(EventModel event) {
-        selectEvent(event.getIdEvent(), event.getTitle());
+    public void selectEvent(EventResultModel event) {
+        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {

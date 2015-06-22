@@ -91,7 +91,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventModel event) {
+            public void onEventClick(EventResultModel event) {
                 presenter.selectEvent(event);
             }
         });
