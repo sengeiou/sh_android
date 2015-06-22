@@ -56,7 +56,7 @@ public class InteractorExecutor implements InteractorHandler {
                 try {
                     interactor.execute();
                 } catch (Exception unhandledException) {
-                    Timber.e(unhandledException, "IntractorExecutor error");
+                    Timber.e(unhandledException, "Unhandled exception in Interactor Executor. If this is an expected exception, it should be handled inside the Interactor.");
                     throw new RuntimeException(unhandledException);
                 }
             }
