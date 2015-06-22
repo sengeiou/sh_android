@@ -304,8 +304,6 @@ public class EventTimelinePresenterTest {
     private Event selectedEvent() {
         Event event = new Event();
         event.setId(SELECTED_EVENT_ID);
-        //event.setTitle(SELECTED_EVENT_TITLE);
-        //event.setAuthorId(EVENT_AUTHOR_ID);
         return event;
     }
 
