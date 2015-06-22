@@ -68,10 +68,6 @@ public class InteractorExecutor implements InteractorHandler {
         bus.post(objectToUi);
     }
 
-    @Override public void sendError(Throwable throwable) {
-        bus.post(throwable);
-    }
-
     private static class JobThreadFactory implements ThreadFactory {
 
         private static final String THREAD_NAME = "android_";
