@@ -11,7 +11,7 @@ import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
-import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.ui.views.EventTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -28,7 +28,7 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private TimelineView timelineView;
+    private EventTimelineView eventTimelineView;
     private String eventId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
@@ -49,13 +49,13 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void setView(TimelineView timelineView) {
-        this.timelineView = timelineView;
+    public void setView(EventTimelineView eventTimelineView) {
+        this.eventTimelineView = eventTimelineView;
     }
 
-    public void initialize(TimelineView timelineView, String eventId) {
+    public void initialize(EventTimelineView eventTimelineView, String eventId) {
         this.eventId = eventId;
-        this.setView(timelineView);
+        this.setView(eventTimelineView);
         this.selectEvent();
         this.pollShotsHanlder = new Handler();
         this.pollShotsRunnable = new Runnable() {
@@ -96,31 +96,31 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-        timelineView.showLoading();
+        eventTimelineView.showLoading();
         timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                timelineView.hideLoading();
-                timelineView.setShots(shotModels);
+                eventTimelineView.hideLoading();
+                eventTimelineView.setShots(shotModels);
                 if (!shotModels.isEmpty()) {
-                    timelineView.hideEmpty();
-                    timelineView.showShots();
+                    eventTimelineView.hideEmpty();
+                    eventTimelineView.showShots();
                 } else {
-                    timelineView.showEmpty();
-                    timelineView.hideShots();
+                    eventTimelineView.showEmpty();
+                    eventTimelineView.hideShots();
                 }
                 loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                timelineView.hideLoading();
-                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                eventTimelineView.hideLoading();
+                eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
         });
     }
 
     public void refresh() {
-        timelineView.showLoading();
+        eventTimelineView.showLoading();
         this.loadNewShots();
     }
 
@@ -135,38 +135,38 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
-                    timelineView.addNewShots(shotModels);
-                    timelineView.hideEmpty();
-                    timelineView.showShots();
+                    eventTimelineView.addNewShots(shotModels);
+                    eventTimelineView.hideEmpty();
+                    eventTimelineView.showShots();
                 }
-                timelineView.hideLoading();
+                eventTimelineView.hideLoading();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-                timelineView.hideLoading();
+                eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                eventTimelineView.hideLoading();
             }
         });
     }
 
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
-        timelineView.showLoadingOldShots();
+        eventTimelineView.showLoadingOldShots();
         timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
               @Override public void onLoaded(Timeline timeline) {
                   isLoadingOlderShots = false;
-                  timelineView.hideLoadingOldShots();
+                  eventTimelineView.hideLoadingOldShots();
                   List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                   if (!shotModels.isEmpty()) {
-                      timelineView.addOldShots(shotModels);
+                      eventTimelineView.addOldShots(shotModels);
                   } else {
                       mightHaveMoreShots = false;
                   }
               }
           }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  timelineView.hideLoadingOldShots();
-                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                  eventTimelineView.hideLoadingOldShots();
+                  eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
               }
           });
     }

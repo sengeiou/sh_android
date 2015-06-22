@@ -1,11 +1,11 @@
 package com.shootr.android.ui.views.nullview;
 
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.ui.views.EventTimelineView;
 
 import java.util.List;
 
-public class NullTimelineView implements TimelineView {
+public class NullEventTimelineView implements EventTimelineView {
 
     @Override public void setShots(List<ShotModel> shots) {
         /* no-op */

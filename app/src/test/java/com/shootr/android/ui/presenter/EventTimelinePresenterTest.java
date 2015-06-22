@@ -10,7 +10,7 @@ import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
-import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.ui.views.EventTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -44,7 +44,7 @@ public class EventTimelinePresenterTest {
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
     private static final String SELECTED_EVENT_ID = "event";
 
-    @Mock TimelineView timelineView;
+    @Mock EventTimelineView eventTimelineView;
     @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
     @Mock SelectEventInteractor selectEventInteractor;
     @Mock Bus bus;
@@ -59,7 +59,7 @@ public class EventTimelinePresenterTest {
         presenter = new EventTimelinePresenter(timelineInteractorWrapper,
           selectEventInteractor,
           shotModelMapper, bus, errorMessageFactory);
-        presenter.setView(timelineView);
+        presenter.setView(eventTimelineView);
         shotSentReceiver = presenter;
     }
 
@@ -67,7 +67,7 @@ public class EventTimelinePresenterTest {
 
     @Test
     public void shouldSelectEventWhenInitialized() throws Exception {
-        presenter.initialize(timelineView, SELECTED_EVENT_ID);
+        presenter.initialize(eventTimelineView, SELECTED_EVENT_ID);
 
         verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), anySelectCallback());
     }
@@ -87,7 +87,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView).setShots(anyListOf(ShotModel.class));
+        verify(eventTimelineView).setShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -95,13 +95,13 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView).showShots();
+        verify(eventTimelineView).showShots();
     }
 
     @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 
-        verify(timelineView, times(1)).showLoading();
+        verify(eventTimelineView, times(1)).showLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -109,7 +109,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView, times(1)).hideLoading();
+        verify(eventTimelineView, times(1)).hideLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
@@ -117,7 +117,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView, times(1)).hideLoading();
+        verify(eventTimelineView, times(1)).hideLoading();
     }
 
     @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
@@ -125,7 +125,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView).showEmpty();
+        verify(eventTimelineView).showEmpty();
     }
 
     @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -133,7 +133,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView).hideEmpty();
+        verify(eventTimelineView).hideEmpty();
     }
 
     @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
@@ -141,7 +141,7 @@ public class EventTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(timelineView).hideShots();
+        verify(eventTimelineView).hideShots();
     }
 
     @Test public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
@@ -150,7 +150,7 @@ public class EventTimelinePresenterTest {
         presenter.loadTimeline();
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-        verify(timelineView).setShots(captor.capture());
+        verify(eventTimelineView).setShots(captor.capture());
         List renderedShotList = captor.<List<ShotModel>>getValue();
         assertThat(renderedShotList).isEmpty();
     }
@@ -162,7 +162,7 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView).addNewShots(anyListOf(ShotModel.class));
+        verify(eventTimelineView).addNewShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -170,13 +170,13 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView, never()).addNewShots(anyListOf(ShotModel.class));
+        verify(eventTimelineView, never()).addNewShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldShowLoadingWhenRefreshTimeline() throws Exception {
         presenter.refresh();
 
-        verify(timelineView, times(1)).showLoading();
+        verify(eventTimelineView, times(1)).showLoading();
     }
 
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
@@ -184,7 +184,7 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView).hideLoading();
+        verify(eventTimelineView).hideLoading();
     }
 
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -192,7 +192,7 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView).hideLoading();
+        verify(eventTimelineView).hideLoading();
     }
 
     @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
@@ -200,7 +200,7 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView).hideEmpty();
+        verify(eventTimelineView).hideEmpty();
     }
 
     @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
@@ -208,7 +208,7 @@ public class EventTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(timelineView).showShots();
+        verify(eventTimelineView).showShots();
     }
 
     //endregion
@@ -230,7 +230,7 @@ public class EventTimelinePresenterTest {
     @Test public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(timelineView).showLoadingOldShots();
+        verify(eventTimelineView).showLoadingOldShots();
     }
 
     @Test public void shouldObtainOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {

@@ -48,11 +48,11 @@ import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
-import com.shootr.android.ui.views.TimelineView;
+import com.shootr.android.ui.views.EventTimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.views.nullview.NullCheckinView;
-import com.shootr.android.ui.views.nullview.NullTimelineView;
+import com.shootr.android.ui.views.nullview.NullEventTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -65,7 +65,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EventTimelineFragment extends BaseFragment
-  implements TimelineView, NewShotBarView, WatchNumberView, CheckinView, FavoriteStatusView {
+  implements EventTimelineView, NewShotBarView, WatchNumberView, CheckinView, FavoriteStatusView {
 
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
@@ -136,7 +136,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        eventTimelinePresenter.setView(new NullTimelineView());
+        eventTimelinePresenter.setView(new NullEventTimelineView());
         checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
