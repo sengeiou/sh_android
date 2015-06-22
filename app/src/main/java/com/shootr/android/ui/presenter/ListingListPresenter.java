@@ -4,7 +4,6 @@ import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetUserListingEventsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
