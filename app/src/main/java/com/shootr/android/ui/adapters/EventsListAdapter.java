@@ -62,6 +62,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
         EventResultViewHolder headerHolder = (EventResultViewHolder) viewHolder;
         boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
+        headerHolder.remove.setVisibility(View.VISIBLE);
         headerHolder.render(event, isCheckedInEvent);
     }
 

@@ -60,6 +60,19 @@
           android:layout_marginLeft="6dp"
           tools:text="2"
           style="@style/WatchersIndicator" />
+
+      <ImageView android:id="@+id/event_remove"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_action_navigation_close"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/event_watchers"
+        android:layout_alignStart="@+id/event_watchers"
+        android:visibility="gone"
+        tools:visibility="visible"/>
     </RelativeLayout>
 </FrameLayout>
 
