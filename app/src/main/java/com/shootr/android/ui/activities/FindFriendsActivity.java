@@ -64,8 +64,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     private SearchView searchView;
 
-    @InjectView(R.id.search_results_list) ListView resultsListView;
-    @InjectView(R.id.search_results_empty) TextView emptyOrErrorView;
+    @InjectView(R.id.find_friends_search_results_list) ListView resultsListView;
+    @InjectView(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
     View progressViewContent;
     View progressView;
 
@@ -83,7 +83,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         if (!restoreSessionOrLogin()){
             return;
         }
-        setContainerContent(R.layout.activity_search);
+        setContainerContent(R.layout.activity_find_friends);
         ButterKnife.inject(this);
 
         setupViews();
@@ -186,7 +186,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         }
     }
 
-    @OnItemClick(R.id.search_results_list)
+    @OnItemClick(R.id.find_friends_search_results_list)
     public void openProfile(int position) {
         UserModel user = (UserModel) resultsListView.getItemAtPosition(position);
         startActivity(ProfileContainerActivity.getIntent(this, user.getIdUser()));
