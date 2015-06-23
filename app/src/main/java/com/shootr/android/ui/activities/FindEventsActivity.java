@@ -11,10 +11,10 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.views.EventSearchView;
+import com.shootr.android.ui.views.FindEventsView;
 import dagger.ObjectGraph;
 
-public class EventSearchActivity extends BaseSignedInActivity implements EventSearchView {
+public class FindEventsActivity extends BaseSignedInActivity implements FindEventsView {
 
     private SearchView searchView;
     private String currentSearchQuery;
@@ -26,7 +26,7 @@ public class EventSearchActivity extends BaseSignedInActivity implements EventSe
         if (!restoreSessionOrLogin()){
             return;
         }
-        setContainerContent(R.layout.activity_event_search);
+        setContainerContent(R.layout.activity_find_events);
         ButterKnife.inject(this);
 
         setupViews();

@@ -21,8 +21,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.activities.EventSearchActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
+import com.shootr.android.ui.activities.FindEventsActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
@@ -110,8 +110,8 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         presenter.initialize(this);
     }
 
-    private void navigateToFindFriends() {
-        Intent intent = new Intent(getActivity(), EventSearchActivity.class);
+    private void navigateToFindEvents() {
+        Intent intent = new Intent(getActivity(), FindEventsActivity.class);
         startActivity(intent);
     }
 
@@ -129,7 +129,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                navigateToFindFriends();
+                navigateToFindEvents();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

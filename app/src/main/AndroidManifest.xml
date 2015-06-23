@@ -182,7 +182,7 @@
             android:label="@string/title_activity_listing" >
         </activity>
         <activity
-            android:name=".ui.activities.EventSearchActivity"
+            android:name=".ui.activities.FindEventsActivity"
             android:label="@string/activity_find_events_title"
             android:theme="@style/ShootrTheme.Closable">
         </activity>
