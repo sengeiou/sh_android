@@ -3,10 +3,8 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -28,7 +26,6 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -39,11 +36,9 @@ public class EventsListPresenterTest {
     private static final String SELECTED_EVENT_ID = "selected_event";
     private static final String SELECTED_EVENT_TITLE = "title";
     private static final String EVENT_AUTHOR_ID = "author";
-    public static final String QUERY = "query";
 
     @Mock Bus bus;
     @Mock EventsListInteractor eventsListInteractor;
-    @Mock EventsSearchInteractor eventsSearchInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock EventsListView eventsListView;
@@ -55,8 +50,7 @@ public class EventsListPresenterTest {
         EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
-        presenter = new EventsListPresenter(eventsListInteractor,
-          eventsSearchInteractor, eventResultModelMapper, errorMessageFactory);
+        presenter = new EventsListPresenter(eventsListInteractor, eventResultModelMapper, errorMessageFactory);
         presenter.setView(eventsListView);
     }
 
@@ -131,59 +125,12 @@ public class EventsListPresenterTest {
         verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
-    @Test
-    public void shouldHideEventListWhileSearching() throws Exception {
-        presenter.search(QUERY);
-
-        verify(eventsListView, times(1)).hideContent();
-    }
-
-    @Test
-    public void shouldShowLoadingWhileSearching() throws Exception {
-        presenter.search(QUERY);
-
-        verify(eventsListView, times(1)).showLoading();
-    }
-
-    @Test
-    public void shouldHideLoadingWhenFinishSearching() throws Exception {
-        setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
-
-        presenter.search(QUERY);
-
-        verify(eventsListView, times(1)).hideLoading();
-    }
-
-    @Test
-    public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
-        setupSearchEventInteractorErrorCallbacks(Collections.singletonList(eventResult()));
-
-        presenter.search(QUERY);
-
-        verify(eventsListView, times(1)).hideLoading();
-    }
-
-    @Test
-    public void shouldShowEventListWhenFinishSearching() throws Exception {
-        setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
-
-        presenter.search(QUERY);
-
-        verify(eventsListView, times(1)).showContent();
-    }
-
-    //TODO search tests
-
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
     }
 
     private Interactor.Callback<EventSearchResultList> anyEventsCallback() {
         return any(Interactor.Callback.class);
-    }
-
-    private EventsSearchInteractor.Callback anyEventSearchCallback() {
-        return any(EventsSearchInteractor.Callback.class);
     }
 
     private void setupEventListInteractorCallbacks(final List<EventSearchResult> result) {
@@ -195,32 +142,6 @@ public class EventsListPresenterTest {
                 return null;
             }
         }).when(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
-    }
-
-    private void setupSearchEventInteractorCallbacks(final List<EventSearchResult> result) {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                EventsSearchInteractor.Callback callback =
-                  (EventsSearchInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(new EventSearchResultList(result));
-                return null;
-            }
-        }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
-    }
-
-    private void setupSearchEventInteractorErrorCallbacks(final List<EventSearchResult> result) {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                EventsSearchInteractor.ErrorCallback callback =
-                  (EventsSearchInteractor.ErrorCallback) invocation.getArguments()[2];
-                callback.onError(new ShootrException() {
-                    @Override public Throwable fillInStackTrace() {
-                        return super.fillInStackTrace();
-                    }
-                });
-                return null;
-            }
-        }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
     }
 
     private EventSearchResult eventResult() {

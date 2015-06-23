@@ -1,7 +1,6 @@
 package com.shootr.android.ui.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -178,14 +176,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     @Override public void showContent() {
         eventsList.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideContent() {
-        eventsList.setVisibility(View.GONE);
-    }
-
-    @Override public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override public void navigateToEventTimeline(String idEvent, String title) {

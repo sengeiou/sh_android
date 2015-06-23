@@ -7,7 +7,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
@@ -18,7 +17,6 @@ import javax.inject.Inject;
 public class EventsListPresenter implements Presenter {
 
     private final EventsListInteractor eventsListInteractor;
-    private final EventsSearchInteractor eventsSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -26,9 +24,8 @@ public class EventsListPresenter implements Presenter {
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.eventsListInteractor = eventsListInteractor;
-        this.eventsSearchInteractor = eventsSearchInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -41,12 +38,6 @@ public class EventsListPresenter implements Presenter {
     public void initialize(EventsListView eventsListView) {
         this.setView(eventsListView);
         this.loadDefaultEventList();
-    }
-
-    public void initialize(EventsListView eventsListView, String initialQuery) {
-        this.eventsListView = eventsListView;
-        // TODO Remove everything related with searchs
-        //this.search(initialQuery);
     }
 
     public void refresh() {
@@ -90,36 +81,8 @@ public class EventsListPresenter implements Presenter {
         }
     }
 
-    public void search(String queryText) {
-        eventsListView.hideContent();
-        eventsListView.hideKeyboard();
-        eventsListView.showLoading();
-        eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
-            @Override public void onLoaded(EventSearchResultList results) {
-                onSearchResults(results);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                eventsListView.hideLoading();
-                showViewError(error);
-            }
-        });
-    }
-
     public void eventCreated(String eventId, String eventTitle) {
         selectEvent(eventId, eventTitle);
-    }
-
-    private void onSearchResults(EventSearchResultList eventSearchResultList) {
-        List<EventSearchResult> eventSearchResults = eventSearchResultList.getEventSearchResults();
-        if (!eventSearchResults.isEmpty()) {
-            List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
-            renderViewEventsList(eventModels);
-            this.setViewCurrentVisibleWatchingEvent(null);
-        } else {
-            this.showViewEmpty();
-        }
-        eventsListView.hideLoading();
     }
 
     private void setViewCurrentVisibleCheckedInEvent(String currentVisibleEventId) {
@@ -134,11 +97,6 @@ public class EventsListPresenter implements Presenter {
         eventsListView.showContent();
         eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);
-    }
-
-    private void showViewEmpty() {
-        eventsListView.showEmpty();
-        eventsListView.hideContent();
     }
 
     private void showViewError(ShootrException error) {
@@ -156,10 +114,6 @@ public class EventsListPresenter implements Presenter {
 
     public void onCommunicationError() {
         eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
-    }
-
-    public void onConnectionNotAvailable() {
-        eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
 
     //region Lifecycle
