@@ -22,6 +22,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_FOOTER = -1;
     public static final int TYPE_GENERIC_ACTIVITY = 0;
     public static final int TYPE_CHECKIN = 1;
+    public static final int TYPE_LISTED = 2;
 
     private final PicassoWrapper picasso;
     private final AndroidTimeUtils timeUtils;
@@ -51,6 +52,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             String activityType = activities.get(position).getType();
             if (ActivityType.CHECKIN.equals(activityType)) {
                 return TYPE_CHECKIN;
+            } else if (ActivityType.LISTED_EVENT.equals(activityType)) {
+                return TYPE_LISTED;
             } else {
                 return TYPE_GENERIC_ACTIVITY;
             }
@@ -69,6 +72,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateActivityViewHolder(parent, viewType);
             case TYPE_CHECKIN:
                 return onCreateCheckinViewHolder(parent, viewType);
+            case TYPE_LISTED:
+                return onCreateListedViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
@@ -92,7 +97,19 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          usernameClickListener, eventTitleClickListener);
+          usernameClickListener,
+          eventTitleClickListener);
+    }
+
+    private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new ListedViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener,
+          eventTitleClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {

@@ -10,9 +10,9 @@ import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.UsernameClickListener;
 
-public class CheckinViewHolder extends ClickableEventActivityViewHolder {
+public class ListedViewHolder extends ClickableEventActivityViewHolder {
 
-    public CheckinViewHolder(View view,
+    public ListedViewHolder(View view,
       PicassoWrapper picasso,
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
@@ -30,6 +30,6 @@ public class CheckinViewHolder extends ClickableEventActivityViewHolder {
 
     @NonNull
     protected String getPatternText() {
-        return getContext().getString(R.string.checkin_activity_text_pattern);
+        return getContext().getString(R.string.listed_activity_text_pattern);
     }
 }
