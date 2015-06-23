@@ -247,7 +247,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
-        profilePresenter.initialize(this, idUser);
     }
 
 
@@ -371,7 +370,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         hideLoadingPhoto();
         setUserInfo(updateduser);
         retrieveUserInfo();
+        initializePresenter();
         setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
+    }
+
+    private void initializePresenter() {
+        profilePresenter.initialize(this, idUser);
     }
 
     @Subscribe
