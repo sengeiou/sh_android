@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.recyclerview.EventSearchRecyclerView;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventResultModel;
@@ -34,7 +34,7 @@ public class FindEventsActivity extends BaseSignedInActivity implements FindEven
     private ObjectGraph objectGraph;
     private EventsListAdapter adapter;
 
-    @InjectView(R.id.find_events_list) RecyclerView eventsList;
+    @InjectView(R.id.find_events_list) EventSearchRecyclerView eventsList;
     @InjectView(R.id.find_events_empty) View emptyView;
     @InjectView(R.id.find_events_loading) View loadingView;
 
@@ -142,9 +142,8 @@ public class FindEventsActivity extends BaseSignedInActivity implements FindEven
     }
 
     @Override public void hideKeyboard() {
-        // TODO full implementation of this method
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     @Override public void showLoading() {

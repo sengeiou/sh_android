@@ -6,13 +6,19 @@
   android:background="@color/white"
   android:animateLayoutChanges="true">
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/find_events_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:clipToPadding="false"
-      android:paddingBottom="8dp"
-      android:paddingTop="8dp"
-      android:scrollbars="vertical" />
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#d9d9d9" />
+
+  <com.shootr.android.ui.adapters.recyclerview.EventSearchRecyclerView
+    android:id="@+id/find_events_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:scrollbars="vertical" />
 
   <ProgressBar android:id="@+id/find_events_loading"
     android:layout_width="wrap_content"
