@@ -111,6 +111,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     private void findFriends() {
         // TODO not going through the presenter? You naughty boy...
         startActivityForResult(new Intent(getActivity(), FindFriendsActivity.class), REQUEST_CAN_CHANGE_DATA);
+        getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     private void setEmptyMessageForPeople() {

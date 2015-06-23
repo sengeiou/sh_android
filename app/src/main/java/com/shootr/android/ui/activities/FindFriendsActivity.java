@@ -20,15 +20,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import dagger.ObjectGraph;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.R;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -37,12 +32,17 @@ import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.PicassoWrapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import dagger.ObjectGraph;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -180,6 +180,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

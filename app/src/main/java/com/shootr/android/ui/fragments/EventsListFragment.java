@@ -111,10 +111,10 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     private void navigateToFindEvents() {
         Intent intent = new Intent(getActivity(), FindEventsActivity.class);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
-    @OnClick(R.id.events_add_event)
-    public void onAddEvent() {
+    @OnClick(R.id.events_add_event) public void onAddEvent() {
         startActivityForResult(new Intent(getActivity(), NewEventActivity.class), REQUEST_NEW_EVENT);
     }
 
