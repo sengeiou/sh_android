@@ -132,9 +132,9 @@
         <activity
             android:name=".ui.activities.UpdateWarningActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.activities.ActivityTimelineContainerActivity"
-          android:label="@string/drawer_activity_title"
-            />
+        <activity
+            android:name=".ui.activities.ActivityTimelineContainerActivity"
+            android:label="@string/drawer_activity_title" />
 
         <service android:name=".data.background.ShotDispatcherBackgroundService" />
 
@@ -180,6 +180,11 @@
         <activity
             android:name=".ui.activities.ListingActivity"
             android:label="@string/title_activity_listing" >
+        </activity>
+        <activity
+            android:name=".ui.activities.EventSearchActivity"
+            android:label="@string/activity_find_events_title"
+            android:theme="@style/ShootrTheme.Closable">
         </activity>
     </application>
 

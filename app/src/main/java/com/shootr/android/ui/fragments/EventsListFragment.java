@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.activities.EventSearchActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
@@ -50,7 +50,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     @Inject ToolbarDecorator toolbarDecorator;
 
     private EventsListAdapter adapter;
-    private SearchView searchView;
 
     public static EventsListFragment newInstance() {
         return new EventsListFragment();
@@ -111,6 +110,11 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         presenter.initialize(this);
     }
 
+    private void navigateToFindFriends() {
+        Intent intent = new Intent(getActivity(), EventSearchActivity.class);
+        startActivity(intent);
+    }
+
     @OnClick(R.id.events_add_event)
     public void onAddEvent() {
         startActivityForResult(new Intent(getActivity(), NewEventActivity.class), REQUEST_NEW_EVENT);
@@ -119,45 +123,17 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     //region Activity methods
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.events_list, menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        searchView = (SearchView) searchItem.getActionView();
-        if(isAdded()){
-            setupSearchView();
-        }
     }
 
-    private void setupSearchView() {
-        searchView.setQueryHint(getString(R.string.menu_search_events));
-
-        SearchView.SearchAutoComplete searchAutoComplete =
-          (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white_disabled));
-
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                toolbarDecorator.hideTitleContainerInfo();
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override public boolean onClose() {
-                toolbarDecorator.showTitleContainerInfo();
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String queryText) {
-                presenter.search(queryText);
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_search:
+                navigateToFindFriends();
                 return true;
-            }
-
-            @Override public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -210,7 +186,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     @Override public void navigateToEventTimeline(String idEvent, String title) {
@@ -237,5 +212,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     @Override public void showError(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
+
     //endregion
 }

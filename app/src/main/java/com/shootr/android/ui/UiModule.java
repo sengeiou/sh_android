@@ -4,6 +4,7 @@ import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
+import com.shootr.android.ui.activities.EventSearchActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
@@ -62,7 +63,8 @@ import javax.inject.Singleton;
                 FavoritesFragment.class,
                 ActivityTimelineContainerActivity.class,
                 ActivityTimelineFragment.class,
-                EventTimelineFragment.class
+                EventTimelineFragment.class,
+                EventSearchActivity.class
         },
         complete = false
 )
