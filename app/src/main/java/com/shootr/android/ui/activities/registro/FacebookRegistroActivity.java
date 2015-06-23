@@ -63,7 +63,6 @@ public class FacebookRegistroActivity extends BaseToolbarActivity {
         mEmailText.setText(email);
         mUsernameText.setText(username);
         // TODO controlar error del avatar
-        Picasso.with(this).load(avatarUrl).error(R.drawable.ic_launcher).into(mAvatarImage);
     }
 
 

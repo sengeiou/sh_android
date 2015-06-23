@@ -62,7 +62,7 @@ public abstract class CommonNotification {
     }
 
     @DrawableRes public int getSmallIcon() {
-        return R.drawable.ic_ab_icon;
+        return R.drawable.ic_stat_app_icon;
     }
 
     public abstract Bitmap getLargeIcon();
