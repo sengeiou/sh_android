@@ -48,10 +48,10 @@ public class CheckinViewHolder extends ActivityViewHolder {
         replacePlaceholderWithEventTitleSpan(spannableCheckinPattern,
           checkinEventPlaceholder,
           checkinEventTitle,
-          new EventTitleSpan(activity.getIdEvent()) {
+          new EventTitleSpan(activity.getIdEvent(), activity.getEventTitle()) {
               @Override
-              public void onEventClick(String eventId) {
-                  onEventTitleClickListener.onClick(eventId);
+              public void onEventClick(String eventId, String eventTitle) {
+                  onEventTitleClickListener.onClick(eventId, eventTitle);
               }
           });
 

@@ -2,5 +2,5 @@ package com.shootr.android.ui.adapters.listeners;
 
 public interface OnEventTitleClickListener {
 
-    void onClick(String eventId);
+    void onClick(String eventId, String eventTitle);
 }

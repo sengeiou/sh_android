@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
@@ -130,9 +131,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             }
         }, new OnEventTitleClickListener() {
             @Override
-            public void onClick(String eventId) {
-                //TODO
-                Toast.makeText(getActivity(), "Event click: "+eventId, Toast.LENGTH_SHORT).show();
+            public void onClick(String eventId, String eventTitle) {
+                openEvent(eventId, eventTitle);
             }
         });
 
@@ -183,6 +183,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     protected void openProfile(String idUser) {
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
         startActivity(profileIntent);
+    }
+
+    protected void openEvent(String idEvent, String eventTitle) {
+        Intent eventIntent = EventTimelineActivity.newIntent(getActivity(), idEvent, eventTitle);
+        startActivity(eventIntent);
     }
 
     //region View methods
