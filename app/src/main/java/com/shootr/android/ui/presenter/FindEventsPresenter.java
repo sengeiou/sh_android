@@ -54,7 +54,6 @@ public class FindEventsPresenter implements Presenter {
     }
 
     public void selectEvent(EventResultModel event) {
-        findEventsView.setCurrentWatchingEventId(event);
         selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
     }
 
@@ -67,15 +66,10 @@ public class FindEventsPresenter implements Presenter {
         if (!eventSearchResults.isEmpty()) {
             List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
             renderViewEventsList(eventModels);
-            this.setViewCurrentVisibleWatchingEvent(null);
         } else {
             this.showViewEmpty();
         }
         findEventsView.hideLoading();
-    }
-
-    private void setViewCurrentVisibleWatchingEvent(EventResultModel currentVisibleEvent) {
-        findEventsView.setCurrentWatchingEventId(currentVisibleEvent);
     }
 
     private void showViewEmpty() {

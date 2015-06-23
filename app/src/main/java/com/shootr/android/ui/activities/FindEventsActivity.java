@@ -154,10 +154,6 @@ public class FindEventsActivity extends BaseSignedInActivity implements FindEven
         loadingView.setVisibility(View.GONE);
     }
 
-    @Override public void setCurrentWatchingEventId(EventResultModel currentVisibleEvent) {
-        adapter.setCurrentWatchingEvent(currentVisibleEvent);
-    }
-
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

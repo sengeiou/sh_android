@@ -13,8 +13,6 @@ public interface FindEventsView {
 
     void hideLoading();
 
-    void setCurrentWatchingEventId(EventResultModel currentVisibleEvent);
-
     void showEmpty();
 
     void showContent();
