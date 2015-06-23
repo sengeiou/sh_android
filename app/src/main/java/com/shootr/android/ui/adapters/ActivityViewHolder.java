@@ -46,7 +46,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
 
     public void render(final ActivityModel activity) {
         name.setText(activity.getUsername());
-        text.setText(formatActivityComment(activity.getComment()));
+        text.setText(formatActivityComment(activity));
         elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
         picasso.loadProfilePhoto(activity.getUserPhoto()).into(avatar);
 
@@ -58,9 +58,10 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    private CharSequence formatActivityComment(CharSequence comment) {
-        return shotTextSpannableBuilder.formatWithUsernameSpans(comment, usernameClickListener);
+    protected CharSequence formatActivityComment(final ActivityModel activity) {
+        return shotTextSpannableBuilder.formatWithUsernameSpans(activity.getComment(), usernameClickListener);
     }
+
 
     private Context getContext() {
         return itemView.getContext();

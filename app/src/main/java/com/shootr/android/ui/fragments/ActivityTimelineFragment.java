@@ -19,6 +19,7 @@ import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
@@ -126,6 +127,12 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             @Override
             public void onClick(String username) {
                 goToUserProfile(username);
+            }
+        }, new OnEventTitleClickListener() {
+            @Override
+            public void onClick(String eventId) {
+                //TODO
+                Toast.makeText(getActivity(), "Event click: "+eventId, Toast.LENGTH_SHORT).show();
             }
         });
 

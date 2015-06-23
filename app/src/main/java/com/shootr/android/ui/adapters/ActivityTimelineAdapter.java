@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
+import com.shootr.android.domain.ActivityType;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -17,29 +19,42 @@ import java.util.List;
 
 public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int TYPE_ACTIVITY = 0;
-    public static final int TYPE_FOOTER = 1;
+    public static final int TYPE_FOOTER = -1;
+    public static final int TYPE_GENERIC_ACTIVITY = 0;
+    public static final int TYPE_CHECKIN = 1;
+
     private final PicassoWrapper picasso;
+    private final AndroidTimeUtils timeUtils;
     private final OnAvatarClickListener avatarClickListener;
     private final UsernameClickListener usernameClickListener;
-    private final AndroidTimeUtils timeUtils;
-    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private final OnEventTitleClickListener eventTitleClickListener;
 
+    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
     private boolean showFooter = false;
 
     public ActivityTimelineAdapter(PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
-      UsernameClickListener usernameClickListener) {
+      UsernameClickListener usernameClickListener, OnEventTitleClickListener eventTitleClickListener) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.usernameClickListener = usernameClickListener;
         this.timeUtils = timeUtils;
+        this.eventTitleClickListener = eventTitleClickListener;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return isFooter(position) ? TYPE_FOOTER : TYPE_ACTIVITY;
+        if (isFooter(position)) {
+            return TYPE_FOOTER;
+        } else {
+            String activityType = activities.get(position).getType();
+            if (ActivityType.CHECKIN.equals(activityType)) {
+                return TYPE_CHECKIN;
+            } else {
+                return TYPE_GENERIC_ACTIVITY;
+            }
+        }
     }
 
     @Override
@@ -50,8 +65,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case TYPE_ACTIVITY:
+            case TYPE_GENERIC_ACTIVITY:
                 return onCreateActivityViewHolder(parent, viewType);
+            case TYPE_CHECKIN:
+                return onCreateCheckinViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
@@ -66,6 +83,16 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           shotTextSpannableBuilder,
           avatarClickListener,
           usernameClickListener);
+    }
+
+    private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new CheckinViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener, eventTitleClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {

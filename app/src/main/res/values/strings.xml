@@ -273,4 +273,5 @@
     <string name="menu_remove_favorite">Remove from Favorites</string>
     <string name="added_to_favorites">Added to Favorites</string>
     <string name="notifications_off_alert">Notifications off</string>
+    <string name="checkin_activity_text_pattern">Checked in on (event)</string>
 </resources>
