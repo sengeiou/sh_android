@@ -26,6 +26,7 @@ import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.EventResultModel;
@@ -92,6 +93,11 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
             @Override
             public void onEventClick(EventResultModel event) {
                 presenter.selectEvent(event);
+            }
+        });
+        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+            @Override public void onUnwatchClick() {
+                presenter.unwatchEvent();
             }
         });
         eventsList.setAdapter(adapter);
@@ -215,6 +221,10 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     @Override public void navigateToEventTimeline(String idEvent, String title) {
         startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
+    }
+
+    @Override public void showNotificationsOff() {
+        Toast.makeText(getActivity(),getResources().getString(R.string.notifications_off_alert), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showEmpty() {

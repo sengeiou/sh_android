@@ -8,6 +8,8 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
@@ -19,6 +21,7 @@ public class EventsListPresenter implements Presenter {
 
     private final EventsListInteractor eventsListInteractor;
     private final EventsSearchInteractor eventsSearchInteractor;
+    private final UnwatchEventInteractor unwatchEventInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -26,9 +29,10 @@ public class EventsListPresenter implements Presenter {
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
-      EventsSearchInteractor eventsSearchInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      EventsSearchInteractor eventsSearchInteractor, UnwatchEventInteractor unwatchEventInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.eventsListInteractor = eventsListInteractor;
         this.eventsSearchInteractor = eventsSearchInteractor;
+        this.unwatchEventInteractor = unwatchEventInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -59,6 +63,21 @@ public class EventsListPresenter implements Presenter {
 
     private void selectEvent(final String idEvent, String eventTitle) {
         eventsListView.navigateToEventTimeline(idEvent, eventTitle);
+    }
+
+    public void unwatchEvent() {
+        unwatchEventInteractor.unwatchEvent(new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                loadDefaultEventList();
+                removeCurrentWatchingEvent();
+                eventsListView.showNotificationsOff();
+            }
+        });
+    }
+
+    private void removeCurrentWatchingEvent() {
+        eventsListView.setCurrentWatchingEventId(null);
     }
 
     protected void loadDefaultEventList() {

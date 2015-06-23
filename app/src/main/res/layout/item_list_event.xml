@@ -10,56 +10,68 @@
   android:paddingRight="16dp"
   android:paddingTop="8dp">
 
-    <RelativeLayout android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+  <RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-        <ImageView android:id="@+id/event_picture"
-          android:layout_width="@dimen/event_result_picture_width"
-          android:layout_height="@dimen/event_result_picture_height"
-          android:layout_marginRight="16dp"
-          android:scaleType="centerCrop"
-          android:src="@drawable/ic_event_picture_default"
-          tools:background="#660000cc" />
+    <ImageView android:id="@+id/event_picture"
+      android:layout_width="@dimen/event_result_picture_width"
+      android:layout_height="@dimen/event_result_picture_height"
+      android:layout_marginRight="16dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/ic_event_picture_default"
+      tools:background="#660000cc" />
 
-        <ImageView android:id="@+id/event_notification_indicator"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/event_subscribed_overlay"
-          android:visibility="gone"
-          tools:visibility="visible" />
+    <ImageView android:id="@+id/event_notification_indicator"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/event_subscribed_overlay"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
-        <LinearLayout android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_toLeftOf="@+id/event_watchers"
-          android:layout_toRightOf="@+id/event_picture"
-          android:orientation="vertical">
+    <LinearLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_toLeftOf="@+id/event_watchers"
+      android:layout_toRightOf="@+id/event_picture"
+      android:orientation="vertical">
 
-            <TextView android:id="@+id/event_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:drawablePadding="8dp"
-              android:ellipsize="end"
-              android:fontFamily="sans-serif-medium"
-              android:maxLines="2"
-              android:textColor="@color/primary_text_dark_color"
-              android:textSize="14sp"
-              tools:text="Titulo Dos líneas" />
+      <TextView android:id="@+id/event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="2"
+        android:textColor="@color/primary_text_dark_color"
+        android:textSize="14sp"
+        tools:text="Titulo Dos líneas" />
 
-            <TextView android:id="@+id/event_author"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textColor="@color/gray_60"
-              tools:text="Romanesco" />
-        </LinearLayout>
+      <TextView android:id="@+id/event_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_60"
+        tools:text="Romanesco" />
+    </LinearLayout>
 
-        <TextView android:id="@+id/event_watchers"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_marginLeft="6dp"
-          tools:text="2"
-          style="@style/WatchersIndicator" />
-    </RelativeLayout>
+    <TextView android:id="@+id/event_watchers"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_marginLeft="6dp"
+      tools:text="2"
+      style="@style/WatchersIndicator" />
+
+    <ImageView android:id="@+id/event_remove"
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:background="?selectableItemBackground"
+      android:src="@drawable/ic_action_navigation_close"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:layout_alignLeft="@+id/event_watchers"
+      android:layout_alignStart="@+id/event_watchers"
+      android:visibility="gone"
+      tools:visibility="visible"/>
+  </RelativeLayout>
 </FrameLayout>
-

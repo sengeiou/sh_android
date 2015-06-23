@@ -7,6 +7,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -44,6 +45,7 @@ public class EventsListPresenterTest {
     @Mock Bus bus;
     @Mock EventsListInteractor eventsListInteractor;
     @Mock EventsSearchInteractor eventsSearchInteractor;
+    @Mock UnwatchEventInteractor unwatchEventInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock EventsListView eventsListView;
@@ -56,7 +58,10 @@ public class EventsListPresenterTest {
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
         presenter = new EventsListPresenter(eventsListInteractor,
-          eventsSearchInteractor, eventResultModelMapper, errorMessageFactory);
+          eventsSearchInteractor,
+          unwatchEventInteractor,
+          eventResultModelMapper,
+          errorMessageFactory);
         presenter.setView(eventsListView);
     }
 
@@ -170,6 +175,13 @@ public class EventsListPresenterTest {
         presenter.search(QUERY);
 
         verify(eventsListView, times(1)).showContent();
+    }
+
+    @Test
+    public void shouldUnwatchEventWhenUnwatchEventCalled() {
+        setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
+        presenter.unwatchEvent();
+        verify(unwatchEventInteractor).unwatchEvent(any(Interactor.CompletedCallback.class));
     }
 
     //TODO search tests
