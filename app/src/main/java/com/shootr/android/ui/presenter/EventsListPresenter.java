@@ -69,6 +69,7 @@ public class EventsListPresenter implements Presenter {
             @Override public void onCompleted() {
                 loadDefaultEventList();
                 removeCurrentWatchingEvent();
+                eventsListView.showNotificationsOff();
             }
         });
     }

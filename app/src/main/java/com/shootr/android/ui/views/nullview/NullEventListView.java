@@ -1,7 +1,6 @@
 package com.shootr.android.ui.views.nullview;
 
 import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.views.EventMediaView;
 import com.shootr.android.ui.views.EventsListView;
 import java.util.List;
 
@@ -32,6 +31,10 @@ public class NullEventListView implements EventsListView {
     }
 
     @Override public void navigateToEventTimeline(String idEvent, String title) {
+        /* no-op */
+    }
+
+    @Override public void showNotificationsOff() {
         /* no-op */
     }
 

@@ -224,6 +224,10 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
     }
 
+    @Override public void showNotificationsOff() {
+        Toast.makeText(getActivity(),getResources().getString(R.string.notifications_off_alert), Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
