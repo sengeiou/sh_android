@@ -45,7 +45,8 @@ public class EventsListPresenter implements Presenter {
 
     public void initialize(EventsListView eventsListView, String initialQuery) {
         this.eventsListView = eventsListView;
-        this.search(initialQuery);
+        // TODO Remove everything related with searchs
+        //this.search(initialQuery);
     }
 
     public void refresh() {
