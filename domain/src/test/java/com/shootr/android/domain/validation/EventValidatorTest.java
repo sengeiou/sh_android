@@ -38,13 +38,6 @@ public class EventValidatorTest {
         assertThat(filter).isEqualTo(punctuation);
     }
 
-    @Test
-    public void testEmojiRegexRemovesEmoticonRangeEmojis() throws Exception {
-        String emojiString = "☺😊😀😁😂😃😄😅😆😇😈😉😯😐😑😕😠😬😡😢😴😮😣😤😥😦😧😨😩😰😟😱😲😳😵😶😷😞😒😍😛😜😝😋😗😙😘😚😎😭😌😖😔😪😏😓😫🙋🙌🙍🙅🙆🙇🙎🙏😺😼😸😹😻😽😿😾🙀🙈🙉🙊💩👶👦👧👨👩👴👵💏💑👪👫👬👭👤👥👮👷💁💂👯👰👸🎅👼👱👲👳💃💆💇💅👻👹👺👽👾👿💀💪👀👂👃👣👄👅💋❤💙💚💛💜💓💔💕💖💗💘💝💞💟👍👎👌✊✌✋👊☝👆👇👈👉👋👏👐";
-        String filteredString = filter(emojiString);
-        assertThat(filteredString).isEmpty();
-    }
-
     private String filter(String original) {
         return original.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
     }
