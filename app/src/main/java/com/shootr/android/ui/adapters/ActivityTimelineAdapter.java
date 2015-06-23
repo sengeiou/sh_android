@@ -1,18 +1,12 @@
 package com.shootr.android.ui.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.model.ActivityModel;
-import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -114,56 +108,5 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public ActivityModel getLastActivity() {
         return activities.get(activities.size() - 1);
-    }
-
-    public static class ActivityViewHolder extends RecyclerView.ViewHolder {
-
-        private final PicassoWrapper picasso;
-        private final AndroidTimeUtils androidTimeUtils;
-        private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-        private final OnAvatarClickListener onAvatarClickListener;
-        private final UsernameClickListener usernameClickListener;
-
-        @InjectView(R.id.activity_avatar) public ImageView avatar;
-        @InjectView(R.id.ativity_user_name) public TextView name;
-        @InjectView(R.id.activity_timestamp) public TextView elapsedTime;
-        @InjectView(R.id.activity_text) public ClickableTextView text;
-
-        public ActivityViewHolder(View view,
-          PicassoWrapper picasso,
-          AndroidTimeUtils androidTimeUtils,
-          ShotTextSpannableBuilder shotTextSpannableBuilder,
-          OnAvatarClickListener onAvatarClickListener,
-          UsernameClickListener usernameClickListener) {
-            super(view);
-            this.androidTimeUtils = androidTimeUtils;
-            this.picasso = picasso;
-            this.onAvatarClickListener = onAvatarClickListener;
-            this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-            this.usernameClickListener = usernameClickListener;
-            ButterKnife.inject(this, view);
-        }
-
-        public void render(final ActivityModel activity) {
-            name.setText(activity.getUsername());
-            text.setText(formatActivityComment(activity.getComment()));
-            elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
-            picasso.loadProfilePhoto(activity.getUserPhoto()).into(avatar);
-
-            avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onAvatarClickListener.onClick(activity.getIdUser(), avatar);
-                }
-            });
-        }
-
-        private CharSequence formatActivityComment(CharSequence comment) {
-            return shotTextSpannableBuilder.formatWithUsernameSpans(comment, usernameClickListener);
-        }
-
-        private Context getContext() {
-            return itemView.getContext();
-        }
     }
 }
