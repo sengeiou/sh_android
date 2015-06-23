@@ -4,27 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
-import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
-import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
@@ -40,22 +39,13 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
 
-    @InjectView(R.id.timeline_activity_list) ListView listView;
+    @InjectView(R.id.timeline_activity_list) RecyclerView activityList;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-
     @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_empty_title) TextView emptyViewTitle;
 
-    @Inject
-    GetUserByUsernameInteractor getUserByUsernameInteractor;
-    @Inject
-    UserModelMapper userModelMapper;
-
-    @Deprecated private ActivityTimelineAdapter adapter;
-    private View.OnClickListener avatarClickListener;
-    private UsernameClickListener usernameClickListener;
-
-    private View footerProgress;
+    private ActivityTimelineAdapter adapter;
+    private LinearLayoutManager layoutManager;
     //endregion
 
     public static ActivityTimelineFragment newInstance() {
@@ -124,28 +114,22 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void setupListAdapter() {
-        avatarClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                int position = ((ActivityTimelineAdapter.ViewHolder) v.getTag()).position;
-                openProfile(position);
-            }
-        };
+        layoutManager = new LinearLayoutManager(getActivity());
+        activityList.setLayoutManager(layoutManager);
 
-        usernameClickListener =  new UsernameClickListener() {
+        adapter = new ActivityTimelineAdapter(picasso, timeUtils, new OnAvatarClickListener() {
+            @Override
+            public void onClick(String userId, View avatarView) {
+                openProfile(userId);
+            }
+        }, new UsernameClickListener() {
             @Override
             public void onClick(String username) {
                 goToUserProfile(username);
             }
-        };
+        });
 
-        View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
-        footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
-
-        listView.addFooterView(footerView, null, false);
-
-        adapter = new ActivityTimelineAdapter(getActivity(), picasso, avatarClickListener, usernameClickListener,
-          timeUtils);
-        listView.setAdapter(adapter);
+        activityList.setAdapter(adapter);
     }
 
     private void startProfileContainerActivity(String username) {
@@ -170,33 +154,27 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void setupListScrollListeners() {
-        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                if (delta < -10) {
-                    // going down
-                } else if (delta > 10) {
-                    // going up
+        activityList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    checkIfEndOfListVisible();
                 }
-            }
-
-            @Override public void onScrollIdle() {
-                checkIfEndOfListVisible();
             }
         });
     }
 
     private void checkIfEndOfListVisible() {
-        int lastItemPosition = listView.getAdapter().getCount() - 1;
-        int lastVisiblePosition = listView.getLastVisiblePosition();
+        int lastItemPosition = activityList.getAdapter().getItemCount()-1;
+        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
         if (lastItemPosition == lastVisiblePosition) {
             timelinePresenter.showingLastActivity(adapter.getLastActivity());
         }
     }
     //endregion
 
-    public void openProfile(int position) {
-        ActivityModel activityVO = adapter.getItem(position);
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), activityVO.getIdUser());
+    protected void openProfile(String idUser) {
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
         startActivity(profileIntent);
     }
 
@@ -228,11 +206,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     @Override public void hideActivities() {
-        listView.setVisibility(View.GONE);
+        activityList.setVisibility(View.GONE);
     }
 
     @Override public void showActivities() {
-        listView.setVisibility(View.VISIBLE);
+        activityList.setVisibility(View.VISIBLE);
     }
 
     @Override public void addNewActivities(List<ActivityModel> newActivities) {
@@ -244,11 +222,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     @Override public void showLoadingOldActivities() {
-        footerProgress.setVisibility(View.VISIBLE);
+        adapter.setFooterVisible(true);
     }
 
     @Override public void hideLoadingOldActivities() {
-        footerProgress.setVisibility(View.GONE);
+        adapter.setFooterVisible(false);
     }
     //endregion
 }
