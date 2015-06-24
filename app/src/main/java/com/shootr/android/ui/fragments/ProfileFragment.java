@@ -370,7 +370,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         hideLoadingPhoto();
         setUserInfo(updateduser);
         retrieveUserInfo();
-        initializePresenter();
         setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
     }
 
@@ -411,6 +410,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private void retrieveUserInfo() {
         if(idUser != null){
             loadProfileUsingJob(idUser);
+            initializePresenter();
         }else{
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
                 @Override
@@ -431,6 +431,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private void loadProfileUsingUser(User userFromCallback) {
         idUser = userFromCallback.getIdUser();
         user = userModelMapper.transform(userFromCallback);
+        initializePresenter();
         loadLatestShots();
         setUserInfo(user);
     }
