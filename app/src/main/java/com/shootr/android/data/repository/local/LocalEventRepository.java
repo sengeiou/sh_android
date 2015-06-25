@@ -51,7 +51,7 @@ public class LocalEventRepository implements EventRepository {
     }
 
     @Override public Event putEvent(Event event, boolean notify) {
-        throw new RuntimeException("Notify not allowed in local repository.");
+        throw new IllegalStateException("Notify not allowed in local repository.");
     }
 
     @Override public Integer getListingCount(String idUser) {
