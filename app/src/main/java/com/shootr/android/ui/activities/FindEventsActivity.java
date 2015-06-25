@@ -37,6 +37,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     @Inject FindEventsPresenter findEventsPresenter;
     @Inject PicassoWrapper picasso;
 
+    //region Lifecycle methods
     @Override protected int getLayoutResource() {
         return R.layout.activity_find_events;
     }
@@ -48,16 +49,6 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         initializeEventListAdapter();
     }
 
-    private void initializeEventListAdapter() {
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override
-            public void onEventClick(EventResultModel event) {
-                findEventsPresenter.selectEvent(event);
-            }
-        });
-        eventsList.setAdapter(adapter);
-    }
-
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,7 +57,6 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -87,6 +77,22 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void initializePresenter() {
         findEventsPresenter.initialize(this);
+    }
+
+    @Override public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+    }
+    //endregion
+
+    private void initializeEventListAdapter() {
+        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
+            @Override
+            public void onEventClick(EventResultModel event) {
+                findEventsPresenter.selectEvent(event);
+            }
+        });
+        eventsList.setAdapter(adapter);
     }
 
     private void setupQuery() {

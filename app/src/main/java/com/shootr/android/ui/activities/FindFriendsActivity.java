@@ -180,11 +180,15 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     @OnItemClick(R.id.find_friends_search_results_list)
