@@ -42,6 +42,100 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     @Inject FindEventsPresenter findEventsPresenter;
     @Inject PicassoWrapper picasso;
 
+
+    private void setupQuery() {
+        if (currentSearchQuery != null) {
+            searchView.setQuery(currentSearchQuery, false);
+            searchView.clearFocus();
+        }
+    }
+
+    private void setupQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override public boolean onQueryTextSubmit(String queryText) {
+                if (!queryText.equals(currentSearchQuery)) {
+                    currentSearchQuery = queryText;
+                    searchEvents();
+                    hideKeyboard();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            @Override public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+    }
+
+    private void setupSearchView() {
+        searchView.setQueryHint(getString(R.string.activity_find_events_hint));
+        searchView.setIconifiedByDefault(false);
+        searchView.setIconified(false);
+
+        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
+    }
+
+    private void initializeEventListAdapter() {
+        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
+            @Override
+            public void onEventClick(EventResultModel event) {
+                findEventsPresenter.selectEvent(event);
+            }
+        });
+        eventsList.setAdapter(adapter);
+    }
+
+    private void searchEvents() {
+        findEventsPresenter.search(currentSearchQuery);
+    }
+
+    //region View methods
+    @Override public void hideContent() {
+        eventsList.setVisibility(View.GONE);
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
+
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        loadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showContent() {
+        eventsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override public void renderEvents(List<EventResultModel> eventModels) {
+        adapter.setEvents(eventModels);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
+        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
+    }
+
+    //endregion
+
     //region Lifecycle methods
     @Override protected int getLayoutResource() {
         return R.layout.activity_find_events;
@@ -104,103 +198,6 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         super.finish();
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
-    //endregion
-
-    private void initializeEventListAdapter() {
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override
-            public void onEventClick(EventResultModel event) {
-                findEventsPresenter.selectEvent(event);
-            }
-        });
-        eventsList.setAdapter(adapter);
-    }
-
-    private void setupQuery() {
-        if (currentSearchQuery != null) {
-            searchView.setQuery(currentSearchQuery, false);
-            searchView.clearFocus();
-        }
-    }
-
-    private void setupQueryTextListener() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String queryText) {
-                if (!queryText.equals(currentSearchQuery)) {
-                    currentSearchQuery = queryText;
-                    startSearch();
-                    hideKeyboard();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            @Override public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-    }
-
-    private void setupSearchView() {
-        searchView.setQueryHint(getString(R.string.activity_find_events_hint));
-        searchView.setIconifiedByDefault(false);
-        searchView.setIconified(false);
-
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
-    }
-
-    //region View methods
-    @Override public void hideContent() {
-        eventsList.setVisibility(View.GONE);
-    }
-
-    @Override public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-    }
-
-    @Override public void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideLoading() {
-        loadingView.setVisibility(View.GONE);
-    }
-
-    @Override public void showEmpty() {
-        emptyView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void showContent() {
-        eventsList.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideEmpty() {
-        emptyView.setVisibility(View.GONE);
-    }
-
-    @Override public void renderEvents(List<EventResultModel> eventModels) {
-        adapter.setEvents(eventModels);
-    }
-
-    @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
-        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
-    }
-
-    public void startSearch() {
-        searchEvents();
-    }
-
-    private void searchEvents() {
-        findEventsPresenter.search(currentSearchQuery);
-    }
-
     //endregion
 
 }
