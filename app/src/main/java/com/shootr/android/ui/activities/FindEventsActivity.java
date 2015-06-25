@@ -92,50 +92,6 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         findEventsPresenter.search(currentSearchQuery);
     }
 
-    //region View methods
-    @Override public void hideContent() {
-        eventsList.setVisibility(View.GONE);
-    }
-
-    @Override public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-    }
-
-    @Override public void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideLoading() {
-        loadingView.setVisibility(View.GONE);
-    }
-
-    @Override public void showEmpty() {
-        emptyView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void showContent() {
-        eventsList.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideEmpty() {
-        emptyView.setVisibility(View.GONE);
-    }
-
-    @Override public void renderEvents(List<EventResultModel> eventModels) {
-        adapter.setEvents(eventModels);
-    }
-
-    @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
-        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
-    }
-
-    //endregion
-
     //region Lifecycle methods
     @Override protected int getLayoutResource() {
         return R.layout.activity_find_events;
@@ -186,7 +142,8 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         super.onRestoreInstanceState(savedInstanceState);
         initializePresenter();
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
-        List<EventResultModel> restoredResults = (List<EventResultModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        List<EventResultModel> restoredResults = (List<EventResultModel>) savedInstanceState.getSerializable(
+          EXTRA_RESULTS);
         findEventsPresenter.restoreEvents(restoredResults);
     }
 
@@ -198,6 +155,50 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         super.finish();
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
+    //endregion
+
+    //region View methods
+    @Override public void hideContent() {
+        eventsList.setVisibility(View.GONE);
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
+
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        loadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showContent() {
+        eventsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override public void renderEvents(List<EventResultModel> eventModels) {
+        adapter.setEvents(eventModels);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
+        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
+    }
+
     //endregion
 
 }
