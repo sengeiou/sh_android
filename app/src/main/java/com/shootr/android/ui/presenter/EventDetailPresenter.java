@@ -78,8 +78,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void editEventInfo() {
-        String idEvent = eventModel.getIdEvent();
-        eventDetailView.navigateToEditEvent(idEvent);
+        String idEventToEdit = eventModel.getIdEvent();
+        eventDetailView.navigateToEditEvent(idEventToEdit);
     }
 
     public void resultFromEditEventInfo(String idEventEdited) {

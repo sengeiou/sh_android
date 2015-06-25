@@ -77,14 +77,14 @@ public class ClickableTextView extends TextView {
      */
     private String makeUrl(String url) {
         boolean hasPrefix = false;
-
+        String newUrl = url;
         for (int i = 0; i < ALLOWED_SCHEMAS.length; i++) {
             if (url.regionMatches(true, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
                 hasPrefix = true;
 
                 // Fix capitalization if necessary
                 if (!url.regionMatches(false, 0, ALLOWED_SCHEMAS[i], 0, ALLOWED_SCHEMAS[i].length())) {
-                    url = ALLOWED_SCHEMAS[i] + url.substring(ALLOWED_SCHEMAS[i].length());
+                    newUrl = ALLOWED_SCHEMAS[i] + url.substring(ALLOWED_SCHEMAS[i].length());
                 }
 
                 break;
@@ -92,10 +92,10 @@ public class ClickableTextView extends TextView {
         }
 
         if (!hasPrefix) {
-            url = DEFAULT_SCHEMA + url;
+            newUrl = DEFAULT_SCHEMA + newUrl;
         }
 
-        return url;
+        return newUrl;
     }
 
 
