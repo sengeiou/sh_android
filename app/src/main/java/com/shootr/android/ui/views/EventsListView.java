@@ -14,10 +14,6 @@ public interface EventsListView extends LoadDataView {
 
     void showContent();
 
-    void hideContent();
-
-    void hideKeyboard();
-
     void navigateToEventTimeline(String idEvent, String title);
 
     void showNotificationsOff();

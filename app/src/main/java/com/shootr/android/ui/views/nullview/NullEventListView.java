@@ -22,14 +22,6 @@ public class NullEventListView implements EventsListView {
         /* no-op */
     }
 
-    @Override public void hideContent() {
-        /* no-op */
-    }
-
-    @Override public void hideKeyboard() {
-        /* no-op */
-    }
-
     @Override public void navigateToEventTimeline(String idEvent, String title) {
         /* no-op */
     }
