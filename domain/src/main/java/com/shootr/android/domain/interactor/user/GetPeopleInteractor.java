@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -43,9 +44,13 @@ public class GetPeopleInteractor implements Interactor {
     }
 
     private void obtainRemotePeople() {
-        List<User> userList = remoteUserRepository.getPeople();
-        userList = reorderPeopleByUsername(userList);
-        interactorHandler.sendUiMessage(new UserList(userList));
+        try{
+            List<User> userList = remoteUserRepository.getPeople();
+            userList = reorderPeopleByUsername(userList);
+            interactorHandler.sendUiMessage(new UserList(userList));
+        } catch (ServerCommunicationException networkError) {
+            /* no-op */
+        }
     }
 
     private List<User> reorderPeopleByUsername(List<User> userList) {

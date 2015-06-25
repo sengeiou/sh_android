@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -55,7 +56,11 @@ public class GetFavoriteEventsInteractor implements Interactor {
     }
 
     private void loadRemoteFavorites() {
-        loadFavoritesFrom(remoteFavoriteRepository);
+        try {
+            loadFavoritesFrom(remoteFavoriteRepository);
+        } catch (ServerCommunicationException networkError) {
+            /* no-op */
+        }
     }
 
     private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
