@@ -1,9 +1,11 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -24,13 +26,18 @@ public class WatchNumberInteractor implements Interactor{
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
 
-    @Inject public WatchNumberInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote UserRepository remoteUserRepository) {
+    @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository,
+      @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
     }
 
     public void loadWatchNumber(Callback callback, ErrorCallback errorCallback) {
@@ -76,10 +83,18 @@ public class WatchNumberInteractor implements Interactor{
     //TODO want local or remote?
     protected List<User> getPeopleAndMe() {
         List<User> peopleAndMe = new ArrayList<>();
-        List<User> people = remoteUserRepository.getPeople();
+        List<User> people = getRemotePeopleOrFallbackToLocal();
         peopleAndMe.addAll(people);
         peopleAndMe.add(sessionRepository.getCurrentUser());
         return peopleAndMe;
+    }
+
+    private List<User> getRemotePeopleOrFallbackToLocal() {
+        try {
+            return remoteUserRepository.getPeople();
+        } catch (ServerCommunicationException networkError) {
+            return localUserRepository.getPeople();
+        }
     }
 
     public interface Callback {

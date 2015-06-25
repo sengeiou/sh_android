@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class WatchNumberInteractorTest {
@@ -29,6 +31,7 @@ public class WatchNumberInteractorTest {
     private WatchNumberInteractor interactor;
 
     @Mock UserRepository remoteUserRepository;
+    @Mock UserRepository localUserRepository;
     @Mock SessionRepository sessionRepository;
     @Mock Interactor.ErrorCallback dummyErrorCallback;
     @Spy SpyCallback spyCallback = new SpyCallback();
@@ -40,7 +43,9 @@ public class WatchNumberInteractorTest {
         TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
         interactor = new WatchNumberInteractor(testInteractorHandler,
           postExecutionThread,
-          sessionRepository, remoteUserRepository);
+          sessionRepository,
+          remoteUserRepository,
+          localUserRepository);
     }
 
     @Test
@@ -73,6 +78,15 @@ public class WatchNumberInteractorTest {
 
         assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
         assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
+    }
+
+    @Test
+    public void shouldFallbackToLocalUserRepositoryWhenRemoteRepositoryFails() throws Exception {
+        when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
+
+        interactor.loadWatchNumber(spyCallback, dummyErrorCallback);
+
+        verify(localUserRepository).getPeople();
     }
 
     private User me() {
