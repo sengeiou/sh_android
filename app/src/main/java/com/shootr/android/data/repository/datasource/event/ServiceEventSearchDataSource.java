@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.service.EventSearchApiService;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
@@ -20,13 +21,15 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
     private final ShootrService shootrService;
     private final UserManager userManager;
     private final SessionRepository sessionRepository;
+    private final EventSearchApiService eventSearchApiService;
 
     @Inject public ServiceEventSearchDataSource(FollowManager followManager, ShootrService shootrService,
-      UserManager userManager, SessionRepository sessionRepository) {
+      UserManager userManager, SessionRepository sessionRepository, EventSearchApiService eventSearchApiService) {
         this.followManager = followManager;
         this.shootrService = shootrService;
         this.userManager = userManager;
         this.sessionRepository = sessionRepository;
+        this.eventSearchApiService = eventSearchApiService;
     }
 
     @Override public List<EventSearchEntity> getDefaultEvents(String locale) {
@@ -51,8 +54,7 @@ public class ServiceEventSearchDataSource implements EventSearchDataSource {
 
     private List<EventSearchEntity> loadEvents(String query, String locale) {
         try {
-            Map<String, Integer> eventsWatchesCounts = getWatchersCountByEvents();
-            return shootrService.getEventSearch(query, eventsWatchesCounts, locale);
+            return eventSearchApiService.getEvents(query, locale);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
