@@ -171,6 +171,9 @@ public class ProfileEditPresenter implements Presenter {
                 break;
             case FieldValidationError.FIELD_WEBSITE:
                 this.showWebsiteValidationError(errorCode);
+                break;
+            default:
+                break;
         }
     }
 
