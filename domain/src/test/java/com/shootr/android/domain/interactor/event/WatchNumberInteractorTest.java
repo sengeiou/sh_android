@@ -82,6 +82,7 @@ public class WatchNumberInteractorTest {
 
     @Test
     public void shouldFallbackToLocalUserRepositoryWhenRemoteRepositoryFails() throws Exception {
+        when(sessionRepository.getCurrentUser()).thenReturn(me());
         when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
 
         interactor.loadWatchNumber(spyCallback, dummyErrorCallback);
