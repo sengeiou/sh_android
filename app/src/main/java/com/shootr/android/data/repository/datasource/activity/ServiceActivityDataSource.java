@@ -4,11 +4,14 @@ import com.shootr.android.data.api.entity.ActivityApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
+import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,19 +25,26 @@ public class ServiceActivityDataSource implements ActivityDataSource{
     private final ActivityApiEntityMapper activityApiEntityMapper;
     private final BusPublisher busPublisher;
     private final SessionRepository sessionRepository;
+    private final EventDataSource localEventDataSource;
     private long lastTriggerDate;
 
-    @Inject public ServiceActivityDataSource(ActivityApiService activityApiService,
-      ActivityApiEntityMapper activityApiEntityMapper, BusPublisher busPublisher, SessionRepository sessionRepository) {
+    @Inject
+    public ServiceActivityDataSource(ActivityApiService activityApiService,
+      ActivityApiEntityMapper activityApiEntityMapper,
+      BusPublisher busPublisher,
+      SessionRepository sessionRepository,
+      @Local EventDataSource localEventDataSource) {
         this.activityApiService = activityApiService;
         this.activityApiEntityMapper = activityApiEntityMapper;
         this.busPublisher = busPublisher;
         this.sessionRepository = sessionRepository;
+        this.localEventDataSource = localEventDataSource;
     }
 
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters) {
         try {
             List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getCurrentUserId(), parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
+            storeEmbedEvents(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
@@ -53,6 +63,16 @@ public class ServiceActivityDataSource implements ActivityDataSource{
 
     @Override public void putActivities(List<ActivityEntity> activityEntities) {
         throw new IllegalArgumentException("method not implemented");
+    }
+
+    private void storeEmbedEvents(List<ActivityApiEntity> activities) {
+        for (ActivityApiEntity activity : activities) {
+            EventEntity event = activity.getEvent();
+            boolean hasAssociatedEvent = event != null;
+            if (hasAssociatedEvent) {
+                localEventDataSource.putEvent(event);
+            }
+        }
     }
 
     private List<ActivityEntity> filterSyncActivities(List<ActivityEntity> activityEntities) {
