@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -29,7 +28,6 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.UsernameClickListener;
-
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -180,7 +178,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private ShotModel extractShotFromIntent() {
-        return ((ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT));
+        return (ShotModel) getIntent().getSerializableExtra(EXTRA_SHOT);
     }
 
     private void initializePresenter(ShotModel shotModel) {

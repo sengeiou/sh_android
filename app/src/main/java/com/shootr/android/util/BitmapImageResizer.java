@@ -110,7 +110,7 @@ public class BitmapImageResizer implements ImageResizer {
                 finalWidth = originalWidth * finalHeight / originalHeight;
             }
         }
-        return Bitmap.createScaledBitmap(orientedImage, ((int) finalWidth), ((int) finalHeight), true);
+        return Bitmap.createScaledBitmap(orientedImage, (int) finalWidth, (int) finalHeight, true);
     }
 
     private Bitmap correctImageRotationIfNeeded(Bitmap originalImage, String imagePath) throws IOException {

@@ -2,10 +2,9 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.data.entity.ShotEntity;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -67,7 +66,7 @@ public class ShotEntityMapper extends GenericMapper {
         ShotEntity shot = new ShotEntity();
         shot.setIdShot((String) dto.get(DatabaseContract.ShotTable.ID_SHOT));
         shot.setIdUser((String) dto.get(DatabaseContract.ShotTable.ID_USER));
-        shot.setUsername(((String) dto.get(DatabaseContract.ShotTable.USERNAME)));
+        shot.setUsername((String) dto.get(DatabaseContract.ShotTable.USERNAME));
         // no user photo from dataservice
         shot.setUserPhoto(avatarProvider.thumbnail(shot.getIdUser()));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
