@@ -1,8 +1,8 @@
 package com.shootr.android.util;
 
-
 import com.shootr.android.domain.utils.TimeUtils;
-
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -10,9 +10,6 @@ import org.joda.time.Minutes;
 import org.joda.time.Months;
 import org.joda.time.Seconds;
 import org.joda.time.Years;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class WatchersTimeFormatter {
@@ -111,10 +108,8 @@ public class WatchersTimeFormatter {
             if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 0){
                 return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
             }
-        } else if(daysBetween == 1){
-            if(Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 1){
-                return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
-            }
+        } else if(daysBetween == 1 && Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth()) != 1){
+            return Math.abs(referenceDate.getDayOfMonth() - targetDate.getDayOfMonth());
         }
         return Math.abs(Days.daysBetween(referenceDate, targetDate).getDays());
     }
