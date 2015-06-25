@@ -13,7 +13,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
+@Deprecated @Singleton
 public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSource {
 
     private final EventManager eventManager;
