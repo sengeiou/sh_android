@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
 import com.shootr.android.ui.model.ActivityModel;
@@ -41,6 +40,9 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
 
     @Override
     protected CharSequence formatActivityComment(final ActivityModel activity) {
+        if (activity.getIdEvent() == null) {
+            return super.formatActivityComment(activity);
+        }
         String commentPattern = getPatternText();
         String eventPlaceholder = "\\(event\\)";
         String eventTitle = activity.getEventTitle();
