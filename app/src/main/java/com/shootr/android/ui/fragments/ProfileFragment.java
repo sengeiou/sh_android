@@ -247,7 +247,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
-        profilePresenter.initialize(this, idUser);
     }
 
 
@@ -374,6 +373,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
     }
 
+    private void initializePresenter() {
+        profilePresenter.initialize(this, idUser);
+    }
+
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
@@ -407,6 +410,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private void retrieveUserInfo() {
         if(idUser != null){
             loadProfileUsingJob(idUser);
+            initializePresenter();
         }else{
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
                 @Override
@@ -427,6 +431,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private void loadProfileUsingUser(User userFromCallback) {
         idUser = userFromCallback.getIdUser();
         user = userModelMapper.transform(userFromCallback);
+        initializePresenter();
         loadLatestShots();
         setUserInfo(user);
     }
