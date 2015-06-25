@@ -1,6 +1,7 @@
 package com.shootr.android.data.entity;
 
 import java.io.Serializable;
+import timber.log.Timber;
 
 public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
 
@@ -146,7 +147,8 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
             return (UserEntity) super.clone();
         } catch (CloneNotSupportedException e) {
             //TODO custom logger
-            // Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+            Timber.w(e,
+              "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
             return this;
         }
     }
