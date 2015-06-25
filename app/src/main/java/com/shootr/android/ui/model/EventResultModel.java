@@ -1,6 +1,8 @@
 package com.shootr.android.ui.model;
 
-public class EventResultModel {
+import java.io.Serializable;
+
+public class EventResultModel implements Serializable {
 
     private EventModel eventModel;
     private int watchers;
