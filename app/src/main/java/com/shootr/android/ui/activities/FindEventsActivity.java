@@ -2,8 +2,8 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,55 +13,54 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
-import com.shootr.android.ui.adapters.recyclerview.EventSearchRecyclerView;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.FindEventsPresenter;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.PicassoWrapper;
-import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindEventsActivity extends BaseSignedInActivity implements FindEventsView {
+public class FindEventsActivity extends BaseToolbarDecoratedActivity implements FindEventsView {
 
     private SearchView searchView;
     private String currentSearchQuery;
-    private ObjectGraph objectGraph;
     private EventsListAdapter adapter;
 
-    @InjectView(R.id.find_events_list) EventSearchRecyclerView eventsList;
+    @InjectView(R.id.find_events_list) RecyclerView eventsList;
     @InjectView(R.id.find_events_empty) View emptyView;
     @InjectView(R.id.find_events_loading) View loadingView;
 
     @Inject FindEventsPresenter findEventsPresenter;
     @Inject PicassoWrapper picasso;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()){
-            return;
-        }
-        setContainerContent(R.layout.activity_find_events);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_find_events;
+    }
 
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
-
-        setupViews();
-        setupActionBar();
-        initializePresenter();
-
-        objectGraph = ShootrApplication.get(getApplicationContext()).getObjectGraph();
+        initializeEventListAdapter();
     }
 
-    private void initializePresenter() {
-        findEventsPresenter.initialize(this);
+    private void initializeEventListAdapter() {
+        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
+            @Override
+            public void onEventClick(EventResultModel event) {
+                findEventsPresenter.selectEvent(event);
+            }
+        });
+        eventsList.setAdapter(adapter);
+    }
+
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
+        toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -86,20 +85,8 @@ public class FindEventsActivity extends BaseSignedInActivity implements FindEven
         return true;
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
-    }
-
-    private void setupViews() {
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override
-            public void onEventClick(EventResultModel event) {
-                findEventsPresenter.selectEvent(event);
-            }
-        });
-        eventsList.setAdapter(adapter);
+    @Override public void initializePresenter() {
+        findEventsPresenter.initialize(this);
     }
 
     private void setupQuery() {
@@ -176,7 +163,7 @@ public class FindEventsActivity extends BaseSignedInActivity implements FindEven
     }
 
     @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
-        startActivity(EventTimelineActivity.newIntent(this , idEvent, eventTitle));
+        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
     }
 
     public void startSearch() {
