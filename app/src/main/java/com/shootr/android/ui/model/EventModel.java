@@ -29,12 +29,19 @@ public class EventModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         EventModel that = (EventModel) o;
 
-        if (!idEvent.equals(that.idEvent)) return false;
+        if (!idEvent.equals(that.idEvent)) {
+            return false;
+        }
 
         return true;
     }
