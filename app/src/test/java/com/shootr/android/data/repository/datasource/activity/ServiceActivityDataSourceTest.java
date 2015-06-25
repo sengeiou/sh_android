@@ -5,6 +5,7 @@ import com.shootr.android.data.api.entity.EmbedUserApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
+import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.bus.BusPublisher;
@@ -41,6 +42,7 @@ public class ServiceActivityDataSourceTest {
     @Mock BusPublisher busPublisher;
     @Mock SessionRepository sessionRepository;
     @Mock ActivityApiService activityApiService;
+    @Mock EventDataSource localEventDataSource;
     @Mock ActivityTimelineParameters activityTimelineParameters;
     private ServiceActivityDataSource datasource;
 
@@ -50,7 +52,9 @@ public class ServiceActivityDataSourceTest {
         ActivityApiEntityMapper activityApiEntityMapper = new ActivityApiEntityMapper();
         datasource = new ServiceActivityDataSource(activityApiService,
           activityApiEntityMapper,
-          busPublisher, sessionRepository);
+          busPublisher,
+          sessionRepository,
+          localEventDataSource);
     }
 
     @Test

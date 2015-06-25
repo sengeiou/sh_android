@@ -8,10 +8,10 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-        <com.shootr.android.ui.widgets.ScrollListView android:id="@+id/timeline_activity_list"
+        <android.support.v7.widget.RecyclerView android:id="@+id/timeline_activity_list"
           android:layout_width="match_parent"
+          android:scrollbars="vertical"
           android:layout_height="match_parent"
-          android:listSelector="@android:color/transparent"
           tools:listitem="@layout/item_list_activity" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,168 +1,131 @@
 package com.shootr.android.ui.adapters;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.shootr.android.R;
+import com.shootr.android.domain.ActivityType;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
 import com.shootr.android.ui.model.ActivityModel;
-import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.UsernameClickListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ActivityTimelineAdapter extends BindableAdapter<ActivityModel> {
+public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<ActivityModel> activities;
-    private PicassoWrapper picasso;
-    private final View.OnClickListener avatarClickListener;
-    private UsernameClickListener clickListener;
-    private AndroidTimeUtils timeUtils;
-    private int tagColor;
-    private ShotTextSpannableBuilder shotTextSpannableBuilder;
+    public static final int TYPE_FOOTER = -1;
+    public static final int TYPE_GENERIC_ACTIVITY = 0;
+    public static final int TYPE_CHECKIN = 1;
+    public static final int TYPE_LISTED = 2;
 
-    public ActivityTimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
-        super(context);
+    private final PicassoWrapper picasso;
+    private final AndroidTimeUtils timeUtils;
+    private final OnAvatarClickListener avatarClickListener;
+    private final UsernameClickListener usernameClickListener;
+    private final OnEventTitleClickListener eventTitleClickListener;
+
+    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private List<ActivityModel> activities = Collections.emptyList();
+    private boolean showFooter = false;
+
+    public ActivityTimelineAdapter(PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
+      UsernameClickListener usernameClickListener, OnEventTitleClickListener eventTitleClickListener) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
-        this.clickListener = clickListener;
+        this.usernameClickListener = usernameClickListener;
         this.timeUtils = timeUtils;
-        this.activities = new ArrayList<>(0);
-        tagColor = context.getResources().getColor(R.color.tag_color);
+        this.eventTitleClickListener = eventTitleClickListener;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     @Override
-    public boolean areAllItemsEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled(int position) {
-        return true;
-    }
-
-    @Override
     public int getItemViewType(int position) {
-        return 0;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return 1;
-    }
-
-    @Override
-    public int getCount() {
-        return activities.size();
-    }
-
-    @Override
-    public ActivityModel getItem(int position) {
-        return activities.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View newView(LayoutInflater inflater, int position, ViewGroup container) {
-        View view = null;
-        switch (getItemViewType(position)) {
-            case 0:
-                view = inflater.inflate(R.layout.item_list_activity, container, false);
-                view.setTag(new ViewHolder(view, avatarClickListener));
-                break;
-            default:
-                break;
-        }
-        return view;
-    }
-
-    @Override
-    public void bindView(final ActivityModel item, int position, View view) {
-        switch (getItemViewType(position)) {
-            case 0:
-                ViewHolder vh = (ViewHolder) view.getTag();
-                vh.position = position;
-
-                String usernameTitle = item.getUsername();
-                vh.name.setText(usernameTitle);
-
-                String comment = item.getComment();
-                String tag = null;
-                if (shouldShowTag() && item.getEventTag() != null) {
-                    tag = item.getEventTag();
-                }
-
-                SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
-                if (commentWithTag != null) {
-                    addActivityComment(vh, commentWithTag);
-                    vh.text.setVisibility(View.VISIBLE);
-                } else {
-                    vh.text.setVisibility(View.GONE);
-                }
-
-                long timestamp = item.getPublishDate().getTime();
-                vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
-
-                String photo = item.getUserPhoto();
-                picasso.loadProfilePhoto(photo).into(vh.avatar);
-                vh.avatar.setTag(vh);
-                break;
-            default:
-                break;
+        if (isFooter(position)) {
+            return TYPE_FOOTER;
+        } else {
+            String activityType = activities.get(position).getType();
+            if (ActivityType.CHECKIN.equals(activityType)) {
+                return TYPE_CHECKIN;
+            } else if (ActivityType.LISTED_EVENT.equals(activityType)) {
+                return TYPE_LISTED;
+            } else {
+                return TYPE_GENERIC_ACTIVITY;
+            }
         }
     }
 
-    private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        if (comment == null && tag == null) {
-            return null;
-        }
-        if (comment != null) {
-            builder.append(comment);
-        }
-        if (comment != null && tag != null) {
-            builder.append(" ");
-        }
-        if (tag != null) {
-            builder.append(formatTag(tag));
-        }
-        return builder;
+    @Override
+    public int getItemCount() {
+        return showFooter ? activities.size() + 1 : activities.size();
     }
 
-    protected boolean shouldShowTag() {
-        return false;
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case TYPE_GENERIC_ACTIVITY:
+                return onCreateActivityViewHolder(parent, viewType);
+            case TYPE_CHECKIN:
+                return onCreateCheckinViewHolder(parent, viewType);
+            case TYPE_LISTED:
+                return onCreateListedViewHolder(parent, viewType);
+            case TYPE_FOOTER:
+                return onCreateFooterViewHolder(parent, viewType);
+        }
+        throw new IllegalStateException("View type %d not handled");
     }
 
-    private SpannableString formatTag(String tag) {
-        ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
-
-        SpannableString tagSpan = new SpannableString(tag);
-        tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return tagSpan;
+    private ActivityViewHolder onCreateActivityViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new ActivityViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener);
     }
 
-    private void addActivityComment(ViewHolder vh, CharSequence comment) {
-        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, clickListener);
-        vh.text.setText(spannedComment);
-        vh.text.addLinks();
+    private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new CheckinViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener,
+          eventTitleClickListener);
+    }
+
+    private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new ListedViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener,
+          eventTitleClickListener);
+    }
+
+    private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
+        View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
+        return new RecyclerView.ViewHolder(footer) {};
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (!isFooter(position)) {
+            ((ActivityViewHolder) holder).render(activities.get(position));
+        }
+    }
+
+    private boolean isFooter(int position) {
+        return position >= activities.size();
     }
 
     public void addActivitiesBelow(List<ActivityModel> newActivities) {
@@ -182,23 +145,12 @@ public class ActivityTimelineAdapter extends BindableAdapter<ActivityModel> {
         notifyDataSetChanged();
     }
 
+    public void setFooterVisible(boolean visible) {
+        showFooter = visible;
+        notifyDataSetChanged();
+    }
+
     public ActivityModel getLastActivity() {
         return activities.get(activities.size() - 1);
     }
-
-    public static class ViewHolder {
-        @InjectView(R.id.activity_avatar) public ImageView avatar;
-        @InjectView(R.id.ativity_user_name) public TextView name;
-        @InjectView(R.id.activity_timestamp) public TextView timestamp;
-        @InjectView(R.id.activity_text) public ClickableTextView text;
-        public int position;
-
-        public ViewHolder(View view, View.OnClickListener avatarClickListener) {
-            ButterKnife.inject(this, view);
-
-            avatar.setOnClickListener(avatarClickListener);
-        }
-
-    }
-
 }
