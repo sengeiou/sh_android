@@ -111,7 +111,7 @@ public abstract class AbstractManager {
     public String createListPlaceholders(int length) {
         if (length < 1) {
             // It will lead to an invalid query anyway ..
-            throw new RuntimeException("At least one placeholder must be created, otherwise this method is useless.");
+            throw new IllegalArgumentException("At least one placeholder must be created, otherwise this method is useless.");
         } else {
             StringBuilder sb = new StringBuilder(length * 2 - 1);
             sb.append("?");
