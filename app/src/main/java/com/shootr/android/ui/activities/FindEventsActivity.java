@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -21,10 +22,14 @@ import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.FindEventsPresenter;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.PicassoWrapper;
+import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FindEventsActivity extends BaseToolbarDecoratedActivity implements FindEventsView {
+
+    private static final String EXTRA_RESULTS = "results";
+    private static final String EXTRA_SEARCH_TEXT = "search";
 
     private SearchView searchView;
     private String currentSearchQuery;
@@ -73,6 +78,22 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         setupQuery();
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
+        outState.putString(EXTRA_SEARCH_TEXT, currentSearchQuery);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        initializePresenter();
+        currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
+        List<EventResultModel> restoredResults = (List<EventResultModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        findEventsPresenter.restoreEvents(restoredResults);
     }
 
     @Override public void initializePresenter() {

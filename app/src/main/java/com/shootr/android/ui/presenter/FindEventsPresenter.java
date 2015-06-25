@@ -96,6 +96,12 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.showError(errorMessage);
     }
 
+    public void restoreEvents(List<EventResultModel> restoredResults) {
+        if (restoredResults != null && !restoredResults.isEmpty()) {
+            findEventsView.renderEvents(restoredResults);
+        }
+    }
+
     @Override public void resume() {
         /* no-op */
     }
