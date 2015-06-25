@@ -99,7 +99,7 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   }
 
   public T getItem(int position) {
-    int modifiedPosition = 0;
+    int modifiedPosition = position;
     if (hasHeader() && hasItems()) {
       modifiedPosition = position;
       --modifiedPosition;
