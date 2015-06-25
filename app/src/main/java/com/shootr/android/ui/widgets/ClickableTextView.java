@@ -126,13 +126,11 @@ public class ClickableTextView extends TextView {
             if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
                 PressableSpan touchedUrlSpan = getTouchedSpan(event, widget, buffer);
 
-                if (action == MotionEvent.ACTION_MOVE) {
-                    if (alreadyPressedSpan != null && touchedUrlSpan != alreadyPressedSpan) {
-                        alreadyPressedSpan.setPressed(false);
-                        alreadyPressedSpan = null;
-                        Selection.removeSelection(buffer);
-                        return false;
-                    }
+                if (action == MotionEvent.ACTION_MOVE && alreadyPressedSpan != null && touchedUrlSpan != alreadyPressedSpan) {
+                    alreadyPressedSpan.setPressed(false);
+                    alreadyPressedSpan = null;
+                    Selection.removeSelection(buffer);
+                    return false;
                 }
 
                 if (touchedUrlSpan != null) {
