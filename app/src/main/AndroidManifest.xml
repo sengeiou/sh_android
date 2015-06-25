@@ -45,7 +45,7 @@
         <activity android:name=".ui.activities.EventTimelineActivity" >
         </activity>
         <activity
-            android:name=".ui.activities.registro.WelcomeLoginActivity"
+            android:name=".ui.activities.registro.LoginSelectionActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/ShootrTheme.NoActionBar" >
@@ -60,7 +60,7 @@
             android:label="@string/title_activity_login_email" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.shootr.android.ui.activities.registro.WelcomeLoginActivity" />
+                android:value=".ui.activities.registro.LoginSelectionActivity" />
         </activity>
         <activity
             android:name=".ui.activities.PostNewShotActivity"
@@ -186,6 +186,12 @@
             android:label="@string/activity_find_events_title"
             android:theme="@style/ShootrTheme.Closable">
         </activity>
+
+        <activity android:name="com.facebook.FacebookActivity"
+          android:configChanges=
+            "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+          android:theme="@android:style/Theme.Translucent.NoTitleBar"
+          android:label="@string/app_name" />
     </application>
 
 </manifest>
