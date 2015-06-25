@@ -166,7 +166,7 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   }
 
   private boolean hasItems() {
-    return items.isEmpty();
+    return !items.isEmpty();
   }
 
   private void validateItems(List<T> items) {

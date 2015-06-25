@@ -121,7 +121,7 @@ public class ShootrDataService implements ShootrService {
             userIds.add(followEntity.getFollowedUser());
         }
         List<UserEntity> usersById = new ArrayList<>();
-        if(userIds.isEmpty()){
+        if(!userIds.isEmpty()){
             usersById = getUsersById(userIds);
         }
         //TODO order
@@ -158,7 +158,7 @@ public class ShootrDataService implements ShootrService {
             userIds.add(followEntity.getIdUser());
         }
         List<UserEntity> usersById = new ArrayList<>();
-        if(userIds.isEmpty()){
+        if(!userIds.isEmpty()){
             usersById = getUsersById(userIds);
         }
         //TODO order
