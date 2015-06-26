@@ -7,8 +7,6 @@ public interface EventSearchDataSource {
 
     List<EventSearchEntity> getDefaultEvents(String locale);
 
-    List<EventSearchEntity> getEvents(String query, String locale);
-
     void putDefaultEvents(List<EventSearchEntity> transform);
 
     void deleteDefaultEvents();

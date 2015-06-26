@@ -80,11 +80,10 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEvents(String query, String locale) {
-        List<EventSearchEntity> eventSearchEntities = remoteEventSearchDataSource.getEvents(query, locale);
+        List<EventEntity> eventEntityList = remoteEventListDataSource.getEvents(query, locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        addWatchersToEventSearchEntities(eventSearchEntities, watchers);
-        localEventSearchDataSource.setLastSearchResults(eventSearchEntities);
-        return eventSearchEntityMapper.transformToDomain(eventSearchEntities);
+        List<EventSearchResult> eventSearchResults = transformEventEntitiesWithWatchers(eventEntityList, watchers);
+        return transformEventEntitiesWithWatchers(eventEntityList, watchers);
     }
 
     @Override public void putDefaultEvents(List<EventSearchResult> eventSearchResults) {

@@ -31,7 +31,7 @@ public class EventsSearchInteractorTest {
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new EventsSearchInteractor(interactorHandler,
           sessionRepository,
-          eventSearchRepository, postExecutionThread, localeProvider);
+          eventSearchRepository, localEventSearchRepository, postExecutionThread, localeProvider);
     }
 
 }

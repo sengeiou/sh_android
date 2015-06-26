@@ -59,10 +59,6 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
         return defaultEventSearch;
     }
 
-    @Override public List<EventSearchEntity> getEvents(String query, String locale) {
-        throw new IllegalStateException("Search not implemented in local datasource");
-    }
-
     @Override public void putDefaultEvents(List<EventSearchEntity> eventSearchEntities) {
         eventManager.putDefaultEventSearch(eventSearchEntities);
     }

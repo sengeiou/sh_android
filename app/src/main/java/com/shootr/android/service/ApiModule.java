@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.EventApiService;
-import com.shootr.android.data.api.service.EventSearchApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.domain.repository.PhotoService;
@@ -54,11 +53,6 @@ public final class ApiModule {
     @Provides
     EventApiService provideEventApiService(RestAdapter restAdapter) {
         return restAdapter.create(EventApiService.class);
-    }
-
-    @Provides
-    EventSearchApiService provideEventSearchApiService(RestAdapter restAdapter) {
-        return restAdapter.create(EventSearchApiService.class);
     }
 
     @Provides
