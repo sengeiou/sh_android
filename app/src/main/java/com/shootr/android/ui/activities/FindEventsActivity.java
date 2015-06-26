@@ -53,14 +53,10 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     private void setupQueryTextListener() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
-                if (!queryText.equals(currentSearchQuery)) {
-                    currentSearchQuery = queryText;
-                    searchEvents();
-                    hideKeyboard();
-                    return true;
-                } else {
-                    return false;
-                }
+                currentSearchQuery = queryText;
+                searchEvents();
+                hideKeyboard();
+                return true;
             }
 
             @Override public boolean onQueryTextChange(String s) {
