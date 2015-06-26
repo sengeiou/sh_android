@@ -5,8 +5,6 @@ import android.util.Log;
 
 public class EventSearchRecyclerView extends RecyclerView {
 
-    private static final String TAG = "EventSearchRecyclerView";
-
     public EventSearchRecyclerView(android.content.Context context) {
         super(context);
     }
@@ -21,7 +19,7 @@ public class EventSearchRecyclerView extends RecyclerView {
 
     @Override
     public void scrollTo(int x, int y) {
-        Log.e(TAG, "EventSearchRecyclerView does not support scrolling to an absolute position.");
+        /* super throws exception, ignore it */
     }
 
 }
