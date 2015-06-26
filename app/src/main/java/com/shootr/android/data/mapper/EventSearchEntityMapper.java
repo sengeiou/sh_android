@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-@Deprecated
 public class EventSearchEntityMapper {
 
     public final EventEntityMapper eventEntityMapper;
