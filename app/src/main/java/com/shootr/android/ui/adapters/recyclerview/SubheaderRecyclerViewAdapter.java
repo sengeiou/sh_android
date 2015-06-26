@@ -99,13 +99,13 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   }
 
   public T getItem(int position) {
-    int modifiedPosition = position;
+    int itemPosition = position;
     if (hasHeader() && hasItems()) {
-      modifiedPosition = position;
-      --modifiedPosition;
-      --modifiedPosition;
+      itemPosition = position;
+      --itemPosition;
+      --itemPosition;
     }
-    return items.get(modifiedPosition);
+    return items.get(itemPosition);
   }
 
   public void setHeader(H header) {
