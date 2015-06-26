@@ -77,10 +77,10 @@ android {
     signingConfigs {
         release {
             storeFile file('../certs/release.keystore')
-            //TODO use credentials from external file or environment variables
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
+            def (releaseKeystorePassword, releaseKeyAlias, releaseKeyPassword) = signingConfig()
+            storePassword releaseKeystorePassword
+            keyAlias releaseKeyAlias
+            keyPassword releaseKeyPassword
         }
 
         debug {
@@ -180,6 +180,54 @@ dependencies {
     androidTestCompile('com.squareup.assertj:assertj-android:1.0.0'){
         exclude group: 'com.android.support'
     }
+}
+
+/**
+ * Tries to read signing values form a properties file, and fallbacks to environment variables if they are not found
+ * @return keystorePassword , keyAlias, keyPassword
+ */
+def signingConfig() {
+    signingConfigFromFile() ?: signinConfigFromEnvironment()
+}
+
+/**
+ * Reads signing values form a environment variables
+ * @return keystorePassword , keyAlias, keyPassword
+ */
+def signinConfigFromEnvironment() {
+    println '-> signinConfigFromEnvironment'
+    [System.getenv('STORE_PASSWORD'), System.getenv('KEY_ALIAS'), System.getenv('KEY_PASSWORD')]
+}
+
+/**
+ * Reads signing values form a properties file
+ * @return keystorePassword , keyAlias, keyPassword
+ */
+def signingConfigFromFile() {
+    println '-> signingConfigFromFile'
+    def Properties props = new Properties()
+    def propFile = file('signing.properties')
+
+    if (propFile.canRead()) {
+        props.load(new FileInputStream(propFile))
+
+        if (props != null &&
+          props.containsKey('STORE_PASSWORD') &&
+          props.containsKey('KEY_ALIAS') &&
+          props.containsKey('KEY_PASSWORD')) {
+
+            def keystorePassword = props['STORE_PASSWORD']
+            def keyAlias = props['KEY_ALIAS']
+            def keyPassword = props['KEY_PASSWORD']
+
+            return [keystorePassword, keyAlias, keyPassword]
+        } else {
+            println 'signing.properties found but some entries are missing'
+        }
+    } else {
+        println 'signing.properties not found'
+    }
+    return null
 }
 
 sonarRunner {
