@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -52,7 +53,11 @@ public class EventsSearchInteractor implements Interactor {
     @Override public void execute() throws Exception {
         removeInvalidCharactersFromQuery();
         if (validateSearchQuery()) {
-            performSearch();
+            try {
+                performSearch();
+            } catch (ServerCommunicationException networkError) {
+                notifyError(networkError);
+            }
         }
     }
 

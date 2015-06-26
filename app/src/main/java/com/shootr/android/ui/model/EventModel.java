@@ -1,7 +1,8 @@
 package com.shootr.android.ui.model;
 
+import java.io.Serializable;
 
-public class EventModel {
+public class EventModel implements Serializable {
 
     private String idEvent;
     private String authorId;
