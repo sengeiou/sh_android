@@ -1,4 +1,4 @@
 before_script:
 
 spec:
-    script: ./gradlew build
+    script: ./gradlew build -PdisablePreDex
