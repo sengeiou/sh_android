@@ -68,14 +68,13 @@ public class LoginSelectionActivity extends BaseActivity {
                 final AccessToken accessToken = loginResult.getAccessToken();
                 Timber.d("Facebook Access Token: %s", accessToken.getToken());
 
-                final Profile profile = Profile.getCurrentProfile();
-
                 GraphRequest graphRequest =
                   GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                       @Override
                       public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                           Timber.d(jsonObject.toString());
-                          String name = profile.getName();
+                          String id = jsonObject.optString("id");
+                          String name = jsonObject.optString("name");
                           String email = jsonObject.optString("email");
                           new AlertDialog.Builder(LoginSelectionActivity.this).setTitle("Hello " + name)
                             .setMessage(String.format(
@@ -85,10 +84,12 @@ public class LoginSelectionActivity extends BaseActivity {
                               accessToken.getToken().substring(0, 20)))
                             .setPositiveButton("Ok", null)
                             .show();
+                          String pictureUrl = "https://graph.facebook.com/%s/picture?type=large";
+                          picasso.load(String.format(pictureUrl, id)).into(loginIcon);
                       }
                   });
                 graphRequest.executeAsync();
-                picasso.load(profile.getProfilePictureUri(200, 200)).into(loginIcon);
+
             }
 
             @Override
