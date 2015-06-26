@@ -2,7 +2,6 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
@@ -10,7 +9,6 @@ import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public interface ShootrService {
 
@@ -58,9 +56,6 @@ public interface ShootrService {
     List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
-
-    List<EventSearchEntity> getEventSearch(String query, Map<String, Integer> eventsWatchesCounts, String locale)
-      throws IOException;
 
     void performCheckin(String idUser, String idEvent) throws IOException;
 
