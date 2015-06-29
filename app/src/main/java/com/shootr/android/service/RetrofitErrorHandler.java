@@ -10,7 +10,7 @@ import timber.log.Timber;
 
 public class RetrofitErrorHandler implements ErrorHandler {
 
-    private static final int CODE_SERVER_DOWN = 503;
+    public static final int CODE_SERVER_DOWN = 503;
 
     private final BusPublisher busPublisher;
 
@@ -37,7 +37,7 @@ public class RetrofitErrorHandler implements ErrorHandler {
         }
     }
 
-    private static class ServerDownError {
+    public static class ServerDownError {
 
         public String title;
         public String description;
