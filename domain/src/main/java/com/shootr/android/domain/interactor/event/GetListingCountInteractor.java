@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -39,16 +40,20 @@ public class GetListingCountInteractor implements Interactor {
     }
 
     private void loadListingCountFromRemote() {
-        loadListingCountFromRepositoty(remoteEventRepository);
+        loadListingCountFromRepository(remoteEventRepository);
     }
 
     private void loadListingCountFromLocal() {
-        loadListingCountFromRepositoty(localEventRepository);
+        loadListingCountFromRepository(localEventRepository);
     }
 
-    private void loadListingCountFromRepositoty(EventRepository eventRepository){
-        Integer listingEventsNumber = eventRepository.getListingCount(idUser);
-        notifyLoaded(listingEventsNumber);
+    private void loadListingCountFromRepository(EventRepository eventRepository){
+        try {
+            Integer listingEventsNumber = eventRepository.getListingCount(idUser);
+            notifyLoaded(listingEventsNumber);
+        } catch (ServerCommunicationException networkError) {
+            /* no-op */
+        }
     }
 
     private void notifyLoaded(final Integer listingEventsNumber) {
