@@ -51,9 +51,9 @@ public class EmailRegistrationPresenterTest {
     }
 
     @Test public void shouldAskForConfirmationIfEmailUsernameAndPasswordAreValid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_VALID);
-        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_VALID);
-        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_VALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_VALID);
+        when(emailRegistrationView.getUsernameInput()).thenReturn(USERNAME_VALID);
+        when(emailRegistrationView.getPasswordInput()).thenReturn(PASSWORD_VALID);
         presenter.setView(emailRegistrationView);
 
         presenter.createAccount();
@@ -62,7 +62,7 @@ public class EmailRegistrationPresenterTest {
     }
 
     @Test public void shouldNotAskForConfirmationIfEmailIsInvalid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_INVALID);
         presenter.setView(emailRegistrationView);
 
         presenter.createAccount();
@@ -72,7 +72,7 @@ public class EmailRegistrationPresenterTest {
 
     //region Email validation
     @Test public void shouldShowEmailErrorWhenFocusRemovedIfEmailInvalid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_INVALID);
 
         presenter.emailFocusRemoved();
 
@@ -81,7 +81,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldNotRequestEmailFocusWhenFocusRemovedIfEmailInvalid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_INVALID);
 
         presenter.emailFocusRemoved();
 
@@ -90,7 +90,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldShowEmailErrorWhenCreateAccountIfEmailInvalid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_INVALID);
 
         presenter.createAccount();
 
@@ -99,7 +99,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldRequestEmailFocusWhenCreateAccountIfEmailInvalid() throws Exception {
-        when(emailRegistrationView.getEmail()).thenReturn(EMAIL_INVALID);
+        when(emailRegistrationView.getEmailInput()).thenReturn(EMAIL_INVALID);
 
         presenter.createAccount();
 
@@ -109,7 +109,7 @@ public class EmailRegistrationPresenterTest {
 
     //region Username validation
     @Test public void shouldShowUsernameErrorWhenFocusRemovedIfUsernameInvalid() throws Exception {
-        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
+        when(emailRegistrationView.getUsernameInput()).thenReturn(USERNAME_INVALID);
 
         presenter.usernameFocusRemoved();
 
@@ -118,7 +118,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldNotRequestUsernameFocusWhenFocusRemovedIfUsernameInvalid() throws Exception {
-        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
+        when(emailRegistrationView.getUsernameInput()).thenReturn(USERNAME_INVALID);
 
         presenter.usernameFocusRemoved();
 
@@ -127,7 +127,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldShowUsernameErrorWhenCreateAccountIfUsernameInvalid() throws Exception {
-        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
+        when(emailRegistrationView.getUsernameInput()).thenReturn(USERNAME_INVALID);
 
         presenter.createAccount();
 
@@ -136,7 +136,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldRequestUsernameFocusWhenCreateAccountIfUsernameInvalid() throws Exception {
-        when(emailRegistrationView.getUsername()).thenReturn(USERNAME_INVALID);
+        when(emailRegistrationView.getUsernameInput()).thenReturn(USERNAME_INVALID);
 
         presenter.createAccount();
 
@@ -146,7 +146,7 @@ public class EmailRegistrationPresenterTest {
 
     //region Password validation
     @Test public void shouldShowPasswordErrorWhenFocusRemovedIfPasswordInvalid() throws Exception {
-        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
+        when(emailRegistrationView.getPasswordInput()).thenReturn(PASSWORD_INVALID);
 
         presenter.passwordFocusRemoved();
 
@@ -155,7 +155,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldNotRequestPasswordFocusWhenFocusRemovedIfPasswordInvalid() throws Exception {
-        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
+        when(emailRegistrationView.getPasswordInput()).thenReturn(PASSWORD_INVALID);
 
         presenter.passwordFocusRemoved();
 
@@ -164,7 +164,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldShowPasswordErrorWhenCreateAccountIfPasswordInvalid() throws Exception {
-        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
+        when(emailRegistrationView.getPasswordInput()).thenReturn(PASSWORD_INVALID);
 
         presenter.createAccount();
 
@@ -173,7 +173,7 @@ public class EmailRegistrationPresenterTest {
 
     @Test
     public void shouldRequestPasswordFocusWhenCreateAccountIfPasswordInvalid() throws Exception {
-        when(emailRegistrationView.getPassword()).thenReturn(PASSWORD_INVALID);
+        when(emailRegistrationView.getPasswordInput()).thenReturn(PASSWORD_INVALID);
 
         presenter.createAccount();
 

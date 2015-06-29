@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 public class FacebookRegistroActivity extends BaseToolbarActivity {
 
-    private static final String KEY_EMAIL = "email";
+    private static final String KEY_EMAIL = "emailInput";
     private static final String KEY_USERNAME = "usernameSuggestion";
     private static final String KEY_AVATAR = "avatar";
 
