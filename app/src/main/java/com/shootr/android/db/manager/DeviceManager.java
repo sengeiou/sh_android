@@ -14,6 +14,11 @@ public class DeviceManager extends AbstractManager {
 
     @Inject DeviceMapper deviceMapper;
 
+    public static final String[] PROJECTION = {
+      "idDevice", "idUser", "platform", "token", "uniqueDeviceID", "model", "osVer", "birth", "modified", "deleted",
+      "revision", "synchronizedStatus"
+    };
+
     @Inject
     public DeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
         super(openHelper);
@@ -25,7 +30,7 @@ public class DeviceManager extends AbstractManager {
         String[] whereArguments = new String[] { String.valueOf(idUser) };
 
         Cursor queryResult =
-          getReadableDatabase().query(DeviceTable.TABLE, DeviceTable.PROJECTION, whereSelection, whereArguments, null,
+          getReadableDatabase().query(DeviceTable.TABLE, PROJECTION, whereSelection, whereArguments, null,
             null, null);
 
         DeviceEntity deviceEntity = null;
