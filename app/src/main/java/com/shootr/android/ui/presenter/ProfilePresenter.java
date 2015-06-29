@@ -2,23 +2,24 @@ package com.shootr.android.ui.presenter;
 
 import android.view.Menu;
 import android.view.MenuInflater;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
-import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
     private final GetListingCountInteractor getListingCountInteractor;
-    private final SessionRepository sessionRepository;
+    private final GetCurrentUserInteractor getCurrentUserInteractor;
     private ProfileView profileView;
     private String profileIdUser;
 
     @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      SessionRepository sessionRepository) {
+      GetCurrentUserInteractor getCurrentUserInteractor) {
         this.getListingCountInteractor = getListingCountInteractor;
-        this.sessionRepository = sessionRepository;
+        this.getCurrentUserInteractor = getCurrentUserInteractor;
     }
 
     protected void setView(ProfileView profileView){
@@ -31,9 +32,15 @@ public class ProfilePresenter implements Presenter {
         loadCurrentUserListing();
     }
 
-    public void setupOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(isCurrentUser()){
-            profileView.createOptionsMenu(menu, inflater);
+    public void setupOptionsMenu(final Menu menu, final MenuInflater inflater) {
+        if(profileIdUser != null) {
+            getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
+                @Override public void onLoaded(User user) {
+                    if(profileIdUser.equals(user.getIdUser())){
+                        profileView.createOptionsMenu(menu, inflater);
+                    }
+                }
+            });
         }
     }
 
@@ -57,10 +64,6 @@ public class ProfilePresenter implements Presenter {
 
     public void clickListing() {
         profileView.navigateToListing(profileIdUser);
-    }
-
-    private boolean isCurrentUser() {
-        return profileIdUser != null && profileIdUser.equals(sessionRepository.getCurrentUserId());
     }
 
     public void logoutSelected() {
