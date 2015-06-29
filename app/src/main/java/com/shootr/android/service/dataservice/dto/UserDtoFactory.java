@@ -37,8 +37,10 @@ public class UserDtoFactory {
     public static final int UNFOLLOW_TYPE = 1;
 
     private static final String ENTITY_LOGIN = "LoginMongo";
+    private static final String ENTITY_LOGOUT = "LogoutMongo";
     private static final String ENTITY_CHECKIN = "CheckInMongo";
     private static final String ALIAS_LOGIN = "Login";
+    private static final String ALIAS_LOGOUT = "Logout";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
@@ -352,5 +354,33 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_PASSWORD_RESET_EMAIL, operation);
+    }
+
+    public GenericDto getLogoutOperationDto(String idUser, String idDevice) {
+        if (idUser == null) {
+            throw new IllegalArgumentException("IdUser must not be null");
+        }
+        if (idDevice == null) {
+            throw new IllegalArgumentException("IdDevice must not be null");
+        }
+        Map<String, Object> keys = new ArrayMap<>(2);
+        keys.put(DatabaseContract.DeviceTable.ID_USER, idUser);
+        keys.put(DatabaseContract.DeviceTable.ID_DEVICE, idDevice);
+
+        MetadataDto metadata = new MetadataDto.Builder() //
+          .operation(Constants.OPERATION_RETRIEVE) //
+          .entity(ENTITY_LOGOUT) //
+          .includeDeleted(false) //
+          .setKeys(keys)
+          .build();
+
+        Map<String, Object> dto = new HashMap<>();
+
+        OperationDto operation = new OperationDto.Builder() //
+          .metadata(metadata) //
+          .putData(dto) //
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGOUT, operation);
     }
 }

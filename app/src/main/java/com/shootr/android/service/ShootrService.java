@@ -77,4 +77,6 @@ public interface ShootrService {
     void sendResetPasswordEmail(String idUser) throws IOException;
 
     Integer getListingCount(String idUser) throws IOException;
+
+    void logout(String idUser, String sessionToken) throws IOException;
 }
