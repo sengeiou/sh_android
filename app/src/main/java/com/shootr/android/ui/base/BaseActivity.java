@@ -120,7 +120,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     private void setupWhalePage() {
         serverDownReceiver = new ServerDown.Receiver() {
             @Subscribe @Override public void onServerDown(ServerDown.Event event) {
-                openWhalePage(event.getTitle(), event.getMessage());
+                openWhalePage();
             }
         };
         bus.register(serverDownReceiver);
@@ -130,8 +130,8 @@ public abstract class BaseActivity extends ActionBarActivity {
         startActivity(new Intent(this, UpdateWarningActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
-    private void openWhalePage(String title, String message) {
-        startActivity(WhaleActivity.newIntent(this, title, message));
+    private void openWhalePage() {
+        startActivity(WhaleActivity.newIntent(this));
     }
 
     private void redirectToLogin() {

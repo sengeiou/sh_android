@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -26,17 +25,17 @@
           android:layout_marginTop="16dp"
           android:fontFamily="sans-serif-light"
           android:gravity="center"
+          android:text="@string/whale_title_default"
           android:textColor="@color/gray_10"
-          android:textSize="27sp"
-          tools:text="@string/whale_title_default" />
+          android:textSize="27sp" />
 
         <TextView android:id="@+id/whale_message"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:gravity="top|center_horizontal"
           android:maxWidth="360dp"
-          android:textSize="18sp"
-          tools:text="@string/whale_message_default" />
+          android:text="@string/whale_message_default"
+          android:textSize="18sp" />
 
     </LinearLayout>
 </FrameLayout>

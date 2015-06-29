@@ -2,6 +2,7 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import javax.inject.Inject;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
@@ -26,20 +27,13 @@ public class RetrofitErrorHandler implements ErrorHandler {
         processServerDownError(cause);
 
         Throwable originalError = cause.getCause();
-        return originalError != null ? originalError : cause;
+        return originalError != null ? originalError : new ServerCommunicationException(cause);
     }
 
     protected void processServerDownError(RetrofitError cause) {
         Response response = cause.getResponse();
         if (response != null && response.getStatus() == CODE_SERVER_DOWN) {
-            ServerDownError error = (ServerDownError) cause.getBodyAs(ServerDownError.class);
-            busPublisher.post(new ServerDown.Event(error.title, error.description));
+            busPublisher.post(new ServerDown.Event());
         }
-    }
-
-    public static class ServerDownError {
-
-        public String title;
-        public String description;
     }
 }

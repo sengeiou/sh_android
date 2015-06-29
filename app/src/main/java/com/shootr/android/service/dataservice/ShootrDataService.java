@@ -54,7 +54,7 @@ public class ShootrDataService implements ShootrService {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
-    public static final String DATA_SERVICES_PATH = "/data-services/rest/generic/";
+    public static final String DATA_SERVICES_PATH = "/data/";
 
     private final OkHttpClient client;
     private final Endpoint endpoint;
@@ -640,9 +640,7 @@ public class ShootrDataService implements ShootrService {
             return genericDto;
         } else {
             if (response.code() == RetrofitErrorHandler.CODE_SERVER_DOWN) {
-                RetrofitErrorHandler.ServerDownError serverDownError =
-                  mapper.readValue(response.body().string(), RetrofitErrorHandler.ServerDownError.class);
-                busPublisher.post(new ServerDown.Event(serverDownError.title, serverDownError.description));
+                busPublisher.post(new ServerDown.Event());
             }
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
