@@ -278,4 +278,6 @@
     <string name="title_activity_event_search">EventSearchActivity</string>
     <string name="activity_find_events_hint">Find streams</string>
     <string name="activity_find_events_title">Find streams</string>
+    <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
+    <string name="whale_title_default">We\'ll be back</string>
 </resources>
