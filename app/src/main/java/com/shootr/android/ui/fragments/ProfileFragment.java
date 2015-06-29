@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -227,6 +228,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.profile_logout) {
+            profilePresenter.logoutSelected();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -708,6 +710,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void createOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
+    }
+
+    @Override public void showLogoutInProgress() {
+        ProgressDialog progress = ProgressDialog.show(getActivity(),
+          getActivity().getString(R.string.sign_out_title),
+          getActivity().getString(R.string.sign_out_message),
+          true);
     }
 
     @OnClick(R.id.profile_listing)

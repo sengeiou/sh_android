@@ -10,4 +10,6 @@ public interface ProfileView {
     void navigateToListing(String idUser);
 
     void createOptionsMenu(Menu menu, MenuInflater inflater);
+
+    void showLogoutInProgress();
 }

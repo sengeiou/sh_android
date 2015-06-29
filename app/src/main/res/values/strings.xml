@@ -279,4 +279,6 @@
     <string name="activity_find_events_hint">Find streams</string>
     <string name="activity_find_events_title">Find streams</string>
     <string name="profile_logout">Logout</string>
+    <string name="sign_out_title">Signing out</string>
+    <string name="sign_out_message">Sign out in progress</string>
 </resources>

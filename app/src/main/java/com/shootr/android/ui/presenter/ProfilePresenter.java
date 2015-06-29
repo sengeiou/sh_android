@@ -62,4 +62,8 @@ public class ProfilePresenter implements Presenter {
     private boolean isCurrentUser() {
         return profileIdUser != null && profileIdUser.equals(sessionRepository.getCurrentUserId());
     }
+
+    public void logoutSelected() {
+        profileView.showLogoutInProgress();
+    }
 }
