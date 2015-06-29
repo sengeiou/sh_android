@@ -140,6 +140,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
+    private ProgressDialog progress;
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -713,10 +714,18 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Override public void showLogoutInProgress() {
-        ProgressDialog progress = ProgressDialog.show(getActivity(),
+        progress = ProgressDialog.show(getActivity(),
           getActivity().getString(R.string.sign_out_title),
           getActivity().getString(R.string.sign_out_message),
           true);
+    }
+
+    @Override public void showError(ShootrException error) {
+        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void hideLogoutInProgress() {
+        progress.dismiss();
     }
 
     @OnClick(R.id.profile_listing)

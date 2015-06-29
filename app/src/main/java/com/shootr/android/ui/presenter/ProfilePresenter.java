@@ -52,7 +52,8 @@ public class ProfilePresenter implements Presenter {
                         }
                     }, new Interactor.ErrorCallback() {
                         @Override public void onError(ShootrException error) {
-                            //TODO should handle error
+                            profileView.hideLogoutInProgress();
+                            profileView.showError(error);
                         }
                     });
 
