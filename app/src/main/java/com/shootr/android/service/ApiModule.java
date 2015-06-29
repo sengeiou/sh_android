@@ -41,12 +41,18 @@ public final class ApiModule {
         return photoService;
     }
 
-    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient) {
+    @Provides RestAdapter.LogLevel provideRetrofitLogLevel() {
+        return RestAdapter.LogLevel.NONE;
+    }
+
+    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient,
+      RestAdapter.LogLevel logLevel) {
         return new RestAdapter.Builder() //
           .setEndpoint(endpoint.getUrl() + API_PATH_BASE) //
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
           .setErrorHandler(new RetrofitErrorHandler()) //
+          .setLogLevel(logLevel)
           .build();
     }
 

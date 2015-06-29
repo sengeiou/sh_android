@@ -1,19 +1,14 @@
 package com.shootr.android.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.ApiEndpoint;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.prefs.BooleanPreference;
-import com.squareup.okhttp.OkHttpClient;
-import dagger.Module;
-import dagger.Provides;
-import com.shootr.android.data.ApiEndpoint;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.service.dataservice.ShootrDataService;
-
+import dagger.Module;
+import dagger.Provides;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
-import retrofit.client.OkClient;
-import retrofit.converter.JacksonConverter;
 
 @Module(
         complete = false,
@@ -39,14 +34,7 @@ public class DebugApiModule {
         }
     }
 
-    @Provides
-    RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient) {
-        return new RestAdapter.Builder() //
-          .setEndpoint(endpoint.getUrl() + ApiModule.API_PATH_BASE) //
-          .setConverter(new JacksonConverter(objectMapper)) //
-          .setClient(new OkClient(okHttpClient)) //
-          .setErrorHandler(new RetrofitErrorHandler()) //
-          .setLogLevel(RestAdapter.LogLevel.BASIC) //
-          .build();
+    @Provides RestAdapter.LogLevel provideRetrofitLogLevel() {
+        return RestAdapter.LogLevel.BASIC;
     }
 }
