@@ -46,12 +46,12 @@ public final class ApiModule {
     }
 
     @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient,
-      RestAdapter.LogLevel logLevel) {
+      RetrofitErrorHandler errorHandler, RestAdapter.LogLevel logLevel) {
         return new RestAdapter.Builder() //
           .setEndpoint(endpoint.getUrl() + API_PATH_BASE) //
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
-          .setErrorHandler(new RetrofitErrorHandler()) //
+          .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
           .build();
     }
