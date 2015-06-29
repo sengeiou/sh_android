@@ -197,17 +197,17 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         createButton.setVisibility(View.INVISIBLE);
     }
 
-    @Override public String getEmailInput() {
+    @Override public String getEmail() {
         String email = this.emailInput.getText().toString();
         return !email.isEmpty() ? email : null;
     }
 
-    @Override public String getUsernameInput() {
+    @Override public String getUsername() {
         String username = this.usernameInput.getText().toString();
         return !username.isEmpty() ? username : null;
     }
 
-    @Override public String getPasswordInput() {
+    @Override public String getPassword() {
         String password = this.passwordInput.getText().toString();
         return !password.isEmpty() ? password : null;
     }
@@ -226,7 +226,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void askEmailConfirmation() {
         new AlertDialog.Builder(this).setTitle(getString(R.string.account_confirmation_title))
-          .setMessage(getEmailInput())
+          .setMessage(getEmail())
           .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmAccountCreation();

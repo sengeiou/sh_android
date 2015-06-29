@@ -8,11 +8,11 @@ public interface EmailRegistrationView extends DataTransferView{
 
     void hideCreateButton();
 
-    String getEmailInput();
+    String getEmail();
 
-    String getUsernameInput();
+    String getUsername();
 
-    String getPasswordInput();
+    String getPassword();
 
     void showEmailError(String errorMessage);
 

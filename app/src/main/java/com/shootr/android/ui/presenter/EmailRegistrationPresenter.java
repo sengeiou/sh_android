@@ -37,19 +37,19 @@ public class EmailRegistrationPresenter implements Presenter {
 
     //region Interaction methods
     public void usernameFocusRemoved() {
-        if(emailRegistrationView.getUsernameInput() != null) {
+        if(emailRegistrationView.getUsername() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_USERNAME);
         }
     }
 
     public void emailFocusRemoved() {
-        if(emailRegistrationView.getEmailInput() != null) {
+        if(emailRegistrationView.getEmail() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_EMAIL);
         }
     }
 
     public void passwordFocusRemoved() {
-        if(emailRegistrationView.getPasswordInput() != null) {
+        if(emailRegistrationView.getPassword() != null) {
             validateFieldOrShowError(CreateUserValidator.FIELD_PASSWORD);
         }
     }
@@ -62,9 +62,9 @@ public class EmailRegistrationPresenter implements Presenter {
 
     public void confirmAccountCreation() {
         showViewLoading();
-        String email = emailRegistrationView.getEmailInput();
-        String username = emailRegistrationView.getUsernameInput();
-        String password = emailRegistrationView.getPasswordInput();
+        String email = emailRegistrationView.getEmail();
+        String username = emailRegistrationView.getUsername();
+        String password = emailRegistrationView.getPassword();
 
         createAccountInteractor.createAccount(email, username, password, //
           new Interactor.CompletedCallback() {
@@ -153,9 +153,9 @@ public class EmailRegistrationPresenter implements Presenter {
     }
 
     private Boolean validateFieldOrShowError(int field) {
-        String email = emailRegistrationView.getEmailInput();
-        String username = emailRegistrationView.getUsernameInput();
-        String password = emailRegistrationView.getPasswordInput();
+        String email = emailRegistrationView.getEmail();
+        String username = emailRegistrationView.getUsername();
+        String password = emailRegistrationView.getPassword();
         List<FieldValidationError> errors = new CreateUserValidator().validate(email, username, password);
         List<FieldValidationError> fieldErrors = new ArrayList<>();
         for (FieldValidationError error : errors) {
