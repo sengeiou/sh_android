@@ -78,8 +78,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void editEventInfo() {
-        String idEventToEdit = eventModel.getIdEvent();
-        eventDetailView.navigateToEditEvent(idEventToEdit);
+        eventDetailView.navigateToEditEvent(idEvent);
     }
 
     public void resultFromEditEventInfo(String idEventEdited) {
