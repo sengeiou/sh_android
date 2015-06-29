@@ -17,4 +17,6 @@ public interface ProfileView {
     void showError(ShootrException error);
 
     void hideLogoutInProgress();
+
+    void navigateToWelcomeScreen();
 }
