@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ViewGroup;
+import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.bus.ServerDown;
@@ -132,6 +133,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     private void openWhalePage() {
         startActivity(WhaleActivity.newIntent(this));
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     private void redirectToLogin() {
