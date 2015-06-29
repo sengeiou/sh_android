@@ -68,7 +68,7 @@ public class ShootrDataService implements ShootrService {
     private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
-    public final ForgotPasswordMapper forgotPasswordMapper;
+    private final ForgotPasswordMapper forgotPasswordMapper;
 
     private final TimeUtils timeUtils;
 
@@ -121,7 +121,7 @@ public class ShootrDataService implements ShootrService {
             userIds.add(followEntity.getFollowedUser());
         }
         List<UserEntity> usersById = new ArrayList<>();
-        if(userIds.size()>0){
+        if(!userIds.isEmpty()){
             usersById = getUsersById(userIds);
         }
         //TODO order
@@ -158,7 +158,7 @@ public class ShootrDataService implements ShootrService {
             userIds.add(followEntity.getIdUser());
         }
         List<UserEntity> usersById = new ArrayList<>();
-        if(userIds.size()>0){
+        if(!userIds.isEmpty()){
             usersById = getUsersById(userIds);
         }
         //TODO order
@@ -320,12 +320,10 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops[0] != null){
-            if(ops[0].getData() != null && ops[0].getData().length > 0){
-                Map<String, Object> dataItem = ops[0].getData()[0];
-                FollowEntity followReceived = followMapper.fromDto(dataItem);
-                return followReceived;
-            }
+        if(ops[0] != null && ops[0].getData() != null && ops[0].getData().length > 0){
+            Map<String, Object> dataItem = ops[0].getData()[0];
+            FollowEntity followReceived = followMapper.fromDto(dataItem);
+            return followReceived;
 
         }
         return null;
@@ -478,13 +476,12 @@ public class ShootrDataService implements ShootrService {
 
     @Override public void performCheckin(String idUser, String idEvent) throws IOException {
         GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
-        GenericDto responseDto = postRequest(checkinDto);
-        // We are done... right? Any errors should have been thrown already. I'm not expecting any value
+        postRequest(checkinDto);
     }
 
     @Override public void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException{
         GenericDto createAccountDto = userDtoFactory.getCreateAccountOperationDto(userCreateAccountEntity);
-        GenericDto responseDto = postRequest(createAccountDto);
+        postRequest(createAccountDto);
     }
 
     @Override
@@ -555,7 +552,7 @@ public class ShootrDataService implements ShootrService {
 
     @Override public void sendResetPasswordEmail(String idUser) throws IOException {
         GenericDto sendResetPasswordEmailDto = userDtoFactory.sendResetPasswordEmail(idUser);
-        GenericDto responseDto = postRequest(sendResetPasswordEmailDto);
+        postRequest(sendResetPasswordEmailDto);
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {

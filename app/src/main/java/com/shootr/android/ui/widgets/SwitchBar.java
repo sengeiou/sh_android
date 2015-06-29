@@ -26,9 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-
 import android.widget.TextView;
-
 import com.shootr.android.R;
 import java.util.ArrayList;
 
@@ -144,7 +142,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
     }
 
     public boolean isShowing() {
-        return (getVisibility() == View.VISIBLE);
+        return getVisibility() == View.VISIBLE;
     }
 
     @Override

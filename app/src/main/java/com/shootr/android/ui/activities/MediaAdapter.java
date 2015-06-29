@@ -22,7 +22,7 @@ import java.util.List;
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private Context context;
-    private List<ShotModel> shotsWithMedia = Collections.EMPTY_LIST;
+    private List<ShotModel> shotsWithMedia = Collections.emptyList();
     private final PicassoWrapper picasso;
 
     public MediaAdapter(Context context, PicassoWrapper picasso) {

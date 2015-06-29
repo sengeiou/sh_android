@@ -4,9 +4,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
 public class CachedUserDataSource implements UserDataSource, CachedDataSource {
@@ -45,7 +43,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
-        throw new RuntimeException("getFollowing not cacheable");
+        throw new IllegalStateException("getFollowing not cacheable");
     }
 
     @Override public UserEntity putUser(UserEntity userEntity) {
@@ -87,19 +85,19 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
     }
 
     @Override public boolean isFollower(String from, String who) {
-        throw new RuntimeException("Can't use cache for follow status check");
+        throw new IllegalStateException("Can't use cache for follow status check");
     }
 
     @Override public boolean isFollowing(String who, String to) {
-        throw new RuntimeException("Can't use cache for follow status check");
+        throw new IllegalStateException("Can't use cache for follow status check");
     }
 
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
-        throw new RuntimeException("Can't use cache for synchronization manipulation");
+        throw new IllegalStateException("Can't use cache for synchronization manipulation");
     }
 
     @Override
     public UserEntity getUserByUsername(String username){
-        throw new RuntimeException("Username filtering is not cached");
+        throw new IllegalStateException("Username filtering is not cached");
     }
 }

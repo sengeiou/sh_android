@@ -80,6 +80,8 @@ public class PhotoPickerController {
                       case R.id.menu_photo_take:
                           pickPhotoFromCamera();
                           break;
+                      default:
+                          break;
                   }
               }
           });

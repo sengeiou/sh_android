@@ -268,6 +268,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                           case R.id.menu_photo_remove:
                               removePhoto();
                               break;
+                          default:
+                              break;
                       }
                   }
               });

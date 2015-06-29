@@ -179,6 +179,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             case TYPE_REPLY:
                 bindReplyViewHolder((ShotDetailReplyHolder) holder, position);
                 break;
+            default:
+                break;
         }
     }
 

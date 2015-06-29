@@ -38,7 +38,7 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   protected static final int TYPE_ITEM = -1;
 
   private H header;
-  private List<T> items = Collections.EMPTY_LIST;
+  private List<T> items = Collections.emptyList();
 
   /**
    * Invokes onCreateHeaderViewHolder or onCreateItemViewHolder methods based on the view type
@@ -99,11 +99,13 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   }
 
   public T getItem(int position) {
+    int itemPosition = position;
     if (hasHeader() && hasItems()) {
-      --position;
-      --position;
+      itemPosition = position;
+      --itemPosition;
+      --itemPosition;
     }
-    return items.get(position);
+    return items.get(itemPosition);
   }
 
   public void setHeader(H header) {
@@ -164,7 +166,7 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
   }
 
   private boolean hasItems() {
-    return items.size() > 0;
+    return !items.isEmpty();
   }
 
   private void validateItems(List<T> items) {

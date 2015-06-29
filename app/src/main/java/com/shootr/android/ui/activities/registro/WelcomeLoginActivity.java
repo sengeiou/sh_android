@@ -138,7 +138,7 @@ public class WelcomeLoginActivity extends BaseToolbarActivity {
         }*/
 
         // Facebook setup
-//        mButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
+//        mButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "emailInput"));
 //        uiHelper = new UiLifecycleHelper(this, callback);
 //        uiHelper.onCreate(savedInstanceState);
     }
@@ -227,11 +227,11 @@ public class WelcomeLoginActivity extends BaseToolbarActivity {
         if (!event.hasError()) {
             // Launch facebook registration activity with fb data
             GraphUser graphUser = event.getGraphUser();
-            String email = (String) graphUser.getProperty("email");
-            String username = email.substring(0, email.indexOf("@")).replace(".", "");
+            String emailInput = (String) graphUser.getProperty("emailInput");
+            String usernameInput = emailInput.substring(0, emailInput.indexOf("@")).replace(".", "");
             String avatar = FacebookUtils.getAvatarUrl(graphUser.getId());
             // We need to destroy de current activity, because coming back will display Logout in facebook button
-            startActivity(FacebookRegistroActivity.getIntent(this, email, username, avatar).addFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(FacebookRegistroActivity.getIntent(this, emailInput, usernameInput, avatar).addFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish(); // Clear task doesn't work on api<11
             String message = "Bienvenido, " + graphUser.getFirstName();
             Timber.d(message);

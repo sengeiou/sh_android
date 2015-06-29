@@ -113,20 +113,22 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private String removeWhiteLines(String multilineText) {
-        while (multilineText.contains("\n\n")) {
-            multilineText = multilineText.replace("\n\n", "\n");
+        String textWithoutWhiteLines = multilineText;
+        while (textWithoutWhiteLines.contains("\n\n")) {
+            textWithoutWhiteLines = textWithoutWhiteLines.replace("\n\n", "\n");
         }
-        return multilineText;
+        return textWithoutWhiteLines;
     }
 
     private String trimAndNullWhenEmpty(String text) {
-        if (text != null) {
-            text = text.trim();
-            if (text.isEmpty()) {
+        String trimmedText = text;
+        if (trimmedText != null) {
+            trimmedText = trimmedText.trim();
+            if (trimmedText.isEmpty()) {
                 return null;
             }
         }
-        return text;
+        return trimmedText;
     }
 
     private String removeProtocolFromUrl(String url) {
@@ -169,6 +171,9 @@ public class ProfileEditPresenter implements Presenter {
                 break;
             case FieldValidationError.FIELD_WEBSITE:
                 this.showWebsiteValidationError(errorCode);
+                break;
+            default:
+                break;
         }
     }
 

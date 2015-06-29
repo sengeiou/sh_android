@@ -38,9 +38,9 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    @InjectView(R.id.registration_email) AutoCompleteTextView email;
-    @InjectView(R.id.registration_username) EditText username;
-    @InjectView(R.id.registration_password) EditText password;
+    @InjectView(R.id.registration_email) AutoCompleteTextView emailInput;
+    @InjectView(R.id.registration_username) EditText usernameInput;
+    @InjectView(R.id.registration_password) EditText passwordInput;
     @InjectView(R.id.registration_create_button) View createButton;
     @InjectView(R.id.registration_create_progress) View progress;
     @InjectView(R.id.registration_legal_disclaimer) TextView disclaimer;
@@ -64,7 +64,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     private void setupSuggestedEmails() {
         ArrayAdapter<String> emailSuggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getEmailAccounts());
-        email.setAdapter(emailSuggestionAdapter);
+        emailInput.setAdapter(emailSuggestionAdapter);
     }
 
     public List<String> getEmailAccounts() {
@@ -198,30 +198,30 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public String getEmail() {
-        String email = this.email.getText().toString();
+        String email = this.emailInput.getText().toString();
         return !email.isEmpty() ? email : null;
     }
 
     @Override public String getUsername() {
-        String username = this.username.getText().toString();
+        String username = this.usernameInput.getText().toString();
         return !username.isEmpty() ? username : null;
     }
 
     @Override public String getPassword() {
-        String password = this.password.getText().toString();
+        String password = this.passwordInput.getText().toString();
         return !password.isEmpty() ? password : null;
     }
 
     @Override public void showEmailError(String errorMessage) {
-        email.setError(errorMessage);
+        emailInput.setError(errorMessage);
     }
 
     @Override public void showUsernameError(String errorMessage) {
-        username.setError(errorMessage);
+        usernameInput.setError(errorMessage);
     }
 
     @Override public void showPasswordError(String errorMessage) {
-        password.setError(errorMessage);
+        passwordInput.setError(errorMessage);
     }
 
     @Override public void askEmailConfirmation() {
@@ -241,15 +241,15 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void focusOnEmailField() {
-        email.requestFocus();
+        emailInput.requestFocus();
     }
 
     @Override public void focusOnPasswordField() {
-        password.requestFocus();
+        passwordInput.requestFocus();
     }
 
     @Override public void focusOnUsernameField() {
-        username.requestFocus();
+        usernameInput.requestFocus();
     }
 
     @Override public void navigateToMainScreen() {

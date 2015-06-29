@@ -8,21 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.shootr.android.domain.repository.Local;
-import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.R;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
-
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
+import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 
 public class UserListAdapter extends BindableAdapter<UserModel> {
 

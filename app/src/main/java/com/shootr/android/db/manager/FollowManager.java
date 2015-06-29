@@ -3,7 +3,6 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
@@ -52,8 +51,7 @@ public class FollowManager extends AbstractManager{
 
 
     /** Insert a Follow **/
-    public void saveFollow(FollowEntity follow)
-    {
+    public void saveFollow(FollowEntity follow) {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
             getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);

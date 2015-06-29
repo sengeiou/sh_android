@@ -46,16 +46,14 @@ public class FilterDto {
 		if (filterItems != null) {
 			this.filterItems = new FilterItemDto[filterItems.length];
 			System.arraycopy(filterItems, 0, this.filterItems, 0, filterItems.length);
-		}
-		else {
+		} else {
 			this.filterItems = null;
 		}
 		
 		if (filters != null) {
 			this.filters = new FilterDto[filters.length];
 			System.arraycopy(filters, 0, this.filters, 0, filters.length);
-		}
-		else {
+		} else {
 			this.filters = null;
 		}
 	}
