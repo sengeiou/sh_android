@@ -7,10 +7,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.ViewGroup;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.bus.UpdateWarning;
 import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
+import com.shootr.android.ui.activities.WhaleActivity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.otto.Bus;
@@ -26,12 +28,14 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject SessionHandler sessionHandler;
 
     private UpdateWarning.Receiver updateWarningReceiver;
+    private ServerDown.Receiver serverDownReceiver;
     private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectDependencies();
         setupUpdateWarning();
+        setupWhalePage();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews(savedInstanceState);
@@ -66,11 +70,13 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override protected void onResume() {
         super.onResume();
         bus.register(updateWarningReceiver);
+        bus.register(serverDownReceiver);
     }
 
     @Override protected void onPause() {
         super.onPause();
         bus.unregister(updateWarningReceiver);
+        bus.unregister(serverDownReceiver);
     }
 
     @Override protected void onDestroy() {
@@ -111,8 +117,21 @@ public abstract class BaseActivity extends ActionBarActivity {
         versionUpdater.checkVersionCompatible();
     }
 
+    private void setupWhalePage() {
+        serverDownReceiver = new ServerDown.Receiver() {
+            @Subscribe @Override public void onServerDown(ServerDown.Event event) {
+                openWhalePage(event.getTitle(), event.getMessage());
+            }
+        };
+        bus.register(serverDownReceiver);
+    }
+
     public void openUpdateWarning() {
         startActivity(new Intent(this, UpdateWarningActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+    }
+
+    private void openWhalePage(String title, String message) {
+        startActivity(WhaleActivity.newIntent(this, title, message));
     }
 
     private void redirectToLogin() {
