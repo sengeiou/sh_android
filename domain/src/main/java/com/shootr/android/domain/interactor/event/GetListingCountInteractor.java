@@ -8,6 +8,8 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class GetListingCountInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
@@ -28,8 +30,8 @@ public class GetListingCountInteractor implements Interactor {
     }
 
     public void loadListingCount(String idUser, Callback<Integer> callback){
+        this.idUser = checkNotNull(idUser);
         this.callback = callback;
-        this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
