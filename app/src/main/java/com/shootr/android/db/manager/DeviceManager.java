@@ -53,12 +53,19 @@ public class DeviceManager extends AbstractManager {
     }
 
     private void deleteDevice(DeviceEntity device) {
-        //TODO this
-    }
-
-    public DeviceEntity getDeviceById(Long idDevice) {
-        //TODO rellenar
-        return null;
+        String args = DeviceTable.ID_DEVICE + "=?";
+        String[] stringArgs = new String[]{String.valueOf(device.getIdDevice())};
+        Cursor c = getReadableDatabase().query(DatabaseContract.DeviceTable.TABLE,
+          PROJECTION,
+          args,
+          stringArgs,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
+            getWritableDatabase().delete(DatabaseContract.EventTable.TABLE, args, stringArgs);
+        }
+        c.close();
     }
 
     public DeviceEntity getDeviceByUniqueId(String uniqueId) {
