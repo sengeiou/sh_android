@@ -6,4 +6,6 @@ import java.io.IOException;
 public interface LoginGateway {
 
     LoginResult performLogin(String usernameOrEmail, String password) throws IOException;
+
+    void performLogout(String idUser) throws IOException;
 }

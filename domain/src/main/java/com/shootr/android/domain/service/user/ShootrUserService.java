@@ -120,6 +120,16 @@ public class ShootrUserService {
     }
 
     public void performLogout() {
-        // TODO real implementation
+        try {
+            User currentUser = sessionRepository.getCurrentUser();
+            loginGateway.performLogout(currentUser.getIdUser());
+            removeSession();
+        } catch (IOException e) {
+            throw new LoginException(e);
+        }
+    }
+
+    private void removeSession() {
+        sessionRepository.destroySession();
     }
 }
