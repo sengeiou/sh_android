@@ -2,13 +2,15 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.domain.bus.BusPublisher;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import javax.inject.Inject;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class RetrofitErrorHandler implements ErrorHandler {
+
+    private static final int CODE_SERVER_DOWN = 503;
 
     private final BusPublisher busPublisher;
 
@@ -20,17 +22,19 @@ public class RetrofitErrorHandler implements ErrorHandler {
     @Override
     public Throwable handleError(RetrofitError cause) {
         Timber.e(cause, "Retrofit error");
-        Throwable originalError = cause.getCause();
 
-        //TODO Do the clean way
-        int statusCode = cause.getResponse().getStatus();
-        if (statusCode == 503) {
+        processServerDownError(cause);
+
+        Throwable originalError = cause.getCause();
+        return originalError != null ? originalError : cause;
+    }
+
+    protected void processServerDownError(RetrofitError cause) {
+        Response response = cause.getResponse();
+        if (response != null && response.getStatus() == CODE_SERVER_DOWN) {
             ServerDownError error = (ServerDownError) cause.getBodyAs(ServerDownError.class);
             busPublisher.post(new ServerDown.Event(error.title, error.description));
-            return new ServerCommunicationException(originalError);
         }
-
-        return originalError != null ? originalError : cause;
     }
 
     private static class ServerDownError {
