@@ -16,6 +16,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -214,6 +217,25 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         Bundle arguments = getArguments();
         idUser = (String) arguments.getSerializable(ARGUMENT_USER);
         username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (isCurrentUser()) {
+            super.onCreateOptionsMenu(menu, inflater);
+            getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
+        }
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (isCurrentUser()) {
+            int id = item.getItemId();
+            if (id == R.id.profile_logout) {
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override
