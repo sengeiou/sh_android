@@ -54,7 +54,7 @@ public class ShootrDataService implements ShootrService {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
-    public static final String DATA_SERVICES_PATH = "/data/";
+    public static final String DATA_SERVICES_PATH = "/data/rest/generic";
 
     private final OkHttpClient client;
     private final Endpoint endpoint;

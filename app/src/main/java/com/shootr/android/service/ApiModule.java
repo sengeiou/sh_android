@@ -30,8 +30,7 @@ import retrofit.converter.JacksonConverter;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.DATA_SERVICES_ENDPOINT_BASE;
-    public static final String API_PATH_BASE = "/shootr-api/rest";
+    public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.API_ENDPOINT_BASE;
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
@@ -48,7 +47,7 @@ public final class ApiModule {
     @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient,
       RetrofitErrorHandler errorHandler, RestAdapter.LogLevel logLevel) {
         return new RestAdapter.Builder() //
-          .setEndpoint(endpoint.getUrl() + API_PATH_BASE) //
+          .setEndpoint(endpoint.getUrl()) //
           .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
           .setErrorHandler(errorHandler) //
