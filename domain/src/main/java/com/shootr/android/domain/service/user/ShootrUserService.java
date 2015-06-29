@@ -118,4 +118,8 @@ public class ShootrUserService {
             throw new SendPasswordResetEmailException(e);
         }
     }
+
+    public void performLogout() {
+        // TODO real implementation
+    }
 }
