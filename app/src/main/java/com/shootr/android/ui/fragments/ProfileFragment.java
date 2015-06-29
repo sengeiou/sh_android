@@ -221,21 +221,15 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isCurrentUser()) {
-            super.onCreateOptionsMenu(menu, inflater);
-            getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
-        }
+        profilePresenter.setupOptionsMenu(menu,inflater);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (isCurrentUser()) {
-            int id = item.getItemId();
-            if (id == R.id.profile_logout) {
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.profile_logout) {
+            return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -709,6 +703,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void navigateToListing(String idUser) {
         Intent intent = ListingActivity.getIntent(this.getActivity(), idUser);
         this.startActivity(intent);
+    }
+
+    @Override public void createOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
     }
 
     @OnClick(R.id.profile_listing)
