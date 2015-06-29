@@ -113,22 +113,22 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private String removeWhiteLines(String multilineText) {
-        String textToModify = multilineText;
-        while (textToModify.contains("\n\n")) {
-            textToModify = textToModify.replace("\n\n", "\n");
+        String textWithoutWhiteLines = multilineText;
+        while (textWithoutWhiteLines.contains("\n\n")) {
+            textWithoutWhiteLines = textWithoutWhiteLines.replace("\n\n", "\n");
         }
-        return textToModify;
+        return textWithoutWhiteLines;
     }
 
     private String trimAndNullWhenEmpty(String text) {
-        String textToTrim = text;
-        if (textToTrim != null) {
-            textToTrim = textToTrim.trim();
-            if (textToTrim.isEmpty()) {
+        String trimmedText = text;
+        if (trimmedText != null) {
+            trimmedText = trimmedText.trim();
+            if (trimmedText.isEmpty()) {
                 return null;
             }
         }
-        return textToTrim;
+        return trimmedText;
     }
 
     private String removeProtocolFromUrl(String url) {
