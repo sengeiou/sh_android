@@ -9,7 +9,7 @@
       android:layout_gravity="center_vertical"
       android:gravity="center"
       android:orientation="vertical"
-      android:paddingBottom="96dp"
+      android:paddingBottom="84dp"
       android:paddingLeft="16dp"
       android:paddingRight="16dp">
 
@@ -36,6 +36,13 @@
           android:maxWidth="360dp"
           android:text="@string/whale_message_default"
           android:textSize="18sp" />
+
+        <Button android:id="@+id/whale_retry"
+          android:layout_width="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_height="wrap_content"
+          android:text="Retry"
+          android:textColor="@color/white" />
 
     </LinearLayout>
 </FrameLayout>

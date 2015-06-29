@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseActivity;
 
@@ -27,5 +28,10 @@ public class WhaleActivity extends BaseActivity {
     @Override
     protected void initializePresenter() {
         /* no-op */
+    }
+
+    @OnClick(R.id.whale_retry)
+    public void onRetryClick() {
+        finish();
     }
 }
