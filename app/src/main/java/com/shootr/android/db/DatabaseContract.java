@@ -1,7 +1,5 @@
 package com.shootr.android.db;
 
-import android.provider.BaseColumns;
-
 public class DatabaseContract {
 
     private DatabaseContract() {
@@ -149,7 +147,7 @@ public class DatabaseContract {
         public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE, ID_USER, TOKEN, ID_PUSH_ENGINE, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
+          ID_DEVICE, ID_USER, PLATFORM, TOKEN, ID_PUSH_ENGINE, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
           APP_VERSION, LOCALE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
