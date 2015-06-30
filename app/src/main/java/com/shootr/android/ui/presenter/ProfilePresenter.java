@@ -31,8 +31,12 @@ public class ProfilePresenter implements Presenter {
     public void initialize(ProfileView profileView, String idUser, boolean isCurrentUser){
         this.setView(profileView);
         this.profileIdUser = idUser;
-        this.isCurrentUser = isCurrentUser;
+        setCurrentUser(isCurrentUser);
         loadCurrentUserListing();
+    }
+
+    protected void setCurrentUser(boolean isCurrentUser) {
+        this.isCurrentUser = isCurrentUser;
     }
 
     public void setupMenuItemsVisibility() {

@@ -35,6 +35,7 @@ public class ProfilePresenterTest {
         profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor,
           databaseVersionUtils);
         profilePresenter.setView(profileView);
+        profilePresenter.setCurrentUser(true);
     }
 
     @Test
@@ -100,6 +101,13 @@ public class ProfilePresenterTest {
         profilePresenter.logoutSelected();
 
         verify(profileView).showError(any(ShootrException.class));
+    }
+
+    @Test
+    public void shouldShowLogoutButtonWhenUserIsCurrentUser() {
+        profilePresenter.setupMenuItemsVisibility();
+
+        verify(profileView).showLogoutButton();
     }
 
     private void setupLogoutInteractorCompletedCallback() {
