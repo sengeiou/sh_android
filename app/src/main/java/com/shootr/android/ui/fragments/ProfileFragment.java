@@ -226,7 +226,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
+        inflater.inflate(R.menu.menu_profile, menu);
         this.menuItem = menu.findItem(R.id.profile_logout);
         profilePresenter.setupMenuItemsVisibility();
     }
