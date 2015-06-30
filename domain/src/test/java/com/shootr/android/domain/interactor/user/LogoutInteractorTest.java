@@ -47,4 +47,11 @@ public class LogoutInteractorTest {
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
+    @Test
+    public void shouldCallbackUserServiceWhenAttempLogout() {
+        doNothing().when(shootrUserService).performLogout();
+        interactor.attempLogout(completedCallback, errorCallback);
+        verify(shootrUserService).performLogout();
+    }
+
 }
