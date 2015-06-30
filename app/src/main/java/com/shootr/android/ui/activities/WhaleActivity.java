@@ -34,4 +34,9 @@ public class WhaleActivity extends BaseActivity {
     public void onRetryClick() {
         finish();
     }
+
+    @Override
+    protected boolean requiresUserLogin() {
+        return false;
+    }
 }
