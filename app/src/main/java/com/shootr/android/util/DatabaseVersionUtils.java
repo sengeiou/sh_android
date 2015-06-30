@@ -7,9 +7,10 @@ import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersion;
 import com.shootr.android.db.ShootrDbOpenHelper;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import javax.inject.Inject;
 
-public class DatabaseVersionUtils {
+public class DatabaseVersionUtils implements DatabaseUtils{
 
     private final IntPreference lastDatabaseVersion;
     private final Version currentVersion;
@@ -34,6 +35,7 @@ public class DatabaseVersionUtils {
         }
     }
 
+    @Override
     public void clearDataOnLogout() {
         clearSharedPreferences();
         clearDatabase();

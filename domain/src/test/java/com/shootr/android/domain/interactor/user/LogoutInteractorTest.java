@@ -6,6 +6,7 @@ import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ public class LogoutInteractorTest {
     @Mock ShootrUserService shootrUserService;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock Interactor.CompletedCallback completedCallback;
+    @Mock DatabaseUtils databaseUtils;
 
     @Before
     public void setUp() throws Exception {
@@ -30,7 +32,7 @@ public class LogoutInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        interactor = new LogoutInteractor(interactorHandler, postExecutionThread, shootrUserService);
+        interactor = new LogoutInteractor(interactorHandler, postExecutionThread, shootrUserService, databaseUtils);
     }
 
     @Test
@@ -42,7 +44,8 @@ public class LogoutInteractorTest {
 
     @Test
     public void shouldHadleServerErrorWhenAttempLogoutWithoutConnection(){
-        doThrow(new ShootrException(){}).when(shootrUserService).performLogout();
+        doThrow(new ShootrException() {
+        }).when(shootrUserService).performLogout();
         interactor.attempLogout(completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
@@ -52,6 +55,12 @@ public class LogoutInteractorTest {
         doNothing().when(shootrUserService).performLogout();
         interactor.attempLogout(completedCallback, errorCallback);
         verify(shootrUserService).performLogout();
+    }
+
+    @Test void shouldCleadrDataWhenAttempLogout() {
+        doNothing().when(shootrUserService).performLogout();
+        interactor.attempLogout(completedCallback, errorCallback);
+        verify(databaseUtils).clearDataOnLogout();
     }
 
 }

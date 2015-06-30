@@ -4,6 +4,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
@@ -12,15 +13,17 @@ public class LogoutInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShootrUserService shootrUserService;
+    private final DatabaseUtils databaseUtils;
 
     private ErrorCallback errorCallback;
     private CompletedCallback completedCallback;
 
     @Inject public LogoutInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      ShootrUserService shootrUserService) {
+      ShootrUserService shootrUserService, DatabaseUtils databaseUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrUserService = shootrUserService;
+        this.databaseUtils = databaseUtils;
     }
 
     public void attempLogout(CompletedCallback completedCallback, ErrorCallback errorCallback) {
@@ -33,6 +36,7 @@ public class LogoutInteractor implements Interactor {
         try {
             shootrUserService.performLogout();
             notifyLoaded();
+            databaseUtils.clearDataOnLogout();
         } catch (ShootrException shootrException) {
             handleServerError(shootrException);
         }

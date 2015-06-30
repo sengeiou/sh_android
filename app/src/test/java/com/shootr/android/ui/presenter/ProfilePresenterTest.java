@@ -5,7 +5,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
-import com.shootr.android.util.DatabaseVersionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,7 +23,6 @@ public class ProfilePresenterTest {
     
     @Mock GetListingCountInteractor getListingCountInteractor;
     @Mock LogoutInteractor logoutInteractor;
-    @Mock DatabaseVersionUtils databaseVersionUtils;
     @Mock ProfileView profileView;
 
     private ProfilePresenter profilePresenter;
@@ -32,8 +30,7 @@ public class ProfilePresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor,
-          databaseVersionUtils);
+        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor);
         profilePresenter.setView(profileView);
         profilePresenter.setCurrentUser(true);
     }

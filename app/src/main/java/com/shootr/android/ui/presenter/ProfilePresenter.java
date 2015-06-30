@@ -5,23 +5,20 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
-import com.shootr.android.util.DatabaseVersionUtils;
 import javax.inject.Inject;
 
 public class ProfilePresenter implements Presenter {
 
     private final GetListingCountInteractor getListingCountInteractor;
     private final LogoutInteractor logoutInteractor;
-    private final DatabaseVersionUtils databaseVersionUtils;
     private ProfileView profileView;
     private String profileIdUser;
     private Boolean isCurrentUser;
 
     @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      LogoutInteractor logoutInteractor, DatabaseVersionUtils databaseVersionUtils) {
+      LogoutInteractor logoutInteractor) {
         this.getListingCountInteractor = getListingCountInteractor;
         this.logoutInteractor = logoutInteractor;
-        this.databaseVersionUtils = databaseVersionUtils;
     }
 
     protected void setView(ProfileView profileView){
@@ -63,7 +60,6 @@ public class ProfilePresenter implements Presenter {
         profileView.showLogoutInProgress();
         logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                databaseVersionUtils.clearDataOnLogout();
                 profileView.hideLogoutInProgress();
                 profileView.navigateToWelcomeScreen();
             }
