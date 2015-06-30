@@ -133,6 +133,9 @@
             android:name=".ui.activities.UpdateWarningActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".ui.activities.WhaleActivity"
+          android:launchMode="singleInstance" />
+        <activity
             android:name=".ui.activities.ActivityTimelineContainerActivity"
             android:label="@string/drawer_activity_title" />
 

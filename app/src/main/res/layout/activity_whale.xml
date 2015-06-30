@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:paddingBottom="84dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp">
+
+        <ImageView android:layout_width="150dp"
+          android:layout_height="150dp"
+          android:layout_gravity="center"
+          android:src="@mipmap/ic_launcher" />
+
+        <TextView android:id="@+id/whale_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="32dp"
+          android:layout_marginTop="16dp"
+          android:fontFamily="sans-serif-light"
+          android:gravity="center"
+          android:text="@string/whale_title_default"
+          android:textColor="@color/gray_10"
+          android:textSize="27sp" />
+
+        <TextView android:id="@+id/whale_message"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="top|center_horizontal"
+          android:maxWidth="360dp"
+          android:text="@string/whale_message_default"
+          android:textSize="18sp" />
+
+        <Button android:id="@+id/whale_retry"
+          android:layout_width="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_height="wrap_content"
+          android:text="Retry"
+          android:textColor="@color/white" />
+
+    </LinearLayout>
+</FrameLayout>

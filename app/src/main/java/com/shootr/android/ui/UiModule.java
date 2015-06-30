@@ -17,6 +17,7 @@ import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.activities.WhaleActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
@@ -64,7 +65,8 @@ import javax.inject.Singleton;
                 ActivityTimelineContainerActivity.class,
                 ActivityTimelineFragment.class,
                 EventTimelineFragment.class,
-                FindEventsActivity.class
+                FindEventsActivity.class,
+                WhaleActivity.class,
         },
         complete = false
 )

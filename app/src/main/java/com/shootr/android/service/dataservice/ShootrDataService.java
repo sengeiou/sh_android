@@ -1,6 +1,7 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
@@ -15,6 +16,7 @@ import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -22,6 +24,7 @@ import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
+import com.shootr.android.service.RetrofitErrorHandler;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
@@ -51,7 +54,7 @@ public class ShootrDataService implements ShootrService {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
-    public static final String DATA_SERVICES_PATH = "/data-services/rest/generic/";
+    public static final String DATA_SERVICES_PATH = "/data/rest/generic";
 
     private final OkHttpClient client;
     private final Endpoint endpoint;
@@ -73,13 +76,26 @@ public class ShootrDataService implements ShootrService {
     private final TimeUtils timeUtils;
 
     private final VersionUpdater versionUpdater;
+    private final BusPublisher busPublisher;
 
     @Inject
-    public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
-      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      UserMapper userMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
-      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, EventEntityMapper eventEntityMapper,
-      ForgotPasswordMapper forgotPasswordMapper, TimeUtils timeUtils, VersionUpdater versionUpdater) {
+    public ShootrDataService(OkHttpClient client,
+      Endpoint endpoint,
+      ObjectMapper mapper,
+      UserDtoFactory userDtoFactory,
+      TimelineDtoFactory timelineDtoFactory,
+      ShotDtoFactory shotDtoFactory,
+      DeviceDtoFactory deviceDtoFactory,
+      UserMapper userMapper,
+      FollowMapper followMapper,
+      ShotEntityMapper shotEntityMapper,
+      EventDtoFactory eventDtoFactory,
+      DeviceMapper deviceMapper,
+      EventEntityMapper eventEntityMapper,
+      ForgotPasswordMapper forgotPasswordMapper,
+      TimeUtils timeUtils,
+      VersionUpdater versionUpdater,
+      BusPublisher busPublisher) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -96,6 +112,7 @@ public class ShootrDataService implements ShootrService {
         this.forgotPasswordMapper = forgotPasswordMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
+        this.busPublisher = busPublisher;
     }
 
     @Override
@@ -619,6 +636,9 @@ public class ShootrDataService implements ShootrService {
             }
             return genericDto;
         } else {
+            if (response.code() == RetrofitErrorHandler.CODE_SERVER_DOWN) {
+                busPublisher.post(new ServerDown.Event());
+            }
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
         }
