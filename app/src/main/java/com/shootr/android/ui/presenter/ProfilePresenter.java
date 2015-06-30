@@ -30,13 +30,14 @@ public class ProfilePresenter implements Presenter {
         this.profileIdUser = idUser;
         setCurrentUser(isCurrentUser);
         loadCurrentUserListing();
+        setupLogoutVisibility();
     }
 
     protected void setCurrentUser(boolean isCurrentUser) {
         this.isCurrentUser = isCurrentUser;
     }
 
-    public void setupMenuItemsVisibility() {
+    protected void setupLogoutVisibility() {
         if(isCurrentUser){
             profileView.showLogoutButton();
         }

@@ -102,7 +102,7 @@ public class ProfilePresenterTest {
 
     @Test
     public void shouldShowLogoutButtonWhenUserIsCurrentUser() {
-        profilePresenter.setupMenuItemsVisibility();
+        profilePresenter.initialize(profileView, ID_USER, true);
 
         verify(profileView).showLogoutButton();
     }

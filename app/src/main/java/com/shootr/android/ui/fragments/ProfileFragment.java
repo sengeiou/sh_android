@@ -75,6 +75,7 @@ import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
 import com.squareup.otto.Bus;
@@ -142,7 +143,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
-    private MenuItem menuItem;
+    private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -227,13 +228,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
-        this.menuItem = menu.findItem(R.id.profile_logout);
-        profilePresenter.setupMenuItemsVisibility();
+        logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.profile_logout) {
+        if (id == R.id.menu_profile_logout) {
             profilePresenter.logoutSelected();
             return true;
         }
@@ -735,7 +735,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Override public void showLogoutButton() {
-        menuItem.setVisible(true);
+        logoutMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)
