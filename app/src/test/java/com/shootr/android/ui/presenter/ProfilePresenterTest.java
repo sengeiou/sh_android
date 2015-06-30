@@ -68,14 +68,7 @@ public class ProfilePresenterTest {
 
     @Test
     public void shouldHideLogoutInProgressWhenLogoutSelectedAndCompletedCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
-                completedCallback.onCompleted();
-                return null;
-            }
-        }).when(logoutInteractor)
-          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        setupLogoutInteractorCompletedCallback();
 
         profilePresenter.logoutSelected();
 
@@ -84,14 +77,7 @@ public class ProfilePresenterTest {
 
     @Test
     public void shouldNavigateToWelcomeScreenWhenLogoutSelectedAndCompletedCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
-                completedCallback.onCompleted();
-                return null;
-            }
-        }).when(logoutInteractor)
-          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        setupLogoutInteractorCompletedCallback();
 
         profilePresenter.logoutSelected();
 
@@ -100,18 +86,7 @@ public class ProfilePresenterTest {
 
     @Test
     public void shouldHideLogoutInProgressWhenLogoutSelectedAndErrorCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[1];
-                errorCallback.onError(new ShootrException() {
-                    @Override public Throwable fillInStackTrace() {
-                        return super.fillInStackTrace();
-                    }
-                });
-                return null;
-            }
-        }).when(logoutInteractor)
-          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        setupLogoutInteractorErrorCallback();
 
         profilePresenter.logoutSelected();
 
@@ -120,21 +95,33 @@ public class ProfilePresenterTest {
 
     @Test
     public void shouldShowErrorWhenLogoutSelectedAndErrorCallback() {
+        setupLogoutInteractorErrorCallback();
+
+        profilePresenter.logoutSelected();
+
+        verify(profileView).showError(any(ShootrException.class));
+    }
+
+    private void setupLogoutInteractorCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(logoutInteractor)
+          .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+    }
+
+    private void setupLogoutInteractorErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[1];
                 errorCallback.onError(new ShootrException() {
-                    @Override public Throwable fillInStackTrace() {
-                        return super.fillInStackTrace();
-                    }
                 });
                 return null;
             }
         }).when(logoutInteractor)
           .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
-
-        profilePresenter.logoutSelected();
-
-        verify(profileView).showError(any(ShootrException.class));
     }
 }
