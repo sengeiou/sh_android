@@ -172,8 +172,8 @@ public class DataModule {
         return new PicassoWrapper(picasso);
     }
 
-    @Provides @Singleton OkHttpClient provideOkHttpClient(Application app) {
-        return createOkHttpClient(app);
+    @Provides @Singleton OkHttpClient provideOkHttpClient(Application app, AuthHeaderInterceptor authHeaderInterceptor) {
+        return createOkHttpClient(app, authHeaderInterceptor);
     }
 
     @Provides @Singleton NetworkUtil provideNetworkUtil(Application app) {
@@ -232,7 +232,7 @@ public class DataModule {
         return new JobManager(app, configuration);
     }
 
-    static OkHttpClient createOkHttpClient(Application app) {
+    static OkHttpClient createOkHttpClient(Application app, AuthHeaderInterceptor authHeaderInterceptor) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -248,6 +248,7 @@ public class DataModule {
         client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());
+        client.interceptors().add(authHeaderInterceptor);
 
         return client;
     }
