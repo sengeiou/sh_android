@@ -37,7 +37,6 @@ public class DatabaseVersionUtils {
     public void clearDataOnLogout() {
         clearSharedPreferences();
         clearDatabase();
-        updateStoredDatabaseVersion();
     }
 
     private void clearSharedPreferences() {
