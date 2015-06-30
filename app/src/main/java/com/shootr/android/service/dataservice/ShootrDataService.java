@@ -644,7 +644,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     private void updateTimeFromServer(GenericDto dto) {
-        Long serverTime = dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
+        Long serverTime = (Long) dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
         if (serverTime != null) {
             timeUtils.setCurrentTime(serverTime);
         }
