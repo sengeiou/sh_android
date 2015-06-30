@@ -3,9 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -734,11 +732,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             Intent intent = getActivity().getBaseContext().getPackageManager()
               .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            int mPendingIntentId = 123456;
-            PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager mgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-            System.exit(0);
+            startActivity(intent);
         }
     }
 
