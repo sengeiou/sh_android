@@ -57,7 +57,8 @@ public class LogoutInteractorTest {
         verify(shootrUserService).performLogout();
     }
 
-    @Test void shouldCleadrDataWhenAttempLogout() {
+    @Test
+    public void shouldCleadrDataWhenAttempLogout() {
         doNothing().when(shootrUserService).performLogout();
         interactor.attempLogout(completedCallback, errorCallback);
         verify(databaseUtils).clearDataOnLogout();
