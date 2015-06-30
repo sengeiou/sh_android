@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.ActivityApiService;
+import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -53,6 +54,11 @@ public final class ApiModule {
           .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
           .build();
+    }
+
+    @Provides
+    AuthApiService provideAuthApiService(RestAdapter restAdapter) {
+        return restAdapter.create(AuthApiService.class);
     }
 
     @Provides

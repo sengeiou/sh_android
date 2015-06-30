@@ -35,7 +35,6 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
-import com.shootr.android.util.SecurityUtils;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -113,15 +112,6 @@ public class ShootrDataService implements ShootrService {
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
         this.busPublisher = busPublisher;
-    }
-
-    @Override
-    public UserEntity login(String id, String password) throws IOException {
-        GenericDto loginDto = userDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
-        GenericDto responseDto = postRequest(loginDto);
-        OperationDto[] ops = responseDto.getOps();
-        Map<String, Object>[] data = ops[0].getData();
-        return userMapper.fromDto(data[0]);
     }
 
     @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {

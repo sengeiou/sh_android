@@ -14,8 +14,6 @@ import java.util.Map;
 
 public interface ShootrService {
 
-    UserEntity login(String id, String password) throws IOException;
-
     List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
 
     List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException;
