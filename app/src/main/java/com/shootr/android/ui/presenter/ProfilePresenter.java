@@ -1,12 +1,8 @@
 package com.shootr.android.ui.presenter;
 
-import android.view.Menu;
-import android.view.MenuInflater;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
-import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.DatabaseVersionUtils;
@@ -15,17 +11,15 @@ import javax.inject.Inject;
 public class ProfilePresenter implements Presenter {
 
     private final GetListingCountInteractor getListingCountInteractor;
-    private final GetCurrentUserInteractor getCurrentUserInteractor;
     private final LogoutInteractor logoutInteractor;
     private final DatabaseVersionUtils databaseVersionUtils;
     private ProfileView profileView;
     private String profileIdUser;
+    private Boolean isCurrentUser;
 
     @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      GetCurrentUserInteractor getCurrentUserInteractor, LogoutInteractor logoutInteractor,
-      DatabaseVersionUtils databaseVersionUtils) {
+      LogoutInteractor logoutInteractor, DatabaseVersionUtils databaseVersionUtils) {
         this.getListingCountInteractor = getListingCountInteractor;
-        this.getCurrentUserInteractor = getCurrentUserInteractor;
         this.logoutInteractor = logoutInteractor;
         this.databaseVersionUtils = databaseVersionUtils;
     }
@@ -34,26 +28,17 @@ public class ProfilePresenter implements Presenter {
         this.profileView = profileView;
     }
 
-    public void initialize(ProfileView profileView, String idUser){
+    public void initialize(ProfileView profileView, String idUser, boolean isCurrentUser){
         this.setView(profileView);
         this.profileIdUser = idUser;
+        this.isCurrentUser = isCurrentUser;
         loadCurrentUserListing();
     }
 
-    public void setupOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        if(profileIdUser != null) {
-            attempLogout(menu, inflater);
+    public void setupMenuItemsVisibility() {
+        if(isCurrentUser){
+            profileView.showLogoutButton();
         }
-    }
-
-    private void attempLogout(final Menu menu, final MenuInflater inflater) {
-        getCurrentUserInteractor.getCurrentUser(new Interactor.Callback<User>() {
-            @Override public void onLoaded(User user) {
-                if(profileIdUser.equals(user.getIdUser())){
-                    profileView.createOptionsMenu(menu, inflater);
-                }
-            }
-        });
     }
 
     public void loadCurrentUserListing() {

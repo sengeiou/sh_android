@@ -3,7 +3,9 @@ package com.shootr.android.ui.fragments;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -141,6 +143,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
+    private MenuItem menuItem;
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -223,7 +226,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        profilePresenter.setupOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
+        this.menuItem = menu.findItem(R.id.profile_logout);
+        profilePresenter.setupMenuItemsVisibility();
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -393,7 +399,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     private void initializePresenter() {
-        profilePresenter.initialize(this, idUser);
+        profilePresenter.initialize(this, idUser, isCurrentUser());
     }
 
     @Subscribe
@@ -708,11 +714,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         this.startActivity(intent);
     }
 
-    @Override public void createOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        getActivity().getMenuInflater().inflate(R.menu.menu_profile, menu);
-    }
-
     @Override public void showLogoutInProgress() {
         progress = ProgressDialog.show(getActivity(),
           getActivity().getString(R.string.sign_out_title),
@@ -733,8 +734,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             Intent intent = getActivity().getBaseContext().getPackageManager()
               .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            int mPendingIntentId = 123456;
+            PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+            System.exit(0);
         }
+    }
+
+    @Override public void showLogoutButton() {
+        menuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)

@@ -1,7 +1,5 @@
 package com.shootr.android.ui.views;
 
-import android.view.Menu;
-import android.view.MenuInflater;
 import com.shootr.android.domain.exception.ShootrException;
 
 public interface ProfileView {
@@ -10,8 +8,6 @@ public interface ProfileView {
 
     void navigateToListing(String idUser);
 
-    void createOptionsMenu(Menu menu, MenuInflater inflater);
-
     void showLogoutInProgress();
 
     void showError(ShootrException error);
@@ -19,4 +15,6 @@ public interface ProfileView {
     void hideLogoutInProgress();
 
     void navigateToWelcomeScreen();
+
+    void showLogoutButton();
 }

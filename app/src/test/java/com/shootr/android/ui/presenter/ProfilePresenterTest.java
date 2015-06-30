@@ -3,7 +3,6 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
-import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.DatabaseVersionUtils;
@@ -24,7 +23,6 @@ public class ProfilePresenterTest {
     public static final String ID_USER = "id_user";
     
     @Mock GetListingCountInteractor getListingCountInteractor;
-    @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock LogoutInteractor logoutInteractor;
     @Mock DatabaseVersionUtils databaseVersionUtils;
     @Mock ProfileView profileView;
@@ -34,14 +32,14 @@ public class ProfilePresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new ProfilePresenter(getListingCountInteractor, getCurrentUserInteractor, logoutInteractor,
+        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor,
           databaseVersionUtils);
         profilePresenter.setView(profileView);
     }
 
     @Test
     public void shouldLoadCurrentUserListingWhenPresenterInitialized() {
-        profilePresenter.initialize(profileView, ID_USER);
+        profilePresenter.initialize(profileView, ID_USER, false);
 
         verify(getListingCountInteractor).loadListingCount(anyString(), any(Interactor.Callback.class));
     }
