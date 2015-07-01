@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.sync.SyncDispatcher;
 import com.shootr.android.data.repository.sync.SyncDispatcherImpl;
-import com.shootr.android.domain.repository.WatchersRepository;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -14,7 +14,8 @@ import javax.inject.Singleton;
     ShotRepositoryModule.class,
     WatchersRepositoryModule.class,
     FavoriteRepositoryModule.class,
-    ActivityRepositoryModule.class
+    ActivityRepositoryModule.class,
+    DatabaseUtilsModule.class
   },
   complete = false,
   library = true

@@ -1,14 +1,23 @@
 package com.shootr.android.db.manager;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.data.entity.DeviceEntity;
 import javax.inject.Inject;
 
 public class DeviceManager extends AbstractManager {
 
     @Inject DeviceMapper deviceMapper;
+
+    public static final String[] PROJECTION = {
+      "idDevice", "idUser", "platform", "token", "uniqueDeviceID", "model", "osVer", "birth", "modified", "deleted",
+      "revision", "synchronizedStatus"
+    };
 
     @Inject
     public DeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
@@ -16,13 +25,47 @@ public class DeviceManager extends AbstractManager {
         this.deviceMapper = deviceMapper;
     }
 
-    public void saveDevice(DeviceEntity device) {
-        //TODO rellenar
+    public DeviceEntity getDeviceByIdUser(String idUser) {
+        String whereSelection = DatabaseContract.DeviceTable.ID_USER + " = ?";
+        String[] whereArguments = new String[] { String.valueOf(idUser) };
+
+        Cursor queryResult =
+          getReadableDatabase().query(DeviceTable.TABLE, PROJECTION, whereSelection, whereArguments, null,
+            null, null);
+
+        DeviceEntity deviceEntity = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            deviceEntity = deviceMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return deviceEntity;
     }
 
-    public DeviceEntity getDeviceById(Long idDevice) {
-        //TODO rellenar
-        return null;
+    public void saveDevice(DeviceEntity device) {
+        ContentValues contentValues = deviceMapper.toContentValues(device);
+        if (contentValues.getAsLong(DatabaseContract.DeviceTable.DELETED) != null) {
+            deleteDevice(device);
+        } else {
+            getWritableDatabase().insertWithOnConflict(DeviceTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        insertInSync();
+    }
+
+    private void deleteDevice(DeviceEntity device) {
+        String args = DeviceTable.ID_DEVICE + "=?";
+        String[] stringArgs = new String[]{String.valueOf(device.getIdDevice())};
+        Cursor c = getReadableDatabase().query(DatabaseContract.DeviceTable.TABLE,
+          PROJECTION,
+          args,
+          stringArgs,
+          null,
+          null,
+          null);
+        if (c.getCount() > 0) {
+            getWritableDatabase().delete(DatabaseContract.EventTable.TABLE, args, stringArgs);
+        }
+        c.close();
     }
 
     public DeviceEntity getDeviceByUniqueId(String uniqueId) {

@@ -2,6 +2,7 @@ package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -33,16 +34,15 @@ public class ShootrUserServiceLoginTest {
     @Mock EventRepository remoteEventRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
+    @Mock DatabaseUtils databaseUtils;
 
     private ShootrUserService shootrUserService;
-
-    private String dummyIdEvent = "EVENT_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
           createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
-          resetPasswordEmailGateway);
+          resetPasswordEmailGateway, databaseUtils);
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws IOException {
@@ -74,7 +74,7 @@ public class ShootrUserServiceLoginTest {
     }
 
     @Test public void shouldDownlaodPeopleIfUserHasNotEventsWhenLoginCorrect() throws IOException {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutEvent());
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
     }

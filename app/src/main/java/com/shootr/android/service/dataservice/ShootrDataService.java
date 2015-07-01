@@ -586,6 +586,11 @@ public class ShootrDataService implements ShootrService {
         return numberOfEvents;
     }
 
+    @Override public void logout(String idUser, String idDevice) throws IOException {
+        GenericDto logoutOperationDto = userDtoFactory.getLogoutOperationDto(idUser, idDevice);
+        postRequest(logoutOperationDto);
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

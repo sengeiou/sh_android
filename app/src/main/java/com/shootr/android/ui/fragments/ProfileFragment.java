@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -58,6 +62,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
@@ -70,6 +75,7 @@ import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
 import com.squareup.otto.Bus;
@@ -136,6 +142,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
+    private ProgressDialog progress;
+    private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -214,6 +222,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         Bundle arguments = getArguments();
         idUser = (String) arguments.getSerializable(ARGUMENT_USER);
         username = (String) arguments.getSerializable(ARGUMENT_USERNAME);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_profile, menu);
+        logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_profile_logout) {
+            profilePresenter.logoutSelected();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -376,7 +400,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     private void initializePresenter() {
-        profilePresenter.initialize(this, idUser);
+        profilePresenter.initialize(this, idUser, isCurrentUser());
     }
 
     @Subscribe
@@ -689,6 +713,37 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void navigateToListing(String idUser) {
         Intent intent = ListingActivity.getIntent(this.getActivity(), idUser);
         this.startActivity(intent);
+    }
+
+    @Override public void showLogoutInProgress() {
+        if(getActivity() != null) {
+            progress = ProgressDialog.show(getActivity(),
+              getActivity().getString(R.string.sign_out_title),
+              getActivity().getString(R.string.sign_out_message),
+              true);
+        }
+    }
+
+    @Override public void showError() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void hideLogoutInProgress() {
+        if(getActivity() != null) {
+            progress.dismiss();
+        }
+    }
+
+    @Override public void navigateToWelcomeScreen() {
+        if(getActivity() != null) {
+            Intent intent = new Intent(getActivity(), WelcomeLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    @Override public void showLogoutButton() {
+        logoutMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)

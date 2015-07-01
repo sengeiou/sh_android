@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".ProfileFragment">
+    <item android:id="@+id/menu_profile_logout"
+      android:title="@string/profile_logout"
+      android:orderInCategory="100"
+      android:visible="false"
+      app:showAsAction="never" />
+</menu>

@@ -111,8 +111,9 @@ public class SQLiteUtils {
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
-            + DeviceTable.ID_DEVICE+" TEXT NOT NULL PRIMARY KEY,"
-            + DeviceTable.ID_USER+" TEXT NOT NULL,"
+            + DeviceTable.ID_DEVICE+" TEXT NULL,"
+            + DeviceTable.ID_USER+" TEXT NOT NULL PRIMARY KEY,"
+            + DeviceTable.PLATFORM +" TEXT NOT NULL,"
             + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
             + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
             + DeviceTable.MODEL+" VARCHAR(255) NULL,"

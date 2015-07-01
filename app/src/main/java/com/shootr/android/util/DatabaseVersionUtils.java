@@ -7,21 +7,24 @@ import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersion;
 import com.shootr.android.db.ShootrDbOpenHelper;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import javax.inject.Inject;
 
-public class DatabaseVersionUtils {
+public class DatabaseVersionUtils implements DatabaseUtils{
 
     private final IntPreference lastDatabaseVersion;
     private final Version currentVersion;
     private final SharedPreferences sharedPreferences;
+    private final SQLiteOpenHelper dbOpenHelper;
     private Context context;
 
     @Inject public DatabaseVersionUtils(@ApplicationContext Context context, SharedPreferences sharedPreferences,
-      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion) {
+      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper) {
         this.lastDatabaseVersion = lastDatabaseVersion;
         this.currentVersion = currentVersion;
         this.sharedPreferences = sharedPreferences;
         this.context = context;
+        this.dbOpenHelper = dbOpenHelper;
     }
 
     public void clearDataOnNewerVersion() {
@@ -32,12 +35,19 @@ public class DatabaseVersionUtils {
         }
     }
 
+    @Override
+    public void clearDataOnLogout() {
+        clearSharedPreferences();
+        clearDatabase();
+    }
+
     private void clearSharedPreferences() {
         sharedPreferences.edit().clear().apply();
     }
 
     private void clearDatabase() {
         context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
+        dbOpenHelper.close();
     }
 
     private void updateStoredDatabaseVersion() {
