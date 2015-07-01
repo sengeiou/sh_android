@@ -28,7 +28,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
      * En nuestro caso al "state_checked"
      * que es el que utilizamos en nuestro selector
      */
-    private final int[] CHECKED_STATE_SET = {
+    private static final int[] CHECKED_STATE_SET = {
         android.R.attr.state_checked
     };
 
