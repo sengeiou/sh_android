@@ -32,7 +32,7 @@ public class SpecialserviceShotGateway implements ShotGateway {
         this.okHttpClient = okHttpClient;
         this.objectMapper = objectMapper;
         this.sessionRepository = sessionRepository;
-        embedVideoEndpoint = endpoint.getUrl() + "/media/rest/video/embed/";
+        embedVideoEndpoint = endpoint.getUrl() + "/media/video/embed/";
     }
 
     @Override public Shot embedVideoInfo(Shot originalShot) throws IOException {

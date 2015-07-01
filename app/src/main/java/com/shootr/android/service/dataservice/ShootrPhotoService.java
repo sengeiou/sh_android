@@ -35,9 +35,9 @@ public class ShootrPhotoService implements PhotoService {
         this.client = client;
         this.sessionRepository = sessionRepository;
         this.objectMapper = objectMapper;
-        uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/rest/upload/img/profile";
-        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/rest/upload/img/shot";
-        uploadEventPhotoEndpoint = endpoint.getUrl() + "/media/rest/upload/img/event";
+        uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/upload/img/profile";
+        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/shot";
+        uploadEventPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/event";
     }
 
     @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
