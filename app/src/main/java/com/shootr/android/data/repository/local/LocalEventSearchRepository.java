@@ -44,8 +44,7 @@ public class LocalEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEvents(String query, String locale) {
-        List<EventSearchEntity> eventSearchEntities = localEventSearchDataSource.getEvents(query, locale);
-        return eventSearchEntityMapper.transformToDomain(eventSearchEntities);
+        throw new IllegalArgumentException("method not implemented in local repository");
     }
 
     @Override public void putDefaultEvents(List<EventSearchResult> eventSearchResults) {

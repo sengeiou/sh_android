@@ -31,11 +31,9 @@ public class EventsSearchInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public EventsSearchInteractor(InteractorHandler interactorHandler,
-      SessionRepository sessionRepository,
+    public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
       @Remote EventSearchRepository eventSearchRepository,
-      PostExecutionThread postExecutionThread,
-      LocaleProvider localeProvider) {
+      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.sessionRepository = sessionRepository;
         this.eventSearchRepository = eventSearchRepository;
