@@ -4,7 +4,6 @@ import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
@@ -271,18 +270,6 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
-    }
-
-    public GenericDto getCreateAccountOperationDto(UserCreateAccountEntity userCreateAccountEntity) {
-        MetadataDto metadataDto = new MetadataDto.Builder().entity(USER_SIGN_IN)
-          .putKey(UserTable.ID, null)
-          .operation(ServiceConstants.OPERATION_CREATE)
-          .build();
-
-        Map<String, Object> userCreateAccountEntityMap = userMapper.toCreateAccountDto(userCreateAccountEntity);
-        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
     }
 
     public GenericDto getForgotPasswordResultByUsernameOrEmail(String usernameOrEmail) {

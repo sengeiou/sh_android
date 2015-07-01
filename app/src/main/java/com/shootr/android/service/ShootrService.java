@@ -6,7 +6,6 @@ import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
@@ -61,8 +60,6 @@ public interface ShootrService {
       throws IOException;
 
     void performCheckin(String idUser, String idEvent) throws IOException;
-
-    void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
 

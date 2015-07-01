@@ -8,7 +8,6 @@ import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -484,11 +483,6 @@ public class ShootrDataService implements ShootrService {
     @Override public void performCheckin(String idUser, String idEvent) throws IOException {
         GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
         postRequest(checkinDto);
-    }
-
-    @Override public void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException{
-        GenericDto createAccountDto = userDtoFactory.getCreateAccountOperationDto(userCreateAccountEntity);
-        postRequest(createAccountDto);
     }
 
     @Override
