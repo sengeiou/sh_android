@@ -97,7 +97,7 @@ public class ProfilePresenterTest {
 
         profilePresenter.logoutSelected();
 
-        verify(profileView).showError(any(ShootrException.class));
+        verify(profileView).showError();
     }
 
     @Test

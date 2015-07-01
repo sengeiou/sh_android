@@ -67,7 +67,7 @@ public class ProfilePresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 profileView.hideLogoutInProgress();
-                profileView.showError(error);
+                profileView.showError();
             }
         });
     }

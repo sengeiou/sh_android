@@ -1,7 +1,5 @@
 package com.shootr.android.ui.views;
 
-import com.shootr.android.domain.exception.ShootrException;
-
 public interface ProfileView {
 
     void showListingCount(Integer listingCount);
@@ -10,7 +8,7 @@ public interface ProfileView {
 
     void showLogoutInProgress();
 
-    void showError(ShootrException error);
+    void showError();
 
     void hideLogoutInProgress();
 

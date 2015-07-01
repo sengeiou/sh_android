@@ -722,8 +722,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         }
     }
 
-    @Override public void showError(ShootrException error) {
-        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+    @Override public void showError() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void hideLogoutInProgress() {
