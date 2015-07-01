@@ -714,10 +714,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Override public void showLogoutInProgress() {
-        progress = ProgressDialog.show(getActivity(),
-          getActivity().getString(R.string.sign_out_title),
-          getActivity().getString(R.string.sign_out_message),
-          true);
+        if(getActivity() != null) {
+            progress = ProgressDialog.show(getActivity(),
+              getActivity().getString(R.string.sign_out_title),
+              getActivity().getString(R.string.sign_out_message),
+              true);
+        }
     }
 
     @Override public void showError(ShootrException error) {
@@ -725,13 +727,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Override public void hideLogoutInProgress() {
-        progress.dismiss();
+        if(getActivity() != null) {
+            progress.dismiss();
+        }
     }
 
     @Override public void navigateToWelcomeScreen() {
-        Intent intent = new Intent(getActivity(), WelcomeLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if(getActivity() != null) {
+            Intent intent = new Intent(getActivity(), WelcomeLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override public void showLogoutButton() {
