@@ -39,44 +39,18 @@
                 android:textColor="@color/gray_10"
                 android:textSize="27sp"/>
 
-            <!-- <TextView
-                 android:id="@+id/login_subtitle"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center_horizontal"
-                 android:layout_marginBottom="16dp"
-                 android:layout_marginLeft="48dp"
-                 android:layout_marginRight="48dp"
-                 android:layout_marginTop="16dp"
-                 android:gravity="center_horizontal"
-                 android:lines="3"
-                 android:text="@string/welcome_subtitle_login"
-                 android:textColor="@color/gray_50"
-                 android:textSize="15sp"/>
-
-         -->
-            <!--<com.facebook.widget.LoginButton
-                android:id="@+id/login_btn_facebook"
-                style="@style/LoginFacebookButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="52dp"
-                android:layout_marginRight="52dp"
-                android:text="@string/activity_login_register_facebook"/>-->
-
-            <Button
-                android:id="@+id/login_btn_facebook"
-                style="@style/LoginFacebookButton"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="56dp"
-                android:visibility="gone"
-                android:layout_marginRight="56dp"
-                android:text="@string/activity_login_register_facebook"/>
+            <TextView
+              android:id="@+id/login_btn_facebook"
+              style="@style/LoginFacebookButton"
+              android:layout_width="match_parent"
+              android:layout_height="44dp"
+              android:layout_marginLeft="@dimen/keyline_2"
+              android:layout_marginRight="@dimen/keyline_2"
+              android:text="@string/activity_login_register_facebook"
+              android:visibility="visible" />
 
             <TextView
                 android:id="@+id/login_btn_email"
-
                 style="@style/LoginEmailButton"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"

@@ -62,7 +62,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
-import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
@@ -736,7 +736,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override public void navigateToWelcomeScreen() {
         if(getActivity() != null) {
-            Intent intent = new Intent(getActivity(), WelcomeLoginActivity.class);
+            Intent intent = new Intent(getActivity(), LoginSelectionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }

@@ -165,6 +165,8 @@ dependencies {
 
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
 
+    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+
     compile 'com.facebook.stetho:stetho:1.1.0'
     compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
 

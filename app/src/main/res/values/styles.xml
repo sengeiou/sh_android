@@ -144,8 +144,11 @@
     </style>
 
     <style name="LoginFacebookButton">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@drawable/background_primary_selectable</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="LoginEmailButton">

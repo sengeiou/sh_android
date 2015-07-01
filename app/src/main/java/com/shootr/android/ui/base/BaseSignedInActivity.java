@@ -7,7 +7,7 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import javax.inject.Inject;
 
 public class BaseSignedInActivity extends BaseToolbarActivity {
@@ -58,7 +58,7 @@ public class BaseSignedInActivity extends BaseToolbarActivity {
     private void finishActivityAndLogin() {
         finish();
         overridePendingTransition(0, 0);
-        startActivity(new Intent(this, WelcomeLoginActivity.class));
+        startActivity(new Intent(this, LoginSelectionActivity.class));
     }
 
 }

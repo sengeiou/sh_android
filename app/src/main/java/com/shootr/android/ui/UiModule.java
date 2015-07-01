@@ -22,7 +22,7 @@ import com.shootr.android.ui.activities.registro.EmailLoginActivity;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
 import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
-import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
@@ -38,7 +38,7 @@ import javax.inject.Singleton;
         injects = {
                 // Every single activity extending BaseActivity, sadly
                 BaseToolbarActivity.class,
-                WelcomeLoginActivity.class,
+                LoginSelectionActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,
