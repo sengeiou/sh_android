@@ -23,14 +23,15 @@ public abstract class BindableAdapter<T> extends BaseAdapter {
   @Override public abstract T getItem(int position);
 
   @Override public final View getView(int position, View view, ViewGroup container) {
-    if (view == null) {
-      view = newView(inflater, position, container);
-      if (view == null) {
+    View bindedView = view;
+    if (bindedView == null) {
+      bindedView = newView(inflater, position, container);
+      if (bindedView == null) {
         throw new IllegalStateException("newView result must not be null.");
       }
     }
-    bindView(getItem(position), position, view);
-    return view;
+    bindView(getItem(position), position, bindedView);
+    return bindedView;
   }
 
   /** Create a new instance of a view for the specified position. */
@@ -40,14 +41,15 @@ public abstract class BindableAdapter<T> extends BaseAdapter {
   public abstract void bindView(T item, int position, View view);
 
   @Override public final View getDropDownView(int position, View view, ViewGroup container) {
-    if (view == null) {
-      view = newDropDownView(inflater, position, container);
-      if (view == null) {
+    View bindedDropDownView = view;
+    if (bindedDropDownView == null) {
+      bindedDropDownView = newDropDownView(inflater, position, container);
+      if (bindedDropDownView == null) {
         throw new IllegalStateException("newDropDownView result must not be null.");
       }
     }
-    bindDropDownView(getItem(position), position, view);
-    return view;
+    bindDropDownView(getItem(position), position, bindedDropDownView);
+    return bindedDropDownView;
   }
 
   /** Create a new instance of a drop-down view for the specified position. */
