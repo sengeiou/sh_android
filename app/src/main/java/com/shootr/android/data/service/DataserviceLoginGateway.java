@@ -31,14 +31,10 @@ public class DataserviceLoginGateway implements LoginGateway {
     }
 
     @Override public LoginResult performLogin(String usernameOrEmail, String password) throws IOException {
-        try {
-            UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
-            User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
-            String sessionToken = loggedInUserEntity.getSessionToken();
-            return new LoginResult(loggedInUser, sessionToken);
-        } catch (IOException e) {
-            throw new LoginException(e);
-        }
+        UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
+        User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
+        String sessionToken = loggedInUserEntity.getSessionToken();
+        return new LoginResult(loggedInUser, sessionToken);
     }
 
     protected UserEntity loginWithUsernameOrEmail(String usernameOrEmail, String password) throws IOException {
