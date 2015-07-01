@@ -170,7 +170,7 @@ public class FilterBuilder {
         }
 
         public T matches(FilterMatcher<T> matcher) {
-            NexusItem nexusItem = matcher.match(this);
+            matcher.match(this);
             return nexusItemReference;
         }
 
