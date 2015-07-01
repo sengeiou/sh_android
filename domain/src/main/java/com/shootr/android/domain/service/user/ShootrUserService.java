@@ -4,6 +4,7 @@ import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -125,7 +126,7 @@ public class ShootrUserService {
             loginGateway.performLogout(currentUser.getIdUser());
             removeSession();
         } catch (IOException e) {
-            throw new LoginException(e);
+            throw new ServerCommunicationException(e);
         }
     }
 

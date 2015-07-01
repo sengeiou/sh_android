@@ -38,13 +38,9 @@ public class DataserviceLoginGateway implements LoginGateway {
     }
 
     @Override public void performLogout(String idUser) throws IOException {
-        try {
-            DeviceEntity deviceByIdUser = deviceManager.getDeviceByIdUser(idUser);
-            if(deviceByIdUser != null) {
-                shootrService.logout(idUser, deviceByIdUser.getIdDevice());
-            }
-        } catch (ServerException e) {
-            throw new LoginException(e);
+        DeviceEntity deviceByIdUser = deviceManager.getDeviceByIdUser(idUser);
+        if(deviceByIdUser != null) {
+            shootrService.logout(idUser, deviceByIdUser.getIdDevice());
         }
     }
 }
