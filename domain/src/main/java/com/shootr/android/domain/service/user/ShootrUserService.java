@@ -5,6 +5,7 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -27,11 +28,13 @@ public class ShootrUserService {
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
+    private final DatabaseUtils databaseUtils;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
       ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
-      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway) {
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
+      DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
@@ -41,6 +44,7 @@ public class ShootrUserService {
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
+        this.databaseUtils = databaseUtils;
     }
 
     public void checkInEvent(String idEvent) {
@@ -125,6 +129,7 @@ public class ShootrUserService {
             User currentUser = sessionRepository.getCurrentUser();
             loginGateway.performLogout(currentUser.getIdUser());
             removeSession();
+            databaseUtils.clearDataOnLogout();
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

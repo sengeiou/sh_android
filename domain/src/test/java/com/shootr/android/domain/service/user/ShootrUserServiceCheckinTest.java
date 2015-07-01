@@ -2,6 +2,7 @@ package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -31,6 +32,7 @@ public class ShootrUserServiceCheckinTest {
     @Mock EventRepository remoteEventRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
+    @Mock DatabaseUtils databaseUtils;
 
     private ShootrUserService shootrUserService;
 
@@ -38,7 +40,7 @@ public class ShootrUserServiceCheckinTest {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
           createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
-          resetPasswordEmailGateway);
+          resetPasswordEmailGateway, databaseUtils);
     }
 
     @Test(expected = InvalidCheckinException.class) public void shouldFailIfCurrentUserIsCheckedInSameEvent() throws Exception {
