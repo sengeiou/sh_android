@@ -1,13 +1,13 @@
 package com.shootr.android.data.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.data.api.entity.LoginApiEntity;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.domain.service.user.LoginGateway;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -38,11 +38,16 @@ public class DataserviceLoginGateway implements LoginGateway {
     }
 
     protected UserEntity loginWithUsernameOrEmail(String usernameOrEmail, String password) throws IOException {
+        LoginApiEntity loginApiEntity = new LoginApiEntity();
+        loginApiEntity.setPassword(password);
+
         if (usernameOrEmail.contains("@")) {
-            return authApiService.loginWithEmail(usernameOrEmail, password);
+            loginApiEntity.setEmail(usernameOrEmail);
         } else {
-            return authApiService.loginWithUsername(usernameOrEmail, password);
+            loginApiEntity.setUserName(usernameOrEmail);
         }
+
+        return authApiService.authenticate(loginApiEntity);
     }
 
     @Override public void performLogout(String idUser) throws IOException {
