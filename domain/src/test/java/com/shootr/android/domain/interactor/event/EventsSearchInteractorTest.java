@@ -13,15 +13,11 @@ import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class EventsSearchInteractorTest {
 
@@ -36,7 +32,6 @@ public class EventsSearchInteractorTest {
     @Mock PostExecutionThread postExecutionThread;
     @Mock SessionRepository sessionRepository;
     @Mock LocaleProvider localeProvider;
-    @Mock EventSearchRepository localEventSearchRepository;
     @Mock EventsSearchInteractor.Callback callback;
     @Mock Interactor.ErrorCallback errorCallback;
 
@@ -46,23 +41,7 @@ public class EventsSearchInteractorTest {
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new EventsSearchInteractor(interactorHandler,
           sessionRepository,
-          eventSearchRepository, localEventSearchRepository, postExecutionThread, localeProvider);
-    }
-
-    @Test
-    public void shouldDeleteEventsInLocalEventSearchRepositoryWhenGetEvents() {
-        when(eventSearchRepository.getEvents(TITLE, LOCALE)).thenReturn(eventSearchResultList());
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
-        interactor.searchEvents(TITLE, callback, errorCallback);
-        verify(localEventSearchRepository).deleteDefaultEvents();
-    }
-
-    @Test
-    public void shouldPutEventsInLocalEventSearchRepositoryWhenGetEvents() {
-        when(eventSearchRepository.getEvents(TITLE, LOCALE)).thenReturn(eventSearchResultList());
-        when(sessionRepository.getCurrentUser()).thenReturn(user());
-        interactor.searchEvents(TITLE, callback, errorCallback);
-        verify(localEventSearchRepository).putDefaultEvents(anyList());
+          eventSearchRepository, postExecutionThread, localeProvider);
     }
 
     private List<EventSearchResult> eventSearchResultList() {
