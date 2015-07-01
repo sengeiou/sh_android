@@ -178,7 +178,8 @@ public class DataModule {
     @Singleton
     OkHttpClient provideOkHttpClient(Application app,
       AuthHeaderInterceptor authHeaderInterceptor,
-      ServerDownErrorInterceptor serverDownErrorInterceptor) {
+      ServerDownErrorInterceptor serverDownErrorInterceptor,
+      UnauthorizedErrorInterceptor unauthorizedErrorInterceptor) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -197,6 +198,7 @@ public class DataModule {
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(authHeaderInterceptor);
         client.interceptors().add(serverDownErrorInterceptor);
+        client.interceptors().add(unauthorizedErrorInterceptor);
         return client;
     }
 
