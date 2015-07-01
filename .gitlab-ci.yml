@@ -1,4 +1,12 @@
 before_script:
 
-spec:
+features:
+    script: ./gradlew test
+    only:
+        - /^feature\/.*$/
+
+integration:
     script: ./gradlew build -PdisablePreDex
+    only:
+        - develop
+        - /^bugfix\/.*$/
