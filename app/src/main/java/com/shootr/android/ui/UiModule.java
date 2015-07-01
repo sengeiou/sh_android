@@ -4,8 +4,8 @@ import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
-import com.shootr.android.ui.activities.FindEventsActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
+import com.shootr.android.ui.activities.FindEventsActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
@@ -20,13 +20,12 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
-import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
-import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.EventTimelineFragment;
+import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -41,7 +40,6 @@ import javax.inject.Singleton;
                 LoginSelectionActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
-                FacebookRegistroActivity.class,
                 PostNewShotActivity.class,
                 ProfileContainerActivity.class,
                 UserFollowsContainerActivity.class,
