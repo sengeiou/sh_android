@@ -51,10 +51,7 @@ public class GCMIntentService extends IntentService {
         super("GCM Service");
     }
 
-    private static final String ID_USER = "idUser";
-
     private static final String ID_SHOT = "idShot";
-    private static final String ID_EVENT = "idEvent";
     private static final String ID_ACTIVITY = "idActivity";
 
     @Override public void onCreate() {
