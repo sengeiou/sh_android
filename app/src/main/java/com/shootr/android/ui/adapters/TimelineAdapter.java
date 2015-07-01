@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -19,12 +20,8 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.UsernameClickListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
@@ -226,7 +223,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     public void addShotsAbove(List<ShotModel> shotModels) {
-        ArrayList<ShotModel> newShotList = new ArrayList<>(shotModels);
+        List<ShotModel> newShotList = new ArrayList<>(shotModels);
         newShotList.addAll(this.shots);
         this.shots = newShotList;
         notifyDataSetChanged();

@@ -45,7 +45,6 @@ import timber.log.Timber;
 public class EventDetailActivity extends BaseNoToolbarActivity
   implements EventDetailView, ObservableScrollView.Callbacks {
 
-    private static final int REQUEST_CODE_EDIT = 1;
     private static final int REQUEST_EDIT_EVENT = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 4;
     private static final int REQUEST_TAKE_PHOTO = 5;

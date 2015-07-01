@@ -6,11 +6,9 @@ public class FieldValidationError {
     public static final int FIELD_NAME = 2;
     public static final int FIELD_WEBSITE = 3;
     public static final int FIELD_BIO = 4;
-    public static final int FIELD_COMMENT = 5;
-    public static final int FIELD_IMAGE = 6;
 
-    private String errorCode;
-    private int field;
+    private final String errorCode;
+    private final int field;
 
     public FieldValidationError(String errorCode, int field) {
         this.errorCode = errorCode;

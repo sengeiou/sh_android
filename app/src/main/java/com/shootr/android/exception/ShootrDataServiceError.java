@@ -4,8 +4,8 @@ import com.shootr.android.domain.exception.ShootrError;
 
 public class ShootrDataServiceError implements ShootrError {
 
-    private String errorCode;
-    private String message;
+    private final String errorCode;
+    private final String message;
 
     public ShootrDataServiceError(String errorCode, String message) {
         this.errorCode = errorCode;

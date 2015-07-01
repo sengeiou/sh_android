@@ -94,7 +94,9 @@ public final class Gravatar {
     }
 
     public String getProfileUrl(String email) {
-        if(TextUtils.isEmpty(email))return null;
+        if(TextUtils.isEmpty(email)) {
+            return null;
+        }
 
         // hexadecimal MD5 hash of the requested user's lowercased email address
         // with all whitespace trimmed
