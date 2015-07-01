@@ -94,7 +94,7 @@ public class UserMapper extends GenericMapper {
 
         user.setWatchingEventTitle(dto.containsKey(UserTable.WATCHING_EVENT_TITLE) ? (String) dto.get(UserTable.WATCHING_EVENT_TITLE) : null);
         if(dto.get(UserTable.ID_CHECKED_EVENT)!=null){
-            user.setIdCheckedEvent(dto.containsKey(UserTable.ID_CHECKED_EVENT) ? ((String) dto.get(UserTable.ID_CHECKED_EVENT)) : null);
+            user.setIdCheckedEvent(dto.containsKey(UserTable.ID_CHECKED_EVENT) ? (String) dto.get(UserTable.ID_CHECKED_EVENT) : null);
         }
         if(dto.get(UserTable.JOIN_EVENT_DATE)!=null) {
             user.setJoinEventDate(dto.containsKey(UserTable.JOIN_EVENT_DATE) ? ((Number) dto.get(UserTable.JOIN_EVENT_DATE)).longValue() : null);

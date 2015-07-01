@@ -114,7 +114,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
         View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
-        return new RecyclerView.ViewHolder(footer) {};
+        return new RecyclerView.ViewHolder(footer) {
+            /* no-op */
+        };
     }
 
     @Override
@@ -139,7 +141,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void addActivitiesAbove(List<ActivityModel> activityModels) {
-        ArrayList<ActivityModel> newActivityList = new ArrayList<>(activityModels);
+        List<ActivityModel> newActivityList = new ArrayList<>(activityModels);
         newActivityList.addAll(this.activities);
         this.activities = newActivityList;
         notifyDataSetChanged();
