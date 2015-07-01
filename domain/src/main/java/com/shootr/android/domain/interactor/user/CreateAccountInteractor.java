@@ -46,7 +46,6 @@ public class CreateAccountInteractor implements Interactor {
         if (validateInput()) {
             try {
                 shootrUserService.createAccount(username, email, password);
-                shootrUserService.performLogin(username, password);
                 notifyLoaded();
             } catch (ShootrException shootrException) {
                 handleServerError(shootrException);
