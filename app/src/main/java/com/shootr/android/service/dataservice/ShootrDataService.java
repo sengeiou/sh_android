@@ -625,9 +625,6 @@ public class ShootrDataService implements ShootrService {
             }
             return genericDto;
         } else {
-            /*if (response.code() == RetrofitErrorHandler.CODE_SERVER_DOWN) {
-                busPublisher.post(new ServerDown.Event());
-            }*/
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
         }
