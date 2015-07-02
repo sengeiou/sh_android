@@ -284,5 +284,6 @@
     <string name="sign_out_title">Signing out</string>
     <string name="sign_out_message">Sign out in progress</string>
     <string name="update_warning_button">Update now</string>
+    <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="whale_retry_button_text">Retry</string>
 </resources>
