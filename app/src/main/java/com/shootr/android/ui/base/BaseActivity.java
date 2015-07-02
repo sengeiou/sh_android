@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.bus.PreconditionFailed;
 import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.bus.Unauthorized;
-import com.shootr.android.data.bus.UpdateWarning;
 import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
@@ -29,16 +29,16 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject VersionUpdater versionUpdater;
     @Inject SessionHandler sessionHandler;
 
-    private UpdateWarning.Receiver updateWarningReceiver;
     private ServerDown.Receiver serverDownReceiver;
+    private PreconditionFailed.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectDependencies();
-        setupUpdateWarning();
         setupWhalePage();
+        setupUpdateWarningPage();
         setupUnauthorizedRedirection();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
@@ -73,14 +73,14 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @Override protected void onResume() {
         super.onResume();
-        bus.register(updateWarningReceiver);
         bus.register(serverDownReceiver);
+        bus.register(preconditionFailedReceiver);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        bus.unregister(updateWarningReceiver);
         bus.unregister(serverDownReceiver);
+        bus.unregister(preconditionFailedReceiver);
     }
 
     @Override protected void onDestroy() {
@@ -111,16 +111,6 @@ public abstract class BaseActivity extends ActionBarActivity {
         return appContainer.get(this);
     }
 
-    private void setupUpdateWarning() {
-        updateWarningReceiver = new UpdateWarning.Receiver() {
-            @Subscribe @Override public void onUpdateWarning(UpdateWarning.Event event) {
-                openUpdateWarning();
-            }
-        };
-        bus.register(updateWarningReceiver);
-        versionUpdater.checkVersionCompatible();
-    }
-
     private void setupWhalePage() {
         serverDownReceiver = new ServerDown.Receiver() {
             @Subscribe @Override public void onServerDown(ServerDown.Event event) {
@@ -128,6 +118,15 @@ public abstract class BaseActivity extends ActionBarActivity {
             }
         };
         bus.register(serverDownReceiver);
+    }
+
+    private void setupUpdateWarningPage() {
+        preconditionFailedReceiver = new PreconditionFailed.Receiver() {
+            @Subscribe @Override public void onPreconditionFailed(PreconditionFailed.Event event) {
+                openUpdateWarningPage();
+            }
+        };
+        bus.register(preconditionFailedReceiver);
     }
 
     private void setupUnauthorizedRedirection() {
@@ -143,12 +142,13 @@ public abstract class BaseActivity extends ActionBarActivity {
         bus.register(unauthorizedReceiver);
     }
 
-    public void openUpdateWarning() {
-        startActivity(new Intent(this, UpdateWarningActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-    }
-
     private void openWhalePage() {
         startActivity(WhaleActivity.newIntent(this));
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+    }
+
+    private void openUpdateWarningPage() {
+        startActivity(UpdateWarningActivity.newIntent(this));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
