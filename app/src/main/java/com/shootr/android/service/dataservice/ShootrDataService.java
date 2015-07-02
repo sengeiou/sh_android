@@ -188,7 +188,7 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata() != null) {
+        }else if(ops[0].getMetadata() != null && ops[0].getData().length > 0) {
             Map<String, Object> data = ops[0].getData()[0];
             return shotEntityMapper.fromDto(data);
 
