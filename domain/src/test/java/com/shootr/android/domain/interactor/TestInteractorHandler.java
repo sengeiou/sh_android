@@ -2,8 +2,6 @@ package com.shootr.android.domain.interactor;
 
 public class TestInteractorHandler implements InteractorHandler {
 
-    private MessageReceiver receiver;
-
     @Override public void execute(Interactor interactor) {
         try {
             interactor.execute();
@@ -13,17 +11,16 @@ public class TestInteractorHandler implements InteractorHandler {
     }
 
     @Override public void sendUiMessage(Object objectToUi) {
-        if (receiver != null) {
-            receiver.receive(objectToUi);
-        }
+        /* no-op */
     }
 
-    public void setReceiver(MessageReceiver receiver) {
-        this.receiver = receiver;
+    @Override
+    public void stopInteractors() {
+        /* no-op */
     }
 
-    interface MessageReceiver {
-
-        void receive(Object objectToUi);
+    @Override
+    public void executeUnique(Runnable clearDBRunnable) {
+        /* no-op */
     }
 }
