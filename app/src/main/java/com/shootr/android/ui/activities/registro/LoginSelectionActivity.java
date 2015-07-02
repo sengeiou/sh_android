@@ -68,7 +68,10 @@ public class LoginSelectionActivity extends BaseActivity {
                 performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.CompletedCallback() {
                     @Override
                     public void onCompleted() {
-                        startActivity(new Intent(LoginSelectionActivity.this, MainTabbedActivity.class));
+                        finish();
+                        Intent i = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override
