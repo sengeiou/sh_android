@@ -75,12 +75,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         super.onResume();
         bus.register(updateWarningReceiver);
         bus.register(serverDownReceiver);
+        bus.register(unauthorizedReceiver);
     }
 
     @Override protected void onPause() {
         super.onPause();
         bus.unregister(updateWarningReceiver);
         bus.unregister(serverDownReceiver);
+        bus.unregister(unauthorizedReceiver);
     }
 
     @Override protected void onDestroy() {
@@ -117,7 +119,6 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openUpdateWarning();
             }
         };
-        bus.register(updateWarningReceiver);
         versionUpdater.checkVersionCompatible();
     }
 
@@ -127,7 +128,6 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openWhalePage();
             }
         };
-        bus.register(serverDownReceiver);
     }
 
     private void setupUnauthorizedRedirection() {
@@ -140,7 +140,6 @@ public abstract class BaseActivity extends ActionBarActivity {
                 }
             }
         };
-        bus.register(unauthorizedReceiver);
     }
 
     public void openUpdateWarning() {
