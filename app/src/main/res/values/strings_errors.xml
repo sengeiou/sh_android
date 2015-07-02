@@ -49,5 +49,7 @@
 
     <!-- Forgot password -->
     <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
+    
+    <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
 
 </resources>

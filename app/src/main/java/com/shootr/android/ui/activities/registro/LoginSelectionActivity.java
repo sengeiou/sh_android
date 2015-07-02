@@ -2,8 +2,8 @@ package com.shootr.android.ui.activities.registro;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.widget.ImageView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -12,28 +12,28 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.shootr.android.R;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.PerformFacebookLoginInteractor;
+import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.util.PicassoWrapper;
 import hugo.weaving.DebugLog;
 import java.util.Arrays;
 import javax.inject.Inject;
-import org.json.JSONObject;
 import timber.log.Timber;
 
 public class LoginSelectionActivity extends BaseActivity {
 
+    private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
+
+    @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
+
     private CallbackManager callbackManager;
     private LoginManager loginManager;
-
-    @InjectView(R.id.login_icon) ImageView loginIcon;
-
-    @Inject PicassoWrapper picasso;
 
     @Override
     protected int getLayoutResource() {
@@ -60,47 +60,33 @@ public class LoginSelectionActivity extends BaseActivity {
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
 
-        //FIXME this violates the whole architecture. Right now it's for demo purposes only. Implement the data flow in a clean way when the actual funcionality required is defined.
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            @DebugLog
             public void onSuccess(LoginResult loginResult) {
                 final AccessToken accessToken = loginResult.getAccessToken();
-                Timber.d("Facebook Access Token: %s", accessToken.getToken());
+                Timber.d("FB Token: %s", accessToken.getToken());
+                performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.CompletedCallback() {
+                    @Override
+                    public void onCompleted() {
+                        startActivity(new Intent(LoginSelectionActivity.this, MainTabbedActivity.class));
+                    }
+                }, new Interactor.ErrorCallback() {
+                    @Override
+                    public void onError(ShootrException error) {
+                        showFacebookError();
+                    }
+                });
+            }
 
-                GraphRequest graphRequest =
-                  GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                      @Override
-                      public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                          Timber.d(jsonObject.toString());
-                          String id = jsonObject.optString("id");
-                          String name = jsonObject.optString("name");
-                          String email = jsonObject.optString("email");
-                          new AlertDialog.Builder(LoginSelectionActivity.this).setTitle("Hello " + name)
-                            .setMessage(String.format(
-                              "Welcome to Shootr and stuff.\n\nYour name is %s, your email is %s and your access token is something like %s...",
-                              name,
-                              email,
-                              accessToken.getToken().substring(0, 20)))
-                            .setPositiveButton("Ok", null)
-                            .show();
-                          String pictureUrl = "https://graph.facebook.com/%s/picture?type=large";
-                          picasso.load(String.format(pictureUrl, id)).into(loginIcon);
-                      }
-                  });
-                graphRequest.executeAsync();
-
+            @Override
+            public void onError(FacebookException e) {
+                Timber.e(e, "Failed to obtain FB access token");
+                showFacebookError();
             }
 
             @Override
             public void onCancel() {
                 /* no-op */
-            }
-
-            @Override
-            @DebugLog
-            public void onError(FacebookException e) {
-                //TODO handle error
             }
         });
     }
@@ -117,12 +103,16 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @OnClick(R.id.login_btn_facebook)
     public void loginWithFacebook() {
-        loginManager.logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email"));
+        loginManager.logInWithReadPermissions(this, Arrays.asList(FACEBOOK_PERMISIONS));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void showFacebookError() {
+        Toast.makeText(LoginSelectionActivity.this, R.string.error_facebook_login, Toast.LENGTH_SHORT).show();
     }
 }
