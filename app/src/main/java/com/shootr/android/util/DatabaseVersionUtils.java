@@ -29,14 +29,16 @@ public class DatabaseVersionUtils implements DatabaseUtils{
 
     public void clearDataOnNewerVersion() {
         if (needsToClearData()) {
-            clearSharedPreferences();
-            clearDatabase();
-            updateStoredDatabaseVersion();
+            resetAppData();
         }
     }
 
     @Override
     public void clearDataOnLogout() {
+        resetAppData();
+    }
+
+    protected void resetAppData() {
         clearSharedPreferences();
         clearDatabase();
         updateStoredDatabaseVersion();
