@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.bus.ShotFailed;
-import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.squareup.otto.Bus;

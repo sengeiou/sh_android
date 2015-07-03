@@ -18,7 +18,6 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;

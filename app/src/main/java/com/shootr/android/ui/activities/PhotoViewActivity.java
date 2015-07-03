@@ -15,15 +15,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
 import javax.inject.Inject;
-
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoViewActivity extends BaseToolbarActivity {

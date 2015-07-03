@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.AskCheckinConfirmation;
+import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetCheckinStatusInteractor;

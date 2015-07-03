@@ -5,7 +5,6 @@ import com.shootr.android.data.mapper.ShotQueueEntityMapper;
 import com.shootr.android.db.manager.ShotQueueManager;
 import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.service.ShotQueueRepository;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 

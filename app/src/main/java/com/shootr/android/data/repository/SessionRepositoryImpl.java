@@ -2,7 +2,6 @@ package com.shootr.android.data.repository;
 
 import com.crashlytics.android.Crashlytics;
 import com.shootr.android.data.prefs.CurrentUserId;
-import com.shootr.android.data.prefs.LongPreference;
 import com.shootr.android.data.prefs.SessionToken;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.domain.User;

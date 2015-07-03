@@ -7,8 +7,8 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import com.shootr.android.R;
 import android.graphics.drawable.Drawable;
+import com.shootr.android.R;
 
 public class BadgeDrawable extends Drawable {
 

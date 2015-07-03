@@ -1,7 +1,6 @@
 package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.exception.ShootrException;
-import java.io.IOException;
 
 public class LoginException extends ShootrException {
 

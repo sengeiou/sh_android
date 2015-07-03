@@ -27,7 +27,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orMod
 public class UserDtoFactory {
 
     public static final long MAX_FOLLOWS_ITEMS = 100L;
-    static final int NUMBER_OF_DAYS_AGO = 7;
 
     public static final Integer GET_FOLLOWERS = 0;
     public static final Integer GET_FOLLOWING = 1;
@@ -61,9 +60,6 @@ public class UserDtoFactory {
     UserMapper userMapper;
     FollowMapper followMapper;
     ForgotPasswordMapper forgotPasswordMapper;
-
-    public static final String ID_USER_FOLLOWING = "idUserFollowing";
-    public static final String ID_USER_WHO_IS_FOLLOWED = "idUserFollowed";
 
     @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper,
       ForgotPasswordMapper forgotPasswordMapper) {

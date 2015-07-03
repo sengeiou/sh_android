@@ -110,65 +110,77 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     @Override
     public void bindView(final ShotModel item, int position, View view) {
-        switch (getItemViewType(position)) {
-            case 0: // Shot
+        ViewHolder vh = (ViewHolder) view.getTag();
+        vh.position = position;
 
-                ViewHolder vh = (ViewHolder) view.getTag();
-                vh.position = position;
+        bindUsername(item, vh);
+        bindComment(item, vh);
+        bindElapsedTime(item, vh);
+        bindPhoto(item, vh);
+        bindImageInfo(item, vh);
+        bindVideoInfo(item, vh);
+    }
 
-                String usernameTitle = item.getUsername();
-                if (item.isReply()) {
-                    vh.name.setText(getReplyName(item));
-                } else {
-                    vh.name.setText(usernameTitle);
+    protected void bindPhoto(ShotModel item, ViewHolder vh) {
+        String photo = item.getPhoto();
+        picasso.loadProfilePhoto(photo).into(vh.avatar);
+        vh.avatar.setTag(vh);
+        vh.image.setTag(vh);
+    }
+
+    protected void bindUsername(ShotModel item, ViewHolder vh) {
+        String usernameTitle = item.getUsername();
+        if (item.isReply()) {
+            vh.name.setText(getReplyName(item));
+        } else {
+            vh.name.setText(usernameTitle);
+        }
+    }
+
+    protected void bindElapsedTime(ShotModel item, ViewHolder vh) {
+        long timestamp = item.getBirth().getTime();
+        vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
+    }
+
+    protected void bindComment(ShotModel item, ViewHolder vh) {
+        String comment = item.getComment();
+        String tag = null;
+        if (shouldShowTag() && item.getEventTag() != null) {
+            tag = item.getEventTag();
+        }
+
+        SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
+        if (commentWithTag != null) {
+            addShotComment(vh, commentWithTag);
+            vh.text.setVisibility(View.VISIBLE);
+        } else {
+            vh.text.setVisibility(View.GONE);
+        }
+    }
+
+    protected void bindImageInfo(ShotModel item, ViewHolder vh) {
+        String imageUrl = item.getImage();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            vh.image.setVisibility(View.VISIBLE);
+            picasso.loadTimelineImage(imageUrl).into(vh.image);
+        } else {
+            vh.image.setVisibility(View.GONE);
+        }
+    }
+
+    protected void bindVideoInfo(final ShotModel item, ViewHolder vh) {
+        if (item.hasVideo()) {
+            vh.videoFrame.setVisibility(View.VISIBLE);
+            vh.videoDuration.setText(item.getVideoDuration());
+            vh.videoFrame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoClickListener.onClick(item.getVideoUrl());
                 }
-
-                String comment = item.getComment();
-                String tag = null;
-                if (shouldShowTag() && item.getEventTag() != null) {
-                    tag = item.getEventTag();
-                }
-
-                SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
-                if (commentWithTag != null) {
-                    addShotComment(vh, commentWithTag);
-                    vh.text.setVisibility(View.VISIBLE);
-                } else {
-                    vh.text.setVisibility(View.GONE);
-                }
-
-                long timestamp = item.getBirth().getTime();
-                vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
-
-                String photo = item.getPhoto();
-                picasso.loadProfilePhoto(photo).into(vh.avatar);
-                vh.avatar.setTag(vh);
-                vh.image.setTag(vh);
-
-                String imageUrl = item.getImage();
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    vh.image.setVisibility(View.VISIBLE);
-                    picasso.loadTimelineImage(imageUrl).into(vh.image);
-                } else {
-                    vh.image.setVisibility(View.GONE);
-                }
-
-                if (item.hasVideo()) {
-                    vh.videoFrame.setVisibility(View.VISIBLE);
-                    vh.videoDuration.setText(item.getVideoDuration());
-                    vh.videoFrame.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            videoClickListener.onClick(item.getVideoUrl());
-                        }
-                    });
-                } else {
-                    vh.videoFrame.setVisibility(View.GONE);
-                    vh.videoFrame.setOnClickListener(null);
-                }
-                break;
-            default:
-                break;
+            });
+        } else {
+            vh.videoFrame.setVisibility(View.GONE);
+            vh.videoFrame.setOnClickListener(null);
         }
     }
 

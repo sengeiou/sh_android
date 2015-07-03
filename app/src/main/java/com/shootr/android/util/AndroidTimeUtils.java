@@ -11,7 +11,6 @@ import java.util.Formatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class AndroidTimeUtils implements TimeUtils {
 

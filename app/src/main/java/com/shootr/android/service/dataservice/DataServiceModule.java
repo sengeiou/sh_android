@@ -1,16 +1,16 @@
 package com.shootr.android.service.dataservice;
 
 import android.app.Application;
+import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import dagger.Module;
-import dagger.Provides;
-import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.dto.UtilityDtoFactory;
+import dagger.Module;
+import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(

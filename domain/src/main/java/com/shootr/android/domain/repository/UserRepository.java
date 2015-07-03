@@ -1,7 +1,6 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.User;
-
 import java.util.List;
 
 public interface UserRepository {

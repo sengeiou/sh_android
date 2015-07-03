@@ -1,9 +1,9 @@
 package com.shootr.android.data.service;
 
 import com.shootr.android.data.api.entity.FacebookLoginApiEntity;
-import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.api.entity.LoginApiEntity;
 import com.shootr.android.data.api.service.AuthApiService;
+import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.DeviceManager;

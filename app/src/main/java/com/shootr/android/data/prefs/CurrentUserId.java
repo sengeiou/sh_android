@@ -1,7 +1,6 @@
 package com.shootr.android.data.prefs;
 
 import java.lang.annotation.Retention;
-
 import javax.inject.Qualifier;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

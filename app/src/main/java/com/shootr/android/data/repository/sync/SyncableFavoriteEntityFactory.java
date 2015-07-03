@@ -6,7 +6,6 @@ import com.shootr.android.data.mapper.FavoriteEntityMapper;
 import com.shootr.android.data.repository.datasource.event.FavoriteDataSource;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.repository.Local;
-import java.util.Date;
 import javax.inject.Inject;
 
 public class SyncableFavoriteEntityFactory extends SyncableEntityFactory<Favorite, FavoriteEntity> {

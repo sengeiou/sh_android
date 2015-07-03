@@ -1,7 +1,6 @@
 package com.shootr.android.ui.adapters.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 public class EventSearchRecyclerView extends RecyclerView {
 

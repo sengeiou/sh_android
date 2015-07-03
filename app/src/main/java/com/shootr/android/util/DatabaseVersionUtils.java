@@ -3,8 +3,6 @@ package com.shootr.android.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.shootr.android.FacebookController;
 import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.data.prefs.IntPreference;

@@ -2,9 +2,8 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.db.DatabaseContract;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,9 +1,7 @@
 package com.shootr.android.ui.model.mappers;
 
-
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.data.mapper.GeneratedUserAvatarUrlProvider;
 import com.shootr.android.ui.model.ShotModel;
 import javax.inject.Inject;
 

@@ -1,9 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.FavoriteEntity;
-import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.db.manager.FavoriteManager;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
