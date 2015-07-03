@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class VersionOutdatedErrorInterceptor implements Interceptor {
 
-    public static final int CODE_PRECONDITION_FAILED = 412;
+    public static final int CODE_OUTDATED_VERSION = 412;
     private final BusPublisher busPublisher;
 
     @Inject public VersionOutdatedErrorInterceptor(BusPublisher busPublisher) {
@@ -18,7 +18,7 @@ public class VersionOutdatedErrorInterceptor implements Interceptor {
 
     @Override public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
-        if (response.code() == CODE_PRECONDITION_FAILED) {
+        if (response.code() == CODE_OUTDATED_VERSION) {
             busPublisher.post(new VersionOutdatedError.Event());
         }
         return response;
