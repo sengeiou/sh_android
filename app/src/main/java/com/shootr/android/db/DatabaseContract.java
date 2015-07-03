@@ -1,7 +1,5 @@
 package com.shootr.android.db;
 
-import android.provider.BaseColumns;
-
 public class DatabaseContract {
 
     private DatabaseContract() {

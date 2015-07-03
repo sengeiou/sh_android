@@ -1,9 +1,9 @@
 package com.shootr.android.ui.widgets;
+
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
-import java.sql.SQLException;
 
 public class ListViewScrollObserver implements OnScrollListener {
     private OnListViewScrollListener listener;

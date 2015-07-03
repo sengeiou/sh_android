@@ -2,7 +2,6 @@ package com.shootr.android.ui;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
-import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.util.PicassoWrapper;
 import de.hdodenhof.circleimageview.CircleImageView;
 

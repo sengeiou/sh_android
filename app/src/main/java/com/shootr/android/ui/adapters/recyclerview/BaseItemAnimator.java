@@ -22,7 +22,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,11 +2,10 @@ package com.shootr.android.data.background.dagger;
 
 import com.shootr.android.data.background.BackgroundShotSender;
 import com.shootr.android.data.background.ShotDispatcherBackgroundService;
-import com.shootr.android.domain.interactor.shot.PostNewShotInteractor;
-import com.shootr.android.domain.service.dagger.Background;
-import com.shootr.android.domain.service.dagger.Queuer;
 import com.shootr.android.domain.service.ShotDispatcher;
 import com.shootr.android.domain.service.ShotSender;
+import com.shootr.android.domain.service.dagger.Background;
+import com.shootr.android.domain.service.dagger.Queuer;
 import dagger.Module;
 import dagger.Provides;
 

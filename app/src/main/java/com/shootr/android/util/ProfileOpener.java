@@ -3,13 +3,11 @@ package com.shootr.android.util;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
-
 import timber.log.Timber;
 
 public class ProfileOpener {

@@ -1,7 +1,6 @@
 package com.shootr.android.util;
 
 import com.shootr.android.domain.utils.TimeUtils;
-
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.junit.Before;

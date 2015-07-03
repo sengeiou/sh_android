@@ -5,7 +5,6 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.WatchersRepository;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

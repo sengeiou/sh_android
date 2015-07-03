@@ -2,7 +2,6 @@ package com.shootr.android.ui.views.nullview;
 
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.views.EventTimelineView;
-
 import java.util.List;
 
 public class NullEventTimelineView implements EventTimelineView {

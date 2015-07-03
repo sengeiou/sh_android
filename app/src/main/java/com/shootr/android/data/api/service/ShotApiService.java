@@ -1,7 +1,6 @@
 package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.entity.ShotApiEntity;
-import com.shootr.android.data.entity.EventEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.http.GET;

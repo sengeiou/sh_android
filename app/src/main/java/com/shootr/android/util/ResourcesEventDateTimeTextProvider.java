@@ -1,19 +1,15 @@
 package com.shootr.android.util;
 
 import android.content.res.Resources;
-
 import com.shootr.android.R;
-
 import com.shootr.android.domain.utils.EventDateTimeTextProvider;
+import java.util.Date;
+import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
-
-import java.util.Date;
-
-import javax.inject.Inject;
 import org.joda.time.format.DateTimeFormatter;
 
 public class ResourcesEventDateTimeTextProvider implements EventDateTimeTextProvider {

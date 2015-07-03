@@ -1,15 +1,11 @@
 package com.shootr.android.util;
 
 import android.content.res.Resources;
-
 import com.shootr.android.R;
-
+import java.util.Date;
+import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-
-import java.util.Date;
-
-import javax.inject.Inject;
 
 public class WatchersTimeTextFormatter {
 

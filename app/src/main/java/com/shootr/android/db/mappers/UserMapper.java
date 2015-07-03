@@ -2,11 +2,9 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract.UserTable;
-
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;

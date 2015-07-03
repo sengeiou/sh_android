@@ -5,7 +5,6 @@ import android.content.Context;
 import com.shootr.android.notifications.AndroidNotificationManager;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.util.PicassoWrapper;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

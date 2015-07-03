@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.util.Version;
-import dagger.Module;
-import dagger.Provides;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
@@ -15,7 +12,9 @@ import com.shootr.android.db.TrackingCursorFactory;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.service.DebugApiModule;
 import com.shootr.android.ui.debug.NetworkProxy;
-
+import com.shootr.android.util.Version;
+import dagger.Module;
+import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(

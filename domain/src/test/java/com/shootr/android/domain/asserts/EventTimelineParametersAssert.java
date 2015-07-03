@@ -2,7 +2,6 @@ package com.shootr.android.domain.asserts;
 
 import com.shootr.android.domain.EventTimelineParameters;
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.internal.Iterables;
 import org.assertj.core.util.Objects;
 
 /**

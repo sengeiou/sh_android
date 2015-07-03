@@ -6,19 +6,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.ViewGroup;
-
+import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.bus.UpdateWarning;
+import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.R;
-import com.shootr.android.ui.AppContainer;
+import javax.inject.Inject;
 
 import static butterknife.ButterKnife.findById;
 

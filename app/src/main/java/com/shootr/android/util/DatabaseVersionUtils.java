@@ -2,7 +2,6 @@ package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.LastDatabaseVersion;

@@ -1,8 +1,8 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.debug.DebugAppContainer;
 import dagger.Module;
 import dagger.Provides;
-import com.shootr.android.ui.debug.DebugAppContainer;
 import javax.inject.Singleton;
 
 @Module(

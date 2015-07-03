@@ -13,8 +13,6 @@ import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.ShotModel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;

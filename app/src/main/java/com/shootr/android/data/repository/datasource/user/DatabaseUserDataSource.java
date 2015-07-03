@@ -4,9 +4,7 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.SessionRepository;
-import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 

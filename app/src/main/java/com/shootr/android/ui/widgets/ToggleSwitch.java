@@ -19,7 +19,6 @@ package com.shootr.android.ui.widgets;
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
-import android.widget.Switch;
 
 public class ToggleSwitch extends SwitchCompat {
 

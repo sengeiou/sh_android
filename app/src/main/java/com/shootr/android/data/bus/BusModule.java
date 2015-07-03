@@ -2,9 +2,6 @@ package com.shootr.android.data.bus;
 
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.notifications.gcm.GCMIntentService;
-import com.squareup.otto.Bus;
-import dagger.Module;
-import dagger.Provides;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
@@ -14,6 +11,9 @@ import com.shootr.android.ui.activities.registro.EmailLoginActivity;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
 import com.shootr.android.ui.fragments.ProfileFragment;
+import com.squareup.otto.Bus;
+import dagger.Module;
+import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(

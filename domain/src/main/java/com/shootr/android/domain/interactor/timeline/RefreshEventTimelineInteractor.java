@@ -2,19 +2,10 @@ package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
-import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
-
-import java.util.List;
 import javax.inject.Inject;
 
 public class RefreshEventTimelineInteractor implements Interactor {

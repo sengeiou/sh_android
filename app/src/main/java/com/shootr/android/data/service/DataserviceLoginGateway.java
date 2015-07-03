@@ -4,7 +4,6 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.domain.service.user.LoginGateway;
 import com.shootr.android.exception.ServerException;

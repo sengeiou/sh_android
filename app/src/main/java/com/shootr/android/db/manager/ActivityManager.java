@@ -8,7 +8,6 @@ import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.ActivityEntityMapper;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.ActivityType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

@@ -1,9 +1,8 @@
 package com.shootr.android;
 
-
-import dagger.Module;
 import com.shootr.android.data.DebugDataModule;
 import com.shootr.android.ui.DebugUiModule;
+import dagger.Module;
 
 @Module(
         addsTo = ShootrModule.class,

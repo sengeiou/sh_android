@@ -13,7 +13,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.TimeUtils;
-
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {

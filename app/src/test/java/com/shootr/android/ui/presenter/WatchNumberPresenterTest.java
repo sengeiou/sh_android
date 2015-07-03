@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-
 import com.shootr.android.domain.bus.EventChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.interactor.Interactor;
@@ -8,15 +7,13 @@ import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
+import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;

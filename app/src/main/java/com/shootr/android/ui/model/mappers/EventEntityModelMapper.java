@@ -2,7 +2,6 @@ package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.util.TimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

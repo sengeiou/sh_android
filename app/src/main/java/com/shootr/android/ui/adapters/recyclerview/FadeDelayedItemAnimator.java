@@ -21,7 +21,6 @@ import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
-
 import android.view.animation.DecelerateInterpolator;
 import java.util.ArrayList;
 import java.util.List;

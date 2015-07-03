@@ -12,7 +12,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
 import com.shootr.android.domain.service.dagger.Background;
-
 import java.io.File;
 import java.util.Date;
 

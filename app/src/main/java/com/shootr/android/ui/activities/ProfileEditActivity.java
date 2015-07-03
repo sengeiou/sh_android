@@ -3,7 +3,6 @@ package com.shootr.android.ui.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.InputFilter;
@@ -18,14 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
-import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {

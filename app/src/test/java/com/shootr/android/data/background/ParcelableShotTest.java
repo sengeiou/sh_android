@@ -2,12 +2,8 @@ package com.shootr.android.data.background;
 
 import android.os.Parcel;
 import com.shootr.android.domain.Shot;
-
-import java.lang.String;
 import java.util.Date;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
