@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.bus.Unauthorized;
+import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
@@ -126,7 +126,7 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openUpdateWarningPage();
             }
         };
-        bus.register(preconditionFailedReceiver);
+        versionUpdater.checkVersionCompatible();
     }
 
     private void setupUnauthorizedRedirection() {
