@@ -113,13 +113,36 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         ViewHolder vh = (ViewHolder) view.getTag();
         vh.position = position;
 
+        bindUsername(item, vh);
+        bindComment(item, vh);
+        bindElapsedTime(item, vh);
+        bindPhoto(item, vh);
+        bindImageInfo(item, vh);
+        bindVideoInfo(item, vh);
+    }
+
+    protected void bindPhoto(ShotModel item, ViewHolder vh) {
+        String photo = item.getPhoto();
+        picasso.loadProfilePhoto(photo).into(vh.avatar);
+        vh.avatar.setTag(vh);
+        vh.image.setTag(vh);
+    }
+
+    protected void bindUsername(ShotModel item, ViewHolder vh) {
         String usernameTitle = item.getUsername();
         if (item.isReply()) {
             vh.name.setText(getReplyName(item));
         } else {
             vh.name.setText(usernameTitle);
         }
+    }
 
+    protected void bindElapsedTime(ShotModel item, ViewHolder vh) {
+        long timestamp = item.getBirth().getTime();
+        vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
+    }
+
+    protected void bindComment(ShotModel item, ViewHolder vh) {
         String comment = item.getComment();
         String tag = null;
         if (shouldShowTag() && item.getEventTag() != null) {
@@ -133,15 +156,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         } else {
             vh.text.setVisibility(View.GONE);
         }
+    }
 
-        long timestamp = item.getBirth().getTime();
-        vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
-
-        String photo = item.getPhoto();
-        picasso.loadProfilePhoto(photo).into(vh.avatar);
-        vh.avatar.setTag(vh);
-        vh.image.setTag(vh);
-
+    protected void bindImageInfo(ShotModel item, ViewHolder vh) {
         String imageUrl = item.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             vh.image.setVisibility(View.VISIBLE);
@@ -149,7 +166,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         } else {
             vh.image.setVisibility(View.GONE);
         }
+    }
 
+    protected void bindVideoInfo(final ShotModel item, ViewHolder vh) {
         if (item.hasVideo()) {
             vh.videoFrame.setVisibility(View.VISIBLE);
             vh.videoDuration.setText(item.getVideoDuration());
