@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities.registro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -29,6 +30,9 @@ import timber.log.Timber;
 public class LoginSelectionActivity extends BaseActivity {
 
     private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
+
+    @InjectView(R.id.login_progress) View loading;
+    @InjectView(R.id.login_buttons) View buttonsContainer;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
 
@@ -77,6 +81,7 @@ public class LoginSelectionActivity extends BaseActivity {
                     @Override
                     public void onError(ShootrException error) {
                         showFacebookError();
+                        hideLoading();
                     }
                 });
             }
@@ -85,11 +90,12 @@ public class LoginSelectionActivity extends BaseActivity {
             public void onError(FacebookException e) {
                 Timber.e(e, "Failed to obtain FB access token");
                 showFacebookError();
+                hideLoading();
             }
 
             @Override
             public void onCancel() {
-                /* no-op */
+                hideLoading();
             }
         });
     }
@@ -106,6 +112,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @OnClick(R.id.login_btn_facebook)
     public void loginWithFacebook() {
+        showLoading();
         loginManager.logInWithReadPermissions(this, Arrays.asList(FACEBOOK_PERMISIONS));
     }
 
@@ -113,6 +120,16 @@ public class LoginSelectionActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void showLoading() {
+        loading.setVisibility(View.VISIBLE);
+        buttonsContainer.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideLoading() {
+        loading.setVisibility(View.GONE);
+        buttonsContainer.setVisibility(View.VISIBLE);
     }
 
     private void showFacebookError() {
