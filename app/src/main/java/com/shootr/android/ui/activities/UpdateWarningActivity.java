@@ -28,12 +28,12 @@ public class UpdateWarningActivity extends BaseNoToolbarActivity {
 
     @OnClick(R.id.update_warning_button)
     public void onUpdateClick() {
-        goToUrl(getString(R.string.update_shootr_version_url));
+        goToAppDownload(getString(R.string.update_shootr_version_url));
     }
 
-    private void goToUrl (String url) {
+    private void goToAppDownload(String url) {
         Uri uriUrl = Uri.parse(url);
-        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-        startActivity(launchBrowser);
+        Intent lastVersionDownload = new Intent(Intent.ACTION_VIEW, uriUrl);
+        startActivity(lastVersionDownload);
     }
 }
