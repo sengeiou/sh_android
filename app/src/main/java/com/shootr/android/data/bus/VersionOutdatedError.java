@@ -1,10 +1,10 @@
 package com.shootr.android.data.bus;
 
-public interface PreconditionFailed {
+public interface VersionOutdatedError {
 
     interface Receiver {
 
-        void onPreconditionFailed(Event event);
+        void onVersionOutdatedError(Event event);
     }
 
     class Event {

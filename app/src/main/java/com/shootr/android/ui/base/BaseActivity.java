@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.bus.PreconditionFailed;
+import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.bus.Unauthorized;
 import com.shootr.android.domain.service.SessionHandler;
@@ -30,7 +30,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject SessionHandler sessionHandler;
 
     private ServerDown.Receiver serverDownReceiver;
-    private PreconditionFailed.Receiver preconditionFailedReceiver;
+    private VersionOutdatedError.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
 
@@ -121,8 +121,8 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     private void setupUpdateWarningPage() {
-        preconditionFailedReceiver = new PreconditionFailed.Receiver() {
-            @Subscribe @Override public void onPreconditionFailed(PreconditionFailed.Event event) {
+        preconditionFailedReceiver = new VersionOutdatedError.Receiver() {
+            @Subscribe @Override public void onVersionOutdatedError(VersionOutdatedError.Event event) {
                 openUpdateWarningPage();
             }
         };

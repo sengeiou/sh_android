@@ -178,7 +178,7 @@ public class DataModule {
       AuthHeaderInterceptor authHeaderInterceptor,
       ServerDownErrorInterceptor serverDownErrorInterceptor,
       UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
-      PreconditionFailedErrorInterceptor preconditionFailedErrorInterceptor) {
+      VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -198,7 +198,7 @@ public class DataModule {
         client.interceptors().add(authHeaderInterceptor);
         client.interceptors().add(serverDownErrorInterceptor);
         client.interceptors().add(unauthorizedErrorInterceptor);
-        client.interceptors().add(preconditionFailedErrorInterceptor);
+        client.interceptors().add(versionOutdatedErrorInterceptor);
 
         return client;
     }
