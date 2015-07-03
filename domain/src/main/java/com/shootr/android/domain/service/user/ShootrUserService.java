@@ -13,7 +13,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.domain.service.SendPasswordResetEmailException;
-import com.shootr.android.domain.utils.SecurityUtils;
 import java.io.IOException;
 import javax.inject.Inject;
 
@@ -74,10 +73,10 @@ public class ShootrUserService {
     }
 
     public void createAccount(String username, String email, String password) {
-        String hashedPassword = SecurityUtils.encodePassword(password);
         try {
-            createAccountGateway.performCreateAccount(username, email, hashedPassword);
-        } catch (Exception e) {
+            LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
+            retrievePostLoginInformation(loginResult);
+        } catch (IOException e) {
             throw new AccountCreationException(e);
         }
     }
@@ -85,15 +84,19 @@ public class ShootrUserService {
     public void performLogin(String usernameOrEmail, String password) {
         try {
             LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
-            storeSession(loginResult);
-            String visibleEventId = loginResult.getUser().getIdWatchingEvent();
-            if (visibleEventId != null) {
-                remoteEventRepository.getEventById(visibleEventId);
-            }
-            remoteUserRepository.getPeople();
+            retrievePostLoginInformation(loginResult);
         } catch (IOException e) {
             throw new LoginException(e);
         }
+    }
+
+    private void retrievePostLoginInformation(LoginResult loginResult) {
+        storeSession(loginResult);
+        String visibleEventId = loginResult.getUser().getIdWatchingEvent();
+        if (visibleEventId != null) {
+            remoteEventRepository.getEventById(visibleEventId);
+        }
+        remoteUserRepository.getPeople();
     }
 
     private void storeSession(LoginResult loginResult) {

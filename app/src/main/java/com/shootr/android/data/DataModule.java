@@ -68,7 +68,9 @@ import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
 import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
@@ -172,8 +174,32 @@ public class DataModule {
         return new PicassoWrapper(picasso);
     }
 
-    @Provides @Singleton OkHttpClient provideOkHttpClient(Application app) {
-        return createOkHttpClient(app);
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient(Application app,
+      AuthHeaderInterceptor authHeaderInterceptor,
+      ServerDownErrorInterceptor serverDownErrorInterceptor,
+      UnauthorizedErrorInterceptor unauthorizedErrorInterceptor) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        try {
+            // Install an HTTP cache in the application cache directory.
+            File cacheDir = new File(app.getCacheDir(), "http");
+            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+            client.setCache(cache);
+        } catch (IOException e) {
+            Timber.e(e, "Unable to install disk cache.");
+        }
+
+        client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
+        client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.networkInterceptors().add(new StethoInterceptor());
+        client.interceptors().add(authHeaderInterceptor);
+        client.interceptors().add(serverDownErrorInterceptor);
+        client.interceptors().add(unauthorizedErrorInterceptor);
+        return client;
     }
 
     @Provides @Singleton NetworkUtil provideNetworkUtil(Application app) {
@@ -230,25 +256,5 @@ public class DataModule {
               }
           }).build();
         return new JobManager(app, configuration);
-    }
-
-    static OkHttpClient createOkHttpClient(Application app) {
-        OkHttpClient client = new OkHttpClient();
-
-        try {
-            // Install an HTTP cache in the application cache directory.
-            File cacheDir = new File(app.getCacheDir(), "http");
-            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-            client.setCache(cache);
-        } catch (IOException e) {
-            Timber.e(e, "Unable to install disk cache.");
-        }
-
-        client.setConnectTimeout(TIMEOUT_CONNECT_SECONDS, TimeUnit.SECONDS);
-        client.setReadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.networkInterceptors().add(new StethoInterceptor());
-
-        return client;
     }
 }

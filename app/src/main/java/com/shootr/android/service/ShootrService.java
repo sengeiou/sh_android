@@ -5,14 +5,11 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
 
 public interface ShootrService {
-
-    UserEntity login(String id, String password) throws IOException;
 
     List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
 
@@ -58,8 +55,6 @@ public interface ShootrService {
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
     void performCheckin(String idUser, String idEvent) throws IOException;
-
-    void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
 

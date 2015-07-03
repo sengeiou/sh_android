@@ -31,14 +31,14 @@ public class RequestorDto {
 
 	public static final int REQUESTOR_ARRAY_LENGTH = POSITION_SYSTEM_TIME + 1;
 
-	private	Long[] req;
+	private	Object[] req;
 
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public RequestorDto() {
-		req = new Long[REQUESTOR_ARRAY_LENGTH];
+		req = new Object[REQUESTOR_ARRAY_LENGTH];
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class RequestorDto {
 	 * 
 	 * @return el array de valores del solicitante.
 	 */
-	public Long[] getReq() {
+	public Object[] getReq() {
 		return req;
 	}
 

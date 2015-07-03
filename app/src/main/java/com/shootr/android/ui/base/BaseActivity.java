@@ -9,6 +9,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.bus.ServerDown;
+import com.shootr.android.data.bus.Unauthorized;
 import com.shootr.android.data.bus.UpdateWarning;
 import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
@@ -30,6 +31,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     private UpdateWarning.Receiver updateWarningReceiver;
     private ServerDown.Receiver serverDownReceiver;
+    private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         injectDependencies();
         setupUpdateWarning();
         setupWhalePage();
+        setupUnauthorizedRedirection();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews(savedInstanceState);
@@ -72,12 +75,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         super.onResume();
         bus.register(updateWarningReceiver);
         bus.register(serverDownReceiver);
+        bus.register(unauthorizedReceiver);
     }
 
     @Override protected void onPause() {
         super.onPause();
         bus.unregister(updateWarningReceiver);
         bus.unregister(serverDownReceiver);
+        bus.unregister(unauthorizedReceiver);
     }
 
     @Override protected void onDestroy() {
@@ -114,7 +119,6 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openUpdateWarning();
             }
         };
-        bus.register(updateWarningReceiver);
         versionUpdater.checkVersionCompatible();
     }
 
@@ -124,7 +128,18 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openWhalePage();
             }
         };
-        bus.register(serverDownReceiver);
+    }
+
+    private void setupUnauthorizedRedirection() {
+        unauthorizedReceiver = new Unauthorized.Receiver() {
+            @Subscribe
+            @Override
+            public void onUnauthorized(Unauthorized.Event event) {
+                if (requiresUserLogin()) {
+                    redirectToLogin();
+                }
+            }
+        };
     }
 
     public void openUpdateWarning() {

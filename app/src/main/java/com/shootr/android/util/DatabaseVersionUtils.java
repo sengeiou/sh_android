@@ -46,8 +46,8 @@ public class DatabaseVersionUtils implements DatabaseUtils{
     }
 
     private void clearDatabase() {
-        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
         dbOpenHelper.close();
+        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
     }
 
     private void updateStoredDatabaseVersion() {

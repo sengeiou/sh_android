@@ -7,7 +7,6 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -34,7 +33,6 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.service.dataservice.generic.RequestorDto;
-import com.shootr.android.util.SecurityUtils;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -112,15 +110,6 @@ public class ShootrDataService implements ShootrService {
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
         this.busPublisher = busPublisher;
-    }
-
-    @Override
-    public UserEntity login(String id, String password) throws IOException {
-        GenericDto loginDto = userDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
-        GenericDto responseDto = postRequest(loginDto);
-        OperationDto[] ops = responseDto.getOps();
-        Map<String, Object>[] data = ops[0].getData();
-        return userMapper.fromDto(data[0]);
     }
 
     @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
@@ -476,11 +465,6 @@ public class ShootrDataService implements ShootrService {
         postRequest(checkinDto);
     }
 
-    @Override public void createAccount(UserCreateAccountEntity userCreateAccountEntity) throws IOException{
-        GenericDto createAccountDto = userDtoFactory.getCreateAccountOperationDto(userCreateAccountEntity);
-        postRequest(createAccountDto);
-    }
-
     @Override
     public UserEntity getUserByUsername(String username) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUsername(username);
@@ -621,9 +605,6 @@ public class ShootrDataService implements ShootrService {
             }
             return genericDto;
         } else {
-            if (response.code() == RetrofitErrorHandler.CODE_SERVER_DOWN) {
-                busPublisher.post(new ServerDown.Event());
-            }
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
         }
@@ -634,7 +615,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     private void updateTimeFromServer(GenericDto dto) {
-        Long serverTime = dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
+        Long serverTime = (Long) dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
         if (serverTime != null) {
             timeUtils.setCurrentTime(serverTime);
         }

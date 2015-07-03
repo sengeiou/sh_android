@@ -4,7 +4,6 @@ import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.UserCreateAccountEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
@@ -36,11 +35,9 @@ public class UserDtoFactory {
     public static final int FOLLOW_TYPE = 0;
     public static final int UNFOLLOW_TYPE = 1;
 
-    private static final String ENTITY_LOGIN = "LoginMongo";
     private static final String ENTITY_LOGOUT = "LogoutMongo";
-    private static final String ENTITY_CHECKIN = "CheckInMongo";
-    private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_LOGOUT = "Logout";
+    private static final String ENTITY_CHECKIN = "CheckInMongo";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
@@ -87,35 +84,6 @@ public class UserDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CHECKIN, operationDto);
     }
-
-    public GenericDto getLoginOperationDto(String id, String password) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id must not be null");
-        }
-        if (password == null) {
-            throw new IllegalArgumentException("Password must not be null");
-        }
-        Map<String, Object> keys = new ArrayMap<>(2);
-        keys.put(id.contains("@") ? UserTable.EMAIL : UserTable.USER_NAME, id);
-        keys.put(UserTable.PASSWORD, password);
-
-        //TODO: Metadata Builder
-        MetadataDto md = new MetadataDto(
-                ServiceConstants.OPERATION_RETRIEVE,
-                ENTITY_LOGIN,
-                false, 1L, 0L, 1L, keys
-        );
-
-        OperationDto op = new OperationDto();
-        op.setMetadata(md);
-
-        Map<String, Object>[] data = new HashMap[1];
-        data[0] = userMapper.toDto(null);
-        op.setData(data);
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
-    }
-
 
     public GenericDto followUserDto(FollowEntity follow){
         if(follow.getIdUser() == null){
@@ -302,18 +270,6 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
-    }
-
-    public GenericDto getCreateAccountOperationDto(UserCreateAccountEntity userCreateAccountEntity) {
-        MetadataDto metadataDto = new MetadataDto.Builder().entity(USER_SIGN_IN)
-          .putKey(UserTable.ID, null)
-          .operation(ServiceConstants.OPERATION_CREATE)
-          .build();
-
-        Map<String, Object> userCreateAccountEntityMap = userMapper.toCreateAccountDto(userCreateAccountEntity);
-        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).putData(userCreateAccountEntityMap).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_USER_SIGN_IN, operationDto);
     }
 
     public GenericDto getForgotPasswordResultByUsernameOrEmail(String usernameOrEmail) {
