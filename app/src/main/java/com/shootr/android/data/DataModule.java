@@ -68,9 +68,7 @@ import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
 import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
@@ -178,8 +176,10 @@ public class DataModule {
     @Singleton
     OkHttpClient provideOkHttpClient(Application app,
       AuthHeaderInterceptor authHeaderInterceptor,
+      VersionHeaderInterceptor versionHeaderInterceptor,
       ServerDownErrorInterceptor serverDownErrorInterceptor,
-      UnauthorizedErrorInterceptor unauthorizedErrorInterceptor) {
+      UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
+      VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -197,8 +197,11 @@ public class DataModule {
         client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(authHeaderInterceptor);
+        client.interceptors().add(versionHeaderInterceptor);
         client.interceptors().add(serverDownErrorInterceptor);
         client.interceptors().add(unauthorizedErrorInterceptor);
+        client.interceptors().add(versionOutdatedErrorInterceptor);
+
         return client;
     }
 
