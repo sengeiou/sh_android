@@ -1,104 +1,85 @@
 <!-- Hack: We are able to center the content of the ScrollView thanks to this LinearLayout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:gravity="center_vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ScrollView android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
+        <LinearLayout android:id="@+id/login_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:animateLayoutChanges="true"
+          android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/login_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical"
-            >
+            <ImageView android:id="@+id/login_icon"
+              android:layout_width="120dp"
+              android:layout_height="120dp"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="40dp"
+              android:src="@mipmap/ic_launcher" />
 
-            <ImageView
-                android:id="@+id/login_icon"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
-                android:src="@mipmap/ic_launcher"/>
+            <TextView android:id="@+id/login_title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginBottom="56dp"
+              android:layout_marginTop="22dp"
+              android:fontFamily="sans-serif-light"
+              android:gravity="center_horizontal"
+              android:text="@string/app_name"
+              android:textColor="@color/gray_10"
+              android:textSize="27sp" />
 
+            <FrameLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:animateLayoutChanges="true">
 
-            <TextView
-                android:id="@+id/login_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="56dp"
-                android:layout_marginTop="22dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center_horizontal"
-                android:text="@string/app_name"
-                android:textColor="@color/gray_10"
-                android:textSize="27sp"/>
+                <ProgressBar android:id="@+id/login_progress"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:visibility="gone"
+                  tools:visibility="visible" />
 
-            <!-- <TextView
-                 android:id="@+id/login_subtitle"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center_horizontal"
-                 android:layout_marginBottom="16dp"
-                 android:layout_marginLeft="48dp"
-                 android:layout_marginRight="48dp"
-                 android:layout_marginTop="16dp"
-                 android:gravity="center_horizontal"
-                 android:lines="3"
-                 android:text="@string/welcome_subtitle_login"
-                 android:textColor="@color/gray_50"
-                 android:textSize="15sp"/>
+                <LinearLayout android:id="@+id/login_buttons"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
 
-         -->
-            <!--<com.facebook.widget.LoginButton
-                android:id="@+id/login_btn_facebook"
-                style="@style/LoginFacebookButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="52dp"
-                android:layout_marginRight="52dp"
-                android:text="@string/activity_login_register_facebook"/>-->
+                    <TextView android:id="@+id/login_btn_facebook"
+                      style="@style/LoginFacebookButton"
+                      android:layout_width="match_parent"
+                      android:layout_height="44dp"
+                      android:layout_marginLeft="@dimen/keyline_2"
+                      android:layout_marginRight="@dimen/keyline_2"
+                      android:text="@string/activity_login_register_facebook"
+                      android:visibility="visible" />
 
-            <Button
-                android:id="@+id/login_btn_facebook"
-                style="@style/LoginFacebookButton"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="56dp"
-                android:visibility="gone"
-                android:layout_marginRight="56dp"
-                android:text="@string/activity_login_register_facebook"/>
+                    <TextView android:id="@+id/login_btn_email"
+                      style="@style/LoginEmailButton"
+                      android:layout_width="match_parent"
+                      android:layout_height="42dp"
+                      android:layout_marginLeft="@dimen/keyline_2"
+                      android:layout_marginRight="@dimen/keyline_2"
+                      android:layout_marginTop="16dp"
+                      android:fontFamily="sans-serif-medium"
+                      android:text="@string/activity_login_register_email" />
 
-            <TextView
-                android:id="@+id/login_btn_email"
-
-                style="@style/LoginEmailButton"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_marginLeft="@dimen/keyline_2"
-                android:layout_marginRight="@dimen/keyline_2"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/activity_login_register_email"/>
-
-            <TextView
-                android:id="@+id/login_btn_login"
-                style="@style/LoginSessionButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
-                android:layout_marginTop="8dp"
-              android:layout_marginBottom="32dp"
-                android:padding="8dp"
-                android:text="@string/activity_login_signin"/>
-
-
+                    <TextView android:id="@+id/login_btn_login"
+                      style="@style/LoginSessionButton"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="32dp"
+                      android:layout_marginLeft="72dp"
+                      android:layout_marginRight="72dp"
+                      android:layout_marginTop="8dp"
+                      android:padding="8dp"
+                      android:text="@string/activity_login_signin" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

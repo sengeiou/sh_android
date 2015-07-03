@@ -15,7 +15,7 @@ import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
-import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.util.VersionUpdater;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -153,7 +153,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     private void redirectToLogin() {
-        startActivity(new Intent(this, WelcomeLoginActivity.class));
+        startActivity(new Intent(this, LoginSelectionActivity.class));
         finish();
     }
 }

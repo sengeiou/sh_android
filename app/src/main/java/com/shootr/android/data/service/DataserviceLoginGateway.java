@@ -1,5 +1,6 @@
 package com.shootr.android.data.service;
 
+import com.shootr.android.data.api.entity.FacebookLoginApiEntity;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.api.entity.LoginApiEntity;
 import com.shootr.android.data.api.service.AuthApiService;
@@ -32,6 +33,14 @@ public class DataserviceLoginGateway implements LoginGateway {
 
     @Override public LoginResult performLogin(String usernameOrEmail, String password) throws IOException {
         UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
+        User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
+        String sessionToken = loggedInUserEntity.getSessionToken();
+        return new LoginResult(loggedInUser, sessionToken);
+    }
+
+    @Override
+    public LoginResult performFacebookLogin(String facebookToken) throws IOException {
+        UserEntity loggedInUserEntity = authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken));
         User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
         String sessionToken = loggedInUserEntity.getSessionToken();
         return new LoginResult(loggedInUser, sessionToken);

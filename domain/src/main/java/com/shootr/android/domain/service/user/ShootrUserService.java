@@ -90,6 +90,15 @@ public class ShootrUserService {
         }
     }
 
+    public void performFacebookLogin(String facebookToken) {
+        try {
+            LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
+            retrievePostLoginInformation(loginResult);
+        } catch (IOException e) {
+            throw new LoginException(e);
+        }
+    }
+
     private void retrievePostLoginInformation(LoginResult loginResult) {
         storeSession(loginResult);
         String visibleEventId = loginResult.getUser().getIdWatchingEvent();
