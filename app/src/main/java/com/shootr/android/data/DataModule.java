@@ -176,6 +176,7 @@ public class DataModule {
     @Singleton
     OkHttpClient provideOkHttpClient(Application app,
       AuthHeaderInterceptor authHeaderInterceptor,
+      VersionHeaderInterceptor versionHeaderInterceptor,
       ServerDownErrorInterceptor serverDownErrorInterceptor,
       UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
       VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
@@ -196,6 +197,7 @@ public class DataModule {
         client.setWriteTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(authHeaderInterceptor);
+        client.interceptors().add(versionHeaderInterceptor);
         client.interceptors().add(serverDownErrorInterceptor);
         client.interceptors().add(unauthorizedErrorInterceptor);
         client.interceptors().add(versionOutdatedErrorInterceptor);
