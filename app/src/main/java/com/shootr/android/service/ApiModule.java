@@ -8,6 +8,7 @@ import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ShotApiService;
+import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.DataServiceModule;
 import com.shootr.android.service.dataservice.ShootrDataService;
@@ -69,6 +70,10 @@ public final class ApiModule {
     @Provides
     ShotApiService provideShotApiService(RestAdapter restAdapter) {
         return restAdapter.create(ShotApiService.class);
+    }
+
+    @Provides VideoApiService provideVideoApiService(RestAdapter restAdapter) {
+        return restAdapter.create(VideoApiService.class);
     }
 
     @Provides
