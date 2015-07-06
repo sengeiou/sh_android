@@ -1,6 +1,6 @@
 package com.shootr.android.data.entity;
 
-public class ResetEntity {
+public class ResetPasswordEntity {
 
     private String idUser;
 

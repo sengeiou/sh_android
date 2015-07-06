@@ -2,7 +2,7 @@ package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.entity.ForgotPasswordEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
-import com.shootr.android.data.entity.ResetEntity;
+import com.shootr.android.data.entity.ResetPasswordEntity;
 import java.io.IOException;
 import retrofit.client.Response;
 import retrofit.http.Body;
@@ -12,7 +12,7 @@ public interface ResetPasswordApiService {
 
     @POST("/auth/forgotPassword") ForgotPasswordResultEntity passwordReset(@Body ForgotPasswordEntity forgotPasswordEntity);
 
-    @POST("/auth/resetPassword") Response sendResetPasswordEmail(@Body ResetEntity resetEntity) throws IOException;
+    @POST("/auth/resetPassword") Response sendResetPasswordEmail(@Body ResetPasswordEntity resetPasswordEntity) throws IOException;
 
 
 }
