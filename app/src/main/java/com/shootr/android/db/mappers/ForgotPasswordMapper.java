@@ -14,7 +14,7 @@ public class ForgotPasswordMapper extends GenericMapper {
 
     public Map<String, Object> toDto(ForgotPasswordResultEntity forgotPasswordResultEntity) {
         Map<String, Object> dto = new HashMap<>();
-        dto.put(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getEmailEncripted());
+        dto.put(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getEmailEncrypted());
         dto.put(DatabaseContract.ForgotPassword.ID, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getIdUser());
         dto.put(DatabaseContract.ForgotPassword.USER_NAME, forgotPasswordResultEntity == null ? null : forgotPasswordResultEntity.getUserName());
         return dto;
@@ -24,7 +24,7 @@ public class ForgotPasswordMapper extends GenericMapper {
         ForgotPasswordResultEntity forgotPasswordResultEntity = new ForgotPasswordResultEntity();
         forgotPasswordResultEntity.setIdUser((String) dataItem.get(DatabaseContract.ForgotPassword.ID));
         forgotPasswordResultEntity.setUserName((String) dataItem.get(DatabaseContract.ForgotPassword.USER_NAME));
-        forgotPasswordResultEntity.setEmailEncripted((String) dataItem.get(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED));
+        forgotPasswordResultEntity.setEmailEncrypted((String) dataItem.get(DatabaseContract.ForgotPassword.EMAIL_ENCRYPTED));
         return forgotPasswordResultEntity;
     }
 }

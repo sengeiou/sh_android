@@ -15,7 +15,7 @@ public class ForgotPasswordResultEntityMapper {
     public ForgotPasswordResult transform(ForgotPasswordResultEntity forgotPasswordResultEntity) {
         ForgotPasswordResult forgotPasswordResult = new ForgotPasswordResult();
         forgotPasswordResult.setIdUser(forgotPasswordResultEntity.getIdUser());
-        forgotPasswordResult.setEmailEncripted(forgotPasswordResultEntity.getEmailEncripted());
+        forgotPasswordResult.setEmailEncripted(forgotPasswordResultEntity.getEmailEncrypted());
         forgotPasswordResult.setUserName(forgotPasswordResultEntity.getUserName());
         forgotPasswordResult.setAvatar(userAvatarUrlProvider.thumbnail(forgotPasswordResultEntity.getIdUser()));
         return forgotPasswordResult;
