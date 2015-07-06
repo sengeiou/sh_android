@@ -16,9 +16,9 @@ public class ServiceEventListDataSource implements EventListDataSource {
     }
 
     @Override
-    public List<EventEntity> getEventList(String currentUserId, String locale) {
+    public List<EventEntity> getEventList(String locale) {
         try {
-            return eventService.getEventList(currentUserId, locale);
+            return eventService.getEventList(locale);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
