@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -63,9 +62,7 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -135,9 +132,6 @@ public class DebugAppContainer implements AppContainer {
 
     //    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
 
-    @InjectView(R.id.debug_contextual_title) View contextualTitleView;
-    @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
-
     @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
     @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
     @InjectView(R.id.debug_network_debugmode) Switch debugModeView;
@@ -166,7 +160,6 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_device_density) TextView deviceDensityView;
     @InjectView(R.id.debug_device_release) TextView deviceReleaseView;
     @InjectView(R.id.debug_device_api) TextView deviceApiView;
-    @InjectView(R.id.debug_device_log) TextView deviceLogView;
     @InjectView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
     @InjectView(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
@@ -193,11 +186,6 @@ public class DebugAppContainer implements AppContainer {
 
         // Inject after inflating the drawer layout so its views are available to inject.
         ButterKnife.inject(this, activity);
-
-        // Set up the contextual actions to watch views coming in and out of the content area.
-        Set<ContextualDebugActions.DebugAction<?>> debugActions = Collections.emptySet();
-        ContextualDebugActions contextualActions = new ContextualDebugActions(this, debugActions);
-        content.setOnHierarchyChangeListener(HierarchyTreeChangeListener.wrap(contextualActions));
 
         drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -497,7 +485,7 @@ public class DebugAppContainer implements AppContainer {
         deviceApiView.setText(String.valueOf(Build.VERSION.SDK_INT));
     }
 
-    @OnClick(R.id.debug_device_log)
+    @OnClick(R.id.debug_logs_show)
     public void openLog() {
         Intent lynxActivityIntent = LynxActivity.getIntent(drawerContext);
         drawerContext.startActivity(lynxActivityIntent);
@@ -523,7 +511,9 @@ public class DebugAppContainer implements AppContainer {
                     src.close();
                     dst.close();
                 }
-                Timber.i("Database copied to " + backupDB.getAbsolutePath());
+                String copiedMessage = "Database copied to " + backupDB.getAbsolutePath();
+                Toast.makeText(drawerContext, copiedMessage, Toast.LENGTH_LONG).show();
+                Timber.i(copiedMessage);
             }
         } catch (Exception e) {
             Timber.e(e, "Error while copying database to sdcard");
