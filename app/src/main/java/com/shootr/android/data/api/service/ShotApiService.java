@@ -14,6 +14,5 @@ public interface ShotApiService {
       @Query("sinceTimestamp") Long sinceTimestamp,
       @Query("maxTimestamp") Long maxTimestamp,
       @Query("includeNice") Boolean includeNice,
-      @Query("maxNice") Integer maxNice,
-      @Query("me") String me) throws IOException;
+      @Query("maxNice") Integer maxNice) throws IOException;
 }
