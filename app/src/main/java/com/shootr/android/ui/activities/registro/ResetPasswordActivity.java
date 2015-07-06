@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
@@ -26,8 +26,8 @@ import javax.inject.Inject;
 
 public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
-    @InjectView(R.id.reset_password_request_view) View resetPasswordRequestLayout;
-    @InjectView(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
+    @Bind(R.id.reset_password_request_view) View resetPasswordRequestLayout;
+    @Bind(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
 
     @Inject PicassoWrapper picasso;
     @Inject ResetPasswordRequestPresenter resetPasswordRequestPresenter;
@@ -44,7 +44,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setupViewImplementations();
         resetPasswordRequestLayout.setVisibility(View.VISIBLE);
         resetPasswordConfirmationLayout.setVisibility(View.GONE);
@@ -52,10 +52,10 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     private void setupViewImplementations() {
         resetPasswordRequestView = new InnerResetPasswordRequestView();
-        ButterKnife.inject(resetPasswordRequestView, resetPasswordRequestLayout);
+        ButterKnife.bind(resetPasswordRequestView, resetPasswordRequestLayout);
 
         resetPasswordConfirmationView = new InnerResetPasswordConfirmationView();
-        ButterKnife.inject(resetPasswordConfirmationView, resetPasswordConfirmationLayout);
+        ButterKnife.bind(resetPasswordConfirmationView, resetPasswordConfirmationLayout);
     }
 
     @Override
@@ -117,10 +117,10 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     public class InnerResetPasswordRequestView implements ResetPasswordRequestView {
 
-        @InjectView(R.id.reset_password_username_email) EditText usernameOrEmailInput;
-        @InjectView(R.id.reset_password_next) View nextButton;
-        @InjectView(R.id.reset_password_progress) View progressView;
-        @InjectView(R.id.reset_password_error_message) TextView resetPasswordError;
+        @Bind(R.id.reset_password_username_email) EditText usernameOrEmailInput;
+        @Bind(R.id.reset_password_next) View nextButton;
+        @Bind(R.id.reset_password_progress) View progressView;
+        @Bind(R.id.reset_password_error_message) TextView resetPasswordError;
 
         @Override
         public void enableNextButton() {
@@ -171,12 +171,12 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
     public class InnerResetPasswordConfirmationView implements ResetPasswordConfirmationView {
 
-        @InjectView(R.id.reset_password_avatar) ImageView avatar;
-        @InjectView(R.id.reset_password_username) TextView usernameText;
-        @InjectView(R.id.reset_password_email_confirmation_message) TextView confirmationMessage;
-        @InjectView(R.id.reset_password_confirm) View confirmButton;
-        @InjectView(R.id.reset_password_done) View doneButton;
-        @InjectView(R.id.reset_password_progress) View progressView;
+        @Bind(R.id.reset_password_avatar) ImageView avatar;
+        @Bind(R.id.reset_password_username) TextView usernameText;
+        @Bind(R.id.reset_password_email_confirmation_message) TextView confirmationMessage;
+        @Bind(R.id.reset_password_confirm) View confirmButton;
+        @Bind(R.id.reset_password_done) View doneButton;
+        @Bind(R.id.reset_password_progress) View progressView;
 
         @Override
         public void showAvatar(String avatarUrl) {

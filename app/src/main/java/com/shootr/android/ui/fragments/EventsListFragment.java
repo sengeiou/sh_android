@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -39,10 +39,10 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     public static final int REQUEST_NEW_EVENT = 1;
 
-    @InjectView(R.id.events_list) RecyclerView eventsList;
-    @InjectView(R.id.events_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.events_empty) View emptyView;
-    @InjectView(R.id.events_loading) View loadingView;
+    @Bind(R.id.events_list) RecyclerView eventsList;
+    @Bind(R.id.events_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.events_empty) View emptyView;
+    @Bind(R.id.events_loading) View loadingView;
 
     @Inject EventsListPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -76,13 +76,13 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         presenter.setView(new NullEventListView());
     }
     //endregion
 
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this, getView());
+        ButterKnife.bind(this, getView());
         eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 

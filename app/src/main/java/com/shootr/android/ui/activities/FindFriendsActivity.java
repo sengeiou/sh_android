@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
@@ -64,8 +64,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     private SearchView searchView;
 
-    @InjectView(R.id.find_friends_search_results_list) ListView resultsListView;
-    @InjectView(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
+    @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
+    @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
     View progressViewContent;
     View progressView;
 
@@ -84,7 +84,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
             return;
         }
         setContainerContent(R.layout.activity_find_friends);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setupViews();
         setupActionBar();

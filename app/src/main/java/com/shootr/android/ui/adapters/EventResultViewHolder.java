@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.model.EventResultModel;
@@ -19,11 +19,11 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     private final OnEventClickListener onEventClickListener;
     private final PicassoWrapper picasso;
 
-    @InjectView(R.id.event_picture) ImageView picture;
-    @InjectView(R.id.event_title) TextView title;
-    @InjectView(R.id.event_author) TextView author;
-    @InjectView(R.id.event_watchers) TextView watchers;
-    @InjectView(R.id.event_notification_indicator) View notificationIndicator;
+    @Bind(R.id.event_picture) ImageView picture;
+    @Bind(R.id.event_title) TextView title;
+    @Bind(R.id.event_author) TextView author;
+    @Bind(R.id.event_watchers) TextView watchers;
+    @Bind(R.id.event_notification_indicator) View notificationIndicator;
 
     public EventResultViewHolder(View itemView,
       OnEventClickListener onEventClickListener,
@@ -31,7 +31,7 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.onEventClickListener = onEventClickListener;
         this.picasso = picasso;
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
     }
 
     public void render(EventResultModel event, boolean isCheckedIn) {

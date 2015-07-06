@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import com.shootr.android.R;
@@ -38,12 +38,12 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    @InjectView(R.id.registration_email) AutoCompleteTextView emailInput;
-    @InjectView(R.id.registration_username) EditText usernameInput;
-    @InjectView(R.id.registration_password) EditText passwordInput;
-    @InjectView(R.id.registration_create_button) View createButton;
-    @InjectView(R.id.registration_create_progress) View progress;
-    @InjectView(R.id.registration_legal_disclaimer) TextView disclaimer;
+    @Bind(R.id.registration_email) AutoCompleteTextView emailInput;
+    @Bind(R.id.registration_username) EditText usernameInput;
+    @Bind(R.id.registration_password) EditText passwordInput;
+    @Bind(R.id.registration_create_button) View createButton;
+    @Bind(R.id.registration_create_progress) View progress;
+    @Bind(R.id.registration_legal_disclaimer) TextView disclaimer;
 
     @Inject EmailRegistrationPresenter presenter;
 
@@ -57,7 +57,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setupDisclaimerLinks();
         setupSuggestedEmails();
     }

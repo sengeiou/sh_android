@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.DraftAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
@@ -25,8 +25,8 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
     @Inject DraftsPresenter presenter;
     @Inject PicassoWrapper picasso;
 
-    @InjectView(R.id.drafts_list) RecyclerView listView;
-    @InjectView(R.id.drafts_empty) View emptyView;
+    @Bind(R.id.drafts_list) RecyclerView listView;
+    @Bind(R.id.drafts_empty) View emptyView;
 
     private DraftAdapter timelineAdapter;
     private boolean showShootAll = false;
@@ -49,7 +49,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
     }
 
     private void initializeViews() {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         timelineAdapter = new DraftAdapter(picasso, this);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);

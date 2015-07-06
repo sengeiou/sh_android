@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -31,8 +31,8 @@ public class LoginSelectionActivity extends BaseActivity {
 
     private static final String[] FACEBOOK_PERMISIONS = { "public_profile", "user_friends", "email" };
 
-    @InjectView(R.id.login_progress) View loading;
-    @InjectView(R.id.login_buttons) View buttonsContainer;
+    @Bind(R.id.login_progress) View loading;
+    @Bind(R.id.login_buttons) View buttonsContainer;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
 
@@ -46,7 +46,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @Override

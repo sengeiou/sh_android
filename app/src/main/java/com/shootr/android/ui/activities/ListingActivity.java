@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
@@ -23,8 +23,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private static final String EXTRA_ID_USER = "idUser";
 
-    @InjectView(R.id.listing_list) RecyclerView listingList;
-    @InjectView(R.id.listing_loading) View loadingView;
+    @Bind(R.id.listing_list) RecyclerView listingList;
+    @Bind(R.id.listing_loading) View loadingView;
 
     @Inject ListingListPresenter presenter;
 
@@ -41,7 +41,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 

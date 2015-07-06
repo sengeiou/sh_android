@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.model.ActivityModel;
@@ -24,10 +24,10 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     private final OnAvatarClickListener onAvatarClickListener;
     private final UsernameClickListener usernameClickListener;
 
-    @InjectView(R.id.activity_avatar) public ImageView avatar;
-    @InjectView(R.id.ativity_user_name) public TextView name;
-    @InjectView(R.id.activity_timestamp) public TextView elapsedTime;
-    @InjectView(R.id.activity_text) public ClickableTextView text;
+    @Bind(R.id.activity_avatar) public ImageView avatar;
+    @Bind(R.id.ativity_user_name) public TextView name;
+    @Bind(R.id.activity_timestamp) public TextView elapsedTime;
+    @Bind(R.id.activity_text) public ClickableTextView text;
 
     public ActivityViewHolder(View view,
       PicassoWrapper picasso,
@@ -41,7 +41,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         this.onAvatarClickListener = onAvatarClickListener;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.usernameClickListener = usernameClickListener;
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     public void render(final ActivityModel activity) {

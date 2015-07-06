@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
@@ -24,9 +24,9 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     private MediaAdapter mediaAdapter;
 
-    @InjectView(R.id.event_media_recycler_view) RecyclerView mediaView;
-    @InjectView(R.id.media_empty) View emptyView;
-    @InjectView(R.id.event_media_loading) View loadingView;
+    @Bind(R.id.event_media_recycler_view) RecyclerView mediaView;
+    @Bind(R.id.media_empty) View emptyView;
+    @Bind(R.id.event_media_loading) View loadingView;
 
     @Inject EventMediaPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -36,7 +36,7 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns)));
         mediaAdapter = new MediaAdapter(this, picasso);
         mediaView.setAdapter(mediaAdapter);

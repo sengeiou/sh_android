@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
@@ -35,9 +35,9 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     private String currentSearchQuery;
     private EventsListAdapter adapter;
 
-    @InjectView(R.id.find_events_list) RecyclerView eventsList;
-    @InjectView(R.id.find_events_empty) View emptyView;
-    @InjectView(R.id.find_events_loading) View loadingView;
+    @Bind(R.id.find_events_list) RecyclerView eventsList;
+    @Bind(R.id.find_events_empty) View emptyView;
+    @Bind(R.id.find_events_loading) View loadingView;
 
     @Inject FindEventsPresenter findEventsPresenter;
     @Inject PicassoWrapper picasso;
@@ -94,7 +94,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
         initializeEventListAdapter();

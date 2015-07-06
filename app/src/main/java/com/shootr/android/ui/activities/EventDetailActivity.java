@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
@@ -53,31 +53,31 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private static final String EXTRA_EVENT_ID = "eventId";
     private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
 
-    @InjectView(R.id.scroll) ObservableScrollView scrollView;
-    @InjectView(R.id.scroll_child) View scrollChild;
-    @InjectView(R.id.event_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.scroll) ObservableScrollView scrollView;
+    @Bind(R.id.scroll_child) View scrollChild;
+    @Bind(R.id.event_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-    @InjectView(R.id.event_loading) View loadingView;
+    @Bind(R.id.event_loading) View loadingView;
 
-    @InjectView(R.id.event_photo) ImageView photo;
-    @InjectView(R.id.event_photo_edit_indicator) ImageView photoEditIndicator;
-    @InjectView(R.id.event_photo_edit_loading) ProgressBar photoLoadingIndicator;
-    @InjectView(R.id.event_photo_container) View photoContainer;
+    @Bind(R.id.event_photo) ImageView photo;
+    @Bind(R.id.event_photo_edit_indicator) ImageView photoEditIndicator;
+    @Bind(R.id.event_photo_edit_loading) ProgressBar photoLoadingIndicator;
+    @Bind(R.id.event_photo_container) View photoContainer;
 
-    @InjectView(R.id.event_title_container) View titleContainer;
-    @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
-    @InjectView(R.id.event_title) TextView titleText;
-    @InjectView(R.id.event_author) TextView authorText;
+    @Bind(R.id.event_title_container) View titleContainer;
+    @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
+    @Bind(R.id.event_title) TextView titleText;
+    @Bind(R.id.event_author) TextView authorText;
 
-    @InjectView(R.id.event_content_container) View contentContainer;
-    @InjectView(R.id.event_content_empty) View contentEmpty;
-    @InjectView(R.id.event_content_detail) View contentDetail;
+    @Bind(R.id.event_content_container) View contentContainer;
+    @Bind(R.id.event_content_empty) View contentEmpty;
+    @Bind(R.id.event_content_detail) View contentDetail;
 
-    @InjectView(R.id.event_content_detail_watchers_number) TextView watchersNumber;
-    @InjectView(R.id.event_content_detail_watchers_list) WatchersView watchersList;
+    @Bind(R.id.event_content_detail_watchers_number) TextView watchersNumber;
+    @Bind(R.id.event_content_detail_watchers_list) WatchersView watchersList;
 
-    @InjectView(R.id.event_detail_media) TextView eventMedia;
-    @InjectView(R.id.event_detail_media_number) TextView eventMediaNumber;
+    @Bind(R.id.event_detail_media) TextView eventMedia;
+    @Bind(R.id.event_detail_media_number) TextView eventMediaNumber;
 
     @Inject EventDetailPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -110,7 +110,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     private void initializeViews() {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
             @Override public void onProfile(String idUser) {

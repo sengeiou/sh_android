@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
@@ -40,15 +40,15 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private static final String EXTRA_REPLY_USERNAME = "parentUsername";
     public static final String EXTRA_PHOTO = "photo";
 
-    @InjectView(R.id.new_shot_avatar) ImageView avatar;
-    @InjectView(R.id.new_shot_title) TextView name;
-    @InjectView(R.id.new_shot_subtitle) TextView username;
-    @InjectView(R.id.new_shot_text) EditText editTextView;
-    @InjectView(R.id.new_shot_char_counter) TextView charCounter;
-    @InjectView(R.id.new_shot_send_button) ImageButton sendButton;
-    @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
-    @InjectView(R.id.new_shot_image_container) ViewGroup imageContainer;
-    @InjectView(R.id.new_shot_image) ImageView image;
+    @Bind(R.id.new_shot_avatar) ImageView avatar;
+    @Bind(R.id.new_shot_title) TextView name;
+    @Bind(R.id.new_shot_subtitle) TextView username;
+    @Bind(R.id.new_shot_text) EditText editTextView;
+    @Bind(R.id.new_shot_char_counter) TextView charCounter;
+    @Bind(R.id.new_shot_send_button) ImageButton sendButton;
+    @Bind(R.id.new_shot_send_progress) ProgressBar progress;
+    @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
+    @Bind(R.id.new_shot_image) ImageView image;
 
     @Inject PicassoWrapper picasso;
     @Inject SessionRepository sessionRepository;
@@ -66,7 +66,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         }
         // Bypass custom layout inyection, translucent activity doesn't get along with Navigation Drawers
         setContentView(R.layout.activity_new_shot);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         initializeViews();
         initializePresenterWithIntentExtras(getIntent().getExtras());

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
@@ -72,15 +72,15 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         public ShotModel shotModel;
 
-        @InjectView(R.id.shot_video_frame) View videoFrame;
-        @InjectView(R.id.shot_video_duration) TextView videoDuration;
-        @InjectView(R.id.event_media_item) ImageView mediaImage;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.event_media_item) ImageView mediaImage;
 
         private TimelineAdapter.VideoClickListener videoClickListener;
 
         public ViewHolder(View itemView, final TimelineAdapter.VideoClickListener videoClickListener) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             this.videoClickListener = videoClickListener;
         }
 

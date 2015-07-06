@@ -13,17 +13,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 
 public class DraftItemView extends FrameLayout {
 
-    @InjectView(R.id.shot_avatar) ImageView avatar;
-    @InjectView(R.id.shot_user_name) TextView name;
-    @InjectView(R.id.shot_text) ClickableTextView text;
-    @InjectView(R.id.shot_image) ImageView image;
-    @InjectView(R.id.shot_draft_buttons) View draftButtons;
-    @InjectView(R.id.shot_separator) View separator;
+    @Bind(R.id.shot_avatar) ImageView avatar;
+    @Bind(R.id.shot_user_name) TextView name;
+    @Bind(R.id.shot_text) ClickableTextView text;
+    @Bind(R.id.shot_image) ImageView image;
+    @Bind(R.id.shot_draft_buttons) View draftButtons;
+    @Bind(R.id.shot_separator) View separator;
 
     private boolean isExpanded;
     private float expandedElevation;
@@ -51,7 +51,7 @@ public class DraftItemView extends FrameLayout {
     }
 
     public void init() {
-        ButterKnife.inject(this, this);
+        ButterKnife.bind(this, this);
         expandedBackgroundColor = getResources().getColor(R.color.white);
         collapsedBackgroundColor = getResources().getColor(R.color.transparent);
 

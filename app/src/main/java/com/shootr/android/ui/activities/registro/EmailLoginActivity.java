@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.dd.CircularProgressButton;
@@ -31,10 +31,10 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     private static final int BUTTON_NORMAL = 0;
     private static final int BUTTON_LOADING = 1;
 
-    @InjectView(R.id.email_login_username_email) AutoCompleteTextView emailUsername;
-    @InjectView(R.id.email_login_password) EditText password;
-    @InjectView(R.id.email_login_button) CircularProgressButton loginButton;
-    @InjectView(R.id.email_login_forgot) TextView resetPassword;
+    @Bind(R.id.email_login_username_email) AutoCompleteTextView emailUsername;
+    @Bind(R.id.email_login_password) EditText password;
+    @Bind(R.id.email_login_button) CircularProgressButton loginButton;
+    @Bind(R.id.email_login_forgot) TextView resetPassword;
 
     @Inject EmailLoginPresenter presenter;
 
@@ -45,7 +45,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected  void initializeViews(Bundle savedInstanceState){
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setupSuggestedEmails();
     }
 

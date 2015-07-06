@@ -28,7 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -96,24 +96,24 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public static final String TAG = "profile";
 
     //region injected
-    @InjectView(R.id.profile_name) TextView nameTextView;
-    @InjectView(R.id.profile_bio) TextView bioTextView;
-    @InjectView(R.id.profile_website) TextView websiteTextView;
-    @InjectView(R.id.profile_avatar) ImageView avatarImageView;
+    @Bind(R.id.profile_name) TextView nameTextView;
+    @Bind(R.id.profile_bio) TextView bioTextView;
+    @Bind(R.id.profile_website) TextView websiteTextView;
+    @Bind(R.id.profile_avatar) ImageView avatarImageView;
 
-    @InjectView(R.id.profile_listing_container) View listingContainerView;
-    @InjectView(R.id.profile_listing) TextView listingText;
-    @InjectView(R.id.profile_listing_number) TextView listingNumber;
+    @Bind(R.id.profile_listing_container) View listingContainerView;
+    @Bind(R.id.profile_listing) TextView listingText;
+    @Bind(R.id.profile_listing_number) TextView listingNumber;
 
-    @InjectView(R.id.profile_marks_followers) TextView followersTextView;
-    @InjectView(R.id.profile_marks_following) TextView followingTextView;
+    @Bind(R.id.profile_marks_followers) TextView followersTextView;
+    @Bind(R.id.profile_marks_following) TextView followingTextView;
 
-    @InjectView(R.id.profile_follow_button) FollowButton followButton;
+    @Bind(R.id.profile_follow_button) FollowButton followButton;
 
-    @InjectView(R.id.profile_shots_empty) View shotsListEmpty;
-    @InjectView(R.id.profile_shots_list) ViewGroup shotsList;
+    @Bind(R.id.profile_shots_empty) View shotsListEmpty;
+    @Bind(R.id.profile_shots_list) ViewGroup shotsList;
 
-    @InjectView(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
+    @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
@@ -264,7 +264,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     @Override

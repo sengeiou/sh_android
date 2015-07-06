@@ -21,7 +21,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
@@ -81,13 +81,13 @@ public class EventTimelineFragment extends BaseFragment
 
     @Inject AndroidTimeUtils timeUtils;
 
-    @InjectView(R.id.timeline_shot_list) ListView listView;
-    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.timeline_shot_list) ListView listView;
+    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-    @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.shot_bar_drafts) View draftsButton;
+    @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.shot_bar_drafts) View draftsButton;
 
-    @InjectView(R.id.timeline_checkin) FloatingActionButton checkinButton;
+    @Bind(R.id.timeline_checkin) FloatingActionButton checkinButton;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -124,7 +124,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_event, container, false);
-        ButterKnife.inject(this, fragmentView);
+        ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
@@ -135,7 +135,7 @@ public class EventTimelineFragment extends BaseFragment
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         eventTimelinePresenter.setView(new NullEventTimelineView());
         checkinPresenter.setView(new NullCheckinView());
         newShotBarPresenter.setView(new NullNewShotBarView());

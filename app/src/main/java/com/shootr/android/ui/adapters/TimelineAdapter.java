@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -246,17 +246,17 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.shot_avatar) public ImageView avatar;
-        @InjectView(R.id.shot_user_name) public TextView name;
-        @InjectView(R.id.shot_timestamp) public TextView timestamp;
-        @InjectView(R.id.shot_text) public ClickableTextView text;
-        @InjectView(R.id.shot_image) public ImageView image;
-        @InjectView(R.id.shot_video_frame) public View videoFrame;
-        @InjectView(R.id.shot_video_duration) public TextView videoDuration;
+        @Bind(R.id.shot_avatar) public ImageView avatar;
+        @Bind(R.id.shot_user_name) public TextView name;
+        @Bind(R.id.shot_timestamp) public TextView timestamp;
+        @Bind(R.id.shot_text) public ClickableTextView text;
+        @Bind(R.id.shot_image) public ImageView image;
+        @Bind(R.id.shot_video_frame) public View videoFrame;
+        @Bind(R.id.shot_video_duration) public TextView videoDuration;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
 
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);

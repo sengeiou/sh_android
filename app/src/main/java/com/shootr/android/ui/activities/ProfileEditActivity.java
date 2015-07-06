@@ -16,7 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -32,11 +32,11 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Inject ProfileEditPresenter presenter;
 
-    @InjectView(R.id.scroll) ScrollView scroll;
-    @InjectView(R.id.profile_edit_name) TextView name;
-    @InjectView(R.id.profile_edit_username) TextView username;
-    @InjectView(R.id.profile_edit_website) TextView website;
-    @InjectView(R.id.profile_edit_bio) TextView bio;
+    @Bind(R.id.scroll) ScrollView scroll;
+    @Bind(R.id.profile_edit_name) TextView name;
+    @Bind(R.id.profile_edit_username) TextView username;
+    @Bind(R.id.profile_edit_website) TextView website;
+    @Bind(R.id.profile_edit_bio) TextView bio;
     private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         }
         setContainerContent(R.layout.activity_profile_edit);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         scrollViewFocusHack();
         limitBioFilters();
