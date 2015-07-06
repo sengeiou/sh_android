@@ -7,6 +7,7 @@ import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
+import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.domain.repository.PhotoService;
@@ -60,6 +61,10 @@ public final class ApiModule {
     @Provides
     AuthApiService provideAuthApiService(RestAdapter restAdapter) {
         return restAdapter.create(AuthApiService.class);
+    }
+
+    @Provides ResetPasswordApiService provideResetPasswordApiService(RestAdapter restAdapter) {
+        return restAdapter.create(ResetPasswordApiService.class);
     }
 
     @Provides
