@@ -1,7 +1,6 @@
 package com.shootr.android.data;
 
-import com.shootr.android.data.bus.VersionOutdatedError;
-import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.util.VersionUpdater;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
@@ -10,16 +9,16 @@ import javax.inject.Inject;
 public class VersionOutdatedErrorInterceptor implements Interceptor {
 
     public static final int CODE_OUTDATED_VERSION = 412;
-    private final BusPublisher busPublisher;
+    private final VersionUpdater versionUpdater;
 
-    @Inject public VersionOutdatedErrorInterceptor(BusPublisher busPublisher) {
-        this.busPublisher = busPublisher;
+    @Inject public VersionOutdatedErrorInterceptor(VersionUpdater versionUpdater) {
+        this.versionUpdater = versionUpdater;
     }
 
     @Override public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
         if (response.code() == CODE_OUTDATED_VERSION) {
-            busPublisher.post(new VersionOutdatedError.Event());
+            versionUpdater.notifyUpdateRequired();
         }
         return response;
     }

@@ -1,7 +1,7 @@
 package com.shootr.android.util;
 
 import android.app.Application;
-import com.shootr.android.data.bus.UpdateWarning;
+import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.prefs.LastVersionNotCompatible;
 import com.shootr.android.data.prefs.LongPreference;
 import com.shootr.android.domain.bus.BusPublisher;
@@ -30,6 +30,6 @@ public class VersionUpdater {
 
     public void notifyUpdateRequired() {
         notCompatibleVersion.set(currentVersion);
-        busPublisher.post(new UpdateWarning.Event());
+        busPublisher.post(new VersionOutdatedError.Event());
     }
 }
