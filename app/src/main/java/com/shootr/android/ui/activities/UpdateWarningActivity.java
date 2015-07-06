@@ -17,7 +17,9 @@ public class UpdateWarningActivity extends BaseNoToolbarActivity {
     @InjectView(R.id.update_warning_button) TextView updateButton;
 
     public static Intent newIntent(@NonNull Context context) {
-        return new Intent(context, UpdateWarningActivity.class);
+        Intent intent = new Intent(context, UpdateWarningActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
     }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
