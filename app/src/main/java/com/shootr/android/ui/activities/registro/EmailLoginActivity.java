@@ -31,8 +31,8 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     private static final int BUTTON_NORMAL = 0;
     private static final int BUTTON_LOADING = 1;
 
-    @InjectView(R.id.email_login_username_email) AutoCompleteTextView emailUsername;
-    @InjectView(R.id.email_login_password) EditText password;
+    @InjectView(R.id.email_login_username_email) public AutoCompleteTextView emailUsername;
+    @InjectView(R.id.email_login_password) public EditText password;
     @InjectView(R.id.email_login_button) CircularProgressButton loginButton;
     @InjectView(R.id.email_login_forgot) TextView resetPassword;
 

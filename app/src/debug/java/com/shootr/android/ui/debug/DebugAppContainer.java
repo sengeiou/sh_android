@@ -53,6 +53,7 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.android.ui.debug.debugactions.LoginDebugAction;
 import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
@@ -236,6 +237,11 @@ public class DebugAppContainer implements AppContainer {
 
     private Collection<ContextualDebugActions.DebugAction<? extends Activity>> debugActions() {
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
+        debugActions.add(new LoginDebugAction("rafa", "123456"));
+        debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
+        debugActions.add(new LoginDebugAction("heisenberg", "123456"));
+        debugActions.add(new LoginDebugAction("ensaladilla", "123456"));
+        debugActions.add(new LoginDebugAction("fakeuser", "fakepassword"));
         return debugActions;
     }
 
