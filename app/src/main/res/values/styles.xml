@@ -9,6 +9,7 @@
         <item name="colorAccent">@color/accent</item>
 
         <item name="colorButtonNormal">?colorPrimary</item>
+        <item name="android:textAppearanceButton">@style/ButtonText</item>
 
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:textColorLink">@color/links</item>
@@ -100,6 +101,10 @@
         <item name="android:textColorPrimary">@color/toolbar_closable</item>
         <item name="colorControlNormal">@color/toolbar_closable</item>
         <item name="colorControlHighlight">#3000</item>
+    </style>
+
+    <style name="ButtonText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="MySearchViewStyle" parent="Widget.AppCompat.Light.SearchView">
