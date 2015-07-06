@@ -67,6 +67,7 @@ import com.shootr.android.util.ResourcesEventDateTimeTextProvider;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
+import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -201,6 +202,7 @@ public class DataModule {
         client.interceptors().add(serverDownErrorInterceptor);
         client.interceptors().add(unauthorizedErrorInterceptor);
         client.interceptors().add(versionOutdatedErrorInterceptor);
+        client.interceptors().add(ResponseFaker.interceptor());
 
         return client;
     }

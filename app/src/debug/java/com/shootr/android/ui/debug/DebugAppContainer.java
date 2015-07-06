@@ -40,6 +40,10 @@ import com.shootr.android.data.NetworkEnabled;
 import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
+import com.shootr.android.data.ServerDownErrorInterceptor;
+import com.shootr.android.data.UnauthorizedErrorInterceptor;
+import com.shootr.android.data.VersionOutdatedErrorInterceptor;
+import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.NotificationsEnabled;
@@ -48,6 +52,8 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
+import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -366,6 +372,21 @@ public class DebugAppContainer implements AppContainer {
         //    Timber.d("Prompting to edit custom endpoint URL.");
         // Pass in the currently selected position since we are merely editing.
         showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
+    }
+
+    @OnClick(R.id.debug_fake_version)
+    public void onFakeVersionOutdatedRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(VersionOutdatedErrorInterceptor.CODE_OUTDATED_VERSION));
+    }
+
+    @OnClick(R.id.debug_fake_server_down)
+    public void onFakeServerDownRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(ServerDownErrorInterceptor.CODE_SERVER_DOWN));
+    }
+
+    @OnClick(R.id.debug_fake_unauthorized)
+    public void onFakeUnauthorizedRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(UnauthorizedErrorInterceptor.CODE_UNAUTHORIZED));
     }
 
     private void setupNotificationsSection() {

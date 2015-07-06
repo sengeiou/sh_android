@@ -1,6 +1,12 @@
 package com.shootr.okresponsefaker;
 
-public abstract class EmptyBodyFakeResponse implements FakeResponse {
+public class EmptyBodyFakeResponse implements FakeResponse {
+
+    private final int httpCode;
+
+    public EmptyBodyFakeResponse(int httpCode) {
+        this.httpCode = httpCode;
+    }
 
     @Override
     public String body() {
@@ -10,5 +16,10 @@ public abstract class EmptyBodyFakeResponse implements FakeResponse {
     @Override
     public String mediaType() {
         return "text/plain";
+    }
+
+    @Override
+    public int httpCode() {
+        return httpCode;
     }
 }
