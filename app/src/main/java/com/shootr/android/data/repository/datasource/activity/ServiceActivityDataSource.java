@@ -43,7 +43,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
 
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters) {
         try {
-            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getCurrentUserId(), parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
+            List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
             storeEmbedEvents(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (IOException e) {
