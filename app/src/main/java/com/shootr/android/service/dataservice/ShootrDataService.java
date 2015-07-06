@@ -1,11 +1,9 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
@@ -22,7 +20,6 @@ import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.RetrofitErrorHandler;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
@@ -512,28 +509,6 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return shotsByUserInEvent;
-    }
-
-
-    @Override public ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException {
-        GenericDto requestDto = userDtoFactory.getForgotPasswordResultByUsernameOrEmail(usernameOrEmail);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            Map<String, Object>[] data = ops[0].getData();
-            if (data.length > 0) {
-                Map<String, Object> dataItem = data[0];
-                return forgotPasswordMapper.fromDto(dataItem);
-            }
-        }
-        return null;
-    }
-
-    @Override public void sendResetPasswordEmail(String idUser) throws IOException {
-        GenericDto sendResetPasswordEmailDto = userDtoFactory.sendResetPasswordEmail(idUser);
-        postRequest(sendResetPasswordEmailDto);
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {
