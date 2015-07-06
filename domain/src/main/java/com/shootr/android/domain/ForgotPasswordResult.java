@@ -5,7 +5,7 @@ public class ForgotPasswordResult {
     private String idUser;
     private String userName;
     private String emailEncripted;
-    private String avatar;
+    private String photo;
 
     public ForgotPasswordResult() {
 
@@ -35,12 +35,12 @@ public class ForgotPasswordResult {
         this.emailEncripted = emailEncripted;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     @Override public boolean equals(Object o) {
@@ -54,14 +54,14 @@ public class ForgotPasswordResult {
         if (emailEncripted != null ? !emailEncripted.equals(that.emailEncripted) : that.emailEncripted != null) {
             return false;
         }
-        return !(avatar != null ? !avatar.equals(that.avatar) : that.avatar != null);
+        return !(photo != null ? !photo.equals(that.photo) : that.photo != null);
     }
 
     @Override public int hashCode() {
         int result = idUser != null ? idUser.hashCode() : 0;
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (emailEncripted != null ? emailEncripted.hashCode() : 0);
-        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
+        result = 31 * result + (photo != null ? photo.hashCode() : 0);
         return result;
     }
 
@@ -71,7 +71,7 @@ public class ForgotPasswordResult {
           "idUser='" + idUser + '\'' +
           ", userName='" + userName + '\'' +
           ", emailEncripted='" + emailEncripted + '\'' +
-          ", avatar='" + avatar + '\'' +
+          ", photo='" + photo + '\'' +
           '}';
     }
 }
