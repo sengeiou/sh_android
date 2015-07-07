@@ -129,6 +129,14 @@
       android:layout_gravity="start|end"
       android:text="Fake requests" />
 
+    <TextView style="@style/Widget.U2020.DebugDrawer.RowTitle"
+      android:layout_gravity="start|center_vertical"
+      android:text="Fire and forget" />
+
+    <Switch android:id="@+id/debug_fake_only_once"
+      style="@style/Widget.U2020.DebugDrawer.RowWidget"
+      android:layout_gravity="start|center_vertical" />
+
     <Button android:id="@+id/debug_fake_version"
       android:layout_width="0dp"
       android:layout_height="wrap_content"

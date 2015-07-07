@@ -41,4 +41,8 @@ public class FakeResponseInterceptor implements Interceptor {
     public void setTriggerOnce(boolean triggerOnce) {
         this.triggerOnce = triggerOnce;
     }
+
+    public boolean isTriggerOnce() {
+        return triggerOnce;
+    }
 }

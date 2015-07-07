@@ -147,6 +147,8 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_network_error) Spinner networkErrorView;
     @InjectView(R.id.debug_network_proxy) Spinner networkProxyView;
 
+    @InjectView(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
+
     @InjectView(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
     @InjectView(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
@@ -202,6 +204,7 @@ public class DebugAppContainer implements AppContainer {
         });
 
         setupNetworkSection();
+        setupFakeRequestsSection();
         setupNotificationsSection();
         setupUserInterfaceSection();
         setupBuildSection();
@@ -372,6 +375,17 @@ public class DebugAppContainer implements AppContainer {
         //    Timber.d("Prompting to edit custom endpoint URL.");
         // Pass in the currently selected position since we are merely editing.
         showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
+    }
+
+    private void setupFakeRequestsSection() {
+        fakeRequestOnlyOnce.setChecked(ResponseFaker.isTriggerOnce());
+        fakeRequestOnlyOnce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ResponseFaker.setTriggerOnce(isChecked);
+                ResponseFaker.clearNextFakeResponse();
+            }
+        });
     }
 
     @OnClick(R.id.debug_fake_version)

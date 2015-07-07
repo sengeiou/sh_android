@@ -20,6 +20,10 @@ public class ResponseFaker {
         interceptor().setTriggerOnce(triggerOnce);
     }
 
+    public static boolean isTriggerOnce() {
+        return interceptor().isTriggerOnce();
+    }
+
     private ResponseFaker() {
         /* no-op */
     }
