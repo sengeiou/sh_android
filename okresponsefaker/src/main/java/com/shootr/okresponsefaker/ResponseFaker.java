@@ -2,9 +2,6 @@ package com.shootr.okresponsefaker;
 
 public class ResponseFaker {
 
-    private ResponseFaker() {
-    }
-
     private static FakeResponseInterceptor interceptorInstance = new FakeResponseInterceptor();
 
     public static FakeResponseInterceptor interceptor() {
@@ -21,5 +18,9 @@ public class ResponseFaker {
 
     public static void setTriggerOnce(boolean triggerOnce) {
         interceptor().setTriggerOnce(triggerOnce);
+    }
+
+    private ResponseFaker() {
+        /* no-op */
     }
 }
