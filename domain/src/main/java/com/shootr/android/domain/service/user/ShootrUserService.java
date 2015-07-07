@@ -5,6 +5,7 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
@@ -80,13 +81,9 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public void performLogin(String usernameOrEmail, String password) {
-        try {
-            LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
-            retrievePostLoginInformation(loginResult);
-        } catch (IOException e) {
-            throw new LoginException(e);
-        }
+    public void performLogin(String usernameOrEmail, String password) throws InvalidLoginException {
+        LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
+        retrievePostLoginInformation(loginResult);
     }
 
     public void performFacebookLogin(String facebookToken) {
