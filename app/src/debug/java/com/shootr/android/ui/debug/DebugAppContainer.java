@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.android.ui.debug.debugactions.LoginDebugAction;
 import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
@@ -68,7 +70,10 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -107,6 +112,7 @@ public class DebugAppContainer implements AppContainer {
 
     Activity activity;
     Context drawerContext;
+    ContextualDebugActions contextualDebugActions;
 
     @Inject
     public DebugAppContainer(OkHttpClient client, Picasso picasso, @ApiEndpoint StringPreference networkEndpoint,
@@ -137,6 +143,9 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_content) ViewGroup content;
 
     //    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
+
+    @InjectView(R.id.debug_contextual_title) View contextualTitleView;
+    @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
 
     @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
     @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
@@ -203,6 +212,7 @@ public class DebugAppContainer implements AppContainer {
             }
         });
 
+        setupContextualActions(activity);
         setupNetworkSection();
         setupFakeRequestsSection();
         setupNotificationsSection();
@@ -213,6 +223,28 @@ public class DebugAppContainer implements AppContainer {
 
         return content;
     }
+
+    private void setupContextualActions(Activity activity) {
+        contextualDebugActions = new ContextualDebugActions(this, debugActions());
+        contextualDebugActions.setActionClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawers();
+            }
+        });
+        contextualDebugActions.bindActions(activity);
+    }
+
+    private Collection<ContextualDebugActions.DebugAction<? extends Activity>> debugActions() {
+        List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
+        debugActions.add(new LoginDebugAction("rafa", "123456"));
+        debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
+        debugActions.add(new LoginDebugAction("heisenberg", "123456"));
+        debugActions.add(new LoginDebugAction("ensaladilla", "123456"));
+        debugActions.add(new LoginDebugAction("fakeuser", "fakepassword"));
+        return debugActions;
+    }
+
 
     private void setupNetworkSection() {
         //region Endpoint
@@ -726,5 +758,9 @@ public class DebugAppContainer implements AppContainer {
         newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ShootrApplication.get(app).buildObjectGraphAndInject();
+    }
+
+    public Context getContext() {
+        return drawerContext;
     }
 }
