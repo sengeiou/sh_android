@@ -44,15 +44,9 @@ public class UserDtoFactory {
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
-    private static final String ALIAS_FORGOT_PASSWORD = "FORGOT_PASSWORD";
     private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
-    private static final String ALIAS_PASSWORD_RESET_EMAIL = "SEND_PASSWORD_RESET_EMAIL";
-    private static final String ALIAS_USER_SIGN_IN = "USERSIGNIN";
-    private static final String USER_SIGN_IN = "UserSignInMongo";
-    public static final String RESET_PASSWORD_ID_USER = "idUser";
-    public static final String RESET_PASSWORD_TABLE_NAME = "ResetPasswordMongo";
     public static final String CHECK_IN_ID_USER = "idUser";
     public static final String CHECK_IN_ID_EVENT_CHECKED = "idEvent";
 
@@ -266,46 +260,6 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
-    }
-
-    public GenericDto getForgotPasswordResultByUsernameOrEmail(String usernameOrEmail) {
-        Map<String, Object> key = new HashMap<>();
-        key.put(DatabaseContract.ForgotPassword.USERNAME_OR_EMAIL,usernameOrEmail);
-
-        MetadataDto metadata = new MetadataDto.Builder() //
-          .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(DatabaseContract.ForgotPassword.TABLE) //
-          .includeDeleted(false) //
-          .setKeys(key)
-          .build();
-
-        OperationDto operation = new OperationDto.Builder() //
-          .metadata(metadata) //
-          .putData(forgotPasswordMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FORGOT_PASSWORD, operation);
-    }
-
-    public GenericDto sendResetPasswordEmail(String idUser) {
-        Map<String, Object> key = new HashMap<>();
-        key.put(RESET_PASSWORD_ID_USER,idUser);
-
-        MetadataDto metadata = new MetadataDto.Builder() //
-          .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(RESET_PASSWORD_TABLE_NAME) //
-          .includeDeleted(false) //
-          .setKeys(key)
-          .build();
-
-        Map<String, Object> dto = new HashMap<>();
-
-        OperationDto operation = new OperationDto.Builder() //
-          .metadata(metadata) //
-          .putData(dto) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_PASSWORD_RESET_EMAIL, operation);
     }
 
     public GenericDto getLogoutOperationDto(String idUser, String idDevice) {
