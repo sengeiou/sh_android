@@ -14,6 +14,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.notifications.checkin.CheckinNotificationManager;
+import com.shootr.android.notifications.checkin.StartedShootingNotificationManager;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
 import com.shootr.android.service.ShootrService;
@@ -38,6 +39,7 @@ public class GCMIntentService extends IntentService {
 
     @Inject FollowNotificationManager followNotificationManager;
     @Inject CheckinNotificationManager checkinNotificationManager;
+    @Inject StartedShootingNotificationManager startedShootingNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject @Local UserRepository localUserRepository;
@@ -111,6 +113,8 @@ public class GCMIntentService extends IntentService {
         Activity activity = remoteActivityRepository.getActivity(idActivity);
         if (ActivityType.CHECKIN.equals(activity.getType())) {
             checkinNotificationManager.sendNewCheckinNotification(activityModelMapper.transform(activity));
+        } else if (ActivityType.STARTED_SHOOTING.equals(activity.getType())) {
+            startedShootingNotificationManager.sendNewStartedShootingNotification(activityModelMapper.transform(activity));
         } else {
             Timber.w("Received unknown activity type: %s", activity.getType());
         }
