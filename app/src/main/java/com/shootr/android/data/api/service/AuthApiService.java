@@ -3,6 +3,7 @@ package com.shootr.android.data.api.service;
 import com.shootr.android.data.api.entity.CreateAccountApiEntity;
 import com.shootr.android.data.api.entity.FacebookLoginApiEntity;
 import com.shootr.android.data.api.entity.LoginApiEntity;
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import retrofit.http.Body;
@@ -14,7 +15,7 @@ public interface AuthApiService {
     UserEntity authenticate(@Body LoginApiEntity loginApiEntity) throws IOException;
 
     @POST("/auth/register")
-    UserEntity createAccount(@Body CreateAccountApiEntity createAccountApiEntity) throws IOException;
+    UserEntity createAccount(@Body CreateAccountApiEntity createAccountApiEntity) throws ApiException, IOException;
 
     @POST("/auth/socialAuthenticate/facebook")
     UserEntity authenticateWithFacebook(@Body FacebookLoginApiEntity facebookLoginApiEntity);

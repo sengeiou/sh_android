@@ -3,8 +3,10 @@ package com.shootr.android.domain.service.user;
 import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
@@ -72,13 +74,10 @@ public class ShootrUserService {
         return false;
     }
 
-    public void createAccount(String username, String email, String password) {
-        try {
-            LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
-            retrievePostLoginInformation(loginResult);
-        } catch (IOException e) {
-            throw new AccountCreationException(e);
-        }
+    public void createAccount(String username, String email, String password)
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password);
+        retrievePostLoginInformation(loginResult);
     }
 
     public void performLogin(String usernameOrEmail, String password) {

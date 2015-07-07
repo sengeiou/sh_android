@@ -1,9 +1,11 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.exception.DomainValidationException;
+import com.shootr.android.domain.exception.EmailAlreadyExistsException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrServerException;
+import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -47,10 +49,21 @@ public class CreateAccountInteractor implements Interactor {
             try {
                 shootrUserService.createAccount(username, email, password);
                 notifyLoaded();
-            } catch (ShootrException shootrException) {
-                handleServerError(shootrException);
+            } catch (EmailAlreadyExistsException e) {
+                handleServerError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE, CreateUserValidator.FIELD_EMAIL);
+            } catch (UsernameAlreadyExistsException e) {
+                handleServerError(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE,
+                  CreateUserValidator.FIELD_USERNAME);
+            } catch (ServerCommunicationException communicationError) {
+                notifyError(communicationError);
             }
         }
+    }
+
+    protected void handleServerError(String errorCode, int field) {
+        FieldValidationError fieldValidationError =
+          new FieldValidationError(errorCode, field);
+        notifyError(new DomainValidationException(fieldValidationError));
     }
 
     private boolean validateInput() {
@@ -77,49 +90,5 @@ public class CreateAccountInteractor implements Interactor {
                 errorCallback.onError(error);
             }
         });
-    }
-
-    private void handleServerError(ShootrException e) {
-        if (e.getCause() instanceof ShootrServerException) {
-            ShootrServerException serverException = (ShootrServerException) e.getCause();
-            String errorCode = serverException.getShootrError().getErrorCode();
-            FieldValidationError validationError = validationErrorFromCode(errorCode);
-            if (validationError != null) {
-                notifyError(new DomainValidationException(validationError));
-                return;
-            }
-        }
-        notifyError(e);
-    }
-
-    private FieldValidationError validationErrorFromCode(String errorCode) {
-        int field = fieldFromErrorCode(errorCode);
-        if (field != 0) {
-            return new FieldValidationError(errorCode, field);
-        } else {
-            return null;
-        }
-    }
-
-    private int fieldFromErrorCode(String errorCode) {
-        switch (errorCode) {
-            case ShootrError.ERROR_CODE_REGISTRATION_EMAIL_IN_USE:
-            case ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT:
-            case ShootrError.ERROR_CODE_REGISTRATION_EMAIL_NULL:
-                return CreateUserValidator.FIELD_EMAIL;
-            case ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE:
-            case ShootrError.ERROR_CODE_REGISTRATION_USERNAME_INVALID_CHARACTERS:
-            case ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL:
-            case ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_LONG:
-            case ShootrError.ERROR_CODE_REGISTRATION_USERNAME_TOO_SHORT:
-                return CreateUserValidator.FIELD_USERNAME;
-            case ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME:
-            case ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS:
-            case ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_NULL:
-            case ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG:
-            case ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT:
-                return CreateUserValidator.FIELD_PASSWORD;
-        }
-        return 0;
     }
 }
