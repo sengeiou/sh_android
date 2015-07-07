@@ -128,7 +128,6 @@ public abstract class BaseActivity extends ActionBarActivity {
                 openUpdateWarningPage();
             }
         };
-        versionUpdater.checkVersionCompatible();
     }
 
     private void setupUnauthorizedRedirection() {
