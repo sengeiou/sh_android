@@ -12,7 +12,9 @@ import com.shootr.android.ui.base.BaseActivity;
 public class WhaleActivity extends BaseActivity {
 
     public static Intent newIntent(@NonNull Context context) {
-        return new Intent(context, WhaleActivity.class);
+        Intent intent = new Intent(context, WhaleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
     }
 
     @Override
@@ -30,9 +32,12 @@ public class WhaleActivity extends BaseActivity {
         /* no-op */
     }
 
-    @OnClick(R.id.whale_retry)
+    @OnClick(R.id.whale_ok)
     public void onRetryClick() {
-        finish();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override
