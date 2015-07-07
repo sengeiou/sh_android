@@ -62,7 +62,6 @@ public class ShootrTimelineService {
         Long activityRefreshDateSince = timelineSynchronizationRepository.getActivityTimelineRefreshDate();
 
         ActivityTimelineParameters activityTimelineParameters = ActivityTimelineParameters.builder() //
-          .currentUser(sessionRepository.getCurrentUserId()) //
           .since(activityRefreshDateSince) //
           .build();
 
@@ -97,7 +96,6 @@ public class ShootrTimelineService {
         Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(event.getId());
 
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
-          .currentUser(sessionRepository.getCurrentUserId()) //
           .forEvent(event) //
           .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //
