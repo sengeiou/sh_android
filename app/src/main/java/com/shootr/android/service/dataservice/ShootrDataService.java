@@ -9,10 +9,8 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -65,12 +63,10 @@ public class ShootrDataService implements ShootrService {
     private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
-    private final ForgotPasswordMapper forgotPasswordMapper;
 
     private final TimeUtils timeUtils;
 
     private final VersionUpdater versionUpdater;
-    private final BusPublisher busPublisher;
 
     @Inject
     public ShootrDataService(OkHttpClient client,
@@ -86,10 +82,8 @@ public class ShootrDataService implements ShootrService {
       EventDtoFactory eventDtoFactory,
       DeviceMapper deviceMapper,
       EventEntityMapper eventEntityMapper,
-      ForgotPasswordMapper forgotPasswordMapper,
       TimeUtils timeUtils,
-      VersionUpdater versionUpdater,
-      BusPublisher busPublisher) {
+      VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -103,10 +97,8 @@ public class ShootrDataService implements ShootrService {
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
         this.eventEntityMapper = eventEntityMapper;
-        this.forgotPasswordMapper = forgotPasswordMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
-        this.busPublisher = busPublisher;
     }
 
     @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {

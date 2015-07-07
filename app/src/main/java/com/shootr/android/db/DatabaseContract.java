@@ -225,24 +225,6 @@ public class DatabaseContract {
         };
     }
 
-    public static final class ForgotPassword implements SyncColumns {
-
-        private ForgotPassword() {
-
-        }
-
-        public static final String TABLE = "ForgotPasswordMongo";
-
-        public static final String ID = "idUser";
-        public static final String USER_NAME = "userName";
-        public static final String EMAIL_ENCRYPTED = "emailEncrypted";
-        public static final String USERNAME_OR_EMAIL = "userNameOrEmail";
-
-        public static final String[] PROJECTION = {
-          ID, USER_NAME, EMAIL_ENCRYPTED, USERNAME_OR_EMAIL
-        };
-    }
-
     public static final class FavoriteTable implements SyncColumns {
 
         private FavoriteTable() {

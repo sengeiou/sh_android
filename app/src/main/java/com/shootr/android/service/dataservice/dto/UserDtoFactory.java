@@ -9,7 +9,6 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -53,14 +52,11 @@ public class UserDtoFactory {
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
     FollowMapper followMapper;
-    ForgotPasswordMapper forgotPasswordMapper;
 
-    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper,
-      ForgotPasswordMapper forgotPasswordMapper) {
+    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
-        this.forgotPasswordMapper = forgotPasswordMapper;
     }
 
     public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
