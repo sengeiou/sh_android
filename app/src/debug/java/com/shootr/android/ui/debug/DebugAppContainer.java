@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -41,6 +40,10 @@ import com.shootr.android.data.NetworkEnabled;
 import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
+import com.shootr.android.data.ServerDownErrorInterceptor;
+import com.shootr.android.data.UnauthorizedErrorInterceptor;
+import com.shootr.android.data.VersionOutdatedErrorInterceptor;
+import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.NotificationsEnabled;
@@ -49,6 +52,8 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
+import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -63,9 +68,7 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -135,9 +138,6 @@ public class DebugAppContainer implements AppContainer {
 
     //    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
 
-    @InjectView(R.id.debug_contextual_title) View contextualTitleView;
-    @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
-
     @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
     @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
     @InjectView(R.id.debug_network_debugmode) Switch debugModeView;
@@ -146,6 +146,8 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_network_variance) Spinner networkVarianceView;
     @InjectView(R.id.debug_network_error) Spinner networkErrorView;
     @InjectView(R.id.debug_network_proxy) Spinner networkProxyView;
+
+    @InjectView(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
 
     @InjectView(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
@@ -166,7 +168,6 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_device_density) TextView deviceDensityView;
     @InjectView(R.id.debug_device_release) TextView deviceReleaseView;
     @InjectView(R.id.debug_device_api) TextView deviceApiView;
-    @InjectView(R.id.debug_device_log) TextView deviceLogView;
     @InjectView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
     @InjectView(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
@@ -194,11 +195,6 @@ public class DebugAppContainer implements AppContainer {
         // Inject after inflating the drawer layout so its views are available to inject.
         ButterKnife.inject(this, activity);
 
-        // Set up the contextual actions to watch views coming in and out of the content area.
-        Set<ContextualDebugActions.DebugAction<?>> debugActions = Collections.emptySet();
-        ContextualDebugActions contextualActions = new ContextualDebugActions(this, debugActions);
-        content.setOnHierarchyChangeListener(HierarchyTreeChangeListener.wrap(contextualActions));
-
         drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
@@ -208,6 +204,7 @@ public class DebugAppContainer implements AppContainer {
         });
 
         setupNetworkSection();
+        setupFakeRequestsSection();
         setupNotificationsSection();
         setupUserInterfaceSection();
         setupBuildSection();
@@ -380,6 +377,32 @@ public class DebugAppContainer implements AppContainer {
         showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
     }
 
+    private void setupFakeRequestsSection() {
+        fakeRequestOnlyOnce.setChecked(ResponseFaker.isTriggerOnce());
+        fakeRequestOnlyOnce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ResponseFaker.setTriggerOnce(isChecked);
+                ResponseFaker.clearNextFakeResponse();
+            }
+        });
+    }
+
+    @OnClick(R.id.debug_fake_version)
+    public void onFakeVersionOutdatedRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(VersionOutdatedErrorInterceptor.CODE_OUTDATED_VERSION));
+    }
+
+    @OnClick(R.id.debug_fake_server_down)
+    public void onFakeServerDownRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(ServerDownErrorInterceptor.CODE_SERVER_DOWN));
+    }
+
+    @OnClick(R.id.debug_fake_unauthorized)
+    public void onFakeUnauthorizedRequest() {
+        ResponseFaker.setNextFakeResponse(new EmptyBodyFakeResponse(UnauthorizedErrorInterceptor.CODE_UNAUTHORIZED));
+    }
+
     private void setupNotificationsSection() {
         boolean showNotifications = notificationsEnabled.get();
         notificationsEnabledView.setChecked(showNotifications);
@@ -497,7 +520,7 @@ public class DebugAppContainer implements AppContainer {
         deviceApiView.setText(String.valueOf(Build.VERSION.SDK_INT));
     }
 
-    @OnClick(R.id.debug_device_log)
+    @OnClick(R.id.debug_logs_show)
     public void openLog() {
         Intent lynxActivityIntent = LynxActivity.getIntent(drawerContext);
         drawerContext.startActivity(lynxActivityIntent);
@@ -523,7 +546,9 @@ public class DebugAppContainer implements AppContainer {
                     src.close();
                     dst.close();
                 }
-                Timber.i("Database copied to " + backupDB.getAbsolutePath());
+                String copiedMessage = "Database copied to " + backupDB.getAbsolutePath();
+                Toast.makeText(drawerContext, copiedMessage, Toast.LENGTH_LONG).show();
+                Timber.i(copiedMessage);
             }
         } catch (Exception e) {
             Timber.e(e, "Error while copying database to sdcard");

@@ -6,7 +6,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import javax.inject.Inject;
 
-class UnauthorizedErrorInterceptor implements Interceptor {
+public class UnauthorizedErrorInterceptor implements Interceptor {
 
     public static final int CODE_UNAUTHORIZED = 401;
 

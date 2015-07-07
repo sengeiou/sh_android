@@ -7,7 +7,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import javax.inject.Inject;
 
-class ServerDownErrorInterceptor implements Interceptor {
+public class ServerDownErrorInterceptor implements Interceptor {
 
     public static final int CODE_SERVER_DOWN = 503;
 
