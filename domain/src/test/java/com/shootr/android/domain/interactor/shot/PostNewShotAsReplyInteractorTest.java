@@ -25,7 +25,8 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     private static final Long PARENT_SHOT_USER_ID = 3L;
     private static final String PARENT_SHOT_USERNAME = "parent username";
 
-    @Mock ShotRepository shotRepository;
+    @Mock ShotRepository localShotRepository;
+    @Mock ShotRepository remoteShotRepository;
 
     private PostNewShotAsReplyInteractor interactor;
 
@@ -36,8 +37,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         interactor = new PostNewShotAsReplyInteractor(postExecutionThread,
           interactorHandler,
           sessionRepository,
-          shotSender,
-          shotRepository);
+          shotSender, localShotRepository, remoteShotRepository);
     }
 
     @Override protected PostNewShotInteractor getInteractorForCommonTests() {
@@ -61,6 +61,19 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     @Test public void shouldHaveParentShotId() throws Exception {
         setupCurrentUserSession();
         setupParentShot();
+
+        interactor.postNewShotAsReply(COMMENT_STUB,
+          IMAGE_STUB, PARENT_SHOT_ID,
+          new DummyCallback(),
+          new DummyErrorCallback());
+
+        Shot sentShot = captureSentShot();
+        assertThat(sentShot.getParentShotId()).isEqualTo(PARENT_SHOT_ID);
+    }
+
+    @Test public void shouldHaveParentShotIdEvenIfNoParentShotInLocal() throws Exception {
+        setupCurrentUserSession();
+        setupParentShotFromRemote();
 
         interactor.postNewShotAsReply(COMMENT_STUB,
           IMAGE_STUB, PARENT_SHOT_ID,
@@ -107,7 +120,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     }
 
     private void setupParentShot() {
-        when(shotRepository.getShot(anyString())).thenReturn(parentShot());
+        when(localShotRepository.getShot(anyString())).thenReturn(parentShot());
+    }
+
+    private void setupParentShotFromRemote() {
+        when(localShotRepository.getShot(anyString())).thenReturn(null);
+        when(remoteShotRepository.getShot(anyString())).thenReturn(parentShot());
     }
 
     private Shot parentShot() {

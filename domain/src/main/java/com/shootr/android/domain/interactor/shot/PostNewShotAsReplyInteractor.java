@@ -5,6 +5,7 @@ import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.service.ShotSender;
@@ -14,14 +15,17 @@ import javax.inject.Inject;
 
 public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
-    private final ShotRepository shotRepository;
+    private final ShotRepository localShotRepository;
+    private final ShotRepository remoteShotRepository;
     private String replyParentId;
     private Shot parentShot;
 
     @Inject public PostNewShotAsReplyInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
-      SessionRepository sessionRepository, @Background ShotSender shotSender, @Local ShotRepository shotRepository) {
+      SessionRepository sessionRepository, @Background ShotSender shotSender, @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository) {
         super(postExecutionThread, interactorHandler, sessionRepository, shotSender);
-        this.shotRepository = shotRepository;
+        this.localShotRepository = localShotRepository;
+        this.remoteShotRepository = remoteShotRepository;
     }
 
     public void postNewShotAsReply(String comment, File image, String replyParentId, CompletedCallback callback, ErrorCallback errorCallback) {
@@ -53,8 +57,9 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
     }
 
     private Shot getParentShot() {
+        parentShot = localShotRepository.getShot(replyParentId);
         if (parentShot == null) {
-            parentShot = shotRepository.getShot(replyParentId);
+            parentShot = remoteShotRepository.getShot(replyParentId);
         }
         return parentShot;
     }
