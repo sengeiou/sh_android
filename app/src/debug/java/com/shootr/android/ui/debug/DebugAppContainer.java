@@ -180,6 +180,7 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_build_name) TextView buildNameView;
     @InjectView(R.id.debug_build_code) TextView buildCodeView;
     @InjectView(R.id.debug_build_sha) TextView buildShaView;
+    @InjectView(R.id.debug_build_branch) TextView buildBranchView;
     @InjectView(R.id.debug_build_date) TextView buildDateView;
 
     @InjectView(R.id.debug_device_make) TextView deviceMakeView;
@@ -542,6 +543,7 @@ public class DebugAppContainer implements AppContainer {
         buildNameView.setText(BuildConfig.VERSION_NAME);
         buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
         buildShaView.setText(BuildConfig.GIT_SHA);
+        buildBranchView.setText(BuildConfig.GIT_BRANCH);
 
         try {
             // Parse ISO8601-format time into local time.
