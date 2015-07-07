@@ -160,6 +160,7 @@
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_PROFILE" />
+                <action android:name="com.shootr.android.ACTION_OPEN_ACTIVITY_NOTIFICATION" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

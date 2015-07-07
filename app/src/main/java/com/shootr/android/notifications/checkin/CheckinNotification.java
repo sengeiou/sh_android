@@ -16,8 +16,7 @@ import java.io.IOException;
 
 public class CheckinNotification extends CommonNotification {
 
-    private static final int REQUEST_DELETE = 1;
-    private static final int REQUEST_OPEN = 2;
+    private static final int REQUEST_OPEN = 1;
 
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
@@ -34,19 +33,13 @@ public class CheckinNotification extends CommonNotification {
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
         builder.setContentIntent(getOpenCheckinNotificationPendingIntent());
-        builder.setDeleteIntent(getDiscardCheckinNotificationPendingIntent());
         builder.setContentTitle(activity.getUsername());
         builder.setContentText(activity.getComment());
     }
 
     protected PendingIntent getOpenCheckinNotificationPendingIntent() {
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN,
-          new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
-    }
-
-    protected PendingIntent getDiscardCheckinNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION), 0);
+          new Intent(NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override

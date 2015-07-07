@@ -1,4 +1,4 @@
-package com.shootr.android.notifications.checkin;
+package com.shootr.android.notifications.startedshooting;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,8 +16,7 @@ import java.io.IOException;
 
 public class StartedShootingNotification extends CommonNotification {
 
-    private static final int REQUEST_DELETE = 1;
-    private static final int REQUEST_OPEN = 2;
+    private static final int REQUEST_OPEN = 1;
 
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
@@ -34,19 +33,13 @@ public class StartedShootingNotification extends CommonNotification {
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
         builder.setContentIntent(getStartedShootingNotificationPendingIntent());
-        builder.setDeleteIntent(getDiscardStartedShootingNotificationPendingIntent());
         builder.setContentTitle(activity.getUsername());
         builder.setContentText(activity.getComment());
     }
 
     protected PendingIntent getStartedShootingNotificationPendingIntent() {
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN,
-          new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
-    }
-
-    protected PendingIntent getDiscardStartedShootingNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION), 0);
+          new Intent(NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override

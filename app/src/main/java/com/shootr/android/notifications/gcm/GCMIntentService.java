@@ -14,7 +14,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.notifications.checkin.CheckinNotificationManager;
-import com.shootr.android.notifications.checkin.StartedShootingNotificationManager;
+import com.shootr.android.notifications.startedshooting.StartedShootingNotificationManager;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
 import com.shootr.android.service.ShootrService;

@@ -1,4 +1,4 @@
-package com.shootr.android.notifications.checkin;
+package com.shootr.android.notifications.startedshooting;
 
 import android.app.Application;
 import android.content.Context;
