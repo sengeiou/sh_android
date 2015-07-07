@@ -1,11 +1,16 @@
 package com.shootr.android.service;
 
+import android.support.annotation.NonNull;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.exception.ErrorInfo;
+import com.shootr.android.data.api.exception.ErrorResource;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import javax.inject.Inject;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
+@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class RetrofitErrorHandler implements ErrorHandler {
 
     @Inject
@@ -13,10 +18,35 @@ public class RetrofitErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public Throwable handleError(RetrofitError cause) {
-        Timber.e(cause, "Retrofit error");
+    public Throwable handleError(RetrofitError retrofitError) {
+        ErrorResource errorResource = (ErrorResource) retrofitError.getBodyAs(ErrorResource.class);
+        if (isApiError(errorResource)) {
+            Timber.e(retrofitError, "Retrofit API Error");
+            return parseApiException(errorResource);
+        } else {
+            Timber.e(retrofitError, "Retrofit Error");
+            return originalCause(retrofitError);
+        }
+    }
 
-        Throwable originalError = cause.getCause();
-        return originalError != null ? originalError : new ServerCommunicationException(cause);
+    private boolean isApiError(ErrorResource errorResource) {
+        return errorResource != null && errorResource.getCode() != null && errorResource.getStatus() != null;
+    }
+
+    @NonNull
+    protected ApiException parseApiException(ErrorResource errorResource) {
+        ErrorInfo errorInfo = ErrorInfo.getForHttpStatusAndCode(errorResource.getStatus(), errorResource.getCode());
+        return new ApiException(errorInfo);
+    }
+
+    @NonNull
+    protected Throwable originalCause(RetrofitError retrofitError) {
+        Throwable originalError = retrofitError.getCause();
+        return originalError != null ? originalError : defaultExceptionForUnknownCause(retrofitError);
+    }
+
+    @NonNull
+    private Exception defaultExceptionForUnknownCause(RetrofitError retrofitError) {
+        return new ServerCommunicationException(retrofitError);
     }
 }
