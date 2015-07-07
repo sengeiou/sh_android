@@ -13,12 +13,12 @@ import retrofit.http.Path;
 
 public interface FavoriteApiService {
 
-    @GET("/user/{idUser}/favorites/")
-    List<FavoriteApiEntity> getFavorites(@Path("idUser") String idUser) throws IOException;
+    @GET("/user/favorites/")
+    List<FavoriteApiEntity> getFavorites() throws IOException;
 
-    @POST("/user/{idUser}/favorites/")
-    FavoriteApiEntity createFavorite(@Path("idUser") String idUser, @Body FavoriteEntity favorite) throws IOException;
+    @POST("/user/favorites/")
+    FavoriteApiEntity createFavorite(@Body FavoriteEntity favorite) throws IOException;
 
-    @DELETE("/user/{idUser}/favorites/event/{idEvent}")
-    Response deleteFavorite(@Path("idUser") String idUser, @Path("idEvent") String idEvent) throws IOException;
+    @DELETE("/user/favorites/event/{idEvent}")
+    Response deleteFavorite(@Path("idEvent") String idEvent) throws IOException;
 }
