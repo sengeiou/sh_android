@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
@@ -125,14 +125,14 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.user_avatar) ImageView avatar;
-        @InjectView(R.id.user_name) TextView title;
-        @InjectView(R.id.user_username) TextView subtitle;
-        @InjectView(R.id.user_follow_button) FollowButton followButton;
+        @Bind(R.id.user_avatar) ImageView avatar;
+        @Bind(R.id.user_name) TextView title;
+        @Bind(R.id.user_username) TextView subtitle;
+        @Bind(R.id.user_follow_button) FollowButton followButton;
         public int position;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

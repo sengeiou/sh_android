@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
@@ -29,9 +29,9 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Inject NewEventPresenter presenter;
 
-    @InjectView(R.id.new_event_title) EditText titleView;
-    @InjectView(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
-    @InjectView(R.id.new_event_title_error) TextView titleErrorView;
+    @Bind(R.id.new_event_title) EditText titleView;
+    @Bind(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
+    @Bind(R.id.new_event_title_error) TextView titleErrorView;
 
     private MenuItem doneMenuItem;
 
@@ -47,7 +47,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     }
 
     private void initializeViews(String idEventToEdit) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 presenter.titleTextChanged(s.toString());

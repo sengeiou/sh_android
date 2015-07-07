@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -35,10 +35,10 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @Inject PicassoWrapper picasso;
     @Inject PeoplePresenter presenter;
 
-    @InjectView(R.id.userlist_list) ListView userlistListView;
-    @InjectView(R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.userlist_list) ListView userlistListView;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
-    @InjectView(R.id.userlist_empty) TextView emptyTextView;
+    @Bind(R.id.userlist_empty) TextView emptyTextView;
     private FriendsAdapter peopleAdapter;
 
     public static PeopleFragment newInstance() {
@@ -63,7 +63,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
     }
@@ -71,7 +71,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         presenter.setView(new NullPeopleView());
     }
 

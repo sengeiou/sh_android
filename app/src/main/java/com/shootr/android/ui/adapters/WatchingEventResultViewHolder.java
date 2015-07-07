@@ -2,7 +2,7 @@ package com.shootr.android.ui.adapters;
 
 import android.view.View;
 import android.widget.ImageView;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
@@ -13,7 +13,7 @@ public class WatchingEventResultViewHolder extends EventResultViewHolder {
 
     private final OnUnwatchClickListener unwatchClickListener;
 
-    @InjectView(R.id.event_remove) ImageView remove;
+    @Bind(R.id.event_remove) ImageView remove;
 
     public WatchingEventResultViewHolder(View itemView, OnEventClickListener onEventClickListener,
       PicassoWrapper picasso, OnUnwatchClickListener unwatchClickListener) {

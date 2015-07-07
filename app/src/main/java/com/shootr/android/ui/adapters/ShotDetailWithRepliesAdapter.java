@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -222,19 +222,19 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        @InjectView(R.id.shot_detail_avatar) ImageView avatar;
-        @InjectView(R.id.shot_detail_user_name) TextView username;
-        @InjectView(R.id.shot_detail_timestamp) TextView timestamp;
-        @InjectView(R.id.shot_detail_text) ClickableTextView shotText;
-        @InjectView(R.id.shot_detail_image) ImageView shotImage;
-        @InjectView(R.id.shot_detail_event_title) TextView eventTitle;
-        @InjectView(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
-        @InjectView(R.id.shot_video_frame) View videoFrame;
-        @InjectView(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_detail_avatar) ImageView avatar;
+        @Bind(R.id.shot_detail_user_name) TextView username;
+        @Bind(R.id.shot_detail_timestamp) TextView timestamp;
+        @Bind(R.id.shot_detail_text) ClickableTextView shotText;
+        @Bind(R.id.shot_detail_image) ImageView shotImage;
+        @Bind(R.id.shot_detail_event_title) TextView eventTitle;
+        @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             context = itemView.getContext();
         }
 
@@ -333,20 +333,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
         private Context context;
 
-        @InjectView(R.id.shot_detail_parent_progress) View progress;
-        @InjectView(R.id.shot_detail_parent_shot) View shot;
+        @Bind(R.id.shot_detail_parent_progress) View progress;
+        @Bind(R.id.shot_detail_parent_shot) View shot;
 
-        @InjectView(R.id.shot_avatar) public ImageView avatar;
-        @InjectView(R.id.shot_user_name) public TextView name;
-        @InjectView(R.id.shot_timestamp) public TextView timestamp;
-        @InjectView(R.id.shot_text) public ClickableTextView text;
-        @InjectView(R.id.shot_image) public ImageView image;
-        @InjectView(R.id.shot_video_frame) View videoFrame;
-        @InjectView(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_avatar) public ImageView avatar;
+        @Bind(R.id.shot_user_name) public TextView name;
+        @Bind(R.id.shot_timestamp) public TextView timestamp;
+        @Bind(R.id.shot_text) public ClickableTextView text;
+        @Bind(R.id.shot_image) public ImageView image;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             context = itemView.getContext();
         }
 
@@ -429,17 +429,17 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.shot_avatar) public ImageView avatar;
-        @InjectView(R.id.shot_user_name) public TextView name;
-        @InjectView(R.id.shot_timestamp) public TextView timestamp;
-        @InjectView(R.id.shot_text) public ClickableTextView text;
-        @InjectView(R.id.shot_image) public ImageView image;
-        @InjectView(R.id.shot_video_frame) View videoFrame;
-        @InjectView(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_avatar) public ImageView avatar;
+        @Bind(R.id.shot_user_name) public TextView name;
+        @Bind(R.id.shot_timestamp) public TextView timestamp;
+        @Bind(R.id.shot_text) public ClickableTextView text;
+        @Bind(R.id.shot_image) public ImageView image;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bindView(final ShotModel reply) {

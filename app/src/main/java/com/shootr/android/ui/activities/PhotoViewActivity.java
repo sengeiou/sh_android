@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.util.PicassoWrapper;
@@ -31,8 +31,8 @@ public class PhotoViewActivity extends BaseToolbarActivity {
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
-    @InjectView(R.id.photo) ImageView image;
-    @InjectView(R.id.toolbar_actionbar) Toolbar toolbar;
+    @Bind(R.id.photo) ImageView image;
+    @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject PicassoWrapper picasso;
 
@@ -59,7 +59,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         // Avoid using DrawerLayout for now, it doesn't work with PhotoView version 1.2.3: https://github.com/chrisbanes/PhotoView/issues/72
         setContentView(R.layout.activity_photo_view);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setupActionBar();
 

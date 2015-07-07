@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
@@ -29,9 +29,9 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject FavoritesListPresenter favoritesListPresenter;
     @Inject PicassoWrapper picasso;
 
-    @InjectView(R.id.favorites_list) RecyclerView favoritesList;
-    @InjectView(R.id.favorites_empty) View empty;
-    @InjectView(R.id.favorites_loading) View loading;
+    @Bind(R.id.favorites_list) RecyclerView favoritesList;
+    @Bind(R.id.favorites_empty) View empty;
+    @Bind(R.id.favorites_loading) View loading;
 
     private FavoriteEventsAdapter adapter;
 
@@ -43,7 +43,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_favorites, container, false);
-        ButterKnife.inject(this, fragmentView);
+        ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
@@ -56,7 +56,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         favoritesListPresenter.setView(new NullFavoritesListView());
     }
 

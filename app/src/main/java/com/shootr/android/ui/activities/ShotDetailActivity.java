@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -37,10 +37,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     public static final String EXTRA_SHOT = "shot";
 
-    @InjectView(R.id.shot_detail_list) RecyclerView detailList;
-    @InjectView(R.id.detail_new_shot_bar) View newShotBar;
-    @InjectView(R.id.shot_bar_text) TextView replyPlaceholder;
-    @InjectView(R.id.shot_bar_drafts) View replyDraftsButton;
+    @Bind(R.id.shot_detail_list) RecyclerView detailList;
+    @Bind(R.id.detail_new_shot_bar) View newShotBar;
+    @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
+    @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
 
     @Inject PicassoWrapper picasso;
     @Inject TimeFormatter timeFormatter;
@@ -67,7 +67,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setupPhotoPicker();
         setupNewShotBarDelegate(extractShotFromIntent());
         setupAdapter();

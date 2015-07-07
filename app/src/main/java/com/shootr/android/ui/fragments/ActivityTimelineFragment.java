@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
@@ -41,10 +41,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject PicassoWrapper picasso;
     @Inject AndroidTimeUtils timeUtils;
 
-    @InjectView(R.id.timeline_activity_list) RecyclerView activityList;
-    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.timeline_empty) View emptyView;
-    @InjectView(R.id.timeline_empty_title) TextView emptyViewTitle;
+    @Bind(R.id.timeline_activity_list) RecyclerView activityList;
+    @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.timeline_empty_title) TextView emptyViewTitle;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -58,7 +58,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
-        ButterKnife.inject(this, fragmentView);
+        ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
@@ -69,7 +69,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         timelinePresenter.setView(new NullActivityTimelineView());
     }
 

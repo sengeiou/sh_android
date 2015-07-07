@@ -25,8 +25,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.BuildConfig;
@@ -139,56 +139,55 @@ public class DebugAppContainer implements AppContainer {
         this.app = app;
     }
 
-    @InjectView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
-    @InjectView(R.id.debug_content) ViewGroup content;
+    @Bind(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
+    @Bind(R.id.debug_content) ViewGroup content;
 
-    //    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
+    @Bind(R.id.debug_contextual_title) View contextualTitleView;
+    @Bind(R.id.debug_contextual_list) LinearLayout contextualListView;
 
-    @InjectView(R.id.debug_contextual_title) View contextualTitleView;
-    @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
+    @Bind(R.id.debug_network_endpoint) Spinner endpointView;
+    @Bind(R.id.debug_network_endpoint_edit) View endpointEditView;
+    @Bind(R.id.debug_network_debugmode) Switch debugModeView;
+    @Bind(R.id.debug_network_enabled) Switch networkEnabledView;
+    @Bind(R.id.debug_network_delay) Spinner networkDelayView;
+    @Bind(R.id.debug_network_variance) Spinner networkVarianceView;
+    @Bind(R.id.debug_network_error) Spinner networkErrorView;
+    @Bind(R.id.debug_network_proxy) Spinner networkProxyView;
 
-    @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
-    @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
-    @InjectView(R.id.debug_network_debugmode) Switch debugModeView;
-    @InjectView(R.id.debug_network_enabled) Switch networkEnabledView;
-    @InjectView(R.id.debug_network_delay) Spinner networkDelayView;
-    @InjectView(R.id.debug_network_variance) Spinner networkVarianceView;
-    @InjectView(R.id.debug_network_error) Spinner networkErrorView;
-    @InjectView(R.id.debug_network_proxy) Spinner networkProxyView;
+    @Bind(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
 
-    @InjectView(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
+    @Bind(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
-    @InjectView(R.id.debug_notif_enable) Switch notificationsEnabledView;
+    @Bind(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
+    @Bind(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
+    @Bind(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
+    @Bind(R.id.debug_ui_scalpel) Switch uiScalpelView;
+    @Bind(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
 
-    @InjectView(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
-    @InjectView(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
-    @InjectView(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
-    @InjectView(R.id.debug_ui_scalpel) Switch uiScalpelView;
-    @InjectView(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
+    @Bind(R.id.debug_build_name) TextView buildNameView;
+    @Bind(R.id.debug_build_code) TextView buildCodeView;
+    @Bind(R.id.debug_build_sha) TextView buildShaView;
+    @Bind(R.id.debug_build_date) TextView buildDateView;
 
-    @InjectView(R.id.debug_build_name) TextView buildNameView;
-    @InjectView(R.id.debug_build_code) TextView buildCodeView;
-    @InjectView(R.id.debug_build_sha) TextView buildShaView;
-    @InjectView(R.id.debug_build_date) TextView buildDateView;
+    @Bind(R.id.debug_device_make) TextView deviceMakeView;
+    @Bind(R.id.debug_device_model) TextView deviceModelView;
+    @Bind(R.id.debug_device_resolution) TextView deviceResolutionView;
+    @Bind(R.id.debug_device_density) TextView deviceDensityView;
+    @Bind(R.id.debug_device_release) TextView deviceReleaseView;
+    @Bind(R.id.debug_device_api) TextView deviceApiView;
+    @Bind(R.id.debug_logs_show) TextView deviceLogView;
+    @Bind(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
-    @InjectView(R.id.debug_device_make) TextView deviceMakeView;
-    @InjectView(R.id.debug_device_model) TextView deviceModelView;
-    @InjectView(R.id.debug_device_resolution) TextView deviceResolutionView;
-    @InjectView(R.id.debug_device_density) TextView deviceDensityView;
-    @InjectView(R.id.debug_device_release) TextView deviceReleaseView;
-    @InjectView(R.id.debug_device_api) TextView deviceApiView;
-    @InjectView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
-
-    @InjectView(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
-    @InjectView(R.id.debug_picasso_cache_size) TextView picassoCacheSizeView;
-    @InjectView(R.id.debug_picasso_cache_hit) TextView picassoCacheHitView;
-    @InjectView(R.id.debug_picasso_cache_miss) TextView picassoCacheMissView;
-    @InjectView(R.id.debug_picasso_decoded) TextView picassoDecodedView;
-    @InjectView(R.id.debug_picasso_decoded_total) TextView picassoDecodedTotalView;
-    @InjectView(R.id.debug_picasso_decoded_avg) TextView picassoDecodedAvgView;
-    @InjectView(R.id.debug_picasso_transformed) TextView picassoTransformedView;
-    @InjectView(R.id.debug_picasso_transformed_total) TextView picassoTransformedTotalView;
-    @InjectView(R.id.debug_picasso_transformed_avg) TextView picassoTransformedAvgView;
+    @Bind(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
+    @Bind(R.id.debug_picasso_cache_size) TextView picassoCacheSizeView;
+    @Bind(R.id.debug_picasso_cache_hit) TextView picassoCacheHitView;
+    @Bind(R.id.debug_picasso_cache_miss) TextView picassoCacheMissView;
+    @Bind(R.id.debug_picasso_decoded) TextView picassoDecodedView;
+    @Bind(R.id.debug_picasso_decoded_total) TextView picassoDecodedTotalView;
+    @Bind(R.id.debug_picasso_decoded_avg) TextView picassoDecodedAvgView;
+    @Bind(R.id.debug_picasso_transformed) TextView picassoTransformedView;
+    @Bind(R.id.debug_picasso_transformed_total) TextView picassoTransformedTotalView;
+    @Bind(R.id.debug_picasso_transformed_avg) TextView picassoTransformedAvgView;
 
     @Override
     public ViewGroup get(final Activity activity) {
@@ -202,7 +201,7 @@ public class DebugAppContainer implements AppContainer {
         LayoutInflater.from(drawerContext).inflate(R.layout.debug_drawer_content, drawer);
 
         // Inject after inflating the drawer layout so its views are available to inject.
-        ButterKnife.inject(this, activity);
+        ButterKnife.bind(this, activity);
 
         drawerLayout.setDrawerShadow(R.drawable.debug_drawer_shadow, Gravity.END);
         drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {

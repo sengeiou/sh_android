@@ -22,7 +22,7 @@ public class WhaleActivity extends BaseActivity {
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @Override

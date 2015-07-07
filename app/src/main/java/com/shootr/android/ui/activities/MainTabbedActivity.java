@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
@@ -28,8 +28,8 @@ import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainTabbedView{
 
-    @InjectView(R.id.pager) ViewPager viewPager;
-    @InjectView(R.id.tab_layout) TabLayout tabLayout;
+    @Bind(R.id.pager) ViewPager viewPager;
+    @Bind(R.id.tab_layout) TabLayout tabLayout;
     @Inject CurrentUserPresenter currentUserPresenter;
     @Inject JobManager jobManager;
 
@@ -42,7 +42,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);

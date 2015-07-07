@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserModel;
@@ -143,14 +143,14 @@ public class WatchersView extends LinearLayout{
 
     class WatcherViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-        @InjectView(R.id.watcher_user_avatar) ImageView avatar;
-        @InjectView(R.id.watcher_user_name) TextView name;
-        @InjectView(R.id.watcher_user_watching) TextView watchingText;
+        @Bind(R.id.watcher_user_avatar) ImageView avatar;
+        @Bind(R.id.watcher_user_name) TextView name;
+        @Bind(R.id.watcher_user_watching) TextView watchingText;
         String userId;
 
         public WatcherViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

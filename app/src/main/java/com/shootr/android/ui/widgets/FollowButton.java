@@ -7,14 +7,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.shootr.android.R;
 
 public class FollowButton extends FrameLayout {
 
-    @InjectView(R.id.follow) View followButton;
-    @InjectView(R.id.following) View followingButton;
-    @InjectView(R.id.edit) View editButton;
+    @Bind(R.id.follow) View followButton;
+    @Bind(R.id.following) View followingButton;
+    @Bind(R.id.edit) View editButton;
 
     private boolean isFollowing;
     private boolean isEditProfile;
@@ -40,7 +40,7 @@ public class FollowButton extends FrameLayout {
 
         inflater.inflate(R.layout.follow_button_layout, this);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         if (isInEditMode()) {
             setFollowing(false);

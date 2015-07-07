@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
@@ -60,9 +60,9 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject NetworkUtil networkUtil;
     @Inject SessionRepository sessionRepository;
 
-    @InjectView(R.id.userlist_list) ListView userlistListView;
-    @InjectView(R.id.userlist_progress) ProgressBar progressBar;
-    @InjectView(R.id.userlist_empty) TextView emptyTextView;
+    @Bind(R.id.userlist_list) ListView userlistListView;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
+    @Bind(R.id.userlist_empty) TextView emptyTextView;
 
     // Args
     String userId;
@@ -113,7 +113,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         userlistListView.setAdapter(getAdapter());
     }
 
@@ -218,7 +218,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     public UserListAdapter getAdapter() {

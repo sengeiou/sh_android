@@ -7,14 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 
 public class UpdateWarningActivity extends BaseNoToolbarActivity {
 
-    @InjectView(R.id.update_warning_button) TextView updateButton;
+    @Bind(R.id.update_warning_button) TextView updateButton;
 
     public static Intent newIntent(@NonNull Context context) {
         return new Intent(context, UpdateWarningActivity.class);
@@ -23,7 +23,7 @@ public class UpdateWarningActivity extends BaseNoToolbarActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_update_warning);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.update_warning_button)
