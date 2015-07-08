@@ -1,4 +1,4 @@
-package com.shootr.android.notifications.checkin;
+package com.shootr.android.notifications.startedshooting;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,14 +14,14 @@ import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
 
-public class CheckinNotification extends CommonNotification {
+public class StartedShootingNotification extends CommonNotification {
 
     private static final int REQUEST_OPEN = 1;
 
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
 
-    public CheckinNotification(Context context,
+    public StartedShootingNotification(Context context,
       NotificationBuilderFactory builderFactory,
       PicassoWrapper picasso,
       ActivityModel activityModel) {
@@ -32,12 +32,12 @@ public class CheckinNotification extends CommonNotification {
 
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentIntent(getOpenCheckinNotificationPendingIntent());
+        builder.setContentIntent(getStartedShootingNotificationPendingIntent());
         builder.setContentTitle(activity.getUsername());
         builder.setContentText(activity.getComment());
     }
 
-    protected PendingIntent getOpenCheckinNotificationPendingIntent() {
+    protected PendingIntent getStartedShootingNotificationPendingIntent() {
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN,
           new Intent(NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
     }

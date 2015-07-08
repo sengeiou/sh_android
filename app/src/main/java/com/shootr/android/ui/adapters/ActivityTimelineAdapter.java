@@ -23,6 +23,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_GENERIC_ACTIVITY = 0;
     public static final int TYPE_CHECKIN = 1;
     public static final int TYPE_LISTED = 2;
+    public static final int TYPE_STARTED_SHOOTING = 3;
 
     private final PicassoWrapper picasso;
     private final AndroidTimeUtils timeUtils;
@@ -54,6 +55,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return TYPE_CHECKIN;
             } else if (ActivityType.LISTED_EVENT.equals(activityType)) {
                 return TYPE_LISTED;
+            } else if (ActivityType.STARTED_SHOOTING.equals(activityType)) {
+                return TYPE_STARTED_SHOOTING;
             } else {
                 return TYPE_GENERIC_ACTIVITY;
             }
@@ -74,6 +77,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateCheckinViewHolder(parent, viewType);
             case TYPE_LISTED:
                 return onCreateListedViewHolder(parent, viewType);
+            case TYPE_STARTED_SHOOTING:
+                return onCreateStartedShootingViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
@@ -104,6 +109,17 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
         return new ListedViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener,
+          eventTitleClickListener);
+    }
+
+    private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new StartedShootingViewHolder(view,
           picasso,
           timeUtils,
           shotTextSpannableBuilder,

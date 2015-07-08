@@ -275,6 +275,7 @@
     <string name="notifications_off_alert">Notifications off</string>
     <string name="checkin_activity_text_pattern">Checked in on (event)</string>
     <string name="listed_activity_text_pattern">Listed (event)</string>
+    <string name="started_shooting_activity_text_pattern">Started shooting on (event)</string>
     <string name="title_activity_event_search">EventSearchActivity</string>
     <string name="activity_find_events_hint">Find streams</string>
     <string name="activity_find_events_title">Find streams</string>

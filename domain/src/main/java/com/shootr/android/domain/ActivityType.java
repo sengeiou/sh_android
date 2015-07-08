@@ -9,6 +9,7 @@ public interface ActivityType {
     String JOIN_EVENT = "JOINEVENT";
     String EXIT_EVENT = "EXITEVENT";
     String UPDATE_EVENT = "UPDATEEVENT";
+    String STARTED_SHOOTING = "STARTEDSHOOTING";
 
     String[] TYPES_ACTIVITY = { CHECKIN,
       EXIT_EVENT,
@@ -16,11 +17,13 @@ public interface ActivityType {
       LISTED_EVENT,
       PROFILE_UPDATED,
       START_FOLLOW,
-      UPDATE_EVENT };
+      UPDATE_EVENT,
+      STARTED_SHOOTING};
     String[] TYPES_ACTIVITY_SHOWN = { CHECKIN,
       LISTED_EVENT,
       PROFILE_UPDATED,
-      START_FOLLOW};
+      START_FOLLOW,
+      STARTED_SHOOTING};
     String[] TYPES_SYNC_TRIGGER = { PROFILE_UPDATED, JOIN_EVENT, EXIT_EVENT, UPDATE_EVENT };
 
 }
