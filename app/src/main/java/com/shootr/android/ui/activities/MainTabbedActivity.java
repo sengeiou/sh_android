@@ -10,8 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
@@ -106,8 +106,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void setUserData(final UserModel userModel) {
-        toolbarDecorator.setTitle(userModel.getName());
-        toolbarDecorator.setSubtitle(userModel.getUsername());
+        toolbarDecorator.setTitle(userModel.getUsername());
         toolbarDecorator.setAvatarImage(userModel.getPhoto());
         setToolbarClickListener(userModel);
     }

@@ -13,6 +13,7 @@
       android:gravity="center_vertical"
       android:animateLayoutChanges="true"
       android:visibility="gone"
+      tools:visibility="visible"
       android:background="?selectableItemBackground">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -39,18 +40,9 @@
           android:layout_toRightOf="@+id/toolbar_user_avatar"
           tools:drawableRight="@drawable/spinner_triangle_white"
           tools:text="Title"
-          tools:visibility="visible" />
-
-        <TextView android:id="@+id/toolbar_subtitle"
-          style="@style/ActionBar.SubtitleText"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:paddingLeft="@dimen/toolbar_title_padding"
-          android:layout_toRightOf="@+id/toolbar_user_avatar"
-          android:layout_below="@+id/toolbar_title"
-          android:visibility="gone"
-          tools:text="Subtitle"
-          tools:visibility="visible" />
+          tools:visibility="visible"
+          android:layout_alignBottom="@+id/toolbar_user_avatar"
+          android:layout_alignTop="@+id/toolbar_user_avatar" />
     </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>
