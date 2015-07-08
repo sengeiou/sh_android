@@ -61,7 +61,6 @@ public class ProfilePresenter implements Presenter {
         profileView.showLogoutInProgress();
         logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                profileView.hideLogoutInProgress();
                 profileView.navigateToWelcomeScreen();
             }
         }, new Interactor.ErrorCallback() {
