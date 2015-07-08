@@ -1,9 +1,11 @@
 package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.entity.ShotApiEntity;
+import com.shootr.android.data.api.exception.ApiException;
 import java.io.IOException;
 import java.util.List;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface ShotApiService {
@@ -16,4 +18,7 @@ public interface ShotApiService {
       @Query("includeNice") Boolean includeNice,
       @Query("maxNice") Integer maxNice,
       @Query("me") String me) throws IOException;
+
+    @GET("/shots/{idShot}/?includeLinks=false")
+    ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
 }

@@ -15,6 +15,9 @@ public class ShotApiEntityMapper {
     }
 
     public ShotEntity transform(ShotApiEntity shotApiEntity) {
+        if (shotApiEntity == null) {
+            return null;
+        }
         ShotEntity shotEntity = new ShotEntity();
         shotEntity.setIdShot(shotApiEntity.getIdShot());
         shotEntity.setComment(shotApiEntity.getComment());
