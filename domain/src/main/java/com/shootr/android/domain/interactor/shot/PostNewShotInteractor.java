@@ -99,7 +99,7 @@ public abstract class PostNewShotInteractor implements Interactor {
         });
     }
 
-    protected void notifyError(final ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(error);
