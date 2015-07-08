@@ -34,10 +34,7 @@ public class WhaleActivity extends BaseActivity {
 
     @OnClick(R.id.whale_ok)
     public void onRetryClick() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        finish();
     }
 
     @Override
