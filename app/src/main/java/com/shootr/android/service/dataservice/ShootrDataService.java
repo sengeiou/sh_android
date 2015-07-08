@@ -13,7 +13,6 @@ import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -25,7 +24,6 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
-import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -47,7 +45,6 @@ import timber.log.Timber;
 public class ShootrDataService implements ShootrService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    public static final long DEFAULT_LIMIT = 100L;
     private static final Integer SEARCH_PAGE_LIMIT = 8;
     public static final String DATA_SERVICES_PATH = "/data/rest/generic";
 
@@ -56,7 +53,6 @@ public class ShootrDataService implements ShootrService {
     private final ObjectMapper mapper;
 
     private final UserDtoFactory userDtoFactory;
-    private final TimelineDtoFactory timelineDtoFactory;
     private final ShotDtoFactory shotDtoFactory;
     private final EventDtoFactory eventDtoFactory;
     private final DeviceDtoFactory deviceDtoFactory;
@@ -71,15 +67,12 @@ public class ShootrDataService implements ShootrService {
     private final TimeUtils timeUtils;
 
     private final VersionUpdater versionUpdater;
-    private final BusPublisher busPublisher;
 
     @Inject
     public ShootrDataService(OkHttpClient client,
       Endpoint endpoint,
       ObjectMapper mapper,
-      UserDtoFactory userDtoFactory,
-      TimelineDtoFactory timelineDtoFactory,
-      ShotDtoFactory shotDtoFactory,
+      UserDtoFactory userDtoFactory, ShotDtoFactory shotDtoFactory,
       DeviceDtoFactory deviceDtoFactory,
       UserMapper userMapper,
       FollowMapper followMapper,
@@ -89,14 +82,12 @@ public class ShootrDataService implements ShootrService {
       EventEntityMapper eventEntityMapper,
       ForgotPasswordMapper forgotPasswordMapper,
       TimeUtils timeUtils,
-      VersionUpdater versionUpdater,
-      BusPublisher busPublisher) {
+      VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
         this.eventDtoFactory = eventDtoFactory;
         this.userDtoFactory = userDtoFactory;
-        this.timelineDtoFactory = timelineDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
         this.deviceDtoFactory = deviceDtoFactory;
         this.userMapper = userMapper;
@@ -107,7 +98,6 @@ public class ShootrDataService implements ShootrService {
         this.forgotPasswordMapper = forgotPasswordMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
-        this.busPublisher = busPublisher;
     }
 
     @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
@@ -166,66 +156,6 @@ public class ShootrDataService implements ShootrService {
         }
         //TODO order
         return usersById;
-    }
-
-    @Override
-    public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
-        List<ShotEntity> newerShots = new ArrayList<>();
-        GenericDto genericDto =
-          timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, newestShotDate, DEFAULT_LIMIT);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                newerShots.add(shot);
-            }
-
-        }
-        return newerShots;
-    }
-
-    @Override
-    public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
-        List<ShotEntity> olderShots = new ArrayList<>();
-        GenericDto genericDto =
-          timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                olderShots.add(shot);
-            }
-
-        }
-        return olderShots;
-    }
-
-    @Override
-    public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
-        List<ShotEntity> shots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds,
-          lastModifiedDate,
-          DEFAULT_LIMIT);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                shots.add(shot);
-            }
-        }
-        return shots;
     }
 
     @Override public List<ShotEntity> getRepliesToShot(String shotId) throws IOException {
