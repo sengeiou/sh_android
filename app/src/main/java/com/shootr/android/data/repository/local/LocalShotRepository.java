@@ -52,4 +52,9 @@ public class LocalShotRepository implements ShotRepository {
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }
+
+    @Override
+    public List<Shot> getShotsFromUser(String idUser, Integer limit) {
+        return shotEntityMapper.transform(localShotDataSource.getShotsFromUser(idUser, limit));
+    }
 }
