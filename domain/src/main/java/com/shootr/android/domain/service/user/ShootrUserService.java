@@ -86,13 +86,9 @@ public class ShootrUserService {
         retrievePostLoginInformation(loginResult);
     }
 
-    public void performFacebookLogin(String facebookToken) {
-        try {
-            LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
-            retrievePostLoginInformation(loginResult);
-        } catch (IOException e) {
-            throw new LoginException(e);
-        }
+    public void performFacebookLogin(String facebookToken) throws InvalidLoginException{
+        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
+        retrievePostLoginInformation(loginResult);
     }
 
     private void retrievePostLoginInformation(LoginResult loginResult) {

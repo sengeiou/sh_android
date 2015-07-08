@@ -1,9 +1,11 @@
 package com.shootr.android.domain.interactor.user;
 
+import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
@@ -39,8 +41,10 @@ public class PerformFacebookLoginInteractor implements Interactor {
         try {
             shootrUserService.performFacebookLogin(facebookToken);
             notifyLoaded();
-        } catch (ShootrException shootrException){
-            handleServerError(shootrException);
+        } catch (InvalidLoginException loginError){
+            notifyError(new LoginException(loginError));
+        } catch (ShootrException unknownException){
+            notifyError(unknownException);
         }
     }
 
@@ -50,10 +54,6 @@ public class PerformFacebookLoginInteractor implements Interactor {
                 completedCallback.onCompleted();
             }
         });
-    }
-
-    private void handleServerError(ShootrException shootrException) {
-        notifyError(shootrException);
     }
 
     private void notifyError(final ShootrException error) {

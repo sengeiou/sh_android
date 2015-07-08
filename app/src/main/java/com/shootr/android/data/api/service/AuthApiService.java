@@ -18,5 +18,5 @@ public interface AuthApiService {
     UserEntity createAccount(@Body CreateAccountApiEntity createAccountApiEntity) throws ApiException, IOException;
 
     @POST("/auth/socialAuthenticate/facebook")
-    UserEntity authenticateWithFacebook(@Body FacebookLoginApiEntity facebookLoginApiEntity);
+    UserEntity authenticateWithFacebook(@Body FacebookLoginApiEntity facebookLoginApiEntity) throws ApiException, IOException;
 }

@@ -19,6 +19,8 @@ public enum ErrorInfo {
     RememberMeAuthenticationException(1015, "Remember me authentication error", 401),
     SessionAuthenticationException(1016, "Session authentication error", 401),
     UsernameNotFoundException(1017, "Username not found", 401),
+    RevokedAuthorizationException(1018, "Revoked authorization", 401),
+    RejectedAuthorizationException(1019, "Rejected authorization", 401),
 
     InvalidRequestException(2001, "invalid request due to validation errors", 422),
 
@@ -36,7 +38,9 @@ public enum ErrorInfo {
 
     InvalidPasswordException(5004, "Invalid password", 400),
     PasswordMatchNewPasswordException(5005, "Password match new Password", 400),
-    PasswordMatchUserNameException(5006, "Password match userName", 400);
+    PasswordMatchUserNameException(5006, "Password match userName", 400),
+
+    ForbiddenRequestException(6001, "Forbidden request", 403);
 
     private int code;
     private int httpCode;

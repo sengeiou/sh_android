@@ -48,11 +48,18 @@ public class DataserviceLoginGateway implements LoginGateway {
     }
 
     @Override
-    public LoginResult performFacebookLogin(String facebookToken) throws IOException {
-        UserEntity loggedInUserEntity = authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken));
-        User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
-        String sessionToken = loggedInUserEntity.getSessionToken();
-        return new LoginResult(loggedInUser, sessionToken);
+    public LoginResult performFacebookLogin(String facebookToken) throws InvalidLoginException {
+        try {
+            UserEntity loggedInUserEntity =
+              authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken));
+            User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
+            String sessionToken = loggedInUserEntity.getSessionToken();
+            return new LoginResult(loggedInUser, sessionToken);
+        } catch (ApiException apiError) {
+            throw new InvalidLoginException();
+        } catch (IOException networkError) {
+            throw new ServerCommunicationException(networkError);
+        }
     }
 
     protected UserEntity loginWithUsernameOrEmail(String usernameOrEmail, String password)
