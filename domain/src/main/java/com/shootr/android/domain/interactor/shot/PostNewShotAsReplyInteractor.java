@@ -13,6 +13,9 @@ import com.shootr.android.domain.service.dagger.Background;
 import java.io.File;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkArgument;
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     private final ShotRepository localShotRepository;
@@ -40,12 +43,8 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     @Override protected void fillShotEventInfo(Shot shot) {
         Shot parentShot = getParentShot();
-        if (parentShot == null) {
-            throw new IllegalArgumentException(String.format("Parent shot not found with id=%s", replyParentId));
-        }
-        if(!parentShot.getType().equals(ShotType.COMMENT)){
-            throw new IllegalArgumentException("Replying to Activity shots is not allowed");
-        }
+        checkNotNull(parentShot, "Parent shot not found with id=%s", replyParentId);
+        checkArgument(!parentShot.getType().equals(ShotType.COMMENT), "Replying to Activity shots is not allowed");
         shot.setEventInfo(parentShot.getEventInfo());
     }
 
