@@ -1,9 +1,11 @@
 package com.shootr.android.domain.interactor.user;
 
+import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
@@ -38,8 +40,10 @@ public class PerformEmailLoginInteractor implements Interactor {
         try {
             shootrUserService.performLogin(usernameOrEmail, password);
             notifyLoaded();
-        } catch (ShootrException shootrException){
-            handleServerError(shootrException);
+        } catch (InvalidLoginException loginError) {
+            handleServerError(new LoginException(loginError));
+        } catch (ShootrException unknownError) {
+            handleServerError(unknownError);
         }
     }
 

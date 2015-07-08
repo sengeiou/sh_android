@@ -42,14 +42,14 @@ public class EmailLoginInteractorTest {
     }
 
     @Test
-    public void shouldHadleServerErrorWhenAttempLoginWithInvalidCredentials(){
+    public void shouldHadleServerErrorWhenAttempLoginWithInvalidCredentials() throws Exception {
         doThrow(new ShootrException(){}).when(shootrUserService).performLogin(anyString(), anyString());
         interactor.attempLogin(FAKE_USER_STUB, FAKE_PASSWORD_STUB, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
     @Test
-    public void shouldCallbackCompletedWhenLoginReturnsCorrectResult(){
+    public void shouldCallbackCompletedWhenLoginReturnsCorrectResult() throws Exception {
         doNothing().when(shootrUserService).performLogin(anyString(),anyString());
         interactor.attempLogin(USERNAME_STUB, PASSWORD_STUB, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();

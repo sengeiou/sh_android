@@ -28,6 +28,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.R;
@@ -44,7 +45,6 @@ import com.shootr.android.data.ScalpelWireframeEnabled;
 import com.shootr.android.data.ServerDownErrorInterceptor;
 import com.shootr.android.data.UnauthorizedErrorInterceptor;
 import com.shootr.android.data.VersionOutdatedErrorInterceptor;
-import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.NotificationsEnabled;
@@ -53,6 +53,8 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.service.DebugServiceAdapter;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.android.ui.debug.debugactions.FakeEmailInUseDebugAction;
+import com.shootr.android.ui.debug.debugactions.FakeUsernameInUseDebugAction;
 import com.shootr.android.ui.debug.debugactions.LoginDebugAction;
 import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
 import com.shootr.okresponsefaker.ResponseFaker;
@@ -94,6 +96,7 @@ public class DebugAppContainer implements AppContainer {
 
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
+    private final ObjectMapper objectMapper;
     private final OkHttpClient client;
     private final Picasso picasso;
     private final StringPreference networkEndpoint;
@@ -115,14 +118,22 @@ public class DebugAppContainer implements AppContainer {
     ContextualDebugActions contextualDebugActions;
 
     @Inject
-    public DebugAppContainer(OkHttpClient client, Picasso picasso, @ApiEndpoint StringPreference networkEndpoint,
-      @NetworkEnabled BooleanPreference networkEnabled, @DebugMode BooleanPreference debugMode,
-      @NetworkProxy StringPreference networkProxy, @AnimationSpeed IntPreference animationSpeed,
-      @PicassoDebugging BooleanPreference picassoDebugging, @ScalpelEnabled BooleanPreference scalpelEnabled,
+    public DebugAppContainer(ObjectMapper objectMapper,
+      OkHttpClient client,
+      Picasso picasso,
+      @ApiEndpoint StringPreference networkEndpoint,
+      @NetworkEnabled BooleanPreference networkEnabled,
+      @DebugMode BooleanPreference debugMode,
+      @NetworkProxy StringPreference networkProxy,
+      @AnimationSpeed IntPreference animationSpeed,
+      @PicassoDebugging BooleanPreference picassoDebugging,
+      @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @CustomEndpoint StringPreference customEndpoint,
-      @NotificationsEnabled BooleanPreference notificationsEnabled, DebugServiceAdapter debugServiceAdapter,
+      @NotificationsEnabled BooleanPreference notificationsEnabled,
+      DebugServiceAdapter debugServiceAdapter,
       Application app) {
+        this.objectMapper = objectMapper;
         this.client = client;
         this.picasso = picasso;
         this.debugMode = debugMode;
@@ -167,6 +178,7 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_build_name) TextView buildNameView;
     @Bind(R.id.debug_build_code) TextView buildCodeView;
     @Bind(R.id.debug_build_sha) TextView buildShaView;
+    @Bind(R.id.debug_build_branch) TextView buildBranchView;
     @Bind(R.id.debug_build_date) TextView buildDateView;
 
     @Bind(R.id.debug_device_make) TextView deviceMakeView;
@@ -236,6 +248,8 @@ public class DebugAppContainer implements AppContainer {
 
     private Collection<ContextualDebugActions.DebugAction<? extends Activity>> debugActions() {
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
+        debugActions.add(new FakeEmailInUseDebugAction(objectMapper));
+        debugActions.add(new FakeUsernameInUseDebugAction(objectMapper));
         debugActions.add(new LoginDebugAction("rafa", "123456"));
         debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
         debugActions.add(new LoginDebugAction("heisenberg", "123456"));
@@ -528,6 +542,7 @@ public class DebugAppContainer implements AppContainer {
         buildNameView.setText(BuildConfig.VERSION_NAME);
         buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
         buildShaView.setText(BuildConfig.GIT_SHA);
+        buildBranchView.setText(BuildConfig.GIT_BRANCH);
 
         try {
             // Parse ISO8601-format time into local time.

@@ -45,7 +45,7 @@ public class ShootrUserServiceLoginTest {
           resetPasswordEmailGateway, databaseUtils);
     }
 
-    @Test public void shouldCreateSessionWhenLoginCorrect() throws IOException {
+    @Test public void shouldCreateSessionWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultCorrect());
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
@@ -53,7 +53,7 @@ public class ShootrUserServiceLoginTest {
         verify(sessionRepository).createSession(CURRENT_USER_ID, SESSION_TOKEN_STUB, currentUser());
     }
 
-    @Test public void shouldDownloadEventIfUserHasEventsWhenLoginCorrect() throws IOException {
+    @Test public void shouldDownloadEventIfUserHasEventsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithEvent());
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
@@ -61,19 +61,19 @@ public class ShootrUserServiceLoginTest {
         verify(remoteEventRepository).getEventById(WATCHING_EVENT_ID);
     }
 
-    @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws IOException {
+    @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteEventRepository, never()).getEventById(anyString());
     }
 
-    @Test public void shouldDownloadPeopleIfUserHasEventsWhenLoginCorrect() throws IOException {
+    @Test public void shouldDownloadPeopleIfUserHasEventsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
     }
 
-    @Test public void shouldDownlaodPeopleIfUserHasNotEventsWhenLoginCorrect() throws IOException {
+    @Test public void shouldDownlaodPeopleIfUserHasNotEventsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
