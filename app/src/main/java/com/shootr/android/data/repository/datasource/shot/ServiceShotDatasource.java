@@ -66,9 +66,11 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getReplies(String shotId) {
         try {
-            return shootrService.getRepliesToShot(shotId);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
+            ShotApiEntity shot = shotApiService.getShotWithReplies(shotId);
+            List<ShotApiEntity> replies = shot.getReplies();
+            return shotApiEntityMapper.transform(replies);
+        } catch (IOException | ApiException error) {
+            throw new ServerCommunicationException(error);
         }
     }
 

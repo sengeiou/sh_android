@@ -19,8 +19,6 @@ public interface ShootrService {
 
     UserEntity getUserByIdUser(String idUser) throws IOException;
 
-    List<ShotEntity> getRepliesToShot(String shotId) throws IOException;
-
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)

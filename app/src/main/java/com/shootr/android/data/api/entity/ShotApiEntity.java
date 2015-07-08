@@ -1,5 +1,7 @@
 package com.shootr.android.data.api.entity;
 
+import java.util.List;
+
 public class ShotApiEntity {
 
     private String idShot;
@@ -20,6 +22,7 @@ public class ShotApiEntity {
     private Long videoDuration;
 
     private EmbedUserApiEntity user;
+    private List<ShotApiEntity> replies;
 
     private Long birth;
     private Long modified;
@@ -159,5 +162,13 @@ public class ShotApiEntity {
 
     public void setRevision(Integer revision) {
         this.revision = revision;
+    }
+
+    public List<ShotApiEntity> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<ShotApiEntity> replies) {
+        this.replies = replies;
     }
 }

@@ -158,23 +158,6 @@ public class ShootrDataService implements ShootrService {
         return usersById;
     }
 
-    @Override public List<ShotEntity> getRepliesToShot(String shotId) throws IOException {
-        List<ShotEntity> shots = new ArrayList<>();
-        GenericDto genericDto = shotDtoFactory.getRepliesOperationDto(shotId);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> aData : data) {
-                ShotEntity shot = shotEntityMapper.fromDto(aData);
-                shots.add(shot);
-                }
-        }
-        return shots;
-    }
-
     @Override public ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException {
         GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(shotTemplate);
         GenericDto responseDto = postRequest(requestDto);

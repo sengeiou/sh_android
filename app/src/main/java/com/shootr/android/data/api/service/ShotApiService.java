@@ -22,6 +22,9 @@ public interface ShotApiService {
     @GET("/shots/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
+    @GET("/shots/{idShot}/?includeLinks=false&includeReplies=true")
+    ShotApiEntity getShotWithReplies(@Path("idShot") String idShot) throws ApiException, IOException;
+
     @GET("/shots/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit,
