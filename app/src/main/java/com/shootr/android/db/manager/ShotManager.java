@@ -8,10 +8,8 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.ShotType;
-import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +18,13 @@ import javax.inject.Inject;
 public class ShotManager extends  AbstractManager{
 
     @Inject ShotEntityMapper shotEntityMapper;
-    @Inject UserMapper userMapper;
-    @Inject ShotEntityModelMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
 
     @Inject
-    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotEntityModelMapper shotVOMapper){
+    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper){
         super(openHelper);
         this.shotEntityMapper = shotEntityMapper;
-        this.userMapper = userMapper;
-        this.shotVOMapper = shotVOMapper;
     }
 
     /**
@@ -46,7 +40,7 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<ShotEntity> getLatestShotsFromIdUser(String idUser, Long latestShotsNumber) {
+    public List<ShotEntity> getShotsFromUser(String idUser, Integer latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
         String[] whereArguments = new String[]{String.valueOf(idUser)};

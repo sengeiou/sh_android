@@ -20,7 +20,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
 public class ShotDtoFactory {
 
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
-    private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
     private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
     private static final String ALIAS_GET_MEDIA = "GET_MEDIA_SHOTS_FOR_EVENT";
     private static final int REPLIES_MAX_ITEMS = 50;
@@ -47,25 +46,6 @@ public class ShotDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_NEW_SHOT, op);
 
-    }
-
-    public GenericDto getLatestShotsFromIdUser(String idUser, Long latestShotNumber) {
-        if (idUser == null) {
-            throw new IllegalArgumentException("idUser must not be null");
-        }
-
-        FilterDto shotsFilter = and(ShotTable.ID_USER).isEqualTo(idUser)
-          .and(or(ShotTable.TYPE).isIn(Arrays.asList(ShotType.TYPES_SHOWN)))
-          .and(ShotTable.DELETED).isEqualTo(null)
-          .and(ShotTable.MODIFIED).greaterThan(0L).build();
-
-        MetadataDto md = new MetadataDto.Builder().operation(ServiceConstants.OPERATION_RETRIEVE)
-          .entity(ShotTable.TABLE)
-          .filter(shotsFilter).items(latestShotNumber).build();
-
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(shotEntityMapper.toDto(null)).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
     }
 
     public GenericDto getRepliesOperationDto(String shotId) {

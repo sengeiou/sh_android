@@ -10,7 +10,6 @@ import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.ui.model.mappers.ShotEntityModelMapper;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -28,8 +27,10 @@ public class ManagerModule {
         return new FollowManager(openHelper, followMapper);
     }
 
-    @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper, UserMapper userMapper, ShotEntityModelMapper shotVOMapper) {
-        return new ShotManager(openHelper, shotEntityMapper, userMapper, shotVOMapper);
+    @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper,
+      ShotEntityMapper shotEntityMapper,
+      UserMapper userMapper) {
+        return new ShotManager(openHelper, shotEntityMapper);
     }
 
     @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {

@@ -48,8 +48,6 @@ public interface ShootrService {
 
     EventEntity getEventById(String idEvent) throws IOException;
 
-    List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException;
-
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
     void performCheckin(String idUser, String idEvent) throws IOException;

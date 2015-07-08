@@ -412,24 +412,6 @@ public class ShootrDataService implements ShootrService {
 
     }
 
-    @Override public List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException {
-        List<ShotEntity> shotEntities = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getLatestShotsFromIdUser(idUser, latestShotNumber);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
-            Timber.e("Received 0 operations");
-        }else{
-            MetadataDto md = ops[0].getMetadata();
-            Long items = md.getItems();
-            for(int i = 0; i< items; i++){
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                shotEntities.add(shotEntityMapper.fromDto(dataItem));
-            }
-        }
-        return shotEntities;
-    }
-
     @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
         GenericDto requestDto = userDtoFactory.saveUserDto(userEntity);
         GenericDto responseDto = postRequest(requestDto);
