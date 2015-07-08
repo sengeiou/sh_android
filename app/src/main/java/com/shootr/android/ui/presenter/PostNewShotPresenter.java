@@ -157,6 +157,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private void onShotError() {
         postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
+        this.hideLoading();
     }
 
     private void updateCharCounter(String filteredText) {

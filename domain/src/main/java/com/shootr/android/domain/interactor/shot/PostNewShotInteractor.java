@@ -44,12 +44,12 @@ public abstract class PostNewShotInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        Shot shotToPublish = createShotFromParameters();
         try {
+            Shot shotToPublish = createShotFromParameters();
             notifyReadyToSend();
             sendShotToServer(shotToPublish);
-        } catch (DomainValidationException validationError) {
-            notifyError(validationError);
+        } catch (ShootrException error) {
+            notifyError(error);
         }
     }
 
