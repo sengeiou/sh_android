@@ -44,7 +44,6 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
     @Override protected void fillShotEventInfo(Shot shot) {
         Shot parentShot = getParentShot();
         checkNotNull(parentShot, "Parent shot not found with id=%s", replyParentId);
-        checkArgument(parentShot.getType().equals(ShotType.COMMENT), "Replying to Activity shots is not allowed");
         shot.setEventInfo(parentShot.getEventInfo());
     }
 
