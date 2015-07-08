@@ -23,6 +23,7 @@ public interface ShotApiService {
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
 
     @GET("/shots/user/{idUser}/?includeLinks=false")
-    List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser, @Query("count") Integer limit)
-      throws ApiException, IOException;
+    List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
+      @Query("count") Integer limit,
+      @Query("types") String[] types) throws ApiException, IOException;
 }
