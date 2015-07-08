@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.data.bus.ServerDown;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
@@ -22,7 +21,6 @@ import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.RetrofitErrorHandler;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.EventDtoFactory;
@@ -168,21 +166,6 @@ public class ShootrDataService implements ShootrService {
         }
         //TODO order
         return usersById;
-    }
-
-    @Override
-    public ShotEntity getShotById(String idShot) throws IOException {
-        GenericDto requestDto = shotDtoFactory.getSingleShotOperationDto(idShot);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if(ops[0].getMetadata() != null && ops[0].getData().length > 0) {
-            Map<String, Object> data = ops[0].getData()[0];
-            return shotEntityMapper.fromDto(data);
-
-        }
-        return null;
     }
 
     @Override

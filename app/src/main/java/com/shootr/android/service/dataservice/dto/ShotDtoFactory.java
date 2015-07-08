@@ -20,7 +20,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
 public class ShotDtoFactory {
 
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
-    private static final String ALIAS_GET_SHOT = "GET_SHOT";
     private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
     private static final String ALIAS_GET_REPLIES = "GET_REPLIES_OF_SHOT";
     private static final String ALIAS_GET_MEDIA = "GET_MEDIA_SHOTS_FOR_EVENT";
@@ -32,22 +31,6 @@ public class ShotDtoFactory {
     @Inject public ShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotEntityMapper shotEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.shotEntityMapper = shotEntityMapper;
-
-    }
-
-    public GenericDto getSingleShotOperationDto(String idShot) {
-        MetadataDto md = new MetadataDto.Builder()
-                .operation(ServiceConstants.OPERATION_RETRIEVE)
-                .entity(ShotTable.TABLE)
-                .putKey(ShotTable.ID_SHOT, idShot)
-                .build();
-
-        OperationDto op = new OperationDto.Builder()
-                .metadata(md)
-                .putData(shotEntityMapper.toDto(null))
-                .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOT, op);
     }
 
     public GenericDto getNewShotOperationDto(ShotEntity shotTemplate) {

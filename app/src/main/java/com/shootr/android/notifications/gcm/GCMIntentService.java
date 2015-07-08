@@ -48,7 +48,7 @@ public class GCMIntentService extends IntentService {
     @Inject UserModelMapper userModelMapper;
     @Inject @Remote ActivityRepository remoteActivityRepository;
     @Inject ActivityModelMapper activityModelMapper;
-    @Inject ShotRepository remoteShotRepository;
+    @Inject @Remote ShotRepository remoteShotRepository;
     @Inject ShotModelMapper shotModelMapper;
 
     public GCMIntentService() {
