@@ -5,12 +5,12 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.dd.CircularProgressButton;
@@ -56,7 +56,13 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
         presenter.initialize(this);
     }
 
-
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @OnTextChanged({R.id.email_login_username_email, R.id.email_login_password})
     public void inputTextChanged() {
