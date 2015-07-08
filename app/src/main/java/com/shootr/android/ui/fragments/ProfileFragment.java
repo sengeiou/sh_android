@@ -12,6 +12,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -94,6 +95,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
+    public static final int LOGOUT_DISMISS_DELAY = 1500;
 
     //region injected
     @Bind(R.id.profile_name) TextView nameTextView;
@@ -736,10 +738,20 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override public void navigateToWelcomeScreen() {
         if(getActivity() != null) {
-            Intent intent = new Intent(getActivity(), LoginSelectionActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideLogoutInProgress();
+                    redirectToWelcome();
+                }
+            }, LOGOUT_DISMISS_DELAY);
         }
+    }
+
+    private void redirectToWelcome() {
+        Intent intent = new Intent(getActivity(), LoginSelectionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override public void showLogoutButton() {

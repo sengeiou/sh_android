@@ -65,15 +65,6 @@ public class ProfilePresenterTest {
     }
 
     @Test
-    public void shouldHideLogoutInProgressWhenLogoutSelectedAndCompletedCallback() {
-        setupLogoutInteractorCompletedCallback();
-
-        profilePresenter.logoutSelected();
-
-        verify(profileView).hideLogoutInProgress();
-    }
-
-    @Test
     public void shouldNavigateToWelcomeScreenWhenLogoutSelectedAndCompletedCallback() {
         setupLogoutInteractorCompletedCallback();
 
