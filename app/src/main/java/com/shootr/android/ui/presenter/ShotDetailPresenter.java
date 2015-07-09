@@ -23,13 +23,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
     private final GetReplyParentInteractor getReplyParentInteractor;
-    private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final ShotModelMapper shotModelMapper;
-    private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
-
-    private UserModel userModel;
 
     private ShotDetailView shotDetailView;
     private ShotModel shotModel;
@@ -40,16 +36,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
       GetReplyParentInteractor getReplyParentInteractor,
       ShotModelMapper shotModelMapper,
-      @Main Bus bus,
-      GetUserByUsernameInteractor getUserByUsernameInteractor,
-      UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
         this.getReplyParentInteractor = getReplyParentInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
-        this.getUserByUsernameInteractor = getUserByUsernameInteractor;
-        this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -103,8 +94,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             public void onLoaded(Shot shot) {
                 if (shot != null) {
                     shotDetailView.renderParent(shotModelMapper.transform(shot));
-                } else {
-                    //TODO
                 }
             }
         }, new Interactor.ErrorCallback() {
