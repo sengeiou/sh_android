@@ -1,10 +1,12 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.ForgotPasswordResult;
+import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import javax.inject.Inject;
 
@@ -33,17 +35,15 @@ public class ResetPasswordInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Exception {
+    @Override public void execute() throws Exception{
         try{
             ForgotPasswordResult forgotPasswordResult = shootrUserService.performResetPassword(usernameOrEmail);
             notifyLoaded(forgotPasswordResult);
-        } catch (ShootrException exception){
-            handleServerError(exception);
+        } catch (InvalidForgotPasswordException forgotError) {
+            notifyError(new ResetPasswordException(forgotError));
+        } catch (ShootrException unknownError){
+            notifyError(unknownError);
         }
-    }
-
-    private void handleServerError(ShootrException exception) {
-        notifyError(exception);
     }
 
     private void notifyError(final ShootrException exception) {
