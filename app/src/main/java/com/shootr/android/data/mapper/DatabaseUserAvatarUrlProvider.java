@@ -7,12 +7,9 @@ import javax.inject.Inject;
 public class DatabaseUserAvatarUrlProvider implements UserAvatarUrlProvider {
 
     private final UserManager userManager;
-    private final GeneratedUserAvatarUrlProvider generatedUserAvatarUrlProvider;
 
-    @Inject public DatabaseUserAvatarUrlProvider(UserManager userManager,
-      GeneratedUserAvatarUrlProvider generatedUserAvatarUrlProvider) {
+    @Inject public DatabaseUserAvatarUrlProvider(UserManager userManager) {
         this.userManager = userManager;
-        this.generatedUserAvatarUrlProvider = generatedUserAvatarUrlProvider;
     }
 
     @Override
@@ -21,7 +18,7 @@ public class DatabaseUserAvatarUrlProvider implements UserAvatarUrlProvider {
         if (user != null) {
             return user.getPhoto();
         } else {
-            return generatedUserAvatarUrlProvider.thumbnail(userId);
+            return null;
         }
     }
 

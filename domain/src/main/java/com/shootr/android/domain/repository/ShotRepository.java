@@ -17,4 +17,6 @@ public interface ShotRepository {
     Integer getMediaCountByIdEvent(String idEvent, List<String> idUser);
 
     List<Shot> getMediaByIdEvent(String idEvent, List<String> userId);
+
+    List<Shot> getShotsFromUser(String idUser, Integer limit);
 }

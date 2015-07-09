@@ -2,9 +2,11 @@ package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -56,17 +58,19 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public ShotEntity getShot(String shotId) {
         try {
-            return shootrService.getShotById(shotId);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
+            return shotApiEntityMapper.transform(shotApiService.getShot(shotId));
+        } catch (IOException | ApiException error) {
+            throw new ServerCommunicationException(error);
         }
     }
 
     @Override public List<ShotEntity> getReplies(String shotId) {
         try {
-            return shootrService.getRepliesToShot(shotId);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
+            ShotApiEntity shot = shotApiService.getShotWithReplies(shotId);
+            List<ShotApiEntity> replies = shot.getReplies();
+            return shotApiEntityMapper.transform(replies);
+        } catch (IOException | ApiException error) {
+            throw new ServerCommunicationException(error);
         }
     }
 
@@ -83,6 +87,16 @@ public class ServiceShotDatasource implements ShotDataSource {
             return shootrService.getEventMediaShots(idEvent, userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
+        try {
+            List<ShotApiEntity> userApiShots = shotApiService.getShotsFromUser(idUser, limit, ShotType.TYPES_SHOWN);
+            return shotApiEntityMapper.transform(userApiShots);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
         }
     }
 }

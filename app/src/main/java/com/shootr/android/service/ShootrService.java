@@ -19,16 +19,6 @@ public interface ShootrService {
 
     UserEntity getUserByIdUser(String idUser) throws IOException;
 
-    ShotEntity getShotById(String idShot) throws IOException;
-
-    List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
-
-    List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException;
-
-    List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
-
-    List<ShotEntity> getRepliesToShot(String shotId) throws IOException;
-
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
@@ -49,8 +39,6 @@ public interface ShootrService {
     List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException;
 
     EventEntity getEventById(String idEvent) throws IOException;
-
-    List<ShotEntity> getLatestsShotsFromIdUser(String idUser, Long latestShotNumber) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
