@@ -176,8 +176,9 @@
             android:name=".ui.activities.EventMediaActivity"
             android:label="@string/title_activity_event_media" />
         <activity
-            android:name=".ui.activities.registro.ResetPasswordActivity"
-            android:label="@string/title_activity_reset_password" >
+          android:name=".ui.activities.registro.ResetPasswordActivity"
+          android:configChanges="orientation|screenSize"
+          android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
             android:name=".ui.activities.ListingActivity"
