@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.service.user.ShootrUserService;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,14 +39,14 @@ public class SendPasswordResetEmailInteractorTest {
     }
 
     @Test
-    public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly(){
+    public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws IOException {
         doNothing().when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();
     }
 
     @Test
-    public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems(){
+    public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws IOException {
         doThrow(new ShootrException(){}).when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
