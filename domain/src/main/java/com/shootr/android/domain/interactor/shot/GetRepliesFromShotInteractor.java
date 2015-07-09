@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -19,6 +20,7 @@ public class GetRepliesFromShotInteractor implements Interactor {
     private final ShotRepository remoteShotRepository;
     private String shotId;
     private Callback<List<Shot>> callback;
+    private ErrorCallback errorCallback;
 
     @Inject
     public GetRepliesFromShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -29,9 +31,10 @@ public class GetRepliesFromShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplies(String shotId, Callback<List<Shot>> callback) {
+    public void loadReplies(String shotId, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
         this.shotId = shotId;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
@@ -40,9 +43,13 @@ public class GetRepliesFromShotInteractor implements Interactor {
         if (!localReplies.isEmpty()) {
             notifyLoaded(orderShots(localReplies));
         }
-        List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
-        if (!updatedReplies.isEmpty()) {
-            notifyLoaded(orderShots(updatedReplies));
+        try {
+            List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
+            if (!updatedReplies.isEmpty()) {
+                notifyLoaded(orderShots(updatedReplies));
+            }
+        } catch (ShootrException error) {
+            notifyError(error);
         }
     }
 
@@ -53,8 +60,18 @@ public class GetRepliesFromShotInteractor implements Interactor {
 
     private void notifyLoaded(final List<Shot> result) {
         postExecutionThread.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 callback.onLoaded(result);
+            }
+        });
+    }
+
+    protected void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                errorCallback.onError(error);
             }
         });
     }

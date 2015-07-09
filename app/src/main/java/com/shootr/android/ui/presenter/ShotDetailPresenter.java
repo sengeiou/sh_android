@@ -76,6 +76,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                         justSentReply = false;
                     }
                 }
+            }, new Interactor.ErrorCallback() {
+                @Override
+                public void onError(ShootrException error) {
+                    shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+                }
             });
         }
     }
