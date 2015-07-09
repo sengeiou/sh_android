@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -15,6 +16,7 @@ public class GetReplyParentInteractor implements Interactor {
     private final ShotRepository remoteShotRepository;
     private String parentId;
     private Callback<Shot> callback;
+    private ErrorCallback errorCallback;
 
     @Inject
     public GetReplyParentInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
@@ -24,22 +26,36 @@ public class GetReplyParentInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplyParent(String parentId, Callback<Shot> callback) {
+    public void loadReplyParent(String parentId, Callback<Shot> callback, ErrorCallback errorCallback) {
         this.parentId = parentId;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        Shot replyParent = remoteShotRepository.getShot(parentId);
+        try {
+            Shot replyParent = remoteShotRepository.getShot(parentId);
+            notifyLoaded(replyParent);
+        } catch (ShootrException error) {
+            notifyError(error);
+        }
 
-        notifyLoaded(replyParent);
     }
 
     private void notifyLoaded(final Shot result) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(result);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                errorCallback.onError(error);
             }
         });
     }

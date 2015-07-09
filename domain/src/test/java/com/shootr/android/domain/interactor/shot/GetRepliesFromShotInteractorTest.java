@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.shot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
@@ -33,6 +34,7 @@ public class GetRepliesFromShotInteractorTest {
     @Mock ShotRepository localShotRepository;
     @Mock ShotRepository remoteShotRepository;
     @Spy SpyCallback<List<Shot>> spyCallback = new SpyCallback<>();
+    @Mock Interactor.ErrorCallback errorCallback;
 
     private GetRepliesFromShotInteractor interactor;
 
@@ -49,7 +51,7 @@ public class GetRepliesFromShotInteractorTest {
     @Test public void shouldCallbackLocalRepliesInOrderNewerBelow() throws Exception {
         when(localShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(unorderedShots());
 
-        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
         assertThat(spyCallback.lastResult()).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
@@ -57,7 +59,7 @@ public class GetRepliesFromShotInteractorTest {
     @Test public void shouldCallbackRemoteRepliesInOrderNewerBelow() throws Exception {
         when(remoteShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(unorderedShots());
 
-        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
         assertThat(spyCallback.lastResult()).isSortedAccordingTo(new Shot.NewerBelowComparator());
     }
@@ -66,7 +68,7 @@ public class GetRepliesFromShotInteractorTest {
         when(localShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(new ArrayList<Shot>());
         when(remoteShotRepository.getReplies(ANY_SHOT_ID)).thenReturn(new ArrayList<Shot>());
 
-        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback);
+        interactor.loadReplies(String.valueOf(ANY_SHOT_ID), spyCallback, errorCallback);
 
         verify(spyCallback, never()).onLoaded(anyListOf(Shot.class));
     }
