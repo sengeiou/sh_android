@@ -13,7 +13,7 @@ public interface ResetPasswordApiService {
 
     @POST("/auth/forgotPassword") ForgotPasswordResultEntity passwordReset(@Body ForgotPasswordEntity forgotPasswordEntity) throws ApiException, IOException;
 
-    @POST("/auth/resetPassword") Response sendResetPasswordEmail(@Body ResetPasswordEntity resetPasswordEntity) throws IOException;
+    @POST("/auth/resetPassword") Response sendResetPasswordEmail(@Body ResetPasswordEntity resetPasswordEntity) throws ApiException, IOException;
 
 
 }

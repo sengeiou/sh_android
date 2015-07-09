@@ -116,12 +116,8 @@ public class ShootrUserService {
         return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 
-    public void sendPasswordResetEmail(String idUser) {
-        try {
-            resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
-        } catch (IOException e) {
-            throw new SendPasswordResetEmailException(e);
-        }
+    public void sendPasswordResetEmail(String idUser) throws IOException {
+        resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
     }
 
     public void performLogout() {
