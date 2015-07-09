@@ -64,6 +64,7 @@ public class NewEventPresenter implements Presenter {
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
+        newEventView.showDeleteEventButton();
     }
     //endregion
 
@@ -91,6 +92,11 @@ public class NewEventPresenter implements Presenter {
         notifyCreation = notify;
         newEventView.showLoading();
         createEvent();
+    }
+
+    public void delete() {
+        //TODO
+        newEventView.showError("Sure, mate");
     }
 
     private void createEvent() {

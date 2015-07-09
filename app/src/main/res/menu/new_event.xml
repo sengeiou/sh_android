@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+      android:id="@+id/menu_delete"
+      android:icon="@drawable/ic_action_delete"
+      android:title="@string/delete_event_label"
+      android:visible="false"
+      app:showAsAction="always"
+      tools:visible="true" />
 
     <item
       android:id="@+id/menu_done"
