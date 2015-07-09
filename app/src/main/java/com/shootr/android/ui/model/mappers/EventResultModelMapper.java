@@ -8,6 +8,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 @Singleton
 public class EventResultModelMapper {
 
@@ -18,6 +20,10 @@ public class EventResultModelMapper {
     }
 
     public EventResultModel transform(EventSearchResult eventSearchResult) {
+        if (eventSearchResult == null) {
+            return null;
+        }
+        checkNotNull(eventSearchResult.getEvent());
         EventModel eventModel = eventModelMapper.transform(eventSearchResult.getEvent());
 
         EventResultModel resultModel = new EventResultModel();
