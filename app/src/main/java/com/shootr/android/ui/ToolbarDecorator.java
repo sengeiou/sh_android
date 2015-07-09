@@ -22,7 +22,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private Toolbar toolbar;
     private ActionBar supportActionBar;
     private TextView titleText;
-    private TextView subtitleText;
     private ViewGroup titleContainer;
 
     private CircleImageView avatar;
@@ -36,7 +35,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         View inflatedView = LayoutInflater.from(context).inflate(R.layout.action_bar_decor, originalRoot, true);
         toolbar = ((Toolbar) inflatedView.findViewById(R.id.toolbar_actionbar));
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
         avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
         setupTitleContainerTransitions();
@@ -66,25 +64,8 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         }
     }
 
-    public void showDropdownIcon(boolean show) {
-        titleText.setCompoundDrawablesWithIntrinsicBounds(0, 0, show ? R.drawable.spinner_triangle_white : 0, 0);
-    }
-
     public void setTitleClickListener(View.OnClickListener clickListener) {
         titleContainer.setOnClickListener(clickListener);
-    }
-
-    public void setSubtitle(@StringRes int subtitle) {
-        setSubtitle(context.getString(subtitle));
-    }
-
-    public void setSubtitle(String subtitle) {
-        if (subtitle == null) {
-            hideSubtitle();
-        } else {
-            subtitleText.setVisibility(View.VISIBLE);
-            subtitleText.setText(subtitle);
-        }
     }
 
     public void setAvatarImage(String imageURL) {
@@ -104,21 +85,10 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText.setVisibility(View.GONE);
     }
 
-    public void hideSubtitle() {
-        subtitleText.setVisibility(View.GONE);
-    }
-
     private void setupTitleContainerTransitions() {
         LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
         layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
         layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
     }
 
-    public void hideTitleContainerInfo() {
-        titleContainer.setVisibility(View.GONE);
-    }
-
-    public void showTitleContainerInfo() {
-        titleContainer.setVisibility(View.VISIBLE);
-    }
 }
