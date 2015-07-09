@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
@@ -12,6 +13,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
@@ -24,6 +26,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final GetUserByUsernameInteractor getUserByUsernameInteractor;
     private final ShotModelMapper shotModelMapper;
     private final UserModelMapper userModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
 
     private UserModel userModel;
@@ -35,14 +38,19 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject
     public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
-                               GetReplyParentInteractor getReplyParentInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
-                               GetUserByUsernameInteractor getUserByUsernameInteractor, UserModelMapper userModelMapper) {
+      GetReplyParentInteractor getReplyParentInteractor,
+      ShotModelMapper shotModelMapper,
+      @Main Bus bus,
+      GetUserByUsernameInteractor getUserByUsernameInteractor,
+      UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
         this.getReplyParentInteractor = getReplyParentInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.getUserByUsernameInteractor = getUserByUsernameInteractor;
         this.userModelMapper = userModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
@@ -93,6 +101,12 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 } else {
                     //TODO
                 }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                shotDetailView.showError(errorMessage);
             }
         });
     }

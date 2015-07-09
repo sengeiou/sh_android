@@ -25,4 +25,5 @@ public interface ShotDetailView  {
 
     void startProfileContainerActivity(String username);
 
+    void showError(String errorMessage);
 }

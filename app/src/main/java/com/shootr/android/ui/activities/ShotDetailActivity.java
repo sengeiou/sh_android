@@ -267,6 +267,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         startActivity(intentForUser);
     }
 
+    @Override
+    public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
