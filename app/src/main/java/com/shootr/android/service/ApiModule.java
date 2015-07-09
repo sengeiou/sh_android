@@ -2,7 +2,6 @@ package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.EventApiService;
@@ -33,7 +32,9 @@ import retrofit.converter.JacksonConverter;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.API_ENDPOINT_BASE;
+    public static final String PRODUCTION_ENDPOINT_URL = "http://api.shootr.com/v1";
+    public static final String TEST_ENDPOINT_URL = "http://tst.api.shootr.com/v1";
+    public static final String TEST_SSL_ENDPOINT_URL = "https://tst.api.shootr.com/v1";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
