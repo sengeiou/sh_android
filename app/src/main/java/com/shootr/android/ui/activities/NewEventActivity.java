@@ -25,7 +25,9 @@ import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
 
+    public static final int RESULT_EXIT_EVENT = 1;
     public static final String KEY_EVENT_ID = "event_id";
+
     public static final String KEY_EVENT_TITLE = "event_title";
 
     @Inject NewEventPresenter presenter;
@@ -130,6 +132,12 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         setResult(RESULT_OK, new Intent() //
           .putExtra(KEY_EVENT_ID, eventId) //
           .putExtra(KEY_EVENT_TITLE, title));
+        finish();
+    }
+
+    @Override
+    public void closeScreenWithExitEvent() {
+        setResult(RESULT_EXIT_EVENT);
         finish();
     }
 
