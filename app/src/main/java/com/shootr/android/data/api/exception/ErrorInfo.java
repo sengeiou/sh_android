@@ -74,4 +74,12 @@ public enum ErrorInfo {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorInfo{" +
+          "code=" + code +
+          ", httpCode=" + httpCode +
+          ", description='" + description + '\'' +
+          '}';
+    }
 }
