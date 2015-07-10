@@ -17,6 +17,9 @@ import retrofit.RestAdapter;
 )
 public class DebugApiModule {
 
+    public static final String TEST_ENDPOINT_URL = "http://tst-api.shootr.com/v1";
+    public static final String TEST_SSL_ENDPOINT_URL = "https://tst-api.shootr.com/v1";
+
     @Provides @Singleton Endpoint provideEndpoint(@ApiEndpoint StringPreference apiEndpoint) {
         return Endpoints.newFixedEndpoint(apiEndpoint.get());
     }

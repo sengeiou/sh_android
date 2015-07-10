@@ -2,10 +2,11 @@ package com.shootr.android.data;
 
 
 import com.shootr.android.service.ApiModule;
+import com.shootr.android.service.DebugApiModule;
 
 public enum ApiEndpoints {
-  TEST("Tst", ApiModule.TEST_ENDPOINT_URL),
-  MOCK_MODE("Tst SSL", ApiModule.TEST_SSL_ENDPOINT_URL),
+  TEST("Tst", DebugApiModule.TEST_ENDPOINT_URL),
+  MOCK_MODE("Tst SSL", DebugApiModule.TEST_SSL_ENDPOINT_URL),
   PRODUCTION("Production", ApiModule.PRODUCTION_ENDPOINT_URL),
   CUSTOM("Custom", null);
 
