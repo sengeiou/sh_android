@@ -1,14 +1,24 @@
 package com.shootr.android.service;
 
+import android.content.SharedPreferences;
 import com.shootr.android.data.ApiEndpoint;
 import com.shootr.android.data.DebugMode;
+import com.shootr.android.data.api.service.ActivityApiService;
+import com.shootr.android.data.api.service.AuthApiService;
+import com.shootr.android.data.api.service.EventApiService;
+import com.shootr.android.data.api.service.FavoriteApiService;
+import com.shootr.android.data.api.service.ResetPasswordApiService;
+import com.shootr.android.data.api.service.ShotApiService;
+import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.service.dataservice.ShootrDataService;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
+import retrofit.MockRestAdapter;
 import retrofit.RestAdapter;
+import retrofit.android.AndroidMockValuePersistence;
 
 @Module(
         complete = false,
@@ -28,12 +38,72 @@ public class DebugApiModule {
         return new DebugServiceAdapter();
     }
 
+    @Provides @Singleton MockRestAdapter provideMockRestAdapter(RestAdapter restAdapter, SharedPreferences preferences) {
+        MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
+        AndroidMockValuePersistence.install(mockRestAdapter, preferences);
+        return mockRestAdapter;
+    }
+
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, DebugServiceAdapter debugServiceAdapter, @DebugMode
     BooleanPreference debugMode) {
         if (debugMode.get()) {
             return debugServiceAdapter.create(shootrDataService);
         } else {
             return shootrDataService;
+        }
+    }
+
+    @Provides
+    AuthApiService provideAuthApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+        return mockOrRealService(AuthApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    ResetPasswordApiService provideResetPasswordApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+        return mockOrRealService(ResetPasswordApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    EventApiService provideEventApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+      return mockOrRealService(EventApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    ShotApiService provideShotApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+      return mockOrRealService(ShotApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    VideoApiService provideVideoApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+      return mockOrRealService(VideoApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+      return mockOrRealService(FavoriteApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides
+    ActivityApiService provideActivityApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+      return mockOrRealService(ActivityApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    private <T> T mockOrRealService(Class<T> serviceClass,
+      RestAdapter restAdapter,
+      MockRestAdapter mockRestAdapter,
+      boolean isDebug) {
+        T realService = restAdapter.create(serviceClass);
+        if (isDebug) {
+            return mockRestAdapter.create(serviceClass, realService);
+        } else {
+            return realService;
         }
     }
 
