@@ -10,3 +10,8 @@ integration:
     only:
         - develop
         - /^bugfix\/.*$/
+
+distribution:
+    script: ./gradlew build -PdisablePreDex publishreleaseApkToS3
+    only:
+        - feature/s3-upload
