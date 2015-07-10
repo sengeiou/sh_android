@@ -40,19 +40,16 @@ public class ResetPasswordInteractorTest {
     }
 
     @Test
-    public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult()
-      throws IOException, InvalidForgotPasswordException {
+    public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult() throws Exception {
         doReturn(forgotPasswordResult).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
         verify(completedCallback).onLoaded(any(ForgotPasswordResult.class));
     }
 
     @Test
-    public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials()
-      throws IOException, InvalidForgotPasswordException {
+    public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials() throws Exception {
         doThrow(new ShootrException(){}).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
-
 }

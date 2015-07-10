@@ -39,14 +39,14 @@ public class SendPasswordResetEmailInteractorTest {
     }
 
     @Test
-    public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws IOException {
+    public void shouldCallbackCompletedWhenSendResetPasswordEmailWorksCorrectly() throws Exception {
         doNothing().when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(completedCallback).onCompleted();
     }
 
     @Test
-    public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws IOException {
+    public void shouldHadleServerErrorWhenSendResetPasswordEmailHasConnectionProblems() throws Exception {
         doThrow(new ShootrException(){}).when(shootrUserService).sendPasswordResetEmail(anyString());
         interactor.sendPasswordResetEmail(FAKE_USER_ID, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
