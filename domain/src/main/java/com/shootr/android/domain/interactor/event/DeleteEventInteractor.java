@@ -65,6 +65,7 @@ public class DeleteEventInteractor implements Interactor {
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingEvent(null);
             currentUser.setWatchingEventTitle(null);
+            currentUser.setJoinEventDate(null);
 
             localUserRepository.putUser(currentUser);
             remoteUserRepository.putUser(currentUser);
