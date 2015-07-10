@@ -6,7 +6,7 @@ import com.shootr.android.service.DebugApiModule;
 
 public enum ApiEndpoints {
   TEST("Tst", DebugApiModule.TEST_ENDPOINT_URL),
-  MOCK_MODE("Tst SSL", DebugApiModule.TEST_SSL_ENDPOINT_URL),
+  TEST_SSL("Tst SSL", DebugApiModule.TEST_SSL_ENDPOINT_URL),
   PRODUCTION("Production", ApiModule.PRODUCTION_ENDPOINT_URL),
   CUSTOM("Custom", null);
 
@@ -31,7 +31,4 @@ public enum ApiEndpoints {
     return CUSTOM;
   }
 
-  public static boolean isMockMode(String endpoint) {
-    return from(endpoint) == MOCK_MODE;
-  }
 }
