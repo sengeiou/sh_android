@@ -33,8 +33,8 @@ import retrofit.converter.JacksonConverter;
 public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = "http://api.shootr.com/v1";
-    public static final String TEST_ENDPOINT_URL = "http://tst.api.shootr.com/v1";
-    public static final String TEST_SSL_ENDPOINT_URL = "https://tst.api.shootr.com/v1";
+    public static final String TEST_ENDPOINT_URL = "http://tst-api.shootr.com/v1";
+    public static final String TEST_SSL_ENDPOINT_URL = "https://tst-api.shootr.com/v1";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
