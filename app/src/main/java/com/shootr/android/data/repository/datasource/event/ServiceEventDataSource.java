@@ -1,7 +1,10 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -60,6 +63,21 @@ public class ServiceEventDataSource implements EventDataSource {
             return eventService.getEventListing(idUser, locale, MAX_NUMBER_OF_LISTING_EVENTS);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public void deleteEvent(String idEvent) throws DeleteEventNotAllowedException {
+        try {
+            eventService.deleteEvent(idEvent);
+        } catch (ApiException apiError) {
+            if (apiError.getErrorInfo() == ErrorInfo.EventHasWatchersException) {
+                throw new DeleteEventNotAllowedException();
+            } else {
+                throw new ServerCommunicationException(apiError);
+            }
+        } catch (IOException networkError) {
+            throw new ServerCommunicationException(networkError);
         }
     }
 }
