@@ -5,6 +5,7 @@ import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.EventDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.Local;
 import java.util.List;
@@ -56,5 +57,10 @@ public class LocalEventRepository implements EventRepository {
 
     @Override public Integer getListingCount(String idUser) {
         return localEventDataSource.getListingCount(idUser);
+    }
+
+    @Override
+    public void deleteEvent(String idEvent) throws DeleteEventNotAllowedException {
+        localEventDataSource.deleteEvent(idEvent);
     }
 }

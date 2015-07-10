@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.db.manager.EventManager;
+import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -37,5 +38,10 @@ public class DatabaseEventDataSource implements EventDataSource {
 
     @Override public List<EventEntity> getEventsListing(String idUser, String locale) {
         return eventManager.getEventsListing(idUser, locale);
+    }
+
+    @Override
+    public void deleteEvent(String idEvent) throws DeleteEventNotAllowedException {
+        eventManager.deleteEvent(idEvent);
     }
 }

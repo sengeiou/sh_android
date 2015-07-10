@@ -90,9 +90,14 @@ public class EventManager extends AbstractManager{
     }
 
     public long deleteEvent(EventEntity eventEntity){
+        String idEvent = eventEntity.getIdEvent();
+        return deleteEvent(idEvent);
+    }
+
+    public long deleteEvent(String idEvent) {
         long res = 0;
         String args = DatabaseContract.EventTable.ID_EVENT + "=?";
-        String[] stringArgs = new String[]{String.valueOf(eventEntity.getIdEvent())};
+        String[] stringArgs = new String[]{String.valueOf(idEvent)};
         Cursor c = getReadableDatabase().query(DatabaseContract.EventTable.TABLE,
           DatabaseContract.EventTable.PROJECTION,
           args,
@@ -105,12 +110,6 @@ public class EventManager extends AbstractManager{
         }
         c.close();
         return res;
-    }
-
-    public void deleteEvents(List<EventEntity> eventEntities) {
-        for (EventEntity eventEntity : eventEntities) {
-            deleteEvent(eventEntity);
-        }
     }
 
     public void insertInSync(){
