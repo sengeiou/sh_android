@@ -287,4 +287,6 @@
     <string name="update_warning_button">Update now</string>
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="whale_retry_button_text">Ok</string>
+    <string name="new_event_short_title_text">Short title</string>
+    <string name="new_event_short_title_label">Short Title</string>
 </resources>

@@ -45,18 +45,30 @@
       tools:text="Error title"
       style="@style/ErrorSubtitle" />
 
-    <TextView
-      android:layout_width="wrap_content"
+    <com.shootr.android.ui.widgets.FloatLabelLayout
+      android:id="@+id/new_event_short_title_label"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="16dp"
-      android:paddingLeft="4dp"
-      android:paddingTop="4dp"
-      android:text="@string/new_event_starts_label"
-      android:textAppearance="@style/TextAppearance.FloatLabel"
-      android:visibility="gone"/>
+      android:layout_marginRight="16dp"
+      app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
+
+      <EditText
+        android:id="@+id/new_event_short_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_event_short_title_label"
+        android:imeOptions="actionDone"
+        android:inputType="text|textCapWords|textNoSuggestions"
+        android:lines="1"
+        android:maxLength="50"
+        android:nextFocusDown="@+id/profile_edit_username"
+        android:singleLine="true"
+        tools:text="MyNewEvent" />
+    </com.shootr.android.ui.widgets.FloatLabelLayout>
 
     <TextView
-      android:id="@+id/new_event_start_date_error"
+      android:id="@+id/new_event_short_title_warning"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="4dp"
@@ -64,7 +76,6 @@
       android:paddingLeft="4dp"
       android:textColor="@color/error"
       android:textSize="12sp"
-      android:visibility="gone"
-      tools:text="Error start date" />
+      tools:text="3 to 15 characters" />
 
 </LinearLayout>
