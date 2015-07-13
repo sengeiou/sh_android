@@ -191,12 +191,9 @@ public class EventManager extends AbstractManager{
         return listingCount;
     }
 
-    public List<EventEntity> getEventsListing(String idUser, String locale) {
-        String localeSelection = DatabaseContract.EventTable.LOCALE + " = ?";
-        String userSelection = DatabaseContract.EventTable.ID_USER + " = ?";
-
-        String whereSelection = userSelection + " AND " + localeSelection;
-        String[] whereArguments = new String[] { idUser,locale };
+    public List<EventEntity> getEventsListing(String idUser) {
+        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
           getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);

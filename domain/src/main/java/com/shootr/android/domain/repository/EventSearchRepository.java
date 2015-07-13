@@ -13,5 +13,5 @@ public interface EventSearchRepository {
 
     void deleteDefaultEvents();
 
-    List<EventSearchResult> getEventsListing(String listingIdUser, String locale);
+    List<EventSearchResult> getEventsListing(String listingIdUser);
 }

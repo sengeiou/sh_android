@@ -16,7 +16,7 @@ public interface EventDataSource {
 
     Integer getListingCount(String idUser);
 
-    List<EventEntity> getEventsListing(String idUser, String locale);
+    List<EventEntity> getEventsListing(String idUser);
 
     void deleteEvent(String idEvent) throws DeleteEventNotAllowedException;
 }
