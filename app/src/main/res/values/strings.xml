@@ -288,4 +288,5 @@
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="whale_retry_button_text">Ok</string>
     <string name="delete_event_label">Delete stream</string>
+    <string name="delete_event_confirmation">Delete stream?</string>
 </resources>

@@ -21,4 +21,6 @@ public interface NewEventView extends DataTransferView{
     void showNotificationConfirmation();
 
     void showDeleteEventButton();
+
+    void askDeleteConfirmation();
 }
