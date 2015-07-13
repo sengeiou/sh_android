@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.ForgotPasswordResult;
+import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -8,6 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.service.user.ShootrUserService;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,17 +40,16 @@ public class ResetPasswordInteractorTest {
     }
 
     @Test
-    public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult(){
+    public void shouldCallbackCompletedWhenResetPasswordReturnsCorrectResult() throws Exception {
         doReturn(forgotPasswordResult).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
         verify(completedCallback).onLoaded(any(ForgotPasswordResult.class));
     }
 
     @Test
-    public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials(){
+    public void shouldHadleServerErrorWhenAttempResetPasswordWithInvalidCredentials() throws Exception {
         doThrow(new ShootrException(){}).when(shootrUserService).performResetPassword(anyString());
         interactor.attempResetPassword(FAKE_USERNAME_STUB, completedCallback, errorCallback);
         verify(errorCallback).onError(any(ShootrException.class));
     }
-
 }

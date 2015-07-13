@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.exception.ShootrError;
@@ -62,7 +60,6 @@ public class ShootrDataService implements ShootrService {
     private final ShotEntityMapper shotEntityMapper;
     private final EventEntityMapper eventEntityMapper;
     private final DeviceMapper deviceMapper;
-    private final ForgotPasswordMapper forgotPasswordMapper;
 
     private final TimeUtils timeUtils;
 
@@ -80,7 +77,6 @@ public class ShootrDataService implements ShootrService {
       EventDtoFactory eventDtoFactory,
       DeviceMapper deviceMapper,
       EventEntityMapper eventEntityMapper,
-      ForgotPasswordMapper forgotPasswordMapper,
       TimeUtils timeUtils,
       VersionUpdater versionUpdater) {
         this.client = client;
@@ -95,7 +91,6 @@ public class ShootrDataService implements ShootrService {
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
         this.eventEntityMapper = eventEntityMapper;
-        this.forgotPasswordMapper = forgotPasswordMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
     }
@@ -390,28 +385,6 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return shotsByUserInEvent;
-    }
-
-
-    @Override public ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException {
-        GenericDto requestDto = userDtoFactory.getForgotPasswordResultByUsernameOrEmail(usernameOrEmail);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            Map<String, Object>[] data = ops[0].getData();
-            if (data.length > 0) {
-                Map<String, Object> dataItem = data[0];
-                return forgotPasswordMapper.fromDto(dataItem);
-            }
-        }
-        return null;
-    }
-
-    @Override public void sendResetPasswordEmail(String idUser) throws IOException {
-        GenericDto sendResetPasswordEmailDto = userDtoFactory.sendResetPasswordEmail(idUser);
-        postRequest(sendResetPasswordEmailDto);
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {

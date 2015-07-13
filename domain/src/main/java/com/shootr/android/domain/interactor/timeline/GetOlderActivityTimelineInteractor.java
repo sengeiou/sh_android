@@ -54,7 +54,6 @@ public class GetOlderActivityTimelineInteractor implements Interactor {
 
     private ActivityTimelineParameters buildTimelineParameters() {
         ActivityTimelineParameters build = ActivityTimelineParameters.builder() //
-          .currentUser(sessionRepository.getCurrentUserId()) //
           .maxDate(currentOldestDate) //
           .build();
         build.excludeHiddenTypes();

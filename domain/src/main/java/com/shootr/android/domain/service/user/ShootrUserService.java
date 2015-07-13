@@ -5,6 +5,7 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
@@ -14,8 +15,6 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.domain.service.ResetPasswordException;
-import com.shootr.android.domain.service.SendPasswordResetEmailException;
 import java.io.IOException;
 import javax.inject.Inject;
 
@@ -112,20 +111,13 @@ public class ShootrUserService {
         return user.getIdCheckedEvent() != null && user.getIdCheckedEvent().equals(idEvent);
     }
 
-    public ForgotPasswordResult performResetPassword(String usernameOrEmail) {
-        try {
-            return resetPasswordGateway.performPasswordReset(usernameOrEmail);
-        } catch (Exception e) {
-            throw new ResetPasswordException(e);
-        }
+    public ForgotPasswordResult performResetPassword(String usernameOrEmail)
+      throws InvalidForgotPasswordException, IOException {
+        return resetPasswordGateway.performPasswordReset(usernameOrEmail);
     }
 
-    public void sendPasswordResetEmail(String idUser) {
-        try {
-            resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
-        } catch (IOException e) {
-            throw new SendPasswordResetEmailException(e);
-        }
+    public void sendPasswordResetEmail(String idUser) throws IOException {
+        resetPasswordEmailGateway.sendPasswordResetEmail(idUser);
     }
 
     public void performLogout() {

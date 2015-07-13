@@ -14,7 +14,7 @@ public class ForgotPasswordUserModelMapper {
         model.setIdUser(forgotPasswordResult.getIdUser());
         model.setUsername(forgotPasswordResult.getUserName());
         model.setEncryptedEmail(forgotPasswordResult.getEmailEncripted());
-        model.setAvatarUrl(forgotPasswordResult.getAvatar());
+        model.setAvatarUrl(forgotPasswordResult.getPhoto());
         return model;
     }
 

@@ -62,7 +62,6 @@ public class GetActivityTimelineInteractor implements Interactor {
 
     private ActivityTimelineParameters buildParameters() {
         return ActivityTimelineParameters.builder()
-          .currentUser(sessionRepository.getCurrentUserId())
           .build();
     }
 

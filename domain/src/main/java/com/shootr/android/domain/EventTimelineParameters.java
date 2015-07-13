@@ -2,8 +2,6 @@ package com.shootr.android.domain;
 
 public class EventTimelineParameters extends TimelineParameters {
 
-    private String currentUserId;
-
     private String eventId;
 
     private String shotType;
@@ -14,10 +12,6 @@ public class EventTimelineParameters extends TimelineParameters {
 
     private EventTimelineParameters() {
         /* private constructor, use builder */
-    }
-
-    public String getCurrentUserId() {
-        return currentUserId;
     }
 
     public String getEventId() {
@@ -62,16 +56,6 @@ public class EventTimelineParameters extends TimelineParameters {
             parameters.shotType = ShotType.COMMENT;
         }
 
-        public Builder currentUser(String userId) {
-            parameters.currentUserId = userId;
-            return this;
-        }
-
-        public Builder forEvent(String eventId) {
-            parameters.eventId = eventId;
-            return this;
-        }
-
         public Builder forEvent(Event event) {
             parameters.eventId = event.getId();
             return this;
@@ -94,9 +78,6 @@ public class EventTimelineParameters extends TimelineParameters {
         }
 
         public EventTimelineParameters build() {
-            if (parameters.currentUserId == null) {
-                throw new IllegalArgumentException("Must specify the current user id");
-            }
             return parameters;
         }
     }

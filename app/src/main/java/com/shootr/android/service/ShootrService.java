@@ -3,7 +3,6 @@ package com.shootr.android.service;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
@@ -49,10 +48,6 @@ public interface ShootrService {
     Integer getEventMediaShotsCount(String idEvent, List<String> idUser) throws IOException;
 
     List<ShotEntity> getEventMediaShots(String idEvent, List<String> userId) throws IOException;
-
-    ForgotPasswordResultEntity passwordReset(String usernameOrEmail) throws IOException;
-
-    void sendResetPasswordEmail(String idUser) throws IOException;
 
     Integer getListingCount(String idUser) throws IOException;
 

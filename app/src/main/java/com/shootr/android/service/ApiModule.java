@@ -2,11 +2,11 @@ package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.EventApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
+import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.domain.repository.PhotoService;
@@ -32,7 +32,7 @@ import retrofit.converter.JacksonConverter;
 )
 public final class ApiModule {
 
-    public static final String PRODUCTION_ENDPOINT_URL = BuildConfig.API_ENDPOINT_BASE;
+    public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
@@ -60,6 +60,10 @@ public final class ApiModule {
     @Provides
     AuthApiService provideAuthApiService(RestAdapter restAdapter) {
         return restAdapter.create(AuthApiService.class);
+    }
+
+    @Provides ResetPasswordApiService provideResetPasswordApiService(RestAdapter restAdapter) {
+        return restAdapter.create(ResetPasswordApiService.class);
     }
 
     @Provides

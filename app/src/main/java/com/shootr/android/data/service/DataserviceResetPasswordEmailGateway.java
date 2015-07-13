@@ -1,19 +1,28 @@
 package com.shootr.android.data.service;
 
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.ResetPasswordApiService;
+import com.shootr.android.data.entity.ResetPasswordEntity;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.ResetPasswordEmailGateway;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import javax.inject.Inject;
 
 public class DataserviceResetPasswordEmailGateway implements ResetPasswordEmailGateway {
 
-    private final ShootrService shootrService;
+    private final ResetPasswordApiService resetPasswordApiService;
 
-    @Inject public DataserviceResetPasswordEmailGateway(ShootrService shootrService) {
-        this.shootrService = shootrService;
+    @Inject public DataserviceResetPasswordEmailGateway(ResetPasswordApiService resetPasswordApiService) {
+        this.resetPasswordApiService = resetPasswordApiService;
     }
 
-    @Override public void sendPasswordResetEmail(String idUser) throws IOException {
-        shootrService.sendResetPasswordEmail(idUser);
+    @Override public void sendPasswordResetEmail(String idUser) {
+        ResetPasswordEntity resetPasswordEntity = new ResetPasswordEntity();
+        resetPasswordEntity.setIdUser(idUser);
+        try {
+            resetPasswordApiService.sendResetPasswordEmail(resetPasswordEntity);
+        } catch (IOException | ApiException error) {
+            throw new ServerCommunicationException(error);
+        }
     }
 }

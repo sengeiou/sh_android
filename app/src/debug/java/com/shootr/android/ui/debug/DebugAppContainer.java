@@ -79,6 +79,7 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import retrofit.MockRestAdapter;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -111,6 +112,7 @@ public class DebugAppContainer implements AppContainer {
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
     private final DebugServiceAdapter debugServiceAdapter;
+    private final MockRestAdapter mockRestAdapter;
     private final Application app;
 
     Activity activity;
@@ -131,8 +133,7 @@ public class DebugAppContainer implements AppContainer {
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled,
-      DebugServiceAdapter debugServiceAdapter,
-      Application app) {
+      DebugServiceAdapter debugServiceAdapter, MockRestAdapter mockRestAdapter, Application app) {
         this.objectMapper = objectMapper;
         this.client = client;
         this.picasso = picasso;
@@ -147,6 +148,7 @@ public class DebugAppContainer implements AppContainer {
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
         this.debugServiceAdapter = debugServiceAdapter;
+        this.mockRestAdapter = mockRestAdapter;
         this.app = app;
     }
 
@@ -322,6 +324,7 @@ public class DebugAppContainer implements AppContainer {
                 if (selected != debugServiceAdapter.getDelay()) {
                     Timber.d("Setting network delay to %sms", selected);
                     debugServiceAdapter.setDelay((int) selected);
+                    mockRestAdapter.setDelay(selected);
                 } else {
                     Timber.d("Ignoring re-selection of network delay %sms", selected);
                 }
@@ -344,6 +347,7 @@ public class DebugAppContainer implements AppContainer {
                 if (selected != debugServiceAdapter.getVariancePercentage()) {
                     Timber.d("Setting network variance to %s%%", selected);
                     debugServiceAdapter.setVariancePercentage(selected);
+                    mockRestAdapter.setVariancePercentage(selected);
                 } else {
                     Timber.d("Ignoring re-selection of network variance %s%%", selected);
                 }
@@ -365,6 +369,7 @@ public class DebugAppContainer implements AppContainer {
                 if (selected != debugServiceAdapter.getErrorPercentage()) {
                     Timber.d("Setting network error to %s%%", selected);
                     debugServiceAdapter.setErrorPercentage(selected);
+                    mockRestAdapter.setErrorPercentage(selected);
                 } else {
                     Timber.d("Ignoring re-selection of network error %s%%", selected);
                 }

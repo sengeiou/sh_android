@@ -1,27 +1,40 @@
 package com.shootr.android.data.service;
 
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.ResetPasswordApiService;
+import com.shootr.android.data.entity.ForgotPasswordEntity;
 import com.shootr.android.data.entity.ForgotPasswordResultEntity;
 import com.shootr.android.data.mapper.ForgotPasswordResultEntityMapper;
 import com.shootr.android.domain.ForgotPasswordResult;
+import com.shootr.android.domain.exception.InvalidForgotPasswordException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.ResetPasswordGateway;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import javax.inject.Inject;
 
 public class DataserviceResetPasswordGateway implements ResetPasswordGateway {
 
-    private final ShootrService shootrService;
+    private final ResetPasswordApiService resetPasswordApiService;
     private final ForgotPasswordResultEntityMapper forgotPasswordResultEntityMapper;
 
-    @Inject public DataserviceResetPasswordGateway(ShootrService shootrService,
+    @Inject public DataserviceResetPasswordGateway(ResetPasswordApiService resetPasswordApiService,
       ForgotPasswordResultEntityMapper forgotPasswordResultEntityMapper) {
-        this.shootrService = shootrService;
+        this.resetPasswordApiService = resetPasswordApiService;
         this.forgotPasswordResultEntityMapper = forgotPasswordResultEntityMapper;
     }
 
-    @Override public ForgotPasswordResult performPasswordReset(String usernameOrEmail) throws IOException {
-        ForgotPasswordResultEntity forgotPasswordResultEntity = shootrService.passwordReset(usernameOrEmail);
-        ForgotPasswordResult forgotPasswordResult = forgotPasswordResultEntityMapper.transform(forgotPasswordResultEntity);
-        return forgotPasswordResult;
+    @Override public ForgotPasswordResult performPasswordReset(String usernameOrEmail) throws
+      InvalidForgotPasswordException {
+        ForgotPasswordEntity forgotPasswordEntity = new ForgotPasswordEntity();
+        forgotPasswordEntity.setUserNameOrEmail(usernameOrEmail);
+        ForgotPasswordResultEntity forgotPasswordResultEntity;
+        try {
+            forgotPasswordResultEntity = resetPasswordApiService.passwordReset(forgotPasswordEntity);
+        } catch (ApiException error) {
+            throw new InvalidForgotPasswordException();
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+        return forgotPasswordResultEntityMapper.transform(forgotPasswordResultEntity);
     }
 }

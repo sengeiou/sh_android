@@ -33,7 +33,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     @Override
     public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity) {
         try {
-            FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(currentUserId(), favoriteEntity);
+            FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(favoriteEntity);
             return favoriteApiEntityMapper.transform(favoriteFromApi);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
@@ -48,7 +48,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     @Override
     public List<FavoriteEntity> getFavorites() {
         try {
-            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites(currentUserId());
+            List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites();
             storeEmbedEvents(favorites);
             return favoriteApiEntityMapper.transform(favorites);
         } catch (IOException error) {
@@ -60,7 +60,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     @Override
     public void removeFavoriteByIdEvent(String eventId) {
         try {
-            favoriteApiService.deleteFavorite(currentUserId(), eventId);
+            favoriteApiService.deleteFavorite(eventId);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
         }

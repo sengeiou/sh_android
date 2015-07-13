@@ -42,7 +42,7 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getDefaultEvents(String locale) {
-        List<EventEntity> eventEntityList = remoteEventListDataSource.getEventList(sessionRepository.getCurrentUserId(), locale);
+        List<EventEntity> eventEntityList = remoteEventListDataSource.getEventList(locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntityList, watchers);
     }
@@ -109,8 +109,7 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEventsListing(String listingIdUser, String locale) {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(currentUserId, listingIdUser, locale);
+        List<EventEntity> eventEntitiesListing = remoteEventDataSource.getEventsListing(listingIdUser, locale);
         localEventDataSource.putEvents(eventEntitiesListing);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);

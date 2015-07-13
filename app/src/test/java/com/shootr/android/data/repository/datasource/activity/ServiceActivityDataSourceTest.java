@@ -25,7 +25,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -59,7 +58,7 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostEventToBusWhenSyncTriggerActivityReceived() throws Exception {
-        when(activityApiService.getActivityTimeline(anyString(), anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
 
@@ -70,7 +69,7 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
-        when(activityApiService.getActivityTimeline(anyString(), anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
           syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
@@ -82,7 +81,7 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyString(), anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 
@@ -96,7 +95,7 @@ public class ServiceActivityDataSourceTest {
 
     @Test
     public void shouldPostOnlyOneEventWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
-        when(activityApiService.getActivityTimeline(anyString(), anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
+        when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivityWithDifferentDates());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
 

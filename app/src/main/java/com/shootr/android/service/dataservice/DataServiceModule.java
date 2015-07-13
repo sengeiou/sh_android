@@ -2,7 +2,6 @@ package com.shootr.android.service.dataservice;
 
 import android.app.Application;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ForgotPasswordMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
@@ -25,8 +24,8 @@ public class DataServiceModule {
         return new UtilityDtoFactory(application);
     }
 
-    @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper, ForgotPasswordMapper forgotPasswordMapper) {
-        return new UserDtoFactory(utilityDtoFactory, userMapper, followMapper, forgotPasswordMapper);
+    @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
+        return new UserDtoFactory(utilityDtoFactory, userMapper, followMapper);
     }
 
     @Provides @Singleton ShotDtoFactory provideShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotEntityMapper shotEntityMapper) {
