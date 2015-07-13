@@ -20,6 +20,8 @@ import timber.log.Timber;
 public class NewEventPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
+    public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
+    public static final int MAX_SHORT_TITLE_LENGTH = 15;
 
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
@@ -30,6 +32,7 @@ public class NewEventPresenter implements Presenter {
 
     private boolean isNewEvent;
     private String preloadedTitle;
+    private String preloadedShortTitle;
     private String preloadedEventId;
     private String currentTitle;
     private String currentShortTitle;
@@ -49,7 +52,6 @@ public class NewEventPresenter implements Presenter {
         this.isNewEvent = optionalIdEventToEdit == null;
         if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
-
         }
     }
 
@@ -64,7 +66,10 @@ public class NewEventPresenter implements Presenter {
     private void setDefaultEventInfo(EventModel eventModel) {
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
+        preloadedShortTitle = eventModel.getTag();
+        currentShortTitle = preloadedShortTitle;
         newEventView.setEventTitle(preloadedTitle);
+        newEventView.showShortTitle(preloadedShortTitle);
     }
     //endregion
 
@@ -106,7 +111,8 @@ public class NewEventPresenter implements Presenter {
 
     private void sendEvent(String preloadedEventId) {
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, notifyCreation, new CreateEventInteractor.Callback() {
+        String shortTitle = filterShortTitle(newEventView.getEventShortTitle());
+        createEventInteractor.sendEvent(preloadedEventId, title, shortTitle, notifyCreation, new CreateEventInteractor.Callback() {
             @Override public void onLoaded(Event event) {
                 eventCreated(event);
             }
@@ -182,20 +188,22 @@ public class NewEventPresenter implements Presenter {
     }
 
     private boolean canSendEvent() {
-        return isValidTitle() && hasChangedTitle();
+        return isValidTitle() && isValidShortTitle();
     }
 
     private boolean isValidTitle() {
         return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
     }
 
-    private boolean hasChangedTitle() {
-        return !newEventView.getEventTitle().equals(preloadedTitle);
+    private boolean isValidShortTitle() {
+        return currentShortTitle != null && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
+          && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
     }
 
     public void shortTitleTextChanged(String shortTitle) {
         updateShortTitleWarning(shortTitle);
         updateShortTitle(shortTitle);
+        this.updateDoneButtonStatus();
     }
 
     private void updateShortTitle(String shortTitle) {

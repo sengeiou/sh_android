@@ -23,4 +23,6 @@ public interface NewEventView extends DataTransferView{
     void showShortTitleWarning();
 
     void hideShortTitleWarning();
+
+    String getEventShortTitle();
 }

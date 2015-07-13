@@ -184,6 +184,10 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         shortTitleErrorView.setVisibility(View.GONE);
     }
 
+    @Override public String getEventShortTitle() {
+        return shortTitleView.getText().toString();
+    }
+
     @Override public void showLoading() {
         doneMenuItem.setActionView(R.layout.item_list_loading);
     }
