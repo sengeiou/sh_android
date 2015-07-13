@@ -196,7 +196,8 @@ public class EventManager extends AbstractManager{
         String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null,
+            DatabaseContract.EventTable.TITLE);
 
         List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
