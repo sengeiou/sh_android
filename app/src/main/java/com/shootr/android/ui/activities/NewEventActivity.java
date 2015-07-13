@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -173,15 +172,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override public void showShortTitle(String currentShortTitle) {
         shortTitleView.setText(currentShortTitle);
-    }
-
-    @Override public void showShortTitleWarning() {
-        shortTitleErrorView.setText(getString(R.string.short_title_warning));
-        shortTitleErrorView.setVisibility(View.VISIBLE);
-    }
-
-    @Override public void hideShortTitleWarning() {
-        shortTitleErrorView.setVisibility(View.GONE);
     }
 
     @Override public String getEventShortTitle() {

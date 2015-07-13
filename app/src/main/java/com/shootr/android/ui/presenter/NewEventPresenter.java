@@ -201,7 +201,6 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void shortTitleTextChanged(String shortTitle) {
-        updateShortTitleWarning(shortTitle);
         updateShortTitle(shortTitle);
         this.updateDoneButtonStatus();
     }
@@ -211,14 +210,6 @@ public class NewEventPresenter implements Presenter {
             currentShortTitle = filterShortTitle(shortTitle);
         } else {
             newEventView.showShortTitle(currentShortTitle);
-        }
-    }
-
-    private void updateShortTitleWarning(String shortTitle) {
-        if(currentShortTitle != null && shortTitle.length() < currentShortTitle.length()) {
-            newEventView.showShortTitleWarning();
-        } else {
-            newEventView.hideShortTitleWarning();
         }
     }
 
