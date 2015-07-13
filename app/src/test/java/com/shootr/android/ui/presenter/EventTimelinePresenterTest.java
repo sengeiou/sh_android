@@ -7,6 +7,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
@@ -49,6 +50,7 @@ public class EventTimelinePresenterTest {
     @Mock SelectEventInteractor selectEventInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock Poller poller;
 
     private EventTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
@@ -58,7 +60,7 @@ public class EventTimelinePresenterTest {
         ShotModelMapper shotModelMapper = new ShotModelMapper();
         presenter = new EventTimelinePresenter(timelineInteractorWrapper,
           selectEventInteractor,
-          shotModelMapper, bus, errorMessageFactory);
+          shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(eventTimelineView);
         shotSentReceiver = presenter;
     }

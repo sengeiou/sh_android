@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
@@ -34,42 +35,48 @@ import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
-        injects = {
-                // Every single activity extending BaseActivity, sadly
-                BaseToolbarActivity.class,
-                LoginSelectionActivity.class,
-                EmailLoginActivity.class,
-                EmailRegistrationActivity.class,
-                PostNewShotActivity.class,
-                ProfileContainerActivity.class,
-                UserFollowsContainerActivity.class,
-                FindFriendsActivity.class,
-                EventDetailActivity.class,
-                ProfileEditActivity.class,
-                ShotDetailActivity.class,
-                PhotoViewActivity.class,
-                EventTimelineActivity.class,
-                PeopleFragment.class,
-                WatchersView.class,
-                NewEventActivity.class,
-                EventMediaActivity.class,
-                UpdateWarningActivity.class,
-                DraftsActivity.class,
-                DraftsPresenter.class,
-                MainTabbedActivity.class,
-                ResetPasswordActivity.class,
-                ListingActivity.class,
-                FavoritesFragment.class,
-                ActivityTimelineContainerActivity.class,
-                ActivityTimelineFragment.class,
-                EventTimelineFragment.class,
-                FindEventsActivity.class,
-                WhaleActivity.class,
-        },
-        complete = false
-)
-public class UiModule {
-    @Provides @Singleton AppContainer provideAppContainer() {
+  injects = {
+    // Every single activity extending BaseActivity, sadly
+    BaseToolbarActivity.class,
+    LoginSelectionActivity.class,
+    EmailLoginActivity.class,
+    EmailRegistrationActivity.class,
+    PostNewShotActivity.class,
+    ProfileContainerActivity.class,
+    UserFollowsContainerActivity.class,
+    FindFriendsActivity.class,
+    EventDetailActivity.class,
+    ProfileEditActivity.class,
+    ShotDetailActivity.class,
+    PhotoViewActivity.class,
+    EventTimelineActivity.class,
+    PeopleFragment.class,
+    WatchersView.class,
+    NewEventActivity.class,
+    EventMediaActivity.class,
+    UpdateWarningActivity.class,
+    DraftsActivity.class,
+    DraftsPresenter.class,
+    MainTabbedActivity.class,
+    ResetPasswordActivity.class,
+    ListingActivity.class,
+    FavoritesFragment.class,
+    ActivityTimelineContainerActivity.class,
+    ActivityTimelineFragment.class,
+    EventTimelineFragment.class,
+    FindEventsActivity.class,
+    WhaleActivity.class,
+  },
+  complete = false) public class UiModule {
+
+    @Provides
+    @Singleton
+    AppContainer provideAppContainer() {
         return AppContainer.DEFAULT;
+    }
+
+    @Provides
+    Poller providePoller() {
+        return new Poller(new Handler());
     }
 }
