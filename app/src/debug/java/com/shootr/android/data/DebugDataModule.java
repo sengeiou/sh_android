@@ -38,6 +38,7 @@ public class DebugDataModule {
     private static final boolean DEFAULT_NETWORK_ENABLED = true;
     private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
     public static final boolean DEFAULT_DEBUG_MODE = false;
+    private static final boolean DEFAULT_POLLER_ACTIVE = true;
 
     @Provides @Singleton @ApiEndpoint StringPreference provideEndpointPreference(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_endpoint", ApiEndpoints.TEST.url);
@@ -74,6 +75,11 @@ public class DebugDataModule {
 
     @Provides @Singleton @CustomEndpoint StringPreference provideCustomEndpoint(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_custom_endpoint", ApiModule.PRODUCTION_ENDPOINT_URL);
+    }
+
+    @Provides @Singleton @PollerEnabled
+    BooleanPreference providePollerActive(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "debug_poller_active", DEFAULT_POLLER_ACTIVE);
     }
 
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {

@@ -40,6 +40,7 @@ import com.shootr.android.data.CustomEndpoint;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.NetworkEnabled;
 import com.shootr.android.data.PicassoDebugging;
+import com.shootr.android.data.PollerEnabled;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
 import com.shootr.android.data.ServerDownErrorInterceptor;
@@ -109,6 +110,7 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference notificationsEnabled;
+    private final BooleanPreference pollerEnabled;
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
     private final DebugServiceAdapter debugServiceAdapter;
@@ -133,7 +135,10 @@ public class DebugAppContainer implements AppContainer {
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
       @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled,
-      DebugServiceAdapter debugServiceAdapter, MockRestAdapter mockRestAdapter, Application app) {
+      @PollerEnabled BooleanPreference pollerEnabled,
+      DebugServiceAdapter debugServiceAdapter,
+      MockRestAdapter mockRestAdapter,
+      Application app) {
         this.objectMapper = objectMapper;
         this.client = client;
         this.picasso = picasso;
@@ -147,6 +152,7 @@ public class DebugAppContainer implements AppContainer {
         this.picassoDebugging = picassoDebugging;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
+        this.pollerEnabled = pollerEnabled;
         this.debugServiceAdapter = debugServiceAdapter;
         this.mockRestAdapter = mockRestAdapter;
         this.app = app;
@@ -166,6 +172,7 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_network_variance) Spinner networkVarianceView;
     @Bind(R.id.debug_network_error) Spinner networkErrorView;
     @Bind(R.id.debug_network_proxy) Spinner networkProxyView;
+    @Bind(R.id.debug_network_poller) Switch networkPollerView;
 
     @Bind(R.id.debug_fake_only_once) Switch fakeRequestOnlyOnce;
 
@@ -419,6 +426,16 @@ public class DebugAppContainer implements AppContainer {
             networkVarianceView.setEnabled(false);
             networkErrorView.setEnabled(false);
         }
+
+        boolean pollerEnabledValue = pollerEnabled.get();
+        networkPollerView.setChecked(pollerEnabledValue);
+        networkPollerView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Timber.d("Setting Poller Enabled to " + isChecked);
+                pollerEnabled.set(isChecked);
+            }
+        });
     }
 
     @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {

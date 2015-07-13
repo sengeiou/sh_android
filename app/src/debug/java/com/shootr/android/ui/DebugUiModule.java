@@ -1,5 +1,8 @@
 package com.shootr.android.ui;
 
+import android.os.Handler;
+import com.shootr.android.data.PollerEnabled;
+import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.ui.debug.DebugAppContainer;
 import dagger.Module;
 import dagger.Provides;
@@ -17,4 +20,7 @@ public class DebugUiModule {
     return debugAppContainer;
   }
 
+    @Provides Poller providePoller(@PollerEnabled BooleanPreference pollerEnabled) {
+        return new DebugPoller(new Handler(), pollerEnabled);
+    }
 }
