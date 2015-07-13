@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,6 +65,8 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
+    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy", "Report"};
+    private static final int REQUEST_EVENT_DETAIL = 1;
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -85,6 +88,7 @@ public class StreamTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
+    private View.OnLongClickListener longClickListener;
     private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
@@ -221,6 +225,23 @@ public class StreamTimelineFragment extends BaseFragment
 
     //endregion
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+      ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        for (String contextMenuOption : CONTEXT_MENU_OPTIONS) {
+            menu.add(0, v.getId(), 0, contextMenuOption);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //TODO Funcionamiento de verdad, no esta prueba
+        String selectedItem = item.getTitle().toString();
+        Toast.makeText(this.getActivity(), selectedItem, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
     private void setupNewShotBarDelegate() {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
             @Override public void openNewShotView() {
@@ -305,6 +326,13 @@ public class StreamTimelineFragment extends BaseFragment
             }
         };
 
+        longClickListener = new View.OnLongClickListener(){
+
+            @Override public boolean onLongClick(View view) {
+                return false;
+            }
+        };
+
         usernameClickListener = new UsernameClickListener() {
             @Override
             public void onClick(String username) {
@@ -341,6 +369,8 @@ public class StreamTimelineFragment extends BaseFragment
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
                 imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
+
+        registerForContextMenu(listView);
     }
 
     private void startProfileContainerActivity(String username) {
