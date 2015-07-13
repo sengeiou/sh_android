@@ -32,6 +32,7 @@ public class NewEventPresenter implements Presenter {
     private String preloadedTitle;
     private String preloadedEventId;
     private String currentTitle;
+    private String currentShortTitle;
     private boolean notifyCreation;
 
     //region Initialization
@@ -70,7 +71,9 @@ public class NewEventPresenter implements Presenter {
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
+        currentShortTitle = filterShortTitle(title);
         this.updateDoneButtonStatus();
+        newEventView.showShortTitle(currentShortTitle);
     }
 
     public void done() {
@@ -103,19 +106,15 @@ public class NewEventPresenter implements Presenter {
 
     private void sendEvent(String preloadedEventId) {
         String title = filterTitle(newEventView.getEventTitle());
-        createEventInteractor.sendEvent(preloadedEventId,
-          title,
-          notifyCreation,
-          new CreateEventInteractor.Callback() {
-              @Override public void onLoaded(Event event) {
-                  eventCreated(event);
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  eventCreationError(error);
-              }
-          });
+        createEventInteractor.sendEvent(preloadedEventId, title, notifyCreation, new CreateEventInteractor.Callback() {
+            @Override public void onLoaded(Event event) {
+                eventCreated(event);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                eventCreationError(error);
+            }
+        });
     }
 
     private void eventCreated(Event event) {
@@ -168,6 +167,14 @@ public class NewEventPresenter implements Presenter {
     //region Utils
     private String filterTitle(String title) {
         return title.trim();
+    }
+
+    private String filterShortTitle(String shortTitle) {
+        if(shortTitle.length() < 15){
+            return shortTitle.trim();
+        }else {
+            return shortTitle.substring(0,14).trim();
+        }
     }
 
     private void updateDoneButtonStatus() {

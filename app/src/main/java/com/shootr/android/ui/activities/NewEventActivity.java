@@ -13,8 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
@@ -32,6 +32,9 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Bind(R.id.new_event_title) EditText titleView;
     @Bind(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_event_title_error) TextView titleErrorView;
+
+    @Bind(R.id.new_event_short_title) EditText shortTitleView;
+    @Bind(R.id.new_event_short_title_warning) TextView shortTitleErrorView;
 
     private MenuItem doneMenuItem;
 
@@ -59,7 +62,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                /* no-op */
+                presenter.titleTextChanged(s.toString());
             }
         });
     }
@@ -152,6 +155,10 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
               }
           })
           .create().show();
+    }
+
+    @Override public void showShortTitle(String currentShortTitle) {
+        shortTitleView.setText(currentShortTitle);
     }
 
     @Override public void showLoading() {

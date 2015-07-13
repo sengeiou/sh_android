@@ -17,4 +17,6 @@ public interface NewEventView extends DataTransferView{
     void hideKeyboard();
 
     void showNotificationConfirmation();
+
+    void showShortTitle(String currentShortTitle);
 }
