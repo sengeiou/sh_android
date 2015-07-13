@@ -62,7 +62,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                presenter.titleTextChanged(s.toString());
+                /* no-op */
             }
         });
         shortTitleView.addTextChangedListener(new TextWatcher() {
@@ -71,11 +71,11 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                presenter.shortTitleTextChanged(charSequence.toString());
+                /* no-op */
             }
 
             @Override public void afterTextChanged(Editable editable) {
-                /* no-op */
+                presenter.shortTitleTextChanged(editable.toString());
             }
         });
     }
