@@ -16,12 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ListView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.melnykov.fab.FloatingActionButton;
@@ -423,11 +421,7 @@ public class EventTimelineFragment extends BaseFragment
                   checkinPresenter.confirmCheckin();
               }
           })
-          .setNegativeButton(R.string.dont_show_again, new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  checkinPresenter.confirmCheckinDontShowAgain();
-              }
-          })
+          .setNegativeButton(R.string.cancel, null)
           .show();
     }
 
@@ -551,23 +545,6 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void hideWatchingPeopleCount() {
         watchNumberCount = null;
         updateWatchNumberIcon();
-    }
-
-    @Override public void hideCheckinButton() {
-        ScaleAnimation scaleAnimation = setUpScaleAnimation();
-        checkinButton.startAnimation(scaleAnimation);
-        checkinButton.setVisibility(View.GONE);
-    }
-
-    private ScaleAnimation setUpScaleAnimation() {
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0,
-          Animation.RELATIVE_TO_SELF, (float)0.5, Animation.RELATIVE_TO_SELF, (float)0.5);
-        scaleAnimation.setDuration(200);
-        return scaleAnimation;
-    }
-
-    @Override public void showCheckinButton() {
-        checkinButton.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -4,14 +4,6 @@ import com.shootr.android.ui.views.CheckinView;
 
 public class NullCheckinView implements CheckinView {
 
-    @Override public void showCheckinButton() {
-        /* no-op */
-    }
-
-    @Override public void hideCheckinButton() {
-        /* no-op */
-    }
-
     @Override public void disableCheckinButton() {
         /* no-op */
     }
