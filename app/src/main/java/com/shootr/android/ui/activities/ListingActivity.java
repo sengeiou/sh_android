@@ -72,6 +72,18 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         /* no-op */
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
+
     @Override public void renderEvents(List<EventResultModel> events) {
         adapter.setEvents(events);
     }

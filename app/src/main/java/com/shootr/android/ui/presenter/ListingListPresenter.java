@@ -16,6 +16,7 @@ public class ListingListPresenter implements Presenter{
 
     private ListingView listingView;
     private String profileIdUser;
+    private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingEventsInteractor getUserListingEventsInteractor,
       EventResultModelMapper eventResultModelMapper) {
@@ -58,11 +59,13 @@ public class ListingListPresenter implements Presenter{
     }
 
     @Override public void resume() {
-        /* no-op */
+        if (hasBeenPaused) {
+            loadListingList();
+        }
     }
 
     @Override public void pause() {
-        /* no-op */
+        hasBeenPaused = true;
     }
 
     public void selectEvent(EventResultModel event) {
