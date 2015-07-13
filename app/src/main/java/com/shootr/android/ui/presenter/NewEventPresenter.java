@@ -37,6 +37,8 @@ public class NewEventPresenter implements Presenter {
     private String currentTitle;
     private String currentShortTitle;
     private boolean notifyCreation;
+    private boolean shortTitleEdited;
+    private boolean shortTitleSelected;
 
     //region Initialization
     @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
@@ -50,6 +52,8 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.isNewEvent = optionalIdEventToEdit == null;
+        this.shortTitleEdited = false;
+        this.shortTitleSelected = false;
         if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
@@ -76,7 +80,9 @@ public class NewEventPresenter implements Presenter {
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
-        currentShortTitle = filterShortTitle(title);
+        if(!shortTitleEdited || !shortTitleSelected){
+            currentShortTitle = filterShortTitle(title);
+        }
         this.updateDoneButtonStatus();
         newEventView.showShortTitle(currentShortTitle);
     }
@@ -112,15 +118,20 @@ public class NewEventPresenter implements Presenter {
     private void sendEvent(String preloadedEventId) {
         String title = filterTitle(newEventView.getEventTitle());
         String shortTitle = filterShortTitle(newEventView.getEventShortTitle());
-        createEventInteractor.sendEvent(preloadedEventId, title, shortTitle, notifyCreation, new CreateEventInteractor.Callback() {
-            @Override public void onLoaded(Event event) {
-                eventCreated(event);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                eventCreationError(error);
-            }
-        });
+        createEventInteractor.sendEvent(preloadedEventId,
+          title,
+          shortTitle,
+          notifyCreation,
+          new CreateEventInteractor.Callback() {
+              @Override public void onLoaded(Event event) {
+                  eventCreated(event);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  eventCreationError(error);
+              }
+          });
     }
 
     private void eventCreated(Event event) {
@@ -203,6 +214,11 @@ public class NewEventPresenter implements Presenter {
     public void shortTitleTextChanged(String shortTitle) {
         updateShortTitle(shortTitle);
         this.updateDoneButtonStatus();
+        if(!shortTitleSelected) {
+            shortTitleEdited = false;
+        } else {
+            shortTitleEdited = true;
+        }
     }
 
     private void updateShortTitle(String shortTitle) {
@@ -221,5 +237,9 @@ public class NewEventPresenter implements Presenter {
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void shortTitleSelected() {
+        shortTitleSelected = true;
     }
 }
