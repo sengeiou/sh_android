@@ -1,10 +1,10 @@
 package com.shootr.android.ui.presenter;
 
-import android.os.Handler;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.mappers.ActivityModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.ActivityTimelineInteractorsWrapper;
@@ -16,28 +16,25 @@ import javax.inject.Inject;
 
 public class ActivityTimelinePresenter implements Presenter {
 
-    private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+    private static final long REFRESH_INTERVAL_MILLISECONDS = 5 * 1000;
 
     private final ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper;
     private final ActivityModelMapper activityModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
+    private final Poller poller;
 
     private ActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
     private boolean mightHaveMoreActivities = true;
 
-    private Runnable pollActivitiesRunnable;
-    private boolean shouldPoll;
-
-    private Handler pollActivitiesHanlder;
-
     @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
+      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
+        this.poller = poller;
     }
 
     public void setView(ActivityTimelineView timelineView) {
@@ -47,33 +44,20 @@ public class ActivityTimelinePresenter implements Presenter {
     public void initialize(ActivityTimelineView timelineView) {
         this.setView(timelineView);
         this.loadTimeline();
-        this.pollActivitiesHanlder = new Handler();
-        this.pollActivitiesRunnable = new Runnable() {
+        poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override
             public void run() {
-                if (!shouldPoll) {
-                    return;
-                }
                 loadNewActivities();
-                scheduleNextPolling();
             }
-        };
+        });
     }
 
     private void startPollingActivities() {
-        shouldPoll = true;
-        scheduleNextPolling();
+        poller.startPolling();
     }
 
     private void stopPollingActivities() {
-        shouldPoll = false;
-        pollActivitiesHanlder.removeCallbacks(pollActivitiesRunnable);
-    }
-
-    private void scheduleNextPolling() {
-        if (shouldPoll) {
-            pollActivitiesHanlder.postDelayed(pollActivitiesRunnable, REFRESH_INTERVAL_MILLISECONDS);
-        }
+        poller.stopPolling();
     }
 
     protected void loadTimeline() {
