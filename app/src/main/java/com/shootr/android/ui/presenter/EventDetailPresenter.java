@@ -128,6 +128,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             @Override public void onLoaded(EventInfo eventInfo) {
                 onEventInfoLoaded(eventInfo);
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                eventDetailView.showError(errorMessage);
+            }
         });
     }
 
@@ -148,12 +153,17 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void loadMediaCount() {
         eventMediaCountInteractor.getEventMediaCount(idEvent, new Interactor.Callback<Integer>() {
-              @Override public void onLoaded(Integer count) {
-                  eventMediaCount = count;
-                  eventDetailView.showMediaCount();
-                  eventDetailView.setMediaCount(count);
-              }
-          });
+            @Override public void onLoaded(Integer count) {
+                eventMediaCount = count;
+                eventDetailView.showMediaCount();
+                eventDetailView.setMediaCount(count);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                eventDetailView.showError(errorMessage);
+            }
+        });
     }
 
     private void showViewDetail() {

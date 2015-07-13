@@ -3,6 +3,8 @@ package com.shootr.android.domain.interactor.event;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -30,6 +32,7 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final EventRepository remoteEventRepository;
     private final EventRepository localEventRepository;
     private final SessionRepository sessionRepository;
+    private ErrorCallback errorCallback;
 
     private String idEventWanted;
     private Callback callback;
@@ -50,19 +53,24 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
-    public void obtainEventInfo(String idEventWanted, Callback callback) {
+    public void obtainEventInfo(String idEventWanted, Callback callback, ErrorCallback errorCallback) {
         this.idEventWanted = idEventWanted;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    public void obtainVisibleEventInfo(Callback callback) {
-        obtainEventInfo(VISIBLE_EVENT, callback);
+    public void obtainVisibleEventInfo(Callback callback, ErrorCallback errorCallback) {
+        obtainEventInfo(VISIBLE_EVENT, callback, errorCallback);
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalEventInfo();
-        obtainRemoteEventInfo();
+        try {
+            obtainLocalEventInfo();
+            obtainRemoteEventInfo();
+        }catch (ServerCommunicationException networkError) {
+            notifyError(networkError);
+        }
     }
 
     protected void obtainLocalEventInfo() {
@@ -146,6 +154,15 @@ public class VisibleEventInfoInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(eventInfo);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                errorCallback.onError(error);
             }
         });
     }
