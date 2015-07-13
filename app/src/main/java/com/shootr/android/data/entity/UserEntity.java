@@ -19,7 +19,6 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String bio;
     private String watchingEventTitle;
     private String idWatchingEvent;
-    private String idCheckedEvent;
     private Long joinEventDate;
 
     public UserEntity(){
@@ -171,14 +170,6 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         } else {
             this.idWatchingEvent = null;
         }
-    }
-
-    public String getIdCheckedEvent() {
-        return idCheckedEvent;
-    }
-
-    public void setIdCheckedEvent(String idCheckedEvent) {
-        this.idCheckedEvent = idCheckedEvent;
     }
 
     public Long getJoinEventDate() {

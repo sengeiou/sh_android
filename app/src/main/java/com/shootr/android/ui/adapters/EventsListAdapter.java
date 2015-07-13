@@ -16,7 +16,6 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     private final PicassoWrapper picasso;
 
-    private String currentCheckedInEvent;
     private OnEventClickListener onEventClickListener;
     private OnUnwatchClickListener onUnwatchClickListener;
 
@@ -58,13 +57,11 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         EventResultModel event = getHeader();
-        String idEvent = event.getEventModel().getIdEvent();
 
         WatchingEventResultViewHolder watchingEventResultViewHolder =
           new WatchingEventResultViewHolder(viewHolder.itemView, onEventClickListener, picasso, onUnwatchClickListener);
 
-        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
-        watchingEventResultViewHolder.render(event, isCheckedInEvent);
+        watchingEventResultViewHolder.render(event);
     }
 
     @Override
@@ -75,13 +72,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         EventResultModel event = getItem(position);
-        String idEvent = event.getEventModel().getIdEvent();
-        boolean isCheckedInEvent = idEvent.equals(currentCheckedInEvent);
-        ((EventResultViewHolder) viewHolder).render(event, isCheckedInEvent);
-    }
-
-    public void setCurrentCheckedInEvent(String eventId) {
-        this.currentCheckedInEvent = eventId;
+        ((EventResultViewHolder) viewHolder).render(event);
     }
 
     public void setCurrentWatchingEvent(EventResultModel event) {

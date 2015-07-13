@@ -11,7 +11,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ public class EventsSearchInteractor implements Interactor {
 
     public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
-    private final SessionRepository sessionRepository;
     private final EventSearchRepository eventSearchRepository;
     private final PostExecutionThread postExecutionThread;
     private final LocaleProvider localeProvider;
@@ -31,11 +29,9 @@ public class EventsSearchInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public EventsSearchInteractor(InteractorHandler interactorHandler, SessionRepository sessionRepository,
-      @Remote EventSearchRepository eventSearchRepository,
+    public EventsSearchInteractor(InteractorHandler interactorHandler, @Remote EventSearchRepository eventSearchRepository,
       PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
-        this.sessionRepository = sessionRepository;
         this.eventSearchRepository = eventSearchRepository;
         this.postExecutionThread = postExecutionThread;
         this.localeProvider = localeProvider;
@@ -77,16 +73,7 @@ public class EventsSearchInteractor implements Interactor {
 
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
 
-        setCurrentCheckedInEventIfAny(eventSearchResultList);
-
         notifySearchResultsSuccessful(eventSearchResultList);
-    }
-
-    private void setCurrentCheckedInEventIfAny(EventSearchResultList eventSearchResultList) {
-        String eventCheckedIn = sessionRepository.getCurrentUser().getIdCheckedEvent();
-        if (eventCheckedIn != null) {
-            eventSearchResultList.setCurrentCheckedInEventId(eventCheckedIn);
-        }
     }
 
     private List<EventSearchResult> filterEventsNotMatchingQuery(List<EventSearchResult> events) {

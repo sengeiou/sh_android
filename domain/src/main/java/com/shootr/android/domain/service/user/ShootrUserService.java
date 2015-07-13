@@ -50,28 +50,11 @@ public class ShootrUserService {
 
     public void checkInEvent(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        if (isCheckedInEvent(currentUser, idEvent)) {
-            throw new InvalidCheckinException(String.format(
-              "Can't perform checkin in event with id %s because user is already checked-in in it",
-              idEvent));
-        }
-
         try {
             checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);
         } catch (IOException e) {
             throw new InvalidCheckinException(e);
         }
-
-        currentUser.setIdCheckedEvent(idEvent);
-        localUserRepository.putUser(currentUser);
-        sessionRepository.setCurrentUser(currentUser);
-    }
-
-    private boolean isCurrentUserCheckedInEvent(User currentUser, String idEvent) {
-        if(currentUser.getIdCheckedEvent() != null){
-            return currentUser.getIdCheckedEvent().equals(idEvent);
-        }
-        return false;
     }
 
     public void createAccount(String username, String email, String password)
@@ -105,10 +88,6 @@ public class ShootrUserService {
         User user = loginResult.getUser();
         sessionRepository.createSession(idUser, sessionToken, user);
         localUserRepository.putUser(loginResult.getUser());
-    }
-
-    private boolean isCheckedInEvent(User user, String idEvent) {
-        return user.getIdCheckedEvent() != null && user.getIdCheckedEvent().equals(idEvent);
     }
 
     public ForgotPasswordResult performResetPassword(String usernameOrEmail)

@@ -22,7 +22,6 @@ public class UserModelMapper {
         userModel.setWebsite(user.getWebsite());
         userModel.setEventWatchingId(user.getIdWatchingEvent());
         userModel.setEventWatchingTitle(user.getWatchingEventTitle());
-        userModel.setIdCheckedEvent(user.getIdCheckedEvent());
         userModel.setJoinEventDate(user.getJoinEventDate());
         return userModel;
     }

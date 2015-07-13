@@ -42,7 +42,7 @@ public class FavoriteEventsAdapter extends RecyclerView.Adapter<EventResultViewH
     @Override
     public void onBindViewHolder(EventResultViewHolder holder, int position) {
         EventResultModel event = events.get(position);
-        holder.render(event, false);
+        holder.render(event);
     }
 
     @Override
