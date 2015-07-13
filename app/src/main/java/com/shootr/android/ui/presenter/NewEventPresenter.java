@@ -192,6 +192,28 @@ public class NewEventPresenter implements Presenter {
     private boolean hasChangedTitle() {
         return !newEventView.getEventTitle().equals(preloadedTitle);
     }
+
+    public void shortTitleTextChanged(String shortTitle) {
+        updateShortTitleWarning(shortTitle);
+        updateShortTitle(shortTitle);
+    }
+
+    private void updateShortTitle(String shortTitle) {
+        if(shortTitle.length() < 15) {
+            currentShortTitle = filterShortTitle(shortTitle);
+        } else {
+            newEventView.showShortTitle(currentShortTitle);
+        }
+    }
+
+    private void updateShortTitleWarning(String shortTitle) {
+        if(currentShortTitle != null && shortTitle.length() < currentShortTitle.length()) {
+            newEventView.showShortTitleWarning();
+        } else {
+            newEventView.hideShortTitleWarning();
+        }
+    }
+
     //endregion
 
     @Override public void resume() {

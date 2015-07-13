@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,6 +64,19 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 presenter.titleTextChanged(s.toString());
+            }
+        });
+        shortTitleView.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no-op */
+            }
+
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                presenter.shortTitleTextChanged(charSequence.toString());
+            }
+
+            @Override public void afterTextChanged(Editable editable) {
+                /* no-op */
             }
         });
     }
@@ -159,6 +173,15 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override public void showShortTitle(String currentShortTitle) {
         shortTitleView.setText(currentShortTitle);
+    }
+
+    @Override public void showShortTitleWarning() {
+        shortTitleErrorView.setText(getString(R.string.short_title_warning));
+        shortTitleErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideShortTitleWarning() {
+        shortTitleErrorView.setVisibility(View.GONE);
     }
 
     @Override public void showLoading() {

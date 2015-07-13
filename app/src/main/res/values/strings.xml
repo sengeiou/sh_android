@@ -289,4 +289,5 @@
     <string name="whale_retry_button_text">Ok</string>
     <string name="new_event_short_title_text">Short title</string>
     <string name="new_event_short_title_label">Short Title</string>
+    <string name="short_title_warning">3 to 15 characters</string>
 </resources>
