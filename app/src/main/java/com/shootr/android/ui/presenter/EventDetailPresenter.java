@@ -160,8 +160,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                eventDetailView.showError(errorMessage);
+                /* no-op */
             }
         });
     }
