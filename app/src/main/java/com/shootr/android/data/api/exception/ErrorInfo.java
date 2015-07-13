@@ -39,6 +39,7 @@ public enum ErrorInfo {
     InvalidPasswordException(5004, "Invalid password", 400),
     PasswordMatchNewPasswordException(5005, "Password match new Password", 400),
     PasswordMatchUserNameException(5006, "Password match userName", 400),
+    EventHasWatchersException(5007, "Event has watchers you cant remove it" , 400),
 
     ForbiddenRequestException(6001, "Forbidden request", 403);
 
@@ -73,4 +74,12 @@ public enum ErrorInfo {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorInfo{" +
+          "code=" + code +
+          ", httpCode=" + httpCode +
+          ", description='" + description + '\'' +
+          '}';
+    }
 }

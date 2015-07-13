@@ -12,9 +12,13 @@ public interface NewEventView extends DataTransferView{
 
     void closeScreenWithResult(String eventId, String title);
 
+    void closeScreenWithExitEvent();
+
     void doneButtonEnabled(boolean enable);
 
     void hideKeyboard();
 
     void showNotificationConfirmation();
+
+    void showDeleteEventButton();
 }

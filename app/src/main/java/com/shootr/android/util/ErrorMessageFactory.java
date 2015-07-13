@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
+import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -96,6 +97,8 @@ public class ErrorMessageFactory {
     public String getMessageForError(ShootrException error) {
         if (error instanceof ServerCommunicationException || error.getCause() instanceof  ServerCommunicationException) {
             return getCommunicationErrorMessage();
+        }else if(error instanceof DeleteEventNotAllowedException) {
+            return context.getString(R.string.error_message_event_has_watchers);
         } else {
             return getUnknownErrorMessage();
         }

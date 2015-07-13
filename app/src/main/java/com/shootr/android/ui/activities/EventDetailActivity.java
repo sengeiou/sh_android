@@ -304,6 +304,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             String idEventEdited = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
             presenter.resultFromEditEventInfo(idEventEdited);
+        }else if (requestCode == REQUEST_EDIT_EVENT && resultCode == NewEventActivity.RESULT_EXIT_EVENT) {
+            setResult(NewEventActivity.RESULT_EXIT_EVENT);
+            finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));

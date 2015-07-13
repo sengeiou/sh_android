@@ -147,6 +147,18 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         findEventsPresenter.initialize(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        findEventsPresenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        findEventsPresenter.pause();
+    }
+
     @Override public void finish() {
         super.finish();
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);

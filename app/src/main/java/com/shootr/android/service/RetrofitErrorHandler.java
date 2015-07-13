@@ -21,8 +21,9 @@ public class RetrofitErrorHandler implements ErrorHandler {
     public Throwable handleError(RetrofitError retrofitError) {
         ErrorResource errorResource = (ErrorResource) retrofitError.getBodyAs(ErrorResource.class);
         if (isApiError(errorResource)) {
-            Timber.e(retrofitError, "Retrofit API Error");
-            return parseApiException(errorResource);
+            ApiException apiError = parseApiException(errorResource);
+            Timber.e(apiError, "Retrofit API Error");
+            return apiError;
         } else {
             Timber.e(retrofitError, "Retrofit Error");
             return originalCause(retrofitError);

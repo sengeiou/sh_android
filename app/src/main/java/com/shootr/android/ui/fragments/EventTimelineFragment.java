@@ -30,6 +30,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
+import com.shootr.android.ui.activities.NewEventActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -69,6 +70,7 @@ public class EventTimelineFragment extends BaseFragment
 
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_TITLE = "eventTitle";
+    private static final int REQUEST_EVENT_DETAIL = 1;
 
     //region Fields
     @Inject EventTimelinePresenter eventTimelinePresenter;
@@ -152,7 +154,13 @@ public class EventTimelineFragment extends BaseFragment
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        photoPickerController.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EVENT_DETAIL && resultCode == NewEventActivity.RESULT_EXIT_EVENT) {
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        } else {
+            photoPickerController.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -500,7 +508,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void navigateToEventDetail(String idEvent) {
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, idEvent);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_EVENT_DETAIL);
     }
 
     @Override public void showEmpty() {

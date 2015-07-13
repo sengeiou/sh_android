@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import java.util.List;
 
 public interface EventDataSource {
@@ -15,5 +16,7 @@ public interface EventDataSource {
 
     Integer getListingCount(String idUser);
 
-    List<EventEntity> getEventsListing(String idUser, String locale);
+    List<EventEntity> getEventsListing(String idUser);
+
+    void deleteEvent(String idEvent) throws DeleteEventNotAllowedException;
 }

@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.CreateEventInteractor;
+import com.shootr.android.domain.interactor.event.DeleteEventInteractor;
 import com.shootr.android.domain.interactor.event.GetEventInteractor;
 import com.shootr.android.domain.validation.EventValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -23,6 +24,7 @@ public class NewEventPresenter implements Presenter {
 
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
+    private final DeleteEventInteractor deleteEventInteractor;
     private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -35,10 +37,14 @@ public class NewEventPresenter implements Presenter {
     private boolean notifyCreation;
 
     //region Initialization
-    @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
-      EventModelMapper eventModelMapper, ErrorMessageFactory errorMessageFactory) {
+    @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor,
+      GetEventInteractor getEventInteractor,
+      DeleteEventInteractor deleteEventInteractor,
+      EventModelMapper eventModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.createEventInteractor = createEventInteractor;
         this.getEventInteractor = getEventInteractor;
+        this.deleteEventInteractor = deleteEventInteractor;
         this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -64,6 +70,7 @@ public class NewEventPresenter implements Presenter {
         preloadedEventId = eventModel.getIdEvent();
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
+        newEventView.showDeleteEventButton();
     }
     //endregion
 
@@ -91,6 +98,21 @@ public class NewEventPresenter implements Presenter {
         notifyCreation = notify;
         newEventView.showLoading();
         createEvent();
+    }
+
+    public void delete() {
+        deleteEventInteractor.deleteEvent(preloadedEventId, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                newEventView.closeScreenWithExitEvent();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                newEventView.showError(errorMessage);
+            }
+        });
     }
 
     private void createEvent() {

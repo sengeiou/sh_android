@@ -70,29 +70,34 @@ public class EventManager extends AbstractManager{
     public void saveEvents(List<EventEntity> eventEntities) {
         SQLiteDatabase database = getWritableDatabase();
         for (EventEntity eventEntity : eventEntities) {
-            ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
-            if (contentValues.getAsLong(DatabaseContract.EventTable.DELETED) != null) {
+            if (eventEntity.getDeleted() != null) {
                 deleteEvent(eventEntity);
             } else {
+                ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
                 database.insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
     }
 
     public void saveEvent(EventEntity eventEntity) {
-        ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
-        if (contentValues.getAsLong(DatabaseContract.EventTable.DELETED) != null) {
+        if (eventEntity.getDeleted() != null) {
             deleteEvent(eventEntity);
         } else {
+            ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
             getWritableDatabase().insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
 
     public long deleteEvent(EventEntity eventEntity){
+        String idEvent = eventEntity.getIdEvent();
+        return deleteEvent(idEvent);
+    }
+
+    public long deleteEvent(String idEvent) {
         long res = 0;
         String args = DatabaseContract.EventTable.ID_EVENT + "=?";
-        String[] stringArgs = new String[]{String.valueOf(eventEntity.getIdEvent())};
+        String[] stringArgs = new String[]{String.valueOf(idEvent)};
         Cursor c = getReadableDatabase().query(DatabaseContract.EventTable.TABLE,
           DatabaseContract.EventTable.PROJECTION,
           args,
@@ -105,12 +110,6 @@ public class EventManager extends AbstractManager{
         }
         c.close();
         return res;
-    }
-
-    public void deleteEvents(List<EventEntity> eventEntities) {
-        for (EventEntity eventEntity : eventEntities) {
-            deleteEvent(eventEntity);
-        }
     }
 
     public void insertInSync(){
@@ -192,15 +191,13 @@ public class EventManager extends AbstractManager{
         return listingCount;
     }
 
-    public List<EventEntity> getEventsListing(String idUser, String locale) {
-        String localeSelection = DatabaseContract.EventTable.LOCALE + " = ?";
-        String userSelection = DatabaseContract.EventTable.ID_USER + " = ?";
-
-        String whereSelection = userSelection + " AND " + localeSelection;
-        String[] whereArguments = new String[] { idUser,locale };
+    public List<EventEntity> getEventsListing(String idUser) {
+        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null,
+            DatabaseContract.EventTable.TITLE);
 
         List<EventEntity> resultEvents = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {

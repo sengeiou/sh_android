@@ -20,11 +20,14 @@ import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
+import com.shootr.android.util.MenuItemValueHolder;
 import javax.inject.Inject;
 
 public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
 
+    public static final int RESULT_EXIT_EVENT = 1;
     public static final String KEY_EVENT_ID = "event_id";
+
     public static final String KEY_EVENT_TITLE = "event_title";
 
     @Inject NewEventPresenter presenter;
@@ -33,7 +36,8 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     @Bind(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_event_title_error) TextView titleErrorView;
 
-    private MenuItem doneMenuItem;
+    private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
 
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +88,8 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_event, menu);
-        doneMenuItem = menu.findItem(R.id.menu_done);
+        doneMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_done));
+        deleteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_delete));
         return true;
     }
 
@@ -94,6 +99,9 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             return true;
         } else if (item.getItemId() == R.id.menu_done) {
             presenter.done();
+            return true;
+        }else if (item.getItemId() == R.id.menu_delete) {
+            presenter.delete();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -127,10 +135,14 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         finish();
     }
 
+    @Override
+    public void closeScreenWithExitEvent() {
+        setResult(RESULT_EXIT_EVENT);
+        finish();
+    }
+
     @Override public void doneButtonEnabled(boolean enable) {
-        if (doneMenuItem != null) {
-            doneMenuItem.setEnabled(enable);
-        }
+        doneMenuItem.setEnabled(enable);
     }
 
     @Override public void hideKeyboard() {
@@ -152,6 +164,11 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
               }
           })
           .create().show();
+    }
+
+    @Override
+    public void showDeleteEventButton() {
+        deleteMenuItem.setVisible(true);
     }
 
     @Override public void showLoading() {

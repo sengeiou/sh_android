@@ -21,6 +21,8 @@ public class FindEventsPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
 
     private FindEventsView findEventsView;
+    private String lastQueryText;
+    private boolean hasBeenPaused = false;
 
     @Inject public FindEventsPresenter(EventsSearchInteractor eventsSearchInteractor,
       EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
@@ -38,6 +40,7 @@ public class FindEventsPresenter implements Presenter {
     }
 
     public void search(String queryText) {
+        this.lastQueryText = queryText;
         findEventsView.hideContent();
         findEventsView.hideKeyboard();
         findEventsView.showLoading();
@@ -103,10 +106,12 @@ public class FindEventsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        /* no-op */
+        if (hasBeenPaused && lastQueryText != null) {
+            search(lastQueryText);
+        }
     }
 
     @Override public void pause() {
-        /* no-op */
+        hasBeenPaused = true;
     }
 }

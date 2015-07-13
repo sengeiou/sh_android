@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -17,19 +18,17 @@ public class GetUserListingEventsInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final EventSearchRepository localEventSearchRepository;
     private final EventSearchRepository remoteEventSearchRepository;
-    private final LocaleProvider localeProvider;
 
     private String idUser;
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local EventSearchRepository localEventRepositoty,
-      @Remote EventSearchRepository remoteEventRepositoty, LocaleProvider localeProvider) {
+      @Remote EventSearchRepository remoteEventRepositoty) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localEventSearchRepository = localEventRepositoty;
         this.remoteEventSearchRepository = remoteEventRepositoty;
-        this.localeProvider = localeProvider;
     }
 
     public void loadUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
@@ -44,7 +43,11 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     private void loadUserListingEventsFromRemote() {
-        loadUserListingEventsFromRepository(remoteEventSearchRepository);
+        try {
+            loadUserListingEventsFromRepository(remoteEventSearchRepository);
+        } catch (ShootrException error) {
+            /* swallow error */
+        }
     }
 
     private void loadUserListingEventsFromLocal() {
@@ -52,8 +55,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     private void loadUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        String locale = localeProvider.getLocale();
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser, locale);
+        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser);
         notifyLoaded(listingEvents);
     }
 
