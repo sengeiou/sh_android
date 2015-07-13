@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -42,7 +43,11 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     private void loadUserListingEventsFromRemote() {
-        loadUserListingEventsFromRepository(remoteEventSearchRepository);
+        try {
+            loadUserListingEventsFromRepository(remoteEventSearchRepository);
+        } catch (ShootrException error) {
+            /* swallow error */
+        }
     }
 
     private void loadUserListingEventsFromLocal() {
