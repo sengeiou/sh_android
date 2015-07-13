@@ -2,6 +2,8 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -23,6 +25,7 @@ public class GetEventMediaInteractor implements Interactor {
     private final UserRepository remoteUserRepository;
     private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
+    private ErrorCallback errorCallback;
 
     private String idEvent;
     private Callback callback;
@@ -41,16 +44,21 @@ public class GetEventMediaInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getEventMedia(String idEvent, Callback callback) {
+    public void getEventMedia(String idEvent, Callback callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         this.currentidUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        getMediaFromLocal();
-        getMediaFromRemote();
+        try{
+            getMediaFromLocal();
+            getMediaFromRemote();
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        }
     }
 
     private void getMediaFromLocal() {
@@ -84,6 +92,15 @@ public class GetEventMediaInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(shots);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                errorCallback.onError(error);
             }
         });
     }

@@ -6,8 +6,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.ButterKnife;
+import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
@@ -71,6 +72,10 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override public void hideLoading() {
         loadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
