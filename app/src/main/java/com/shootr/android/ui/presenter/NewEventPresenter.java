@@ -37,8 +37,7 @@ public class NewEventPresenter implements Presenter {
     private String currentTitle;
     private String currentShortTitle;
     private boolean notifyCreation;
-    private boolean shortTitleEdited;
-    private boolean shortTitleSelected;
+    private boolean shortTitleEditedManually;
 
     //region Initialization
     @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor, GetEventInteractor getEventInteractor,
@@ -52,8 +51,7 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.isNewEvent = optionalIdEventToEdit == null;
-        this.shortTitleEdited = false;
-        this.shortTitleSelected = false;
+        this.shortTitleEditedManually = false;
         if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
@@ -74,17 +72,19 @@ public class NewEventPresenter implements Presenter {
         currentShortTitle = preloadedShortTitle;
         newEventView.setEventTitle(preloadedTitle);
         newEventView.showShortTitle(preloadedShortTitle);
+
+        shortTitleEditedManually = !filterShortTitle(preloadedTitle).equals(preloadedShortTitle);
     }
     //endregion
 
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
-        if(!shortTitleEdited || !shortTitleSelected){
+        if(!shortTitleEditedManually){
             currentShortTitle = filterShortTitle(title);
+            newEventView.showShortTitle(currentShortTitle);
         }
         this.updateDoneButtonStatus();
-        newEventView.showShortTitle(currentShortTitle);
     }
 
     public void done() {
@@ -214,19 +214,10 @@ public class NewEventPresenter implements Presenter {
     public void shortTitleTextChanged(String shortTitle) {
         updateShortTitle(shortTitle);
         this.updateDoneButtonStatus();
-        if(!shortTitleSelected) {
-            shortTitleEdited = false;
-        } else {
-            shortTitleEdited = true;
-        }
     }
 
     private void updateShortTitle(String shortTitle) {
-        if(shortTitle.length() < 15) {
-            currentShortTitle = filterShortTitle(shortTitle);
-        } else {
-            newEventView.showShortTitle(currentShortTitle);
-        }
+        currentShortTitle = filterShortTitle(shortTitle);
     }
 
     //endregion
@@ -239,7 +230,7 @@ public class NewEventPresenter implements Presenter {
         /* no-op */
     }
 
-    public void shortTitleSelected() {
-        shortTitleSelected = true;
+    public void shortTitleEditedManually() {
+        shortTitleEditedManually = true;
     }
 }

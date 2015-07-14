@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class NewEventPresenterTest {
@@ -38,9 +39,9 @@ public class NewEventPresenterTest {
     }
 
     @Test
-    public void shouldHaveShortTitleWith15WordsMax() {
+    public void shouldHaveShortTitleWith15charactersMax() {
         presenter.initialize(newEventView, null);
-        presenter.titleTextChanged("Title with more than 15 words");
+        presenter.titleTextChanged("Title with more than 15 characters");
         verify(newEventView).showShortTitle("Title with more");
     }
 
@@ -54,8 +55,25 @@ public class NewEventPresenterTest {
     @Test
     public void shouldUpdateDoneButtonStatusWhenEditTitle() {
         presenter.initialize(newEventView, null);
-        presenter.titleTextChanged("Title with more than 15 words");
+        presenter.titleTextChanged("Title with more than 15 characters");
         verify(newEventView).showShortTitle(anyString());
+    }
+
+    @Test
+    public void shouldShortTitleBeSameAsTitleWhenTitleEdited() throws Exception {
+        presenter.initialize(newEventView, null);
+        presenter.titleTextChanged("title");
+
+        verify(newEventView).showShortTitle("title");
+    }
+
+    @Test
+    public void shouldShortTitleNotBeSameAsTitleWhenTitleEditedAfterShortTitleHasBeenEdited() throws Exception {
+        presenter.initialize(newEventView, null);
+        presenter.shortTitleEditedManually();
+        presenter.titleTextChanged("title");
+
+        verify(newEventView, never()).showShortTitle(anyString());
     }
 
 }
