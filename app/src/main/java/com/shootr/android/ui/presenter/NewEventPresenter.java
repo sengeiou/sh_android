@@ -21,7 +21,7 @@ public class NewEventPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
     public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
-    public static final int MAX_SHORT_TITLE_LENGTH = 15;
+    public static final int MAX_SHORT_TITLE_LENGTH = 20;
 
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
