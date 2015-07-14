@@ -19,6 +19,7 @@ public class UserEntityMapper {
         user.setIdUser(userEntity.getIdUser());
         user.setUsername(userEntity.getUserName());
         user.setName(userEntity.getName());
+        user.setEmail(userEntity.getEmail());
         user.setPhoto(userEntity.getPhoto());
         user.setNumFollowings(userEntity.getNumFollowings());
         user.setNumFollowers(userEntity.getNumFollowers());

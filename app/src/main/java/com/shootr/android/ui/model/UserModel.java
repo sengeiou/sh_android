@@ -20,6 +20,15 @@ public class UserModel implements Serializable, Cloneable {
     private Long joinEventDate;
     private String joinEventDateText;
     private String idCheckedEvent;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getIdCheckedEvent() {
         return idCheckedEvent;

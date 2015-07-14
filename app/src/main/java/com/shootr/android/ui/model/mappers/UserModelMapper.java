@@ -24,6 +24,7 @@ public class UserModelMapper {
         userModel.setEventWatchingTitle(user.getWatchingEventTitle());
         userModel.setIdCheckedEvent(user.getIdCheckedEvent());
         userModel.setJoinEventDate(user.getJoinEventDate());
+        userModel.setEmail(user.getEmail());
         return userModel;
     }
 
