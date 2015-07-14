@@ -51,7 +51,7 @@ public class EventMediaPresenter implements Presenter {
         getEventMediaInteractor.getEventMedia(idEvent, new Interactor.Callback() {
             @Override public void onLoaded(Object o) {
                 List<Shot> shotsWithMedia = (List<Shot>) o;
-                if (shotsWithMedia != null && shotsWithMedia.isEmpty()) {
+                if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
                     eventMediaView.hideEmpty();
                     List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
                     eventMediaView.setMedia(shotModels);
