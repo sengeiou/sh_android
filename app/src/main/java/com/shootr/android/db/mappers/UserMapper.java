@@ -119,6 +119,7 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
+        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
         dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
         dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
@@ -139,6 +140,7 @@ public class UserMapper extends GenericMapper {
         user.setIdUser(c.getString(c.getColumnIndex(UserTable.ID)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
+        user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
         user.setNumFollowers(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
         user.setNumFollowings(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
