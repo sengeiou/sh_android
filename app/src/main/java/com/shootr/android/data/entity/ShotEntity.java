@@ -12,6 +12,8 @@ public class ShotEntity extends Synchronized{
     private String eventTag;
     private String eventTitle;
 
+    private Integer niceCount;
+
     private String type;
 
     private String idShotParent;
@@ -148,5 +150,13 @@ public class ShotEntity extends Synchronized{
 
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    public Integer getNiceCount() {
+        return niceCount;
+    }
+
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount = niceCount;
     }
 }

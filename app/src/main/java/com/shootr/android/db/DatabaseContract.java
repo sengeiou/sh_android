@@ -94,6 +94,7 @@ public class DatabaseContract {
         public static final String ID_EVENT = "idEvent";
         public static final String EVENT_TAG = "eventTag";
         public static final String EVENT_TITLE = "eventTitle";
+        public static final String NICE_COUNT = "niceCount";
         public static final String TYPE = "type";
 
         public static final String ID_SHOT_PARENT = "idShotParent";
@@ -106,7 +107,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
-          TYPE,
+          NICE_COUNT, TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };

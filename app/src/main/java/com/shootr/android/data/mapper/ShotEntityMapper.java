@@ -46,6 +46,7 @@ public class ShotEntityMapper {
         shot.setVideoDuration(shotEntity.getVideoDuration());
 
         shot.setType(shotEntity.getType());
+        shot.setNiceCount(shotEntity.getNiceCount());
 
         return shot;
     }
@@ -87,6 +88,7 @@ public class ShotEntityMapper {
         shotEntity.setVideoUrl(shot.getVideoUrl());
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
+        shotEntity.setNiceCount(shot.getNiceCount());
 
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         return shotEntity;

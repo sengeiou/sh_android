@@ -41,6 +41,9 @@ public class ShotApiEntityMapper {
         shotEntity.setVideoTitle(shotApiEntity.getVideoTitle());
         shotEntity.setVideoDuration(shotApiEntity.getVideoDuration());
 
+        Integer niceCount = shotApiEntity.getNiceCount();
+        shotEntity.setNiceCount(niceCount != null ? niceCount : 0);
+
         shotEntity.setBirth(new Date(shotApiEntity.getBirth()));
         shotEntity.setModified(new Date(shotApiEntity.getModified()));
         shotEntity.setRevision(shotApiEntity.getRevision());
