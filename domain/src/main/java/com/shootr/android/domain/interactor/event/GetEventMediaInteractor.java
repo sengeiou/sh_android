@@ -28,7 +28,7 @@ public class GetEventMediaInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     private String idEvent;
-    private Callback callback;
+    private Callback<List<Shot>> callback;
     private String currentidUser;
 
     @Inject
@@ -44,7 +44,7 @@ public class GetEventMediaInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getEventMedia(String idEvent, Callback callback, ErrorCallback errorCallback) {
+    public void getEventMedia(String idEvent, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
         this.idEvent = idEvent;
         this.callback = callback;
         this.errorCallback = errorCallback;
