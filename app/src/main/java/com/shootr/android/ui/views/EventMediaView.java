@@ -14,4 +14,6 @@ public interface EventMediaView {
     void showLoading();
 
     void hideLoading();
+
+    void showError(String errorMessage);
 }

@@ -1,11 +1,13 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetEventMediaInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.EventMediaView;
+import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -13,13 +15,16 @@ public class EventMediaPresenter implements Presenter {
 
     private final GetEventMediaInteractor getEventMediaInteractor;
     private final ShotModelMapper shotModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
     private EventMediaView eventMediaView;
     private String idEvent;
     private Integer eventMediaCount;
 
-    @Inject public EventMediaPresenter(GetEventMediaInteractor getEventMediaInteractor, ShotModelMapper shotModelMapper) {
+    @Inject public EventMediaPresenter(GetEventMediaInteractor getEventMediaInteractor, ShotModelMapper shotModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getEventMediaInteractor = getEventMediaInteractor;
         this.shotModelMapper = shotModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     protected void setView(EventMediaView eventMediaView) {
@@ -46,12 +51,17 @@ public class EventMediaPresenter implements Presenter {
         getEventMediaInteractor.getEventMedia(idEvent, new Interactor.Callback() {
             @Override public void onLoaded(Object o) {
                 List<Shot> shotsWithMedia = (List<Shot>) o;
-                if(shotsWithMedia != null && shotsWithMedia.isEmpty()) {
+                if (shotsWithMedia != null && shotsWithMedia.isEmpty()) {
                     eventMediaView.hideEmpty();
                     List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
                     eventMediaView.setMedia(shotModels);
                     eventMediaView.hideLoading();
                 }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                eventMediaView.showError(errorMessage);
             }
         });
     }
