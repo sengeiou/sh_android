@@ -101,10 +101,10 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void delete() {
-        newEventView.askDeleteConfirmation();
+        newEventView.askDeleteEventConfirmation();
     }
 
-    public void confirmDelete() {
+    public void confirmDeleteEvent() {
         deleteEventInteractor.deleteEvent(preloadedEventId, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {

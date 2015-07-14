@@ -172,13 +172,13 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     }
 
     @Override
-    public void askDeleteConfirmation() {
+    public void askDeleteEventConfirmation() {
         new AlertDialog.Builder(this)
           .setMessage(R.string.delete_event_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmDelete();
+                  presenter.confirmDeleteEvent();
               }
           })
           .setNegativeButton(R.string.cancel, null)
