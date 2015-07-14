@@ -196,7 +196,7 @@
     <string name="activity_empty">No Activity</string>
 
     <string name="entered">Entered&#160;</string>
-    <string name="long_time_ago">long time ago</string>
+    <string name="long_time_ago">a long time ago</string>
     <string name="just_now">just now</string>
     <string name="day_ago">1 day ago</string>
     <string name="hour_ago">1 hour ago</string>
