@@ -15,8 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -37,6 +37,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Bind(R.id.profile_edit_username) TextView username;
     @Bind(R.id.profile_edit_website) TextView website;
     @Bind(R.id.profile_edit_bio) TextView bio;
+    @Bind(R.id.profile_edit_email) TextView email;
     private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         username.setText(userModel.getUsername());
         website.setText(userModel.getWebsite());
         bio.setText(userModel.getBio());
+        email.setText(userModel.getEmail());
     }
 
     @Override public void hideKeyboard() {
