@@ -178,7 +178,7 @@
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>
-    <string name="checkin_notification_message">Check In will shoot a notification to your followers.</string>
+    <string name="checkin_notification_message">This will notify your followers you are here.</string>
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
