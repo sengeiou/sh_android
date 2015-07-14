@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -66,6 +67,7 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
     private static final String[] CONTEXT_MENU_OPTIONS = {"Copy", "Report"};
+    private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
     private static final int REQUEST_EVENT_DETAIL = 1;
 
     //region Fields
@@ -88,7 +90,6 @@ public class StreamTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
-    private View.OnLongClickListener longClickListener;
     private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
@@ -229,16 +230,23 @@ public class StreamTimelineFragment extends BaseFragment
     public void onCreateContextMenu(ContextMenu menu, View v,
       ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        for (String contextMenuOption : CONTEXT_MENU_OPTIONS) {
-            menu.add(0, v.getId(), 0, contextMenuOption);
+        for(int i = 0; i<CONTEXT_MENU_OPTIONS.length; i++) {
+            menu.add(0, CONTEXT_MENU_OPTIONS_INDEX[i], 0, CONTEXT_MENU_OPTIONS[i]);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        //TODO Funcionamiento de verdad, no esta prueba
-        String selectedItem = item.getTitle().toString();
-        Toast.makeText(this.getActivity(), selectedItem, Toast.LENGTH_SHORT).show();
+        ContextMenu.ContextMenuInfo menuInfo = item.getMenuInfo();
+        if(menuInfo instanceof AdapterView.AdapterContextMenuInfo) {
+            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            int position = adapterContextMenuInfo.position;
+            ShotModel shotModel = adapter.getItem(position);
+            int itemId = item.getItemId();
+            if(itemId == CONTEXT_MENU_OPTIONS_INDEX[0]) {
+                Toast.makeText(this.getActivity(), shotModel.getComment(), Toast.LENGTH_SHORT).show();
+            }
+        }
         return true;
     }
 
@@ -323,13 +331,6 @@ public class StreamTimelineFragment extends BaseFragment
             @Override public void onClick(View v) {
                 int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
                 openImage(position);
-            }
-        };
-
-        longClickListener = new View.OnLongClickListener(){
-
-            @Override public boolean onLongClick(View view) {
-                return false;
             }
         };
 
