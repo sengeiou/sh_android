@@ -46,7 +46,7 @@
       android:textSize="16sp"
       tools:text="Who's the referee?" />
 
-    <RelativeLayout android:layout_width="match_parent"
+    <FrameLayout android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_text"
       android:layout_below="@+id/shot_text"
@@ -66,8 +66,6 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:foreground="?selectableItemBackground"
-          android:layout_alignBottom="@+id/shot_image"
-          android:layout_alignTop="@+id/shot_image"
           android:background="#66000000"
           android:visibility="visible"
           tools:visibility="visible">
@@ -86,6 +84,6 @@
               android:textColor="@color/white"
               tools:text="0:00" />
         </FrameLayout>
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>
