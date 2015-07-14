@@ -187,10 +187,10 @@ public class NewEventPresenter implements Presenter {
     }
 
     private String filterShortTitle(String shortTitle) {
-        if(shortTitle.length() < 15){
+        if(shortTitle.length() <= 15){
             return shortTitle.trim();
         }else {
-            return shortTitle.substring(0,14).trim();
+            return shortTitle.substring(0,15).trim();
         }
     }
 
