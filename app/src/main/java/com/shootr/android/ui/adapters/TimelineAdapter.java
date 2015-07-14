@@ -121,6 +121,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         bindPhoto(item, vh);
         bindImageInfo(item, vh);
         bindVideoInfo(item, vh);
+        bindNiceInfo(item, vh);
     }
 
     protected void bindPhoto(ShotModel item, ViewHolder vh) {
@@ -184,6 +185,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             vh.videoFrame.setVisibility(View.GONE);
             vh.videoFrame.setOnClickListener(null);
         }
+    }
+
+    private void bindNiceInfo(ShotModel item, ViewHolder vh) {
+        vh.niceCount.setText(String.valueOf(item.getNiceCount()));
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
@@ -256,6 +261,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_video_frame) public View videoFrame;
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
         @Bind(R.id.shot_nice_button) public Checkable niceButton;
+        @Bind(R.id.shot_nice_count) public TextView niceCount;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
