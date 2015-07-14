@@ -41,8 +41,8 @@ public class NewEventPresenterTest {
     @Test
     public void shouldHaveShortTitleWith15charactersMax() {
         presenter.initialize(newEventView, null);
-        presenter.titleTextChanged("Title with more than 15 characters");
-        verify(newEventView).showShortTitle("Title with more");
+        presenter.titleTextChanged("Title with more than tewnty and some characters");
+        verify(newEventView).showShortTitle("Title with more than");
     }
 
     @Test
