@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -100,6 +101,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         website.setText(userModel.getWebsite());
         bio.setText(userModel.getBio());
         email.setText(userModel.getEmail());
+        email.setKeyListener(null);
     }
 
     @Override public void hideKeyboard() {
@@ -190,5 +192,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.profile_edit_email)
+    public void onEmailClick() {
+        //TODO intent a una activity de confirm email
     }
 }
