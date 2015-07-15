@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,8 +27,9 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     public static final String KEY_EVENT_ID = "event_id";
     public static final String KEY_EVENT_TITLE = "event_title";
-    public static final String EXTRA_TITLE = "title";
-    public static final String EXTRA_SHORT_TITLE = "short_title";
+
+    private static final String EXTRA_EDITED_TITLE = "title";
+    private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewEventPresenter presenter;
 
@@ -54,19 +54,19 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         initializePresenter(idEventToEdit);
 
         if (savedInstanceState != null) {
-            String title = savedInstanceState.getString(EXTRA_TITLE);
-            String shortTitle = savedInstanceState.getString(EXTRA_SHORT_TITLE);
+            String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
+            String editedShortTitle = savedInstanceState.getString(EXTRA_EDITED_SHORT_TITLE);
 
-            titleView.setText(title);
-            shortTitleView.setText(shortTitle);
+            titleView.setText(editedTitle);
+            shortTitleView.setText(editedShortTitle);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_TITLE, titleView.getText().toString());
-        outState.putString(EXTRA_SHORT_TITLE, shortTitleView.getText().toString());
+        outState.putString(EXTRA_EDITED_TITLE, titleView.getText().toString());
+        outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
     private void initializeViews(String idEventToEdit) {
