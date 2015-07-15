@@ -362,6 +362,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) Checkable niceButton;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -426,6 +427,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setVisibility(View.GONE);
                 this.videoFrame.setOnClickListener(null);
             }
+        }
+
+        @OnClick(R.id.shot_nice_button)
+        public void onNiceClick() {
+            //TODO real functional implementation
+            niceButton.toggle();
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
