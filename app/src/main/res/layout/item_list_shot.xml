@@ -89,31 +89,16 @@
         </FrameLayout>
     </FrameLayout>
 
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+    <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
       android:layout_alignParentRight="true"
       android:layout_below="@+id/shot_media_content"
-      android:clickable="true"
       android:layout_marginBottom="8dp"
-      android:orientation="horizontal">
+      android:layout_marginTop="4dp"
+      android:background="@drawable/bg_nice_action"
+      android:clickable="true"
+      android:scaleType="center"
+      android:src="@drawable/ic_thumb_up_16_checkable_nopadding" />
 
-        <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
-          android:layout_width="36dp"
-          android:layout_height="36dp"
-          android:background="@drawable/bg_nice_action"
-          android:scaleType="center"
-          android:src="@drawable/ic_thumb_up_16_checkable_nopadding" />
-
-        <TextView android:id="@+id/shot_nice_count"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="8dp"
-          android:layout_gravity="center_vertical"
-          android:textSize="13sp"
-          tools:text="3"
-          android:textColor="@color/gray_60"
-          android:text="0" />
-
-    </LinearLayout>
 </RelativeLayout>

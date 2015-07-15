@@ -188,7 +188,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     private void bindNiceInfo(ShotModel item, ViewHolder vh) {
-        vh.niceCount.setText(String.valueOf(item.getNiceCount()));
+        //TODO add nice(d?) status to the button
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
@@ -261,7 +261,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_video_frame) public View videoFrame;
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
         @Bind(R.id.shot_nice_button) public Checkable niceButton;
-        @Bind(R.id.shot_nice_count) public TextView niceCount;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
