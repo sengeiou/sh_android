@@ -79,8 +79,6 @@ public class NewEventPresenter implements Presenter {
             bindShortTitleToTitleIfMatches();
         }
     }
-
-
     //endregion
 
     //region Interaction methods
@@ -90,6 +88,12 @@ public class NewEventPresenter implements Presenter {
             currentShortTitle = filterShortTitle(title);
             newEventView.showShortTitle(currentShortTitle);
         }
+        this.updateDoneButtonStatus();
+    }
+
+    public void shortTitleTextChanged(String shortTitle) {
+        currentShortTitle = filterShortTitle(shortTitle);
+        this.bindShortTitleToTitleIfMatches();
         this.updateDoneButtonStatus();
     }
 
@@ -217,22 +221,11 @@ public class NewEventPresenter implements Presenter {
           && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
     }
 
-    public void shortTitleTextChanged(String shortTitle) {
-        updateShortTitle(shortTitle);
-        this.bindShortTitleToTitleIfMatches();
-        this.updateDoneButtonStatus();
-    }
-
-    private void updateShortTitle(String shortTitle) {
-        currentShortTitle = filterShortTitle(shortTitle);
-    }
-
     private void bindShortTitleToTitleIfMatches() {
         if (currentTitle != null && currentShortTitle != null) {
             shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
         }
     }
-
     //endregion
 
     @Override public void resume() {
