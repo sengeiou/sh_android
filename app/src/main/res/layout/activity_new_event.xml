@@ -61,7 +61,7 @@
         android:imeOptions="actionDone"
         android:inputType="text|textCapSentences|textNoSuggestions"
         android:lines="1"
-        android:maxLength="50"
+        android:maxLength="20"
         android:nextFocusDown="@+id/profile_edit_username"
         android:singleLine="true"
         tools:text="MyNewEvent" />
@@ -76,6 +76,6 @@
       android:paddingLeft="4dp"
       android:textColor="@color/error"
       android:textSize="12sp"
-      tools:text="3 to 15 characters" />
+      tools:text="3 to 20 characters" />
 
 </LinearLayout>
