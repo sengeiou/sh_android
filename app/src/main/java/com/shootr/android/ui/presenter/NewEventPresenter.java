@@ -71,13 +71,16 @@ public class NewEventPresenter implements Presenter {
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = eventModel.getTitle();
             preloadedShortTitle = eventModel.getTag();
+            currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
             newEventView.setEventTitle(preloadedTitle);
             newEventView.showShortTitle(preloadedShortTitle);
 
-            shortTitleEditedManually = !filterShortTitle(preloadedTitle).equals(preloadedShortTitle);
+            bindShortTitleToTitleIfMatches();
         }
     }
+
+
     //endregion
 
     //region Interaction methods
@@ -216,11 +219,18 @@ public class NewEventPresenter implements Presenter {
 
     public void shortTitleTextChanged(String shortTitle) {
         updateShortTitle(shortTitle);
+        this.bindShortTitleToTitleIfMatches();
         this.updateDoneButtonStatus();
     }
 
     private void updateShortTitle(String shortTitle) {
         currentShortTitle = filterShortTitle(shortTitle);
+    }
+
+    private void bindShortTitleToTitleIfMatches() {
+        if (currentTitle != null && currentShortTitle != null) {
+            shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
+        }
     }
 
     //endregion
