@@ -134,7 +134,6 @@
           android:layout_gravity="center_vertical"
           android:layout_marginLeft="8dp"
           android:textColor="@color/gray_60"
-          android:textStyle="bold"
           android:textSize="14sp"
           tools:text="8 nices"
           />
