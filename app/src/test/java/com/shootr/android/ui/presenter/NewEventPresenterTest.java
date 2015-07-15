@@ -14,6 +14,7 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
 public class NewEventPresenterTest {
@@ -71,8 +72,11 @@ public class NewEventPresenterTest {
     @Test
     public void shouldShortTitleNotBeSameAsTitleWhenTitleEditedAfterShortTitleHasBeenEdited() throws Exception {
         presenter.initialize(newEventView, null);
-        presenter.shortTitleEditedManually();
-        presenter.titleTextChanged("title");
+        presenter.titleTextChanged("old title");
+        presenter.shortTitleTextChanged("short title");
+        reset(newEventView);
+
+        presenter.titleTextChanged("new title");
 
         verify(newEventView, never()).showShortTitle(anyString());
     }
