@@ -95,9 +95,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
             }
 
             @Override public void afterTextChanged(Editable editable) {
-                if (shortTitleView.hasFocus()) {
-                    presenter.shortTitleEditedManually();
-                }
                 presenter.shortTitleTextChanged(editable.toString());
             }
         });

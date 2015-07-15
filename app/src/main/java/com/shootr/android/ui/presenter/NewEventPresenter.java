@@ -242,9 +242,4 @@ public class NewEventPresenter implements Presenter {
     @Override public void pause() {
         /* no-op */
     }
-
-    public void shortTitleEditedManually() {
-        shortTitleEditedManually = true;
-    }
-
 }
