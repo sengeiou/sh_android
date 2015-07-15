@@ -165,7 +165,7 @@
     <string name="event_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
     <string name="menu_event_edit_info">Stream info</string>
-    <string name="menu_event_edit_photo">Edit photo</string>
+    <string name="menu_event_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
     <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
