@@ -720,7 +720,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void showLogoutInProgress() {
         if(getActivity() != null) {
             progress = ProgressDialog.show(getActivity(),
-              getActivity().getString(R.string.sign_out_title),
+              null,
               getActivity().getString(R.string.sign_out_message),
               true);
         }

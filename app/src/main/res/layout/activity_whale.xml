@@ -13,16 +13,15 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp">
 
-        <ImageView android:layout_width="150dp"
-          android:layout_height="150dp"
-          android:layout_gravity="center"
-          android:src="@mipmap/ic_launcher" />
+        <ImageView android:layout_width="@dimen/logo_size_104"
+          android:layout_height="@dimen/logo_size_104"
+          android:src="@drawable/logo_blue_104" />
 
         <TextView android:id="@+id/whale_title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="32dp"
-          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginTop="32dp"
           android:fontFamily="sans-serif-light"
           android:gravity="center"
           android:text="@string/whale_title_default"
