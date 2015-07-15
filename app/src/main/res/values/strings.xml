@@ -289,4 +289,13 @@
     <string name="whale_retry_button_text">Ok</string>
     <string name="delete_event_label">Delete stream</string>
     <string name="delete_event_confirmation">Delete stream?</string>
+
+    <plurals name="nice_count_pattern">
+        <item quantity="one">
+            %d nice
+        </item>
+        <item quantity="other">
+            %d nices
+        </item>
+    </plurals>
 </resources>

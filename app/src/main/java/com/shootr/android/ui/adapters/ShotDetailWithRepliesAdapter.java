@@ -234,6 +234,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.shot_nice_button) Checkable niceButton;
+        @Bind(R.id.shot_nice_count) TextView niceCount;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -304,6 +305,15 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 });
             } else {
                 parentToggleButton.setVisibility(View.GONE);
+            }
+
+            Integer niceCount = shotModel.getNiceCount();
+            if (niceCount > 0) {
+                this.niceCount.setVisibility(View.VISIBLE);
+                this.niceCount.setText(context.getResources()
+                  .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+            } else {
+                this.niceCount.setVisibility(View.GONE);
             }
         }
 
