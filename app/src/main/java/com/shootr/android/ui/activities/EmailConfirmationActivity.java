@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.EmailConfirmationPresenter;
@@ -66,5 +68,26 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
                 /* no-op */
               }
         }).show();
+    }
+
+    @Override public void showUserEmail(String userEmail) {
+        email.setText(userEmail);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+    }
+
+    @Override public void showEmailError(String errorMessage) {
+        email.setError(errorMessage);
+    }
+
+    @Override public void updateDoneButton() {
+        // TODO Change visibility
+    }
+
+    @OnTextChanged(R.id.email_confirmation_email)
+    public void onEmailChanged() {
+        presenter.onEmailEdited(email.getText().toString());
     }
 }
