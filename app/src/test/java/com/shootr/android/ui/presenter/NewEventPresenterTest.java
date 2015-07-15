@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -49,7 +50,7 @@ public class NewEventPresenterTest {
     public void shouldUpdateDoneButtonWhenEditShortTitle() {
         presenter.initialize(newEventView, null);
         presenter.shortTitleTextChanged("Short Title");
-        verify(newEventView).doneButtonEnabled(anyBoolean());
+        verify(newEventView, atLeastOnce()).doneButtonEnabled(anyBoolean());
     }
 
     @Test
