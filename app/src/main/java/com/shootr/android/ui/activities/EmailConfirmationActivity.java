@@ -10,12 +10,17 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.presenter.EmailConfirmationPresenter;
+import com.shootr.android.ui.views.EmailConfirmationView;
+import javax.inject.Inject;
 
-public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity {
+public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
 
     @Bind(R.id.email_confirmation_email) TextView email;
     @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
     @Bind(R.id.email_confirmation_confirm_progress) View progress;
+
+    @Inject EmailConfirmationPresenter presenter;
 
     public static Intent newIntent(Context context, String email) {
         Intent intent = new Intent(context, EmailConfirmationActivity.class);
@@ -37,7 +42,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected void initializePresenter() {
-        //TODO presenter stuff
+        presenter.initialize(this);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
