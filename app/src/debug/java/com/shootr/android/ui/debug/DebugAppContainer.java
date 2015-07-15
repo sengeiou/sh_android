@@ -188,7 +188,6 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_build_code) TextView buildCodeView;
     @Bind(R.id.debug_build_sha) TextView buildShaView;
     @Bind(R.id.debug_build_branch) TextView buildBranchView;
-    @Bind(R.id.debug_build_date) TextView buildDateView;
 
     @Bind(R.id.debug_device_make) TextView deviceMakeView;
     @Bind(R.id.debug_device_model) TextView deviceModelView;
@@ -565,16 +564,6 @@ public class DebugAppContainer implements AppContainer {
         buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
         buildShaView.setText(BuildConfig.GIT_SHA);
         buildBranchView.setText(BuildConfig.GIT_BRANCH);
-
-        try {
-            // Parse ISO8601-format time into local time.
-            DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
-            buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
-        } catch (ParseException e) {
-            throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
-        }
     }
 
     private void setupDeviceSection() {
