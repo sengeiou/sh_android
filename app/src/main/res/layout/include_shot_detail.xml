@@ -123,11 +123,13 @@
       android:paddingBottom="16dp"
       android:orientation="horizontal">
 
-        <com.shootr.android.ui.widgets.CheckableImageView style="@style/NiceButton"
+        <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
+          style="@style/NiceButton"
           android:layout_width="@dimen/nice_button_size"
           android:layout_height="@dimen/nice_button_size" />
 
-        <TextView android:layout_width="wrap_content"
+        <TextView android:id="@+id/shot_nice_count"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginLeft="8dp"
