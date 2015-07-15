@@ -44,5 +44,9 @@
     <dimen name="toolbar_title_padding">16dp</dimen>
     <dimen name="tabbar_shadow_height">4dp</dimen>
     <dimen name="reset_password_avatar_size">80dp</dimen>
+    <dimen name="email_confirmation_button_padding">16dp</dimen>
+    <dimen name="email_confirmation_button_text_size">14sp</dimen>
+    <dimen name="email_confirmation_message_width">360dp</dimen>
+    <dimen name="email_confirmation_message_text_size">18sp</dimen>
 
 </resources>
