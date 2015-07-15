@@ -30,7 +30,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     public static final String KEY_EVENT_TITLE = "event_title";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_SHORT_TITLE = "short_title";
-    public static final String EXTRA_ID_EVENT = "id_event";
 
     @Inject NewEventPresenter presenter;
 
@@ -53,26 +52,21 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         setupActionbar(idEventToEdit);
 
         initializePresenter(idEventToEdit);
+
+        if (savedInstanceState != null) {
+            String title = savedInstanceState.getString(EXTRA_TITLE);
+            String shortTitle = savedInstanceState.getString(EXTRA_SHORT_TITLE);
+
+            titleView.setText(title);
+            shortTitleView.setText(shortTitle);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        String idEventToEdit = getIntent().getStringExtra(KEY_EVENT_ID);
         outState.putString(EXTRA_TITLE, titleView.getText().toString());
         outState.putString(EXTRA_SHORT_TITLE, shortTitleView.getText().toString());
-        outState.putString(EXTRA_ID_EVENT, idEventToEdit);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        String title = savedInstanceState.getString(EXTRA_TITLE);
-        String shortTitle = savedInstanceState.getString(EXTRA_SHORT_TITLE);
-        String idEvent = savedInstanceState.getString(EXTRA_ID_EVENT);
-        initializeViews(idEvent);
-        setupActionbar(idEvent);
-        initializePresenter(idEvent, title, shortTitle);
     }
 
     private void initializeViews(String idEventToEdit) {
@@ -123,11 +117,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     private void initializePresenter(String idEventToEdit) {
         presenter.initialize(this, idEventToEdit);
     }
-
-    private void initializePresenter(String idEventToEdit, String title, String shortTitle) {
-        presenter.initialize(this, idEventToEdit, title, shortTitle);
-    }
-
     //endregion
 
     //region Activity methods

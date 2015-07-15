@@ -58,18 +58,6 @@ public class NewEventPresenter implements Presenter {
         updateDoneButtonStatus();
     }
 
-    public void initialize(NewEventView newEventView, String optionalIdEventToEdit, String title, String shortTitle) {
-        this.newEventView = newEventView;
-        this.isNewEvent = optionalIdEventToEdit == null;
-        this.shortTitleEditedManually = false;
-        if (!isNewEvent) {
-            this.preloadEventToEdit(optionalIdEventToEdit);
-        }
-        this.currentTitle = title;
-        this.currentShortTitle = shortTitle;
-        updateDoneButtonStatus();
-    }
-
     private void preloadEventToEdit(String optionalIdEventToEdit) {
         getEventInteractor.loadEvent(optionalIdEventToEdit, new GetEventInteractor.Callback() {
             @Override public void onLoaded(Event event) {
@@ -80,13 +68,15 @@ public class NewEventPresenter implements Presenter {
 
     private void setDefaultEventInfo(EventModel eventModel) {
         preloadedEventId = eventModel.getIdEvent();
-        preloadedTitle = eventModel.getTitle();
-        preloadedShortTitle = eventModel.getTag();
-        currentShortTitle = preloadedShortTitle;
-        newEventView.setEventTitle(preloadedTitle);
-        newEventView.showShortTitle(preloadedShortTitle);
+        if (currentTitle == null && currentShortTitle == null) {
+            preloadedTitle = eventModel.getTitle();
+            preloadedShortTitle = eventModel.getTag();
+            currentShortTitle = preloadedShortTitle;
+            newEventView.setEventTitle(preloadedTitle);
+            newEventView.showShortTitle(preloadedShortTitle);
 
-        shortTitleEditedManually = !filterShortTitle(preloadedTitle).equals(preloadedShortTitle);
+            shortTitleEditedManually = !filterShortTitle(preloadedTitle).equals(preloadedShortTitle);
+        }
     }
     //endregion
 
