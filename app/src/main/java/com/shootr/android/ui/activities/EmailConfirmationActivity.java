@@ -1,6 +1,8 @@
 package com.shootr.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,7 +26,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
 
     public static Intent newIntent(Context context, String email) {
         Intent intent = new Intent(context, EmailConfirmationActivity.class);
-        intent.putExtra(ProfileEditActivity.EXTRA_EVENT_ID, email);
+        intent.putExtra(ProfileEditActivity.EXTRA_USER_EMAIL, email);
         return intent;
     }
 
@@ -42,7 +44,8 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override protected void initializePresenter() {
-        presenter.initialize(this);
+        String email = getIntent().getStringExtra(ProfileEditActivity.EXTRA_USER_EMAIL);
+        presenter.initialize(this, email);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -52,5 +55,16 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override public void showConfirmationToUser(String email) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Confirm Your Email") //
+          .setMessage("Click the link in the email we've just sent to " + email) //
+          .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialogInterface, int i) {
+                /* no-op */
+              }
+        }).show();
     }
 }

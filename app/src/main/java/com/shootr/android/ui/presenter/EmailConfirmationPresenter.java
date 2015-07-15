@@ -15,8 +15,13 @@ public class EmailConfirmationPresenter implements Presenter {
         this.emailConfirmationView = emailConfirmationView;
     }
 
-    public void initialize(EmailConfirmationView emailConfirmationView) {
+    public void initialize(EmailConfirmationView emailConfirmationView, String email) {
         this.setView(emailConfirmationView);
+        this.confirmEmail(email);
+    }
+
+    private void confirmEmail(String email) {
+        emailConfirmationView.showConfirmationToUser(email);
     }
 
     @Override public void resume() {
