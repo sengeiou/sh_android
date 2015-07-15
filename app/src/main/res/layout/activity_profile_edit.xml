@@ -106,6 +106,7 @@
             </com.shootr.android.ui.widgets.FloatLabelLayout>
 
             <com.shootr.android.ui.widgets.FloatLabelLayout
+              android:id="@+id/profile_edit_email_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="16dp"
@@ -113,7 +114,7 @@
               android:layout_marginTop="16dp"
               app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
-              <EditText
+              <TextView
                 android:id="@+id/profile_edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,7 +122,9 @@
                 android:imeOptions="actionDone"
                 android:maxLength="150"
                 android:maxLines="4"
-                android:inputType="text|textEmailAddress" />
+                android:clickable="true"
+                android:inputType="text|textEmailAddress"
+                style="@android:style/Widget.EditText" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
 

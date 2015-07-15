@@ -23,6 +23,7 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
+import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
 import javax.inject.Inject;
 
@@ -30,7 +31,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
-    public static final String EXTRA_EVENT_ID = "user_email";
+    public static final String EXTRA_USER_EMAIL = "user_email";
 
     @Inject ProfileEditPresenter presenter;
 
@@ -40,6 +41,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Bind(R.id.profile_edit_website) TextView website;
     @Bind(R.id.profile_edit_bio) TextView bio;
     @Bind(R.id.profile_edit_email) TextView email;
+    @Bind(R.id.profile_edit_email_layout) FloatLabelLayout emailLayout;
     private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +201,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.profile_edit_email)
+    @OnClick(R.id.profile_edit_email_layout)
     public void onEmailClick() {
         startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
     }
