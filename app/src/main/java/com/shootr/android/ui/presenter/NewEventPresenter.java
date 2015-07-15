@@ -55,6 +55,19 @@ public class NewEventPresenter implements Presenter {
         if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
         }
+        updateDoneButtonStatus();
+    }
+
+    public void initialize(NewEventView newEventView, String optionalIdEventToEdit, String title, String shortTitle) {
+        this.newEventView = newEventView;
+        this.isNewEvent = optionalIdEventToEdit == null;
+        this.shortTitleEditedManually = false;
+        if (!isNewEvent) {
+            this.preloadEventToEdit(optionalIdEventToEdit);
+        }
+        this.currentTitle = title;
+        this.currentShortTitle = shortTitle;
+        updateDoneButtonStatus();
     }
 
     private void preloadEventToEdit(String optionalIdEventToEdit) {
@@ -233,4 +246,5 @@ public class NewEventPresenter implements Presenter {
     public void shortTitleEditedManually() {
         shortTitleEditedManually = true;
     }
+
 }
