@@ -154,8 +154,35 @@
                         <com.shootr.android.ui.widgets.WatchersView android:id="@+id/event_content_detail_watchers_list"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:paddingBottom="56dp"
                           />
+
+                      <View android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="bottom"
+                        android:background="?dividerHorizontal" />
+
+                      <FrameLayout android:layout_width="match_parent"
+                        android:layout_marginBottom="56dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_vertical"
+                          android:layout_marginLeft="16dp"
+                          android:src="@drawable/ic_checkin_24_gray50" />
+
+                        <TextView android:id="@+id/event_checkin"
+                          android:layout_width="match_parent"
+                          android:layout_height="56dp"
+                          android:background="?selectableItemBackground"
+                          android:clickable="true"
+                          android:gravity="center_vertical"
+                          android:paddingLeft="@dimen/keyline_2"
+                          android:textAppearance="@style/TextAppearance.Switch"
+                          android:textColor="?android:attr/textColorPrimary"
+                          android:text="@string/check_in_action" />
+                      </FrameLayout>
                     </LinearLayout>
 
                 </FrameLayout>

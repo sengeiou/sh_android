@@ -8,8 +8,6 @@ public interface EventsListView extends LoadDataView {
 
     void renderEvents(List<EventResultModel> events);
 
-    void setCurrentCheckedInEventId(String eventId);
-
     void setCurrentWatchingEventId(EventResultModel eventId);
 
     void showContent();

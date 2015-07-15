@@ -178,7 +178,7 @@
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>
-    <string name="checkin_notification_message">Check In will shoot a notification to your followers.</string>
+    <string name="checkin_notification_message">This will notify your followers you are here.</string>
     <string name="ok">Ok</string>
     <string name="reply_placeholder_pattern">Reply to %s…</string>
     <string name="reply_name_pattern">%1$s to %2$s</string>
@@ -196,7 +196,7 @@
     <string name="activity_empty">No Activity</string>
 
     <string name="entered">Entered&#160;</string>
-    <string name="long_time_ago">long time ago</string>
+    <string name="long_time_ago">a long time ago</string>
     <string name="just_now">just now</string>
     <string name="day_ago">1 day ago</string>
     <string name="hour_ago">1 hour ago</string>

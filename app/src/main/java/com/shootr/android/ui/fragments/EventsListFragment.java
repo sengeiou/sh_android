@@ -172,10 +172,6 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentCheckedInEventId(String eventId) {
-        adapter.setCurrentCheckedInEvent(eventId);
-    }
-
     @Override public void setCurrentWatchingEventId(EventResultModel event) {
         adapter.setCurrentWatchingEvent(event);
     }

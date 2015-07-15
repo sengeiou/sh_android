@@ -67,12 +67,11 @@ public class DatabaseContract {
         public static final String EMAIL_NORMALIZED = "emailNormalized";
         public static final String WATCHING_EVENT_ID = "idWatchingEvent";
         public static final String WATCHING_EVENT_TITLE = "watchingEventTitle";
-        public static final String ID_CHECKED_EVENT = "idCheckedEvent";
         public static final String JOIN_EVENT_DATE = "joinEventDate";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, ID_CHECKED_EVENT, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }

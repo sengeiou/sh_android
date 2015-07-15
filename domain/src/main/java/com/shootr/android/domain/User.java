@@ -18,7 +18,6 @@ public class User {
 
     private String idWatchingEvent;
     private String watchingEventTitle;
-    private String idCheckedEvent;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -167,14 +166,6 @@ public class User {
           ", username='" + username + '\'' +
           ", idWatchingEvent=" + idWatchingEvent +
           '}';
-    }
-
-    public String getIdCheckedEvent() {
-        return idCheckedEvent;
-    }
-
-    public void setIdCheckedEvent(String idCheckedEvent) {
-        this.idCheckedEvent = idCheckedEvent;
     }
 
     public Long getJoinEventDate() {

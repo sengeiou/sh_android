@@ -21,13 +21,6 @@
       android:src="@drawable/ic_event_picture_default"
       tools:background="#660000cc" />
 
-    <ImageView android:id="@+id/event_notification_indicator"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/event_subscribed_overlay"
-      android:visibility="gone"
-      tools:visibility="visible" />
-
     <LinearLayout android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"

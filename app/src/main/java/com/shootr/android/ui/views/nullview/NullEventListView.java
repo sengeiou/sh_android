@@ -10,10 +10,6 @@ public class NullEventListView implements EventsListView {
         /* no-op */
     }
 
-    @Override public void setCurrentCheckedInEventId(String eventId) {
-        /* no-op */
-    }
-
     @Override public void setCurrentWatchingEventId(EventResultModel eventId) {
         /* no-op */
     }

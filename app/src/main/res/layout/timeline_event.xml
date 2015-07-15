@@ -26,18 +26,6 @@
 
         <include layout="@layout/include_shadow_above_shot_bar" />
 
-      <com.melnykov.fab.FloatingActionButton android:id="@+id/timeline_checkin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_checkin_white_24"
-        android:visibility="gone"
-        fab:fab_colorNormal="@color/primary"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_disabled"
-        fab:fab_shadow="true" />
-
     </FrameLayout>
 
     <include android:id="@+id/timeline_new_shot_bar"

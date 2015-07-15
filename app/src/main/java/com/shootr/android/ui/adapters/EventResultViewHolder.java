@@ -23,7 +23,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.event_title) TextView title;
     @Bind(R.id.event_author) TextView author;
     @Bind(R.id.event_watchers) TextView watchers;
-    @Bind(R.id.event_notification_indicator) View notificationIndicator;
 
     public EventResultViewHolder(View itemView,
       OnEventClickListener onEventClickListener,
@@ -34,7 +33,7 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void render(EventResultModel event, boolean isCheckedIn) {
+    public void render(EventResultModel event) {
         this.setClickListener(event);
         title.setText(event.getEventModel().getTitle());
         int watchersCount = event.getWatchers();
@@ -49,12 +48,6 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(picture);
-
-        if (isCheckedIn) {
-            setNotificationIconVisibility(true);
-        } else {
-            setNotificationIconVisibility(false);
-        }
     }
 
     private void setClickListener(final EventResultModel eventResult) {
@@ -67,19 +60,5 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
 
     private String getWatchersText(int watchers) {
         return String.valueOf(watchers);
-    }
-
-    private void setNotificationIconVisibility(boolean visible) {
-        notificationIndicator.setVisibility(visible? View.VISIBLE : View.GONE);
-    }
-
-    private void setHighlightColorVisibility(boolean showHighlight) {
-        if (showHighlight) {
-            CharSequence text = title.getText();
-            SpannableStringBuilder sp = new SpannableStringBuilder(text);
-            int selectedColor = itemView.getContext().getResources().getColor(R.color.primary);
-            sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            title.setText(sp);
-        }
     }
 }

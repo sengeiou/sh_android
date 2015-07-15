@@ -33,8 +33,6 @@ public class UserEntityMapper {
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
 
-        user.setIdCheckedEvent(userEntity.getIdCheckedEvent());
-
         if(userEntity.getJoinEventDate() != null){
             user.setJoinEventDate(userEntity.getJoinEventDate());
         }
@@ -61,8 +59,6 @@ public class UserEntityMapper {
         userEntity.setIdWatchingEvent(user.getIdWatchingEvent());
 
         userEntity.setWatchingEventTitle(user.getWatchingEventTitle());
-
-        userEntity.setIdCheckedEvent(user.getIdCheckedEvent());
 
         userEntity.setJoinEventDate(user.getJoinEventDate());
 

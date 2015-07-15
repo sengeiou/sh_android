@@ -19,15 +19,6 @@ public class UserModel implements Serializable, Cloneable {
     private String eventWatchingTitle;
     private Long joinEventDate;
     private String joinEventDateText;
-    private String idCheckedEvent;
-
-    public String getIdCheckedEvent() {
-        return idCheckedEvent;
-    }
-
-    public void setIdCheckedEvent(String idCheckedEvent) {
-        this.idCheckedEvent = idCheckedEvent;
-    }
 
     public Long getPoints() {
         return points;

@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +30,9 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
+import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -43,7 +46,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EventDetailActivity extends BaseNoToolbarActivity
-  implements EventDetailView, ObservableScrollView.Callbacks {
+  implements EventDetailView, CheckinView, ObservableScrollView.Callbacks {
 
     private static final int REQUEST_EDIT_EVENT = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 4;
@@ -79,7 +82,10 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     @Bind(R.id.event_detail_media) TextView eventMedia;
     @Bind(R.id.event_detail_media_number) TextView eventMediaNumber;
 
-    @Inject EventDetailPresenter presenter;
+    @Bind(R.id.event_checkin) View checkinButton;
+
+    @Inject EventDetailPresenter eventDetailPresenter;
+    @Inject CheckinPresenter checkinPresenter;
     @Inject PicassoWrapper picasso;
 
     private boolean hasPicture;
@@ -106,7 +112,8 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     private void initializePresenter(String idEvent) {
-        presenter.initialize(this, idEvent);
+        eventDetailPresenter.initialize(this, idEvent);
+        checkinPresenter.initialize(this, idEvent);
     }
 
     private void initializeViews() {
@@ -123,7 +130,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
           R.color.refresh_4);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                presenter.refreshInfo();
+                eventDetailPresenter.refreshInfo();
             }
         });
         final ViewTreeObserver scrollViewViewTreeObserver = scrollView.getViewTreeObserver();
@@ -152,18 +159,23 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @OnClick(R.id.event_author)
     public void onAuthorClick() {
-        presenter.clickAuthor();
+        eventDetailPresenter.clickAuthor();
     }
 
     @OnClick(R.id.event_detail_media)
     public void onMediaClick() {
-        presenter.clickMedia();
+        eventDetailPresenter.clickMedia();
+    }
+
+    @OnClick(R.id.event_checkin)
+    public void onCheckinClick() {
+        checkinPresenter.checkIn();
     }
 
     //region Edit photo
     @OnClick(R.id.event_photo_container)
     public void onPhotoClick() {
-        presenter.photoClick();
+        eventDetailPresenter.photoClick();
     }
 
     private void choosePhotoFromGallery() {
@@ -289,7 +301,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_edit) {
-            presenter.editEventClick();
+            eventDetailPresenter.editEventClick();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             finish();
@@ -303,28 +315,28 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
             String idEventEdited = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
-            presenter.resultFromEditEventInfo(idEventEdited);
+            eventDetailPresenter.resultFromEditEventInfo(idEventEdited);
         }else if (requestCode == REQUEST_EDIT_EVENT && resultCode == NewEventActivity.RESULT_EXIT_EVENT) {
             setResult(NewEventActivity.RESULT_EXIT_EVENT);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-            presenter.photoSelected(photoFile);
+            eventDetailPresenter.photoSelected(photoFile);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             File photoFile = getCameraPhotoFile();
-            presenter.photoSelected(photoFile);
+            eventDetailPresenter.photoSelected(photoFile);
         }
     }
 
     @Override protected void onResume() {
         super.onResume();
-        presenter.resume();
+        eventDetailPresenter.resume();
     }
 
     @Override protected void onPause() {
         super.onPause();
-        presenter.pause();
+        eventDetailPresenter.pause();
     }
     //endregion
 
@@ -363,10 +375,10 @@ public class EventDetailActivity extends BaseNoToolbarActivity
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_event_edit_photo:
-                          presenter.editEventPhoto();
+                          eventDetailPresenter.editEventPhoto();
                           break;
                       case R.id.menu_event_edit_info:
-                          presenter.editEventInfo();
+                          eventDetailPresenter.editEventInfo();
                           break;
                   }
               }
@@ -514,6 +526,38 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void disableCheckinButton() {
+        checkinButton.setEnabled(false);
+    }
+
+    @Override
+    public void enableCheckinButton() {
+        checkinButton.setEnabled(true);
+    }
+
+    @Override
+    public void showCheckinError() {
+        Toast.makeText(this, getString(R.string.problem_while_checkin), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showCheckinConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.checkin_notification_message)
+          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  checkinPresenter.confirmCheckin();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
+    @Override
+    public void showCheckinDone() {
+        Toast.makeText(this, getString(R.string.successfully_checked_in), Toast.LENGTH_SHORT).show();
     }
     //endregion
 }

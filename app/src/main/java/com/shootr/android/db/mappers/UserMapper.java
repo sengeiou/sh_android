@@ -56,7 +56,6 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
             cv.put(UserTable.WATCHING_EVENT_ID, u.getIdWatchingEvent());
             cv.put(UserTable.WATCHING_EVENT_TITLE, u.getWatchingEventTitle());
-            cv.put(UserTable.ID_CHECKED_EVENT, u.getIdCheckedEvent());
             cv.put(UserTable.JOIN_EVENT_DATE, u.getJoinEventDate());
             setSynchronizedtoContentValues(u, cv);
         }
@@ -90,9 +89,6 @@ public class UserMapper extends GenericMapper {
         }
 
         user.setWatchingEventTitle(dto.containsKey(UserTable.WATCHING_EVENT_TITLE) ? (String) dto.get(UserTable.WATCHING_EVENT_TITLE) : null);
-        if(dto.get(UserTable.ID_CHECKED_EVENT)!=null){
-            user.setIdCheckedEvent(dto.containsKey(UserTable.ID_CHECKED_EVENT) ? (String) dto.get(UserTable.ID_CHECKED_EVENT) : null);
-        }
         if(dto.get(UserTable.JOIN_EVENT_DATE)!=null) {
             user.setJoinEventDate(dto.containsKey(UserTable.JOIN_EVENT_DATE) ? ((Number) dto.get(UserTable.JOIN_EVENT_DATE)).longValue() : null);
         }
@@ -128,7 +124,6 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
         dto.put(UserTable.WATCHING_EVENT_ID, user == null ? null : user.getIdWatchingEvent());
         dto.put(UserTable.WATCHING_EVENT_TITLE, user == null ? null : user.getWatchingEventTitle());
-        dto.put(UserTable.ID_CHECKED_EVENT, user == null ? null : user.getIdCheckedEvent());
         dto.put(UserTable.JOIN_EVENT_DATE, user == null ? null : user.getJoinEventDate());
         setSynchronizedtoDto(user, dto);
         return dto;
@@ -148,7 +143,6 @@ public class UserMapper extends GenericMapper {
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
         user.setIdWatchingEvent(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_ID)));
         user.setWatchingEventTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_TITLE)));
-        user.setIdCheckedEvent(c.getString(c.getColumnIndex(UserTable.ID_CHECKED_EVENT)));
         user.setJoinEventDate(c.getLong(c.getColumnIndex(UserTable.JOIN_EVENT_DATE)));
         return user;
     }

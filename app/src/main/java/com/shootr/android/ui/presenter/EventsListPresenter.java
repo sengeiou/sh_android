@@ -89,7 +89,6 @@ public class EventsListPresenter implements Presenter {
         if (!eventSearchResults.isEmpty()) {
             List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
             this.renderViewEventsList(eventResultModels);
-            this.setViewCurrentVisibleCheckedInEvent(resultList.getCurrentCheckedInEventId());
             EventSearchResult currentWatchingEvent = resultList.getCurrentWatchingEvent();
             this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
         }else{
@@ -99,10 +98,6 @@ public class EventsListPresenter implements Presenter {
 
     public void eventCreated(String eventId, String eventTitle) {
         selectEvent(eventId, eventTitle);
-    }
-
-    private void setViewCurrentVisibleCheckedInEvent(String currentVisibleEventId) {
-        eventsListView.setCurrentCheckedInEventId(currentVisibleEventId);
     }
 
     private void setViewCurrentVisibleWatchingEvent(EventResultModel currentVisibleEvent) {

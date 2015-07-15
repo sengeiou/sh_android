@@ -21,8 +21,8 @@ public class WatchingEventResultViewHolder extends EventResultViewHolder {
         this.unwatchClickListener = unwatchClickListener;
     }
 
-    public void render(EventResultModel event, boolean isCheckedIn) {
-        super.render(event, isCheckedIn);
+    public void render(EventResultModel event) {
+        super.render(event);
         remove.setVisibility(View.VISIBLE);
         setUnwatchClickListener();
     }
