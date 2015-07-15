@@ -22,6 +22,7 @@ import javax.inject.Inject;
 public class ProfileEditPresenter implements Presenter {
 
     private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
+    public static final String EMAIL_HAS_NOT_BEEN_CONFIRMED_YET = "Email has not been confirmed yet";
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
@@ -52,6 +53,9 @@ public class ProfileEditPresenter implements Presenter {
     private void fillCurrentUserData() {
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         this.profileEditView.renderUserInfo(currentUserModel);
+        if(!currentUserModel.getEmailConfirmed()){
+            profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
+        }
     }
 
     public void discard() {

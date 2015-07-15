@@ -177,6 +177,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void showEmailNotConfirmedError(String error) {
+        email.setError(error);
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
         menuItemDone = menu.findItem(R.id.menu_done);
