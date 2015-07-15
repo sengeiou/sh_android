@@ -90,15 +90,12 @@
     </FrameLayout>
 
     <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
-      android:layout_width="36dp"
-      android:layout_height="36dp"
+      android:layout_width="@dimen/nice_button_size"
+      android:layout_height="@dimen/nice_button_size"
       android:layout_alignParentRight="true"
       android:layout_below="@+id/shot_media_content"
       android:layout_marginBottom="8dp"
       android:layout_marginTop="4dp"
-      android:background="@drawable/bg_nice_action"
-      android:clickable="true"
-      android:scaleType="center"
-      android:src="@drawable/ic_thumb_up_16_checkable_nopadding" />
+      style="@style/NiceButton" />
 
 </RelativeLayout>
