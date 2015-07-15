@@ -18,6 +18,7 @@ public class SQLiteUtils {
             + UserTable.SESSION_TOKEN + " VARCHAR(255),"
             + UserTable.USER_NAME + " VARCHAR(255),"
             + UserTable.EMAIL + " VARCHAR(255),"
+            + UserTable.EMAIL_CONFIRMED + " INT NULL,"
             + UserTable.NAME + " VARCHAR(255),"
             + UserTable.PHOTO + " VARCHAR(1024) NULL,"
             + UserTable.POINTS+" INT NULL,"

@@ -25,6 +25,7 @@ public class UserModelMapper {
         userModel.setIdCheckedEvent(user.getIdCheckedEvent());
         userModel.setJoinEventDate(user.getJoinEventDate());
         userModel.setEmail(user.getEmail());
+        userModel.setEmailConfirmed(user.getEmailConfirmed() == 1);
         return userModel;
     }
 

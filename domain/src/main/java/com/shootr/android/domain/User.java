@@ -8,6 +8,7 @@ public class User {
     private String username;
     private String name;
     private String email;
+    private Integer emailConfirmed;
     private String photo;
     private Long numFollowings;
     private Long numFollowers;
@@ -23,6 +24,14 @@ public class User {
     private boolean isFollowing;
     private boolean isFollower;
     private boolean isMe;
+
+    public Integer getEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(Integer emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
 
     public String getIdUser() {
         return idUser;

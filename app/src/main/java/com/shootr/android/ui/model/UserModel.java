@@ -21,6 +21,15 @@ public class UserModel implements Serializable, Cloneable {
     private String joinEventDateText;
     private String idCheckedEvent;
     private String email;
+    private Boolean emailConfirmed;
+
+    public Boolean getEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(Boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
 
     public String getEmail() {
         return email;
