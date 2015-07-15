@@ -175,6 +175,7 @@
     <string name="drawer_timeline_title">Timeline</string>
     <string name="drawer_friends_title">Friends</string>
     <string name="drawer_favorites_title">Favorites</string>
+    <string name="title_activity_email_confirmation">Email</string>
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>

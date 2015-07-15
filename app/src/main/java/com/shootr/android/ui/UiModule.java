@@ -3,6 +3,7 @@ package com.shootr.android.ui;
 import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
+import com.shootr.android.ui.activities.EmailConfirmationActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
 import com.shootr.android.ui.activities.EventTimelineActivity;
@@ -66,6 +67,7 @@ import javax.inject.Singleton;
     EventTimelineFragment.class,
     FindEventsActivity.class,
     WhaleActivity.class,
+    EmailConfirmationActivity.class,
   },
   complete = false) public class UiModule {
 

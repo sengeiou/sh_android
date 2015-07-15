@@ -129,10 +129,8 @@
             android:label="@string/activity_drafts_title"
             android:theme="@style/ShootrTheme.DarkToolbar" >
         </activity>
-        <activity
-            android:name=".ui.activities.UpdateWarningActivity" />
-        <activity
-            android:name=".ui.activities.WhaleActivity"/>
+        <activity android:name=".ui.activities.UpdateWarningActivity" />
+        <activity android:name=".ui.activities.WhaleActivity" />
         <activity
             android:name=".ui.activities.ActivityTimelineContainerActivity"
             android:label="@string/drawer_activity_title" />
@@ -176,9 +174,9 @@
             android:name=".ui.activities.EventMediaActivity"
             android:label="@string/title_activity_event_media" />
         <activity
-          android:name=".ui.activities.registro.ResetPasswordActivity"
-          android:configChanges="orientation|screenSize"
-          android:label="@string/title_activity_reset_password" >
+            android:name=".ui.activities.registro.ResetPasswordActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
             android:name=".ui.activities.ListingActivity"
@@ -187,14 +185,17 @@
         <activity
             android:name=".ui.activities.FindEventsActivity"
             android:label="@string/activity_find_events_title"
-            android:theme="@style/ShootrTheme.Closable">
+            android:theme="@style/ShootrTheme.Closable" >
         </activity>
-
-        <activity android:name="com.facebook.FacebookActivity"
-          android:configChanges=
-            "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-          android:theme="@android:style/Theme.Translucent.NoTitleBar"
-          android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.activities.EmailConfirmationActivity"
+            android:label="@string/title_activity_email_confirmation" >
+        </activity>
     </application>
 
 </manifest>

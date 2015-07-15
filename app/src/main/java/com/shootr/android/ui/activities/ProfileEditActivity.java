@@ -30,6 +30,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
+    public static final String EXTRA_EVENT_ID = "user_email";
 
     @Inject ProfileEditPresenter presenter;
 
@@ -200,6 +201,6 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @OnClick(R.id.profile_edit_email)
     public void onEmailClick() {
-        //TODO intent a una activity de confirm email
+        startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
     }
 }
