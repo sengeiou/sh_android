@@ -37,7 +37,7 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
         try {
             this.authApiService.changeEmail(changeEmailApiEntity);
         }catch (ApiException error) {
-            if (ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
+            if (ErrorInfo.EmailAlreadyExistsException == error.getErrorInfo()) {
                 throw new EmailAlreadyExistsException();
             } else {
                 throw new InvalidChangeEmailException();
