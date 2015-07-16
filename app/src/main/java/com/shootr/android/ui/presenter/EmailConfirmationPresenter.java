@@ -1,5 +1,8 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.views.EmailConfirmationView;
@@ -11,12 +14,15 @@ import javax.inject.Inject;
 public class EmailConfirmationPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
+    private final ConfirmEmailInteractor confirmEmailInteractor;
 
     private EmailConfirmationView emailConfirmationView;
     private String initializedEmail;
 
-    @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory) {
+    @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
+      ConfirmEmailInteractor confirmEmailInteractor) {
         this.errorMessageFactory = errorMessageFactory;
+        this.confirmEmailInteractor = confirmEmailInteractor;
     }
 
     protected void setView(EmailConfirmationView emailConfirmationView) {
@@ -29,8 +35,16 @@ public class EmailConfirmationPresenter implements Presenter {
         this.confirmEmail(email);
     }
 
-    private void confirmEmail(String email) {
-        emailConfirmationView.showConfirmationToUser(email);
+    private void confirmEmail(final String email) {
+        confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                emailConfirmationView.showConfirmationToUser(email);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                emailConfirmationView.showError(error.getMessage());
+            }
+        });
     }
 
     protected void setUserEmail(String userEmail) {
