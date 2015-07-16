@@ -2,6 +2,7 @@ package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotDetail;
 import java.util.List;
 
 public interface ShotRepository {
@@ -19,4 +20,6 @@ public interface ShotRepository {
     List<Shot> getMediaByIdStream(String idEvent, List<String> userId);
 
     List<Shot> getShotsFromUser(String idUser, Integer limit);
+
+    ShotDetail getShotDetail(String idShot);
 }
