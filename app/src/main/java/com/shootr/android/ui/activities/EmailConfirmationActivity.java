@@ -97,6 +97,6 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
 
     @OnClick(R.id.email_confirmation_confirm_button)
     public void onDoneButtonClick() {
-        presenter.attempToConfirmEmail(email.getText().toString());
+        presenter.attempToChangeEmail(email.getText().toString());
     }
 }

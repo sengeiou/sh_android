@@ -2,7 +2,9 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
+import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.views.EmailConfirmationView;
@@ -15,14 +17,19 @@ public class EmailConfirmationPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
     private final ConfirmEmailInteractor confirmEmailInteractor;
+    private final UpdateUserInteractor updateUserInteractor;
+    private final ChangeEmailInteractor changeEmailInteractor;
 
     private EmailConfirmationView emailConfirmationView;
     private String initializedEmail;
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
-      ConfirmEmailInteractor confirmEmailInteractor) {
+      ConfirmEmailInteractor confirmEmailInteractor, UpdateUserInteractor updateUserInteractor,
+      ChangeEmailInteractor changeEmailInteractor) {
         this.errorMessageFactory = errorMessageFactory;
         this.confirmEmailInteractor = confirmEmailInteractor;
+        this.updateUserInteractor = updateUserInteractor;
+        this.changeEmailInteractor = changeEmailInteractor;
     }
 
     protected void setView(EmailConfirmationView emailConfirmationView) {
@@ -45,19 +52,12 @@ public class EmailConfirmationPresenter implements Presenter {
                 emailConfirmationView.showError(error.getMessage());
             }
         });
+        updateCurrentUser();
     }
 
     protected void setUserEmail(String userEmail) {
         this.initializedEmail = userEmail;
         emailConfirmationView.showUserEmail(userEmail);
-    }
-
-    @Override public void resume() {
-        /* no-op */
-    }
-
-    @Override public void pause() {
-        /* no-op */
     }
 
     public void onEmailEdited(String editedEmail) {
@@ -109,10 +109,44 @@ public class EmailConfirmationPresenter implements Presenter {
         emailConfirmationView.showEmailError(errorMessage);
     }
 
-    public void attempToConfirmEmail(String emailEdited) {
+    public void attempToChangeEmail(String emailEdited) {
         if(verifyEmailBeforeConfirmating(emailEdited)) {
-            emailConfirmationView.showConfirmationToUser(emailEdited);
+            confirmEmail(emailEdited);
             emailConfirmationView.hideDoneButton();
+            changeEmail(emailEdited);
         }
+    }
+
+    private void changeEmail(String emailEdited) {
+        changeEmailInteractor.changeEmail(emailEdited, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error.getMessage());
+            }
+        });
+        updateCurrentUser();
+    }
+
+    private void updateCurrentUser() {
+        updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                /* no-op */
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                emailConfirmationView.showError(error.getMessage());
+            }
+        });
+    }
+
+    @Override public void resume() {
+        /* no-op */
+    }
+
+    @Override public void pause() {
+        /* no-op */
     }
 }
