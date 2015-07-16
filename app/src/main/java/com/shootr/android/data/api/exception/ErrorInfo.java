@@ -32,6 +32,7 @@ public enum ErrorInfo {
     InternalServerErrorException(4001, "Internal server error", 500),
 
     EmailAlreadyExistsException(5001, "Email already registered", 400),
+    EmailMatchNewEmailException(5011, "Email match new Email" , 400),
     UserNameAlreadyExistsException(5002, "Username already exists", 400),
 
     AccountNotFoundException(5003, "Account not found", 400),

@@ -1,11 +1,15 @@
 package com.shootr.android.domain.interactor.user;
 
+import com.shootr.android.domain.exception.DomainValidationException;
+import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.user.ShootrUserService;
+import com.shootr.android.domain.validation.FieldValidationError;
 import javax.inject.Inject;
 
 public class ChangeEmailInteractor implements Interactor {
@@ -38,7 +42,15 @@ public class ChangeEmailInteractor implements Interactor {
             notifyLoaded();
         } catch (ServerCommunicationException error) {
             notifyError(error);
+        } catch (EmailAlreadyExistsException error) {
+            notifyError(new EmailInUseException(error));
         }
+    }
+
+    protected void handleServerError(String errorCode, int field) {
+        FieldValidationError fieldValidationError =
+          new FieldValidationError(errorCode, field);
+        notifyError(new DomainValidationException(fieldValidationError));
     }
 
     private void notifyLoaded() {
