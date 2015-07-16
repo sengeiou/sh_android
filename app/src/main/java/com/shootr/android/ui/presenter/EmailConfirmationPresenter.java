@@ -4,8 +4,11 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EmailConfirmationView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.ArrayList;
@@ -17,16 +20,20 @@ public class EmailConfirmationPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final ConfirmEmailInteractor confirmEmailInteractor;
     private final ChangeEmailInteractor changeEmailInteractor;
+    private final SessionRepository sessionRepository;
+    private final UserModelMapper userModelMapper;
 
     private EmailConfirmationView emailConfirmationView;
     private String initializedEmail;
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
-      ConfirmEmailInteractor confirmEmailInteractor,
-      ChangeEmailInteractor changeEmailInteractor) {
+      ConfirmEmailInteractor confirmEmailInteractor, ChangeEmailInteractor changeEmailInteractor,
+      SessionRepository sessionRepository, UserModelMapper userModelMapper) {
         this.errorMessageFactory = errorMessageFactory;
         this.confirmEmailInteractor = confirmEmailInteractor;
         this.changeEmailInteractor = changeEmailInteractor;
+        this.sessionRepository = sessionRepository;
+        this.userModelMapper = userModelMapper;
     }
 
     protected void setView(EmailConfirmationView emailConfirmationView) {
@@ -40,15 +47,18 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     private void confirmEmail(final String email) {
-        confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                emailConfirmationView.showConfirmationToUser(email);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                emailConfirmationView.showError(error.getMessage());
-            }
-        });
+        UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+        if(!currentUserModel.getEmailConfirmed()){
+            confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    emailConfirmationView.showConfirmationToUser(email);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    emailConfirmationView.showError(error.getMessage());
+                }
+            });
+        }
     }
 
     protected void setUserEmail(String userEmail) {
