@@ -11,4 +11,6 @@ public interface EmailConfirmationView {
     void showEmailError(String errorMessage);
 
     void updateDoneButton();
+
+    void hideDoneButton();
 }

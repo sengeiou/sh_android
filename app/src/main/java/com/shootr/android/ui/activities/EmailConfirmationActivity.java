@@ -83,7 +83,11 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void updateDoneButton() {
-        // TODO Change visibility
+        confirmButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideDoneButton() {
+        confirmButton.setVisibility(View.GONE);
     }
 
     @OnTextChanged(R.id.email_confirmation_email)

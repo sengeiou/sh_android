@@ -13,6 +13,7 @@ public class EmailConfirmationPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
 
     private EmailConfirmationView emailConfirmationView;
+    private String initializedEmail;
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory) {
         this.errorMessageFactory = errorMessageFactory;
@@ -33,6 +34,7 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     public void setUserEmail(String userEmail) {
+        this.initializedEmail = userEmail;
         emailConfirmationView.showUserEmail(userEmail);
     }
 
@@ -45,8 +47,10 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     public void onEmailEdited(String editedEmail) {
-        if(verifyEmailBeforeConfirmating(editedEmail)) {
+        if(verifyEmailBeforeConfirmating(editedEmail) && !editedEmail.equals(initializedEmail)) {
             emailConfirmationView.updateDoneButton();
+        } else if (!verifyEmailBeforeConfirmating(editedEmail)) {
+            emailConfirmationView.hideDoneButton();
         }
     }
 
