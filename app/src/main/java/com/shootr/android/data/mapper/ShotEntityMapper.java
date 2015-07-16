@@ -1,8 +1,10 @@
 package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.LocalSynchronized;
+import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotDetail;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -92,5 +94,15 @@ public class ShotEntityMapper {
 
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         return shotEntity;
+    }
+
+    public ShotDetail transform(ShotDetailEntity shotDetailEntity) {
+        ShotDetail shotDetail = new ShotDetail();
+
+        shotDetail.setShot(transform(shotDetailEntity.getShot()));
+        shotDetail.setParentShot(transform(shotDetailEntity.getParentShot()));
+        shotDetail.setReplies(transform(shotDetailEntity.getReplies()));
+
+        return shotDetail;
     }
 }

@@ -25,6 +25,7 @@ public class ShotApiEntity {
 
     private EmbedUserApiEntity user;
     private List<ShotApiEntity> replies;
+    private ShotApiEntity parent;
 
     private Long birth;
     private Long modified;
@@ -180,5 +181,13 @@ public class ShotApiEntity {
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
+    }
+
+    public ShotApiEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(ShotApiEntity parent) {
+        this.parent = parent;
     }
 }
