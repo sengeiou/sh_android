@@ -1,7 +1,9 @@
 package com.shootr.android.data.service;
 
+import com.shootr.android.data.api.entity.ChangeEmailApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.AuthApiService;
+import com.shootr.android.domain.exception.InvalidChangeEmailException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.ConfirmEmailGateway;
@@ -26,7 +28,15 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
         }
     }
 
-    @Override public void changeEmail(String email) {
-        //TODO
+    @Override public void changeEmail(String email) throws InvalidChangeEmailException {
+        ChangeEmailApiEntity changeEmailApiEntity = new ChangeEmailApiEntity();
+        changeEmailApiEntity.setNewEmail(email);
+        try {
+            this.authApiService.changeEmail(changeEmailApiEntity);
+        }catch (ApiException error) {
+            throw new InvalidChangeEmailException();
+        } catch (IOException error) {
+            throw new ServerCommunicationException(error);
+        }
     }
 }
