@@ -27,6 +27,7 @@ public class ConfirmEmailInteractor implements Interactor{
     public void confirmEmail(CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.callback = completedCallback;
         this.errorCallback = errorCallback;
+        this.interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
