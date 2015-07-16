@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 public class EmailConfirmationPresenter implements Presenter {
 
+    public static final String EMAIL_ALREADY_REGISTERED = "Email already registered";
     private final ErrorMessageFactory errorMessageFactory;
     private final ConfirmEmailInteractor confirmEmailInteractor;
     private final ChangeEmailInteractor changeEmailInteractor;
@@ -130,7 +131,7 @@ public class EmailConfirmationPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                showViewError(error.getMessage());
+                showViewError(EMAIL_ALREADY_REGISTERED);
             }
         });
     }

@@ -2,6 +2,9 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -31,16 +34,18 @@ public class ProfileEditPresenter implements Presenter {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
+    private final UpdateUserInteractor updateUserInteractor;
 
     private UserModel currentUserModel;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
+      ErrorMessageFactory errorMessageFactory, JobManager jobManager, UpdateUserInteractor updateUserInteractor) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.jobManager = jobManager;
+        this.updateUserInteractor = updateUserInteractor;
     }
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
@@ -51,10 +56,25 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void fillCurrentUserData(boolean resume) {
+        updateUser(resume);
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         this.profileEditView.renderUserInfo(currentUserModel);
-        if(!currentUserModel.getEmailConfirmed() && !resume){
+        if(!currentUserModel.getEmailConfirmed() && !resume) {
             profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
+        }
+    }
+
+    private void updateUser(boolean resume) {
+        if(!resume) {
+            updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    /* no-op */
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    profileEditView.alertComunicationError();
+                }
+            });
         }
     }
 
