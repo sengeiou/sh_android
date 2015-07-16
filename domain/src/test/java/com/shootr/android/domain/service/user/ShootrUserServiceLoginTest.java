@@ -6,7 +6,6 @@ import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,6 +30,7 @@ public class ShootrUserServiceLoginTest {
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
+    @Mock ConfirmEmailGateway confirmEmailGateway;
     @Mock EventRepository remoteEventRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
@@ -41,7 +41,9 @@ public class ShootrUserServiceLoginTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
+          createAccountGateway, loginGateway, resetPasswordGateway,
+          confirmEmailGateway,
+          remoteEventRepository, remoteUserRepository,
           resetPasswordEmailGateway, databaseUtils);
     }
 

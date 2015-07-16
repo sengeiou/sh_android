@@ -26,6 +26,7 @@ public class ShootrUserService {
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
+    private final ConfirmEmailGateway confirmEmailGateway;
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
@@ -33,15 +34,15 @@ public class ShootrUserService {
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
-      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
-      DatabaseUtils databaseUtils) {
+      ResetPasswordGateway resetPasswordGateway, ConfirmEmailGateway confirmEmailGateway, @Remote EventRepository remoteEventRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
         this.resetPasswordGateway = resetPasswordGateway;
+        this.confirmEmailGateway = confirmEmailGateway;
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
@@ -133,5 +134,9 @@ public class ShootrUserService {
 
     private void removeSession() {
         sessionRepository.destroySession();
+    }
+
+    public void confirmEmail() {
+        confirmEmailGateway.confirmEmail();
     }
 }
