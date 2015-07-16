@@ -204,5 +204,6 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @OnClick(R.id.profile_edit_email_layout)
     public void onEmailClick() {
         startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
+        email.setError(null);
     }
 }
