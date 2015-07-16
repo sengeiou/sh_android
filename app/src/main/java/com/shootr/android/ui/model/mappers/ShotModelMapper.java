@@ -12,6 +12,9 @@ public class ShotModelMapper {
     }
 
     public ShotModel transform(Shot shot) {
+        if (shot == null) {
+            return null;
+        }
         ShotModel shotModel = new ShotModel();
         shotModel.setIdShot(shot.getIdShot());
         shotModel.setComment(shot.getComment());
