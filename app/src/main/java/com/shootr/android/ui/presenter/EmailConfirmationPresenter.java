@@ -4,7 +4,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
-import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.views.EmailConfirmationView;
@@ -17,18 +16,16 @@ public class EmailConfirmationPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
     private final ConfirmEmailInteractor confirmEmailInteractor;
-    private final UpdateUserInteractor updateUserInteractor;
     private final ChangeEmailInteractor changeEmailInteractor;
 
     private EmailConfirmationView emailConfirmationView;
     private String initializedEmail;
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
-      ConfirmEmailInteractor confirmEmailInteractor, UpdateUserInteractor updateUserInteractor,
+      ConfirmEmailInteractor confirmEmailInteractor,
       ChangeEmailInteractor changeEmailInteractor) {
         this.errorMessageFactory = errorMessageFactory;
         this.confirmEmailInteractor = confirmEmailInteractor;
-        this.updateUserInteractor = updateUserInteractor;
         this.changeEmailInteractor = changeEmailInteractor;
     }
 
@@ -52,7 +49,6 @@ public class EmailConfirmationPresenter implements Presenter {
                 emailConfirmationView.showError(error.getMessage());
             }
         });
-        updateCurrentUser();
     }
 
     protected void setUserEmail(String userEmail) {
@@ -125,19 +121,6 @@ public class EmailConfirmationPresenter implements Presenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 showViewError(error.getMessage());
-            }
-        });
-        updateCurrentUser();
-    }
-
-    private void updateCurrentUser() {
-        updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                /* no-op */
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                emailConfirmationView.showError(error.getMessage());
             }
         });
     }

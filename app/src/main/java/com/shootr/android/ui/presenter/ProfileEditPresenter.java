@@ -46,14 +46,14 @@ public class ProfileEditPresenter implements Presenter {
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
         this.profileEditView = profileEditView;
         this.objectGraph = objectGraph;
-        this.fillCurrentUserData();
+        this.fillCurrentUserData(false);
         this.profileEditView.hideKeyboard();
     }
 
-    private void fillCurrentUserData() {
+    private void fillCurrentUserData(boolean resume) {
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         this.profileEditView.renderUserInfo(currentUserModel);
-        if(!currentUserModel.getEmailConfirmed()){
+        if(!currentUserModel.getEmailConfirmed() && !resume){
             profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
         }
     }
@@ -222,6 +222,7 @@ public class ProfileEditPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
+        fillCurrentUserData(true);
     }
 
     @Override public void pause() {

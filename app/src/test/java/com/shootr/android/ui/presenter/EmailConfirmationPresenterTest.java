@@ -4,7 +4,6 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
-import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.ui.views.EmailConfirmationView;
 import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
@@ -31,7 +30,6 @@ public class EmailConfirmationPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ConfirmEmailInteractor confirmEmailInteractor;
     @Mock ChangeEmailInteractor changeEmailInteractor;
-    @Mock UpdateUserInteractor updateUserInteractor;
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock Interactor.ErrorCallback errorCallback;
 
@@ -40,8 +38,7 @@ public class EmailConfirmationPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new EmailConfirmationPresenter(errorMessageFactory, confirmEmailInteractor, updateUserInteractor,
-          changeEmailInteractor);
+        presenter = new EmailConfirmationPresenter(errorMessageFactory, confirmEmailInteractor, changeEmailInteractor);
         presenter.setView(emailConfirmationView);
     }
 
