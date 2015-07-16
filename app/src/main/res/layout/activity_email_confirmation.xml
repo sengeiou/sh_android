@@ -49,13 +49,6 @@
       android:textSize="@dimen/email_confirmation_button_text_size"
       tools:visibility="visible"/>
 
-    <ProgressBar android:id="@+id/email_confirmation_confirm_progress"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:indeterminate="true"
-      android:visibility="gone" />
-
   </FrameLayout>
 
 </LinearLayout>

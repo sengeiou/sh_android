@@ -33,7 +33,7 @@ public class EmailConfirmationPresenter implements Presenter {
         emailConfirmationView.showConfirmationToUser(email);
     }
 
-    public void setUserEmail(String userEmail) {
+    protected void setUserEmail(String userEmail) {
         this.initializedEmail = userEmail;
         emailConfirmationView.showUserEmail(userEmail);
     }
@@ -47,7 +47,7 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     public void onEmailEdited(String editedEmail) {
-        if(verifyEmailBeforeConfirmating(editedEmail) && !editedEmail.equals(initializedEmail)) {
+        if(!editedEmail.equals(initializedEmail) && verifyEmailBeforeConfirmating(editedEmail)) {
             emailConfirmationView.updateDoneButton();
         } else if (!verifyEmailBeforeConfirmating(editedEmail)) {
             emailConfirmationView.hideDoneButton();
@@ -57,7 +57,6 @@ public class EmailConfirmationPresenter implements Presenter {
     private boolean verifyEmailBeforeConfirmating(String editedEmail) {
         boolean validationSuccessful = true;
         if (!validateFieldOrShowError(editedEmail, EmailConfirmationValidator.FIELD_EMAIL)) {
-            //emailConfirmationView.focusOnEmailField();
             validationSuccessful = false;
         }
         return validationSuccessful;
@@ -94,5 +93,12 @@ public class EmailConfirmationPresenter implements Presenter {
 
     private void showViewEmailError(String errorMessage) {
         emailConfirmationView.showEmailError(errorMessage);
+    }
+
+    public void attempToConfirmEmail(String emailEdited) {
+        if(verifyEmailBeforeConfirmating(emailEdited)) {
+            emailConfirmationView.showConfirmationToUser(emailEdited);
+            emailConfirmationView.hideDoneButton();
+        }
     }
 }

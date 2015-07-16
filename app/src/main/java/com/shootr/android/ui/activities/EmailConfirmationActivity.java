@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -22,7 +23,6 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
 
     @Bind(R.id.email_confirmation_email) TextView email;
     @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
-    @Bind(R.id.email_confirmation_confirm_progress) View progress;
 
     @Inject EmailConfirmationPresenter presenter;
 
@@ -93,5 +93,10 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     @OnTextChanged(R.id.email_confirmation_email)
     public void onEmailChanged() {
         presenter.onEmailEdited(email.getText().toString());
+    }
+
+    @OnClick(R.id.email_confirmation_confirm_button)
+    public void onDoneButtonClick() {
+        presenter.attempToConfirmEmail(email.getText().toString());
     }
 }

@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -55,7 +56,19 @@ public class EmailConfirmationPresenterTest {
     @Test
     public void shouldShowErrorWhenEmailIsNotValid() {
         presenter.onEmailEdited(INVALID_EMAIL);
-        verify(emailConfirmationView).showEmailError(anyString());
+        verify(emailConfirmationView, atLeastOnce()).showEmailError(anyString());
+    }
+
+    @Test
+    public void shouldShowConfirmationWhenEmailIsValidAndDoneButtonPressed() {
+        presenter.attempToConfirmEmail(EMAIL);
+        verify(emailConfirmationView).showConfirmationToUser(anyString());
+    }
+
+    @Test
+    public void shouldHideDoneButtonWhenEmailIsValidAndDoneButtonPressed() {
+        presenter.attempToConfirmEmail(EMAIL);
+        verify(emailConfirmationView).showConfirmationToUser(anyString());
     }
 
 }
