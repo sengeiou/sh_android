@@ -61,9 +61,9 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void showConfirmationToUser(String email) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Confirm Your Email") //
-          .setMessage("Click the link in the email we've just sent to " + email) //
-          .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
+          .setMessage(getString(R.string.email_confirmation_message_content) + email) //
+          .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialogInterface, int i) {
                 /* no-op */
               }
