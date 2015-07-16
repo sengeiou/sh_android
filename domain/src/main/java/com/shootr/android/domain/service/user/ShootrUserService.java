@@ -142,7 +142,11 @@ public class ShootrUserService {
         confirmEmailGateway.confirmEmail();
     }
 
-    public void changeEmail(String email) throws InvalidChangeEmailException {
+    public void changeEmail(String email) throws InvalidChangeEmailException, EmailAlreadyExistsException {
+        User currentUser = sessionRepository.getCurrentUser();
+        currentUser.setEmail(email);
+        sessionRepository.setCurrentUser(currentUser);
+
         confirmEmailGateway.changeEmail(email);
     }
 
