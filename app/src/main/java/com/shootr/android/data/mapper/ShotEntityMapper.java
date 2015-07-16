@@ -97,6 +97,9 @@ public class ShotEntityMapper {
     }
 
     public ShotDetail transform(ShotDetailEntity shotDetailEntity) {
+        if (shotDetailEntity == null) {
+            return null;
+        }
         ShotDetail shotDetail = new ShotDetail();
 
         shotDetail.setShot(transform(shotDetailEntity.getShot()));

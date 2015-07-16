@@ -42,7 +42,9 @@ public class GetShotDetailInteractor implements Interactor{
     @Override
     public void execute() throws Exception {
         ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
-        notifyLoaded(reoderReplies(localShotDetail));
+        if (localShotDetail != null) {
+            notifyLoaded(reoderReplies(localShotDetail));
+        }
 
         try {
             ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);

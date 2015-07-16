@@ -58,18 +58,21 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
     @Override
     public ShotDetailEntity getShotDetail(String idShot) {
-        ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
-
         ShotEntity shot = getShot(idShot);
-        shotDetailEntity.setShot(shot);
+        if (shot != null) {
+            ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
+            shotDetailEntity.setShot(shot);
 
-        shotDetailEntity.setReplies(getReplies(idShot));
+            shotDetailEntity.setReplies(getReplies(idShot));
 
-        String parentId = shot.getIdShotParent();
-        if (parentId != null) {
-            shotDetailEntity.setParentShot(getShot(parentId));
+            String parentId = shot.getIdShotParent();
+            if (parentId != null) {
+                shotDetailEntity.setParentShot(getShot(parentId));
+            }
+
+            return shotDetailEntity;
+        } else {
+            return null;
         }
-
-        return shotDetailEntity;
     }
 }
