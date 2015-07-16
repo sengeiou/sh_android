@@ -49,6 +49,9 @@ public class GetShotDetailInteractor implements Interactor{
         try {
             ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
             notifyLoaded(reoderReplies(remoteShotDetail));
+            if (localShotDetail != null) {
+                localShotRepository.putShot(remoteShotDetail.getShot());
+            }
         } catch (ShootrException error) {
             notifyError(error);
         }
