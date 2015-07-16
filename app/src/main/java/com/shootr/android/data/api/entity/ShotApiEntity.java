@@ -11,6 +11,8 @@ public class ShotApiEntity {
     private String eventTag;
     private String eventTitle;
 
+    private Integer niceCount;
+
     private String type;
 
     private String idShotParent;
@@ -170,5 +172,13 @@ public class ShotApiEntity {
 
     public void setReplies(List<ShotApiEntity> replies) {
         this.replies = replies;
+    }
+
+    public Integer getNiceCount() {
+        return niceCount;
+    }
+
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount = niceCount;
     }
 }

@@ -6,7 +6,6 @@
   android:layout_height="wrap_content"
   android:descendantFocusability="blocksDescendants"
   android:orientation="vertical"
-  android:paddingBottom="24dp"
   android:paddingLeft="16dp"
   android:paddingRight="16dp"
   android:paddingTop="16dp">
@@ -46,17 +45,19 @@
       android:textSize="16sp"
       tools:text="Who's the referee?" />
 
-    <RelativeLayout android:layout_width="match_parent"
+    <FrameLayout android:id="@+id/shot_media_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_text"
       android:layout_below="@+id/shot_text"
-      android:layout_marginTop="8dp"
       android:focusable="false"
       android:focusableInTouchMode="false">
 
         <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_image"
           android:layout_width="match_parent"
           android:layout_height="@dimen/shot_item_image_height"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
           android:scaleType="centerCrop"
           android:visibility="gone"
           tools:src="@drawable/sample_avatar"
@@ -65,10 +66,10 @@
         <FrameLayout android:id="@+id/shot_video_frame"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:foreground="?selectableItemBackground"
-          android:layout_alignBottom="@+id/shot_image"
-          android:layout_alignTop="@+id/shot_image"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
           android:background="#66000000"
+          android:foreground="?selectableItemBackground"
           android:visibility="visible"
           tools:visibility="visible">
 
@@ -86,6 +87,15 @@
               android:textColor="@color/white"
               tools:text="0:00" />
         </FrameLayout>
-    </RelativeLayout>
+    </FrameLayout>
+
+    <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
+      android:layout_width="@dimen/nice_button_size"
+      android:layout_height="@dimen/nice_button_size"
+      android:layout_alignParentRight="true"
+      android:layout_below="@+id/shot_media_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="4dp"
+      style="@style/NiceButton" />
 
 </RelativeLayout>

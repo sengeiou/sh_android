@@ -30,6 +30,7 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
         shot.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         shot.setType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
+        shot.setNiceCount(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.NICE_COUNT)));
         shot.setIdShotParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
         shot.setIdUserParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
         shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
@@ -52,6 +53,7 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.EVENT_TITLE, shot.getEventTitle());
         cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
+        cv.put(DatabaseContract.ShotTable.NICE_COUNT, shot.getNiceCount());
         cv.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot.getIdShotParent());
         cv.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot.getIdUserParent());
         cv.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot.getUserNameParent());

@@ -22,6 +22,7 @@ public class Shot {
     private Long videoDuration;
 
     private String type;
+    private Integer niceCount;
 
     public String getIdShot() {
         return idShot;
@@ -137,6 +138,14 @@ public class Shot {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Integer getNiceCount() {
+        return niceCount;
+    }
+
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount = niceCount;
     }
 
     public static class ShotEventInfo {

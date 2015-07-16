@@ -48,6 +48,7 @@ public class SQLiteUtils {
             + ShotTable.ID_EVENT+ " TEXT NULL,"
             + ShotTable.EVENT_TAG+ " TEXT NULL,"
             + ShotTable.EVENT_TITLE+ " TEXT NULL,"
+            + ShotTable.NICE_COUNT+ " NUMBER NOT NULL,"
             + ShotTable.TYPE+ " TEXT NOT NULL,"
             + ShotTable.ID_SHOT_PARENT+ " TEXT NULL,"
             + ShotTable.ID_USER_PARENT+ " TEXT NULL,"

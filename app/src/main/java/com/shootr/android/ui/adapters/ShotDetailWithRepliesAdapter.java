@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -231,6 +233,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) Checkable niceButton;
+        @Bind(R.id.shot_nice_count) TextView niceCount;
 
         public ShotDetailMainViewHolder(View itemView) {
             super(itemView);
@@ -302,6 +306,21 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 parentToggleButton.setVisibility(View.GONE);
             }
+
+            Integer niceCount = shotModel.getNiceCount();
+            if (niceCount > 0) {
+                this.niceCount.setVisibility(View.VISIBLE);
+                this.niceCount.setText(context.getResources()
+                  .getQuantityString(R.plurals.nice_count_pattern, niceCount, niceCount));
+            } else {
+                this.niceCount.setVisibility(View.GONE);
+            }
+        }
+
+        @OnClick(R.id.shot_nice_button)
+        public void onNiceClick() {
+            //TODO real functional implementation
+            niceButton.toggle();
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
@@ -343,6 +362,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) Checkable niceButton;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -407,6 +427,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setVisibility(View.GONE);
                 this.videoFrame.setOnClickListener(null);
             }
+        }
+
+        @OnClick(R.id.shot_nice_button)
+        public void onNiceClick() {
+            //TODO real functional implementation
+            niceButton.toggle();
         }
 
         private String getUsernameTitle(ShotModel shotModel) {

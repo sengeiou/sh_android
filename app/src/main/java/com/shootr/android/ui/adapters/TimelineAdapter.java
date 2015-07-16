@@ -9,10 +9,12 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -119,6 +121,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         bindPhoto(item, vh);
         bindImageInfo(item, vh);
         bindVideoInfo(item, vh);
+        bindNiceInfo(item, vh);
     }
 
     protected void bindPhoto(ShotModel item, ViewHolder vh) {
@@ -182,6 +185,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             vh.videoFrame.setVisibility(View.GONE);
             vh.videoFrame.setOnClickListener(null);
         }
+    }
+
+    private void bindNiceInfo(ShotModel item, ViewHolder vh) {
+        //TODO add nice(d?) status to the button
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
@@ -253,6 +260,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) public View videoFrame;
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
+        @Bind(R.id.shot_nice_button) public Checkable niceButton;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
@@ -260,6 +268,12 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
+        }
+
+        @OnClick(R.id.shot_nice_button)
+        public void onNiceClick() {
+            // TODO trigger listener instead
+            niceButton.toggle();
         }
 
         public void setVideoClickListener(View.OnClickListener videoClickListener) {

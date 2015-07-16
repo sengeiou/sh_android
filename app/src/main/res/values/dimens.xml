@@ -45,5 +45,6 @@
     <dimen name="tabbar_shadow_height">4dp</dimen>
     <dimen name="reset_password_avatar_size">80dp</dimen>
     <dimen name="logo_size_104">104dp</dimen>
+    <dimen name="nice_button_size">36dp</dimen>
 
 </resources>
