@@ -5,6 +5,7 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -136,7 +137,11 @@ public class ShootrUserService {
         sessionRepository.destroySession();
     }
 
-    public void confirmEmail() {
+    public void confirmEmail() throws InvalidEmailConfirmationException {
         confirmEmailGateway.confirmEmail();
+    }
+
+    public void changeEmail(String email) {
+        confirmEmailGateway.changeEmail(email);
     }
 }
