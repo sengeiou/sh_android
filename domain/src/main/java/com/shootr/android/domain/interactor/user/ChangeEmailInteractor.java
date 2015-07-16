@@ -34,7 +34,7 @@ public class ChangeEmailInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            // TODO real stuff
+            shootrUserService.changeEmail(email);
             notifyLoaded();
         } catch (ServerCommunicationException error) {
             notifyError(error);
