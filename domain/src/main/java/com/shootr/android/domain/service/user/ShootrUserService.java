@@ -144,4 +144,11 @@ public class ShootrUserService {
     public void changeEmail(String email) {
         confirmEmailGateway.changeEmail(email);
     }
+
+    public void updateCurrentUser() {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        User remoteUser = remoteUserRepository.getUserById(currentUserId);
+        localUserRepository.putUser(remoteUser);
+        sessionRepository.setCurrentUser(remoteUser);
+    }
 }
