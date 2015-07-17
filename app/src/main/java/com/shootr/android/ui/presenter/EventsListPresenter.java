@@ -49,7 +49,7 @@ public class EventsListPresenter implements Presenter {
 
     public void selectEvent(EventResultModel event) {
         eventsListView.setCurrentWatchingEventId(event);
-        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
+        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTag());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
