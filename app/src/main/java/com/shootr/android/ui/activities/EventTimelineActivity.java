@@ -6,12 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.android.R;
+import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
+
+    @Inject SelectEventInteractor selectEventInteractor;
 
     public static Intent newIntent(Context context, String eventId, String eventTitle) {
         Intent intent = new Intent(context, EventTimelineActivity.class);
@@ -28,8 +34,30 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
         if (getIntent().getExtras() == null) {
             throw new RuntimeException("No intent extras, no party");
         }
+
+        String eventId = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_ID);
+
         setEventTitleFromIntent();
+
+        getEvent(eventId);
+
         setupAndAddFragment(savedInstanceState);
+    }
+
+    //FIXME Esto es una ñapa como un castillo
+    private void getEvent(String eventId) {
+        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<EventSearchResult>() {
+            @Override
+            public void onLoaded(EventSearchResult eventSearchResult) {
+                setEventTitle(eventSearchResult.getEvent().getTag());
+            }
+        });
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        String eventId = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_ID);
+        getEvent(eventId);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,6 +85,10 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
     private void setEventTitleFromIntent() {
         String eventTitle = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_TITLE);
         getToolbarDecorator().setTitle(eventTitle);
+    }
+
+    private void setEventTitle(String title) {
+        getToolbarDecorator().setTitle(title);
     }
 
     @Override protected void initializePresenter() {
