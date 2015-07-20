@@ -302,4 +302,5 @@
     <string name="new_event_short_title_label">Short title</string>
     <string name="short_title_warning">3 to 15 characters</string>
     <string name="profile_support">Support</string>
+    <string name="title_activity_support">Support</string>
 </resources>

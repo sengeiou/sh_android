@@ -62,6 +62,7 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -241,7 +242,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             return true;
         }
         if (id == R.id.menu_profile_support) {
-            //TODO open support activity
+            startActivity(new Intent(this.getActivity(), SupportActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
