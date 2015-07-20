@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -29,13 +30,6 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         Intent intent = new Intent(context, EmailConfirmationActivity.class);
         intent.putExtra(ProfileEditActivity.EXTRA_USER_EMAIL, email);
         return intent;
-    }
-
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initializeViews(savedInstanceState);
-
-        initializePresenter();
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -71,10 +65,15 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         outState.putString(ProfileEditActivity.EXTRA_USER_EMAIL, email.getText().toString());
     }
 
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        initializePresenter();
+    }
+
     @Override public void showConfirmationToUser(String email) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
-          .setMessage(getString(R.string.email_confirmation_message_content) + email) //
+        alertDialogBuilder.setMessage(getString(R.string.email_confirmation_message_content) + email) //
           .setPositiveButton(getString(R.string.email_confirmation_ok), null).show();
     }
 

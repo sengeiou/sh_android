@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
@@ -17,7 +16,9 @@ import com.shootr.android.util.ErrorMessageFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class EmailConfirmationPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
@@ -55,7 +56,7 @@ public class EmailConfirmationPresenter implements Presenter {
         updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-                if (!currentUserModel.getEmailConfirmed() && !email.equals(initializedEmail)) {
+                if (!currentUserModel.getEmailConfirmed()) {
                     confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
                         @Override public void onCompleted() {
                             emailConfirmationView.showConfirmationToUser(email);
@@ -139,17 +140,16 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     public void attempToChangeEmail(String emailEdited) {
-        if(verifyEmailBeforeConfirmating(emailEdited)) {
+        if(verifyEmailBeforeConfirmating(emailEdited) && !emailEdited.equals(initializedEmail)) {
             changeEmail(emailEdited);
-            confirmEmail(emailEdited);
             emailConfirmationView.hideDoneButton();
         }
     }
 
-    private void changeEmail(String emailEdited) {
+    private void changeEmail(final String emailEdited) {
         changeEmailInteractor.changeEmail(emailEdited, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                /* no-op */
+                confirmEmail(emailEdited);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
