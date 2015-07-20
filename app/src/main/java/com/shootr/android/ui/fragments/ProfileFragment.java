@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -231,12 +231,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
+        logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_profile_logout) {
             profilePresenter.logoutSelected();
+            return true;
+        }
+        if (id == R.id.menu_profile_support) {
+            //TODO open support activity
             return true;
         }
         return super.onOptionsItemSelected(item);

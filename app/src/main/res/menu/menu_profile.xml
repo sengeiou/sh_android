@@ -4,7 +4,8 @@
   tools:context=".ProfileFragment">
     <item android:id="@+id/menu_profile_logout"
       android:title="@string/profile_logout"
-      android:orderInCategory="100"
-      android:visible="false"
+      app:showAsAction="never" />
+    <item android:id="@+id/menu_profile_support"
+      android:title="@string/profile_support"
       app:showAsAction="never" />
 </menu>
