@@ -2,7 +2,6 @@ package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,6 +31,13 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         return intent;
     }
 
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeViews(savedInstanceState);
+
+        initializePresenter();
+    }
+
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,6 +63,12 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ProfileEditActivity.EXTRA_USER_EMAIL, email.getText().toString());
     }
 
     @Override public void showConfirmationToUser(String email) {
