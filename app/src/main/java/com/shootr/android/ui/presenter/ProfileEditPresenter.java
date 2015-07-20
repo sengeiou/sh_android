@@ -2,7 +2,9 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -37,6 +39,7 @@ public class ProfileEditPresenter implements Presenter {
     private final UpdateUserInteractor updateUserInteractor;
 
     private UserModel currentUserModel;
+    private boolean hasBeenInitialized = false;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager, UpdateUserInteractor updateUserInteractor) {
@@ -51,31 +54,34 @@ public class ProfileEditPresenter implements Presenter {
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
         this.profileEditView = profileEditView;
         this.objectGraph = objectGraph;
-        this.fillCurrentUserData(false);
+        this.fillCurrentUserData();
         this.profileEditView.hideKeyboard();
     }
 
-    private void fillCurrentUserData(boolean resume) {
-        updateUser(resume);
-        currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        this.profileEditView.renderUserInfo(currentUserModel);
-        if(!currentUserModel.getEmailConfirmed() && !resume) {
-            profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
-        }
+    private void fillCurrentUserData() {
+        updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+                profileEditView.renderUserInfo(currentUserModel);
+                if (!currentUserModel.getEmailConfirmed() && !hasBeenInitialized) {
+                    profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
     }
 
-    private void updateUser(boolean resume) {
-        if(!resume) {
-            updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
-                @Override public void onCompleted() {
-                    /* no-op */
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    profileEditView.alertComunicationError();
-                }
-            });
+    private void showViewError(ShootrException error) {
+        String errorMessage;
+        if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        } else {
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
+        profileEditView.showError(errorMessage);
     }
 
     public void discard() {
@@ -242,10 +248,14 @@ public class ProfileEditPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
-        fillCurrentUserData(true);
+        fillCurrentUserData();
     }
 
     @Override public void pause() {
         bus.unregister(this);
+    }
+
+    public void setHasBeenInitialized(boolean hasBeenInitialized) {
+        this.hasBeenInitialized = hasBeenInitialized;
     }
 }

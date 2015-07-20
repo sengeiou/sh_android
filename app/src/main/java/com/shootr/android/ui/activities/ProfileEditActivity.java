@@ -184,6 +184,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         email.setError(error);
     }
 
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
         menuItemDone = menu.findItem(R.id.menu_done);
@@ -203,6 +207,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @OnClick(R.id.profile_edit_email_layout)
     public void onEmailClick() {
+        presenter.setHasBeenInitialized(true);
         startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
         email.setError(null);
     }
