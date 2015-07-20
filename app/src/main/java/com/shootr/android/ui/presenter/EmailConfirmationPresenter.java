@@ -7,6 +7,8 @@ import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
 import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.service.EmailInUseException;
+import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.UserModel;
@@ -129,8 +131,10 @@ public class EmailConfirmationPresenter implements Presenter {
         String errorMessage;
         if (error instanceof ServerCommunicationException) {
             errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        } else if (error instanceof EmailInUseException) {
+            errorMessage = "Email already registered";
         } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+            errorMessage = errorMessageFactory.getMessageForError(error);
         }
         emailConfirmationView.showError(errorMessage);
     }

@@ -53,14 +53,8 @@ public class ChangeEmailInteractor implements Interactor {
         } catch (EmailMatchNewEmailException error) {
             notifyError(new EmailIsAuthenticatedException(error));
         } catch (NullPointerException unknownError) {
-            notifyError(new InsufficientAuthenticationException("Invalid email"));
+            notifyError(new InsufficientAuthenticationException(unknownError));
         }
-    }
-
-    protected void handleServerError(String errorCode, int field) {
-        FieldValidationError fieldValidationError =
-          new FieldValidationError(errorCode, field);
-        notifyError(new DomainValidationException(fieldValidationError));
     }
 
     private void notifyLoaded() {
