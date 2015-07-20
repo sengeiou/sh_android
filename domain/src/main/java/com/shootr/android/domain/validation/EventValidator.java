@@ -9,11 +9,13 @@ public class EventValidator {
 
     public static final int TITLE_MINIMUN_LENGTH = 3;
     public static final int TITLE_MAXIMUN_LENGTH = 50;
-    public static final int TAG_MAXIMUM_LENGTH = 8;
+    public static final int TAG_MINIMUN_LENGTH = 3;
+    public static final int TAG_MAXIMUM_LENGTH = 20;
     public static final String EMOJI_RANGE_REGEX = "[\\x{1F300}-\\x{1F64F}\\x{1f680}-\\x{1f6ff}\\x{2600}-\\x{27bf}]";
     public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
 
     public static final int FIELD_TITLE = 1;
+    public static final int FIELD_SHORT_TITLE = 2;
 
     private List<FieldValidationError> fieldValidationErrors;
 
@@ -23,7 +25,13 @@ public class EventValidator {
 
     public List<FieldValidationError> validate(Event event) {
         validateTitle(event);
+        validateShortTitle(event);
         return fieldValidationErrors;
+    }
+
+    private void validateShortTitle(Event event) {
+        validateShortTitleTooShort(event);
+        validateShortTitleTooLong(event);
     }
 
     //region Title
@@ -51,4 +59,22 @@ public class EventValidator {
         }
     }
     //endregion
+
+    //region Short Title
+    private void validateShortTitleTooLong(Event event) {
+        if (event.getTag() != null && alphanumericLength(event.getTag()) > TAG_MAXIMUM_LENGTH) {
+            fieldValidationErrors.add(
+              new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_LONG, FIELD_SHORT_TITLE));
+        }
+    }
+
+    private void validateShortTitleTooShort(Event event) {
+        String shortTitle = event.getTag();
+        if (shortTitle == null || alphanumericLength(shortTitle) < TAG_MINIMUN_LENGTH) {
+            fieldValidationErrors.add(
+              new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_SHORT, FIELD_SHORT_TITLE));
+        }
+    }
+    //endregion
+
 }

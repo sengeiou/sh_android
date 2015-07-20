@@ -159,6 +159,7 @@ public class EventsListPresenterTest {
         EventModel eventModel = new EventModel();
         eventModel.setIdEvent(SELECTED_EVENT_ID);
         eventModel.setTitle(SELECTED_EVENT_TITLE);
+        eventModel.setTag(SELECTED_EVENT_TITLE);
         EventResultModel eventResultModel = new EventResultModel();
         eventResultModel.setEventModel(eventModel);
         return eventResultModel;

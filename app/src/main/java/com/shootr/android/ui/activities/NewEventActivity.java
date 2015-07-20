@@ -13,8 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
@@ -30,14 +30,20 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     public static final String KEY_EVENT_TITLE = "event_title";
 
+    private static final String EXTRA_EDITED_TITLE = "title";
+    private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
+
     @Inject NewEventPresenter presenter;
 
     @Bind(R.id.new_event_title) EditText titleView;
     @Bind(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
     @Bind(R.id.new_event_title_error) TextView titleErrorView;
+    @Bind(R.id.new_event_short_title) EditText shortTitleView;
+    @Bind(R.id.new_event_short_title_warning) TextView shortTitleErrorView;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
+
 
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +53,23 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
         initializeViews(idEventToEdit);
         setupActionbar(idEventToEdit);
+
         initializePresenter(idEventToEdit);
+
+        if (savedInstanceState != null) {
+            String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
+            String editedShortTitle = savedInstanceState.getString(EXTRA_EDITED_SHORT_TITLE);
+
+            titleView.setText(editedTitle);
+            shortTitleView.setText(editedShortTitle);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_EDITED_TITLE, titleView.getText().toString());
+        outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
     private void initializeViews(String idEventToEdit) {
@@ -66,6 +88,19 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
                 /* no-op */
             }
         });
+        shortTitleView.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no-op */
+            }
+
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /* no-op */
+            }
+
+            @Override public void afterTextChanged(Editable editable) {
+                presenter.shortTitleTextChanged(editable.toString());
+            }
+        });
     }
 
     private void setupActionbar(String idEventToEdit) {
@@ -82,7 +117,6 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     private void initializePresenter(String idEventToEdit) {
         presenter.initialize(this, idEventToEdit);
     }
-
     //endregion
 
     //region Activity methods
@@ -173,16 +207,22 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override
     public void askDeleteEventConfirmation() {
-        new AlertDialog.Builder(this)
-          .setMessage(R.string.delete_event_confirmation)
+        new AlertDialog.Builder(this).setMessage(R.string.delete_event_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
+              @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmDeleteEvent();
               }
           })
           .setNegativeButton(R.string.cancel, null)
           .show();
+    }
+
+    @Override public void showShortTitle(String currentShortTitle) {
+        shortTitleView.setText(currentShortTitle);
+    }
+
+    @Override public String getEventShortTitle() {
+        return shortTitleView.getText().toString();
     }
 
     @Override public void showLoading() {

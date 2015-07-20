@@ -21,6 +21,8 @@ import timber.log.Timber;
 public class NewEventPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
+    public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
+    public static final int MAX_SHORT_TITLE_LENGTH = 20;
 
     private final CreateEventInteractor createEventInteractor;
     private final GetEventInteractor getEventInteractor;
@@ -32,9 +34,12 @@ public class NewEventPresenter implements Presenter {
 
     private boolean isNewEvent;
     private String preloadedTitle;
+    private String preloadedShortTitle;
     private String preloadedEventId;
     private String currentTitle;
+    private String currentShortTitle;
     private boolean notifyCreation;
+    private boolean shortTitleEditedManually;
 
     //region Initialization
     @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor,
@@ -52,10 +57,11 @@ public class NewEventPresenter implements Presenter {
     public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.isNewEvent = optionalIdEventToEdit == null;
+        this.shortTitleEditedManually = false;
         if (!isNewEvent) {
             this.preloadEventToEdit(optionalIdEventToEdit);
-
         }
+        updateDoneButtonStatus();
     }
 
     private void preloadEventToEdit(String optionalIdEventToEdit) {
@@ -71,12 +77,32 @@ public class NewEventPresenter implements Presenter {
         preloadedTitle = eventModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
         newEventView.showDeleteEventButton();
+        if (currentTitle == null && currentShortTitle == null) {
+            preloadedTitle = eventModel.getTitle();
+            preloadedShortTitle = eventModel.getTag();
+            currentTitle = preloadedTitle;
+            currentShortTitle = preloadedShortTitle;
+            newEventView.setEventTitle(preloadedTitle);
+            newEventView.showShortTitle(preloadedShortTitle);
+
+            bindShortTitleToTitleIfMatches();
+        }
     }
     //endregion
 
     //region Interaction methods
     public void titleTextChanged(String title) {
         currentTitle = filterTitle(title);
+        if(!shortTitleEditedManually){
+            currentShortTitle = filterShortTitle(title);
+            newEventView.showShortTitle(currentShortTitle);
+        }
+        this.updateDoneButtonStatus();
+    }
+
+    public void shortTitleTextChanged(String shortTitle) {
+        currentShortTitle = filterShortTitle(shortTitle);
+        this.bindShortTitleToTitleIfMatches();
         this.updateDoneButtonStatus();
     }
 
@@ -129,8 +155,10 @@ public class NewEventPresenter implements Presenter {
 
     private void sendEvent(String preloadedEventId) {
         String title = filterTitle(newEventView.getEventTitle());
+        String shortTitle = filterShortTitle(newEventView.getEventShortTitle());
         createEventInteractor.sendEvent(preloadedEventId,
           title,
+          shortTitle,
           notifyCreation,
           new CreateEventInteractor.Callback() {
               @Override public void onLoaded(Event event) {
@@ -196,20 +224,35 @@ public class NewEventPresenter implements Presenter {
         return title.trim();
     }
 
+    private String filterShortTitle(String shortTitle) {
+        if(shortTitle.length() <= 20){
+            return shortTitle.trim();
+        }else {
+            return shortTitle.substring(0,20).trim();
+        }
+    }
+
     private void updateDoneButtonStatus() {
         newEventView.doneButtonEnabled(canSendEvent());
     }
 
     private boolean canSendEvent() {
-        return isValidTitle() && hasChangedTitle();
+        return isValidTitle() && isValidShortTitle();
     }
 
     private boolean isValidTitle() {
         return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
     }
 
-    private boolean hasChangedTitle() {
-        return !newEventView.getEventTitle().equals(preloadedTitle);
+    private boolean isValidShortTitle() {
+        return currentShortTitle != null && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
+          && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
+    }
+
+    private void bindShortTitleToTitleIfMatches() {
+        if (currentTitle != null && currentShortTitle != null) {
+            shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
+        }
     }
     //endregion
 
