@@ -2,12 +2,16 @@ package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
+import com.shootr.android.domain.exception.EmailMatchNewEmailException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.UnauthorizedRequestException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.service.EmailInUseException;
+import com.shootr.android.domain.service.EmailIsAuthenticatedException;
+import com.shootr.android.domain.service.InsufficientAuthenticationException;
 import com.shootr.android.domain.service.user.ShootrUserService;
 import com.shootr.android.domain.validation.FieldValidationError;
 import javax.inject.Inject;
@@ -44,6 +48,12 @@ public class ChangeEmailInteractor implements Interactor {
             notifyError(error);
         } catch (EmailAlreadyExistsException error) {
             notifyError(new EmailInUseException(error));
+        } catch (UnauthorizedRequestException error) {
+            notifyError(new InsufficientAuthenticationException(error));
+        } catch (EmailMatchNewEmailException error) {
+            notifyError(new EmailIsAuthenticatedException(error));
+        } catch (NullPointerException unknownError) {
+            notifyError(new InsufficientAuthenticationException("Invalid email"));
         }
     }
 

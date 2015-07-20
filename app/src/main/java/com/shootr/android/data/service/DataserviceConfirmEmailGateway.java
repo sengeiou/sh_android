@@ -9,7 +9,7 @@ import com.shootr.android.domain.exception.EmailMatchNewEmailException;
 import com.shootr.android.domain.exception.InvalidChangeEmailException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
+import com.shootr.android.domain.exception.UnauthorizedRequestException;
 import com.shootr.android.domain.service.user.ConfirmEmailGateway;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -33,7 +33,8 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
     }
 
     @Override public void changeEmail(String email)
-      throws InvalidChangeEmailException, EmailAlreadyExistsException, EmailMatchNewEmailException {
+      throws InvalidChangeEmailException, EmailAlreadyExistsException, EmailMatchNewEmailException,
+      UnauthorizedRequestException {
         ChangeEmailApiEntity changeEmailApiEntity = new ChangeEmailApiEntity();
         changeEmailApiEntity.setNewEmail(email);
         try {
@@ -43,6 +44,8 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
                 throw new EmailAlreadyExistsException();
             } else if(ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
                 throw new EmailMatchNewEmailException();
+            } else if(ErrorInfo.InsufficientAuthenticationException == error.getErrorInfo()) {
+                throw new UnauthorizedRequestException();
             } else {
                 throw new InvalidChangeEmailException();
             }

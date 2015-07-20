@@ -12,7 +12,7 @@ public class EmailConfirmationValidator {
       "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
       "(" +
       "\\." +
-      "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+      "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" +
       ")+";
 
     public static final int FIELD_EMAIL = 1;
