@@ -7,14 +7,6 @@ import java.util.regex.Pattern;
 
 public class EmailConfirmationValidator {
 
-    private static final String EMAIL_PATTERN = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}" +
-      "@" +
-      "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-      "(" +
-      "\\." +
-      "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" +
-      ")+";
-
     public static final int FIELD_EMAIL = 1;
 
     private List<FieldValidationError> fieldValidationErrors;
@@ -42,7 +34,7 @@ public class EmailConfirmationValidator {
 
     private void validateEmailFormat(String email) {
         if (email != null) {
-            Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
+            Pattern emailPattern = Pattern.compile(CreateUserValidator.EMAIL_PATTERN);
             boolean hasEmailFormat = emailPattern.matcher(email).matches();
             if (!hasEmailFormat) {
                 addError(ShootrError.ERROR_CODE_REGISTRATION_EMAIL_INVALID_FORMAT, CreateUserValidator.FIELD_EMAIL);
