@@ -5,6 +5,7 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
+import com.shootr.android.domain.exception.EmailMatchNewEmailException;
 import com.shootr.android.domain.exception.InvalidChangeEmailException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -31,7 +32,8 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
         }
     }
 
-    @Override public void changeEmail(String email) throws InvalidChangeEmailException, EmailAlreadyExistsException {
+    @Override public void changeEmail(String email)
+      throws InvalidChangeEmailException, EmailAlreadyExistsException, EmailMatchNewEmailException {
         ChangeEmailApiEntity changeEmailApiEntity = new ChangeEmailApiEntity();
         changeEmailApiEntity.setNewEmail(email);
         try {
@@ -39,6 +41,8 @@ public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
         }catch (ApiException error) {
             if (ErrorInfo.EmailAlreadyExistsException == error.getErrorInfo()) {
                 throw new EmailAlreadyExistsException();
+            } else if(ErrorInfo.EmailMatchNewEmailException == error.getErrorInfo()) {
+                throw new EmailMatchNewEmailException();
             } else {
                 throw new InvalidChangeEmailException();
             }

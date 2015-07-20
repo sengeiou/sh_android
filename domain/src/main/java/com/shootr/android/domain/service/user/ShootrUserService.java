@@ -4,6 +4,7 @@ import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
+import com.shootr.android.domain.exception.EmailMatchNewEmailException;
 import com.shootr.android.domain.exception.InvalidChangeEmailException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
@@ -142,7 +143,8 @@ public class ShootrUserService {
         confirmEmailGateway.confirmEmail();
     }
 
-    public void changeEmail(String email) throws InvalidChangeEmailException, EmailAlreadyExistsException {
+    public void changeEmail(String email)
+      throws InvalidChangeEmailException, EmailAlreadyExistsException, EmailMatchNewEmailException {
         User currentUser = sessionRepository.getCurrentUser();
         currentUser.setEmail(email);
         sessionRepository.setCurrentUser(currentUser);
