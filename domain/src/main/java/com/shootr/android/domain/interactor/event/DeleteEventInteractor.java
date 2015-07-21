@@ -2,15 +2,12 @@ package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
-import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -23,8 +20,8 @@ public class DeleteEventInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventRepository remoteEventRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
@@ -35,15 +32,15 @@ public class DeleteEventInteractor implements Interactor {
     @Inject
     public DeleteEventInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      @Remote EventRepository remoteEventRepository,
-      @Local EventRepository localEventRepository,
+      @Remote StreamRepository remoteStreamRepository,
+      @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository,
       @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.remoteEventRepository = remoteEventRepository;
-        this.localEventRepository = localEventRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
+        this.localStreamRepository = localStreamRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
@@ -59,8 +56,8 @@ public class DeleteEventInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            remoteEventRepository.deleteEvent(idEvent);
-            localEventRepository.deleteEvent(idEvent);
+            remoteStreamRepository.deleteStream(idEvent);
+            localStreamRepository.deleteStream(idEvent);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingEvent(null);

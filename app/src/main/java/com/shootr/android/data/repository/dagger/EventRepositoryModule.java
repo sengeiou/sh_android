@@ -9,12 +9,12 @@ import com.shootr.android.data.repository.datasource.event.EventSearchDataSource
 import com.shootr.android.data.repository.datasource.event.ServiceEventDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceEventListDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceEventSearchDataSource;
-import com.shootr.android.data.repository.local.LocalEventRepository;
+import com.shootr.android.data.repository.local.LocalStreamRepository;
 import com.shootr.android.data.repository.local.LocalEventSearchRepository;
 import com.shootr.android.data.repository.remote.RemoteEventSearchRepository;
-import com.shootr.android.data.repository.remote.SyncEventRepository;
+import com.shootr.android.data.repository.remote.SyncStreamRepository;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -24,19 +24,19 @@ import javax.inject.Singleton;
 
 @Module(
   injects = {
-    LocalEventRepository.class, SyncEventRepository.class
+    LocalStreamRepository.class, SyncStreamRepository.class
   },
   complete = false,
   library = true)
 public class EventRepositoryModule {
 
-    @Provides @Singleton @Local EventRepository provideLocalEventRepository(
-      LocalEventRepository eventRepository) {
+    @Provides @Singleton @Local StreamRepository provideLocalEventRepository(
+      LocalStreamRepository eventRepository) {
         return eventRepository;
     }
 
-    @Provides @Singleton @Remote EventRepository provideRemoteEventRepository(
-      SyncEventRepository eventRepository) {
+    @Provides @Singleton @Remote StreamRepository provideRemoteEventRepository(
+      SyncStreamRepository eventRepository) {
         return eventRepository;
     }
 

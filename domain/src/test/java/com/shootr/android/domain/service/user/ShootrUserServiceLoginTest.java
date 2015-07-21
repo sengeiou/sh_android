@@ -3,10 +3,9 @@ package com.shootr.android.domain.service.user;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.DatabaseUtils;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,7 +30,7 @@ public class ShootrUserServiceLoginTest {
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
-    @Mock EventRepository remoteEventRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
@@ -41,7 +40,7 @@ public class ShootrUserServiceLoginTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
+          createAccountGateway, loginGateway, resetPasswordGateway, remoteStreamRepository, remoteUserRepository,
           resetPasswordEmailGateway, databaseUtils);
     }
 
@@ -58,13 +57,13 @@ public class ShootrUserServiceLoginTest {
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
 
-        verify(remoteEventRepository).getEventById(WATCHING_EVENT_ID);
+        verify(remoteStreamRepository).getStreamById(WATCHING_EVENT_ID);
     }
 
     @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws Exception {
         when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutEvent());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-        verify(remoteEventRepository, never()).getEventById(anyString());
+        verify(remoteStreamRepository, never()).getStreamById(anyString());
     }
 
     @Test public void shouldDownloadPeopleIfUserHasEventsWhenLoginCorrect() throws Exception {

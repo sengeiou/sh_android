@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -29,8 +29,8 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final UserRepository localWatchRepository;
-    private final EventRepository remoteEventRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
     private final SessionRepository sessionRepository;
     private ErrorCallback errorCallback;
 
@@ -40,15 +40,15 @@ public class VisibleEventInfoInteractor implements Interactor {
     @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localWatchRepository,
-      @Remote EventRepository remoteEventRepository, @Local EventRepository localEventRepository,
+      @Remote StreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localWatchRepository = localWatchRepository;
-        this.remoteEventRepository = remoteEventRepository;
-        this.localEventRepository = localEventRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
+        this.localStreamRepository = localStreamRepository;
         this.sessionRepository = sessionRepository;
     }
 
@@ -74,14 +74,14 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     protected void obtainLocalEventInfo() {
-        EventInfo eventInfo = getEventInfo(localWatchRepository, localEventRepository);
+        EventInfo eventInfo = getEventInfo(localWatchRepository, localStreamRepository);
         if (eventInfo != NO_EVENT_VISIBLE_INFO) {
             notifyLoaded(eventInfo);
         }
     }
 
     protected void obtainRemoteEventInfo() {
-        EventInfo eventInfo = getEventInfo(remoteUserRepository, remoteEventRepository);
+        EventInfo eventInfo = getEventInfo(remoteUserRepository, remoteStreamRepository);
         if (eventInfo != null) {
             notifyLoaded(eventInfo);
         } else {
@@ -89,13 +89,13 @@ public class VisibleEventInfoInteractor implements Interactor {
         }
     }
 
-    protected EventInfo getEventInfo(UserRepository userRepository, EventRepository eventRepository) {
+    protected EventInfo getEventInfo(UserRepository userRepository, StreamRepository streamRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
 
         String wantedEventId = getWantedEventId(currentUser);
 
         if (wantedEventId != null) {
-            Event visibleEvent = eventRepository.getEventById(wantedEventId);
+            Event visibleEvent = streamRepository.getStreamById(wantedEventId);
             if (visibleEvent == null) {
                 //TODO should not happen, but can't assert that right now
                 return NO_EVENT_VISIBLE_INFO;

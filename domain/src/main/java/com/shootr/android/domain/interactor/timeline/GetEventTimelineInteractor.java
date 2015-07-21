@@ -10,7 +10,7 @@ import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -27,7 +27,7 @@ public class GetEventTimelineInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final ShotRepository localShotRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
     private final UserRepository localUserRepository;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -35,13 +35,13 @@ public class GetEventTimelineInteractor implements Interactor {
     @Inject public GetEventTimelineInteractor(InteractorHandler interactorHandler,
                                               PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
                                               @Local ShotRepository localShotRepository,
-                                              @Local EventRepository localEventRepository,
+                                              @Local StreamRepository localStreamRepository,
                                               @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.localShotRepository = localShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
         this.localUserRepository = localUserRepository;
     }
     //endregion
@@ -93,7 +93,7 @@ public class GetEventTimelineInteractor implements Interactor {
     private Event getVisibleEvent() {
         String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingEvent();
         if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
+            return localStreamRepository.getStreamById(visibleEventId);
         }
         return null;
     }

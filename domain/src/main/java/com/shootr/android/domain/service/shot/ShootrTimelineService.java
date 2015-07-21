@@ -9,7 +9,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -27,7 +27,7 @@ public class ShootrTimelineService {
     public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
 
     private final SessionRepository sessionRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
@@ -36,12 +36,12 @@ public class ShootrTimelineService {
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
-    public ShootrTimelineService(SessionRepository sessionRepository, @Local EventRepository localEventRepository,
+    public ShootrTimelineService(SessionRepository sessionRepository, @Local StreamRepository localStreamRepository,
       @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
       @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
@@ -143,7 +143,7 @@ public class ShootrTimelineService {
         User currentUser = localUserRepository.getUserById(currentUserId);
         String watchingEventId = currentUser.getIdWatchingEvent();
         if (watchingEventId != null) {
-            return localEventRepository.getEventById(watchingEventId);
+            return localStreamRepository.getStreamById(watchingEventId);
         }
         return null;
     }

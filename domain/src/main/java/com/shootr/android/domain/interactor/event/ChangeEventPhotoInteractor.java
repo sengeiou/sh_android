@@ -6,7 +6,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
@@ -21,8 +21,8 @@ public class ChangeEventPhotoInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ImageResizer imageResizer;
     private final PhotoService photoService; //TODO does this need to be a repository? It's a bit special, I think
-    private final EventRepository localEventRepository;
-    private final EventRepository remoteEventRepository;
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
 
     private String idEvent;
     private File photoFile;
@@ -31,13 +31,13 @@ public class ChangeEventPhotoInteractor implements Interactor {
 
     @Inject public ChangeEventPhotoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ImageResizer imageResizer, PhotoService photoService,
-      @Local EventRepository localEventRepository, @Remote EventRepository remoteEventRepository) {
+      @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.imageResizer = imageResizer;
         this.photoService = photoService;
-        this.localEventRepository = localEventRepository;
-        this.remoteEventRepository = remoteEventRepository;
+        this.localStreamRepository = localStreamRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
     }
 
     public void changeEventPhoto(String idEvent, File photoFile, Callback callback, ErrorCallback errorCallback) {
@@ -52,9 +52,9 @@ public class ChangeEventPhotoInteractor implements Interactor {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
             String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, idEvent);
-            Event event = localEventRepository.getEventById(idEvent);
+            Event event = localStreamRepository.getStreamById(idEvent);
             event.setPicture(imageUrl);
-            Event remoteEvent = remoteEventRepository.putEvent(event);
+            Event remoteEvent = remoteStreamRepository.putStream(event);
             notifyLoaded(remoteEvent);
         } catch (IOException e) {
             notifyError(new ServerCommunicationException(e));

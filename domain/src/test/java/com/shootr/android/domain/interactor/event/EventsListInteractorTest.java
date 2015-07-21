@@ -13,7 +13,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
@@ -55,7 +55,7 @@ public class EventsListInteractorTest {
     @Spy SpyCallback<EventSearchResultList> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback dummyErrorCallback;
     @Mock LocaleProvider localeProvider;
-    @Mock EventRepository localEventRepository;
+    @Mock StreamRepository localStreamRepository;
     @Mock WatchersRepository watchersRepository;
 
     private EventsListInteractor interactor;
@@ -69,8 +69,7 @@ public class EventsListInteractorTest {
           postExecutionThread,
           remoteEventSearchRepository,
           localEventSearchRepository,
-          eventListSynchronizationRepository,
-          localEventRepository,
+          eventListSynchronizationRepository, localStreamRepository,
           watchersRepository,
           sessionRepository,
           localUserRepository,

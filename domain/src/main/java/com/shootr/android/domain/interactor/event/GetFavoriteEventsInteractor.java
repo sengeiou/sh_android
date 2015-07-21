@@ -7,7 +7,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -24,20 +24,20 @@ public class GetFavoriteEventsInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final FavoriteRepository localFavoriteRepository;
     private final FavoriteRepository remoteFavoriteRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
     private final WatchersRepository watchersRepository;
 
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetFavoriteEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
-      @Remote FavoriteRepository remoteFavoriteRepository, @Local EventRepository localEventRepository,
+      @Remote FavoriteRepository remoteFavoriteRepository, @Local StreamRepository localStreamRepository,
       @Local WatchersRepository watchersRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
         this.watchersRepository = watchersRepository;
     }
 
@@ -89,7 +89,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         for (Favorite favorite : favorites) {
             idEvents.add(favorite.getIdEvent());
         }
-        return localEventRepository.getEventsByIds(idEvents);
+        return localStreamRepository.getStreamsByIds(idEvents);
     }
 
     private List<EventSearchResult> addWatchersToEvents(List<Event> events) {

@@ -6,7 +6,7 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -20,7 +20,7 @@ public class SelectEventInteractor implements Interactor {
     //region Dependencies
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
     private final WatchersRepository localWatchersRepository;
@@ -31,13 +31,13 @@ public class SelectEventInteractor implements Interactor {
     private Callback<EventSearchResult> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepository,
+      PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
       @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
       SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.localWatchersRepository = localWatchersRepository;
@@ -68,7 +68,7 @@ public class SelectEventInteractor implements Interactor {
     }
 
     private Event getSelectedEvent() {
-        Event selectedEvent = localEventRepository.getEventById(idSelectedEvent);
+        Event selectedEvent = localStreamRepository.getStreamById(idSelectedEvent);
         if (selectedEvent == null) {
             throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
         }

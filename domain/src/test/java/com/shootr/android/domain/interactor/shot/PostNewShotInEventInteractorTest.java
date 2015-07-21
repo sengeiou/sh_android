@@ -7,7 +7,7 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private static final String WATCHING_EVENT_ID = "1L";
 
-    @Mock EventRepository localEventRepository;
+    @Mock StreamRepository localStreamRepository;
 
     private PostNewShotInEventInteractor interactor;
 
@@ -34,7 +34,8 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         InteractorHandler interactorHandler = new TestInteractorHandler();
         interactor =
-          new PostNewShotInEventInteractor(postExecutionThread, interactorHandler, sessionRepository, localEventRepository, shotSender);
+          new PostNewShotInEventInteractor(postExecutionThread, interactorHandler, sessionRepository,
+            localStreamRepository, shotSender);
     }
 
     @Override protected PostNewShotInteractor getInteractorForCommonTests() {
@@ -76,7 +77,7 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
 
     private void setupWatchingEvent() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-        when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
     private Event watchingEvent() {

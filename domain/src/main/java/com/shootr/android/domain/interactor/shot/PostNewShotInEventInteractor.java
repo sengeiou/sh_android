@@ -4,7 +4,7 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
@@ -15,14 +15,14 @@ import javax.inject.Inject;
 public class PostNewShotInEventInteractor extends PostNewShotInteractor {
 
     private final SessionRepository sessionRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
 
     @Inject public PostNewShotInEventInteractor(PostExecutionThread postExecutionThread, InteractorHandler interactorHandler,
-      SessionRepository sessionRepository, @Local EventRepository localEventRepository,
+      SessionRepository sessionRepository, @Local StreamRepository localStreamRepository,
       @Background ShotSender shotSender) {
         super(postExecutionThread, interactorHandler, sessionRepository, shotSender);
         this.sessionRepository = sessionRepository;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
     }
 
     public void postNewShotInEvent(String comment, File image, CompletedCallback callback, ErrorCallback errorCallback) {
@@ -43,7 +43,7 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
     private Event currentVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {
-            return localEventRepository.getEventById(visibleEventId);
+            return localStreamRepository.getStreamById(visibleEventId);
         } else {
             return null;
         }

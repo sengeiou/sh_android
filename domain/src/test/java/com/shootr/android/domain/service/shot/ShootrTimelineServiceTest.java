@@ -10,7 +10,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
@@ -49,7 +49,7 @@ public class ShootrTimelineServiceTest {
     public static final String USER_ID = "user_id";
 
     @Mock SessionRepository sessionRepository;
-    @Mock EventRepository localEventRepository;
+    @Mock StreamRepository localStreamRepository;
     @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
@@ -63,8 +63,7 @@ public class ShootrTimelineServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrTimelineService = new ShootrTimelineService(sessionRepository,
-          localEventRepository,
+        shootrTimelineService = new ShootrTimelineService(sessionRepository, localStreamRepository,
           localUserRepository,
           remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
           timelineSynchronizationRepository);
@@ -105,7 +104,7 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
         List<Activity> activities = activitiesList();
-        when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
@@ -128,7 +127,7 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldNotRefreshEventShotsWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
         when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
-        when(localEventRepository.getEventById(anyString())).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
@@ -230,7 +229,7 @@ public class ShootrTimelineServiceTest {
     private void setupWatchingEvent() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatching());
-        when(localEventRepository.getEventById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
     private User currentUserWatching() {

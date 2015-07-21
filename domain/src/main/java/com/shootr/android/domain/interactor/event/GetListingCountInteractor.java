@@ -4,7 +4,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import javax.inject.Inject;
@@ -15,19 +15,19 @@ public class GetListingCountInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventRepository localEventRepository;
-    private final EventRepository remoteEventRepository;
+    private final StreamRepository localStreamRepository;
+    private final StreamRepository remoteStreamRepository;
 
     private String idUser;
     private Callback<Integer> callback;
 
     @Inject public GetListingCountInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local EventRepository localEventRepositoty,
-      @Remote EventRepository remoteEventRepositoty) {
+      PostExecutionThread postExecutionThread, @Local StreamRepository localEventRepositoty,
+      @Remote StreamRepository remoteEventRepositoty) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventRepository = localEventRepositoty;
-        this.remoteEventRepository = remoteEventRepositoty;
+        this.localStreamRepository = localEventRepositoty;
+        this.remoteStreamRepository = remoteEventRepositoty;
     }
 
     public void loadListingCount(String idUser, Callback<Integer> callback){
@@ -42,16 +42,16 @@ public class GetListingCountInteractor implements Interactor {
     }
 
     private void loadListingCountFromRemote() {
-        loadListingCountFromRepository(remoteEventRepository);
+        loadListingCountFromRepository(remoteStreamRepository);
     }
 
     private void loadListingCountFromLocal() {
-        loadListingCountFromRepository(localEventRepository);
+        loadListingCountFromRepository(localStreamRepository);
     }
 
-    private void loadListingCountFromRepository(EventRepository eventRepository){
+    private void loadListingCountFromRepository(StreamRepository streamRepository){
         try {
-            Integer listingEventsNumber = eventRepository.getListingCount(idUser);
+            Integer listingEventsNumber = streamRepository.getListingCount(idUser);
             notifyLoaded(listingEventsNumber);
         } catch (ServerCommunicationException networkError) {
             /* no-op */

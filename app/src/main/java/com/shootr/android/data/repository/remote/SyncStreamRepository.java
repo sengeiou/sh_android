@@ -8,29 +8,30 @@ import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SyncEventRepository implements EventRepository, SyncableRepository {
+public class SyncStreamRepository implements StreamRepository, SyncableRepository {
 
     private final EventEntityMapper eventEntityMapper;
     private final EventDataSource localEventDataSource;
     private final EventDataSource remoteEventDataSource;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
-    @Inject public SyncEventRepository(EventEntityMapper eventEntityMapper, @Local EventDataSource localEventDataSource,
-      @Remote EventDataSource remoteEventDataSource, SyncableEventEntityFactory syncableEventEntityFactory) {
+    @Inject public SyncStreamRepository(EventEntityMapper eventEntityMapper,
+      @Local EventDataSource localEventDataSource, @Remote EventDataSource remoteEventDataSource,
+      SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localEventDataSource = localEventDataSource;
         this.remoteEventDataSource = remoteEventDataSource;
         this.eventEntityMapper = eventEntityMapper;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
-    @Override public Event getEventById(String idEvent) {
-        EventEntity eventEntity = remoteEventDataSource.getEventById(idEvent);
+    @Override public Event getStreamById(String idStream) {
+        EventEntity eventEntity = remoteEventDataSource.getEventById(idStream);
         if (eventEntity != null) {
             markEntityAsSynchronized(eventEntity);
             localEventDataSource.putEvent(eventEntity);
@@ -40,18 +41,18 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
         }
     }
 
-    @Override public List<Event> getEventsByIds(List<String> eventIds) {
-        List<EventEntity> remoteEvents = remoteEventDataSource.getEventsByIds(eventIds);
+    @Override public List<Event> getStreamsByIds(List<String> streamIds) {
+        List<EventEntity> remoteEvents = remoteEventDataSource.getEventsByIds(streamIds);
         markEntitiesAsSynchronized(remoteEvents);
         localEventDataSource.putEvents(remoteEvents);
         return eventEntityMapper.transform(remoteEvents);
     }
 
-    @Override public Event putEvent(Event event) {
-        return putEvent(event, false);
+    @Override public Event putStream(Event event) {
+        return putStream(event, false);
     }
 
-    @Override public Event putEvent(Event event, boolean notify) {
+    @Override public Event putStream(Event event, boolean notify) {
         EventEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(event);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
@@ -66,7 +67,7 @@ public class SyncEventRepository implements EventRepository, SyncableRepository 
     }
 
     @Override
-    public void deleteEvent(String idEvent) throws DeleteEventNotAllowedException {
+    public void deleteStream(String idEvent) throws DeleteEventNotAllowedException {
         remoteEventDataSource.deleteEvent(idEvent);
     }
 

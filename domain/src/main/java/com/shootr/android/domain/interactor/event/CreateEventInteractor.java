@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
@@ -22,7 +22,7 @@ public class CreateEventInteractor implements Interactor {
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
-    private final EventRepository remoteEventRepository;
+    private final StreamRepository remoteStreamRepository;
     private final LocaleProvider localeProvider;
 
     private String idEvent;
@@ -33,11 +33,11 @@ public class CreateEventInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote EventRepository remoteEventRepository, LocaleProvider localeProvider) {
+      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
-        this.remoteEventRepository = remoteEventRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
         this.localeProvider = localeProvider;
     }
 
@@ -71,7 +71,7 @@ public class CreateEventInteractor implements Interactor {
             event = new Event();
             event.setLocale(localeProvider.getLocale());
         } else {
-            event = remoteEventRepository.getEventById(idEvent);
+            event = remoteStreamRepository.getStreamById(idEvent);
         }
         event.setTitle(title);
         event.setTag(shortTitle);
@@ -86,7 +86,7 @@ public class CreateEventInteractor implements Interactor {
     }
 
     private Event sendEventToServer(Event event, boolean notify) {
-        return remoteEventRepository.putEvent(event, notify);
+        return remoteStreamRepository.putStream(event, notify);
     }
 
     //region Validation

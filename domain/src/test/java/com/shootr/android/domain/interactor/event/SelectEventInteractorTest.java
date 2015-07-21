@@ -7,7 +7,7 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
@@ -36,7 +36,7 @@ public class SelectEventInteractorTest {
     private static final String NEW_EVENT_TITLE = "newTitle";
 
     @Mock TestInteractorHandler interactorHandler;
-    @Mock EventRepository localEventRepository;
+    @Mock StreamRepository localStreamRepository;
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
@@ -54,7 +54,7 @@ public class SelectEventInteractorTest {
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor = new SelectEventInteractor(interactorHandler,
-          postExecutionThread, localEventRepository, localUserRepository,
+          postExecutionThread, localStreamRepository, localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
           sessionRepository,
@@ -64,7 +64,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInSessionRepository() throws Exception {
         setupOldWatchingEvent();
-        when(localEventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -74,7 +74,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInLocalRepository() throws Exception {
         setupOldWatchingEvent();
-        when(localEventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -84,7 +84,7 @@ public class SelectEventInteractorTest {
     @Test
     public void shouldSetNewEventIdInRemoteRepository() throws Exception {
         setupOldWatchingEvent();
-        when(localEventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
 
@@ -93,13 +93,13 @@ public class SelectEventInteractorTest {
 
     @Test @Ignore
     public void selectedEventSavedInLocalIfNotExists() throws Exception {
-        when(localEventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
     }
 
     @Test
     public void selectingCurrentEventDoesNotifyUi() throws Exception {
         setupOldWatchingEvent();
-        when(localEventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
+        when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
@@ -108,7 +108,7 @@ public class SelectEventInteractorTest {
 
     @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentEvent() throws Exception {
         setupOldWatchingEvent();
-        when(localEventRepository.getEventById(OLD_EVENT_ID)).thenReturn(oldEvent());
+        when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
         interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
 
@@ -119,7 +119,7 @@ public class SelectEventInteractorTest {
 
     @Test
     public void shouldNotifyCallbackBeforeSettingUserInRemoteRepository() throws Exception {
-        when(localEventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
         interactor.selectEvent(NEW_EVENT_ID, dummyCallback);

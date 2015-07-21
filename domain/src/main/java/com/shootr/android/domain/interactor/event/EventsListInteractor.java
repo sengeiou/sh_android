@@ -9,7 +9,7 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -35,7 +35,7 @@ public class EventsListInteractor implements Interactor {
     private final TimeUtils timeUtils;
     private final LocaleProvider localeProvider;
     private final WatchersRepository watchersRepository;
-    private final EventRepository localEventRepository;
+    private final StreamRepository localStreamRepository;
 
     private Callback<EventSearchResultList> callback;
     private ErrorCallback errorCallback;
@@ -46,7 +46,7 @@ public class EventsListInteractor implements Interactor {
       @Remote EventSearchRepository remoteEventSearchRepository,
       @Local EventSearchRepository localEventSearchRepository,
       EventListSynchronizationRepository eventListSynchronizationRepository,
-      @Local EventRepository localEventRepository,
+      @Local StreamRepository localStreamRepository,
       @Local WatchersRepository watchersRepository,
       SessionRepository sessionRepository,
       @Local UserRepository localUserRepository,
@@ -62,7 +62,7 @@ public class EventsListInteractor implements Interactor {
         this.timeUtils = timeUtils;
         this.localeProvider = localeProvider;
         this.watchersRepository = watchersRepository;
-        this.localEventRepository = localEventRepository;
+        this.localStreamRepository = localStreamRepository;
     }
 
     public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback) {
@@ -116,7 +116,7 @@ public class EventsListInteractor implements Interactor {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         String idWatchingEvent = currentUser.getIdWatchingEvent();
         if (idWatchingEvent != null) {
-            Event event = localEventRepository.getEventById(idWatchingEvent);
+            Event event = localStreamRepository.getStreamById(idWatchingEvent);
             Integer watchers = watchersRepository.getWatchers(idWatchingEvent);
             EventSearchResult eventSearchResult = new EventSearchResult();
             eventSearchResult.setEvent(event);

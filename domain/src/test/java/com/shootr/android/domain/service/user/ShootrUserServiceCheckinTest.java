@@ -2,7 +2,7 @@ package com.shootr.android.domain.service.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.DatabaseUtils;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class ShootrUserServiceCheckinTest {
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
-    @Mock EventRepository remoteEventRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
@@ -36,7 +36,7 @@ public class ShootrUserServiceCheckinTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
+          createAccountGateway, loginGateway, resetPasswordGateway, remoteStreamRepository, remoteUserRepository,
           resetPasswordEmailGateway, databaseUtils);
     }
 

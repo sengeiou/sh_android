@@ -10,7 +10,7 @@ import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
@@ -49,7 +49,7 @@ public class GetEventTimelineInteractorTest {
     @Mock ShotRepository localShotRepository;
     @Mock UserRepository localUserRepository;
     @Spy SpyCallback spyCallback = new SpyCallback();
-    @Mock EventRepository eventRepository;
+    @Mock StreamRepository streamRepository;
     @Mock SessionRepository sessionRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
@@ -68,8 +68,7 @@ public class GetEventTimelineInteractorTest {
         interactor = new GetEventTimelineInteractor(interactorHandler,
           postExecutionThread,
           sessionRepository,
-          localShotRepository,
-                eventRepository,
+          localShotRepository, streamRepository,
           localUserRepository
         );
     }
@@ -120,7 +119,7 @@ public class GetEventTimelineInteractorTest {
 
     private void setupWatchingEvent() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(eventRepository.getEventById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
+        when(streamRepository.getStreamById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
     }
 
     //region Stubs

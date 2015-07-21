@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class GetFavoriteEventsInteractorTest {
     @Mock Interactor.Callback<List<EventSearchResult>> callback;
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
-    @Mock EventRepository localEventRepository;
+    @Mock StreamRepository localStreamRepository;
     @Mock WatchersRepository watchersRepository;
     @Spy SpyCallback<List<EventSearchResult>> spyCallback = new SpyCallback<>();
 
@@ -53,8 +53,7 @@ public class GetFavoriteEventsInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         getFavoriteEventsInteractor = new GetFavoriteEventsInteractor(interactorHandler, postExecutionThread,
           localFavoriteRepository,
-          remoteFavoriteRepository,
-          localEventRepository, watchersRepository);
+          remoteFavoriteRepository, localStreamRepository, watchersRepository);
     }
 
     @Test
@@ -78,12 +77,12 @@ public class GetFavoriteEventsInteractorTest {
     @Test
     public void shouldLoadEventsFromLocal(){
         getFavoriteEventsInteractor.loadFavoriteEvents(callback);
-        verify(localEventRepository, atLeastOnce()).getEventsByIds(anyList());
+        verify(localStreamRepository, atLeastOnce()).getStreamsByIds(anyList());
     }
 
     @Test
     public void shouldLoadWatchers(){
-        when(localEventRepository.getEventsByIds(anyList())).thenReturn(listWithOneEvent());
+        when(localStreamRepository.getStreamsByIds(anyList())).thenReturn(listWithOneEvent());
         getFavoriteEventsInteractor.loadFavoriteEvents(callback);
         verify(watchersRepository, atLeastOnce()).getWatchers();
     }
@@ -103,7 +102,7 @@ public class GetFavoriteEventsInteractorTest {
     public void shouldLoadLocalEventsFromFavorites() {
         when(localFavoriteRepository.getFavorites()).thenReturn(listWithOneFavorite());
         getFavoriteEventsInteractor.loadFavoriteEvents(callback);
-        verify(localEventRepository).getEventsByIds(favoriteEventsIds());
+        verify(localStreamRepository).getStreamsByIds(favoriteEventsIds());
     }
 
 
@@ -163,7 +162,7 @@ public class GetFavoriteEventsInteractorTest {
     }
 
     protected void setupEventRepositoryReturnsEventsWithInputIds() {
-        when(localEventRepository.getEventsByIds(anyListOf(String.class))).thenAnswer(new Answer<List<Event>>() {
+        when(localStreamRepository.getStreamsByIds(anyListOf(String.class))).thenAnswer(new Answer<List<Event>>() {
             @Override
             public List<Event> answer(InvocationOnMock invocation) throws Throwable {
                 List<String> ids = (List<String>) invocation.getArguments()[0];
