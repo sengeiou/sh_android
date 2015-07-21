@@ -14,17 +14,10 @@ import com.shootr.android.R;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.util.VersionUtils;
-import java.util.Arrays;
-import java.util.List;
 import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity {
 
-    public static final String FAQ = "FAQ";
-    public static final String PRIVACY_POLICY = "Privacy Policy";
-    public static final String TERMS_OF_SERVICE = "Terms of Service";
-    public static final String VERSION = "Version";
-    private static List<String> SUPPORT_LIST = Arrays.asList(FAQ, PRIVACY_POLICY, TERMS_OF_SERVICE, VERSION);
     public static final String TERMS_OF_SERVICE_BASE_URL = "http://docs.shootr.com/#/terms/";
     public static final String PRIVACY_POLICY_SERVICE_BASE_URL = "http://docs.shootr.com/#/privacy/";
 
@@ -49,7 +42,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected void initializePresenter() {
-        // TODO if really procceed
+        /* no-op */
     }
 
     @Override
