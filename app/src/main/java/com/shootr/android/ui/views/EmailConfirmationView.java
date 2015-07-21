@@ -13,4 +13,6 @@ public interface EmailConfirmationView {
     void updateDoneButton();
 
     void hideDoneButton();
+
+    void goBack();
 }

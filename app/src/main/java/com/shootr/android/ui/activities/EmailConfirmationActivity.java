@@ -97,6 +97,10 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         confirmButton.setVisibility(View.GONE);
     }
 
+    @Override public void goBack() {
+        this.finish();
+    }
+
     @OnTextChanged(R.id.email_confirmation_email)
     public void onEmailChanged() {
         presenter.onEmailEdited(email.getText().toString());

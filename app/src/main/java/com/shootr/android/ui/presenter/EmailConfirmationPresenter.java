@@ -147,6 +147,8 @@ public class EmailConfirmationPresenter implements Presenter {
         if(verifyEmailBeforeConfirmating(emailEdited) && !emailEdited.equals(initializedEmail)) {
             changeEmail(emailEdited);
             emailConfirmationView.hideDoneButton();
+        } else {
+            emailConfirmationView.goBack();
         }
     }
 
