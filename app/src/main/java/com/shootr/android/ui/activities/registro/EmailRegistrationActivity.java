@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -20,11 +21,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import com.shootr.android.R;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
@@ -38,6 +40,9 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
+    public static final String TERMS_OF_SERVICE_BASE_URL = "http://docs.shootr.com/#/terms/";
+    public static final String PRIVACY_POLICY_SERVICE_BASE_URL = "http://docs.shootr.com/#/privacy/";
+
     @Bind(R.id.registration_email) AutoCompleteTextView emailInput;
     @Bind(R.id.registration_username) EditText usernameInput;
     @Bind(R.id.registration_password) EditText passwordInput;
@@ -46,6 +51,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.registration_legal_disclaimer) TextView disclaimer;
 
     @Inject EmailRegistrationPresenter presenter;
+    @Inject LocaleProvider localeProvider;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -87,7 +93,8 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
         final View.OnClickListener termsClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(EmailRegistrationActivity.this, "Terms of Service", Toast.LENGTH_SHORT).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TERMS_OF_SERVICE_BASE_URL + localeProvider.getLanguage()));
+                startActivity(browserIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
@@ -96,7 +103,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
         final View.OnClickListener privacyClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(EmailRegistrationActivity.this, "Privacy Policy", Toast.LENGTH_SHORT).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_SERVICE_BASE_URL
+                  + localeProvider.getLanguage()));
+                startActivity(browserIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
