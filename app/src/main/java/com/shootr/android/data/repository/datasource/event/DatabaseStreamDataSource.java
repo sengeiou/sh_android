@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.db.manager.StreamManager;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import java.util.List;
@@ -14,20 +14,20 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         this.streamManager = streamManager;
     }
 
-    @Override public EventEntity getStreamById(String idStream) {
+    @Override public StreamEntity getStreamById(String idStream) {
         return streamManager.getStreamById(idStream);
     }
 
-    @Override public List<EventEntity> getStreamByIds(List<String> streamIds) {
+    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
         return streamManager.getStreamsByIds(streamIds);
     }
 
-    @Override public EventEntity putStream(EventEntity streamEntity) {
+    @Override public StreamEntity putStream(StreamEntity streamEntity) {
         streamManager.saveStream(streamEntity);
         return streamEntity;
     }
 
-    @Override public List<EventEntity> putStreams(List<EventEntity> streams) {
+    @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {
         streamManager.saveStreams(streams);
         return streams;
     }
@@ -36,7 +36,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streamManager.getListingCount(idUser);
     }
 
-    @Override public List<EventEntity> getStreamsListing(String idUser) {
+    @Override public List<StreamEntity> getStreamsListing(String idUser) {
         return streamManager.getStreamsListing(idUser);
     }
 

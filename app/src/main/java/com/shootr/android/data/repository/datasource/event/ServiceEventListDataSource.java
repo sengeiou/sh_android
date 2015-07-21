@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.api.service.EventApiService;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,7 @@ public class ServiceEventListDataSource implements EventListDataSource {
     }
 
     @Override
-    public List<EventEntity> getEventList(String locale) {
+    public List<StreamEntity> getEventList(String locale) {
         try {
             return eventService.getEventList(locale);
         } catch (IOException e) {
@@ -24,7 +24,7 @@ public class ServiceEventListDataSource implements EventListDataSource {
         }
     }
 
-    @Override public List<EventEntity> getEvents(String query, String locale) {
+    @Override public List<StreamEntity> getEvents(String query, String locale) {
         try {
             return eventService.getEvents(query, locale);
         } catch (IOException e) {

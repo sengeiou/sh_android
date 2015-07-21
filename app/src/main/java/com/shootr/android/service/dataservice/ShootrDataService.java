@@ -2,12 +2,12 @@ package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.DeviceEntity;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.EventEntityMapper;
+import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
@@ -58,7 +58,7 @@ public class ShootrDataService implements ShootrService {
     private final UserMapper userMapper;
     private final FollowMapper followMapper;
     private final ShotEntityMapper shotEntityMapper;
-    private final EventEntityMapper eventEntityMapper;
+    private final StreamEntityMapper streamEntityMapper;
     private final DeviceMapper deviceMapper;
 
     private final TimeUtils timeUtils;
@@ -76,7 +76,7 @@ public class ShootrDataService implements ShootrService {
       ShotEntityMapper shotEntityMapper,
       StreamDtoFactory streamDtoFactory,
       DeviceMapper deviceMapper,
-      EventEntityMapper eventEntityMapper,
+      StreamEntityMapper streamEntityMapper,
       TimeUtils timeUtils,
       VersionUpdater versionUpdater) {
         this.client = client;
@@ -90,7 +90,7 @@ public class ShootrDataService implements ShootrService {
         this.followMapper = followMapper;
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
     }
@@ -271,23 +271,23 @@ public class ShootrDataService implements ShootrService {
         return followReceived;
     }
 
-    @Override public EventEntity saveStream(EventEntity eventEntity) throws IOException {
-        GenericDto requestDto = streamDtoFactory.saveStream(eventEntity);
+    @Override public StreamEntity saveStream(StreamEntity streamEntity) throws IOException {
+        GenericDto requestDto = streamDtoFactory.saveStream(streamEntity);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        EventEntity eventsReceived = null;
+        StreamEntity eventsReceived = null;
         if (ops.length > 0) {
-            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+            eventsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
         return eventsReceived;
     }
 
-    @Override public List<EventEntity> getStreamsByIds(List<String> eventIds) throws IOException {
-        List<EventEntity> eventsReceived = new ArrayList<>();
+    @Override public List<StreamEntity> getStreamsByIds(List<String> eventIds) throws IOException {
+        List<StreamEntity> eventsReceived = new ArrayList<>();
         GenericDto requestDto = streamDtoFactory.getStreamsNotEndedByIds(eventIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -298,13 +298,13 @@ public class ShootrDataService implements ShootrService {
             Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                eventsReceived.add(eventEntityMapper.fromDto(dataItem));
+                eventsReceived.add(streamEntityMapper.fromDto(dataItem));
             }
         }
         return eventsReceived;
     }
 
-    @Override public EventEntity getStreamById(String idEvent) throws IOException {
+    @Override public StreamEntity getStreamById(String idEvent) throws IOException {
         GenericDto requestDto = streamDtoFactory.getStreamById(idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -312,9 +312,9 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        EventEntity eventsReceived = null;
+        StreamEntity eventsReceived = null;
         if(ops.length>0){
-            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+            eventsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
         return eventsReceived;
 

@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.local;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
@@ -25,29 +25,29 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override public Event getStreamById(String idStream) {
-        EventEntity eventEntity = localStreamDataSource.getStreamById(idStream);
-        if (eventEntity == null) {
-            eventEntity = fallbackOnSearchResults(idStream);
+        StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream);
+        if (streamEntity == null) {
+            streamEntity = fallbackOnSearchResults(idStream);
         }
-        return eventEntityMapper.transform(eventEntity);
+        return eventEntityMapper.transform(streamEntity);
     }
 
-    private EventEntity fallbackOnSearchResults(String idEvent) {
-        EventEntity eventEntity = localEventSearchDataSource.getEventResult(idEvent);
-        if (eventEntity != null) {
-            localStreamDataSource.putStream(eventEntity);
+    private StreamEntity fallbackOnSearchResults(String idEvent) {
+        StreamEntity streamEntity = localEventSearchDataSource.getEventResult(idEvent);
+        if (streamEntity != null) {
+            localStreamDataSource.putStream(streamEntity);
         }
-        return eventEntity;
+        return streamEntity;
     }
 
     @Override public List<Event> getStreamsByIds(List<String> streamIds) {
-        List<EventEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds);
+        List<StreamEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds);
         return eventEntityMapper.transform(eventEntities);
     }
 
     @Override public Event putStream(Event event) {
-        EventEntity eventEntity = eventEntityMapper.transform(event);
-        localStreamDataSource.putStream(eventEntity);
+        StreamEntity streamEntity = eventEntityMapper.transform(event);
+        localStreamDataSource.putStream(streamEntity);
         return event;
     }
 

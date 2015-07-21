@@ -1,6 +1,6 @@
 package com.shootr.android.data.entity;
 
-public class EventEntity extends Synchronized implements Comparable<EventEntity> {
+public class StreamEntity extends Synchronized implements Comparable<StreamEntity> {
 
     private String idEvent;
     private String idUser;
@@ -32,10 +32,10 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
         if (this == o){
             return true;
         }
-        if (o == null || !(o instanceof EventEntity)){
+        if (o == null || !(o instanceof StreamEntity)){
             return false;
         }
-        EventEntity that = (EventEntity) o;
+        StreamEntity that = (StreamEntity) o;
 
         if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null){
             return false;
@@ -48,7 +48,7 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
         return idEvent != null ? idEvent.hashCode() : 0;
     }
 
-    @Override public int compareTo(EventEntity another) {
+    @Override public int compareTo(StreamEntity another) {
         boolean areSameEvent = this.getIdEvent().equals(another.getIdEvent());
         if (areSameEvent) {
             return 0;

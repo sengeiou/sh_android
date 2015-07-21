@@ -1,6 +1,6 @@
 package com.shootr.android.data.api.entity;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 
 public class FavoriteApiEntity {
 
@@ -8,7 +8,7 @@ public class FavoriteApiEntity {
     private String idEvent;
     private Integer order;
 
-    private EventEntity event;
+    private StreamEntity event;
 
     public String getIdUser() {
         return idUser;
@@ -34,11 +34,11 @@ public class FavoriteApiEntity {
         this.order = order;
     }
 
-    public EventEntity getEvent() {
+    public StreamEntity getEvent() {
         return event;
     }
 
-    public void setEvent(EventEntity event) {
+    public void setEvent(StreamEntity event) {
         this.event = event;
     }
 

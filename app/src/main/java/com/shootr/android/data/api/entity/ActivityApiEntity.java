@@ -1,6 +1,6 @@
 package com.shootr.android.data.api.entity;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 
 public class ActivityApiEntity {
 
@@ -22,7 +22,7 @@ public class ActivityApiEntity {
     private Integer revision;
 
     private EmbedUserApiEntity user;
-    private EventEntity event;
+    private StreamEntity event;
 
     public String getIdActivity() {
         return idActivity;
@@ -120,11 +120,11 @@ public class ActivityApiEntity {
         this.user = user;
     }
 
-    public EventEntity getEvent() {
+    public StreamEntity getEvent() {
         return event;
     }
 
-    public void setEvent(EventEntity event) {
+    public void setEvent(StreamEntity event) {
         this.event = event;
     }
 }

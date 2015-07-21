@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.sync;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, EventEntity> {
+public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, StreamEntity> {
 
     private EventEntityMapper eventEntityMapper;
     private StreamDataSource localStreamDataSource;
@@ -22,22 +22,22 @@ public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, Eve
         this.localStreamDataSource = localStreamDataSource;
     }
 
-    @Override protected EventEntity currentEntity(Event event) {
+    @Override protected StreamEntity currentEntity(Event event) {
         return localStreamDataSource.getStreamById(event.getId());
     }
 
-    @Override protected EventEntity updateValues(EventEntity currentEntity, Event event) {
-        EventEntity eventEntityFromDomain = eventEntityMapper.transform(event);
-        eventEntityFromDomain.setModified(new Date());
-        eventEntityFromDomain.setRevision(currentEntity.getRevision() + 1);
-        eventEntityFromDomain.setBirth(currentEntity.getBirth());
-        eventEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
-        eventEntityFromDomain.setDeleted(currentEntity.getDeleted());
-        return eventEntityFromDomain;
+    @Override protected StreamEntity updateValues(StreamEntity currentEntity, Event event) {
+        StreamEntity streamEntityFromDomain = eventEntityMapper.transform(event);
+        streamEntityFromDomain.setModified(new Date());
+        streamEntityFromDomain.setRevision(currentEntity.getRevision() + 1);
+        streamEntityFromDomain.setBirth(currentEntity.getBirth());
+        streamEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+        streamEntityFromDomain.setDeleted(currentEntity.getDeleted());
+        return streamEntityFromDomain;
     }
 
-    @Override protected EventEntity createNewEntity(Event event) {
-        EventEntity newEntityFromDomain = eventEntityMapper.transform(event);
+    @Override protected StreamEntity createNewEntity(Event event) {
+        StreamEntity newEntityFromDomain = eventEntityMapper.transform(event);
         newEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         Date birth = new Date();
         newEntityFromDomain.setBirth(birth); //TODO dates from timeutils

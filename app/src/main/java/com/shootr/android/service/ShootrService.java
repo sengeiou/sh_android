@@ -1,7 +1,7 @@
 package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -33,11 +33,11 @@ public interface ShootrService {
 
     FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    EventEntity saveStream(EventEntity eventEntity) throws IOException;
+    StreamEntity saveStream(StreamEntity streamEntity) throws IOException;
 
-    List<EventEntity> getStreamsByIds(List<String> eventIds) throws IOException;
+    List<StreamEntity> getStreamsByIds(List<String> eventIds) throws IOException;
 
-    EventEntity getStreamById(String idEvent) throws IOException;
+    StreamEntity getStreamById(String idEvent) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 

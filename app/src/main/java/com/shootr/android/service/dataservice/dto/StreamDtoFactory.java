@@ -1,9 +1,9 @@
 package com.shootr.android.service.dataservice.dto;
 
 import com.shootr.android.constant.Constants;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.mappers.EventEntityMapper;
+import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -26,11 +26,11 @@ public class StreamDtoFactory {
     public static final String ALIAS_LISTING_EVENTS = "GET_ALL_EVENTS_CREATED_BYUSER";
 
     private UtilityDtoFactory utilityDtoFactory;
-    private EventEntityMapper eventEntityMapper;
+    private StreamEntityMapper streamEntityMapper;
 
-    @Inject public StreamDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper) {
+    @Inject public StreamDtoFactory(UtilityDtoFactory utilityDtoFactory, StreamEntityMapper streamEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
     }
 
     public GenericDto getStreamsNotEndedByIds(List<String> streamsIds) {
@@ -44,18 +44,18 @@ public class StreamDtoFactory {
           .items(1000)
           .build();
 
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENTS_FROM_WATCH_FOLLOWING, op);
     }
 
-    public GenericDto saveStream(EventEntity eventEntity) {
+    public GenericDto saveStream(StreamEntity streamEntity) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, eventEntity.getIdEvent())
+          .putKey(DatabaseContract.EventTable.ID_EVENT, streamEntity.getIdEvent())
           .entity(DatabaseContract.EventTable.TABLE)
           .build();
 
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(eventEntity)).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(streamEntity)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_EVENT, op);
     }
@@ -66,7 +66,7 @@ public class StreamDtoFactory {
           .putKey(DatabaseContract.EventTable.ID_EVENT, idStream)
           .items(1)
           .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENT_BY_ID_EVENT, op);
     }
 
@@ -99,7 +99,7 @@ public class StreamDtoFactory {
           .filter(eventsListingFilter)
           .items(0)
           .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LISTING_EVENTS, op);
     }
 }

@@ -1,6 +1,6 @@
 package com.shootr.android.data.entity;
 
-public class EventSearchEntity extends EventEntity{
+public class StreamSearchEntity extends StreamEntity {
 
     private int watchers;
 

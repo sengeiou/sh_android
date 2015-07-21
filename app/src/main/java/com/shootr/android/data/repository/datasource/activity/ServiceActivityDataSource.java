@@ -4,7 +4,7 @@ import com.shootr.android.data.api.entity.ActivityApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
@@ -67,7 +67,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
 
     private void storeEmbedEvents(List<ActivityApiEntity> activities) {
         for (ActivityApiEntity activity : activities) {
-            EventEntity event = activity.getEvent();
+            StreamEntity event = activity.getEvent();
             boolean hasAssociatedEvent = event != null;
             if (hasAssociatedEvent) {
                 localStreamDataSource.putStream(event);

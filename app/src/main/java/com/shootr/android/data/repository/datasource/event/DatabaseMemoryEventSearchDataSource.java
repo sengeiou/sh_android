@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import android.support.v4.util.ArrayMap;
-import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.StreamManager;
 import com.shootr.android.db.manager.FollowManager;
@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSource {
 
     private final StreamManager streamManager;
-    private final Map<String, EventSearchEntity> lastEventSearchResults;
+    private final Map<String, StreamSearchEntity> lastEventSearchResults;
     private final SessionRepository sessionRepository;
     private final FollowManager followManager;
     private final UserManager userManager;
@@ -33,33 +33,33 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
         lastEventSearchResults = new ArrayMap<>();
     }
 
-    public void setLastSearchResults(List<EventSearchEntity> eventSearchEntities) {
+    public void setLastSearchResults(List<StreamSearchEntity> eventSearchEntities) {
         lastEventSearchResults.clear();
-        for (EventSearchEntity eventSearchEntity : eventSearchEntities) {
-            lastEventSearchResults.put(eventSearchEntity.getIdEvent(), eventSearchEntity);
+        for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
+            lastEventSearchResults.put(streamSearchEntity.getIdEvent(), streamSearchEntity);
         }
     }
 
-    @Override public List<EventSearchEntity> getDefaultEvents(String locale) {
+    @Override public List<StreamSearchEntity> getDefaultEvents(String locale) {
         Map<String, Integer> watchersCountByEvents = getWatchersCountByEvents();
-        List<EventSearchEntity> defaultEventSearch = streamManager.getDefaultStreamSearch();
-        List<EventSearchEntity> eventSearchEntitiesWithUpdatedWatchNumber =
+        List<StreamSearchEntity> defaultEventSearch = streamManager.getDefaultStreamSearch();
+        List<StreamSearchEntity> eventSearchEntitiesWithUpdatedWatchNumber =
           updateWatchNumberInEvents(watchersCountByEvents, defaultEventSearch);
         return eventSearchEntitiesWithUpdatedWatchNumber;
     }
 
-    private List<EventSearchEntity> updateWatchNumberInEvents(Map<String, Integer> watchersCountByEvents,
-      List<EventSearchEntity> defaultEventSearch) {
-        for (EventSearchEntity eventSearchEntity : defaultEventSearch) {
-            Integer eventWatchers = watchersCountByEvents.get(eventSearchEntity.getIdEvent());
+    private List<StreamSearchEntity> updateWatchNumberInEvents(Map<String, Integer> watchersCountByEvents,
+      List<StreamSearchEntity> defaultEventSearch) {
+        for (StreamSearchEntity streamSearchEntity : defaultEventSearch) {
+            Integer eventWatchers = watchersCountByEvents.get(streamSearchEntity.getIdEvent());
             if (eventWatchers != null) {
-                eventSearchEntity.setWatchers(eventWatchers);
+                streamSearchEntity.setWatchers(eventWatchers);
             }
         }
         return defaultEventSearch;
     }
 
-    @Override public void putDefaultEvents(List<EventSearchEntity> eventSearchEntities) {
+    @Override public void putDefaultEvents(List<StreamSearchEntity> eventSearchEntities) {
         streamManager.putDefaultStreamSearch(eventSearchEntities);
     }
 
@@ -67,12 +67,12 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
         streamManager.deleteDefaultStreamSearch();
     }
 
-    @Override public EventSearchEntity getEventResult(String idEvent) {
-        EventSearchEntity eventFromDefaultList = streamManager.getStreamSearchResultById(idEvent);
+    @Override public StreamSearchEntity getEventResult(String idEvent) {
+        StreamSearchEntity eventFromDefaultList = streamManager.getStreamSearchResultById(idEvent);
         if (eventFromDefaultList != null) {
             return eventFromDefaultList;
         } else {
-            EventSearchEntity eventFromLastSearchResults = lastEventSearchResults.get(idEvent);
+            StreamSearchEntity eventFromLastSearchResults = lastEventSearchResults.get(idEvent);
             return eventFromLastSearchResults;
         }
     }

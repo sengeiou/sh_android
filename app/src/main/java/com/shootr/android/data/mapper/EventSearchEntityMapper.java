@@ -1,6 +1,6 @@
 package com.shootr.android.data.mapper;
 
-import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import java.util.ArrayList;
@@ -16,40 +16,40 @@ public class EventSearchEntityMapper {
         this.eventEntityMapper = eventEntityMapper;
     }
 
-    public EventSearchResult transform(EventSearchEntity eventSearchEntity) {
-        Event event = eventEntityMapper.transform(eventSearchEntity);
+    public EventSearchResult transform(StreamSearchEntity streamSearchEntity) {
+        Event event = eventEntityMapper.transform(streamSearchEntity);
 
         EventSearchResult eventSearchResult = new EventSearchResult();
         eventSearchResult.setEvent(event);
-        eventSearchResult.setWatchersNumber(eventSearchEntity.getWatchers());
+        eventSearchResult.setWatchersNumber(streamSearchEntity.getWatchers());
 
         return eventSearchResult;
     }
 
-    public List<EventSearchResult> transformToDomain(List<EventSearchEntity> eventSearchEntities) {
+    public List<EventSearchResult> transformToDomain(List<StreamSearchEntity> eventSearchEntities) {
         List<EventSearchResult> eventSearchResults = new ArrayList<>(eventSearchEntities.size());
-        for (EventSearchEntity eventSearchEntity : eventSearchEntities) {
-            eventSearchResults.add(transform(eventSearchEntity));
+        for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
+            eventSearchResults.add(transform(streamSearchEntity));
         }
         return eventSearchResults;
     }
 
-    public EventSearchEntity transform(EventSearchResult eventSearchResult) {
+    public StreamSearchEntity transform(EventSearchResult eventSearchResult) {
         Event event = eventSearchResult.getEvent();
 
-        EventSearchEntity eventSearchEntity = new EventSearchEntity();
-        eventEntityMapper.transformToTemplate(event, eventSearchEntity);
+        StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
+        eventEntityMapper.transformToTemplate(event, streamSearchEntity);
 
-        eventSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
+        streamSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
 
-        eventSearchEntity.setBirth(new Date());
-        eventSearchEntity.setModified(new Date());
+        streamSearchEntity.setBirth(new Date());
+        streamSearchEntity.setModified(new Date());
 
-        return eventSearchEntity;
+        return streamSearchEntity;
     }
 
-    public List<EventSearchEntity> transform(List<EventSearchResult> eventSearchResults) {
-        List<EventSearchEntity> entities = new ArrayList<>(eventSearchResults.size());
+    public List<StreamSearchEntity> transform(List<EventSearchResult> eventSearchResults) {
+        List<StreamSearchEntity> entities = new ArrayList<>(eventSearchResults.size());
         for (EventSearchResult eventSearchResult : eventSearchResults) {
             entities.add(transform(eventSearchResult));
         }

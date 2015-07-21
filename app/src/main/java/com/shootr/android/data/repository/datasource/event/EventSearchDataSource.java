@@ -1,15 +1,15 @@
 package com.shootr.android.data.repository.datasource.event;
 
-import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.StreamSearchEntity;
 import java.util.List;
 
 public interface EventSearchDataSource {
 
-    List<EventSearchEntity> getDefaultEvents(String locale);
+    List<StreamSearchEntity> getDefaultEvents(String locale);
 
-    void putDefaultEvents(List<EventSearchEntity> transform);
+    void putDefaultEvents(List<StreamSearchEntity> transform);
 
     void deleteDefaultEvents();
 
-    EventSearchEntity getEventResult(String idEvent);
+    StreamSearchEntity getEventResult(String idEvent);
 }

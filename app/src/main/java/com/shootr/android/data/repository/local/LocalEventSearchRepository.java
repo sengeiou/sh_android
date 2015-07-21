@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.local;
 
-import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.data.entity.EventSearchEntity;
+import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.mapper.EventSearchEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
@@ -35,7 +35,7 @@ public class LocalEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getDefaultEvents(String locale) {
-        List<EventSearchEntity> defaultEvents = localEventSearchDataSource.getDefaultEvents(locale);
+        List<StreamSearchEntity> defaultEvents = localEventSearchDataSource.getDefaultEvents(locale);
         return eventSearchEntityMapper.transformToDomain(defaultEvents);
     }
 
@@ -52,17 +52,17 @@ public class LocalEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEventsListing(String listingIdUser) {
-        List<EventEntity> eventEntitiesListing = localStreamDataSource.getStreamsListing(listingIdUser);
+        List<StreamEntity> eventEntitiesListing = localStreamDataSource.getStreamsListing(listingIdUser);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
     }
 
 
-    private List<EventSearchResult> transformEventEntitiesWithWatchers(List<EventEntity> eventEntities,
+    private List<EventSearchResult> transformEventEntitiesWithWatchers(List<StreamEntity> eventEntities,
       Map<String, Integer> watchers) {
         List<EventSearchResult> results = new ArrayList<>(eventEntities.size());
-        for (EventEntity eventEntity : eventEntities) {
-            Event event = eventEntityMapper.transform(eventEntity);
+        for (StreamEntity streamEntity : eventEntities) {
+            Event event = eventEntityMapper.transform(streamEntity);
             Integer eventWatchers = watchers.get(event.getId());
             EventSearchResult eventSearchResult =
               new EventSearchResult(event, eventWatchers != null ? eventWatchers : 0);

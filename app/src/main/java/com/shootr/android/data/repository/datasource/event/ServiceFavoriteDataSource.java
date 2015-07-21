@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.datasource.event;
 import com.shootr.android.data.api.entity.FavoriteApiEntity;
 import com.shootr.android.data.api.entity.mapper.FavoriteApiEntityMapper;
 import com.shootr.android.data.api.service.FavoriteApiService;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.FavoriteEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.Local;
@@ -73,7 +73,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
 
     private void storeEmbedEvents(List<FavoriteApiEntity> favorites) {
         for (FavoriteApiEntity favorite : favorites) {
-            EventEntity event = favorite.getEvent();
+            StreamEntity event = favorite.getEvent();
             localStreamDataSource.putStream(event);
         }
     }

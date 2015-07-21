@@ -1,6 +1,6 @@
 package com.shootr.android.data.mapper;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.domain.Event;
 import java.util.ArrayList;
@@ -12,36 +12,36 @@ public class EventEntityMapper {
     @Inject public EventEntityMapper() {
     }
 
-    public Event transform(EventEntity eventEntity) {
-        if (eventEntity == null) {
+    public Event transform(StreamEntity streamEntity) {
+        if (streamEntity == null) {
             return null;
         }
         Event event = new Event();
-        event.setId(eventEntity.getIdEvent());
-        event.setAuthorId(eventEntity.getIdUser());
-        event.setTitle(eventEntity.getTitle());
-        event.setPicture(eventEntity.getPhoto());
-        event.setTag(eventEntity.getTag());
-        event.setAuthorUsername(eventEntity.getUserName());
-        event.setLocale(eventEntity.getLocale());
+        event.setId(streamEntity.getIdEvent());
+        event.setAuthorId(streamEntity.getIdUser());
+        event.setTitle(streamEntity.getTitle());
+        event.setPicture(streamEntity.getPhoto());
+        event.setTag(streamEntity.getTag());
+        event.setAuthorUsername(streamEntity.getUserName());
+        event.setLocale(streamEntity.getLocale());
         return event;
     }
 
-    public List<Event> transform(List<EventEntity> eventEntities) {
+    public List<Event> transform(List<StreamEntity> eventEntities) {
         List<Event> events = new ArrayList<>(eventEntities.size());
-        for (EventEntity eventEntity : eventEntities) {
-            events.add(transform(eventEntity));
+        for (StreamEntity streamEntity : eventEntities) {
+            events.add(transform(streamEntity));
         }
         return events;
     }
 
-    public EventEntity transform(Event event) {
-        EventEntity eventEntity = new EventEntity();
-        transformToTemplate(event, eventEntity);
-        return eventEntity;
+    public StreamEntity transform(Event event) {
+        StreamEntity streamEntity = new StreamEntity();
+        transformToTemplate(event, streamEntity);
+        return streamEntity;
     }
 
-    protected void transformToTemplate(Event event, EventEntity entityTemplate) {
+    protected void transformToTemplate(Event event, StreamEntity entityTemplate) {
         entityTemplate.setIdEvent(event.getId());
         entityTemplate.setIdUser(event.getAuthorId());
         entityTemplate.setTitle(event.getTitle());

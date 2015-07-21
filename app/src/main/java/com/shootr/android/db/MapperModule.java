@@ -3,7 +3,7 @@ package com.shootr.android.db;
 import com.shootr.android.data.mapper.DatabaseUserAvatarUrlProvider;
 import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.EventEntityMapper;
+import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
@@ -42,8 +42,8 @@ public class MapperModule {
         return new UserMapper();
     }
 
-    @Provides EventEntityMapper provideEntityMapper() {
-        return new EventEntityMapper();
+    @Provides StreamEntityMapper provideEntityMapper() {
+        return new StreamEntityMapper();
     }
 
     @Provides UserAvatarUrlProvider provideUserAvatarUrlProvider(DatabaseUserAvatarUrlProvider userAvatarUrlProvider) {

@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.datasource.event;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.EventApiService;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
@@ -22,7 +22,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         this.eventService = eventService;
     }
 
-    @Override public EventEntity getStreamById(String idStream) {
+    @Override public StreamEntity getStreamById(String idStream) {
         try {
             return service.getStreamById(idStream);
         } catch (IOException e) {
@@ -30,7 +30,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public List<EventEntity> getStreamByIds(List<String> streamIds) {
+    @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
         try {
             return service.getStreamsByIds(streamIds);
         } catch (IOException e) {
@@ -38,7 +38,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public EventEntity putStream(EventEntity streamEntity) {
+    @Override public StreamEntity putStream(StreamEntity streamEntity) {
         try {
             return service.saveStream(streamEntity);
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public List<EventEntity> putStreams(List<EventEntity> streams) {
+    @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {
         throw new RuntimeException("Method not implemented yet!");
     }
 
@@ -58,7 +58,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public List<EventEntity> getStreamsListing(String idUser) {
+    @Override public List<StreamEntity> getStreamsListing(String idUser) {
         try {
             return eventService.getEventListing(idUser, MAX_NUMBER_OF_LISTING_EVENTS);
         } catch (IOException e) {
