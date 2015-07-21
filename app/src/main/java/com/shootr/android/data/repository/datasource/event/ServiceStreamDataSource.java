@@ -24,7 +24,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public EventEntity getStreamById(String idStream) {
         try {
-            return service.getEventById(idStream);
+            return service.getStreamById(idStream);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -32,7 +32,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public List<EventEntity> getStreamByIds(List<String> streamIds) {
         try {
-            return service.getEventsByIds(streamIds);
+            return service.getStreamsByIds(streamIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -40,7 +40,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public EventEntity putStream(EventEntity streamEntity) {
         try {
-            return service.saveEvent(streamEntity);
+            return service.saveStream(streamEntity);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

@@ -17,7 +17,7 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 
-public class EventDtoFactory {
+public class StreamDtoFactory {
 
     private static final String ALIAS_GET_EVENTS_FROM_WATCH_FOLLOWING = "GET_EVENTS_FROM_WATCH_FOLLOWING";
     private static final String ALIAS_GET_EVENT_BY_ID_EVENT = "GET_EVENT_BY_ID_EVENT";
@@ -28,14 +28,14 @@ public class EventDtoFactory {
     private UtilityDtoFactory utilityDtoFactory;
     private EventEntityMapper eventEntityMapper;
 
-    @Inject public EventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper) {
+    @Inject public StreamDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.eventEntityMapper = eventEntityMapper;
     }
 
-    public GenericDto getEventsNotEndedByIds(List<String> eventsIds) {
+    public GenericDto getStreamsNotEndedByIds(List<String> streamsIds) {
         FilterDto eventsWatchFollowingFilter = and(orIsNotDeleted(),
-          or(DatabaseContract.EventTable.ID_EVENT).isIn(eventsIds)).build();
+          or(DatabaseContract.EventTable.ID_EVENT).isIn(streamsIds)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(DatabaseContract.EventTable.TABLE)
@@ -49,7 +49,7 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENTS_FROM_WATCH_FOLLOWING, op);
     }
 
-    public GenericDto saveEvent(EventEntity eventEntity) {
+    public GenericDto saveStream(EventEntity eventEntity) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
           .putKey(DatabaseContract.EventTable.ID_EVENT, eventEntity.getIdEvent())
           .entity(DatabaseContract.EventTable.TABLE)
@@ -60,18 +60,17 @@ public class EventDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_EVENT, op);
     }
 
-    public GenericDto getEventById(String idEvent) {
+    public GenericDto getStreamById(String idStream) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(DatabaseContract.EventTable.TABLE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, idEvent)
+          .putKey(DatabaseContract.EventTable.ID_EVENT, idStream)
           .items(1)
           .build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(eventEntityMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_EVENT_BY_ID_EVENT, op);
     }
 
-    public GenericDto getSearchEventDto(String query, Map<String, Integer> eventsWatchesCounts,
-                                        String locale) {
+    public GenericDto getSearchStreamDto(String query, Map<String, Integer> eventsWatchesCounts, String locale) {
         MetadataDto md = new MetadataDto.Builder().items(50)
           .operation(Constants.OPERATION_RETRIEVE)
           .entity("SearchEventMongo")

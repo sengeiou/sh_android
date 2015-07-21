@@ -20,7 +20,7 @@ import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
-import com.shootr.android.service.dataservice.dto.EventDtoFactory;
+import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -52,7 +52,7 @@ public class ShootrDataService implements ShootrService {
 
     private final UserDtoFactory userDtoFactory;
     private final ShotDtoFactory shotDtoFactory;
-    private final EventDtoFactory eventDtoFactory;
+    private final StreamDtoFactory streamDtoFactory;
     private final DeviceDtoFactory deviceDtoFactory;
 
     private final UserMapper userMapper;
@@ -74,7 +74,7 @@ public class ShootrDataService implements ShootrService {
       UserMapper userMapper,
       FollowMapper followMapper,
       ShotEntityMapper shotEntityMapper,
-      EventDtoFactory eventDtoFactory,
+      StreamDtoFactory streamDtoFactory,
       DeviceMapper deviceMapper,
       EventEntityMapper eventEntityMapper,
       TimeUtils timeUtils,
@@ -82,7 +82,7 @@ public class ShootrDataService implements ShootrService {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
-        this.eventDtoFactory = eventDtoFactory;
+        this.streamDtoFactory = streamDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
         this.deviceDtoFactory = deviceDtoFactory;
@@ -271,8 +271,8 @@ public class ShootrDataService implements ShootrService {
         return followReceived;
     }
 
-    @Override public EventEntity saveEvent(EventEntity eventEntity) throws IOException {
-        GenericDto requestDto = eventDtoFactory.saveEvent(eventEntity);
+    @Override public EventEntity saveStream(EventEntity eventEntity) throws IOException {
+        GenericDto requestDto = streamDtoFactory.saveStream(eventEntity);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -286,9 +286,9 @@ public class ShootrDataService implements ShootrService {
         return eventsReceived;
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException {
+    @Override public List<EventEntity> getStreamsByIds(List<String> eventIds) throws IOException {
         List<EventEntity> eventsReceived = new ArrayList<>();
-        GenericDto requestDto = eventDtoFactory.getEventsNotEndedByIds(eventIds);
+        GenericDto requestDto = streamDtoFactory.getStreamsNotEndedByIds(eventIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -304,8 +304,8 @@ public class ShootrDataService implements ShootrService {
         return eventsReceived;
     }
 
-    @Override public EventEntity getEventById(String idEvent) throws IOException {
-        GenericDto requestDto = eventDtoFactory.getEventById(idEvent);
+    @Override public EventEntity getStreamById(String idEvent) throws IOException {
+        GenericDto requestDto = streamDtoFactory.getStreamById(idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -355,7 +355,7 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
+    @Override public Integer getStreamMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
         Integer numberOfMedia = 0;
         GenericDto requestDto = shotDtoFactory.getMediaShotsCountByEvent(idEvent, idUsers);
         GenericDto responseDto = postRequest(requestDto);
@@ -369,7 +369,7 @@ public class ShootrDataService implements ShootrService {
         return numberOfMedia;
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) throws IOException {
+    @Override public List<ShotEntity> getStreamMediaShots(String idEvent, List<String> userIds) throws IOException {
         List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
         GenericDto requestDto = shotDtoFactory.getMediaShotsByEvent(idEvent, userIds);
         GenericDto responseDto = postRequest(requestDto);
@@ -389,7 +389,7 @@ public class ShootrDataService implements ShootrService {
 
     @Override public Integer getListingCount(String idUser) throws IOException {
         Integer numberOfEvents = 0;
-        GenericDto requestDto = eventDtoFactory.getListingCount(idUser);
+        GenericDto requestDto = streamDtoFactory.getListingCount(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

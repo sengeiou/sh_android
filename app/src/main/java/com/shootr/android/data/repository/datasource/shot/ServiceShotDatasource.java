@@ -75,7 +75,7 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
         try {
-            return shootrService.getEventMediaShotsCount(idEvent, idUsers);
+            return shootrService.getStreamMediaShotsCount(idEvent, idUsers);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -83,7 +83,7 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
         try {
-            return shootrService.getEventMediaShots(idEvent, userIds);
+            return shootrService.getStreamMediaShots(idEvent, userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

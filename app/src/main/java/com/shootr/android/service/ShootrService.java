@@ -33,11 +33,11 @@ public interface ShootrService {
 
     FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    EventEntity saveEvent(EventEntity eventEntity) throws IOException;
+    EventEntity saveStream(EventEntity eventEntity) throws IOException;
 
-    List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException;
+    List<EventEntity> getStreamsByIds(List<String> eventIds) throws IOException;
 
-    EventEntity getEventById(String idEvent) throws IOException;
+    EventEntity getStreamById(String idEvent) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
@@ -45,9 +45,9 @@ public interface ShootrService {
 
     UserEntity getUserByUsername(String username) throws IOException;
 
-    Integer getEventMediaShotsCount(String idEvent, List<String> idUser) throws IOException;
+    Integer getStreamMediaShotsCount(String idEvent, List<String> idUser) throws IOException;
 
-    List<ShotEntity> getEventMediaShots(String idEvent, List<String> userId) throws IOException;
+    List<ShotEntity> getStreamMediaShots(String idEvent, List<String> userId) throws IOException;
 
     Integer getListingCount(String idUser) throws IOException;
 
