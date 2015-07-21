@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
-import com.shootr.android.data.api.service.EventApiService;
+import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -66,9 +66,8 @@ public final class ApiModule {
         return restAdapter.create(ResetPasswordApiService.class);
     }
 
-    @Provides
-    EventApiService provideEventApiService(RestAdapter restAdapter) {
-        return restAdapter.create(EventApiService.class);
+    @Provides StreamApiService provideEventApiService(RestAdapter restAdapter) {
+        return restAdapter.create(StreamApiService.class);
     }
 
     @Provides

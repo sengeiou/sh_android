@@ -4,10 +4,10 @@ import com.shootr.android.data.repository.MemoryEventListSynchronizationReposito
 import com.shootr.android.data.repository.datasource.event.DatabaseStreamDataSource;
 import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
-import com.shootr.android.data.repository.datasource.event.EventListDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamListDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceStreamDataSource;
-import com.shootr.android.data.repository.datasource.event.ServiceEventListDataSource;
+import com.shootr.android.data.repository.datasource.event.ServiceStreamListDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceEventSearchDataSource;
 import com.shootr.android.data.repository.local.LocalStreamRepository;
 import com.shootr.android.data.repository.local.LocalEventSearchRepository;
@@ -58,7 +58,8 @@ public class EventRepositoryModule {
         return eventSearchRepository;
     }
 
-    @Provides @Remote EventListDataSource provideRemoteEventListDataSource(ServiceEventListDataSource serviceEventListDataSource) {
+    @Provides @Remote
+    StreamListDataSource provideRemoteEventListDataSource(ServiceStreamListDataSource serviceEventListDataSource) {
         return serviceEventListDataSource;
     }
 

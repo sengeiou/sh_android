@@ -5,7 +5,7 @@ import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
-import com.shootr.android.data.repository.datasource.event.EventListDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamListDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.EventSearchRepository;
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 public class RemoteEventSearchRepository implements EventSearchRepository {
 
     @Deprecated private final DatabaseMemoryEventSearchDataSource localEventSearchDataSource;
-    private final EventListDataSource remoteEventListDataSource;
+    private final StreamListDataSource remoteStreamListDataSource;
     private final WatchersRepository localWatchersRepository;
     private final EventEntityMapper eventEntityMapper;
     private final SessionRepository sessionRepository;
@@ -29,12 +29,12 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     private final StreamDataSource remoteStreamDataSource;
 
     @Inject public RemoteEventSearchRepository(DatabaseMemoryEventSearchDataSource localEventSearchDataSource,
-      @Remote EventListDataSource remoteEventListDataSource, @Local WatchersRepository localWatchersRepository,
+      @Remote StreamListDataSource remoteStreamListDataSource, @Local WatchersRepository localWatchersRepository,
       EventEntityMapper eventEntityMapper, SessionRepository sessionRepository, @Local
     StreamDataSource localStreamDataSource,
       @Remote StreamDataSource remoteStreamDataSource) {
         this.localEventSearchDataSource = localEventSearchDataSource;
-        this.remoteEventListDataSource = remoteEventListDataSource;
+        this.remoteStreamListDataSource = remoteStreamListDataSource;
         this.localWatchersRepository = localWatchersRepository;
         this.eventEntityMapper = eventEntityMapper;
         this.sessionRepository = sessionRepository;
@@ -43,7 +43,7 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getDefaultEvents(String locale) {
-        List<StreamEntity> streamEntityList = remoteEventListDataSource.getEventList(locale);
+        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(streamEntityList, watchers);
     }
@@ -93,7 +93,7 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEvents(String query, String locale) {
-        List<StreamEntity> streamEntityList = remoteEventListDataSource.getEvents(query, locale);
+        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
 
         localEventSearchDataSource.setLastSearchResults(transformEventEntitiesInEventSearchEntities(streamEntityList,
