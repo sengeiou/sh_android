@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.sync;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.Local;
 import java.util.Date;
@@ -14,16 +14,16 @@ import javax.inject.Singleton;
 public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, EventEntity> {
 
     private EventEntityMapper eventEntityMapper;
-    private EventDataSource localEventDataSource;
+    private StreamDataSource localStreamDataSource;
 
     @Inject public SyncableEventEntityFactory(EventEntityMapper eventEntityMapper,
-      @Local EventDataSource localEventDataSource) {
+      @Local StreamDataSource localStreamDataSource) {
         this.eventEntityMapper = eventEntityMapper;
-        this.localEventDataSource = localEventDataSource;
+        this.localStreamDataSource = localStreamDataSource;
     }
 
     @Override protected EventEntity currentEntity(Event event) {
-        return localEventDataSource.getEventById(event.getId());
+        return localStreamDataSource.getStreamById(event.getId());
     }
 
     @Override protected EventEntity updateValues(EventEntity currentEntity, Event event) {

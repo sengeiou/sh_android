@@ -17,17 +17,17 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     private final FavoriteApiService favoriteApiService;
     private final SessionRepository sessionRepository;
     private final FavoriteApiEntityMapper favoriteApiEntityMapper;
-    private final EventDataSource localEventDataSource;
+    private final StreamDataSource localStreamDataSource;
 
     @Inject
     public ServiceFavoriteDataSource(FavoriteApiService favoriteApiService,
       SessionRepository sessionRepository,
       FavoriteApiEntityMapper favoriteApiEntityMapper,
-      @Local EventDataSource localEventDataSource) {
+      @Local StreamDataSource localStreamDataSource) {
         this.favoriteApiService = favoriteApiService;
         this.sessionRepository = sessionRepository;
         this.favoriteApiEntityMapper = favoriteApiEntityMapper;
-        this.localEventDataSource = localEventDataSource;
+        this.localStreamDataSource = localStreamDataSource;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     private void storeEmbedEvents(List<FavoriteApiEntity> favorites) {
         for (FavoriteApiEntity favorite : favorites) {
             EventEntity event = favorite.getEvent();
-            localEventDataSource.putEvent(event);
+            localStreamDataSource.putStream(event);
         }
     }
 

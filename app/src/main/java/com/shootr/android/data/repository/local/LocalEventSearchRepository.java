@@ -4,7 +4,7 @@ import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.mapper.EventSearchEntityMapper;
-import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
@@ -20,16 +20,16 @@ public class LocalEventSearchRepository implements EventSearchRepository {
 
     private final EventSearchDataSource localEventSearchDataSource;
     private final EventSearchEntityMapper eventSearchEntityMapper;
-    private final EventDataSource localEventDataSource;
+    private final StreamDataSource localStreamDataSource;
     private final WatchersRepository localWatchersRepository;
     private final EventEntityMapper eventEntityMapper;
 
     @Inject public LocalEventSearchRepository(@Local EventSearchDataSource localEventSearchDataSource,
-      EventSearchEntityMapper eventSearchEntityMapper, @Local EventDataSource localEventDataSource,
+      EventSearchEntityMapper eventSearchEntityMapper, @Local StreamDataSource localStreamDataSource,
       @Local WatchersRepository localWatchersRepository, EventEntityMapper eventEntityMapper) {
         this.localEventSearchDataSource = localEventSearchDataSource;
         this.eventSearchEntityMapper = eventSearchEntityMapper;
-        this.localEventDataSource = localEventDataSource;
+        this.localStreamDataSource = localStreamDataSource;
         this.localWatchersRepository = localWatchersRepository;
         this.eventEntityMapper = eventEntityMapper;
     }
@@ -52,7 +52,7 @@ public class LocalEventSearchRepository implements EventSearchRepository {
     }
 
     @Override public List<EventSearchResult> getEventsListing(String listingIdUser) {
-        List<EventEntity> eventEntitiesListing = localEventDataSource.getEventsListing(listingIdUser);
+        List<EventEntity> eventEntitiesListing = localStreamDataSource.getStreamsListing(listingIdUser);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
     }

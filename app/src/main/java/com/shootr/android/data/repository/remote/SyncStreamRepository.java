@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Event;
@@ -17,24 +17,24 @@ import javax.inject.Inject;
 public class SyncStreamRepository implements StreamRepository, SyncableRepository {
 
     private final EventEntityMapper eventEntityMapper;
-    private final EventDataSource localEventDataSource;
-    private final EventDataSource remoteEventDataSource;
+    private final StreamDataSource localStreamDataSource;
+    private final StreamDataSource remoteStreamDataSource;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
     @Inject public SyncStreamRepository(EventEntityMapper eventEntityMapper,
-      @Local EventDataSource localEventDataSource, @Remote EventDataSource remoteEventDataSource,
+      @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource,
       SyncableEventEntityFactory syncableEventEntityFactory) {
-        this.localEventDataSource = localEventDataSource;
-        this.remoteEventDataSource = remoteEventDataSource;
+        this.localStreamDataSource = localStreamDataSource;
+        this.remoteStreamDataSource = remoteStreamDataSource;
         this.eventEntityMapper = eventEntityMapper;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
     @Override public Event getStreamById(String idStream) {
-        EventEntity eventEntity = remoteEventDataSource.getEventById(idStream);
+        EventEntity eventEntity = remoteStreamDataSource.getStreamById(idStream);
         if (eventEntity != null) {
             markEntityAsSynchronized(eventEntity);
-            localEventDataSource.putEvent(eventEntity);
+            localStreamDataSource.putStream(eventEntity);
             return eventEntityMapper.transform(eventEntity);
         } else {
             return null;
@@ -42,9 +42,9 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override public List<Event> getStreamsByIds(List<String> streamIds) {
-        List<EventEntity> remoteEvents = remoteEventDataSource.getEventsByIds(streamIds);
+        List<EventEntity> remoteEvents = remoteStreamDataSource.getStreamByIds(streamIds);
         markEntitiesAsSynchronized(remoteEvents);
-        localEventDataSource.putEvents(remoteEvents);
+        localStreamDataSource.putStreams(remoteEvents);
         return eventEntityMapper.transform(remoteEvents);
     }
 
@@ -56,19 +56,19 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         EventEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(event);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
-        EventEntity remoteEventEntity = remoteEventDataSource.putEvent(currentOrNewEntity);
+        EventEntity remoteEventEntity = remoteStreamDataSource.putStream(currentOrNewEntity);
         markEntityAsSynchronized(remoteEventEntity);
-        localEventDataSource.putEvent(remoteEventEntity);
+        localStreamDataSource.putStream(remoteEventEntity);
         return eventEntityMapper.transform(remoteEventEntity);
     }
 
     @Override public Integer getListingCount(String idUser) {
-        return remoteEventDataSource.getListingCount(idUser);
+        return remoteStreamDataSource.getListingCount(idUser);
     }
 
     @Override
     public void deleteStream(String idEvent) throws DeleteEventNotAllowedException {
-        remoteEventDataSource.deleteEvent(idEvent);
+        remoteStreamDataSource.deleteStream(idEvent);
     }
 
     private void markEntitiesAsSynchronized(List<EventEntity> remoteEvents) {

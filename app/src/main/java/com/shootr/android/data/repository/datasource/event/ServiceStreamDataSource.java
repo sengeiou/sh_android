@@ -11,42 +11,42 @@ import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ServiceEventDataSource implements EventDataSource {
+public class ServiceStreamDataSource implements StreamDataSource {
 
     public static final int MAX_NUMBER_OF_LISTING_EVENTS = 100;
     private final ShootrService service;
     private final EventApiService eventService;
 
-    @Inject public ServiceEventDataSource(ShootrService service, EventApiService eventService) {
+    @Inject public ServiceStreamDataSource(ShootrService service, EventApiService eventService) {
         this.service = service;
         this.eventService = eventService;
     }
 
-    @Override public EventEntity getEventById(String idEvent) {
+    @Override public EventEntity getStreamById(String idStream) {
         try {
-            return service.getEventById(idEvent);
+            return service.getEventById(idStream);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) {
+    @Override public List<EventEntity> getStreamByIds(List<String> streamIds) {
         try {
-            return service.getEventsByIds(eventIds);
+            return service.getEventsByIds(streamIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public EventEntity putEvent(EventEntity eventEntity) {
+    @Override public EventEntity putStream(EventEntity streamEntity) {
         try {
-            return service.saveEvent(eventEntity);
+            return service.saveEvent(streamEntity);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<EventEntity> putEvents(List<EventEntity> events) {
+    @Override public List<EventEntity> putStreams(List<EventEntity> streams) {
         throw new RuntimeException("Method not implemented yet!");
     }
 
@@ -58,7 +58,7 @@ public class ServiceEventDataSource implements EventDataSource {
         }
     }
 
-    @Override public List<EventEntity> getEventsListing(String idUser) {
+    @Override public List<EventEntity> getStreamsListing(String idUser) {
         try {
             return eventService.getEventListing(idUser, MAX_NUMBER_OF_LISTING_EVENTS);
         } catch (IOException e) {
@@ -67,9 +67,9 @@ public class ServiceEventDataSource implements EventDataSource {
     }
 
     @Override
-    public void deleteEvent(String idEvent) throws DeleteEventNotAllowedException {
+    public void deleteStream(String idStream) throws DeleteEventNotAllowedException {
         try {
-            eventService.deleteEvent(idEvent);
+            eventService.deleteEvent(idStream);
         } catch (ApiException apiError) {
             if (apiError.getErrorInfo() == ErrorInfo.EventHasWatchersException) {
                 throw new DeleteEventNotAllowedException();
