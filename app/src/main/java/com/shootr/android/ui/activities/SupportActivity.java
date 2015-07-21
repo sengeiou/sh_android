@@ -14,7 +14,11 @@ import java.util.List;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity {
 
-    private static List<String> SUPPORT_LIST = Arrays.asList("FAQ", "Privacy Policy", "Terms of Service", "Version");
+    public static final String FAQ = "FAQ";
+    public static final String PRIVACY_POLICY = "Privacy Policy";
+    public static final String TERMS_OF_SERVICE = "Terms of Service";
+    public static final String VERSION = "Version";
+    private static List<String> SUPPORT_LIST = Arrays.asList(FAQ, PRIVACY_POLICY, TERMS_OF_SERVICE, VERSION);
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
