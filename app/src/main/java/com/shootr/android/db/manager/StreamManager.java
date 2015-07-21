@@ -13,20 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventManager extends AbstractManager{
+public class StreamManager extends AbstractManager{
 
     private final EventEntityMapper eventEntityMapper;
     private final TimeUtils timeUtils;
 
-    @Inject public EventManager(SQLiteOpenHelper openHelper, EventEntityMapper eventEntityMapper, TimeUtils timeUtils){
+    @Inject public StreamManager(SQLiteOpenHelper openHelper, EventEntityMapper eventEntityMapper, TimeUtils timeUtils){
         super(openHelper);
         this.eventEntityMapper = eventEntityMapper;
         this.timeUtils = timeUtils;
     }
 
-    public EventEntity getEventById(String eventid) {
+    public EventEntity getStreamById(String streamId) {
         String whereSelection = DatabaseContract.EventTable.ID_EVENT + " = ?";
-        String[] whereArguments = new String[] { String.valueOf(eventid) };
+        String[] whereArguments = new String[] { String.valueOf(streamId) };
 
         Cursor queryResult =
           getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null,
@@ -41,15 +41,15 @@ public class EventManager extends AbstractManager{
         return eventEntity;
     }
 
-    public List<EventEntity> getEventsByIds(List<String> eventIds) {
-        if (eventIds.isEmpty()) {
+    public List<EventEntity> getStreamsByIds(List<String> streamIds) {
+        if (streamIds.isEmpty()) {
             return new ArrayList<>();
         }
         String whereSelection = DatabaseContract.EventTable.ID_EVENT
-          + " IN (" + createListPlaceholders(eventIds.size())+")";
-        String[] whereArguments = new String[eventIds.size()];
-        for (int i = 0; i < eventIds.size(); i++) {
-            whereArguments[i] = eventIds.get(i);
+          + " IN (" + createListPlaceholders(streamIds.size())+")";
+        String[] whereArguments = new String[streamIds.size()];
+        for (int i = 0; i < streamIds.size(); i++) {
+            whereArguments[i] = streamIds.get(i);
         }
 
         Cursor queryResult =
@@ -67,11 +67,11 @@ public class EventManager extends AbstractManager{
         return resultEvents;
     }
 
-    public void saveEvents(List<EventEntity> eventEntities) {
+    public void saveStreams(List<EventEntity> eventEntities) {
         SQLiteDatabase database = getWritableDatabase();
         for (EventEntity eventEntity : eventEntities) {
             if (eventEntity.getDeleted() != null) {
-                deleteEvent(eventEntity);
+                deleteStream(eventEntity);
             } else {
                 ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
                 database.insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -79,9 +79,9 @@ public class EventManager extends AbstractManager{
         }
     }
 
-    public void saveEvent(EventEntity eventEntity) {
+    public void saveStream(EventEntity eventEntity) {
         if (eventEntity.getDeleted() != null) {
-            deleteEvent(eventEntity);
+            deleteStream(eventEntity);
         } else {
             ContentValues contentValues = eventEntityMapper.toContentValues(eventEntity);
             getWritableDatabase().insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -89,12 +89,12 @@ public class EventManager extends AbstractManager{
         insertInSync();
     }
 
-    public long deleteEvent(EventEntity eventEntity){
+    public long deleteStream(EventEntity eventEntity){
         String idEvent = eventEntity.getIdEvent();
-        return deleteEvent(idEvent);
+        return deleteStream(idEvent);
     }
 
-    public long deleteEvent(String idEvent) {
+    public long deleteStream(String idEvent) {
         long res = 0;
         String args = DatabaseContract.EventTable.ID_EVENT + "=?";
         String[] stringArgs = new String[]{String.valueOf(idEvent)};
@@ -116,7 +116,7 @@ public class EventManager extends AbstractManager{
         insertInTableSync(DatabaseContract.EventTable.TABLE, 10, 1000, 0);
     }
 
-    public List<EventSearchEntity> getDefaultEventSearch() {
+    public List<EventSearchEntity> getDefaultStreamSearch() {
         List<EventSearchEntity> eventSearchEntities = new ArrayList<>();
 
         Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
@@ -136,9 +136,9 @@ public class EventManager extends AbstractManager{
         return eventSearchEntities;
     }
 
-    public EventSearchEntity getEventSearchResultById(String idEvent) {
+    public EventSearchEntity getStreamSearchResultById(String idStream) {
         String whereClause = DatabaseContract.EventSearchTable.ID_EVENT + "=?";
-        String[] whereArguments = new String[] { String.valueOf(idEvent) };
+        String[] whereArguments = new String[] { String.valueOf(idStream) };
 
         Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
           DatabaseContract.EventSearchTable.PROJECTION,
@@ -157,7 +157,7 @@ public class EventManager extends AbstractManager{
         }
     }
 
-    public void putDefaultEventSearch(List<EventSearchEntity> eventSearchEntities) {
+    public void putDefaultStreamSearch(List<EventSearchEntity> eventSearchEntities) {
         SQLiteDatabase database = getWritableDatabase();
         try{
             database.beginTransaction();
@@ -174,7 +174,7 @@ public class EventManager extends AbstractManager{
 
     }
 
-    public void deleteDefaultEventSearch() {
+    public void deleteDefaultStreamSearch() {
         getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
     }
 
@@ -191,7 +191,7 @@ public class EventManager extends AbstractManager{
         return listingCount;
     }
 
-    public List<EventEntity> getEventsListing(String idUser) {
+    public List<EventEntity> getStreamsListing(String idUser) {
         String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
         String[] whereArguments = new String[] { idUser };
 

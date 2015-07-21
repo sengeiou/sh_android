@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.datasource.event;
 import android.support.v4.util.ArrayMap;
 import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.db.manager.EventManager;
+import com.shootr.android.db.manager.StreamManager;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -16,17 +16,17 @@ import javax.inject.Singleton;
 @Singleton
 public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSource {
 
-    private final EventManager eventManager;
+    private final StreamManager streamManager;
     private final Map<String, EventSearchEntity> lastEventSearchResults;
     private final SessionRepository sessionRepository;
     private final FollowManager followManager;
     private final UserManager userManager;
 
-    @Inject public DatabaseMemoryEventSearchDataSource(EventManager eventManager,
+    @Inject public DatabaseMemoryEventSearchDataSource(StreamManager streamManager,
                                                        SessionRepository sessionRepository,
                                                        FollowManager followManager,
                                                        UserManager userManager) {
-        this.eventManager = eventManager;
+        this.streamManager = streamManager;
         this.sessionRepository = sessionRepository;
         this.followManager = followManager;
         this.userManager = userManager;
@@ -42,7 +42,7 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
 
     @Override public List<EventSearchEntity> getDefaultEvents(String locale) {
         Map<String, Integer> watchersCountByEvents = getWatchersCountByEvents();
-        List<EventSearchEntity> defaultEventSearch = eventManager.getDefaultEventSearch();
+        List<EventSearchEntity> defaultEventSearch = streamManager.getDefaultStreamSearch();
         List<EventSearchEntity> eventSearchEntitiesWithUpdatedWatchNumber =
           updateWatchNumberInEvents(watchersCountByEvents, defaultEventSearch);
         return eventSearchEntitiesWithUpdatedWatchNumber;
@@ -60,15 +60,15 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
     }
 
     @Override public void putDefaultEvents(List<EventSearchEntity> eventSearchEntities) {
-        eventManager.putDefaultEventSearch(eventSearchEntities);
+        streamManager.putDefaultStreamSearch(eventSearchEntities);
     }
 
     @Override public void deleteDefaultEvents() {
-        eventManager.deleteDefaultEventSearch();
+        streamManager.deleteDefaultStreamSearch();
     }
 
     @Override public EventSearchEntity getEventResult(String idEvent) {
-        EventSearchEntity eventFromDefaultList = eventManager.getEventSearchResultById(idEvent);
+        EventSearchEntity eventFromDefaultList = streamManager.getStreamSearchResultById(idEvent);
         if (eventFromDefaultList != null) {
             return eventFromDefaultList;
         } else {
