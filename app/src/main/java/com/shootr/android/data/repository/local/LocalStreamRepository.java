@@ -1,9 +1,9 @@
 package com.shootr.android.data.repository.local;
 
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.data.mapper.EventEntityMapper;
+import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
-import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.repository.StreamRepository;
@@ -14,14 +14,14 @@ import javax.inject.Inject;
 public class LocalStreamRepository implements StreamRepository {
 
     private final StreamDataSource localStreamDataSource;
-    private final EventSearchDataSource localEventSearchDataSource;
-    private final EventEntityMapper eventEntityMapper;
+    private final StreamSearchDataSource localStreamSearchDataSource;
+    private final StreamEntityMapper streamEntityMapper;
 
     @Inject public LocalStreamRepository(@Local StreamDataSource localStreamDataSource,
-      @Local EventSearchDataSource localEventSearchDataSource, EventEntityMapper eventEntityMapper) {
+      @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper) {
         this.localStreamDataSource = localStreamDataSource;
-        this.localEventSearchDataSource = localEventSearchDataSource;
-        this.eventEntityMapper = eventEntityMapper;
+        this.localStreamSearchDataSource = localStreamSearchDataSource;
+        this.streamEntityMapper = streamEntityMapper;
     }
 
     @Override public Event getStreamById(String idStream) {
@@ -29,11 +29,11 @@ public class LocalStreamRepository implements StreamRepository {
         if (streamEntity == null) {
             streamEntity = fallbackOnSearchResults(idStream);
         }
-        return eventEntityMapper.transform(streamEntity);
+        return streamEntityMapper.transform(streamEntity);
     }
 
     private StreamEntity fallbackOnSearchResults(String idEvent) {
-        StreamEntity streamEntity = localEventSearchDataSource.getEventResult(idEvent);
+        StreamEntity streamEntity = localStreamSearchDataSource.getStreamResult(idEvent);
         if (streamEntity != null) {
             localStreamDataSource.putStream(streamEntity);
         }
@@ -42,11 +42,11 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public List<Event> getStreamsByIds(List<String> streamIds) {
         List<StreamEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds);
-        return eventEntityMapper.transform(eventEntities);
+        return streamEntityMapper.transform(eventEntities);
     }
 
     @Override public Event putStream(Event event) {
-        StreamEntity streamEntity = eventEntityMapper.transform(event);
+        StreamEntity streamEntity = streamEntityMapper.transform(event);
         localStreamDataSource.putStream(streamEntity);
         return event;
     }

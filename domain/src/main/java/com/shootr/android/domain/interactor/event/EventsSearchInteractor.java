@@ -9,7 +9,7 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class EventsSearchInteractor implements Interactor {
 
     public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
-    private final EventSearchRepository eventSearchRepository;
+    private final StreamSearchRepository streamSearchRepository;
     private final PostExecutionThread postExecutionThread;
     private final LocaleProvider localeProvider;
 
@@ -29,10 +29,11 @@ public class EventsSearchInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public EventsSearchInteractor(InteractorHandler interactorHandler, @Remote EventSearchRepository eventSearchRepository,
+    public EventsSearchInteractor(InteractorHandler interactorHandler, @Remote
+    StreamSearchRepository streamSearchRepository,
       PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
-        this.eventSearchRepository = eventSearchRepository;
+        this.streamSearchRepository = streamSearchRepository;
         this.postExecutionThread = postExecutionThread;
         this.localeProvider = localeProvider;
     }
@@ -68,7 +69,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void performSearch() {
-        List<EventSearchResult> events = eventSearchRepository.getEvents(query, localeProvider.getLocale());
+        List<EventSearchResult> events = streamSearchRepository.getStreams(query, localeProvider.getLocale());
         events = filterEventsNotMatchingQuery(events);
 
         EventSearchResultList eventSearchResultList = new EventSearchResultList(events);

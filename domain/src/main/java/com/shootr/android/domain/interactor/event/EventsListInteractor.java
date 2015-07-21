@@ -10,7 +10,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
 import com.shootr.android.domain.repository.StreamRepository;
-import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -27,8 +27,8 @@ public class EventsListInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventSearchRepository remoteEventSearchRepository;
-    private final EventSearchRepository localEventSearchRepository;
+    private final StreamSearchRepository remoteStreamSearchRepository;
+    private final StreamSearchRepository localStreamSearchRepository;
     private final EventListSynchronizationRepository eventListSynchronizationRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
@@ -43,8 +43,8 @@ public class EventsListInteractor implements Interactor {
     @Inject
     public EventsListInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      @Remote EventSearchRepository remoteEventSearchRepository,
-      @Local EventSearchRepository localEventSearchRepository,
+      @Remote StreamSearchRepository remoteStreamSearchRepository,
+      @Local StreamSearchRepository localStreamSearchRepository,
       EventListSynchronizationRepository eventListSynchronizationRepository,
       @Local StreamRepository localStreamRepository,
       @Local WatchersRepository watchersRepository,
@@ -54,8 +54,8 @@ public class EventsListInteractor implements Interactor {
       LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.remoteEventSearchRepository = remoteEventSearchRepository;
-        this.localEventSearchRepository = localEventSearchRepository;
+        this.remoteStreamSearchRepository = remoteStreamSearchRepository;
+        this.localStreamSearchRepository = localStreamSearchRepository;
         this.eventListSynchronizationRepository = eventListSynchronizationRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
@@ -73,7 +73,7 @@ public class EventsListInteractor implements Interactor {
 
     @Override
     public void execute() throws Exception {
-        List<EventSearchResult> localEvents = localEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
+        List<EventSearchResult> localEvents = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(localEvents);
 
         Long currentTime = timeUtils.getCurrentTime();
@@ -88,10 +88,10 @@ public class EventsListInteractor implements Interactor {
     }
 
     protected void refreshEvents() {
-        List<EventSearchResult> remoteEvents = remoteEventSearchRepository.getDefaultEvents(localeProvider.getLocale());
+        List<EventSearchResult> remoteEvents = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(remoteEvents);
-        localEventSearchRepository.deleteDefaultEvents();
-        localEventSearchRepository.putDefaultEvents(remoteEvents);
+        localStreamSearchRepository.deleteDefaultStreams();
+        localStreamSearchRepository.putDefaultStreams(remoteEvents);
     }
 
     private boolean minimumRefreshTimePassed(Long currentTime) {

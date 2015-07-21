@@ -1,15 +1,15 @@
 package com.shootr.android.data.mapper;
 
-import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.Event;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventEntityMapper {
+public class StreamEntityMapper {
 
-    @Inject public EventEntityMapper() {
+    @Inject public StreamEntityMapper() {
     }
 
     public Event transform(StreamEntity streamEntity) {

@@ -2,13 +2,13 @@ package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.StreamSearchEntity;
-import com.shootr.android.data.mapper.EventEntityMapper;
-import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
+import com.shootr.android.data.mapper.StreamEntityMapper;
+import com.shootr.android.data.repository.datasource.event.DatabaseMemoryStreamSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamListDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -18,41 +18,40 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
-public class RemoteEventSearchRepository implements EventSearchRepository {
+public class RemoteStreamSearchRepository implements StreamSearchRepository {
 
-    @Deprecated private final DatabaseMemoryEventSearchDataSource localEventSearchDataSource;
+    @Deprecated private final DatabaseMemoryStreamSearchDataSource localEventSearchDataSource;
     private final StreamListDataSource remoteStreamListDataSource;
     private final WatchersRepository localWatchersRepository;
-    private final EventEntityMapper eventEntityMapper;
+    private final StreamEntityMapper streamEntityMapper;
     private final SessionRepository sessionRepository;
     private final StreamDataSource localStreamDataSource;
     private final StreamDataSource remoteStreamDataSource;
 
-    @Inject public RemoteEventSearchRepository(DatabaseMemoryEventSearchDataSource localEventSearchDataSource,
+    @Inject public RemoteStreamSearchRepository(DatabaseMemoryStreamSearchDataSource localEventSearchDataSource,
       @Remote StreamListDataSource remoteStreamListDataSource, @Local WatchersRepository localWatchersRepository,
-      EventEntityMapper eventEntityMapper, SessionRepository sessionRepository, @Local
-    StreamDataSource localStreamDataSource,
-      @Remote StreamDataSource remoteStreamDataSource) {
+      StreamEntityMapper streamEntityMapper, SessionRepository sessionRepository,
+      @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource) {
         this.localEventSearchDataSource = localEventSearchDataSource;
         this.remoteStreamListDataSource = remoteStreamListDataSource;
         this.localWatchersRepository = localWatchersRepository;
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.sessionRepository = sessionRepository;
         this.localStreamDataSource = localStreamDataSource;
         this.remoteStreamDataSource = remoteStreamDataSource;
     }
 
-    @Override public List<EventSearchResult> getDefaultEvents(String locale) {
+    @Override public List<EventSearchResult> getDefaultStreams(String locale) {
         List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        return transformEventEntitiesWithWatchers(streamEntityList, watchers);
+        return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
     }
 
-    private List<EventSearchResult> transformEventEntitiesWithWatchers(List<StreamEntity> eventEntities,
+    private List<EventSearchResult> transformStreamEntitiesWithWatchers(List<StreamEntity> eventEntities,
       Map<String, Integer> watchers) {
         List<EventSearchResult> results = new ArrayList<>(eventEntities.size());
         for (StreamEntity streamEntity : eventEntities) {
-            Event event = eventEntityMapper.transform(streamEntity);
+            Event event = streamEntityMapper.transform(streamEntity);
             Integer eventWatchers = watchers.get(event.getId());
             EventSearchResult eventSearchResult =
               new EventSearchResult(event, eventWatchers != null ? eventWatchers : 0);
@@ -61,17 +60,17 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
         return results;
     }
 
-    private List<StreamSearchEntity> transformEventEntitiesInEventSearchEntities(List<StreamEntity> eventEntities,
+    private List<StreamSearchEntity> transformStreamEntitiesInStreamSearchEntities(List<StreamEntity> eventEntities,
       Map<String, Integer> watchers) {
         List<StreamSearchEntity> results = new ArrayList<>(eventEntities.size());
         for (StreamEntity streamEntity : eventEntities) {
-            StreamSearchEntity streamSearchEntity = transformEventEntityInEventSearchEntity(watchers, streamEntity);
+            StreamSearchEntity streamSearchEntity = transformStreamEntityInStreamSearchEntity(watchers, streamEntity);
             results.add(streamSearchEntity);
         }
         return results;
     }
 
-    private StreamSearchEntity transformEventEntityInEventSearchEntity(Map<String, Integer> watchers,
+    private StreamSearchEntity transformStreamEntityInStreamSearchEntity(Map<String, Integer> watchers,
       StreamEntity streamEntity) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         streamSearchEntity.setIdEvent(streamEntity.getIdEvent());
@@ -92,27 +91,27 @@ public class RemoteEventSearchRepository implements EventSearchRepository {
         return streamSearchEntity;
     }
 
-    @Override public List<EventSearchResult> getEvents(String query, String locale) {
+    @Override public List<EventSearchResult> getStreams(String query, String locale) {
         List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
 
-        localEventSearchDataSource.setLastSearchResults(transformEventEntitiesInEventSearchEntities(streamEntityList,
+        localEventSearchDataSource.setLastSearchResults(transformStreamEntitiesInStreamSearchEntities(streamEntityList,
           watchers));
-        return transformEventEntitiesWithWatchers(streamEntityList, watchers);
+        return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
     }
 
-    @Override public void putDefaultEvents(List<EventSearchResult> eventSearchResults) {
+    @Override public void putDefaultStreams(List<EventSearchResult> eventSearchResults) {
         throw new IllegalStateException("Method not implemented in remote repository");
     }
 
-    @Override public void deleteDefaultEvents() {
+    @Override public void deleteDefaultStreams() {
         throw new IllegalStateException("Method not implemented in remote repository");
     }
 
-    @Override public List<EventSearchResult> getEventsListing(String listingIdUser) {
+    @Override public List<EventSearchResult> getStreamsListing(String listingIdUser) {
         List<StreamEntity> eventEntitiesListing = remoteStreamDataSource.getStreamsListing(listingIdUser);
         localStreamDataSource.putStreams(eventEntitiesListing);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        return transformEventEntitiesWithWatchers(eventEntitiesListing, watchers);
+        return transformStreamEntitiesWithWatchers(eventEntitiesListing, watchers);
     }
 }

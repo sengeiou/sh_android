@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSource {
+public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSource {
 
     private final StreamManager streamManager;
     private final Map<String, StreamSearchEntity> lastEventSearchResults;
@@ -22,10 +22,8 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
     private final FollowManager followManager;
     private final UserManager userManager;
 
-    @Inject public DatabaseMemoryEventSearchDataSource(StreamManager streamManager,
-                                                       SessionRepository sessionRepository,
-                                                       FollowManager followManager,
-                                                       UserManager userManager) {
+    @Inject public DatabaseMemoryStreamSearchDataSource(StreamManager streamManager,
+      SessionRepository sessionRepository, FollowManager followManager, UserManager userManager) {
         this.streamManager = streamManager;
         this.sessionRepository = sessionRepository;
         this.followManager = followManager;
@@ -40,7 +38,7 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
         }
     }
 
-    @Override public List<StreamSearchEntity> getDefaultEvents(String locale) {
+    @Override public List<StreamSearchEntity> getDefaultStreams(String locale) {
         Map<String, Integer> watchersCountByEvents = getWatchersCountByEvents();
         List<StreamSearchEntity> defaultEventSearch = streamManager.getDefaultStreamSearch();
         List<StreamSearchEntity> eventSearchEntitiesWithUpdatedWatchNumber =
@@ -59,15 +57,15 @@ public class DatabaseMemoryEventSearchDataSource implements EventSearchDataSourc
         return defaultEventSearch;
     }
 
-    @Override public void putDefaultEvents(List<StreamSearchEntity> eventSearchEntities) {
+    @Override public void putDefaultStreams(List<StreamSearchEntity> eventSearchEntities) {
         streamManager.putDefaultStreamSearch(eventSearchEntities);
     }
 
-    @Override public void deleteDefaultEvents() {
+    @Override public void deleteDefaultStreams() {
         streamManager.deleteDefaultStreamSearch();
     }
 
-    @Override public StreamSearchEntity getEventResult(String idEvent) {
+    @Override public StreamSearchEntity getStreamResult(String idEvent) {
         StreamSearchEntity eventFromDefaultList = streamManager.getStreamSearchResultById(idEvent);
         if (eventFromDefaultList != null) {
             return eventFromDefaultList;

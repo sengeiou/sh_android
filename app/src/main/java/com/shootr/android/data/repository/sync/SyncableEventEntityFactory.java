@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.sync;
 
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
-import com.shootr.android.data.mapper.EventEntityMapper;
+import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.repository.Local;
@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 @Singleton
 public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, StreamEntity> {
 
-    private EventEntityMapper eventEntityMapper;
+    private StreamEntityMapper streamEntityMapper;
     private StreamDataSource localStreamDataSource;
 
-    @Inject public SyncableEventEntityFactory(EventEntityMapper eventEntityMapper,
+    @Inject public SyncableEventEntityFactory(StreamEntityMapper streamEntityMapper,
       @Local StreamDataSource localStreamDataSource) {
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.localStreamDataSource = localStreamDataSource;
     }
 
@@ -27,7 +27,7 @@ public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, Str
     }
 
     @Override protected StreamEntity updateValues(StreamEntity currentEntity, Event event) {
-        StreamEntity streamEntityFromDomain = eventEntityMapper.transform(event);
+        StreamEntity streamEntityFromDomain = streamEntityMapper.transform(event);
         streamEntityFromDomain.setModified(new Date());
         streamEntityFromDomain.setRevision(currentEntity.getRevision() + 1);
         streamEntityFromDomain.setBirth(currentEntity.getBirth());
@@ -37,7 +37,7 @@ public class SyncableEventEntityFactory extends SyncableEntityFactory<Event, Str
     }
 
     @Override protected StreamEntity createNewEntity(Event event) {
-        StreamEntity newEntityFromDomain = eventEntityMapper.transform(event);
+        StreamEntity newEntityFromDomain = streamEntityMapper.transform(event);
         newEntityFromDomain.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         Date birth = new Date();
         newEntityFromDomain.setBirth(birth); //TODO dates from timeutils

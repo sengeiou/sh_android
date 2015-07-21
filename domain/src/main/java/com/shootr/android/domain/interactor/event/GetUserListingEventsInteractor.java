@@ -5,10 +5,9 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -16,19 +15,19 @@ public class GetUserListingEventsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final EventSearchRepository localEventSearchRepository;
-    private final EventSearchRepository remoteEventSearchRepository;
+    private final StreamSearchRepository localStreamSearchRepository;
+    private final StreamSearchRepository remoteStreamSearchRepository;
 
     private String idUser;
     private Callback<List<EventSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local EventSearchRepository localEventRepositoty,
-      @Remote EventSearchRepository remoteEventRepositoty) {
+      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localEventRepositoty,
+      @Remote StreamSearchRepository remoteEventRepositoty) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localEventSearchRepository = localEventRepositoty;
-        this.remoteEventSearchRepository = remoteEventRepositoty;
+        this.localStreamSearchRepository = localEventRepositoty;
+        this.remoteStreamSearchRepository = remoteEventRepositoty;
     }
 
     public void loadUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
@@ -44,18 +43,18 @@ public class GetUserListingEventsInteractor implements Interactor {
 
     private void loadUserListingEventsFromRemote() {
         try {
-            loadUserListingEventsFromRepository(remoteEventSearchRepository);
+            loadUserListingEventsFromRepository(remoteStreamSearchRepository);
         } catch (ShootrException error) {
             /* swallow error */
         }
     }
 
     private void loadUserListingEventsFromLocal() {
-        loadUserListingEventsFromRepository(localEventSearchRepository);
+        loadUserListingEventsFromRepository(localStreamSearchRepository);
     }
 
-    private void loadUserListingEventsFromRepository(EventSearchRepository eventRepository){
-        List<EventSearchResult> listingEvents = eventRepository.getEventsListing(idUser);
+    private void loadUserListingEventsFromRepository(StreamSearchRepository eventRepository){
+        List<EventSearchResult> listingEvents = eventRepository.getStreamsListing(idUser);
         notifyLoaded(listingEvents);
     }
 

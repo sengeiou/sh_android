@@ -4,24 +4,24 @@ import com.shootr.android.data.entity.StreamSearchEntity;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ServiceEventSearchDataSource implements EventSearchDataSource {
+public class ServiceStreamSearchDataSource implements StreamSearchDataSource {
 
-    @Inject public ServiceEventSearchDataSource() {
+    @Inject public ServiceStreamSearchDataSource() {
     }
 
-    @Override public List<StreamSearchEntity> getDefaultEvents(String locale) {
+    @Override public List<StreamSearchEntity> getDefaultStreams(String locale) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    @Override public void putDefaultEvents(List<StreamSearchEntity> transform) {
+    @Override public void putDefaultStreams(List<StreamSearchEntity> transform) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    @Override public void deleteDefaultEvents() {
+    @Override public void deleteDefaultStreams() {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    @Override public StreamSearchEntity getEventResult(String idEvent) {
+    @Override public StreamSearchEntity getStreamResult(String idEvent) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 }

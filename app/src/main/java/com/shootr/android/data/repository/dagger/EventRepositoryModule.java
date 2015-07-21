@@ -2,20 +2,20 @@ package com.shootr.android.data.repository.dagger;
 
 import com.shootr.android.data.repository.MemoryEventListSynchronizationRepository;
 import com.shootr.android.data.repository.datasource.event.DatabaseStreamDataSource;
-import com.shootr.android.data.repository.datasource.event.DatabaseMemoryEventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.DatabaseMemoryStreamSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamListDataSource;
-import com.shootr.android.data.repository.datasource.event.EventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceStreamDataSource;
 import com.shootr.android.data.repository.datasource.event.ServiceStreamListDataSource;
-import com.shootr.android.data.repository.datasource.event.ServiceEventSearchDataSource;
+import com.shootr.android.data.repository.datasource.event.ServiceStreamSearchDataSource;
 import com.shootr.android.data.repository.local.LocalStreamRepository;
-import com.shootr.android.data.repository.local.LocalEventSearchRepository;
-import com.shootr.android.data.repository.remote.RemoteEventSearchRepository;
+import com.shootr.android.data.repository.local.LocalStreamSearchRepository;
+import com.shootr.android.data.repository.remote.RemoteStreamSearchRepository;
 import com.shootr.android.data.repository.remote.SyncStreamRepository;
 import com.shootr.android.domain.repository.EventListSynchronizationRepository;
 import com.shootr.android.domain.repository.StreamRepository;
-import com.shootr.android.domain.repository.EventSearchRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import dagger.Module;
@@ -50,11 +50,13 @@ public class EventRepositoryModule {
         return eventDataSource;
     }
 
-    @Provides @Local EventSearchRepository provideLocalEventSearchRepository(LocalEventSearchRepository eventSearchRepository) {
+    @Provides @Local
+    StreamSearchRepository provideLocalEventSearchRepository(LocalStreamSearchRepository eventSearchRepository) {
         return eventSearchRepository;
     }
 
-    @Provides @Remote EventSearchRepository provideLocalEventSearchRepository(RemoteEventSearchRepository eventSearchRepository) {
+    @Provides @Remote
+    StreamSearchRepository provideLocalEventSearchRepository(RemoteStreamSearchRepository eventSearchRepository) {
         return eventSearchRepository;
     }
 
@@ -63,13 +65,13 @@ public class EventRepositoryModule {
         return serviceEventListDataSource;
     }
 
-    @Provides @Remote EventSearchDataSource provideRemoteEventSearchDataSource(
-      ServiceEventSearchDataSource serviceEventSearchDataSource) {
+    @Provides @Remote StreamSearchDataSource provideRemoteEventSearchDataSource(
+      ServiceStreamSearchDataSource serviceEventSearchDataSource) {
         return serviceEventSearchDataSource;
     }
 
-    @Provides @Local EventSearchDataSource provideLocalEventSearchDataSource(
-      DatabaseMemoryEventSearchDataSource serviceEventSearchDataSource) {
+    @Provides @Local StreamSearchDataSource provideLocalEventSearchDataSource(
+      DatabaseMemoryStreamSearchDataSource serviceEventSearchDataSource) {
         return serviceEventSearchDataSource;
     }
 

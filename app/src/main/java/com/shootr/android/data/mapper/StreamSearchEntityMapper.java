@@ -8,16 +8,16 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventSearchEntityMapper {
+public class StreamSearchEntityMapper {
 
-    public final EventEntityMapper eventEntityMapper;
+    public final StreamEntityMapper streamEntityMapper;
 
-    @Inject public EventSearchEntityMapper(EventEntityMapper eventEntityMapper) {
-        this.eventEntityMapper = eventEntityMapper;
+    @Inject public StreamSearchEntityMapper(StreamEntityMapper streamEntityMapper) {
+        this.streamEntityMapper = streamEntityMapper;
     }
 
     public EventSearchResult transform(StreamSearchEntity streamSearchEntity) {
-        Event event = eventEntityMapper.transform(streamSearchEntity);
+        Event event = streamEntityMapper.transform(streamSearchEntity);
 
         EventSearchResult eventSearchResult = new EventSearchResult();
         eventSearchResult.setEvent(event);
@@ -38,7 +38,7 @@ public class EventSearchEntityMapper {
         Event event = eventSearchResult.getEvent();
 
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
-        eventEntityMapper.transformToTemplate(event, streamSearchEntity);
+        streamEntityMapper.transformToTemplate(event, streamSearchEntity);
 
         streamSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
 

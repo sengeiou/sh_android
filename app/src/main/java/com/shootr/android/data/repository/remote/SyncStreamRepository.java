@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.remote;
 
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
-import com.shootr.android.data.mapper.EventEntityMapper;
+import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
@@ -16,17 +16,17 @@ import javax.inject.Inject;
 
 public class SyncStreamRepository implements StreamRepository, SyncableRepository {
 
-    private final EventEntityMapper eventEntityMapper;
+    private final StreamEntityMapper streamEntityMapper;
     private final StreamDataSource localStreamDataSource;
     private final StreamDataSource remoteStreamDataSource;
     private final SyncableEventEntityFactory syncableEventEntityFactory;
 
-    @Inject public SyncStreamRepository(EventEntityMapper eventEntityMapper,
+    @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource,
       SyncableEventEntityFactory syncableEventEntityFactory) {
         this.localStreamDataSource = localStreamDataSource;
         this.remoteStreamDataSource = remoteStreamDataSource;
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
@@ -35,7 +35,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
             localStreamDataSource.putStream(streamEntity);
-            return eventEntityMapper.transform(streamEntity);
+            return streamEntityMapper.transform(streamEntity);
         } else {
             return null;
         }
@@ -45,7 +45,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         List<StreamEntity> remoteEvents = remoteStreamDataSource.getStreamByIds(streamIds);
         markEntitiesAsSynchronized(remoteEvents);
         localStreamDataSource.putStreams(remoteEvents);
-        return eventEntityMapper.transform(remoteEvents);
+        return streamEntityMapper.transform(remoteEvents);
     }
 
     @Override public Event putStream(Event event) {
@@ -59,7 +59,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity);
         markEntityAsSynchronized(remoteStreamEntity);
         localStreamDataSource.putStream(remoteStreamEntity);
-        return eventEntityMapper.transform(remoteStreamEntity);
+        return streamEntityMapper.transform(remoteStreamEntity);
     }
 
     @Override public Integer getListingCount(String idUser) {
