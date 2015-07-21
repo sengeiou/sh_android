@@ -303,4 +303,8 @@
     <string name="short_title_warning">3 to 15 characters</string>
     <string name="profile_support">Support</string>
     <string name="title_activity_support">Support</string>
+    <string name="support_version">Version</string>
+    <string name="support_terms_service">Terms of Service</string>
+    <string name="support_privacy_policy">Privacy Policy</string>
+    <string name="support_faq">FAQ</string>
 </resources>

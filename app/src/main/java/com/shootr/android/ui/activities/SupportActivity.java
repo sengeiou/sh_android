@@ -1,15 +1,19 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.SupportAdapter;
+import com.shootr.android.util.VersionUtils;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,13 +25,14 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
     public static final String TERMS_OF_SERVICE = "Terms of Service";
     public static final String VERSION = "Version";
     private static List<String> SUPPORT_LIST = Arrays.asList(FAQ, PRIVACY_POLICY, TERMS_OF_SERVICE, VERSION);
-
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+    public static final String TERMS_OF_SERVICE_BASE_URL = "http://docs.shootr.com/#/terms/";
+    public static final String PRIVACY_POLICY_SERVICE_BASE_URL = "http://docs.shootr.com/#/privacy/";
 
     @Inject LocaleProvider localeProvider;
 
-    @Bind(R.id.support_recycler_view) RecyclerView supportView;
+    @Bind(R.id.support_terms_service_container) FrameLayout termsAndService;
+    @Bind(R.id.support_privacy_policy_container) FrameLayout privacyPolicy;
+    @Bind(R.id.support_version_number) TextView versionNumber;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -39,11 +44,8 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        supportView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        supportView.setLayoutManager(layoutManager);
-        adapter = new SupportAdapter(this, SUPPORT_LIST, localeProvider);
-        supportView.setAdapter(adapter);
+        versionNumber.setVisibility(View.VISIBLE);
+        versionNumber.setText(String.valueOf(VersionUtils.getVersionName(getApplication())));
     }
 
     @Override protected void initializePresenter() {
@@ -59,4 +61,17 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @OnClick(R.id.support_terms_service_container)
+    public void onTermsAndServiceClick() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TERMS_OF_SERVICE_BASE_URL + localeProvider.getLanguage()));
+        startActivity(browserIntent);
+    }
+
+    @OnClick(R.id.support_privacy_policy_container)
+    public void onPrivacyPolicyClick() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_SERVICE_BASE_URL + localeProvider.getLanguage()));
+        startActivity(browserIntent);
+    }
+
 }
