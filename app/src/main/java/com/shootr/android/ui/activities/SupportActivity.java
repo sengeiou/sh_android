@@ -7,10 +7,12 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.SupportAdapter;
 import java.util.Arrays;
 import java.util.List;
+import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity {
 
@@ -22,6 +24,8 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+
+    @Inject LocaleProvider localeProvider;
 
     @Bind(R.id.support_recycler_view) RecyclerView supportView;
 
@@ -38,7 +42,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
         supportView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         supportView.setLayoutManager(layoutManager);
-        adapter = new SupportAdapter(this, SUPPORT_LIST);
+        adapter = new SupportAdapter(this, SUPPORT_LIST, localeProvider);
         supportView.setAdapter(adapter);
     }
 
