@@ -13,7 +13,7 @@
       android:layout_width="24dp"
       android:layout_height="24dp"
       android:layout_marginRight="32dp"
-      tools:src="@drawable/ic_event_info_24_nopadding_gray50" />
+      tools:src="@drawable/ic_stream_info_24_nopadding_gray50" />
     <!--android:tint="@color/drawer_text"-->
 
     <CheckedTextView android:id="@+id/drawer_item_text"

@@ -18,7 +18,7 @@
       android:layout_height="@dimen/event_result_picture_height"
       android:layout_marginRight="16dp"
       android:scaleType="centerCrop"
-      android:src="@drawable/ic_event_picture_default"
+      android:src="@drawable/ic_stream_picture_default"
       tools:background="#660000cc" />
 
     <LinearLayout android:layout_width="wrap_content"

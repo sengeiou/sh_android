@@ -118,7 +118,7 @@
         </activity>
         <activity
             android:name=".ui.activities.NewStreamActivity"
-            android:label="@string/activity_new_event_title"
+            android:label="@string/activity_new_stream_title"
             android:theme="@style/ShootrTheme.Closable" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -174,7 +174,7 @@
 
         <activity
             android:name=".ui.activities.StreamMediaActivity"
-            android:label="@string/title_activity_event_media" />
+            android:label="@string/title_activity_stream_media" />
         <activity
           android:name=".ui.activities.registro.ResetPasswordActivity"
           android:configChanges="orientation|screenSize"
@@ -186,7 +186,7 @@
         </activity>
         <activity
             android:name=".ui.activities.FindStreamsActivity"
-            android:label="@string/activity_find_events_title"
+            android:label="@string/activity_find_streams_title"
             android:theme="@style/ShootrTheme.Closable">
         </activity>
 

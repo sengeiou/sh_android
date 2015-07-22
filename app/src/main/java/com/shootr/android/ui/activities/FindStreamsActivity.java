@@ -66,7 +66,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void setupSearchView() {
-        searchView.setQueryHint(getString(R.string.activity_find_events_hint));
+        searchView.setQueryHint(getString(R.string.activity_find_streams_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
 

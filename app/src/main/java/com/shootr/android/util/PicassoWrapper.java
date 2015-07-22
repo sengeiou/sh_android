@@ -16,7 +16,7 @@ public class PicassoWrapper {
     public PicassoWrapper(Picasso picasso) {
         this.picasso = picasso;
         defaultImageRes = R.drawable.ic_contact_picture_default;
-        defaultEventPictureRes = R.drawable.ic_event_picture_default;
+        defaultEventPictureRes = R.drawable.ic_stream_picture_default;
     }
 
     public RequestCreator loadProfilePhoto(String path) {

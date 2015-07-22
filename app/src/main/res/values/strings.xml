@@ -106,7 +106,7 @@
     <string name="watching_request_subtitle_one">%s is now watching</string>
     <string name="watching_request_subtitle_two">%1$s &amp; %2$s are now watching</string>
     <string name="watching_request_subtitle_more">%d people are now watching</string>
-    <string name="watching_event_question">Watching %s?</string>
+    <string name="watching_stream_question">Watching %s?</string>
 
 
     <!-- Watch requests -->
@@ -143,29 +143,29 @@
     <string name="activity_info_title_pattern">%1$s (%2$d)</string>
     <string name="watching_notifications_alert">You will receive notifications from people watching this stream</string>
     <string name="menu_notifications">Notifications</string>
-    <string name="single_event_empty">Load a stream to see who\'s Watching</string>
-    <string name="event_title_default">Select Stream</string>
-    <string name="menu_events">Watching…</string>
-    <string name="activity_event_list_title">Watching…</string>
-    <string name="menu_search_events">Search</string>
-    <string name="events_list_empty">No results.</string>
+    <string name="single_stream_empty">Load a stream to see who\'s Watching</string>
+    <string name="stream_title_default">Select Stream</string>
+    <string name="menu_streams">Watching…</string>
+    <string name="activity_stream_list_title">Watching…</string>
+    <string name="menu_search_streams">Search</string>
+    <string name="stream_list_empty">No results.</string>
     <string name="add_photo">Add Photo</string>
-    <string name="edit_event">Edit Stream</string>
-    <string name="activity_new_event_title">New stream</string>
+    <string name="edit_stream">Edit Stream</string>
+    <string name="activity_new_stream_title">New stream</string>
     <string name="activity_edit_stream_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
     <string name="activity_pick_timezone_title">Select time zone</string>
-    <string name="new_event_title_label">Title</string>
-    <string name="new_event_starts_label">Starts</string>
-    <string name="new_event_timezone_label">Time zone</string>
-    <string name="new_event_ends_label">Ends before</string>
-    <string name="event_subtitle_nothing">Hall</string>
+    <string name="new_stream_title_label">Title</string>
+    <string name="new_stream_starts_label">Starts</string>
+    <string name="new_stream_timezone_label">Time zone</string>
+    <string name="new_stream_ends_label">Ends before</string>
+    <string name="stream_subtitle_nothing">Hall</string>
     <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
     <string name="stream_notification_confirmation_yes">Notify</string>
     <string name="stream_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
-    <string name="menu_event_edit_info">Stream info</string>
-    <string name="menu_event_edit_photo">Photo</string>
+    <string name="menu_stream_edit_info">Stream info</string>
+    <string name="menu_stream_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
     <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
@@ -191,7 +191,7 @@
     <string name="registration_create_button_text">Create account</string>
     <string name="account_confirmation_title">Is this correct?</string>
     <string name="error_login_credentials_invalid">ID OR PASSWORD ARE NOT VALID</string>
-    <string name="drawer_events_title">Streams</string>
+    <string name="drawer_streams_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
 
@@ -244,7 +244,7 @@
             %d friends
         </item>
     </plurals>
-    <plurals name="event_watchers">
+    <plurals name="stream_watchers">
         <item quantity="one">
             – %d friend
         </item>
@@ -252,12 +252,12 @@
            – %d friends
         </item>
     </plurals>
-    <string name="title_activity_event_media">Media</string>
+    <string name="title_activity_stream_media">Media</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="event_media_empty_title">No photos or videos.</string>
-    <string name="event_detail_media">Media</string>
-    <string name="event_detail_media_number">0</string>
+    <string name="stream_media_empty_title">No photos or videos.</string>
+    <string name="stream_detail_media">Media</string>
+    <string name="stream_detail_media_number">0</string>
     <string name="stream_detail_edit_menu_title">Edit</string>
     <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
     <string name="done">Done</string>
@@ -276,9 +276,9 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <string name="listed_activity_text_pattern">Listed (stream)</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
-    <string name="title_activity_event_search">EventSearchActivity</string>
-    <string name="activity_find_events_hint">Find streams</string>
-    <string name="activity_find_events_title">Find streams</string>
+    <string name="title_activity_stream_search">StreamSearchActivity</string>
+    <string name="activity_find_streams_hint">Find streams</string>
+    <string name="activity_find_streams_title">Find streams</string>
     <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="profile_logout">Logout</string>
@@ -286,7 +286,7 @@
     <string name="update_warning_button">Update now</string>
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="whale_retry_button_text">OK</string>
-    <string name="delete_event_label">Delete stream</string>
+    <string name="delete_stream_label">Delete stream</string>
     <string name="delete_stream_confirmation">Delete stream?</string>
 
     <plurals name="nice_count_pattern">
@@ -297,7 +297,7 @@
             %d nices
         </item>
     </plurals>
-    <string name="new_event_short_title_text">Short title</string>
-    <string name="new_event_short_title_label">Short title</string>
+    <string name="new_stream_short_title_text">Short title</string>
+    <string name="new_stream_short_title_label">Short title</string>
     <string name="short_title_warning">3 to 15 characters</string>
 </resources>

@@ -36,7 +36,7 @@
       android:layout_gravity="center"
       android:gravity="center"
       android:padding="16dp"
-      android:text="@string/events_list_empty"
+      android:text="@string/stream_list_empty"
       android:textColor="@color/gray_50"
       android:textSize="20sp"
       android:visibility="gone"

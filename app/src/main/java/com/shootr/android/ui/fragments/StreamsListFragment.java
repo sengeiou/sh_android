@@ -57,7 +57,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     //region Lifecycle
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_events_list, container, false);
+        return inflater.inflate(R.layout.activity_streams_list, container, false);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     //region Activity methods
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.events_list, menu);
+        inflater.inflate(R.menu.streams_list, menu);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {

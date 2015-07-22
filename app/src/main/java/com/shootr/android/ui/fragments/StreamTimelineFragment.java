@@ -114,7 +114,7 @@ public class StreamTimelineFragment extends BaseFragment
     //region Lifecycle methods
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.timeline_event, container, false);
+        View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }

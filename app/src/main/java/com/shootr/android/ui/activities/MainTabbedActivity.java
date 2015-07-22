@@ -152,7 +152,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 case 0:
                     return getString(R.string.drawer_favorites_title).toUpperCase(l);
                 case 1:
-                    return getString(R.string.drawer_events_title).toUpperCase(l);
+                    return getString(R.string.drawer_streams_title).toUpperCase(l);
                 case 2:
                     return getString(R.string.drawer_friends_title).toUpperCase(l);
                 default:

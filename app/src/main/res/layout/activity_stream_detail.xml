@@ -65,7 +65,7 @@
                       android:layout_gravity="center"
                       android:gravity="center"
                       android:padding="16dp"
-                      android:text="@string/single_event_empty"
+                      android:text="@string/single_stream_empty"
                       android:textColor="@color/gray_50"
                       android:textSize="20sp"
                       android:visibility="gone"
@@ -87,7 +87,7 @@
                               android:layout_height="wrap_content"
                               android:layout_gravity="center_vertical"
                               android:layout_marginLeft="16dp"
-                              android:src="@drawable/ic_event_author_24_gray50" />
+                              android:src="@drawable/ic_stream_author_24_gray50" />
 
                             <TextView android:id="@+id/stream_author"
                               android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                             android:paddingRight="16dp"
                             android:layout_gravity="end|center_vertical"
                             android:textAppearance="@style/TextAppearance.Switch"
-                            android:text="@string/event_detail_media_number"
+                            android:text="@string/stream_detail_media_number"
                             android:textColor="@color/gray_60"
                             android:visibility="visible"
                             tools:text="7" />
@@ -119,7 +119,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="16dp"
-                            android:src="@drawable/ic_action_event_gallery_gray_24" />
+                            android:src="@drawable/ic_action_stream_gallery_gray_24" />
                           <TextView android:id="@+id/stream_detail_media"
                             android:layout_width="match_parent"
                             android:layout_height="56dp"
@@ -129,7 +129,7 @@
                             android:paddingLeft="@dimen/keyline_2"
                             android:textAppearance="@style/TextAppearance.Switch"
                             android:textColor="?android:attr/textColorPrimary"
-                            android:text="@string/event_detail_media"
+                            android:text="@string/stream_detail_media"
                             tools:text="Media" />
 
                         </FrameLayout>
@@ -203,7 +203,7 @@
                       android:layout_height="wrap_content"
                       android:layout_marginLeft="@dimen/keyline_2"
                       android:layout_marginRight="@dimen/keyline_1"
-                      android:text="@string/event_title_default"
+                      android:text="@string/stream_title_default"
                       android:textColor="@color/white"
                       android:textSize="18sp"
                       android:textStyle="bold"
