@@ -37,12 +37,12 @@ public class LocalFavoriteRepository implements FavoriteRepository {
 
     @Override
     public Favorite getFavoriteByStream(String eventId) {
-        FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdEvent(eventId);
+        FavoriteEntity favoriteByIdEvent = localFavoriteDataSource.getFavoriteByIdStream(eventId);
         return favoriteEntityMapper.transform(favoriteByIdEvent);
     }
 
     @Override
     public void removeFavoriteByStream(String eventId) {
-        localFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+        localFavoriteDataSource.removeFavoriteByIdStream(eventId);
     }
 }

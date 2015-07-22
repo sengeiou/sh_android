@@ -8,8 +8,8 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
+import com.shootr.android.domain.StreamTimelineParameters;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,8 +101,8 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE, 3, 1000, 0);
     }
 
-    public List<ShotEntity> getShotsByEventParameters(StreamTimelineParameters parameters) {
-        String eventSelection = ShotTable.ID_STREAM + " = ?";
+    public List<ShotEntity> getShotsByStreamParameters(StreamTimelineParameters parameters) {
+        String streamSelection = ShotTable.ID_STREAM + " = ?";
         String typeSelection = ShotTable.TYPE + " = ?";
         //TODO since & max
         //TODO limit
@@ -110,7 +110,7 @@ public class ShotManager extends  AbstractManager{
         String[] whereArguments = new String[2];
         whereArguments[0] = String.valueOf(parameters.getStreamId());
         whereArguments[1] = String.valueOf(parameters.getShotType());
-        String whereClause = eventSelection + " AND " + typeSelection;
+        String whereClause = streamSelection + " AND " + typeSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -175,12 +175,12 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-    public Long getLastModifiedDateForEvent(String eventId) {
-        String eventIdClause = ShotTable.ID_STREAM + " = ?";
+    public Long getLastModifiedDateForStream(String streamId) {
+        String streamIdClause = ShotTable.ID_STREAM + " = ?";
         String commentTypeOnlyClause = ShotTable.TYPE + " = '" + ShotType.COMMENT + "'";
 
-        String whereClause = eventIdClause + " AND " + commentTypeOnlyClause;
-        String[] whereArguments = new String[]{String.valueOf(eventId)};
+        String whereClause = streamIdClause + " AND " + commentTypeOnlyClause;
+        String[] whereArguments = new String[]{String.valueOf(streamId)};
         String order = ShotTable.MODIFIED + " desc";
 
         Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null, order, "1");
@@ -194,9 +194,9 @@ public class ShotManager extends  AbstractManager{
         }
     }
 
-    public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+    public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
-        String eventSelection = ShotTable.ID_STREAM + " = ?";
+        String streamSelection = ShotTable.ID_STREAM + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
         String[] whereArguments = new String[idUsers.size()+1];
@@ -205,9 +205,9 @@ public class ShotManager extends  AbstractManager{
             whereArguments[i] = String.valueOf(idUsers.get(i));
         }
 
-        whereArguments[idUsers.size()] = idEvent;
+        whereArguments[idUsers.size()] = idStream;
 
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+        String whereClause = usersSelection + " AND " + streamSelection + " AND " + imageSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
@@ -227,9 +227,9 @@ public class ShotManager extends  AbstractManager{
         return resultShots.size();
     }
 
-    public List<ShotEntity> getEventMediaShots(String idEvent, List<String> idUsers) {
+    public List<ShotEntity> getStreamMediaShots(String idStream, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
-        String eventSelection = ShotTable.ID_STREAM + " = ?";
+        String streamSelection = ShotTable.ID_STREAM + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
         String[] whereArguments = new String[idUsers.size()+1];
@@ -238,9 +238,9 @@ public class ShotManager extends  AbstractManager{
             whereArguments[i] = String.valueOf(idUsers.get(i));
         }
 
-        whereArguments[idUsers.size()] = String.valueOf(idEvent);
+        whereArguments[idUsers.size()] = String.valueOf(idStream);
 
-        String whereClause = usersSelection + " AND " + eventSelection + " AND " + imageSelection;
+        String whereClause = usersSelection + " AND " + streamSelection + " AND " + imageSelection;
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,

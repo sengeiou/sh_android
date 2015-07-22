@@ -41,7 +41,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForEventTimeline(StreamTimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         try {
             List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
@@ -73,17 +73,17 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
         try {
-            return shootrService.getStreamMediaShotsCount(idEvent, idUsers);
+            return shootrService.getStreamMediaShotsCount(idStream, idUsers);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
         try {
-            return shootrService.getStreamMediaShots(idEvent, userIds);
+            return shootrService.getStreamMediaShots(idStream, userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

@@ -13,13 +13,13 @@ import javax.inject.Inject;
 
 public class ServiceStreamDataSource implements StreamDataSource {
 
-    public static final int MAX_NUMBER_OF_LISTING_EVENTS = 100;
+    public static final int MAX_NUMBER_OF_LISTING_STREAMS = 100;
     private final ShootrService service;
-    private final StreamApiService eventService;
+    private final StreamApiService streamApiService;
 
-    @Inject public ServiceStreamDataSource(ShootrService service, StreamApiService eventService) {
+    @Inject public ServiceStreamDataSource(ShootrService service, StreamApiService streamApiService) {
         this.service = service;
-        this.eventService = eventService;
+        this.streamApiService = streamApiService;
     }
 
     @Override public StreamEntity getStreamById(String idStream) {
@@ -60,7 +60,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         try {
-            return eventService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_EVENTS);
+            return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -69,9 +69,9 @@ public class ServiceStreamDataSource implements StreamDataSource {
     @Override
     public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
         try {
-            eventService.deleteStream(idStream);
+            streamApiService.deleteStream(idStream);
         } catch (ApiException apiError) {
-            if (apiError.getErrorInfo() == ErrorInfo.EventHasWatchersException) {
+            if (apiError.getErrorInfo() == ErrorInfo.StreamHasWatchersException) {
                 throw new DeleteStreamNotAllowedException();
             } else {
                 throw new ServerCommunicationException(apiError);

@@ -44,7 +44,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters) {
         try {
             List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
-            storeEmbedEvents(activities);
+            storeEmbedStreams(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
@@ -65,12 +65,12 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         throw new IllegalArgumentException("method not implemented");
     }
 
-    private void storeEmbedEvents(List<ActivityApiEntity> activities) {
+    private void storeEmbedStreams(List<ActivityApiEntity> activities) {
         for (ActivityApiEntity activity : activities) {
-            StreamEntity event = activity.getStream();
-            boolean hasAssociatedEvent = event != null;
-            if (hasAssociatedEvent) {
-                localStreamDataSource.putStream(event);
+            StreamEntity stream = activity.getStream();
+            boolean hasAssociatedStream = stream != null;
+            if (hasAssociatedStream) {
+                localStreamDataSource.putStream(stream);
             }
         }
     }

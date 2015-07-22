@@ -21,7 +21,7 @@ public class ServiceStreamSearchDataSource implements StreamSearchDataSource {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 
-    @Override public StreamSearchEntity getStreamResult(String idEvent) {
+    @Override public StreamSearchEntity getStreamResult(String idStream) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
 }

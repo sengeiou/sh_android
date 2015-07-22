@@ -11,5 +11,5 @@ public interface StreamSearchDataSource {
 
     void deleteDefaultStreams();
 
-    StreamSearchEntity getStreamResult(String idEvent);
+    StreamSearchEntity getStreamResult(String idStream);
 }

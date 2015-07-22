@@ -20,8 +20,8 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public FavoriteEntity getFavoriteByIdEvent(String idEvent) {
-        return favoriteManager.getFavoriteByIdEvent(idEvent);
+    public FavoriteEntity getFavoriteByIdStream(String idStream) {
+        return favoriteManager.getFavoriteByIdStream(idStream);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public void removeFavoriteByIdEvent(String eventId) {
-        favoriteManager.deleteEventByIdEvent(eventId);
+    public void removeFavoriteByIdStream(String streamId) {
+        favoriteManager.deleteStreamByIdStream(streamId);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
 
     @Override
     public Favorite getFavoriteByStream(String eventId) {
-        FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdEvent(eventId);
+        FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdStream(eventId);
         return favoriteEntityMapper.transform(favoriteEntity);
     }
 
@@ -71,8 +71,8 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     public void removeFavoriteByStream(String eventId) {
         try {
             syncTrigger.triggerSync();
-            remoteFavoriteDataSource.removeFavoriteByIdEvent(eventId);
-            localFavoriteDataSource.removeFavoriteByIdEvent(eventId);
+            remoteFavoriteDataSource.removeFavoriteByIdStream(eventId);
+            localFavoriteDataSource.removeFavoriteByIdStream(eventId);
         } catch (ServerCommunicationException error) {
             queueUpload(buildDeletedEntity(eventId), error);
         }
@@ -116,8 +116,8 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         List<FavoriteEntity> notSynchronized = localFavoriteDataSource.getEntitiesNotSynchronized();
         for (FavoriteEntity favoriteEntityEntity : notSynchronized) {
             if (LocalSynchronized.SYNC_DELETED.equals(favoriteEntityEntity.getSynchronizedStatus())) {
-                remoteFavoriteDataSource.removeFavoriteByIdEvent(favoriteEntityEntity.getIdStream());
-                localFavoriteDataSource.removeFavoriteByIdEvent(favoriteEntityEntity.getIdStream());
+                remoteFavoriteDataSource.removeFavoriteByIdStream(favoriteEntityEntity.getIdStream());
+                localFavoriteDataSource.removeFavoriteByIdStream(favoriteEntityEntity.getIdStream());
             } else {
                 FavoriteEntity synchedEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
                 synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
