@@ -47,7 +47,7 @@ public class ShotDtoFactory {
     public GenericDto getMediaShotsCountByEvent(String idEvent, List<String> idUsers) {
         FilterDto eventsFilter = and(
           or(ShotTable.ID_USER).isIn(idUsers)) //
-          .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
+          .and(ShotTable.ID_STREAM).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
           .and(ShotTable.DELETED).isEqualTo(null) //
           .build();
@@ -69,7 +69,7 @@ public class ShotDtoFactory {
 
     public GenericDto getMediaShotsByEvent(String idEvent, List<String> idUsers) {
         FilterDto eventsFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
-          .and(ShotTable.ID_EVENT).isEqualTo(idEvent) //
+          .and(ShotTable.ID_STREAM).isEqualTo(idEvent) //
           .and(ShotTable.IMAGE).isNotEqualTo(null) //
           .and(ShotTable.DELETED).isEqualTo(null) //
           .build();

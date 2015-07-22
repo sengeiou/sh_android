@@ -73,7 +73,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
     private StreamSearchEntity transformStreamEntityInStreamSearchEntity(Map<String, Integer> watchers,
       StreamEntity streamEntity) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
-        streamSearchEntity.setIdEvent(streamEntity.getIdEvent());
+        streamSearchEntity.setIdStream(streamEntity.getIdStream());
         streamSearchEntity.setIdUser(streamEntity.getIdUser());
         streamSearchEntity.setUserName(streamEntity.getUserName());
         streamSearchEntity.setTag(streamEntity.getTag());
@@ -85,8 +85,8 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setDeleted(streamEntity.getDeleted());
         streamSearchEntity.setModified(streamEntity.getModified());
         streamEntity.setRevision(streamEntity.getRevision());
-        if(watchers.get(streamEntity.getIdEvent()) != null) {
-            streamSearchEntity.setWatchers(watchers.get(streamEntity.getIdEvent()));
+        if(watchers.get(streamEntity.getIdStream()) != null) {
+            streamSearchEntity.setWatchers(watchers.get(streamEntity.getIdStream()));
         }
         return streamSearchEntity;
     }

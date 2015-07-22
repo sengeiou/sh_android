@@ -16,7 +16,7 @@ public class EventEntityModelMapper {
     public EventModel toEventModel(StreamEntity streamEntity) {
         EventModel eventModel = new EventModel();
         eventModel.setTitle(streamEntity.getTitle());
-        eventModel.setIdEvent(streamEntity.getIdEvent());
+        eventModel.setIdEvent(streamEntity.getIdStream());
         return eventModel;
     }
 

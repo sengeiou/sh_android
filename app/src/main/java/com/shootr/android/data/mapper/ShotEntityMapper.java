@@ -23,11 +23,11 @@ public class ShotEntityMapper {
         shot.setComment(shotEntity.getComment());
         shot.setImage(shotEntity.getImage());
         shot.setPublishDate(shotEntity.getBirth());
-        if (shotEntity.getIdEvent() != null) {
+        if (shotEntity.getIdStream() != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(shotEntity.getIdEvent());
-            eventInfo.setEventTitle(shotEntity.getEventTitle());
-            eventInfo.setEventTag(shotEntity.getEventTag());
+            eventInfo.setIdEvent(shotEntity.getIdStream());
+            eventInfo.setEventTitle(shotEntity.getStreamTitle());
+            eventInfo.setEventTag(shotEntity.getStreamTag());
             shot.setEventInfo(eventInfo);
         }
 
@@ -76,9 +76,9 @@ public class ShotEntityMapper {
         shotEntity.setIdUser(idUser);
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            shotEntity.setIdEvent(eventInfo.getIdEvent());
-            shotEntity.setEventTitle(eventInfo.getEventTitle());
-            shotEntity.setEventTag(eventInfo.getEventTag());
+            shotEntity.setIdStream(eventInfo.getIdEvent());
+            shotEntity.setStreamTitle(eventInfo.getEventTitle());
+            shotEntity.setStreamTag(eventInfo.getEventTag());
         }
 
         shotEntity.setIdShotParent(shot.getParentShotId());

@@ -17,7 +17,7 @@ public class StreamEntityMapper {
             return null;
         }
         Stream stream = new Stream();
-        stream.setId(streamEntity.getIdEvent());
+        stream.setId(streamEntity.getIdStream());
         stream.setAuthorId(streamEntity.getIdUser());
         stream.setTitle(streamEntity.getTitle());
         stream.setPicture(streamEntity.getPhoto());
@@ -42,7 +42,7 @@ public class StreamEntityMapper {
     }
 
     protected void transformToTemplate(Stream stream, StreamEntity entityTemplate) {
-        entityTemplate.setIdEvent(stream.getId());
+        entityTemplate.setIdStream(stream.getId());
         entityTemplate.setIdUser(stream.getAuthorId());
         entityTemplate.setTitle(stream.getTitle());
         entityTemplate.setPhoto(stream.getPicture());

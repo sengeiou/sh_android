@@ -2,15 +2,15 @@ package com.shootr.android.data.entity;
 
 public class FavoriteEntity extends LocalSynchronized {
 
-    private String idEvent;
+    private String idStream;
     private Integer order;
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public Integer getOrder() {

@@ -30,7 +30,7 @@ public class FavoriteManager extends AbstractManager {
     }
 
     public FavoriteEntity getFavoriteByIdEvent(String idEvent) {
-        String whereSelection = FavoriteTable.ID_EVENT + " = ? AND " + whereNotDeleted();
+        String whereSelection = FavoriteTable.ID_STREAM + " = ? AND " + whereNotDeleted();
         String[] whereArgumens = new String[] { idEvent };
 
         Cursor queryResult = getReadableDatabase().query(FavoriteTable.TABLE,
@@ -71,7 +71,7 @@ public class FavoriteManager extends AbstractManager {
     }
 
     public void deleteEventByIdEvent(String eventId) {
-        String whereClause = FavoriteTable.ID_EVENT + " = ?";
+        String whereClause = FavoriteTable.ID_STREAM + " = ?";
         String[] whereArgs = new String[] { eventId };
         getWritableDatabase().delete(FavoriteTable.TABLE, whereClause, whereArgs);
     }

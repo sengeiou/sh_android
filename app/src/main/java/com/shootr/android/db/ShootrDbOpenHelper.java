@@ -24,9 +24,9 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_FOLLOW);
         db.execSQL(SQLiteUtils.CREATE_TABLE_TABLESSYNC);
         db.execSQL(SQLiteUtils.CREATE_TABLE_DEVICE);
-        db.execSQL(SQLiteUtils.CREATE_TABLE_EVENT);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_STREAM);
         db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT_QUEUE);
-        db.execSQL(SQLiteUtils.CREATE_TABLE_EVENT_SEARCH);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_STREAM_SEARCH);
         db.execSQL(SQLiteUtils.CREATE_TABLE_FAVORITE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_ACTIVITY);
 
@@ -39,9 +39,9 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.FollowTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TablesSync.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.DeviceTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.EventTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.StreamTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotQueueTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.EventSearchTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.StreamSearchTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ActivityTable.TABLE);
         onCreate(db);
     }

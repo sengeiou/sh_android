@@ -29,9 +29,9 @@ public class ShotQueueCursorMapper extends GenericMapper{
         shotQueueEntity.setUsername(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME)));
         shotQueueEntity.setComment(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.COMMENT)));
         shotQueueEntity.setImage(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.IMAGE)));
-        shotQueueEntity.setEventTag(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TAG)));
-        shotQueueEntity.setEventTitle(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.EVENT_TITLE)));
-        shotQueueEntity.setIdEvent(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_EVENT)));
+        shotQueueEntity.setStreamTag(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.STREAM_TAG)));
+        shotQueueEntity.setStreamTitle(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.STREAM_TITLE)));
+        shotQueueEntity.setIdStream(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_STREAM)));
         shotQueueEntity.setType(cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.TYPE)));
 
         if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT))) {
@@ -60,9 +60,9 @@ public class ShotQueueCursorMapper extends GenericMapper{
         contentValues.put(DatabaseContract.ShotQueueTable.USERNAME, entity.getUsername());
         contentValues.put(DatabaseContract.ShotQueueTable.COMMENT, entity.getComment());
         contentValues.put(DatabaseContract.ShotQueueTable.IMAGE, entity.getImage());
-        contentValues.put(DatabaseContract.ShotQueueTable.EVENT_TAG, entity.getEventTag());
-        contentValues.put(DatabaseContract.ShotQueueTable.EVENT_TITLE, entity.getEventTitle());
-        contentValues.put(DatabaseContract.ShotQueueTable.ID_EVENT, entity.getIdEvent());
+        contentValues.put(DatabaseContract.ShotQueueTable.STREAM_TAG, entity.getStreamTag());
+        contentValues.put(DatabaseContract.ShotQueueTable.STREAM_TITLE, entity.getStreamTitle());
+        contentValues.put(DatabaseContract.ShotQueueTable.ID_STREAM, entity.getIdStream());
         contentValues.put(DatabaseContract.ShotQueueTable.TYPE, entity.getType());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT, entity.getIdShotParent());
         contentValues.put(DatabaseContract.ShotQueueTable.ID_USER_PARENT, entity.getIdUserParent());

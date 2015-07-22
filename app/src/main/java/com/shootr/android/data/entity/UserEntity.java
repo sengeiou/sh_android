@@ -17,9 +17,9 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private Long rank;
     private String website;
     private String bio;
-    private String watchingEventTitle;
-    private String idWatchingEvent;
-    private Long joinEventDate;
+    private String watchingStreamTitle;
+    private String idWatchingStream;
+    private Long joinStreamDate;
 
     public UserEntity(){
     }
@@ -152,31 +152,31 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         }
     }
 
-    public String getWatchingEventTitle() {
-        return watchingEventTitle;
+    public String getWatchingStreamTitle() {
+        return watchingStreamTitle;
     }
 
-    public void setWatchingEventTitle(String watchingEventTitle) {
-        this.watchingEventTitle = watchingEventTitle;
+    public void setWatchingStreamTitle(String watchingStreamTitle) {
+        this.watchingStreamTitle = watchingStreamTitle;
     }
 
-    public String getIdWatchingEvent() {
-        return idWatchingEvent;
+    public String getIdWatchingStream() {
+        return idWatchingStream;
     }
 
-    public void setIdWatchingEvent(String idWatchingEvent) {
-        if (idWatchingEvent !=null) {
-            this.idWatchingEvent = idWatchingEvent;
+    public void setIdWatchingStream(String idWatchingStream) {
+        if (idWatchingStream !=null) {
+            this.idWatchingStream = idWatchingStream;
         } else {
-            this.idWatchingEvent = null;
+            this.idWatchingStream = null;
         }
     }
 
-    public Long getJoinEventDate() {
-        return joinEventDate;
+    public Long getJoinStreamDate() {
+        return joinStreamDate;
     }
 
-    public void setJoinEventDate(Long joinEventDate) {
-        this.joinEventDate = joinEventDate;
+    public void setJoinStreamDate(Long joinStreamDate) {
+        this.joinStreamDate = joinStreamDate;
     }
 }

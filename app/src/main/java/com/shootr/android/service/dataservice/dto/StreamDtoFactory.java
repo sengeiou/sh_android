@@ -35,10 +35,10 @@ public class StreamDtoFactory {
 
     public GenericDto getStreamsNotEndedByIds(List<String> streamsIds) {
         FilterDto eventsWatchFollowingFilter = and(orIsNotDeleted(),
-          or(DatabaseContract.EventTable.ID_EVENT).isIn(streamsIds)).build();
+          or(DatabaseContract.StreamTable.ID_STREAM).isIn(streamsIds)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.EventTable.TABLE)
+          .entity(DatabaseContract.StreamTable.TABLE)
           .includeDeleted(false)
           .filter(eventsWatchFollowingFilter)
           .items(1000)
@@ -51,8 +51,8 @@ public class StreamDtoFactory {
 
     public GenericDto saveStream(StreamEntity streamEntity) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, streamEntity.getIdEvent())
-          .entity(DatabaseContract.EventTable.TABLE)
+          .putKey(DatabaseContract.StreamTable.ID_STREAM, streamEntity.getIdStream())
+          .entity(DatabaseContract.StreamTable.TABLE)
           .build();
 
         OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(streamEntity)).build();
@@ -62,8 +62,8 @@ public class StreamDtoFactory {
 
     public GenericDto getStreamById(String idStream) {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.EventTable.TABLE)
-          .putKey(DatabaseContract.EventTable.ID_EVENT, idStream)
+          .entity(DatabaseContract.StreamTable.TABLE)
+          .putKey(DatabaseContract.StreamTable.ID_STREAM, idStream)
           .items(1)
           .build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
@@ -92,10 +92,10 @@ public class StreamDtoFactory {
 
     public GenericDto getListingCount(String idUser) {
         FilterDto eventsListingFilter = and(
-          or(DatabaseContract.EventTable.ID_USER).isEqualTo(idUser))
+          or(DatabaseContract.StreamTable.ID_USER).isEqualTo(idUser))
           .build();
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.EventTable.TABLE)
+          .entity(DatabaseContract.StreamTable.TABLE)
           .filter(eventsListingFilter)
           .items(0)
           .build();

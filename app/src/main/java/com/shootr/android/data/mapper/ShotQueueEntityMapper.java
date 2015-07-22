@@ -37,9 +37,9 @@ public class ShotQueueEntityMapper {
 
         Shot.ShotEventInfo eventInfo = shot.getEventInfo();
         if (eventInfo != null) {
-            entity.setIdEvent(eventInfo.getIdEvent());
-            entity.setEventTitle(eventInfo.getEventTitle());
-            entity.setEventTag(eventInfo.getEventTag());
+            entity.setIdStream(eventInfo.getIdEvent());
+            entity.setStreamTitle(eventInfo.getEventTitle());
+            entity.setStreamTag(eventInfo.getEventTag());
         }
 
         entity.setIdUser(shot.getUserInfo().getIdUser());
@@ -80,9 +80,9 @@ public class ShotQueueEntityMapper {
         shot.setUserInfo(userInfo);
 
         Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(entity.getIdEvent());
-        eventInfo.setEventTitle(entity.getEventTitle());
-        eventInfo.setEventTag(entity.getEventTag());
+        eventInfo.setIdEvent(entity.getIdStream());
+        eventInfo.setEventTitle(entity.getStreamTitle());
+        eventInfo.setEventTag(entity.getStreamTag());
         if (eventInfo.getIdEvent() != null) {
             shot.setEventInfo(eventInfo);
         }

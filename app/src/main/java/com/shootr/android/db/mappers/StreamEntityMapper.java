@@ -17,13 +17,13 @@ public class StreamEntityMapper extends GenericMapper{
     }
 
     private void fillContentValues(StreamEntity streamEntity, ContentValues contentValues) {
-        contentValues.put(DatabaseContract.EventTable.ID_EVENT, streamEntity.getIdEvent());
-        contentValues.put(DatabaseContract.EventTable.ID_USER, streamEntity.getIdUser());
-        contentValues.put(DatabaseContract.EventTable.USERNAME, streamEntity.getUserName());
-        contentValues.put(DatabaseContract.EventTable.TITLE, streamEntity.getTitle());
-        contentValues.put(DatabaseContract.EventTable.PHOTO, streamEntity.getPhoto());
-        contentValues.put(DatabaseContract.EventTable.TAG, streamEntity.getTag());
-        contentValues.put(DatabaseContract.EventTable.LOCALE, streamEntity.getLocale());
+        contentValues.put(DatabaseContract.StreamTable.ID_STREAM, streamEntity.getIdStream());
+        contentValues.put(DatabaseContract.StreamTable.ID_USER, streamEntity.getIdUser());
+        contentValues.put(DatabaseContract.StreamTable.USERNAME, streamEntity.getUserName());
+        contentValues.put(DatabaseContract.StreamTable.TITLE, streamEntity.getTitle());
+        contentValues.put(DatabaseContract.StreamTable.PHOTO, streamEntity.getPhoto());
+        contentValues.put(DatabaseContract.StreamTable.TAG, streamEntity.getTag());
+        contentValues.put(DatabaseContract.StreamTable.LOCALE, streamEntity.getLocale());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -34,33 +34,33 @@ public class StreamEntityMapper extends GenericMapper{
     }
 
     private void fillStreamEntity(Map<String, Object> dto, StreamEntity streamEntity) {
-        streamEntity.setIdEvent(dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
-          : ((String) (dto.get(DatabaseContract.EventTable.ID_EVENT))));
-        streamEntity.setIdUser(dto.get(DatabaseContract.EventTable.ID_USER) == null ? null
-          : ((String) (dto.get(DatabaseContract.EventTable.ID_USER))));
-        streamEntity.setTitle((String) dto.get(DatabaseContract.EventTable.TITLE) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.TITLE));
-        streamEntity.setUserName((String) dto.get(DatabaseContract.EventTable.USERNAME) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.USERNAME));
-        streamEntity.setPhoto((String) dto.get(DatabaseContract.EventTable.PHOTO) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.PHOTO));
-        streamEntity.setTag((String) dto.get(DatabaseContract.EventTable.TAG) == null ? null
-          : (String) dto.get(DatabaseContract.EventTable.TAG));
-        streamEntity.setLocale(dto.get(DatabaseContract.EventTable.LOCALE) == null ? null
-                : (String) dto.get(DatabaseContract.EventTable.LOCALE));
+        streamEntity.setIdStream(dto.get(DatabaseContract.StreamTable.ID_STREAM) == null ? null
+          : ((String) (dto.get(DatabaseContract.StreamTable.ID_STREAM))));
+        streamEntity.setIdUser(dto.get(DatabaseContract.StreamTable.ID_USER) == null ? null
+          : ((String) (dto.get(DatabaseContract.StreamTable.ID_USER))));
+        streamEntity.setTitle((String) dto.get(DatabaseContract.StreamTable.TITLE) == null ? null
+          : (String) dto.get(DatabaseContract.StreamTable.TITLE));
+        streamEntity.setUserName((String) dto.get(DatabaseContract.StreamTable.USERNAME) == null ? null
+          : (String) dto.get(DatabaseContract.StreamTable.USERNAME));
+        streamEntity.setPhoto((String) dto.get(DatabaseContract.StreamTable.PHOTO) == null ? null
+          : (String) dto.get(DatabaseContract.StreamTable.PHOTO));
+        streamEntity.setTag((String) dto.get(DatabaseContract.StreamTable.TAG) == null ? null
+          : (String) dto.get(DatabaseContract.StreamTable.TAG));
+        streamEntity.setLocale(dto.get(DatabaseContract.StreamTable.LOCALE) == null ? null
+                : (String) dto.get(DatabaseContract.StreamTable.LOCALE));
         setSynchronizedfromDto(dto, streamEntity);
     }
 
     public Map<String, Object> toDto(StreamEntity streamEntity) {
         Map<String, Object> dto = new HashMap<>();
-        dto.put(DatabaseContract.EventTable.ID_EVENT, streamEntity == null ? null : streamEntity.getIdEvent());
-        dto.put(DatabaseContract.EventTable.ID_USER, streamEntity == null ? null : streamEntity.getIdUser());
-        dto.put(DatabaseContract.EventTable.USERNAME, streamEntity == null ? null : streamEntity.getUserName());
-        dto.put(DatabaseContract.EventTable.TITLE, streamEntity == null ? null : streamEntity.getTitle());
-        dto.put(DatabaseContract.EventTable.PHOTO, streamEntity == null ? null : streamEntity.getPhoto());
-        dto.put(DatabaseContract.EventTable.TAG, streamEntity == null ? null : streamEntity.getTag());
-        dto.put(DatabaseContract.EventTable.LOCALE, streamEntity == null ? null : streamEntity.getLocale());
-        dto.put(DatabaseContract.EventTable.NOTIFY_CREATION,
+        dto.put(DatabaseContract.StreamTable.ID_STREAM, streamEntity == null ? null : streamEntity.getIdStream());
+        dto.put(DatabaseContract.StreamTable.ID_USER, streamEntity == null ? null : streamEntity.getIdUser());
+        dto.put(DatabaseContract.StreamTable.USERNAME, streamEntity == null ? null : streamEntity.getUserName());
+        dto.put(DatabaseContract.StreamTable.TITLE, streamEntity == null ? null : streamEntity.getTitle());
+        dto.put(DatabaseContract.StreamTable.PHOTO, streamEntity == null ? null : streamEntity.getPhoto());
+        dto.put(DatabaseContract.StreamTable.TAG, streamEntity == null ? null : streamEntity.getTag());
+        dto.put(DatabaseContract.StreamTable.LOCALE, streamEntity == null ? null : streamEntity.getLocale());
+        dto.put(DatabaseContract.StreamTable.NOTIFY_CREATION,
           streamEntity == null ? null : streamEntity.getNotifyCreation());
         setSynchronizedtoDto(streamEntity, dto);
         return dto;
@@ -73,34 +73,34 @@ public class StreamEntityMapper extends GenericMapper{
     }
 
     private void fillStreamEntity(Cursor c, StreamEntity streamEntity) {
-        streamEntity.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.EventTable.ID_EVENT)));
-        streamEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.EventTable.ID_USER)));
-        streamEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.EventTable.USERNAME)));
-        streamEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TITLE)));
-        streamEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.EventTable.PHOTO)));
-        streamEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TAG)));
-        streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.EventTable.LOCALE)));
+        streamEntity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.ID_STREAM)));
+        streamEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.ID_USER)));
+        streamEntity.setUserName(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.USERNAME)));
+        streamEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TITLE)));
+        streamEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.PHOTO)));
+        streamEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TAG)));
+        streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.LOCALE)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 
     public StreamSearchEntity fromSearchDto(Map<String, Object> dataItem) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(dataItem, streamSearchEntity);
-        streamSearchEntity.setWatchers(((Number) dataItem.get(DatabaseContract.EventSearchTable.WATCHERS)).intValue());
+        streamSearchEntity.setWatchers(((Number) dataItem.get(DatabaseContract.StreamSearchTable.WATCHERS)).intValue());
         return streamSearchEntity;
     }
 
     public StreamSearchEntity fromSearchCursor(Cursor cursor) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(cursor, streamSearchEntity);
-        streamSearchEntity.setWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.EventSearchTable.WATCHERS)));
+        streamSearchEntity.setWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
         return streamSearchEntity;
     }
 
     public ContentValues toSearchContentValues(StreamSearchEntity entity) {
         ContentValues contentValues = new ContentValues();
         fillContentValues(entity, contentValues);
-        contentValues.put(DatabaseContract.EventSearchTable.WATCHERS, entity.getWatchers());
+        contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getWatchers());
         return contentValues;
     }
 

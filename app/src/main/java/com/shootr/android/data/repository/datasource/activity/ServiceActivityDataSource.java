@@ -67,7 +67,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
 
     private void storeEmbedEvents(List<ActivityApiEntity> activities) {
         for (ActivityApiEntity activity : activities) {
-            StreamEntity event = activity.getEvent();
+            StreamEntity event = activity.getStream();
             boolean hasAssociatedEvent = event != null;
             if (hasAssociatedEvent) {
                 localStreamDataSource.putStream(event);

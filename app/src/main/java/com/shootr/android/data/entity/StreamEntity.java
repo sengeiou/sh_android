@@ -2,7 +2,7 @@ package com.shootr.android.data.entity;
 
 public class StreamEntity extends Synchronized implements Comparable<StreamEntity> {
 
-    private String idEvent;
+    private String idStream;
     private String idUser;
     private String userName;
     private String tag;
@@ -11,12 +11,12 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Integer notifyCreation;
     private String locale;
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public String getLocale() {
@@ -37,7 +37,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
         }
         StreamEntity that = (StreamEntity) o;
 
-        if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null){
+        if (idStream != null ? !idStream.equals(that.idStream) : that.idStream != null){
             return false;
         }
         return true;
@@ -45,15 +45,15 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     @Override
     public int hashCode() {
-        return idEvent != null ? idEvent.hashCode() : 0;
+        return idStream != null ? idStream.hashCode() : 0;
     }
 
     @Override public int compareTo(StreamEntity another) {
-        boolean areSameEvent = this.getIdEvent().equals(another.getIdEvent());
-        if (areSameEvent) {
+        boolean areSameStream = this.getIdStream().equals(another.getIdStream());
+        if (areSameStream) {
             return 0;
         }
-        int idComparison = this.getIdEvent().compareTo(another.getIdEvent());
+        int idComparison = this.getIdStream().compareTo(another.getIdStream());
         return idComparison;
     }
 

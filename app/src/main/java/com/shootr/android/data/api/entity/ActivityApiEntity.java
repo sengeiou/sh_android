@@ -9,9 +9,9 @@ public class ActivityApiEntity {
     private String idUser;
     private String username;
 
-    private String idEvent;
-    private String eventTitle;
-    private String eventTag;
+    private String idStream;
+    private String streamTitle;
+    private String streamTag;
 
     private String comment;
     private String type;
@@ -22,7 +22,7 @@ public class ActivityApiEntity {
     private Integer revision;
 
     private EmbedUserApiEntity user;
-    private StreamEntity event;
+    private StreamEntity stream;
 
     public String getIdActivity() {
         return idActivity;
@@ -48,28 +48,28 @@ public class ActivityApiEntity {
         this.username = username;
     }
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
+    public String getStreamTitle() {
+        return streamTitle;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
     }
 
-    public String getEventTag() {
-        return eventTag;
+    public String getStreamTag() {
+        return streamTag;
     }
 
-    public void setEventTag(String eventTag) {
-        this.eventTag = eventTag;
+    public void setStreamTag(String streamTag) {
+        this.streamTag = streamTag;
     }
 
     public String getComment() {
@@ -120,11 +120,11 @@ public class ActivityApiEntity {
         this.user = user;
     }
 
-    public StreamEntity getEvent() {
-        return event;
+    public StreamEntity getStream() {
+        return stream;
     }
 
-    public void setEvent(StreamEntity event) {
-        this.event = event;
+    public void setStream(StreamEntity stream) {
+        this.stream = stream;
     }
 }

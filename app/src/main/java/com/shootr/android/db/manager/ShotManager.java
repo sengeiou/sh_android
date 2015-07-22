@@ -102,7 +102,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public List<ShotEntity> getShotsByEventParameters(StreamTimelineParameters parameters) {
-        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String eventSelection = ShotTable.ID_STREAM + " = ?";
         String typeSelection = ShotTable.TYPE + " = ?";
         //TODO since & max
         //TODO limit
@@ -176,7 +176,7 @@ public class ShotManager extends  AbstractManager{
     }
 
     public Long getLastModifiedDateForEvent(String eventId) {
-        String eventIdClause = ShotTable.ID_EVENT + " = ?";
+        String eventIdClause = ShotTable.ID_STREAM + " = ?";
         String commentTypeOnlyClause = ShotTable.TYPE + " = '" + ShotType.COMMENT + "'";
 
         String whereClause = eventIdClause + " AND " + commentTypeOnlyClause;
@@ -196,7 +196,7 @@ public class ShotManager extends  AbstractManager{
 
     public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
-        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String eventSelection = ShotTable.ID_STREAM + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
         String[] whereArguments = new String[idUsers.size()+1];
@@ -229,7 +229,7 @@ public class ShotManager extends  AbstractManager{
 
     public List<ShotEntity> getEventMediaShots(String idEvent, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
-        String eventSelection = ShotTable.ID_EVENT + " = ?";
+        String eventSelection = ShotTable.ID_STREAM + " = ?";
         String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
 
         String[] whereArguments = new String[idUsers.size()+1];

@@ -25,11 +25,11 @@ public class StreamManager extends AbstractManager{
     }
 
     public StreamEntity getStreamById(String streamId) {
-        String whereSelection = DatabaseContract.EventTable.ID_EVENT + " = ?";
+        String whereSelection = DatabaseContract.StreamTable.ID_STREAM + " = ?";
         String[] whereArguments = new String[] { String.valueOf(streamId) };
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null,
+          getReadableDatabase().query(DatabaseContract.StreamTable.TABLE, DatabaseContract.StreamTable.PROJECTION, whereSelection, whereArguments, null,
             null, null);
 
         StreamEntity streamEntity = null;
@@ -45,7 +45,7 @@ public class StreamManager extends AbstractManager{
         if (streamIds.isEmpty()) {
             return new ArrayList<>();
         }
-        String whereSelection = DatabaseContract.EventTable.ID_EVENT
+        String whereSelection = DatabaseContract.StreamTable.ID_STREAM
           + " IN (" + createListPlaceholders(streamIds.size())+")";
         String[] whereArguments = new String[streamIds.size()];
         for (int i = 0; i < streamIds.size(); i++) {
@@ -53,7 +53,7 @@ public class StreamManager extends AbstractManager{
         }
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(DatabaseContract.StreamTable.TABLE, DatabaseContract.StreamTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         List<StreamEntity> resultEvents = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -74,7 +74,7 @@ public class StreamManager extends AbstractManager{
                 deleteStream(streamEntity);
             } else {
                 ContentValues contentValues = streamEntityMapper.toContentValues(streamEntity);
-                database.insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                database.insertWithOnConflict(DatabaseContract.StreamTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
     }
@@ -84,43 +84,43 @@ public class StreamManager extends AbstractManager{
             deleteStream(streamEntity);
         } else {
             ContentValues contentValues = streamEntityMapper.toContentValues(streamEntity);
-            getWritableDatabase().insertWithOnConflict(DatabaseContract.EventTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(DatabaseContract.StreamTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
 
     public long deleteStream(StreamEntity streamEntity){
-        String idEvent = streamEntity.getIdEvent();
+        String idEvent = streamEntity.getIdStream();
         return deleteStream(idEvent);
     }
 
     public long deleteStream(String idEvent) {
         long res = 0;
-        String args = DatabaseContract.EventTable.ID_EVENT + "=?";
+        String args = DatabaseContract.StreamTable.ID_STREAM + "=?";
         String[] stringArgs = new String[]{String.valueOf(idEvent)};
-        Cursor c = getReadableDatabase().query(DatabaseContract.EventTable.TABLE,
-          DatabaseContract.EventTable.PROJECTION,
+        Cursor c = getReadableDatabase().query(DatabaseContract.StreamTable.TABLE,
+          DatabaseContract.StreamTable.PROJECTION,
           args,
           stringArgs,
           null,
           null,
           null);
         if (c.getCount() > 0) {
-           res = getWritableDatabase().delete(DatabaseContract.EventTable.TABLE, args, stringArgs);
+           res = getWritableDatabase().delete(DatabaseContract.StreamTable.TABLE, args, stringArgs);
         }
         c.close();
         return res;
     }
 
     public void insertInSync(){
-        insertInTableSync(DatabaseContract.EventTable.TABLE, 10, 1000, 0);
+        insertInTableSync(DatabaseContract.StreamTable.TABLE, 10, 1000, 0);
     }
 
     public List<StreamSearchEntity> getDefaultStreamSearch() {
         List<StreamSearchEntity> eventSearchEntities = new ArrayList<>();
 
-        Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
-          DatabaseContract.EventSearchTable.PROJECTION,
+        Cursor queryResults = getReadableDatabase().query(DatabaseContract.StreamSearchTable.TABLE,
+          DatabaseContract.StreamSearchTable.PROJECTION,
           null,
           null,
           null,
@@ -137,11 +137,11 @@ public class StreamManager extends AbstractManager{
     }
 
     public StreamSearchEntity getStreamSearchResultById(String idStream) {
-        String whereClause = DatabaseContract.EventSearchTable.ID_EVENT + "=?";
+        String whereClause = DatabaseContract.StreamSearchTable.ID_STREAM + "=?";
         String[] whereArguments = new String[] { String.valueOf(idStream) };
 
-        Cursor queryResults = getReadableDatabase().query(DatabaseContract.EventSearchTable.TABLE,
-          DatabaseContract.EventSearchTable.PROJECTION,
+        Cursor queryResults = getReadableDatabase().query(DatabaseContract.StreamSearchTable.TABLE,
+          DatabaseContract.StreamSearchTable.PROJECTION,
           whereClause,
           whereArguments,
           null,
@@ -162,7 +162,7 @@ public class StreamManager extends AbstractManager{
         try{
             database.beginTransaction();
             for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
-                database.insertWithOnConflict(DatabaseContract.EventSearchTable.TABLE,
+                database.insertWithOnConflict(DatabaseContract.StreamSearchTable.TABLE,
                         null,
                         streamEntityMapper.toSearchContentValues(streamSearchEntity),
                         SQLiteDatabase.CONFLICT_REPLACE);
@@ -175,15 +175,15 @@ public class StreamManager extends AbstractManager{
     }
 
     public void deleteDefaultStreamSearch() {
-        getWritableDatabase().delete(DatabaseContract.EventSearchTable.TABLE, null, null);
+        getWritableDatabase().delete(DatabaseContract.StreamSearchTable.TABLE, null, null);
     }
 
     public Integer getListingCount(String idUser) {
-        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ?";
         String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(DatabaseContract.StreamTable.TABLE, DatabaseContract.StreamTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         int listingCount = queryResult.getCount();
 
@@ -192,12 +192,12 @@ public class StreamManager extends AbstractManager{
     }
 
     public List<StreamEntity> getStreamsListing(String idUser) {
-        String whereSelection = DatabaseContract.EventTable.ID_USER + " = ?";
+        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ?";
         String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
-          getReadableDatabase().query(DatabaseContract.EventTable.TABLE, DatabaseContract.EventTable.PROJECTION, whereSelection, whereArguments, null, null,
-            DatabaseContract.EventTable.TITLE);
+          getReadableDatabase().query(DatabaseContract.StreamTable.TABLE, DatabaseContract.StreamTable.PROJECTION, whereSelection, whereArguments, null, null,
+            DatabaseContract.StreamTable.TITLE);
 
         List<StreamEntity> resultEvents = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {

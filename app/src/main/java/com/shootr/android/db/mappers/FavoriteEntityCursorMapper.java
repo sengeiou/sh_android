@@ -14,7 +14,7 @@ public class FavoriteEntityCursorMapper {
 
     public FavoriteEntity fromCursor(Cursor cursor) {
         FavoriteEntity entity = new FavoriteEntity();
-        entity.setIdEvent(stringFromColumn(FavoriteTable.ID_EVENT, cursor));
+        entity.setIdStream(stringFromColumn(FavoriteTable.ID_STREAM, cursor));
         entity.setOrder(intFromColumn(FavoriteTable.ORDER, cursor));
 
         entity.setSynchronizedStatus(stringFromColumn(FavoriteTable.SYNCHRONIZED, cursor));
@@ -24,7 +24,7 @@ public class FavoriteEntityCursorMapper {
 
     public ContentValues toContentValues(FavoriteEntity entity) {
         ContentValues values = new ContentValues();
-        values.put(FavoriteTable.ID_EVENT, entity.getIdEvent());
+        values.put(FavoriteTable.ID_STREAM, entity.getIdStream());
         values.put(FavoriteTable.ORDER, entity.getOrder());
 
         values.put(FavoriteTable.SYNCHRONIZED, entity.getSynchronizedStatus());

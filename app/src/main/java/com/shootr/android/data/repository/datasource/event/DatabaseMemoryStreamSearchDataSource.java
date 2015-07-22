@@ -34,7 +34,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
     public void setLastSearchResults(List<StreamSearchEntity> eventSearchEntities) {
         lastEventSearchResults.clear();
         for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
-            lastEventSearchResults.put(streamSearchEntity.getIdEvent(), streamSearchEntity);
+            lastEventSearchResults.put(streamSearchEntity.getIdStream(), streamSearchEntity);
         }
     }
 
@@ -49,7 +49,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
     private List<StreamSearchEntity> updateWatchNumberInEvents(Map<String, Integer> watchersCountByEvents,
       List<StreamSearchEntity> defaultEventSearch) {
         for (StreamSearchEntity streamSearchEntity : defaultEventSearch) {
-            Integer eventWatchers = watchersCountByEvents.get(streamSearchEntity.getIdEvent());
+            Integer eventWatchers = watchersCountByEvents.get(streamSearchEntity.getIdStream());
             if (eventWatchers != null) {
                 streamSearchEntity.setWatchers(eventWatchers);
             }
@@ -83,11 +83,11 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
 
         Map<String, Integer> eventsWatchesCounts = new HashMap<>();
         for (UserEntity watcher : watchers) {
-            Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
+            Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingStream());
             if (currentCount != null) {
-                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), currentCount + 1);
+                eventsWatchesCounts.put(watcher.getIdWatchingStream(), currentCount + 1);
             } else {
-                eventsWatchesCounts.put(watcher.getIdWatchingEvent(), 1);
+                eventsWatchesCounts.put(watcher.getIdWatchingStream(), 1);
             }
         }
         return eventsWatchesCounts;

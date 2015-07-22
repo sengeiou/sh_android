@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.sync;
 
-import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.Stream;
@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SyncableEventEntityFactory extends SyncableEntityFactory<Stream, StreamEntity> {
+public class SyncableStreamEntityFactory extends SyncableEntityFactory<Stream, StreamEntity> {
 
     private StreamEntityMapper streamEntityMapper;
     private StreamDataSource localStreamDataSource;
 
-    @Inject public SyncableEventEntityFactory(StreamEntityMapper streamEntityMapper,
+    @Inject public SyncableStreamEntityFactory(StreamEntityMapper streamEntityMapper,
       @Local StreamDataSource localStreamDataSource) {
         this.streamEntityMapper = streamEntityMapper;
         this.localStreamDataSource = localStreamDataSource;
