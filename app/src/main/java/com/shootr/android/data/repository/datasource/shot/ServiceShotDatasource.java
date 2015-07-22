@@ -43,7 +43,7 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getShotsForEventTimeline(StreamTimelineParameters parameters) {
         try {
-            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getStreamId(),
+            List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),

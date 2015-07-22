@@ -357,7 +357,7 @@ public class ShootrDataService implements ShootrService {
 
     @Override public Integer getStreamMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
         Integer numberOfMedia = 0;
-        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByEvent(idEvent, idUsers);
+        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idEvent, idUsers);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -371,7 +371,7 @@ public class ShootrDataService implements ShootrService {
 
     @Override public List<ShotEntity> getStreamMediaShots(String idEvent, List<String> userIds) throws IOException {
         List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getMediaShotsByEvent(idEvent, userIds);
+        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idEvent, userIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
