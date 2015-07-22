@@ -5,7 +5,7 @@ import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
@@ -143,7 +143,7 @@ public class ShootrTimelineServiceTest {
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        EventTimelineParameters parameters = captureTimelineParameters();
+        StreamTimelineParameters parameters = captureTimelineParameters();
         assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
     }
 
@@ -154,7 +154,7 @@ public class ShootrTimelineServiceTest {
 
         shootrTimelineService.refreshTimelinesForWatchingEvent();
 
-        EventTimelineParameters parameters = captureTimelineParameters();
+        StreamTimelineParameters parameters = captureTimelineParameters();
         assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
     }
 
@@ -258,9 +258,9 @@ public class ShootrTimelineServiceTest {
         return shot;
     }
 
-    private EventTimelineParameters captureTimelineParameters() {
-        ArgumentCaptor<EventTimelineParameters> parametersCaptor =
-          ArgumentCaptor.forClass(EventTimelineParameters.class);
+    private StreamTimelineParameters captureTimelineParameters() {
+        ArgumentCaptor<StreamTimelineParameters> parametersCaptor =
+          ArgumentCaptor.forClass(StreamTimelineParameters.class);
         verify(remoteShotRepository).getShotsForEventTimeline(parametersCaptor.capture());
         return parametersCaptor.getValue();
     }
@@ -296,8 +296,8 @@ public class ShootrTimelineServiceTest {
         return shot;
     }
 
-    private EventTimelineParameters anyEventParameters() {
-        return any(EventTimelineParameters.class);
+    private StreamTimelineParameters anyEventParameters() {
+        return any(StreamTimelineParameters.class);
     }
 
     private ActivityTimelineParameters anyActivityParameters() {

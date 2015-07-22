@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
@@ -72,9 +72,9 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void selectEvent() {
-        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<EventSearchResult>() {
+        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<StreamSearchResult>() {
             @Override
-            public void onLoaded(EventSearchResult eventSearchResult) {
+            public void onLoaded(StreamSearchResult streamSearchResult) {
                 loadTimeline();
             }
         });

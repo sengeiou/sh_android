@@ -1,8 +1,8 @@
 package com.shootr.android.domain;
 
-public class EventTimelineParameters extends TimelineParameters {
+public class StreamTimelineParameters extends TimelineParameters {
 
-    private String eventId;
+    private String streamId;
 
     private String shotType;
 
@@ -10,12 +10,12 @@ public class EventTimelineParameters extends TimelineParameters {
 
     private Boolean includeNiceShots;
 
-    private EventTimelineParameters() {
+    private StreamTimelineParameters() {
         /* private constructor, use builder */
     }
 
-    public String getEventId() {
-        return eventId;
+    public String getStreamId() {
+        return streamId;
     }
 
     public String getShotType() {
@@ -44,7 +44,7 @@ public class EventTimelineParameters extends TimelineParameters {
 
     public static class Builder {
 
-        private EventTimelineParameters parameters = new EventTimelineParameters();
+        private StreamTimelineParameters parameters = new StreamTimelineParameters();
 
         public Builder() {
             setDefaults();
@@ -57,7 +57,7 @@ public class EventTimelineParameters extends TimelineParameters {
         }
 
         public Builder forEvent(Stream stream) {
-            parameters.eventId = stream.getId();
+            parameters.streamId = stream.getId();
             return this;
         }
 
@@ -77,7 +77,7 @@ public class EventTimelineParameters extends TimelineParameters {
             return this;
         }
 
-        public EventTimelineParameters build() {
+        public StreamTimelineParameters build() {
             return parameters;
         }
     }

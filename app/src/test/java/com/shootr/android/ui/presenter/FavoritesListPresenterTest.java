@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
@@ -113,11 +113,11 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).renderFavorites(stubResultModel());
     }
 
-    private EventSearchResult stubEvent() {
-        return new EventSearchResult();
+    private StreamSearchResult stubEvent() {
+        return new StreamSearchResult();
     }
 
-    private List<EventSearchResult> stubResult() {
+    private List<StreamSearchResult> stubResult() {
         return Arrays.asList(stubEvent());
     }
 
@@ -125,19 +125,19 @@ public class FavoritesListPresenterTest {
         return eventResultModelMapper.transform(stubResult());
     }
 
-    private List<EventSearchResult> empty() {
+    private List<StreamSearchResult> empty() {
         return Collections.EMPTY_LIST;
     }
 
-    protected Interactor.Callback<List<EventSearchResult>> anyCallback() {
+    protected Interactor.Callback<List<StreamSearchResult>> anyCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupInteractorCallbacks(final List<EventSearchResult> result) {
+    private void setupInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<EventSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
+                Interactor.Callback<List<StreamSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(result);
                 return null;
             }

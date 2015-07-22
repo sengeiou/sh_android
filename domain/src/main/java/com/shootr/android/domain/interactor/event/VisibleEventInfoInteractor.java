@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class VisibleEventInfoInteractor implements Interactor {
 
     private static final String VISIBLE_EVENT = null;
-    private static final EventInfo NO_EVENT_VISIBLE_INFO = null;
+    private static final StreamInfo NO_EVENT_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -74,22 +74,22 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     protected void obtainLocalEventInfo() {
-        EventInfo eventInfo = getEventInfo(localWatchRepository, localStreamRepository);
-        if (eventInfo != NO_EVENT_VISIBLE_INFO) {
-            notifyLoaded(eventInfo);
+        StreamInfo streamInfo = getEventInfo(localWatchRepository, localStreamRepository);
+        if (streamInfo != NO_EVENT_VISIBLE_INFO) {
+            notifyLoaded(streamInfo);
         }
     }
 
     protected void obtainRemoteEventInfo() {
-        EventInfo eventInfo = getEventInfo(remoteUserRepository, remoteStreamRepository);
-        if (eventInfo != null) {
-            notifyLoaded(eventInfo);
+        StreamInfo streamInfo = getEventInfo(remoteUserRepository, remoteStreamRepository);
+        if (streamInfo != null) {
+            notifyLoaded(streamInfo);
         } else {
             notifyLoaded(noEvent());
         }
     }
 
-    protected EventInfo getEventInfo(UserRepository userRepository, StreamRepository streamRepository) {
+    protected StreamInfo getEventInfo(UserRepository userRepository, StreamRepository streamRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
 
         String wantedEventId = getWantedEventId(currentUser);
@@ -137,23 +137,23 @@ public class VisibleEventInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private EventInfo buildEventInfo(Stream currentVisibleStream, List<User> eventWatchers, User currentUser) {
+    private StreamInfo buildEventInfo(Stream currentVisibleStream, List<User> eventWatchers, User currentUser) {
         boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingEvent());
-        return EventInfo.builder()
+        return StreamInfo.builder()
           .event(currentVisibleStream)
           .watchers(eventWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();
     }
 
-    private EventInfo noEvent() {
-        return new EventInfo();
+    private StreamInfo noEvent() {
+        return new StreamInfo();
     }
 
-    private void notifyLoaded(final EventInfo eventInfo) {
+    private void notifyLoaded(final StreamInfo streamInfo) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(eventInfo);
+                callback.onLoaded(streamInfo);
             }
         });
     }
@@ -169,6 +169,6 @@ public class VisibleEventInfoInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(EventInfo eventInfo);
+        void onLoaded(StreamInfo streamInfo);
     }
 }

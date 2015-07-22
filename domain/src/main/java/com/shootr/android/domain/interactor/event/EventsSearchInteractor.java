@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -69,17 +69,17 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void performSearch() {
-        List<EventSearchResult> events = streamSearchRepository.getStreams(query, localeProvider.getLocale());
+        List<StreamSearchResult> events = streamSearchRepository.getStreams(query, localeProvider.getLocale());
         events = filterEventsNotMatchingQuery(events);
 
-        EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
+        StreamSearchResultList streamSearchResultList = new StreamSearchResultList(events);
 
-        notifySearchResultsSuccessful(eventSearchResultList);
+        notifySearchResultsSuccessful(streamSearchResultList);
     }
 
-    private List<EventSearchResult> filterEventsNotMatchingQuery(List<EventSearchResult> events) {
-        List<EventSearchResult> filteredResults = new ArrayList<>(events.size());
-        for (EventSearchResult event : events) {
+    private List<StreamSearchResult> filterEventsNotMatchingQuery(List<StreamSearchResult> events) {
+        List<StreamSearchResult> filteredResults = new ArrayList<>(events.size());
+        for (StreamSearchResult event : events) {
             if (matchesQuery(event)) {
                 filteredResults.add(event);
             }
@@ -87,11 +87,11 @@ public class EventsSearchInteractor implements Interactor {
         return filteredResults;
     }
 
-    private boolean matchesQuery(EventSearchResult event) {
+    private boolean matchesQuery(StreamSearchResult event) {
         return event.getStream().getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
-    private void notifySearchResultsSuccessful(final EventSearchResultList events) {
+    private void notifySearchResultsSuccessful(final StreamSearchResultList events) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(events);
@@ -109,6 +109,6 @@ public class EventsSearchInteractor implements Interactor {
 
     public interface Callback {
 
-        void onLoaded(EventSearchResultList results);
+        void onLoaded(StreamSearchResultList results);
     }
 }

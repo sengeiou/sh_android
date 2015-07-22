@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -37,12 +37,12 @@ public class GetFavoriteEventsInteractorTest {
     private static final String EVENT_ID_1 = "id_1";
     private static final String EVENT_ID_2 = "id_2";
 
-    @Mock Interactor.Callback<List<EventSearchResult>> callback;
+    @Mock Interactor.Callback<List<StreamSearchResult>> callback;
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock StreamRepository localStreamRepository;
     @Mock WatchersRepository watchersRepository;
-    @Spy SpyCallback<List<EventSearchResult>> spyCallback = new SpyCallback<>();
+    @Spy SpyCallback<List<StreamSearchResult>> spyCallback = new SpyCallback<>();
 
     private GetFavoriteEventsInteractor getFavoriteEventsInteractor;
 
@@ -93,7 +93,7 @@ public class GetFavoriteEventsInteractorTest {
         when(localFavoriteRepository.getFavorites()).thenReturn(unorderedFavorites());
 
         getFavoriteEventsInteractor.loadFavoriteEvents(spyCallback);
-        List<EventSearchResult> results = spyCallback.firstResult();
+        List<StreamSearchResult> results = spyCallback.firstResult();
 
         assertThat(results).containsSequence(orderedEventResults());
     }
@@ -114,14 +114,14 @@ public class GetFavoriteEventsInteractorTest {
         );
     }
 
-    private EventSearchResult[] orderedEventResults() {
-        return new EventSearchResult[] {
+    private StreamSearchResult[] orderedEventResults() {
+        return new StreamSearchResult[] {
           eventResult(EVENT_ID_0), eventResult(EVENT_ID_1), eventResult(EVENT_ID_2)
         };
     }
 
-    private EventSearchResult eventResult(String eventId) {
-        return new EventSearchResult(event(eventId), 0);
+    private StreamSearchResult eventResult(String eventId) {
+        return new StreamSearchResult(event(eventId), 0);
     }
 
     private Stream event(String eventId) {

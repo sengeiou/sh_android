@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.local;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -25,7 +25,7 @@ public class LocalShotRepository implements ShotRepository {
         return shot;
     }
 
-    @Override public List<Shot> getShotsForEventTimeline(EventTimelineParameters parameters) {
+    @Override public List<Shot> getShotsForEventTimeline(StreamTimelineParameters parameters) {
         List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForEventTimeline(parameters);
         return shotEntityMapper.transform(shotsForEvent);
     }

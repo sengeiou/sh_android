@@ -1,6 +1,6 @@
 package com.shootr.android.ui.model.mappers;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import java.util.ArrayList;
@@ -19,23 +19,23 @@ public class EventResultModelMapper {
         this.eventModelMapper = eventModelMapper;
     }
 
-    public EventResultModel transform(EventSearchResult eventSearchResult) {
-        if (eventSearchResult == null) {
+    public EventResultModel transform(StreamSearchResult streamSearchResult) {
+        if (streamSearchResult == null) {
             return null;
         }
-        checkNotNull(eventSearchResult.getStream());
-        EventModel eventModel = eventModelMapper.transform(eventSearchResult.getStream());
+        checkNotNull(streamSearchResult.getStream());
+        EventModel eventModel = eventModelMapper.transform(streamSearchResult.getStream());
 
         EventResultModel resultModel = new EventResultModel();
         resultModel.setEventModel(eventModel);
-        resultModel.setWatchers(eventSearchResult.getWatchersNumber());
+        resultModel.setWatchers(streamSearchResult.getWatchersNumber());
         return resultModel;
     }
 
-    public List<EventResultModel> transform(List<EventSearchResult> eventSearchResults) {
-        List<EventResultModel> models = new ArrayList<>(eventSearchResults.size());
-        for (EventSearchResult eventSearchResult : eventSearchResults) {
-            models.add(transform(eventSearchResult));
+    public List<EventResultModel> transform(List<StreamSearchResult> streamSearchResults) {
+        List<EventResultModel> models = new ArrayList<>(streamSearchResults.size());
+        for (StreamSearchResult streamSearchResult : streamSearchResults) {
+            models.add(transform(streamSearchResult));
         }
         return models;
     }

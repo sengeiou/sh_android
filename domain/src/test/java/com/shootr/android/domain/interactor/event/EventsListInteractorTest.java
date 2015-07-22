@@ -1,8 +1,8 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -52,7 +52,7 @@ public class EventsListInteractorTest {
     @Mock SessionRepository sessionRepository;
     @Mock UserRepository localUserRepository;
     @Mock TimeUtils timeUtils;
-    @Spy SpyCallback<EventSearchResultList> spyCallback = new SpyCallback<>();
+    @Spy SpyCallback<StreamSearchResultList> spyCallback = new SpyCallback<>();
     @Mock Interactor.ErrorCallback dummyErrorCallback;
     @Mock LocaleProvider localeProvider;
     @Mock StreamRepository localStreamRepository;
@@ -83,8 +83,8 @@ public class EventsListInteractorTest {
 
         interactor.loadEvents(spyCallback, dummyErrorCallback);
 
-        verify(spyCallback).onLoaded(any(EventSearchResultList.class));
-        assertThat(spyCallback.firstResult().getEventSearchResults()).hasSize(2);
+        verify(spyCallback).onLoaded(any(StreamSearchResultList.class));
+        assertThat(spyCallback.firstResult().getStreamSearchResults()).hasSize(2);
     }
 
     @Test public void shouldLoadRemoteEventsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
@@ -185,24 +185,24 @@ public class EventsListInteractorTest {
         when(eventListSynchronizationRepository.getEventsRefreshDate()).thenReturn(NOW);
     }
 
-    private List<EventSearchResult> twoEventResults() {
+    private List<StreamSearchResult> twoEventResults() {
         return Arrays.asList(eventResult(), eventResult());
     }
 
-    private EventSearchResultList twoEventResultList() {
-        return new EventSearchResultList(twoEventResults());
+    private StreamSearchResultList twoEventResultList() {
+        return new StreamSearchResultList(twoEventResults());
     }
 
-    private List<EventSearchResult> emptyResults() {
+    private List<StreamSearchResult> emptyResults() {
         return Collections.emptyList();
     }
 
-    private EventSearchResultList emptyResultList() {
-        return new EventSearchResultList(emptyResults());
+    private StreamSearchResultList emptyResultList() {
+        return new StreamSearchResultList(emptyResults());
     }
 
-    private EventSearchResult eventResult() {
-        EventSearchResult result = new EventSearchResult();
+    private StreamSearchResult eventResult() {
+        StreamSearchResult result = new StreamSearchResult();
         result.setStream(new Stream());
         return result;
     }

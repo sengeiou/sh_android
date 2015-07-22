@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
@@ -34,9 +34,9 @@ public class FavoritesListPresenter implements Presenter{
 
     protected void loadFavorites() {
         favoritesListView.showLoading();
-        getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<EventSearchResult>>() {
+        getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override
-            public void onLoaded(List<EventSearchResult> events) {
+            public void onLoaded(List<StreamSearchResult> events) {
                 favoritesListView.hideLoading();
                 if (events.isEmpty()) {
                     favoritesListView.showEmpty();

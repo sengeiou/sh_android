@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
@@ -269,7 +269,7 @@ public class StreamTimelinePresenterTest {
         return any(Interactor.Callback.class);
     }
 
-    private Interactor.Callback<EventSearchResult> anySelectCallback() {
+    private Interactor.Callback<StreamSearchResult> anySelectCallback() {
         return any(Interactor.Callback.class);
     }
     //endregion
@@ -309,10 +309,10 @@ public class StreamTimelinePresenterTest {
         return stream;
     }
 
-    private EventSearchResult eventResult() {
-        EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setStream(selectedEvent());
-        return eventSearchResult;
+    private StreamSearchResult eventResult() {
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(selectedEvent());
+        return streamSearchResult;
     }
 
     //endregion
@@ -348,7 +348,7 @@ public class StreamTimelinePresenterTest {
     private void setupSelectEventInteractorCallbacksEvent() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<EventSearchResult> callback = (Interactor.Callback<EventSearchResult>) invocation.getArguments()[1];
+                Interactor.Callback<StreamSearchResult> callback = (Interactor.Callback<StreamSearchResult>) invocation.getArguments()[1];
                 callback.onLoaded(eventResult());
                 return null;
             }

@@ -5,7 +5,7 @@ import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
@@ -41,9 +41,9 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForEventTimeline(StreamTimelineParameters parameters) {
         try {
-            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getEventId(),
+            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),

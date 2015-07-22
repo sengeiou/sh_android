@@ -1,19 +1,19 @@
 package com.shootr.android.domain;
 
-public class EventSearchResult {
+public class StreamSearchResult {
 
     private Stream stream;
     private int watchersNumber;
 
-    public EventSearchResult() {
+    public StreamSearchResult() {
     }
 
-    public EventSearchResult(Stream stream, int watchersNumber) {
+    public StreamSearchResult(Stream stream, int watchersNumber) {
         this.stream = stream;
         this.watchersNumber = watchersNumber;
     }
 
-    public EventSearchResult(Stream stream, Integer watchersNumber) {
+    public StreamSearchResult(Stream stream, Integer watchersNumber) {
         this.stream = stream;
         this.watchersNumber = watchersNumber != null ? watchersNumber : 0;
     }
@@ -36,9 +36,9 @@ public class EventSearchResult {
 
     @Override public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EventSearchResult)) return false;
+        if (!(o instanceof StreamSearchResult)) return false;
 
-        EventSearchResult that = (EventSearchResult) o;
+        StreamSearchResult that = (StreamSearchResult) o;
 
         if (watchersNumber != that.watchersNumber) return false;
         return stream.equals(that.stream);
@@ -51,8 +51,8 @@ public class EventSearchResult {
     }
 
     @Override public String toString() {
-        return "EventSearchResult{" +
-          "event=" + stream +
+        return "StreamSearchResult{" +
+          "stream=" + stream +
           ", watchersNumber=" + watchersNumber +
           '}';
     }

@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -27,7 +27,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
     private final StreamRepository localStreamRepository;
     private final WatchersRepository watchersRepository;
 
-    private Callback<List<EventSearchResult>> callback;
+    private Callback<List<StreamSearchResult>> callback;
 
     @Inject public GetFavoriteEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
@@ -41,7 +41,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         this.watchersRepository = watchersRepository;
     }
 
-    public void loadFavoriteEvents(Interactor.Callback<List<EventSearchResult>> callback) {
+    public void loadFavoriteEvents(Interactor.Callback<List<StreamSearchResult>> callback) {
         this.callback = callback;
         interactorHandler.execute(this);
     }
@@ -67,7 +67,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         List<Favorite> favorites = favoriteRepository.getFavorites();
         List<Stream> favoriteStreams = eventsFromFavorites(favorites);
         favoriteStreams = sortEventsByName(favoriteStreams);
-        List<EventSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteStreams);
+        List<StreamSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteStreams);
         notifyLoaded(favoriteEventsWithWatchers);
     }
 
@@ -92,20 +92,20 @@ public class GetFavoriteEventsInteractor implements Interactor {
         return localStreamRepository.getStreamsByIds(idEvents);
     }
 
-    private List<EventSearchResult> addWatchersToEvents(List<Stream> streams) {
+    private List<StreamSearchResult> addWatchersToEvents(List<Stream> streams) {
         Map<String, Integer> watchersInEvents = watchersRepository.getWatchers();
-        List<EventSearchResult> eventsWithWatchers = new ArrayList<>(streams.size());
+        List<StreamSearchResult> eventsWithWatchers = new ArrayList<>(streams.size());
         for (Stream stream : streams) {
             Integer eventWatchers = watchersInEvents.get(stream.getId());
-            eventsWithWatchers.add(new EventSearchResult(stream, eventWatchers));
+            eventsWithWatchers.add(new StreamSearchResult(stream, eventWatchers));
         }
         return eventsWithWatchers;
     }
 
-    private void notifyLoaded(final List<EventSearchResult> eventSearchResults) {
+    private void notifyLoaded(final List<StreamSearchResult> streamSearchResults) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(eventSearchResults);
+                callback.onLoaded(streamSearchResults);
             }
         });
     }

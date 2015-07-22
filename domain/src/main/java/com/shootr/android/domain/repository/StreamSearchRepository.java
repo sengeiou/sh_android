@@ -1,17 +1,17 @@
 package com.shootr.android.domain.repository;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import java.util.List;
 
 public interface StreamSearchRepository {
 
-    List<EventSearchResult> getDefaultStreams(String locale);
+    List<StreamSearchResult> getDefaultStreams(String locale);
 
-    List<EventSearchResult> getStreams(String query, String locale);
+    List<StreamSearchResult> getStreams(String query, String locale);
 
-    void putDefaultStreams(List<EventSearchResult> eventSearchResults);
+    void putDefaultStreams(List<StreamSearchResult> streamSearchResults);
 
     void deleteDefaultStreams();
 
-    List<EventSearchResult> getStreamsListing(String listingIdUser);
+    List<StreamSearchResult> getStreamsListing(String listingIdUser);
 }

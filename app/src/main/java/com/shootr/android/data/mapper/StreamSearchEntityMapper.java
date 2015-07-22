@@ -2,7 +2,7 @@ package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,31 +16,31 @@ public class StreamSearchEntityMapper {
         this.streamEntityMapper = streamEntityMapper;
     }
 
-    public EventSearchResult transform(StreamSearchEntity streamSearchEntity) {
+    public StreamSearchResult transform(StreamSearchEntity streamSearchEntity) {
         Stream stream = streamEntityMapper.transform(streamSearchEntity);
 
-        EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setStream(stream);
-        eventSearchResult.setWatchersNumber(streamSearchEntity.getWatchers());
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(stream);
+        streamSearchResult.setWatchersNumber(streamSearchEntity.getWatchers());
 
-        return eventSearchResult;
+        return streamSearchResult;
     }
 
-    public List<EventSearchResult> transformToDomain(List<StreamSearchEntity> eventSearchEntities) {
-        List<EventSearchResult> eventSearchResults = new ArrayList<>(eventSearchEntities.size());
+    public List<StreamSearchResult> transformToDomain(List<StreamSearchEntity> eventSearchEntities) {
+        List<StreamSearchResult> streamSearchResults = new ArrayList<>(eventSearchEntities.size());
         for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
-            eventSearchResults.add(transform(streamSearchEntity));
+            streamSearchResults.add(transform(streamSearchEntity));
         }
-        return eventSearchResults;
+        return streamSearchResults;
     }
 
-    public StreamSearchEntity transform(EventSearchResult eventSearchResult) {
-        Stream stream = eventSearchResult.getStream();
+    public StreamSearchEntity transform(StreamSearchResult streamSearchResult) {
+        Stream stream = streamSearchResult.getStream();
 
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         streamEntityMapper.transformToTemplate(stream, streamSearchEntity);
 
-        streamSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
+        streamSearchEntity.setWatchers(streamSearchResult.getWatchersNumber());
 
         streamSearchEntity.setBirth(new Date());
         streamSearchEntity.setModified(new Date());
@@ -48,10 +48,10 @@ public class StreamSearchEntityMapper {
         return streamSearchEntity;
     }
 
-    public List<StreamSearchEntity> transform(List<EventSearchResult> eventSearchResults) {
-        List<StreamSearchEntity> entities = new ArrayList<>(eventSearchResults.size());
-        for (EventSearchResult eventSearchResult : eventSearchResults) {
-            entities.add(transform(eventSearchResult));
+    public List<StreamSearchEntity> transform(List<StreamSearchResult> streamSearchResults) {
+        List<StreamSearchEntity> entities = new ArrayList<>(streamSearchResults.size());
+        for (StreamSearchResult streamSearchResult : streamSearchResults) {
+            entities.add(transform(streamSearchResult));
         }
         return entities;
     }

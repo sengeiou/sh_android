@@ -2,7 +2,7 @@ package com.shootr.android.domain;
 
 import java.util.List;
 
-public class EventInfo {
+public class StreamInfo {
 
     private List<User> watchers;
 
@@ -44,29 +44,29 @@ public class EventInfo {
 
     public static class Builder {
 
-        private EventInfo eventInfo;
+        private StreamInfo streamInfo;
 
         public Builder() {
-            this.eventInfo = new EventInfo();
+            this.streamInfo = new StreamInfo();
         }
 
         public Builder watchers(List<User> watches) {
-            eventInfo.setWatchers(watches);
+            streamInfo.setWatchers(watches);
             return this;
         }
 
         public Builder currentUserWatching(User currentUserWatching) {
-            eventInfo.setCurrentUserWatching(currentUserWatching);
+            streamInfo.setCurrentUserWatching(currentUserWatching);
             return this;
         }
 
         public Builder event(Stream stream) {
-            eventInfo.setStream(stream);
+            streamInfo.setStream(stream);
             return this;
         }
 
-        public EventInfo build() {
-            return eventInfo;
+        public StreamInfo build() {
+            return streamInfo;
         }
     }
 }

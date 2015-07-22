@@ -1,6 +1,6 @@
 package com.shootr.android.domain.repository;
 
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import java.util.List;
 
@@ -8,7 +8,7 @@ public interface ShotRepository {
 
     Shot putShot(Shot shot);
 
-    List<Shot> getShotsForEventTimeline(EventTimelineParameters parameters);
+    List<Shot> getShotsForEventTimeline(StreamTimelineParameters parameters);
 
     Shot getShot(String shotId);
 

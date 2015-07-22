@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -19,7 +19,7 @@ public class GetUserListingEventsInteractor implements Interactor {
     private final StreamSearchRepository remoteStreamSearchRepository;
 
     private String idUser;
-    private Callback<List<EventSearchResult>> callback;
+    private Callback<List<StreamSearchResult>> callback;
 
     @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamSearchRepository localEventRepositoty,
@@ -30,7 +30,7 @@ public class GetUserListingEventsInteractor implements Interactor {
         this.remoteStreamSearchRepository = remoteEventRepositoty;
     }
 
-    public void loadUserListingEvents(Callback<List<EventSearchResult>> callback, String idUser){
+    public void loadUserListingEvents(Callback<List<StreamSearchResult>> callback, String idUser){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
@@ -54,11 +54,11 @@ public class GetUserListingEventsInteractor implements Interactor {
     }
 
     private void loadUserListingEventsFromRepository(StreamSearchRepository eventRepository){
-        List<EventSearchResult> listingEvents = eventRepository.getStreamsListing(idUser);
+        List<StreamSearchResult> listingEvents = eventRepository.getStreamsListing(idUser);
         notifyLoaded(listingEvents);
     }
 
-    private void notifyLoaded(final List<EventSearchResult> listingEvents) {
+    private void notifyLoaded(final List<StreamSearchResult> listingEvents) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingEvents);

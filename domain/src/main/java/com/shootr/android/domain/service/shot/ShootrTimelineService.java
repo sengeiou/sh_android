@@ -4,7 +4,7 @@ import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
@@ -95,17 +95,17 @@ public class ShootrTimelineService {
 
         Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(stream.getId());
 
-        EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
+        StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forEvent(stream) //
           .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //
           .build();
 
-        List<Shot> localShots = localShotRepository.getShotsForEventTimeline(eventTimelineParameters);
+        List<Shot> localShots = localShotRepository.getShotsForEventTimeline(streamTimelineParameters);
         if (localShots.isEmpty()) {
-            eventTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
+            streamTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
         }
-        return remoteShotRepository.getShotsForEventTimeline(eventTimelineParameters);
+        return remoteShotRepository.getShotsForEventTimeline(streamTimelineParameters);
     }
 
     private Timeline buildSortedTimeline(List<Shot> shots) {

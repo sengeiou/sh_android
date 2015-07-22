@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
@@ -67,12 +67,12 @@ public class GetEventTimelineInteractor implements Interactor {
         }
     }
 
-    private List<Shot> loadLocalShots(EventTimelineParameters timelineParameters) {
+    private List<Shot> loadLocalShots(StreamTimelineParameters timelineParameters) {
         return localShotRepository.getShotsForEventTimeline(timelineParameters);
     }
 
-    private EventTimelineParameters buildParameters(Stream stream) {
-        return EventTimelineParameters.builder()
+    private StreamTimelineParameters buildParameters(Stream stream) {
+        return StreamTimelineParameters.builder()
           .forEvent(stream)
           .build();
     }

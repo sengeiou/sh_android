@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetUserListingEventsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
@@ -36,15 +36,15 @@ public class ListingListPresenter implements Presenter{
 
     private void loadListingList() {
         listingView.showLoading();
-        getUserListingEventsInteractor.loadUserListingEvents(new Interactor.Callback<List<EventSearchResult>>() {
-            @Override public void onLoaded(List<EventSearchResult> events) {
+        getUserListingEventsInteractor.loadUserListingEvents(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> events) {
                 listingView.hideLoading();
                 onListingLoaded(events);
             }
         }, profileIdUser);
     }
 
-    private void onListingLoaded(List<EventSearchResult> events) {
+    private void onListingLoaded(List<StreamSearchResult> events) {
         if (!events.isEmpty()) {
             List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
             this.renderViewEventsList(eventModels);

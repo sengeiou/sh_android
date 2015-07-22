@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -45,7 +45,7 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.hideKeyboard();
         findEventsView.showLoading();
         eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
-            @Override public void onLoaded(EventSearchResultList results) {
+            @Override public void onLoaded(StreamSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
@@ -64,10 +64,10 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.navigateToEventTimeline(idEvent, eventTitle);
     }
 
-    private void onSearchResults(EventSearchResultList eventSearchResultList) {
-        List<EventSearchResult> eventSearchResults = eventSearchResultList.getEventSearchResults();
-        if (!eventSearchResults.isEmpty()) {
-            List<EventResultModel> eventModels = eventResultModelMapper.transform(eventSearchResults);
+    private void onSearchResults(StreamSearchResultList streamSearchResultList) {
+        List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
+        if (!streamSearchResults.isEmpty()) {
+            List<EventResultModel> eventModels = eventResultModelMapper.transform(streamSearchResults);
             renderViewEventsList(eventModels);
         } else {
             this.showViewEmpty();

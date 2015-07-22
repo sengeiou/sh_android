@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -40,7 +40,7 @@ public class SelectStreamInteractorTest {
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock SessionRepository sessionRepository;
-    @Mock Interactor.Callback<EventSearchResult> dummyCallback;
+    @Mock Interactor.Callback<StreamSearchResult> dummyCallback;
     @Mock TimeUtils timeUtils;
     @Mock WatchersRepository localWatchersRepository;
 
@@ -188,8 +188,8 @@ public class SelectStreamInteractorTest {
         return user;
     }
 
-    private EventSearchResult anyEvent() {
-        return any(EventSearchResult.class);
+    private StreamSearchResult anyEvent() {
+        return any(StreamSearchResult.class);
     }
     //endregion
 }

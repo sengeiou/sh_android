@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventInfo;
+import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -125,8 +125,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void getEventInfo() {
         eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
-            @Override public void onLoaded(EventInfo eventInfo) {
-                onEventInfoLoaded(eventInfo);
+            @Override public void onLoaded(StreamInfo streamInfo) {
+                onEventInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -136,15 +136,15 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         });
     }
 
-    public void onEventInfoLoaded(EventInfo eventInfo) {
-        if (eventInfo.getStream() == null) {
+    public void onEventInfoLoaded(StreamInfo streamInfo) {
+        if (streamInfo.getStream() == null) {
             this.showViewEmpty();
         } else {
             this.hideViewEmpty();
-            this.renderEventInfo(eventInfo.getStream());
-            this.renderWatchersList(eventInfo.getWatchers());
-            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
-            this.renderWatchersCount(eventInfo.getWatchersCount());
+            this.renderEventInfo(streamInfo.getStream());
+            this.renderWatchersList(streamInfo.getWatchers());
+            this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
+            this.renderWatchersCount(streamInfo.getWatchersCount());
             this.loadMediaCount();
             this.showViewDetail();
         }

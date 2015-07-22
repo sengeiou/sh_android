@@ -1,8 +1,8 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsListInteractor;
 import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
@@ -108,7 +108,7 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {
-        setupEventListInteractorCallbacks(new ArrayList<EventSearchResult>());
+        setupEventListInteractorCallbacks(new ArrayList<StreamSearchResult>());
 
         presenter.loadDefaultEventList();
 
@@ -134,25 +134,25 @@ public class EventsListPresenterTest {
         return any(Interactor.ErrorCallback.class);
     }
 
-    private Interactor.Callback<EventSearchResultList> anyEventsCallback() {
+    private Interactor.Callback<StreamSearchResultList> anyEventsCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupEventListInteractorCallbacks(final List<EventSearchResult> result) {
+    private void setupEventListInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<EventSearchResultList> callback =
-                  (Interactor.Callback<EventSearchResultList>) invocation.getArguments()[0];
-                callback.onLoaded(new EventSearchResultList(result));
+                Interactor.Callback<StreamSearchResultList> callback =
+                  (Interactor.Callback<StreamSearchResultList>) invocation.getArguments()[0];
+                callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
         }).when(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
     }
 
-    private EventSearchResult eventResult() {
-        EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setStream(selectedEvent());
-        return eventSearchResult;
+    private StreamSearchResult eventResult() {
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(selectedEvent());
+        return streamSearchResult;
     }
 
     private EventResultModel selectedEventModel() {

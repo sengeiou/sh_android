@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.android.R;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.SelectEventInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -46,10 +46,10 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
     //FIXME Esto es una ñapa como un castillo
     private void getEvent(String eventId) {
-        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<EventSearchResult>() {
+        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<StreamSearchResult>() {
             @Override
-            public void onLoaded(EventSearchResult eventSearchResult) {
-                setEventTitle(eventSearchResult.getStream().getTag());
+            public void onLoaded(StreamSearchResult streamSearchResult) {
+                setEventTitle(streamSearchResult.getStream().getTag());
             }
         });
     }

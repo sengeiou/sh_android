@@ -1,8 +1,8 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -37,7 +37,7 @@ public class EventsListInteractor implements Interactor {
     private final WatchersRepository watchersRepository;
     private final StreamRepository localStreamRepository;
 
-    private Callback<EventSearchResultList> callback;
+    private Callback<StreamSearchResultList> callback;
     private ErrorCallback errorCallback;
 
     @Inject
@@ -65,7 +65,7 @@ public class EventsListInteractor implements Interactor {
         this.localStreamRepository = localStreamRepository;
     }
 
-    public void loadEvents(Callback<EventSearchResultList> callback, ErrorCallback errorCallback) {
+    public void loadEvents(Callback<StreamSearchResultList> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -73,7 +73,7 @@ public class EventsListInteractor implements Interactor {
 
     @Override
     public void execute() throws Exception {
-        List<EventSearchResult> localEvents = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+        List<StreamSearchResult> localEvents = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(localEvents);
 
         Long currentTime = timeUtils.getCurrentTime();
@@ -88,7 +88,7 @@ public class EventsListInteractor implements Interactor {
     }
 
     protected void refreshEvents() {
-        List<EventSearchResult> remoteEvents = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+        List<StreamSearchResult> remoteEvents = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
         notifyLoaded(remoteEvents);
         localStreamSearchRepository.deleteDefaultStreams();
         localStreamSearchRepository.putDefaultStreams(remoteEvents);
@@ -101,9 +101,9 @@ public class EventsListInteractor implements Interactor {
     }
 
     //region Result
-    private void notifyLoaded(final List<EventSearchResult> results) {
-        final EventSearchResultList searchResultList =
-          new EventSearchResultList(results, getWatchingEventWithWatchNumber());
+    private void notifyLoaded(final List<StreamSearchResult> results) {
+        final StreamSearchResultList searchResultList =
+          new StreamSearchResultList(results, getWatchingEventWithWatchNumber());
         postExecutionThread.post(new Runnable() {
             @Override
             public void run() {
@@ -112,16 +112,16 @@ public class EventsListInteractor implements Interactor {
         });
     }
 
-    private EventSearchResult getWatchingEventWithWatchNumber() {
+    private StreamSearchResult getWatchingEventWithWatchNumber() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         String idWatchingEvent = currentUser.getIdWatchingEvent();
         if (idWatchingEvent != null) {
             Stream stream = localStreamRepository.getStreamById(idWatchingEvent);
             Integer watchers = watchersRepository.getWatchers(idWatchingEvent);
-            EventSearchResult eventSearchResult = new EventSearchResult();
-            eventSearchResult.setStream(stream);
-            eventSearchResult.setWatchersNumber(watchers);
-            return eventSearchResult;
+            StreamSearchResult streamSearchResult = new StreamSearchResult();
+            streamSearchResult.setStream(stream);
+            streamSearchResult.setWatchersNumber(watchers);
+            return streamSearchResult;
         } else {
             return null;
         }

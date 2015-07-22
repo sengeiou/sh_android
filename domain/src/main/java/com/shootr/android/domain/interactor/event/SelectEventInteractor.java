@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -28,7 +28,7 @@ public class SelectEventInteractor implements Interactor {
     private final TimeUtils timeUtils;
 
     private String idSelectedEvent;
-    private Callback<EventSearchResult> callback;
+    private Callback<StreamSearchResult> callback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
@@ -46,7 +46,7 @@ public class SelectEventInteractor implements Interactor {
     }
     //endregion
 
-    public void selectEvent(String idEvent, Callback<EventSearchResult> callback) {
+    public void selectEvent(String idEvent, Callback<StreamSearchResult> callback) {
         this.idSelectedEvent = idEvent;
         this.callback = callback;
         interactorHandler.execute(this);
@@ -90,11 +90,11 @@ public class SelectEventInteractor implements Interactor {
         return timeUtils.getCurrentTime();
     }
 
-    private EventSearchResult attachWatchNumber(Stream stream) {
-        EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setStream(stream);
-        eventSearchResult.setWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
-        return eventSearchResult;
+    private StreamSearchResult attachWatchNumber(Stream stream) {
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(stream);
+        streamSearchResult.setWatchersNumber(localWatchersRepository.getWatchers(stream.getId()));
+        return streamSearchResult;
     }
     private void notifyLoaded(final Stream selectedStream) {
         postExecutionThread.post(new Runnable() {

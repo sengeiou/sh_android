@@ -1,8 +1,8 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
@@ -90,18 +90,18 @@ public class FindEventsPresenterTest {
         verify(findEventsView, times(1)).showContent();
     }
 
-    private void setupSearchEventInteractorCallbacks(final List<EventSearchResult> result) {
+    private void setupSearchEventInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 EventsSearchInteractor.Callback callback =
                   (EventsSearchInteractor.Callback) invocation.getArguments()[1];
-                callback.onLoaded(new EventSearchResultList(result));
+                callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
         }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
     }
 
-    private void setupSearchEventInteractorErrorCallbacks(final List<EventSearchResult> result) {
+    private void setupSearchEventInteractorErrorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 EventsSearchInteractor.ErrorCallback callback =
@@ -124,10 +124,10 @@ public class FindEventsPresenterTest {
         return any(Interactor.ErrorCallback.class);
     }
 
-    private EventSearchResult eventResult() {
-        EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setStream(selectedEvent());
-        return eventSearchResult;
+    private StreamSearchResult eventResult() {
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(selectedEvent());
+        return streamSearchResult;
     }
 
     private Stream selectedEvent() {

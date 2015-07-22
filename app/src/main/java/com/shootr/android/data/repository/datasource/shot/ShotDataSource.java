@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import java.util.List;
 
 public interface ShotDataSource {
@@ -10,7 +10,7 @@ public interface ShotDataSource {
 
     void putShots(List<ShotEntity> shotEntities);
 
-    List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters);
+    List<ShotEntity> getShotsForEventTimeline(StreamTimelineParameters parameters);
 
     ShotEntity getShot(String shotId);
 

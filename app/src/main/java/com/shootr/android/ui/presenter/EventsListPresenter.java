@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
-import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -72,10 +72,10 @@ public class EventsListPresenter implements Presenter {
     }
 
     protected void loadDefaultEventList() {
-        eventsListInteractor.loadEvents(new Interactor.Callback<EventSearchResultList>() {
-            @Override public void onLoaded(EventSearchResultList eventSearchResultList) {
+        eventsListInteractor.loadEvents(new Interactor.Callback<StreamSearchResultList>() {
+            @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
                 eventsListView.hideLoading();
-                onDefaultEventListLoaded(eventSearchResultList);
+                onDefaultEventListLoaded(streamSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -84,12 +84,12 @@ public class EventsListPresenter implements Presenter {
         });
     }
 
-    public void onDefaultEventListLoaded(EventSearchResultList resultList) {
-        List<EventSearchResult> eventSearchResults = resultList.getEventSearchResults();
-        if (!eventSearchResults.isEmpty()) {
-            List<EventResultModel> eventResultModels = eventResultModelMapper.transform(eventSearchResults);
+    public void onDefaultEventListLoaded(StreamSearchResultList resultList) {
+        List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
+        if (!streamSearchResults.isEmpty()) {
+            List<EventResultModel> eventResultModels = eventResultModelMapper.transform(streamSearchResults);
             this.renderViewEventsList(eventResultModels);
-            EventSearchResult currentWatchingEvent = resultList.getCurrentWatchingEvent();
+            StreamSearchResult currentWatchingEvent = resultList.getCurrentWatchingStream();
             this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
         }else{
             eventsListView.showLoading();

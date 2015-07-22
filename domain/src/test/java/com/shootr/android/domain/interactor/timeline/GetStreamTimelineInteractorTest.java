@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
@@ -79,13 +79,13 @@ public class GetStreamTimelineInteractorTest {
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
 
-        verify(localShotRepository, never()).getShotsForEventTimeline(any(EventTimelineParameters.class));
+        verify(localShotRepository, never()).getShotsForEventTimeline(any(StreamTimelineParameters.class));
     }
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForEventTimeline(any(EventTimelineParameters.class))).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForEventTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadEventTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
@@ -161,8 +161,8 @@ public class GetStreamTimelineInteractorTest {
     //endregion
 
     //region Spies
-    private EventTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
-        ArgumentCaptor<EventTimelineParameters> captor = ArgumentCaptor.forClass(EventTimelineParameters.class);
+    private StreamTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
+        ArgumentCaptor<StreamTimelineParameters> captor = ArgumentCaptor.forClass(StreamTimelineParameters.class);
         verify(shotRepository).getShotsForEventTimeline(captor.capture());
         return captor.getValue();
     }

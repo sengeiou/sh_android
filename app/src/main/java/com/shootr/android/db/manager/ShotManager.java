@@ -8,7 +8,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,14 +101,14 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE, 3, 1000, 0);
     }
 
-    public List<ShotEntity> getShotsByEventParameters(EventTimelineParameters parameters) {
+    public List<ShotEntity> getShotsByEventParameters(StreamTimelineParameters parameters) {
         String eventSelection = ShotTable.ID_EVENT + " = ?";
         String typeSelection = ShotTable.TYPE + " = ?";
         //TODO since & max
         //TODO limit
 
         String[] whereArguments = new String[2];
-        whereArguments[0] = String.valueOf(parameters.getEventId());
+        whereArguments[0] = String.valueOf(parameters.getStreamId());
         whereArguments[1] = String.valueOf(parameters.getShotType());
         String whereClause = eventSelection + " AND " + typeSelection;
 
