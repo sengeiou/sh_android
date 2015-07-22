@@ -65,7 +65,7 @@ public class DebugApiModule {
         return mockOrRealService(ResetPasswordApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
-    @Provides StreamApiService provideEventApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
     BooleanPreference debugMode) {
       return mockOrRealService(StreamApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }

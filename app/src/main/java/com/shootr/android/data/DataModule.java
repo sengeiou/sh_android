@@ -156,7 +156,7 @@ public class DataModule {
     }
 
     @Provides @Singleton
-    StreamDateTimeTextProvider provideEventTimeFormatter(ResourcesStreamDateTimeTextProvider timeTextFormatter) {
+    StreamDateTimeTextProvider provideStreamTimeFormatter(ResourcesStreamDateTimeTextProvider timeTextFormatter) {
         return timeTextFormatter;
     }
 
