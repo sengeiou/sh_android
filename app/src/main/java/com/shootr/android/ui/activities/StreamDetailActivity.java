@@ -118,7 +118,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     private void initializeViews() {
         ButterKnife.bind(this);
-        headerMaxElevation = getResources().getDimension(R.dimen.event_header_elevation);
+        headerMaxElevation = getResources().getDimension(R.dimen.stream_header_elevation);
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
             @Override public void onProfile(String idUser) {
                 navigateToUserProfile(idUser);

@@ -34,9 +34,9 @@
 
     <!--Badge-->
     <dimen name="badge_text_size">10sp</dimen>
-    <dimen name="event_result_picture_height">84dp</dimen>
-    <dimen name="event_result_picture_width">112dp</dimen>
-    <dimen name="event_header_elevation">4dp</dimen>
+    <dimen name="stream_result_picture_height">84dp</dimen>
+    <dimen name="stream_result_picture_width">112dp</dimen>
+    <dimen name="stream_header_elevation">4dp</dimen>
     <dimen name="navdrawer_profile_avatar_size">64dp</dimen>
     <dimen name="checkin_bar_height">56dp</dimen>
     <dimen name="shot_item_image_height">185dp</dimen>
