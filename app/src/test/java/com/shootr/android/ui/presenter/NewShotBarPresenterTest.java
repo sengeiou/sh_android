@@ -67,7 +67,7 @@ public class NewShotBarPresenterTest {
     }
 
     @Test
-    public void shouldShowDraftsButtonWhenShotFailedEventReceived() throws Exception {
+    public void shouldShowDraftsButtonWhenShotFailedStreamReceived() throws Exception {
         setupDraftsInteractorCallbacks(draftsList());
 
         shotFailedReceiver.onShotFailed(SHOT_FAILED_STREAM);

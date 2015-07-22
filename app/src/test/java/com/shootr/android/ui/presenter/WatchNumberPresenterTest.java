@@ -28,7 +28,7 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
     private static final WatchUpdateRequest.Stream WATCH_UPDATE_STREAM = null;
-    public static final String EVENT_ID_STUB = "event_id";
+    public static final String STREAM_ID_STUB = "stream_id";
 
     @Mock WatchNumberInteractor watchNumberInteractor;
     @Mock Bus bus;
@@ -36,7 +36,7 @@ public class WatchNumberPresenterTest {
 
     private WatchNumberPresenter presenter;
     private WatchUpdateRequest.Receiver watchUpdateReceiver;
-    private StreamChanged.Receiver eventChangedReceiver;
+    private StreamChanged.Receiver streamChangedReceiver;
 
     @Before
     public void setUp() throws Exception {
@@ -44,12 +44,12 @@ public class WatchNumberPresenterTest {
         presenter = new WatchNumberPresenter(bus, watchNumberInteractor);
         presenter.setView(watchNumberView);
         watchUpdateReceiver = presenter;
-        eventChangedReceiver = presenter;
+        streamChangedReceiver = presenter;
     }
 
     @Test
     public void shouldLoadWatchNumberWhenInitialized() throws Exception {
-        presenter.initialize(watchNumberView, EVENT_ID_STUB);
+        presenter.initialize(watchNumberView, STREAM_ID_STUB);
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
@@ -82,7 +82,7 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
-    public void shouldHideCountViewWhenNoEvent() throws Exception {
+    public void shouldHideCountViewWhenNoStream() throws Exception {
         setupWatchNumberInteractorCallbacks(WatchNumberInteractor.NO_STREAM);
 
         presenter.retrieveData();
@@ -98,8 +98,8 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
-    public void shouldLoadWatchNumberWhenEventChanged() throws Exception {
-        eventChangedReceiver.onStreamChanged(eventChangedEvent());
+    public void shouldLoadWatchNumberWhenStreamChanged() throws Exception {
+        streamChangedReceiver.onStreamChanged(streamChangedStream());
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
@@ -112,10 +112,10 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
-    public void shouldHideWatchNumberWhenExitEventReceivedAlthougInteractorHasntCallback() throws Exception {
+    public void shouldHideWatchNumberWhenExitStreamReceivedAlthougInteractorHasntCallback() throws Exception {
         doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
 
-        eventChangedReceiver.onStreamChanged(exitEventEvent());
+        streamChangedReceiver.onStreamChanged(exitStream());
 
         verify(watchNumberView).hideWatchingPeopleCount();
     }
@@ -130,19 +130,19 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
-    public void shouldEventChangedReceiverHaveSubscribeAnnotation() throws Exception {
+    public void shouldStreamChangedReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = StreamChanged.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = eventChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Stream.class);
+        Method receiverDeclaredMethod = streamChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Stream.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
 
-    private StreamChanged.Stream eventChangedEvent() {
-        return new StreamChanged.Stream(EVENT_ID_STUB);
+    private StreamChanged.Stream streamChangedStream() {
+        return new StreamChanged.Stream(STREAM_ID_STUB);
     }
 
-    private StreamChanged.Stream exitEventEvent() {
+    private StreamChanged.Stream exitStream() {
         return new StreamChanged.Stream(null);
     }
 

@@ -85,50 +85,50 @@ public class WatcherTimeFormatterTest {
 
     @Test public void shouldShowJustEnteredFormatWhenDateIs59Seconds() throws Exception {
         long now = date(7, 5, 2015) + time(12, 0, 59);
-        long eventDate = date(7, 5, 2015) + time(12, 0, 0);
+        long streamDate = date(7, 5, 2015) + time(12, 0, 0);
         when(timeUtils.getCurrentTime()).thenReturn(now);
 
-        watchersTimeFormatter.jointDateText(eventDate);
+        watchersTimeFormatter.jointDateText(streamDate);
 
         verify(watchersTimeTextFormatter).getJustEnteredFormat();
     }
 
     @Test public void shouldShowMinutesAgoFormatWhenDateIs1Minute() throws Exception {
         long now = date(7, 5, 2015) + time(12, 1, 0);
-        long eventDate = date(7, 5, 2015) + time(12, 0, 0);
+        long streamDate = date(7, 5, 2015) + time(12, 0, 0);
         when(timeUtils.getCurrentTime()).thenReturn(now);
 
-        watchersTimeFormatter.jointDateText(eventDate);
+        watchersTimeFormatter.jointDateText(streamDate);
 
         verify(watchersTimeTextFormatter).getMinutesAgoFormat(any(DateTime.class));
     }
 
     @Test public void shouldShowHoursAgoFormatWhenDateIs1Hours() throws Exception {
         long now = date(7, 5, 2015) + time(12, 40, 0);
-        long eventDate = date(7, 5, 2015) + time(11, 40, 0);
+        long streamDate = date(7, 5, 2015) + time(11, 40, 0);
         when(timeUtils.getCurrentTime()).thenReturn(now);
 
-        watchersTimeFormatter.jointDateText(eventDate);
+        watchersTimeFormatter.jointDateText(streamDate);
 
         verify(watchersTimeTextFormatter).getHoursAgoFormat(any(DateTime.class));
     }
 
     @Test public void shouldShowDaysAgoFormatWhenDateIs1Day() throws Exception {
         long now = date(7, 5, 2015) + time(12, 40, 0);
-        long eventDate = date(6, 5, 2015) + time(12, 40, 0);
+        long streamDate = date(6, 5, 2015) + time(12, 40, 0);
         when(timeUtils.getCurrentTime()).thenReturn(now);
 
-        watchersTimeFormatter.jointDateText(eventDate);
+        watchersTimeFormatter.jointDateText(streamDate);
 
         verify(watchersTimeTextFormatter).getDaysAgoFormat(any(DateTime.class));
     }
 
     @Test public void shouldNotShowDaysAgoFormatWhenDateIsLessThan1Day() throws Exception {
         long now = date(7, 5, 2015) + time(12, 40, 0);
-        long eventDate = date(6, 5, 2015) + time(12, 41, 0);
+        long StreamDate = date(6, 5, 2015) + time(12, 41, 0);
         when(timeUtils.getCurrentTime()).thenReturn(now);
 
-        watchersTimeFormatter.jointDateText(eventDate);
+        watchersTimeFormatter.jointDateText(StreamDate);
 
         verify(watchersTimeTextFormatter,never()).getDaysAgoFormat(any(DateTime.class));
     }

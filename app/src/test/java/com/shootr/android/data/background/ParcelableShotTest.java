@@ -16,9 +16,9 @@ public class ParcelableShotTest {
     private static final Long USER_ID = 2L;
     private static final String USERNAME = "username";
     private static final String AVATAR = "avatar";
-    private static final Long EVENT_ID = 3L;
-    private static final String EVENT_TITLE = "title";
-    private static final String EVENT_TAG = "tag";
+    private static final Long STREAM_ID = 3L;
+    private static final String STREAM_TITLE = "title";
+    private static final String STREAM_TAG = "tag";
     private static final Long QUEUE_ID = 4L;
     private static final Long PARENT_ID = 5L;
     private static final Long PARENT_USER_ID = 6L;
@@ -78,9 +78,9 @@ public class ParcelableShotTest {
     }
 
     @Test
-    public void testShotFromParcelableHasEventInfo() throws Exception {
+    public void testShotFromParcelableHasStreamInfo() throws Exception {
         Shot shotStub = shotStub();
-        Shot.ShotStreamInfo eventInfoStub = shotStub.getStreamInfo();
+        Shot.ShotStreamInfo streamInfoStub = shotStub.getStreamInfo();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
 
         Parcel parcel = MockParcel.obtain();
@@ -89,15 +89,15 @@ public class ParcelableShotTest {
 
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
-        Shot.ShotStreamInfo eventInfoFromParcel = shotFromParcel.getStreamInfo();
+        Shot.ShotStreamInfo streamInfoFromParcel = shotFromParcel.getStreamInfo();
 
-        assertThat(eventInfoFromParcel.getIdStream()).isEqualTo(eventInfoStub.getIdStream());
-        assertThat(eventInfoFromParcel.getStreamTitle()).isEqualTo(eventInfoStub.getStreamTitle());
-        assertThat(eventInfoFromParcel.getStreamTag()).isEqualTo(eventInfoStub.getStreamTag());
+        assertThat(streamInfoFromParcel.getIdStream()).isEqualTo(streamInfoStub.getIdStream());
+        assertThat(streamInfoFromParcel.getStreamTitle()).isEqualTo(streamInfoStub.getStreamTitle());
+        assertThat(streamInfoFromParcel.getStreamTag()).isEqualTo(streamInfoStub.getStreamTag());
     }
 
     @Test
-    public void testEventInfoFromParcelableIsNullIfOriginalWasNull() throws Exception {
+    public void testStreamInfoFromParcelableIsNullIfOriginalWasNull() throws Exception {
         Shot shotStub = shotStub();
         shotStub.setStreamInfo(null);
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
@@ -107,8 +107,8 @@ public class ParcelableShotTest {
 
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
-        Shot.ShotStreamInfo eventInfoFromParcel = shotFromParcel.getStreamInfo();
-        assertThat(eventInfoFromParcel).isNull();
+        Shot.ShotStreamInfo streamInfoFromParcel = shotFromParcel.getStreamInfo();
+        assertThat(streamInfoFromParcel).isNull();
     }
 
     @Test
@@ -177,16 +177,16 @@ public class ParcelableShotTest {
         shot.setImage(IMAGE_STUB);
         shot.setPublishDate(new Date());
         shot.setUserInfo(userInfo());
-        shot.setStreamInfo(eventInfo());
+        shot.setStreamInfo(streamInfo());
         return shot;
     }
 
-    private Shot.ShotStreamInfo eventInfo() {
-        Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
-        eventInfo.setIdStream(String.valueOf(EVENT_ID));
-        eventInfo.setStreamTitle(EVENT_TITLE);
-        eventInfo.setStreamTag(EVENT_TAG);
-        return eventInfo;
+    private Shot.ShotStreamInfo streamInfo() {
+        Shot.ShotStreamInfo streamInfo = new Shot.ShotStreamInfo();
+        streamInfo.setIdStream(String.valueOf(STREAM_ID));
+        streamInfo.setStreamTitle(STREAM_TITLE);
+        streamInfo.setStreamTag(STREAM_TAG);
+        return streamInfo;
     }
 
     private Shot.ShotUserInfo userInfo() {

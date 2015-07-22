@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
@@ -42,7 +42,7 @@ public class StreamTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Stream SHOT_SENT_STREAM = null;
-    private static final String SELECTED_EVENT_ID = "stream";
+    private static final String SELECTED_STREAM_ID = "stream";
 
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -66,16 +66,16 @@ public class StreamTimelinePresenterTest {
     //region Select stream
 
     @Test
-    public void shouldSelectEventWhenInitialized() throws Exception {
-        presenter.initialize(streamTimelineView, SELECTED_EVENT_ID);
+    public void shouldSelectStreamWhenInitialized() throws Exception {
+        presenter.initialize(streamTimelineView, SELECTED_STREAM_ID);
 
-        verify(selectStreamInteractor).selectStream(eq(SELECTED_EVENT_ID), anySelectCallback());
+        verify(selectStreamInteractor).selectStream(eq(SELECTED_STREAM_ID), anySelectCallback());
     }
     //endregion
 
     //region Load timeline
-    @Test public void shouldLoadTimlelineWhenSelectEventIfSelectEventCallbacks() throws Exception {
-        setupSelectEventInteractorCallbacksEvent();
+    @Test public void shouldLoadTimlelineWhenSelectStreamIfSelectStreamCallbacks() throws Exception {
+        setupSelectStreamInteractorCallbacksStream();
 
         presenter.selectStream();
 
@@ -243,7 +243,7 @@ public class StreamTimelinePresenterTest {
     }
     //endregion
 
-    //region Bus events
+    //region Bus streams
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
         shotSentReceiver.onShotSent(SHOT_SENT_STREAM);
 
@@ -301,15 +301,15 @@ public class StreamTimelinePresenterTest {
         return shot;
     }
 
-    private com.shootr.android.domain.Stream selectedEvent() {
+    private com.shootr.android.domain.Stream selectedStream() {
         com.shootr.android.domain.Stream stream = new com.shootr.android.domain.Stream();
-        stream.setId(SELECTED_EVENT_ID);
+        stream.setId(SELECTED_STREAM_ID);
         return stream;
     }
 
-    private StreamSearchResult eventResult() {
+    private StreamSearchResult streamResult() {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
-        streamSearchResult.setStream(selectedEvent());
+        streamSearchResult.setStream(selectedStream());
         return streamSearchResult;
     }
 
@@ -343,11 +343,11 @@ public class StreamTimelinePresenterTest {
         }).when(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
 
-    private void setupSelectEventInteractorCallbacksEvent() {
+    private void setupSelectStreamInteractorCallbacksStream() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<StreamSearchResult> callback = (Interactor.Callback<StreamSearchResult>) invocation.getArguments()[1];
-                callback.onLoaded(eventResult());
+                callback.onLoaded(streamResult());
                 return null;
             }
         }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));

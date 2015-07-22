@@ -34,9 +34,9 @@ import static org.mockito.Mockito.verify;
 
 public class StreamsListPresenterTest {
 
-    private static final String SELECTED_EVENT_ID = "selected_event";
-    private static final String SELECTED_EVENT_TITLE = "title";
-    private static final String EVENT_AUTHOR_ID = "author";
+    private static final String SELECTED_STREAM_ID = "selected_stream";
+    private static final String SELECTED_STREAM_TITLE = "title";
+    private static final String STREAM_AUTHOR_ID = "author";
 
     @Mock Bus bus;
     @Mock StreamsListInteractor streamsListInteractor;
@@ -57,86 +57,86 @@ public class StreamsListPresenterTest {
         presenter.setView(streamsListView);
     }
 
-    @Test public void shouldLoadEventListOnInitialized() throws Exception {
+    @Test public void shouldLoadStreamListOnInitialized() throws Exception {
         presenter.initialize(streamsListView);
 
-        verify(streamsListInteractor).loadStreams(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor).loadStreams(anyStreamsCallback(), anyErrorCallback());
     }
 
-    @Test public void shouldNavigateToEventTimelineWhenEventSelected() throws Exception {
-        presenter.selectStream(selectedEventModel());
+    @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
+        presenter.selectStream(selectedStreamModel());
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
     }
 
-    @Test public void shouldNavigateToEventTimelineWhenNewEventCreated() throws Exception {
-        presenter.streamCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+    @Test public void shouldNavigateToStreamTimelineWhenNewStreamCreated() throws Exception {
+        presenter.streamCreated(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
     }
 
-    @Test public void shouldNavigateToEventTimelineWhenNewEventCreatedIfSelectEventInteractorCallbacksEventId() throws Exception {
-        presenter.streamCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+    @Test public void shouldNavigateToStreamTimelineWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
+        presenter.streamCreated(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
     }
 
-    @Test public void shouldRenderEventListWhenEventListInteractorCallbacksResults() throws Exception {
-        setupEventListInteractorCallbacks(Arrays.asList(eventResult(), eventResult()));
+    @Test public void shouldRenderStreamListWhenStreamListInteractorCallbacksResults() throws Exception {
+        setupStreamListInteractorCallbacks(Arrays.asList(streamResult(), streamResult()));
 
         presenter.loadDefaultStreamList();
 
         verify(streamsListView).renderStream(anyListOf(StreamResultModel.class));
     }
 
-    @Test public void shouldHideLoadingWhenEventListInteractorCallbacksResults() throws Exception {
-        setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
+    @Test public void shouldHideLoadingWhenStreamListInteractorCallbacksResults() throws Exception {
+        setupStreamListInteractorCallbacks(Collections.singletonList(streamResult()));
 
         presenter.loadDefaultStreamList();
 
         verify(streamsListView).hideLoading();
     }
 
-    @Test public void shouldNotShowLoadingWhenEventListInteractorCallbacksResults() throws Exception {
-        setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
+    @Test public void shouldNotShowLoadingWhenStreamListInteractorCallbacksResults() throws Exception {
+        setupStreamListInteractorCallbacks(Collections.singletonList(streamResult()));
 
         presenter.loadDefaultStreamList();
 
         verify(streamsListView, never()).showLoading();
     }
 
-    @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {
-        setupEventListInteractorCallbacks(new ArrayList<StreamSearchResult>());
+    @Test public void shouldShowLoadingWhenStreamListInteractorCallbacksEmpty() throws Exception {
+        setupStreamListInteractorCallbacks(new ArrayList<StreamSearchResult>());
 
         presenter.loadDefaultStreamList();
 
         verify(streamsListView).showLoading();
     }
 
-    @Test public void shouldLoadEventListOnceWhenInitializedAndResumed() throws Exception {
+    @Test public void shouldLoadStreamListOnceWhenInitializedAndResumed() throws Exception {
         presenter.initialize(streamsListView);
         presenter.resume();
 
-        verify(streamsListInteractor, times(1)).loadStreams(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor, times(1)).loadStreams(anyStreamsCallback(), anyErrorCallback());
     }
 
-    @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
+    @Test public void shouldLoadStreamListTwiceWhenInitializedPausedAndResumed() throws Exception {
         presenter.initialize(streamsListView);
         presenter.pause();
         presenter.resume();
 
-        verify(streamsListInteractor, times(2)).loadStreams(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor, times(2)).loadStreams(anyStreamsCallback(), anyErrorCallback());
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
     }
 
-    private Interactor.Callback<StreamSearchResultList> anyEventsCallback() {
+    private Interactor.Callback<StreamSearchResultList> anyStreamsCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupEventListInteractorCallbacks(final List<StreamSearchResult> result) {
+    private void setupStreamListInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<StreamSearchResultList> callback =
@@ -144,30 +144,30 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
-        }).when(streamsListInteractor).loadStreams(anyEventsCallback(), anyErrorCallback());
+        }).when(streamsListInteractor).loadStreams(anyStreamsCallback(), anyErrorCallback());
     }
 
-    private StreamSearchResult eventResult() {
+    private StreamSearchResult streamResult() {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
-        streamSearchResult.setStream(selectedEvent());
+        streamSearchResult.setStream(selectedStream());
         return streamSearchResult;
     }
 
-    private StreamResultModel selectedEventModel() {
+    private StreamResultModel selectedStreamModel() {
         StreamModel streamModel = new StreamModel();
-        streamModel.setIdStream(SELECTED_EVENT_ID);
-        streamModel.setTitle(SELECTED_EVENT_TITLE);
-        streamModel.setTag(SELECTED_EVENT_TITLE);
+        streamModel.setIdStream(SELECTED_STREAM_ID);
+        streamModel.setTitle(SELECTED_STREAM_TITLE);
+        streamModel.setTag(SELECTED_STREAM_TITLE);
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
 
-    private Stream selectedEvent() {
+    private Stream selectedStream() {
         Stream stream = new Stream();
-        stream.setId(SELECTED_EVENT_ID);
-        stream.setTitle(SELECTED_EVENT_TITLE);
-        stream.setAuthorId(EVENT_AUTHOR_ID);
+        stream.setId(SELECTED_STREAM_ID);
+        stream.setTitle(SELECTED_STREAM_TITLE);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
 }

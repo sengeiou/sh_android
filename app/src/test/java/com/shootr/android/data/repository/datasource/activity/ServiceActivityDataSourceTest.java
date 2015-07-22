@@ -56,7 +56,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostEventToBusWhenSyncTriggerActivityReceived() throws Exception {
+    public void shouldPostStreamToBusWhenSyncTriggerActivityReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
@@ -67,7 +67,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
+    public void shouldPostOnlyOneStreamWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
           syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -79,7 +79,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
+    public void shouldPostOnlyOneStreamWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -93,7 +93,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
+    public void shouldPostOnlyOneStreamWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivityWithDifferentDates());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -107,7 +107,7 @@ public class ServiceActivityDataSourceTest {
     }
 
     @Test
-    public void shouldNotPostEventWhenTriggerActivityFromCurrentUser() throws Exception {
+    public void shouldNotPostStreamWhenTriggerActivityFromCurrentUser() throws Exception {
         when(activityDataSource.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           oneTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER_STUB);

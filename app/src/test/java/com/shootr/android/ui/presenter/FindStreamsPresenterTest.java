@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
 
 public class FindStreamsPresenterTest {
 
-    private static final String SELECTED_EVENT_ID = "selected_event";
-    private static final String SELECTED_EVENT_TITLE = "title";
-    private static final String EVENT_AUTHOR_ID = "author";
+    private static final String SELECTED_STREAM_ID = "selected_stream";
+    private static final String SELECTED_STREAM_TITLE = "title";
+    private static final String STREAM_AUTHOR_ID = "author";
     public static final String QUERY = "query";
 
     @Mock StreamSearchInteractor streamSearchInteractor;
@@ -51,7 +51,7 @@ public class FindStreamsPresenterTest {
     }
 
     @Test
-    public void shouldHideEventListWhileSearching() throws Exception {
+    public void shouldHideStreamListWhileSearching() throws Exception {
         findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).hideContent();
@@ -66,7 +66,7 @@ public class FindStreamsPresenterTest {
 
     @Test
     public void shouldHideLoadingWhenFinishSearching() throws Exception {
-        setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
+        setupSearchStreamInteractorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
 
@@ -75,7 +75,7 @@ public class FindStreamsPresenterTest {
 
     @Test
     public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
-        setupSearchEventInteractorErrorCallbacks(Collections.singletonList(eventResult()));
+        setupSearchStreamInteractorErrorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
 
@@ -83,15 +83,15 @@ public class FindStreamsPresenterTest {
     }
 
     @Test
-    public void shouldShowEventListWhenFinishSearching() throws Exception {
-        setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
+    public void shouldShowStreamListWhenFinishSearching() throws Exception {
+        setupSearchStreamInteractorCallbacks(Collections.singletonList(streamResult()));
 
         findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).showContent();
     }
 
-    private void setupSearchEventInteractorCallbacks(final List<StreamSearchResult> result) {
+    private void setupSearchStreamInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 StreamSearchInteractor.Callback callback =
@@ -99,10 +99,10 @@ public class FindStreamsPresenterTest {
                 callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
-        }).when(streamSearchInteractor).searchStreams(anyString(), anyEventSearchCallback(), anyErrorCallback());
+        }).when(streamSearchInteractor).searchStreams(anyString(), anyStreamSearchCallback(), anyErrorCallback());
     }
 
-    private void setupSearchEventInteractorErrorCallbacks(final List<StreamSearchResult> result) {
+    private void setupSearchStreamInteractorErrorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 StreamSearchInteractor.ErrorCallback callback =
@@ -114,10 +114,10 @@ public class FindStreamsPresenterTest {
                 });
                 return null;
             }
-        }).when(streamSearchInteractor).searchStreams(anyString(), anyEventSearchCallback(), anyErrorCallback());
+        }).when(streamSearchInteractor).searchStreams(anyString(), anyStreamSearchCallback(), anyErrorCallback());
     }
 
-    private StreamSearchInteractor.Callback anyEventSearchCallback() {
+    private StreamSearchInteractor.Callback anyStreamSearchCallback() {
         return any(StreamSearchInteractor.Callback.class);
     }
 
@@ -125,17 +125,17 @@ public class FindStreamsPresenterTest {
         return any(Interactor.ErrorCallback.class);
     }
 
-    private StreamSearchResult eventResult() {
+    private StreamSearchResult streamResult() {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
-        streamSearchResult.setStream(selectedEvent());
+        streamSearchResult.setStream(selectedStream());
         return streamSearchResult;
     }
 
-    private Stream selectedEvent() {
+    private Stream selectedStream() {
         Stream stream = new Stream();
-        stream.setId(SELECTED_EVENT_ID);
-        stream.setTitle(SELECTED_EVENT_TITLE);
-        stream.setAuthorId(EVENT_AUTHOR_ID);
+        stream.setId(SELECTED_STREAM_ID);
+        stream.setTitle(SELECTED_STREAM_TITLE);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
 

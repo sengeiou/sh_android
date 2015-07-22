@@ -113,12 +113,12 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).renderFavorites(stubResultModel());
     }
 
-    private StreamSearchResult stubEvent() {
+    private StreamSearchResult stubStream() {
         return new StreamSearchResult();
     }
 
     private List<StreamSearchResult> stubResult() {
-        return Arrays.asList(stubEvent());
+        return Arrays.asList(stubStream());
     }
 
     private List<StreamResultModel> stubResultModel() {
