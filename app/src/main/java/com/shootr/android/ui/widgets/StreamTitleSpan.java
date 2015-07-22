@@ -4,12 +4,12 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class EventTitleSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
+public abstract class StreamTitleSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
 
     private String eventId;
     private String eventTitle;
 
-    public EventTitleSpan(String eventId, String eventTitle) {
+    public StreamTitleSpan(String eventId, String eventTitle) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
     }
@@ -21,10 +21,10 @@ public abstract class EventTitleSpan extends ClickableSpan implements ClickableT
     }
 
     @Override public void onClick(View widget) {
-        onEventClick(eventId, eventTitle);
+        onStreamClick(eventId, eventTitle);
     }
 
-    public abstract void onEventClick(String eventId, String eventTitle);
+    public abstract void onStreamClick(String eventId, String eventTitle);
 
     @Override public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);

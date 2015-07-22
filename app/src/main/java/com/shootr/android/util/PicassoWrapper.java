@@ -31,7 +31,7 @@ public class PicassoWrapper {
         return loadResult;
     }
 
-    public RequestCreator loadEventPicture(String pictureUrl) {
+    public RequestCreator loadStreamPicture(String pictureUrl) {
         boolean isValidPicture = pictureUrl != null && !pictureUrl.isEmpty();
         RequestCreator loadResult;
         if (isValidPicture) {

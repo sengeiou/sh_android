@@ -4,53 +4,51 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class EventResultViewHolder extends RecyclerView.ViewHolder {
+public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
-    private final OnEventClickListener onEventClickListener;
+    private final OnStreamClickListener onStreamClickListener;
     private final PicassoWrapper picasso;
 
-    @Bind(R.id.event_picture) ImageView picture;
+    @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_author) TextView author;
-    @Bind(R.id.event_watchers) TextView watchers;
+    @Bind(R.id.stream_watchers) TextView watchers;
 
-    public EventResultViewHolder(View itemView,
-      OnEventClickListener onEventClickListener,
-      PicassoWrapper picasso) {
+    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, PicassoWrapper picasso) {
         super(itemView);
-        this.onEventClickListener = onEventClickListener;
+        this.onStreamClickListener = onStreamClickListener;
         this.picasso = picasso;
         ButterKnife.bind(this, itemView);
     }
 
-    public void render(StreamResultModel event) {
-        this.setClickListener(event);
-        title.setText(event.getStreamModel().getTitle());
-        int watchersCount = event.getWatchers();
+    public void render(StreamResultModel streamResultModel) {
+        this.setClickListener(streamResultModel);
+        title.setText(streamResultModel.getStreamModel().getTitle());
+        int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0) {
             watchers.setVisibility(View.VISIBLE);
             watchers.setText(getWatchersText(watchersCount));
         } else {
             watchers.setVisibility(View.GONE);
         }
-        author.setText(event.getStreamModel().getAuthorUsername());
+        author.setText(streamResultModel.getStreamModel().getAuthorUsername());
 
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
-        String pictureUrl = event.getStreamModel().getPicture();
-        picasso.loadEventPicture(pictureUrl).into(picture);
+        String pictureUrl = streamResultModel.getStreamModel().getPicture();
+        picasso.loadStreamPicture(pictureUrl).into(picture);
     }
 
-    private void setClickListener(final StreamResultModel eventResult) {
+    private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onEventClickListener.onEventClick(eventResult);
+                onStreamClickListener.onStreamClick(streamResult);
             }
         });
     }

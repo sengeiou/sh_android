@@ -22,8 +22,8 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
-import com.shootr.android.ui.adapters.EventsListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
@@ -48,7 +48,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject PicassoWrapper picasso;
     @Inject ToolbarDecorator toolbarDecorator;
 
-    private EventsListAdapter adapter;
+    private StreamsListAdapter adapter;
 
     public static StreamsListFragment newInstance() {
         return new StreamsListFragment();
@@ -86,10 +86,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
+        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
             @Override
-            public void onEventClick(StreamResultModel event) {
-                presenter.selectStream(event);
+            public void onStreamClick(StreamResultModel stream) {
+                presenter.selectStream(stream);
             }
         });
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
@@ -169,11 +169,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     //region View methods
     @Override public void renderStream(List<StreamResultModel> streams) {
-        adapter.setEvents(streams);
+        adapter.setStreams(streams);
     }
 
     @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
-        adapter.setCurrentWatchingEvent(streamId);
+        adapter.setCurrentWatchingStream(streamId);
     }
 
     @Override public void showContent() {

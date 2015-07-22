@@ -11,8 +11,8 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.EventsListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
@@ -28,7 +28,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Inject ListingListPresenter presenter;
 
-    private EventsListAdapter adapter;
+    private StreamsListAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -45,9 +45,9 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override public void onEventClick(StreamResultModel event) {
-                presenter.selectStream(event);
+        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+            @Override public void onStreamClick(StreamResultModel stream) {
+                presenter.selectStream(stream);
             }
         });
         listingList.setAdapter(adapter);
@@ -85,7 +85,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {
-        adapter.setEvents(streams);
+        adapter.setStreams(streams);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String title) {

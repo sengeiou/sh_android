@@ -2,7 +2,7 @@ package com.shootr.android.ui.adapters.listeners;
 
 import com.shootr.android.ui.model.StreamResultModel;
 
-public interface OnEventClickListener {
+public interface OnStreamClickListener {
 
-    void onEventClick(StreamResultModel event);
+    void onStreamClick(StreamResultModel stream);
 }

@@ -15,8 +15,8 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.EventsListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
@@ -33,7 +33,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     private SearchView searchView;
     private String currentSearchQuery;
-    private EventsListAdapter adapter;
+    private StreamsListAdapter adapter;
 
     @Bind(R.id.find_streams_list) RecyclerView streamsList;
     @Bind(R.id.find_streams_empty) View emptyView;
@@ -75,10 +75,10 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void initializeStreamListAdapter() {
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
+        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
             @Override
-            public void onEventClick(StreamResultModel event) {
-                findStreamsPresenter.selectStream(event);
+            public void onStreamClick(StreamResultModel stream) {
+                findStreamsPresenter.selectStream(stream);
             }
         });
         streamsList.setAdapter(adapter);
@@ -196,7 +196,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void renderStreams(List<StreamResultModel> streamModels) {
-        adapter.setEvents(streamModels);
+        adapter.setStreams(streamModels);
     }
 
     @Override public void showError(String errorMessage) {

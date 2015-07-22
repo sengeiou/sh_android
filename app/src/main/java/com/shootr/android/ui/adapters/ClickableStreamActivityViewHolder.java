@@ -7,9 +7,9 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.model.ActivityModel;
-import com.shootr.android.ui.widgets.EventTitleSpan;
+import com.shootr.android.ui.widgets.StreamTitleSpan;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -17,19 +17,15 @@ import com.shootr.android.util.UsernameClickListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class ClickableEventActivityViewHolder extends ActivityViewHolder {
+public abstract class ClickableStreamActivityViewHolder extends ActivityViewHolder {
 
-    private final OnEventTitleClickListener onEventTitleClickListener;
+    private final OnStreamTitleClickListener onStreamTitleClickListener;
 
-    public ClickableEventActivityViewHolder(View view,
-      PicassoWrapper picasso,
-      AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener,
-      OnEventTitleClickListener onEventTitleClickListener) {
+    public ClickableStreamActivityViewHolder(View view, PicassoWrapper picasso, AndroidTimeUtils androidTimeUtils,
+      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
+      UsernameClickListener usernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
-        this.onEventTitleClickListener = onEventTitleClickListener;
+        this.onStreamTitleClickListener = onStreamTitleClickListener;
     }
 
     public void render(final ActivityModel activity) {
@@ -44,17 +40,16 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
             return super.formatActivityComment(activity);
         }
         String commentPattern = getPatternText();
-        String eventPlaceholder = "\\(stream\\)";
-        String eventTitle = activity.getStreamTitle();
+        String streamPlaceholder = "\\(stream\\)";
+        String streamTitle = activity.getStreamTitle();
         SpannableStringBuilder spannableCheckinPattern = new SpannableStringBuilder(commentPattern);
 
-        replacePlaceholderWithEventTitleSpan(spannableCheckinPattern,
-          eventPlaceholder,
-          eventTitle,
-          new EventTitleSpan(activity.getIdStream(), activity.getStreamTitle()) {
-              @Override
-              public void onEventClick(String eventId, String eventTitle) {
-                  onEventTitleClickListener.onClick(eventId, eventTitle);
+        replacePlaceholderWithStreamTitleSpan(spannableCheckinPattern,
+          streamPlaceholder,
+          streamTitle,
+          new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle()) {
+              @Override public void onStreamClick(String streamId, String streamTitle) {
+                  onStreamTitleClickListener.onClick(streamId, streamTitle);
               }
           });
 
@@ -64,10 +59,8 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
     @NonNull
     protected abstract String getPatternText();
 
-    private void replacePlaceholderWithEventTitleSpan(SpannableStringBuilder spannableBuilder,
-      String placeholder,
-      String replaceText,
-      EventTitleSpan eventTitleSpan) {
+    private void replacePlaceholderWithStreamTitleSpan(SpannableStringBuilder spannableBuilder, String placeholder,
+      String replaceText, StreamTitleSpan streamTitleSpan) {
         Pattern termsPattern = Pattern.compile(placeholder);
         Matcher termsMatcher = termsPattern.matcher(spannableBuilder.toString());
         if (termsMatcher.find()) {
@@ -75,7 +68,7 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
             int termsEnd = termsMatcher.end();
             spannableBuilder.replace(termsStart, termsEnd, replaceText);
 
-            spannableBuilder.setSpan(eventTitleSpan,
+            spannableBuilder.setSpan(streamTitleSpan,
               termsStart,
               termsStart + replaceText.length(),
               Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

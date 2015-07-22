@@ -5,30 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 
-public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
+public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
 
     private final PicassoWrapper picasso;
 
-    private OnEventClickListener onEventClickListener;
+    private OnStreamClickListener onStreamClickListener;
     private OnUnwatchClickListener onUnwatchClickListener;
 
-    public EventsListAdapter(PicassoWrapper picasso, OnEventClickListener onEventClickListener) {
+    public StreamsListAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener) {
         this.picasso = picasso;
-        this.onEventClickListener = onEventClickListener;
+        this.onStreamClickListener = onStreamClickListener;
     }
 
-    public void setEvents(List<StreamResultModel> events) {
+    public void setStreams(List<StreamResultModel> streams) {
         boolean wasEmpty = getItems().isEmpty();
-        setItems(events);
+        setItems(streams);
         if (wasEmpty) {
-            notifyItemRangeInserted(0, events.size());
+            notifyItemRangeInserted(0, streams.size());
         } else {
             notifyDataSetChanged();
         }
@@ -36,8 +36,8 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event, parent, false);
-        return new EventResultViewHolder(view, onEventClickListener, picasso);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
     }
 
     @Override
@@ -50,18 +50,18 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_event, parent, false);
-        return new EventResultViewHolder(view, onEventClickListener, picasso);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
     }
 
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel event = getHeader();
+        StreamResultModel stream = getHeader();
 
-        WatchingEventResultViewHolder watchingEventResultViewHolder =
-          new WatchingEventResultViewHolder(viewHolder.itemView, onEventClickListener, picasso, onUnwatchClickListener);
+        WatchingStreamResultViewHolder watchingStreamResultViewHolder =
+          new WatchingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso, onUnwatchClickListener);
 
-        watchingEventResultViewHolder.render(event);
+        watchingStreamResultViewHolder.render(stream);
     }
 
     @Override
@@ -71,12 +71,12 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel event = getItem(position);
-        ((EventResultViewHolder) viewHolder).render(event);
+        StreamResultModel stream = getItem(position);
+        ((StreamResultViewHolder) viewHolder).render(stream);
     }
 
-    public void setCurrentWatchingEvent(StreamResultModel event) {
-        this.setHeader(event);
+    public void setCurrentWatchingStream(StreamResultModel streamResultModel) {
+        this.setHeader(streamResultModel);
     }
 
     public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {

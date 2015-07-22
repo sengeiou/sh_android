@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -229,7 +229,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_detail_timestamp) TextView timestamp;
         @Bind(R.id.shot_detail_text) ClickableTextView shotText;
         @Bind(R.id.shot_detail_image) ImageView shotImage;
-        @Bind(R.id.shot_detail_event_title) TextView eventTitle;
+        @Bind(R.id.shot_detail_stream_title) TextView streamTitle;
         @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
@@ -254,7 +254,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 shotText.setVisibility(View.GONE);
             }
-            showEventTitle(shotModel);
+            showStreamTitle(shotModel);
 
             picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
@@ -337,13 +337,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             return timeFormatter.getDateAndTimeDetailed(date.getTime());
         }
 
-        private void showEventTitle(ShotModel shotModel) {
+        private void showStreamTitle(ShotModel shotModel) {
             String title = shotModel.getStreamTitle();
             if (title != null) {
-                eventTitle.setText(shotModel.getStreamTitle());
-                eventTitle.setVisibility(View.VISIBLE);
+                streamTitle.setText(shotModel.getStreamTitle());
+                streamTitle.setVisibility(View.VISIBLE);
             } else {
-                eventTitle.setVisibility(View.GONE);
+                streamTitle.setVisibility(View.GONE);
             }
         }
     }

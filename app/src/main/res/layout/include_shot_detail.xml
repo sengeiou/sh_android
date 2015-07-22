@@ -53,7 +53,7 @@
           android:src="@drawable/ic_arrow_down_24_gray50" />
     </RelativeLayout>
 
-    <TextView android:id="@+id/shot_detail_event_title"
+    <TextView android:id="@+id/shot_detail_stream_title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/keyline_1"

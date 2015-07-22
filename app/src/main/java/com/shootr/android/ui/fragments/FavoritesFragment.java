@@ -13,8 +13,8 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
-import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
@@ -33,7 +33,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
 
-    private FavoriteEventsAdapter adapter;
+    private FavoriteStreamsAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -80,10 +80,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
+        adapter = new FavoriteStreamsAdapter(picasso, new OnStreamClickListener() {
             @Override
-            public void onEventClick(StreamResultModel event) {
-                favoritesListPresenter.selectStream(event);
+            public void onStreamClick(StreamResultModel stream) {
+                favoritesListPresenter.selectStream(stream);
             }
         });
         favoritesList.setAdapter(adapter);
@@ -95,7 +95,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Override
     public void renderFavorites(List<StreamResultModel> streamModels) {
-        adapter.setEvents(streamModels);
+        adapter.setStreams(streamModels);
     }
 
     @Override

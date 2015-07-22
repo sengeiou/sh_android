@@ -4,25 +4,25 @@ import android.view.View;
 import android.widget.ImageView;
 import butterknife.Bind;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class WatchingEventResultViewHolder extends EventResultViewHolder {
+public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
 
     private final OnUnwatchClickListener unwatchClickListener;
 
-    @Bind(R.id.event_remove) ImageView remove;
+    @Bind(R.id.stream_remove) ImageView remove;
 
-    public WatchingEventResultViewHolder(View itemView, OnEventClickListener onEventClickListener,
+    public WatchingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
       PicassoWrapper picasso, OnUnwatchClickListener unwatchClickListener) {
-        super(itemView, onEventClickListener, picasso);
+        super(itemView, onStreamClickListener, picasso);
         this.unwatchClickListener = unwatchClickListener;
     }
 
-    public void render(StreamResultModel event) {
-        super.render(event);
+    public void render(StreamResultModel streamResultModel) {
+        super.render(streamResultModel);
         remove.setVisibility(View.VISIBLE);
         setUnwatchClickListener();
     }
