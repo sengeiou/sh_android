@@ -15,12 +15,12 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class EventDetailPresenterTest {
+public class StreamDetailPresenterTest {
 
     private StreamDetailPresenter presenter;
 
     @Mock Bus bus;
-    @Mock VisibleStreamInfoInteractor eventInfoInteractor;
+    @Mock VisibleStreamInfoInteractor streamInfoInteractor;
     @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -33,18 +33,17 @@ public class EventDetailPresenterTest {
 
     @Mock SharedPreferences sharedPreferences;
     @Mock WatchersTimeFormatter watchersTimeFormatter;
-    @Mock GetStreamMediaCountInteractor eventMediaCountInteractor;
+    @Mock GetStreamMediaCountInteractor streamMediaCountInteractor;
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
         streamModelMapper = new StreamModelMapper(sessionRepository);
         userModelMapper= new UserModelMapper();
 
-        presenter = new StreamDetailPresenter(bus,
-          eventInfoInteractor, changeStreamPhotoInteractor, streamModelMapper,
+        presenter = new StreamDetailPresenter(bus, streamInfoInteractor, changeStreamPhotoInteractor, streamModelMapper,
           userModelMapper,
           errorMessageFactory,
-          watchersTimeFormatter, eventMediaCountInteractor);
+          watchersTimeFormatter, streamMediaCountInteractor);
 
         presenter.setView(streamDetailView);
     }

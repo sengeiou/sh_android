@@ -30,7 +30,7 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
-import com.shootr.android.ui.views.nullview.NullEventListView;
+import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -77,7 +77,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        presenter.setView(new NullEventListView());
+        presenter.setView(new NullStreamListView());
     }
     //endregion
 

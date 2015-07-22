@@ -4,7 +4,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.views.StreamsListView;
 import java.util.List;
 
-public class NullEventListView implements StreamsListView {
+public class NullStreamListView implements StreamsListView {
 
     @Override public void renderStream(List<StreamResultModel> streams) {
         /* no-op */
