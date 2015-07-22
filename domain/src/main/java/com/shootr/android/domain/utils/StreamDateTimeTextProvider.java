@@ -2,7 +2,7 @@ package com.shootr.android.domain.utils;
 
 import org.joda.time.DateTime;
 
-public interface EventDateTimeTextProvider {
+public interface StreamDateTimeTextProvider {
 
     String getStartingInMinutesFormat(DateTime date);
 

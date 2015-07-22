@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.verify;
 public class StreamTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
-    private static final ShotSent.Event SHOT_SENT_EVENT = null;
+    private static final ShotSent.Stream SHOT_SENT_STREAM = null;
     private static final String SELECTED_EVENT_ID = "stream";
 
     @Mock EventTimelineView eventTimelineView;
@@ -246,7 +245,7 @@ public class StreamTimelinePresenterTest {
 
     //region Bus events
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
-        shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
+        shotSentReceiver.onShotSent(SHOT_SENT_STREAM);
 
         verify(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
@@ -254,7 +253,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Event.class);
+        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Stream.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
@@ -302,8 +301,8 @@ public class StreamTimelinePresenterTest {
         return shot;
     }
 
-    private Stream selectedEvent() {
-        Stream stream = new Stream();
+    private com.shootr.android.domain.Stream selectedEvent() {
+        com.shootr.android.domain.Stream stream = new com.shootr.android.domain.Stream();
         stream.setId(SELECTED_EVENT_ID);
         return stream;
     }

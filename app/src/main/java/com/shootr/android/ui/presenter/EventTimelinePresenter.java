@@ -166,7 +166,7 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Subscribe
-    @Override public void onShotSent(ShotSent.Event event) {
+    @Override public void onShotSent(ShotSent.Stream stream) {
         refresh();
     }
 }

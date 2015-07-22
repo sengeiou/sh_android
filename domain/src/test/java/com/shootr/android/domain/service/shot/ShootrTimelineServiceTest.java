@@ -26,7 +26,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static com.shootr.android.domain.asserts.EventTimelineParametersAssert.assertThat;
+import static com.shootr.android.domain.asserts.StreamTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -165,7 +165,7 @@ public class ShootrTimelineServiceTest {
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
-        assertThat(captureTimelineParameters()).hasEventId(WATCHING_EVENT_ID);
+        assertThat(captureTimelineParameters()).hasStreamId(WATCHING_EVENT_ID);
     }
 
     @Test

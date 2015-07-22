@@ -183,7 +183,7 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void notifyShotQueued(QueuedShot queuedShot) {
-        busPublisher.post(new ShotQueued.Event(queuedShot));
+        busPublisher.post(new ShotQueued.Stream(queuedShot));
         shotQueueListener.onQueueShot(queuedShot);
     }
 
@@ -192,13 +192,13 @@ public class ShotDispatcher implements ShotSender {
     }
 
     private void notifyShotSent(QueuedShot queuedShot) {
-        busPublisher.post(new ShotSent.Event(queuedShot.getShot()));
+        busPublisher.post(new ShotSent.Stream(queuedShot.getShot()));
         shotQueueListener.onShotSent(queuedShot);
     }
 
     private void notifyShotSendingFailed(QueuedShot queuedShot, Exception e) {
         shotQueueListener.onShotFailed(queuedShot, e);
-        busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
+        busPublisher.post(new ShotFailed.Stream(queuedShot.getShot()));
     }
 
     private void persistShotFailed(QueuedShot queuedShot) {

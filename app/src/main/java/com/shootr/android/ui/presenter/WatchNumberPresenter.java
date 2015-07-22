@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.bus.EventChanged;
+import com.shootr.android.domain.bus.StreamChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -11,7 +11,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
-public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, EventChanged.Receiver {
+public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, StreamChanged.Receiver {
 
     private final Bus bus;
     private final WatchNumberInteractor watchNumberInteractor;
@@ -64,13 +64,13 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     }
 
     @Subscribe
-    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Stream stream) {
         retrieveData();
     }
 
     @Subscribe
-    @Override public void onEventChanged(EventChanged.Event event) {
-        if (event.getNewEventId() != null) {
+    @Override public void onStreamChanged(StreamChanged.Stream stream) {
+        if (stream.getNewStreamId() != null) {
             retrieveData();
         } else {
             watchNumberView.hideWatchingPeopleCount();

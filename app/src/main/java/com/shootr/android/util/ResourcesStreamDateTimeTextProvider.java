@@ -2,7 +2,7 @@ package com.shootr.android.util;
 
 import android.content.res.Resources;
 import com.shootr.android.R;
-import com.shootr.android.domain.utils.EventDateTimeTextProvider;
+import com.shootr.android.domain.utils.StreamDateTimeTextProvider;
 import java.util.Date;
 import javax.inject.Inject;
 import org.joda.time.DateTime;
@@ -12,7 +12,7 @@ import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class ResourcesEventDateTimeTextProvider implements EventDateTimeTextProvider {
+public class ResourcesStreamDateTimeTextProvider implements StreamDateTimeTextProvider {
 
     DateTimeFormatter todayFormater = DateTimeFormat.forPattern("HH:mm");
     DateTimeFormatter tomorrowFormater = DateTimeFormat.forPattern("HH:mm");
@@ -23,7 +23,7 @@ public class ResourcesEventDateTimeTextProvider implements EventDateTimeTextProv
 
     private final Resources resources;
 
-    @Inject public ResourcesEventDateTimeTextProvider(Resources resources){
+    @Inject public ResourcesStreamDateTimeTextProvider(Resources resources){
         this.resources = resources;
     }
 

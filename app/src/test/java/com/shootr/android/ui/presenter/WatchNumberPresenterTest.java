@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.bus.EventChanged;
+import com.shootr.android.domain.bus.StreamChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
@@ -27,7 +27,7 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_1_PERSON = 1;
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
-    private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
+    private static final WatchUpdateRequest.Stream WATCH_UPDATE_STREAM = null;
     public static final String EVENT_ID_STUB = "event_id";
 
     @Mock WatchNumberInteractor watchNumberInteractor;
@@ -36,7 +36,7 @@ public class WatchNumberPresenterTest {
 
     private WatchNumberPresenter presenter;
     private WatchUpdateRequest.Receiver watchUpdateReceiver;
-    private EventChanged.Receiver eventChangedReceiver;
+    private StreamChanged.Receiver eventChangedReceiver;
 
     @Before
     public void setUp() throws Exception {
@@ -92,14 +92,14 @@ public class WatchNumberPresenterTest {
 
     @Test
     public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
-        watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
+        watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_STREAM);
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
     @Test
     public void shouldLoadWatchNumberWhenEventChanged() throws Exception {
-        eventChangedReceiver.onEventChanged(eventChangedEvent());
+        eventChangedReceiver.onStreamChanged(eventChangedEvent());
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
@@ -115,7 +115,7 @@ public class WatchNumberPresenterTest {
     public void shouldHideWatchNumberWhenExitEventReceivedAlthougInteractorHasntCallback() throws Exception {
         doNothing().when(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
 
-        eventChangedReceiver.onEventChanged(exitEventEvent());
+        eventChangedReceiver.onStreamChanged(exitEventEvent());
 
         verify(watchNumberView).hideWatchingPeopleCount();
     }
@@ -124,26 +124,26 @@ public class WatchNumberPresenterTest {
     public void shouldWatchUpdateReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = WatchUpdateRequest.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Event.class);
+        Method receiverDeclaredMethod = watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Stream.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
 
     @Test
     public void shouldEventChangedReceiverHaveSubscribeAnnotation() throws Exception {
-        String receiverMethodName = EventChanged.Receiver.class.getDeclaredMethods()[0].getName();
+        String receiverMethodName = StreamChanged.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = eventChangedReceiver.getClass().getMethod(receiverMethodName, EventChanged.Event.class);
+        Method receiverDeclaredMethod = eventChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Stream.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
 
-    private EventChanged.Event eventChangedEvent() {
-        return new EventChanged.Event(EVENT_ID_STUB);
+    private StreamChanged.Stream eventChangedEvent() {
+        return new StreamChanged.Stream(EVENT_ID_STUB);
     }
 
-    private EventChanged.Event exitEventEvent() {
-        return new EventChanged.Event(null);
+    private StreamChanged.Stream exitEventEvent() {
+        return new StreamChanged.Stream(null);
     }
 
     private void setupWatchNumberInteractorCallbacks(final Integer count) {

@@ -7,11 +7,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
 import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
-import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -126,7 +123,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         startProfileContainerActivity(username);
     }
 
-    @Subscribe @Override public void onShotSent(ShotSent.Event event) {
+    @Subscribe @Override public void onShotSent(ShotSent.Stream stream) {
         justSentReply = true;
         this.loadReplies();
     }
