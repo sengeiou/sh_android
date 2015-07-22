@@ -279,16 +279,16 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
             return null;
         }
-        StreamEntity eventsReceived = null;
+        StreamEntity streamsReceived = null;
         if (ops.length > 0) {
-            eventsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
+            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
-        return eventsReceived;
+        return streamsReceived;
     }
 
-    @Override public List<StreamEntity> getStreamsByIds(List<String> eventIds) throws IOException {
-        List<StreamEntity> eventsReceived = new ArrayList<>();
-        GenericDto requestDto = streamDtoFactory.getStreamsNotEndedByIds(eventIds);
+    @Override public List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException {
+        List<StreamEntity> streamsReceived = new ArrayList<>();
+        GenericDto requestDto = streamDtoFactory.getStreamsNotEndedByIds(streamIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -298,25 +298,25 @@ public class ShootrDataService implements ShootrService {
             Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                eventsReceived.add(streamEntityMapper.fromDto(dataItem));
+                streamsReceived.add(streamEntityMapper.fromDto(dataItem));
             }
         }
-        return eventsReceived;
+        return streamsReceived;
     }
 
-    @Override public StreamEntity getStreamById(String idEvent) throws IOException {
-        GenericDto requestDto = streamDtoFactory.getStreamById(idEvent);
+    @Override public StreamEntity getStreamById(String idStream) throws IOException {
+        GenericDto requestDto = streamDtoFactory.getStreamById(idStream);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
         }
-        StreamEntity eventsReceived = null;
+        StreamEntity streamsReceived = null;
         if(ops.length>0){
-            eventsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
+            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
-        return eventsReceived;
+        return streamsReceived;
 
     }
 
@@ -333,8 +333,8 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public void performCheckin(String idUser, String idEvent) throws IOException {
-        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
+    @Override public void performCheckin(String idUser, String idStream) throws IOException {
+        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idStream);
         postRequest(checkinDto);
     }
 
@@ -355,9 +355,9 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public Integer getStreamMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) throws IOException {
         Integer numberOfMedia = 0;
-        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idEvent, idUsers);
+        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idStream, idUsers);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -369,9 +369,9 @@ public class ShootrDataService implements ShootrService {
         return numberOfMedia;
     }
 
-    @Override public List<ShotEntity> getStreamMediaShots(String idEvent, List<String> userIds) throws IOException {
-        List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idEvent, userIds);
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) throws IOException {
+        List<ShotEntity> shotsByUserInStream = new ArrayList<>();
+        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idStream, userIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -381,14 +381,14 @@ public class ShootrDataService implements ShootrService {
             Long items = md.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                shotsByUserInEvent.add(shotEntityMapper.fromDto(dataItem));
+                shotsByUserInStream.add(shotEntityMapper.fromDto(dataItem));
             }
         }
-        return shotsByUserInEvent;
+        return shotsByUserInStream;
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {
-        Integer numberOfEvents = 0;
+        Integer numberOfStreams = 0;
         GenericDto requestDto = streamDtoFactory.getListingCount(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -396,9 +396,9 @@ public class ShootrDataService implements ShootrService {
             Timber.e("Received 0 operations");
         }else {
             MetadataDto metadata = ops[0].getMetadata();
-            numberOfEvents = metadata.getTotalItems().intValue();
+            numberOfStreams = metadata.getTotalItems().intValue();
         }
-        return numberOfEvents;
+        return numberOfStreams;
     }
 
     @Override public void logout(String idUser, String idDevice) throws IOException {

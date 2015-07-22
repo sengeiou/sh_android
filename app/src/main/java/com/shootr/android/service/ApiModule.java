@@ -66,7 +66,7 @@ public final class ApiModule {
         return restAdapter.create(ResetPasswordApiService.class);
     }
 
-    @Provides StreamApiService provideEventApiService(RestAdapter restAdapter) {
+    @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter) {
         return restAdapter.create(StreamApiService.class);
     }
 
