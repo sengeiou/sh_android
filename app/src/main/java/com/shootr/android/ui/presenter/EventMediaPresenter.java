@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetEventMediaInteractor;
+import com.shootr.android.domain.interactor.event.GetStreamMediaInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.EventMediaView;
@@ -13,16 +13,16 @@ import javax.inject.Inject;
 
 public class EventMediaPresenter implements Presenter {
 
-    private final GetEventMediaInteractor getEventMediaInteractor;
+    private final GetStreamMediaInteractor getStreamMediaInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private EventMediaView eventMediaView;
     private String idEvent;
     private Integer eventMediaCount;
 
-    @Inject public EventMediaPresenter(GetEventMediaInteractor getEventMediaInteractor, ShotModelMapper shotModelMapper,
+    @Inject public EventMediaPresenter(GetStreamMediaInteractor getStreamMediaInteractor, ShotModelMapper shotModelMapper,
       ErrorMessageFactory errorMessageFactory) {
-        this.getEventMediaInteractor = getEventMediaInteractor;
+        this.getStreamMediaInteractor = getStreamMediaInteractor;
         this.shotModelMapper = shotModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -48,7 +48,7 @@ public class EventMediaPresenter implements Presenter {
     }
 
     private void renderMedia(String idEvent) {
-        getEventMediaInteractor.getEventMedia(idEvent, new Interactor.Callback<List<Shot>>() {
+        getStreamMediaInteractor.getStreamMedia(idEvent, new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shotsWithMedia) {
                 if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
                     eventMediaView.hideEmpty();

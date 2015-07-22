@@ -91,7 +91,7 @@ public class ShootrUserServiceLoginTest {
 
     private LoginResult loginResultWithEvent() {
         User user = currentUser();
-        user.setIdWatchingEvent(String.valueOf(WATCHING_EVENT_ID));
+        user.setIdWatchingStream(String.valueOf(WATCHING_EVENT_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -102,7 +102,7 @@ public class ShootrUserServiceLoginTest {
     private User currentUser() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_EVENT_ID);
         return user;
     }
 }

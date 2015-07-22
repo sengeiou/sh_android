@@ -6,9 +6,9 @@ import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.GetEventMediaCountInteractor;
-import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.event.ChangeStreamPhotoInteractor;
+import com.shootr.android.domain.interactor.event.GetStreamMediaCountInteractor;
+import com.shootr.android.domain.interactor.event.VisibleStreamInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.EventModel;
@@ -29,14 +29,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
     private final Bus bus;
-    private final VisibleEventInfoInteractor eventInfoInteractor;
-    private final ChangeEventPhotoInteractor changeEventPhotoInteractor;
+    private final VisibleStreamInfoInteractor eventInfoInteractor;
+    private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     private final EventModelMapper eventModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final WatchersTimeFormatter watchersTimeFormatter;
-    private final GetEventMediaCountInteractor eventMediaCountInteractor;
+    private final GetStreamMediaCountInteractor eventMediaCountInteractor;
 
     private EventDetailView eventDetailView;
     private String idEvent;
@@ -47,12 +47,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private Integer eventMediaCount;
 
     @Inject
-    public EventDetailPresenter(@Main Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      ChangeEventPhotoInteractor changeEventPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
-      WatchersTimeFormatter watchersTimeFormatter, GetEventMediaCountInteractor eventMediaCountInteractor) {
+    public EventDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor eventInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+      WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor eventMediaCountInteractor) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
-        this.changeEventPhotoInteractor = changeEventPhotoInteractor;
+        this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -93,9 +93,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
-        changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(),
+        changeStreamPhotoInteractor.changeStreamPhoto(eventModel.getIdEvent(),
           photoFile,
-          new ChangeEventPhotoInteractor.Callback() {
+          new ChangeStreamPhotoInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   renderEventInfo(stream);
                   eventDetailView.hideLoadingPictureUpload();
@@ -124,7 +124,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void getEventInfo() {
-        eventInfoInteractor.obtainEventInfo(idEvent, new VisibleEventInfoInteractor.Callback() {
+        eventInfoInteractor.obtainStreamInfo(idEvent, new VisibleStreamInfoInteractor.Callback() {
             @Override public void onLoaded(StreamInfo streamInfo) {
                 onEventInfoLoaded(streamInfo);
             }
@@ -152,7 +152,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void loadMediaCount() {
-        eventMediaCountInteractor.getEventMediaCount(idEvent, new Interactor.Callback<Integer>() {
+        eventMediaCountInteractor.getStreamMediaCount(idEvent, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer count) {
                 eventMediaCount = count;
                 eventDetailView.showMediaCount();

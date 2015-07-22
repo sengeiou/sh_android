@@ -8,12 +8,12 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.EventListSynchronizationRepository;
-import com.shootr.android.domain.repository.StreamRepository;
-import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamListSynchronizationRepository;
+import com.shootr.android.domain.repository.StreamRepository;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
@@ -21,7 +21,7 @@ import com.shootr.android.domain.utils.TimeUtils;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListInteractor implements Interactor {
+public class StreamsListInteractor implements Interactor {
 
     private static final Long REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS = 30L * 1000L;
 
@@ -29,7 +29,7 @@ public class EventsListInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final StreamSearchRepository remoteStreamSearchRepository;
     private final StreamSearchRepository localStreamSearchRepository;
-    private final EventListSynchronizationRepository eventListSynchronizationRepository;
+    private final StreamListSynchronizationRepository streamListSynchronizationRepository;
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final TimeUtils timeUtils;
@@ -41,22 +41,18 @@ public class EventsListInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public EventsListInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
+    public StreamsListInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote StreamSearchRepository remoteStreamSearchRepository,
       @Local StreamSearchRepository localStreamSearchRepository,
-      EventListSynchronizationRepository eventListSynchronizationRepository,
-      @Local StreamRepository localStreamRepository,
-      @Local WatchersRepository watchersRepository,
-      SessionRepository sessionRepository,
-      @Local UserRepository localUserRepository,
-      TimeUtils timeUtils,
+      StreamListSynchronizationRepository streamListSynchronizationRepository,
+      @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository, TimeUtils timeUtils,
       LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteStreamSearchRepository = remoteStreamSearchRepository;
         this.localStreamSearchRepository = localStreamSearchRepository;
-        this.eventListSynchronizationRepository = eventListSynchronizationRepository;
+        this.streamListSynchronizationRepository = streamListSynchronizationRepository;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.timeUtils = timeUtils;
@@ -65,7 +61,7 @@ public class EventsListInteractor implements Interactor {
         this.localStreamRepository = localStreamRepository;
     }
 
-    public void loadEvents(Callback<StreamSearchResultList> callback, ErrorCallback errorCallback) {
+    public void loadStreams(Callback<StreamSearchResultList> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -73,37 +69,37 @@ public class EventsListInteractor implements Interactor {
 
     @Override
     public void execute() throws Exception {
-        List<StreamSearchResult> localEvents = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
-        notifyLoaded(localEvents);
+        List<StreamSearchResult> localStreams = localStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+        notifyLoaded(localStreams);
 
         Long currentTime = timeUtils.getCurrentTime();
-        if (localEvents.isEmpty() || minimumRefreshTimePassed(currentTime)) {
+        if (localStreams.isEmpty() || minimumRefreshTimePassed(currentTime)) {
             try {
-                refreshEvents();
-                eventListSynchronizationRepository.setEventsRefreshDate(currentTime);
+                refreshStreams();
+                streamListSynchronizationRepository.setStreamsRefreshDate(currentTime);
             } catch (ShootrException error) {
                 notifyError(error);
             }
         }
     }
 
-    protected void refreshEvents() {
-        List<StreamSearchResult> remoteEvents = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
-        notifyLoaded(remoteEvents);
+    protected void refreshStreams() {
+        List<StreamSearchResult> remoteStreams = remoteStreamSearchRepository.getDefaultStreams(localeProvider.getLocale());
+        notifyLoaded(remoteStreams);
         localStreamSearchRepository.deleteDefaultStreams();
-        localStreamSearchRepository.putDefaultStreams(remoteEvents);
+        localStreamSearchRepository.putDefaultStreams(remoteStreams);
     }
 
     private boolean minimumRefreshTimePassed(Long currentTime) {
-        Long eventsLastRefreshDate = eventListSynchronizationRepository.getEventsRefreshDate();
-        Long minimumTimeToRefresh = eventsLastRefreshDate + REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS;
+        Long streamsLastRefreshDate = streamListSynchronizationRepository.getStreamsRefreshDate();
+        Long minimumTimeToRefresh = streamsLastRefreshDate + REFRESH_THRESHOLD_30_SECONDS_IN_MILLIS;
         return minimumTimeToRefresh < currentTime;
     }
 
     //region Result
     private void notifyLoaded(final List<StreamSearchResult> results) {
         final StreamSearchResultList searchResultList =
-          new StreamSearchResultList(results, getWatchingEventWithWatchNumber());
+          new StreamSearchResultList(results, getWatchingStreamsWithWatchNumber());
         postExecutionThread.post(new Runnable() {
             @Override
             public void run() {
@@ -112,12 +108,12 @@ public class EventsListInteractor implements Interactor {
         });
     }
 
-    private StreamSearchResult getWatchingEventWithWatchNumber() {
+    private StreamSearchResult getWatchingStreamsWithWatchNumber() {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        String idWatchingEvent = currentUser.getIdWatchingEvent();
-        if (idWatchingEvent != null) {
-            Stream stream = localStreamRepository.getStreamById(idWatchingEvent);
-            Integer watchers = watchersRepository.getWatchers(idWatchingEvent);
+        String idWatchingStream = currentUser.getIdWatchingStream();
+        if (idWatchingStream != null) {
+            Stream stream = localStreamRepository.getStreamById(idWatchingStream);
+            Integer watchers = watchersRepository.getWatchers(idWatchingStream);
             StreamSearchResult streamSearchResult = new StreamSearchResult();
             streamSearchResult.setStream(stream);
             streamSearchResult.setWatchersNumber(watchers);

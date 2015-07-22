@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 public class RefreshStreamTimelineInteractorTest {
 
-    private RefreshEventTimelineInteractor interactor;
+    private RefreshStreamTimelineInteractor interactor;
 
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
@@ -34,15 +34,15 @@ public class RefreshStreamTimelineInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.interactor = new RefreshEventTimelineInteractor(interactorHandler, postExecutionThread,
+        this.interactor = new RefreshStreamTimelineInteractor(interactorHandler, postExecutionThread,
                 shootrTimelineService);
     }
 
     @Test
     public void shouldCallbackEventTimelineWhenServiceReturnsTimelineForEvent() throws Exception {
-        when(shootrTimelineService.refreshTimelinesForWatchingEvent()).thenReturn(timelineForEvent());
+        when(shootrTimelineService.refreshTimelinesForWatchingStream()).thenReturn(timelineForEvent());
 
-        interactor.refreshEventTimeline(spyCallback, errorCallback);
+        interactor.refreshStreamTimeline(spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForEvent());
     }

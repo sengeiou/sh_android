@@ -12,12 +12,12 @@ import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
-import com.shootr.android.domain.validation.EventValidator;
+import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import java.util.List;
 import javax.inject.Inject;
 
-public class CreateEventInteractor implements Interactor {
+public class CreateStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -25,15 +25,16 @@ public class CreateEventInteractor implements Interactor {
     private final StreamRepository remoteStreamRepository;
     private final LocaleProvider localeProvider;
 
-    private String idEvent;
+    private String idStream;
     private String title;
     private String shortTitle;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public CreateEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository, LocaleProvider localeProvider) {
+    @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
@@ -41,9 +42,9 @@ public class CreateEventInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendEvent(String idEvent, String title, String shortTitle, boolean notifyCreation,
-      Callback callback, ErrorCallback errorCallback) {
-        this.idEvent = idEvent;
+    public void sendStream(String idStream, String title, String shortTitle, boolean notifyCreation, Callback callback,
+      ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.title = title;
         this.shortTitle = shortTitle;
         this.notifyCreation = notifyCreation;
@@ -53,11 +54,11 @@ public class CreateEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        Stream stream = eventFromParameters();
+        Stream stream = streamFromParameters();
 
-        if (validateEvent(stream)) {
+        if (validateStream(stream)) {
             try {
-                Stream savedStream = sendEventToServer(stream, notifyCreation);
+                Stream savedStream = sendStreamToServer(stream, notifyCreation);
                 notifyLoaded(savedStream);
             } catch (ShootrException e) {
                 handleServerError(e);
@@ -65,13 +66,13 @@ public class CreateEventInteractor implements Interactor {
         }
     }
 
-    private Stream eventFromParameters() {
+    private Stream streamFromParameters() {
         Stream stream;
-        if (isNewEvent()) {
+        if (isNewStream()) {
             stream = new Stream();
             stream.setLocale(localeProvider.getLocale());
         } else {
-            stream = remoteStreamRepository.getStreamById(idEvent);
+            stream = remoteStreamRepository.getStreamById(idStream);
         }
         stream.setTitle(title);
         stream.setTag(shortTitle);
@@ -81,17 +82,17 @@ public class CreateEventInteractor implements Interactor {
         return stream;
     }
 
-    private boolean isNewEvent() {
-        return idEvent == null;
+    private boolean isNewStream() {
+        return idStream == null;
     }
 
-    private Stream sendEventToServer(Stream stream, boolean notify) {
+    private Stream sendStreamToServer(Stream stream, boolean notify) {
         return remoteStreamRepository.putStream(stream, notify);
     }
 
     //region Validation
-    private boolean validateEvent(Stream stream) {
-        List<FieldValidationError> validationErrors = new EventValidator().validate(stream);
+    private boolean validateStream(Stream stream) {
+        List<FieldValidationError> validationErrors = new StreamValidator().validate(stream);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
@@ -124,9 +125,9 @@ public class CreateEventInteractor implements Interactor {
 
     private int fieldFromErrorCode(String errorCode) {
         switch (errorCode) {
-            case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT:
-            case ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG:
-                return EventValidator.FIELD_TITLE;
+            case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT:
+            case ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG:
+                return StreamValidator.FIELD_TITLE;
         }
         return 0;
     }

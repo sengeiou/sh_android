@@ -26,7 +26,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
 
     @Mock StreamRepository localStreamRepository;
 
-    private PostNewShotInEventInteractor interactor;
+    private PostNewShotInStreamInteractor interactor;
 
     @Before
     public void setUp() throws Exception {
@@ -34,7 +34,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         InteractorHandler interactorHandler = new TestInteractorHandler();
         interactor =
-          new PostNewShotInEventInteractor(postExecutionThread, interactorHandler, sessionRepository,
+          new PostNewShotInStreamInteractor(postExecutionThread, interactorHandler, sessionRepository,
             localStreamRepository, shotSender);
     }
 
@@ -47,10 +47,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         setupCurrentUserSession();
         setupWatchingEvent();
 
-        interactor.postNewShotInEvent(COMMENT_STUB,
-          IMAGE_NULL,
-          new DummyCallback(),
-          new DummyErrorCallback());
+        interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
@@ -63,10 +60,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
     public void shouldSendShotWithoutEventInfoWhenNoEventWatching() throws Exception {
         setupCurrentUserSession();
 
-        interactor.postNewShotInEvent(COMMENT_STUB,
-          IMAGE_NULL,
-          new DummyCallback(),
-          new DummyErrorCallback());
+        interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
@@ -90,7 +84,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
 
     private User currentUserWatching() {
         User user = currentUser();
-        user.setIdWatchingEvent(String.valueOf(WATCHING_EVENT_ID));
+        user.setIdWatchingStream(String.valueOf(WATCHING_EVENT_ID));
         return user;
     }
 }

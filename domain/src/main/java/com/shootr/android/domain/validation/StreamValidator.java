@@ -5,7 +5,7 @@ import com.shootr.android.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventValidator {
+public class StreamValidator {
 
     public static final int TITLE_MINIMUN_LENGTH = 3;
     public static final int TITLE_MAXIMUN_LENGTH = 50;
@@ -19,7 +19,7 @@ public class EventValidator {
 
     private List<FieldValidationError> fieldValidationErrors;
 
-    public EventValidator() {
+    public StreamValidator() {
         fieldValidationErrors = new ArrayList<>();
     }
 
@@ -44,7 +44,7 @@ public class EventValidator {
         String title = stream.getTitle();
         if (title == null || alphanumericLength(title) < TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
-              new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT, FIELD_TITLE));
+              new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, FIELD_TITLE));
         }
     }
 
@@ -55,7 +55,7 @@ public class EventValidator {
     private void validateTitleTooLong(Stream stream) {
         if (stream.getTitle() != null && alphanumericLength(stream.getTitle()) > TITLE_MAXIMUN_LENGTH) {
             fieldValidationErrors.add(
-              new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG, FIELD_TITLE));
+              new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, FIELD_TITLE));
         }
     }
     //endregion

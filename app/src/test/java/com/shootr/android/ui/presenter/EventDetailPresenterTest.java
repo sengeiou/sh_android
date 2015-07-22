@@ -1,9 +1,9 @@
 package com.shootr.android.ui.presenter;
 
 import android.content.SharedPreferences;
-import com.shootr.android.domain.interactor.event.ChangeEventPhotoInteractor;
-import com.shootr.android.domain.interactor.event.GetEventMediaCountInteractor;
-import com.shootr.android.domain.interactor.event.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.event.ChangeStreamPhotoInteractor;
+import com.shootr.android.domain.interactor.event.GetStreamMediaCountInteractor;
+import com.shootr.android.domain.interactor.event.VisibleStreamInfoInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -20,8 +20,8 @@ public class EventDetailPresenterTest {
     private EventDetailPresenter presenter;
 
     @Mock Bus bus;
-    @Mock VisibleEventInfoInteractor eventInfoInteractor;
-    @Mock ChangeEventPhotoInteractor changeEventPhotoInteractor;
+    @Mock VisibleStreamInfoInteractor eventInfoInteractor;
+    @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock EventDetailView eventDetailView;
@@ -33,7 +33,7 @@ public class EventDetailPresenterTest {
 
     @Mock SharedPreferences sharedPreferences;
     @Mock WatchersTimeFormatter watchersTimeFormatter;
-    @Mock GetEventMediaCountInteractor eventMediaCountInteractor;
+    @Mock GetStreamMediaCountInteractor eventMediaCountInteractor;
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -41,8 +41,7 @@ public class EventDetailPresenterTest {
         userModelMapper= new UserModelMapper();
 
         presenter = new EventDetailPresenter(bus,
-          eventInfoInteractor,
-          changeEventPhotoInteractor,
+          eventInfoInteractor, changeStreamPhotoInteractor,
           eventModelMapper,
           userModelMapper,
           errorMessageFactory,

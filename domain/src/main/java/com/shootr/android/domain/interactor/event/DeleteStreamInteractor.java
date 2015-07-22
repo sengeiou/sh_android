@@ -1,22 +1,22 @@
 package com.shootr.android.domain.interactor.event;
 
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
+import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class DeleteEventInteractor implements Interactor {
+public class DeleteStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -25,17 +25,14 @@ public class DeleteEventInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
-    private String idEvent;
+    private String idStream;
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
     @Inject
-    public DeleteEventInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      @Remote StreamRepository remoteStreamRepository,
-      @Local StreamRepository localStreamRepository,
-      SessionRepository sessionRepository,
-      @Local UserRepository localUserRepository,
+    public DeleteStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote StreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository,
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -46,8 +43,8 @@ public class DeleteEventInteractor implements Interactor {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void deleteEvent(String idEvent, CompletedCallback completedCallback, ErrorCallback errorCallback) {
-        this.idEvent = checkNotNull(idEvent);
+    public void deleteStream(String idStream, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+        this.idStream = checkNotNull(idStream);
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -56,19 +53,19 @@ public class DeleteEventInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            remoteStreamRepository.deleteStream(idEvent);
-            localStreamRepository.deleteStream(idEvent);
+            remoteStreamRepository.deleteStream(idStream);
+            localStreamRepository.deleteStream(idStream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-            currentUser.setIdWatchingEvent(null);
-            currentUser.setWatchingEventTitle(null);
-            currentUser.setJoinEventDate(null);
+            currentUser.setIdWatchingStream(null);
+            currentUser.setWatchingStreamTitle(null);
+            currentUser.setJoinStreamDate(null);
 
             localUserRepository.putUser(currentUser);
             remoteUserRepository.putUser(currentUser);
             sessionRepository.setCurrentUser(currentUser);
             notifyCompleted();
-        } catch (DeleteEventNotAllowedException deleteNotAllowedError) {
+        } catch (DeleteStreamNotAllowedException deleteNotAllowedError) {
             notifyError(deleteNotAllowedError);
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);

@@ -5,7 +5,7 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
@@ -33,7 +33,7 @@ public class FindEventsPresenterTest {
     private static final String EVENT_AUTHOR_ID = "author";
     public static final String QUERY = "query";
 
-    @Mock EventsSearchInteractor eventsSearchInteractor;
+    @Mock StreamSearchInteractor streamSearchInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock FindEventsView findEventsView;
@@ -45,7 +45,7 @@ public class FindEventsPresenterTest {
         EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
-        findEventsPresenter = new FindEventsPresenter(eventsSearchInteractor, eventResultModelMapper, errorMessageFactory);
+        findEventsPresenter = new FindEventsPresenter(streamSearchInteractor, eventResultModelMapper, errorMessageFactory);
         findEventsPresenter.setView(findEventsView);
     }
 
@@ -93,19 +93,19 @@ public class FindEventsPresenterTest {
     private void setupSearchEventInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                EventsSearchInteractor.Callback callback =
-                  (EventsSearchInteractor.Callback) invocation.getArguments()[1];
+                StreamSearchInteractor.Callback callback =
+                  (StreamSearchInteractor.Callback) invocation.getArguments()[1];
                 callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
-        }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
+        }).when(streamSearchInteractor).searchStreams(anyString(), anyEventSearchCallback(), anyErrorCallback());
     }
 
     private void setupSearchEventInteractorErrorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                EventsSearchInteractor.ErrorCallback callback =
-                  (EventsSearchInteractor.ErrorCallback) invocation.getArguments()[2];
+                StreamSearchInteractor.ErrorCallback callback =
+                  (StreamSearchInteractor.ErrorCallback) invocation.getArguments()[2];
                 callback.onError(new ShootrException() {
                     @Override public Throwable fillInStackTrace() {
                         return super.fillInStackTrace();
@@ -113,11 +113,11 @@ public class FindEventsPresenterTest {
                 });
                 return null;
             }
-        }).when(eventsSearchInteractor).searchEvents(anyString(), anyEventSearchCallback(), anyErrorCallback());
+        }).when(streamSearchInteractor).searchStreams(anyString(), anyEventSearchCallback(), anyErrorCallback());
     }
 
-    private EventsSearchInteractor.Callback anyEventSearchCallback() {
-        return any(EventsSearchInteractor.Callback.class);
+    private StreamSearchInteractor.Callback anyEventSearchCallback() {
+        return any(StreamSearchInteractor.Callback.class);
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {

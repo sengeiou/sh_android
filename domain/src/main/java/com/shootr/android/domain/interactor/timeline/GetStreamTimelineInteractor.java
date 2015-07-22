@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetEventTimelineInteractor implements Interactor {
+public class GetStreamTimelineInteractor implements Interactor {
 
     //region Dependencies
     private final InteractorHandler interactorHandler;
@@ -32,11 +32,10 @@ public class GetEventTimelineInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetEventTimelineInteractor(InteractorHandler interactorHandler,
-                                              PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-                                              @Local ShotRepository localShotRepository,
-                                              @Local StreamRepository localStreamRepository,
-                                              @Local UserRepository localUserRepository) {
+    @Inject public GetStreamTimelineInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+      @Local ShotRepository localShotRepository, @Local StreamRepository localStreamRepository,
+      @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.localShotRepository = localShotRepository;
         this.interactorHandler = interactorHandler;
@@ -46,7 +45,7 @@ public class GetEventTimelineInteractor implements Interactor {
     }
     //endregion
 
-    public void loadEventTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadStreamTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -57,18 +56,18 @@ public class GetEventTimelineInteractor implements Interactor {
     }
 
     private void loadLocalShots() {
-        Stream visibleStream = getVisibleEvent();
+        Stream visibleStream = getVisibleStream();
         if (visibleStream != null) {
             List<Shot> shots = loadLocalShots(buildParameters(visibleStream));
             shots = sortShotsByPublishDate(shots);
             notifyTimelineFromShots(shots);
         } else {
-            notifyError(new TimelineException("Can't load event timeline without visible event"));
+            notifyError(new TimelineException("Can't load stream timeline without visible stream"));
         }
     }
 
     private List<Shot> loadLocalShots(StreamTimelineParameters timelineParameters) {
-        return localShotRepository.getShotsForEventTimeline(timelineParameters);
+        return localShotRepository.getShotsForStreamTimeline(timelineParameters);
     }
 
     private StreamTimelineParameters buildParameters(Stream stream) {
@@ -90,10 +89,10 @@ public class GetEventTimelineInteractor implements Interactor {
         return ids;
     }
 
-    private Stream getVisibleEvent() {
-        String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingEvent();
-        if (visibleEventId != null) {
-            return localStreamRepository.getStreamById(visibleEventId);
+    private Stream getVisibleStream() {
+        String idWatchingStream = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingStream();
+        if (idWatchingStream != null) {
+            return localStreamRepository.getStreamById(idWatchingStream);
         }
         return null;
     }

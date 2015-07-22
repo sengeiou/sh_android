@@ -44,7 +44,7 @@ public class SelectStreamInteractorTest {
     @Mock TimeUtils timeUtils;
     @Mock WatchersRepository localWatchersRepository;
 
-    private SelectEventInteractor interactor;
+    private SelectStreamInteractor interactor;
 
     @Before
     public void setUp() throws Exception {
@@ -53,7 +53,7 @@ public class SelectStreamInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUser());
         doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
-        interactor = new SelectEventInteractor(interactorHandler,
+        interactor = new SelectStreamInteractor(interactorHandler,
           postExecutionThread, localStreamRepository, localUserRepository,
           remoteUserRepository,
           localWatchersRepository,
@@ -66,7 +66,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingEvent();
         when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
 
         verify(sessionRepository).setCurrentUser(currentUserWatchingNewEvent());
     }
@@ -76,7 +76,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingEvent();
         when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
 
         verify(localUserRepository).putUser(currentUserWatchingNewEvent());
     }
@@ -86,7 +86,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingEvent();
         when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
 
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
 
         verify(remoteUserRepository).putUser(currentUserWatchingNewEvent());
     }
@@ -101,7 +101,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingEvent();
         when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
-        interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
+        interactor.selectStream(OLD_EVENT_ID, dummyCallback);
 
         verify(dummyCallback).onLoaded(anyEvent());
     }
@@ -110,7 +110,7 @@ public class SelectStreamInteractorTest {
         setupOldWatchingEvent();
         when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
 
-        interactor.selectEvent(OLD_EVENT_ID, dummyCallback);
+        interactor.selectStream(OLD_EVENT_ID, dummyCallback);
 
         verify(localUserRepository, never()).putUser(any(User.class));
         verify(remoteUserRepository, never()).putUser(any(User.class));
@@ -122,7 +122,7 @@ public class SelectStreamInteractorTest {
         when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
-        interactor.selectEvent(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
 
         inOrder.verify(dummyCallback).onLoaded(anyEvent());
         inOrder.verify(remoteUserRepository).putUser(any(User.class));
@@ -133,7 +133,7 @@ public class SelectStreamInteractorTest {
         User userWithOldEvent = currentUserWatchingOldEvent();
         Stream selectedStream = newEvent();
 
-        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedStream);
+        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldEvent, selectedStream);
 
         assertThat(updatedUser).hasWatchingEventId(NEW_EVENT_ID);
     }
@@ -143,7 +143,7 @@ public class SelectStreamInteractorTest {
         User userWithOldEvent = currentUserWatchingOldEvent();
         Stream selectedStream = newEvent();
 
-        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedStream);
+        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldEvent, selectedStream);
 
         assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
     }
@@ -155,14 +155,14 @@ public class SelectStreamInteractorTest {
 
     private User currentUserWatchingOldEvent() {
         User user = currentUser();
-        user.setIdWatchingEvent(OLD_EVENT_ID);
-        user.setWatchingEventTitle(OLD_EVENT_TITLE);
+        user.setIdWatchingStream(OLD_EVENT_ID);
+        user.setWatchingStreamTitle(OLD_EVENT_TITLE);
         return user;
     }
 
     private User currentUserWatchingNewEvent() {
         User user = currentUser();
-        user.setIdWatchingEvent(NEW_EVENT_ID);
+        user.setIdWatchingStream(NEW_EVENT_ID);
         return user;
     }
     //endregion

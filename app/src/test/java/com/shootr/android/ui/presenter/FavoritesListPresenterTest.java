@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
+import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 public class FavoritesListPresenterTest {
 
     @Mock FavoritesListView favoritesListView;
-    @Mock GetFavoriteEventsInteractor getFavoriteEventsInteractor;
+    @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     @Mock EventResultModelMapper eventResultModelMapper;
     @Mock EventModelMapper eventModelMapper;
 
@@ -33,7 +33,7 @@ public class FavoritesListPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventResultModelMapper);
+        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, eventResultModelMapper);
         presenter.setView(favoritesListView);
     }
 
@@ -41,7 +41,7 @@ public class FavoritesListPresenterTest {
     public void shouldLoadFavoritesWhenInitialized() throws Exception {
         presenter.initialize(favoritesListView);
 
-        verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class FavoritesListPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
     @Test
@@ -141,6 +141,6 @@ public class FavoritesListPresenterTest {
                 callback.onLoaded(result);
                 return null;
             }
-        }).when(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        }).when(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 }

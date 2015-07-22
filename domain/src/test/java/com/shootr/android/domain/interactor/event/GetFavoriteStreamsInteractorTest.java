@@ -30,7 +30,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GetFavoriteEventsInteractorTest {
+public class GetFavoriteStreamsInteractorTest {
 
     public static final String EVENT_ID = "event_id";
     private static final String EVENT_ID_0 = "id_0";
@@ -44,46 +44,46 @@ public class GetFavoriteEventsInteractorTest {
     @Mock WatchersRepository watchersRepository;
     @Spy SpyCallback<List<StreamSearchResult>> spyCallback = new SpyCallback<>();
 
-    private GetFavoriteEventsInteractor getFavoriteEventsInteractor;
+    private GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        getFavoriteEventsInteractor = new GetFavoriteEventsInteractor(interactorHandler, postExecutionThread,
+        getFavoriteStreamsInteractor = new GetFavoriteStreamsInteractor(interactorHandler, postExecutionThread,
           localFavoriteRepository,
           remoteFavoriteRepository, localStreamRepository, watchersRepository);
     }
 
     @Test
     public void shouldCallbackWhenLoadFavoriteEvents(){
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(callback, atLeastOnce()).onLoaded(anyList());
     }
 
     @Test
     public void shouldLoadFavoritesFromLocal(){
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(localFavoriteRepository).getFavorites();
     }
 
     @Test
     public void shouldLoadFavoritesFromRemote(){
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(remoteFavoriteRepository).getFavorites();
     }
 
     @Test
     public void shouldLoadEventsFromLocal(){
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(localStreamRepository, atLeastOnce()).getStreamsByIds(anyList());
     }
 
     @Test
     public void shouldLoadWatchers(){
         when(localStreamRepository.getStreamsByIds(anyList())).thenReturn(listWithOneEvent());
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(watchersRepository, atLeastOnce()).getWatchers();
     }
 
@@ -92,7 +92,7 @@ public class GetFavoriteEventsInteractorTest {
         setupEventRepositoryReturnsEventsWithInputIds();
         when(localFavoriteRepository.getFavorites()).thenReturn(unorderedFavorites());
 
-        getFavoriteEventsInteractor.loadFavoriteEvents(spyCallback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(spyCallback);
         List<StreamSearchResult> results = spyCallback.firstResult();
 
         assertThat(results).containsSequence(orderedEventResults());
@@ -101,7 +101,7 @@ public class GetFavoriteEventsInteractorTest {
     @Test
     public void shouldLoadLocalEventsFromFavorites() {
         when(localFavoriteRepository.getFavorites()).thenReturn(listWithOneFavorite());
-        getFavoriteEventsInteractor.loadFavoriteEvents(callback);
+        getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
         verify(localStreamRepository).getStreamsByIds(favoriteEventsIds());
     }
 

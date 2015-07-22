@@ -1,8 +1,8 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.interactor.event.CreateEventInteractor;
-import com.shootr.android.domain.interactor.event.DeleteEventInteractor;
-import com.shootr.android.domain.interactor.event.GetEventInteractor;
+import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
+import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
+import com.shootr.android.domain.interactor.event.GetStreamInteractor;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -20,9 +20,9 @@ import static org.mockito.Mockito.verify;
 
 public class NewStreamPresenterTest {
 
-    @Mock CreateEventInteractor createEventInteractor;
-    @Mock GetEventInteractor getEventInteractor;
-    @Mock DeleteEventInteractor deleteEventInteractor;
+    @Mock CreateStreamInteractor createStreamInteractor;
+    @Mock GetStreamInteractor getStreamInteractor;
+    @Mock DeleteStreamInteractor deleteStreamInteractor;
     @Mock EventModelMapper eventModelMapper;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewEventView newEventView;
@@ -32,7 +32,8 @@ public class NewStreamPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new NewEventPresenter(createEventInteractor, getEventInteractor, deleteEventInteractor, eventModelMapper, errorMessageFactory);
+        presenter = new NewEventPresenter(createStreamInteractor, getStreamInteractor,
+          deleteStreamInteractor, eventModelMapper, errorMessageFactory);
     }
 
     @Test

@@ -4,8 +4,8 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.EventsListInteractor;
-import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
+import com.shootr.android.domain.interactor.event.StreamsListInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
@@ -39,8 +39,8 @@ public class EventsListPresenterTest {
     private static final String EVENT_AUTHOR_ID = "author";
 
     @Mock Bus bus;
-    @Mock EventsListInteractor eventsListInteractor;
-    @Mock UnwatchEventInteractor unwatchEventInteractor;
+    @Mock StreamsListInteractor streamsListInteractor;
+    @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock EventsListView eventsListView;
@@ -52,8 +52,7 @@ public class EventsListPresenterTest {
         EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
           new EventResultModelMapper(eventModelMapper);
-        presenter = new EventsListPresenter(eventsListInteractor,
-          unwatchEventInteractor,
+        presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor,
           eventResultModelMapper,
           errorMessageFactory);
         presenter.setView(eventsListView);
@@ -62,7 +61,7 @@ public class EventsListPresenterTest {
     @Test public void shouldLoadEventListOnInitialized() throws Exception {
         presenter.initialize(eventsListView);
 
-        verify(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
 
     @Test public void shouldNavigateToEventTimelineWhenEventSelected() throws Exception {
@@ -119,7 +118,7 @@ public class EventsListPresenterTest {
         presenter.initialize(eventsListView);
         presenter.resume();
 
-        verify(eventsListInteractor, times(1)).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor, times(1)).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
 
     @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
@@ -127,7 +126,7 @@ public class EventsListPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(eventsListInteractor, times(2)).loadEvents(anyEventsCallback(), anyErrorCallback());
+        verify(streamsListInteractor, times(2)).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {
@@ -146,7 +145,7 @@ public class EventsListPresenterTest {
                 callback.onLoaded(new StreamSearchResultList(result));
                 return null;
             }
-        }).when(eventsListInteractor).loadEvents(anyEventsCallback(), anyErrorCallback());
+        }).when(streamsListInteractor).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
 
     private StreamSearchResult eventResult() {

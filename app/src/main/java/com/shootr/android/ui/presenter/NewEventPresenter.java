@@ -5,10 +5,10 @@ import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.CreateEventInteractor;
-import com.shootr.android.domain.interactor.event.DeleteEventInteractor;
-import com.shootr.android.domain.interactor.event.GetEventInteractor;
-import com.shootr.android.domain.validation.EventValidator;
+import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
+import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
+import com.shootr.android.domain.interactor.event.GetStreamInteractor;
+import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -24,9 +24,9 @@ public class NewEventPresenter implements Presenter {
     public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
     public static final int MAX_SHORT_TITLE_LENGTH = 20;
 
-    private final CreateEventInteractor createEventInteractor;
-    private final GetEventInteractor getEventInteractor;
-    private final DeleteEventInteractor deleteEventInteractor;
+    private final CreateStreamInteractor createStreamInteractor;
+    private final GetStreamInteractor getStreamInteractor;
+    private final DeleteStreamInteractor deleteStreamInteractor;
     private final EventModelMapper eventModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -42,14 +42,14 @@ public class NewEventPresenter implements Presenter {
     private boolean shortTitleEditedManually;
 
     //region Initialization
-    @Inject public NewEventPresenter(CreateEventInteractor createEventInteractor,
-      GetEventInteractor getEventInteractor,
-      DeleteEventInteractor deleteEventInteractor,
+    @Inject public NewEventPresenter(CreateStreamInteractor createStreamInteractor,
+      GetStreamInteractor getStreamInteractor,
+      DeleteStreamInteractor deleteStreamInteractor,
       EventModelMapper eventModelMapper,
       ErrorMessageFactory errorMessageFactory) {
-        this.createEventInteractor = createEventInteractor;
-        this.getEventInteractor = getEventInteractor;
-        this.deleteEventInteractor = deleteEventInteractor;
+        this.createStreamInteractor = createStreamInteractor;
+        this.getStreamInteractor = getStreamInteractor;
+        this.deleteStreamInteractor = deleteStreamInteractor;
         this.eventModelMapper = eventModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -65,7 +65,7 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void preloadEventToEdit(String optionalIdEventToEdit) {
-        getEventInteractor.loadEvent(optionalIdEventToEdit, new GetEventInteractor.Callback() {
+        getStreamInteractor.loadStream(optionalIdEventToEdit, new GetStreamInteractor.Callback() {
             @Override public void onLoaded(Stream stream) {
                 setDefaultEventInfo(eventModelMapper.transform(stream));
             }
@@ -131,14 +131,12 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void confirmDeleteEvent() {
-        deleteEventInteractor.deleteEvent(preloadedEventId, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+        deleteStreamInteractor.deleteStream(preloadedEventId, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
                 newEventView.closeScreenWithExitEvent();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 newEventView.showError(errorMessage);
             }
@@ -156,11 +154,11 @@ public class NewEventPresenter implements Presenter {
     private void sendEvent(String preloadedEventId) {
         String title = filterTitle(newEventView.getEventTitle());
         String shortTitle = filterShortTitle(newEventView.getEventShortTitle());
-        createEventInteractor.sendEvent(preloadedEventId,
+        createStreamInteractor.sendStream(preloadedEventId,
           title,
           shortTitle,
           notifyCreation,
-          new CreateEventInteractor.Callback() {
+          new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   eventCreated(stream);
               }
@@ -201,7 +199,7 @@ public class NewEventPresenter implements Presenter {
         for (FieldValidationError validationError : errors) {
             String errorMessage = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
             switch (validationError.getField()) {
-                case EventValidator.FIELD_TITLE:
+                case StreamValidator.FIELD_TITLE:
                     showViewTitleError(errorMessage);
                     break;
                 default:

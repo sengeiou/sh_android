@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetUserListingEventsInteractor;
+import com.shootr.android.domain.interactor.event.GetUserListingStreamsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
@@ -11,16 +11,16 @@ import javax.inject.Inject;
 
 public class ListingListPresenter implements Presenter{
 
-    private final GetUserListingEventsInteractor getUserListingEventsInteractor;
+    private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     private final EventResultModelMapper eventResultModelMapper;
 
     private ListingView listingView;
     private String profileIdUser;
     private boolean hasBeenPaused = false;
 
-    @Inject public ListingListPresenter(GetUserListingEventsInteractor getUserListingEventsInteractor,
+    @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       EventResultModelMapper eventResultModelMapper) {
-        this.getUserListingEventsInteractor = getUserListingEventsInteractor;
+        this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
     }
 
@@ -36,7 +36,7 @@ public class ListingListPresenter implements Presenter{
 
     private void loadListingList() {
         listingView.showLoading();
-        getUserListingEventsInteractor.loadUserListingEvents(new Interactor.Callback<List<StreamSearchResult>>() {
+        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override public void onLoaded(List<StreamSearchResult> events) {
                 listingView.hideLoading();
                 onListingLoaded(events);

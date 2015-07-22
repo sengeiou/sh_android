@@ -5,13 +5,13 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetUserListingEventsInteractor implements Interactor {
+public class GetUserListingStreamsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -21,47 +21,47 @@ public class GetUserListingEventsInteractor implements Interactor {
     private String idUser;
     private Callback<List<StreamSearchResult>> callback;
 
-    @Inject public GetUserListingEventsInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localEventRepositoty,
-      @Remote StreamSearchRepository remoteEventRepositoty) {
+    @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamRepositoty,
+      @Remote StreamSearchRepository remoteStreamRepositoty) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localStreamSearchRepository = localEventRepositoty;
-        this.remoteStreamSearchRepository = remoteEventRepositoty;
+        this.localStreamSearchRepository = localStreamRepositoty;
+        this.remoteStreamSearchRepository = remoteStreamRepositoty;
     }
 
-    public void loadUserListingEvents(Callback<List<StreamSearchResult>> callback, String idUser){
+    public void loadUserListingStreams(Callback<List<StreamSearchResult>> callback, String idUser){
         this.callback = callback;
         this.idUser = idUser;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        loadUserListingEventsFromLocal();
-        loadUserListingEventsFromRemote();
+        loadUserListingStreamsFromLocal();
+        loadUserListingStreamsFromRemote();
     }
 
-    private void loadUserListingEventsFromRemote() {
+    private void loadUserListingStreamsFromRemote() {
         try {
-            loadUserListingEventsFromRepository(remoteStreamSearchRepository);
+            loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
         } catch (ShootrException error) {
             /* swallow error */
         }
     }
 
-    private void loadUserListingEventsFromLocal() {
-        loadUserListingEventsFromRepository(localStreamSearchRepository);
+    private void loadUserListingStreamsFromLocal() {
+        loadUserListingStreamsFromRepository(localStreamSearchRepository);
     }
 
-    private void loadUserListingEventsFromRepository(StreamSearchRepository eventRepository){
-        List<StreamSearchResult> listingEvents = eventRepository.getStreamsListing(idUser);
-        notifyLoaded(listingEvents);
+    private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
+        List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
+        notifyLoaded(listingStreams);
     }
 
-    private void notifyLoaded(final List<StreamSearchResult> listingEvents) {
+    private void notifyLoaded(final List<StreamSearchResult> listingStreams) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(listingEvents);
+                callback.onLoaded(listingStreams);
             }
         });
     }

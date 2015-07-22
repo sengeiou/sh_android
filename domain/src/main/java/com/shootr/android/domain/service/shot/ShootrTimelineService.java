@@ -72,7 +72,7 @@ public class ShootrTimelineService {
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
     }
 
-    public Timeline refreshTimelinesForWatchingEvent() {
+    public Timeline refreshTimelinesForWatchingStream() {
         List<Shot> shotsForEvent = refreshWatchingEventShots();
 
         refreshActivityShots();
@@ -101,11 +101,11 @@ public class ShootrTimelineService {
           .since(eventRefreshDateSince) //
           .build();
 
-        List<Shot> localShots = localShotRepository.getShotsForEventTimeline(streamTimelineParameters);
+        List<Shot> localShots = localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
         if (localShots.isEmpty()) {
             streamTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
         }
-        return remoteShotRepository.getShotsForEventTimeline(streamTimelineParameters);
+        return remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
     }
 
     private Timeline buildSortedTimeline(List<Shot> shots) {
@@ -141,7 +141,7 @@ public class ShootrTimelineService {
     private Stream getWatchingEvent() {
         String currentUserId = sessionRepository.getCurrentUserId();
         User currentUser = localUserRepository.getUserById(currentUserId);
-        String watchingEventId = currentUser.getIdWatchingEvent();
+        String watchingEventId = currentUser.getIdWatchingStream();
         if (watchingEventId != null) {
             return localStreamRepository.getStreamById(watchingEventId);
         }

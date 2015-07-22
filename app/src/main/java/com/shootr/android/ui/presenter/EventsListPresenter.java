@@ -6,8 +6,8 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.EventsListInteractor;
-import com.shootr.android.domain.interactor.event.UnwatchEventInteractor;
+import com.shootr.android.domain.interactor.event.StreamsListInteractor;
+import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
@@ -17,18 +17,18 @@ import javax.inject.Inject;
 
 public class EventsListPresenter implements Presenter {
 
-    private final EventsListInteractor eventsListInteractor;
-    private final UnwatchEventInteractor unwatchEventInteractor;
+    private final StreamsListInteractor streamsListInteractor;
+    private final UnwatchStreamInteractor unwatchStreamInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
     private boolean hasBeenPaused;
 
-    @Inject public EventsListPresenter(EventsListInteractor eventsListInteractor,
-      UnwatchEventInteractor unwatchEventInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.eventsListInteractor = eventsListInteractor;
-        this.unwatchEventInteractor = unwatchEventInteractor;
+    @Inject public EventsListPresenter(StreamsListInteractor streamsListInteractor,
+      UnwatchStreamInteractor unwatchStreamInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+        this.streamsListInteractor = streamsListInteractor;
+        this.unwatchStreamInteractor = unwatchStreamInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -57,9 +57,8 @@ public class EventsListPresenter implements Presenter {
     }
 
     public void unwatchEvent() {
-        unwatchEventInteractor.unwatchEvent(new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+        unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
                 loadDefaultEventList();
                 removeCurrentWatchingEvent();
                 eventsListView.showNotificationsOff();
@@ -72,7 +71,7 @@ public class EventsListPresenter implements Presenter {
     }
 
     protected void loadDefaultEventList() {
-        eventsListInteractor.loadEvents(new Interactor.Callback<StreamSearchResultList>() {
+        streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
             @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
                 eventsListView.hideLoading();
                 onDefaultEventListLoaded(streamSearchResultList);

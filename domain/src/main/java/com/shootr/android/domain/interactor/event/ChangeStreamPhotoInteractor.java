@@ -6,16 +6,16 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.utils.ImageResizer;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class ChangeEventPhotoInteractor implements Interactor {
+public class ChangeStreamPhotoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -24,12 +24,12 @@ public class ChangeEventPhotoInteractor implements Interactor {
     private final StreamRepository localStreamRepository;
     private final StreamRepository remoteStreamRepository;
 
-    private String idEvent;
+    private String idStream;
     private File photoFile;
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public ChangeEventPhotoInteractor(InteractorHandler interactorHandler,
+    @Inject public ChangeStreamPhotoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ImageResizer imageResizer, PhotoService photoService,
       @Local StreamRepository localStreamRepository, @Remote StreamRepository remoteStreamRepository) {
         this.interactorHandler = interactorHandler;
@@ -40,8 +40,8 @@ public class ChangeEventPhotoInteractor implements Interactor {
         this.remoteStreamRepository = remoteStreamRepository;
     }
 
-    public void changeEventPhoto(String idEvent, File photoFile, Callback callback, ErrorCallback errorCallback) {
-        this.idEvent = idEvent;
+    public void changeStreamPhoto(String idStream, File photoFile, Callback callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.photoFile = photoFile;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -51,8 +51,8 @@ public class ChangeEventPhotoInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
-            String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, idEvent);
-            Stream stream = localStreamRepository.getStreamById(idEvent);
+            String imageUrl = photoService.uploadStreamImageAndGetUrl(resizedImageFile, idStream);
+            Stream stream = localStreamRepository.getStreamById(idStream);
             stream.setPicture(imageUrl);
             Stream remoteStream = remoteStreamRepository.putStream(stream);
             notifyLoaded(remoteStream);

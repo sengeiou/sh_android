@@ -72,10 +72,10 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnEventTimelineWhenRefreshEventTimeline() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(
           eventShotListWithMultipleShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream();
 
         assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
     }
@@ -83,9 +83,9 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldRefreshActivityShotsWhenRefreshEventTimeline() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
 
-        shootrTimelineService.refreshTimelinesForWatchingEvent();
+        shootrTimelineService.refreshTimelinesForWatchingStream();
 
         verify(remoteActivityRepository).getActivityTimeline(anyActivityParameters());
     }
@@ -117,31 +117,31 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldRefreshEventShotsWhenRefreshActivityTimeline() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(eventShotList());
 
         shootrTimelineService.refreshTimelinesForActivity();
 
-        verify(remoteShotRepository).getShotsForEventTimeline(anyEventParameters());
+        verify(remoteShotRepository).getShotsForStreamTimeline(anyEventParameters());
     }
 
     @Test
     public void shouldNotRefreshEventShotsWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(eventShotList());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(eventShotList());
         when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingEvent());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         shootrTimelineService.refreshTimelinesForActivity();
 
-        verify(remoteShotRepository, never()).getShotsForEventTimeline(anyEventParameters());
+        verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyEventParameters());
     }
 
     @Test
     public void shouldRequestFewerNiceShotsWhenWatchingEventHasShotsInLocalRepository() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(unorderedShots());
 
-        shootrTimelineService.refreshTimelinesForWatchingEvent();
+        shootrTimelineService.refreshTimelinesForWatchingStream();
 
         StreamTimelineParameters parameters = captureTimelineParameters();
         assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
@@ -150,9 +150,9 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldRequestFullNiceShotsWhenWatchingEventDoesntHaveShotsInLocalRepository() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(Collections.<Shot>emptyList());
+        when(localShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(Collections.<Shot>emptyList());
 
-        shootrTimelineService.refreshTimelinesForWatchingEvent();
+        shootrTimelineService.refreshTimelinesForWatchingStream();
 
         StreamTimelineParameters parameters = captureTimelineParameters();
         assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
@@ -161,9 +161,9 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldRequestTimelineWithEventIdWhenWatchingEvent() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
 
-        shootrTimelineService.refreshTimelinesForWatchingEvent();
+        shootrTimelineService.refreshTimelinesForWatchingStream();
 
         assertThat(captureTimelineParameters()).hasEventId(WATCHING_EVENT_ID);
     }
@@ -174,7 +174,7 @@ public class ShootrTimelineServiceTest {
         when(timelineSynchronizationRepository.getEventTimelineRefreshDate(WATCHING_EVENT_ID)).thenReturn(
           WATCHING_EVENT_REFRESH_DATE);
 
-        shootrTimelineService.refreshTimelinesForWatchingEvent();
+        shootrTimelineService.refreshTimelinesForWatchingStream();
 
         assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_EVENT_REFRESH_DATE);
     }
@@ -182,9 +182,9 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingEvent() throws Exception {
         setupWatchingEvent();
-        when(remoteShotRepository.getShotsForEventTimeline(anyEventParameters())).thenReturn(unorderedShots());
+        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(unorderedShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream();
 
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }
@@ -234,7 +234,7 @@ public class ShootrTimelineServiceTest {
 
     private User currentUserWatching() {
         User user = new User();
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -261,7 +261,7 @@ public class ShootrTimelineServiceTest {
     private StreamTimelineParameters captureTimelineParameters() {
         ArgumentCaptor<StreamTimelineParameters> parametersCaptor =
           ArgumentCaptor.forClass(StreamTimelineParameters.class);
-        verify(remoteShotRepository).getShotsForEventTimeline(parametersCaptor.capture());
+        verify(remoteShotRepository).getShotsForStreamTimeline(parametersCaptor.capture());
         return parametersCaptor.getValue();
     }
 

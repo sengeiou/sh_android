@@ -9,5 +9,5 @@ public interface PhotoService {
 
     String uploadShotImageAndGetUrl(File imageFile) throws IOException;
 
-    String uploadEventImageAndGetUrl(File imageFile, String idEvent) throws IOException;
+    String uploadStreamImageAndGetUrl(File imageFile, String idEvent) throws IOException;
 }

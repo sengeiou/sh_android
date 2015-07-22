@@ -41,7 +41,7 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
         fillReplyInfo(shot);
     }
 
-    @Override protected void fillShotEventInfo(Shot shot) {
+    @Override protected void fillShotStreamInfo(Shot shot) {
         Shot parentShot = getParentShot();
         checkNotNull(parentShot, "Parent shot not found with id=%s", replyParentId);
         shot.setEventInfo(parentShot.getEventInfo());

@@ -6,7 +6,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -47,7 +47,7 @@ public class StreamTimelinePresenterTest {
 
     @Mock EventTimelineView eventTimelineView;
     @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
-    @Mock SelectEventInteractor selectEventInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
@@ -58,8 +58,7 @@ public class StreamTimelinePresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new EventTimelinePresenter(timelineInteractorWrapper,
-          selectEventInteractor,
+        presenter = new EventTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
           shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(eventTimelineView);
         shotSentReceiver = presenter;
@@ -71,7 +70,7 @@ public class StreamTimelinePresenterTest {
     public void shouldSelectEventWhenInitialized() throws Exception {
         presenter.initialize(eventTimelineView, SELECTED_EVENT_ID);
 
-        verify(selectEventInteractor).selectEvent(eq(SELECTED_EVENT_ID), anySelectCallback());
+        verify(selectStreamInteractor).selectStream(eq(SELECTED_EVENT_ID), anySelectCallback());
     }
     //endregion
 
@@ -352,7 +351,7 @@ public class StreamTimelinePresenterTest {
                 callback.onLoaded(eventResult());
                 return null;
             }
-        }).when(selectEventInteractor).selectEvent(anyString(), any(Interactor.Callback.class));
+        }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
     }
     //endregion
 }

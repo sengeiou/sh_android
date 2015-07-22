@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetEventMediaCountInteractor implements Interactor {
+public class GetStreamMediaInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -26,14 +27,15 @@ public class GetEventMediaCountInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private ErrorCallback errorCallback;
 
-    private String idEvent;
-    private String idUser;
-    private Callback<Integer> callback;
+    private String idStream;
+    private Callback<List<Shot>> callback;
+    private String currentidUser;
 
-    @Inject public GetEventMediaCountInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository remoteShotRepository,
-      @Local ShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+    @Inject
+    public GetStreamMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository,
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteShotRepository = remoteShotRepository;
@@ -43,55 +45,54 @@ public class GetEventMediaCountInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void getEventMediaCount(String idEvent, Callback callback, ErrorCallback errorCallback) {
-        this.idEvent = idEvent;
+    public void getStreamMedia(String idStream, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.callback = callback;
         this.errorCallback = errorCallback;
-        this.idUser = sessionRepository.getCurrentUserId();
+        this.currentidUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        try {
-            getMediaCountFromLocal();
-            getMediaCountFromRemote();
+        try{
+            getMediaFromLocal();
+            getMediaFromRemote();
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
-
     }
 
-    private void getMediaCountFromLocal() {
+    private void getMediaFromLocal() {
         List<User> people = localUserRepository.getPeople();
-        List<String> peopleIds  = getPeopleInEvent(people);
-        Integer mediaCountByIdEvent = getMediaCountFromRepository(peopleIds, localShotRepository);
-        notifyLoaded(mediaCountByIdEvent);
+        List<String> peopleIds = getPeopleInStream(people);
+        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository);
+        notifyLoaded(shots);
     }
 
-    private void getMediaCountFromRemote() {
+    private void getMediaFromRemote() {
         List<User> people = remoteUserRepository.getPeople();
-        List<String> peopleIds  = getPeopleInEvent(people);
-        Integer mediaCountByIdEvent = getMediaCountFromRepository(peopleIds, remoteShotRepository);
-        notifyLoaded(mediaCountByIdEvent);
+        List<String> peopleIds = getPeopleInStream(people);
+        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository);
+        notifyLoaded(shots);
     }
 
-    private Integer getMediaCountFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
-        return shotRepository.getMediaCountByIdEvent(idEvent, peopleIds);
+    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
+        return shotRepository.getMediaByIdStream(idStream, peopleIds);
     }
 
-    private List<String> getPeopleInEvent(List<User> people) {
+    private List<String> getPeopleInStream(List<User> people) {
         List<String> peopleIds = new ArrayList<>();
         for (User user : people) {
             peopleIds.add(user.getIdUser());
         }
-        peopleIds.add(idUser);
+        peopleIds.add(currentidUser);
         return peopleIds;
     }
 
-    private void notifyLoaded(final Integer mediaCount) {
+    private void notifyLoaded(final List<Shot> shots) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(mediaCount);
+                callback.onLoaded(shots);
             }
         });
     }
@@ -104,4 +105,5 @@ public class GetEventMediaCountInteractor implements Interactor {
             }
         });
     }
+
 }

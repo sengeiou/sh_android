@@ -5,7 +5,7 @@ import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
+import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import java.util.List;
@@ -60,7 +60,7 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override
-    public void deleteStream(String idEvent) throws DeleteEventNotAllowedException {
+    public void deleteStream(String idEvent) throws DeleteStreamNotAllowedException {
         localStreamDataSource.deleteStream(idEvent);
     }
 }

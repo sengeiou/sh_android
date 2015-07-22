@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
-    @Inject SelectEventInteractor selectEventInteractor;
+    @Inject SelectStreamInteractor selectStreamInteractor;
 
     public static Intent newIntent(Context context, String eventId, String eventTitle) {
         Intent intent = new Intent(context, EventTimelineActivity.class);
@@ -46,9 +46,8 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
     //FIXME Esto es una ñapa como un castillo
     private void getEvent(String eventId) {
-        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<StreamSearchResult>() {
-            @Override
-            public void onLoaded(StreamSearchResult streamSearchResult) {
+        selectStreamInteractor.selectStream(eventId, new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 setEventTitle(streamSearchResult.getStream().getTag());
             }
         });

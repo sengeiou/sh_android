@@ -75,7 +75,7 @@ public class ShootrUserService {
 
     private void retrievePostLoginInformation(LoginResult loginResult) {
         storeSession(loginResult);
-        String visibleEventId = loginResult.getUser().getIdWatchingEvent();
+        String visibleEventId = loginResult.getUser().getIdWatchingStream();
         if (visibleEventId != null) {
             remoteStreamRepository.getStreamById(visibleEventId);
         }

@@ -4,7 +4,7 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
+import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -67,12 +67,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
     }
 
     @Override
-    public void deleteStream(String idStream) throws DeleteEventNotAllowedException {
+    public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
         try {
             eventService.deleteStream(idStream);
         } catch (ApiException apiError) {
             if (apiError.getErrorInfo() == ErrorInfo.EventHasWatchersException) {
-                throw new DeleteEventNotAllowedException();
+                throw new DeleteStreamNotAllowedException();
             } else {
                 throw new ServerCommunicationException(apiError);
             }

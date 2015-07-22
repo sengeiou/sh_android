@@ -4,7 +4,7 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.PostNewShotAsReplyInteractor;
-import com.shootr.android.domain.interactor.shot.PostNewShotInEventInteractor;
+import com.shootr.android.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -21,7 +21,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
-    private final PostNewShotInEventInteractor postNewShotInEventInteractor;
+    private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
     private final PostNewShotAsReplyInteractor postNewShotAsReplyInteractor;
 
     private PostNewShotView postNewShotView;
@@ -33,11 +33,11 @@ public class PostNewShotPresenter implements Presenter {
 
     @Inject
     public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      PostNewShotInEventInteractor postNewShotInEventInteractor,
+      PostNewShotInStreamInteractor postNewShotInStreamInteractor,
       PostNewShotAsReplyInteractor postNewShotAsReplyInteractor) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
-        this.postNewShotInEventInteractor = postNewShotInEventInteractor;
+        this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
     }
 
@@ -136,7 +136,7 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void postEventShot() {
-        postNewShotInEventInteractor.postNewShotInEvent(shotCommentToSend,
+        postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend,
           selectedImageFile,
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {

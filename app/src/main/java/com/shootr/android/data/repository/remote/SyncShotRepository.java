@@ -30,7 +30,7 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(responseShotEntity);
     }
 
-    @Override public List<Shot> getShotsForEventTimeline(StreamTimelineParameters parameters) {
+    @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForEventTimeline(parameters);
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
@@ -48,11 +48,11 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(remoteShotDataSource.getReplies(shot));
     }
 
-    @Override public Integer getMediaCountByIdEvent(String idEvent, List<String> idUsers) {
+    @Override public Integer getMediaCountByIdStream(String idEvent, List<String> idUsers) {
         return remoteShotDataSource.getEventMediaShotsCount(idEvent, idUsers);
     }
 
-    @Override public List<Shot> getMediaByIdEvent(String idEvent, List<String> userId) {
+    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userId) {
         List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getEventMediaShots(idEvent, userId);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;

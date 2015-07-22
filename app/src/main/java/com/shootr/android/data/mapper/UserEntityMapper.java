@@ -26,15 +26,15 @@ public class UserEntityMapper {
         user.setBio(userEntity.getBio());
         user.setPoints(userEntity.getPoints());
 
-        user.setIdWatchingEvent(userEntity.getIdWatchingEvent());
-        user.setWatchingEventTitle(userEntity.getWatchingEventTitle());
+        user.setIdWatchingStream(userEntity.getIdWatchingEvent());
+        user.setWatchingStreamTitle(userEntity.getWatchingEventTitle());
 
         user.setMe(userEntity.getIdUser().equals(currentUserId));
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
 
         if(userEntity.getJoinEventDate() != null){
-            user.setJoinEventDate(userEntity.getJoinEventDate());
+            user.setJoinStreamDate(userEntity.getJoinEventDate());
         }
 
         return user;
@@ -56,11 +56,11 @@ public class UserEntityMapper {
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
 
-        userEntity.setIdWatchingEvent(user.getIdWatchingEvent());
+        userEntity.setIdWatchingEvent(user.getIdWatchingStream());
 
         userEntity.setWatchingEventTitle(user.getWatchingEventTitle());
 
-        userEntity.setJoinEventDate(user.getJoinEventDate());
+        userEntity.setJoinEventDate(user.getJoinStreamDate());
 
         //TODO synchronized fields
         return userEntity;

@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
+import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
@@ -11,15 +11,15 @@ import javax.inject.Inject;
 
 public class FavoritesListPresenter implements Presenter{
 
-    private final GetFavoriteEventsInteractor getFavoriteEventsInteractor;
+    private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final EventResultModelMapper eventResultModelMapper;
 
     private FavoritesListView favoritesListView;
     private boolean hasBeenPaused = false;
 
-    @Inject public FavoritesListPresenter(GetFavoriteEventsInteractor getFavoriteEventsInteractor,
+    @Inject public FavoritesListPresenter(GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
       EventResultModelMapper eventResultModelMapper) {
-        this.getFavoriteEventsInteractor = getFavoriteEventsInteractor;
+        this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
     }
 
@@ -34,9 +34,8 @@ public class FavoritesListPresenter implements Presenter{
 
     protected void loadFavorites() {
         favoritesListView.showLoading();
-        getFavoriteEventsInteractor.loadFavoriteEvents(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override
-            public void onLoaded(List<StreamSearchResult> events) {
+        getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> events) {
                 favoritesListView.hideLoading();
                 if (events.isEmpty()) {
                     favoritesListView.showEmpty();

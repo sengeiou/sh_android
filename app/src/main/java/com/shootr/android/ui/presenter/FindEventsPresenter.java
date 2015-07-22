@@ -6,7 +6,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FindEventsView;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 public class FindEventsPresenter implements Presenter {
 
-    private final EventsSearchInteractor eventsSearchInteractor;
+    private final StreamSearchInteractor streamSearchInteractor;
     private final EventResultModelMapper eventResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -24,9 +24,9 @@ public class FindEventsPresenter implements Presenter {
     private String lastQueryText;
     private boolean hasBeenPaused = false;
 
-    @Inject public FindEventsPresenter(EventsSearchInteractor eventsSearchInteractor,
+    @Inject public FindEventsPresenter(StreamSearchInteractor streamSearchInteractor,
       EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
-        this.eventsSearchInteractor = eventsSearchInteractor;
+        this.streamSearchInteractor = streamSearchInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -44,7 +44,7 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.hideContent();
         findEventsView.hideKeyboard();
         findEventsView.showLoading();
-        eventsSearchInteractor.searchEvents(queryText, new EventsSearchInteractor.Callback() {
+        streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
             @Override public void onLoaded(StreamSearchResultList results) {
                 onSearchResults(results);
             }

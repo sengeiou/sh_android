@@ -25,7 +25,7 @@ public class LocalShotRepository implements ShotRepository {
         return shot;
     }
 
-    @Override public List<Shot> getShotsForEventTimeline(StreamTimelineParameters parameters) {
+    @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForEventTimeline(parameters);
         return shotEntityMapper.transform(shotsForEvent);
     }
@@ -43,11 +43,11 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 
-    @Override public Integer getMediaCountByIdEvent(String idEvent, List<String> idUser) {
+    @Override public Integer getMediaCountByIdStream(String idEvent, List<String> idUser) {
         return localShotDataSource.getEventMediaShotsCount(idEvent, idUser);
     }
 
-    @Override public List<Shot> getMediaByIdEvent(String idEvent, List<String> userIds) {
+    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds) {
         List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getEventMediaShots(idEvent, userIds);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;

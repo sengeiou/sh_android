@@ -9,14 +9,14 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsSearchInteractor implements Interactor {
+public class StreamSearchInteractor implements Interactor {
 
     public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
@@ -29,16 +29,16 @@ public class EventsSearchInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public EventsSearchInteractor(InteractorHandler interactorHandler, @Remote
-    StreamSearchRepository streamSearchRepository,
-      PostExecutionThread postExecutionThread, LocaleProvider localeProvider) {
+    public StreamSearchInteractor(InteractorHandler interactorHandler,
+      @Remote StreamSearchRepository streamSearchRepository, PostExecutionThread postExecutionThread,
+      LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.streamSearchRepository = streamSearchRepository;
         this.postExecutionThread = postExecutionThread;
         this.localeProvider = localeProvider;
     }
 
-    public void searchEvents(String query, Callback callback, ErrorCallback errorCallback) {
+    public void searchStreams(String query, Callback callback, ErrorCallback errorCallback) {
         this.query = query;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -69,32 +69,32 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private void performSearch() {
-        List<StreamSearchResult> events = streamSearchRepository.getStreams(query, localeProvider.getLocale());
-        events = filterEventsNotMatchingQuery(events);
+        List<StreamSearchResult> streams = streamSearchRepository.getStreams(query, localeProvider.getLocale());
+        streams = filterStreamsNotMatchingQuery(streams);
 
-        StreamSearchResultList streamSearchResultList = new StreamSearchResultList(events);
+        StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 
         notifySearchResultsSuccessful(streamSearchResultList);
     }
 
-    private List<StreamSearchResult> filterEventsNotMatchingQuery(List<StreamSearchResult> events) {
-        List<StreamSearchResult> filteredResults = new ArrayList<>(events.size());
-        for (StreamSearchResult event : events) {
-            if (matchesQuery(event)) {
-                filteredResults.add(event);
+    private List<StreamSearchResult> filterStreamsNotMatchingQuery(List<StreamSearchResult> streams) {
+        List<StreamSearchResult> filteredResults = new ArrayList<>(streams.size());
+        for (StreamSearchResult stream : streams) {
+            if (matchesQuery(stream)) {
+                filteredResults.add(stream);
             }
         }
         return filteredResults;
     }
 
-    private boolean matchesQuery(StreamSearchResult event) {
-        return event.getStream().getTitle().toLowerCase().contains(query.toLowerCase());
+    private boolean matchesQuery(StreamSearchResult stream) {
+        return stream.getStream().getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
-    private void notifySearchResultsSuccessful(final StreamSearchResultList events) {
+    private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(events);
+                callback.onLoaded(streams);
             }
         });
     }

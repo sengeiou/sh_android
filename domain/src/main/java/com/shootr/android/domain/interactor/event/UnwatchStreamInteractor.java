@@ -10,7 +10,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import javax.inject.Inject;
 
-public class UnwatchEventInteractor implements Interactor {
+public class UnwatchStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -20,8 +20,9 @@ public class UnwatchEventInteractor implements Interactor {
 
     private CompletedCallback completedCallback;
 
-    @Inject public UnwatchEventInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository) {
+    @Inject public UnwatchStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository, @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
@@ -29,7 +30,7 @@ public class UnwatchEventInteractor implements Interactor {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void unwatchEvent(CompletedCallback completedCallback) {
+    public void unwatchStream(CompletedCallback completedCallback) {
         this.completedCallback = completedCallback;
         interactorHandler.execute(this);
     }
@@ -56,9 +57,9 @@ public class UnwatchEventInteractor implements Interactor {
     }
 
     protected User removeWatching(User currentUser) {
-        currentUser.setIdWatchingEvent(null);
-        currentUser.setWatchingEventTitle(null);
-        currentUser.setJoinEventDate(null);
+        currentUser.setIdWatchingStream(null);
+        currentUser.setWatchingStreamTitle(null);
+        currentUser.setJoinStreamDate(null);
         return currentUser;
     }
 

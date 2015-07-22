@@ -6,16 +6,16 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import javax.inject.Inject;
 
-public class SelectEventInteractor implements Interactor {
+public class SelectStreamInteractor implements Interactor {
 
     //region Dependencies
     private final InteractorHandler interactorHandler;
@@ -27,14 +27,13 @@ public class SelectEventInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final TimeUtils timeUtils;
 
-    private String idSelectedEvent;
+    private String idSelectedStream;
     private Callback<StreamSearchResult> callback;
 
-    @Inject public SelectEventInteractor(final InteractorHandler interactorHandler,
+    @Inject public SelectStreamInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, @Local WatchersRepository localWatchersRepository,
-      SessionRepository sessionRepository, TimeUtils timeUtils) {
+      @Local UserRepository localUserRepository, @Remote UserRepository remoteUserRepository,
+      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamRepository = localStreamRepository;
@@ -46,19 +45,19 @@ public class SelectEventInteractor implements Interactor {
     }
     //endregion
 
-    public void selectEvent(String idEvent, Callback<StreamSearchResult> callback) {
-        this.idSelectedEvent = idEvent;
+    public void selectStream(String idStream, Callback<StreamSearchResult> callback) {
+        this.idSelectedStream = idStream;
         this.callback = callback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        Stream selectedStream = getSelectedEvent();
-        if (isSelectingCurrentWatchingEvent(currentUser)) {
+        Stream selectedStream = getSelectedStream();
+        if (isSelectingCurrentWatchingStream(currentUser)) {
             notifyLoaded(selectedStream);
         } else {
-            User updatedUser = updateUserWithEventInfo(currentUser, selectedStream);
+            User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
 
             sessionRepository.setCurrentUser(updatedUser);
             localUserRepository.putUser(updatedUser);
@@ -67,22 +66,22 @@ public class SelectEventInteractor implements Interactor {
         }
     }
 
-    private Stream getSelectedEvent() {
-        Stream selectedStream = localStreamRepository.getStreamById(idSelectedEvent);
+    private Stream getSelectedStream() {
+        Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream);
         if (selectedStream == null) {
-            throw new RuntimeException(String.format("Event with id %s not found in local repository", idSelectedEvent));
+            throw new RuntimeException(String.format("Stream with id %s not found in local repository", idSelectedStream));
         }
         return selectedStream;
     }
 
-    private boolean isSelectingCurrentWatchingEvent(User currentUser) {
-        return idSelectedEvent.equals(currentUser.getIdWatchingEvent());
+    private boolean isSelectingCurrentWatchingStream(User currentUser) {
+        return idSelectedStream.equals(currentUser.getIdWatchingStream());
     }
 
-    protected User updateUserWithEventInfo(User currentUser, Stream selectedStream) {
-        currentUser.setIdWatchingEvent(selectedStream.getId());
-        currentUser.setWatchingEventTitle(selectedStream.getTitle());
-        currentUser.setJoinEventDate(getCurrentTime());
+    protected User updateUserWithStreamInfo(User currentUser, Stream selectedStream) {
+        currentUser.setIdWatchingStream(selectedStream.getId());
+        currentUser.setWatchingStreamTitle(selectedStream.getTitle());
+        currentUser.setJoinStreamDate(getCurrentTime());
         return currentUser;
     }
 

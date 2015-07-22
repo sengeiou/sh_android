@@ -11,7 +11,7 @@ public class Favorite {
 
     }
 
-    public String getIdEvent() {
+    public String getIdStream() {
         return idEvent;
     }
 

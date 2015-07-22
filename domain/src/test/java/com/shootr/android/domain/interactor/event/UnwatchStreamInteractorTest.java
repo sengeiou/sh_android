@@ -30,7 +30,7 @@ public class UnwatchStreamInteractorTest {
     @Mock UserRepository remoteUserRepository;
     @Mock CompletedCallback completedCallback;
 
-    private UnwatchEventInteractor unwatchEventInteractor;
+    private UnwatchStreamInteractor unwatchStreamInteractor;
 
     @Before
     public void setUp() throws Exception {
@@ -39,7 +39,7 @@ public class UnwatchStreamInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-        this.unwatchEventInteractor = new UnwatchEventInteractor(interactorHandler, postExecutionThread,
+        this.unwatchStreamInteractor = new UnwatchStreamInteractor(interactorHandler, postExecutionThread,
           sessionRepository, localUserRepository, remoteUserRepository);
     }
 
@@ -48,7 +48,7 @@ public class UnwatchStreamInteractorTest {
     public void shouldUpdateUserInfoInSessionRepositoryWhenUnwatch() throws Throwable {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         verify(sessionRepository).setCurrentUser(user());
     }
@@ -57,7 +57,7 @@ public class UnwatchStreamInteractorTest {
     public void shouldUpdateUserInfoInLocalRepositoryWhenUnwatch() {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         verify(localUserRepository).putUser(user());
     }
@@ -66,7 +66,7 @@ public class UnwatchStreamInteractorTest {
     public void shouldUpdateUserInfoInRemoteRepositoryWhenUnwatch() {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         verify(remoteUserRepository).putUser(user());
     }
@@ -75,18 +75,18 @@ public class UnwatchStreamInteractorTest {
     public void shouldPutUserWithNoWatchingEventInSessionRepositoryWhenUnwatch() {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
         verify(sessionRepository).setCurrentUser(argument.capture());
-        assertThat(argument.getValue().getIdWatchingEvent()).isNull();
+        assertThat(argument.getValue().getIdWatchingStream()).isNull();
     }
 
     @Test
     public void shouldNotifyCompletedAfterLocalUserInfoUpdated() {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         InOrder inOrder = inOrder(localUserRepository, completedCallback);
         inOrder.verify(localUserRepository).putUser(user());
@@ -97,7 +97,7 @@ public class UnwatchStreamInteractorTest {
     public void shouldNotifyCompletedBeforeRemoteUserInfoUpdated() {
         setupUserWithWatchingEvent();
 
-        unwatchEventInteractor.unwatchEvent(completedCallback);
+        unwatchStreamInteractor.unwatchStream(completedCallback);
 
         InOrder inOrder = inOrder(completedCallback, remoteUserRepository);
         inOrder.verify(completedCallback).onCompleted();
@@ -115,7 +115,7 @@ public class UnwatchStreamInteractorTest {
     private User userWithWatchingEvent() {
         User user = new User();
         user.setIdUser(USER_ID);
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_EVENT_ID);
         return user;
     }
 

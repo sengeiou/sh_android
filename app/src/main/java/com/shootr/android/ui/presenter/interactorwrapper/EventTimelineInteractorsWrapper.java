@@ -2,35 +2,35 @@ package com.shootr.android.ui.presenter.interactorwrapper;
 
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.timeline.GetEventTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.GetOlderEventTimelineInteractor;
-import com.shootr.android.domain.interactor.timeline.RefreshEventTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.GetStreamTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.RefreshStreamTimelineInteractor;
 import javax.inject.Inject;
 
 public class EventTimelineInteractorsWrapper {
 
-    private final RefreshEventTimelineInteractor refreshEventTimelineInteractor;
-    private final GetEventTimelineInteractor getEventTimelineInteractor;
-    private final GetOlderEventTimelineInteractor getOlderEventTimelineInteractor;
+    private final RefreshStreamTimelineInteractor refreshStreamTimelineInteractor;
+    private final GetStreamTimelineInteractor getStreamTimelineInteractor;
+    private final GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
 
-    @Inject public EventTimelineInteractorsWrapper(RefreshEventTimelineInteractor refreshEventTimelineInteractor,
-      GetEventTimelineInteractor getEventTimelineInteractor,
-      GetOlderEventTimelineInteractor getOlderEventTimelineInteractor) {
-        this.refreshEventTimelineInteractor = refreshEventTimelineInteractor;
-        this.getEventTimelineInteractor = getEventTimelineInteractor;
-        this.getOlderEventTimelineInteractor = getOlderEventTimelineInteractor;
+    @Inject public EventTimelineInteractorsWrapper(RefreshStreamTimelineInteractor refreshStreamTimelineInteractor,
+      GetStreamTimelineInteractor getStreamTimelineInteractor,
+      GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor) {
+        this.refreshStreamTimelineInteractor = refreshStreamTimelineInteractor;
+        this.getStreamTimelineInteractor = getStreamTimelineInteractor;
+        this.getOlderStreamTimelineInteractor = getOlderStreamTimelineInteractor;
     }
 
     public void loadTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        getEventTimelineInteractor.loadEventTimeline(callback, errorCallback);
+        getStreamTimelineInteractor.loadStreamTimeline(callback, errorCallback);
     }
 
     public void refreshTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        refreshEventTimelineInteractor.refreshEventTimeline(callback, errorCallback);
+        refreshStreamTimelineInteractor.refreshStreamTimeline(callback, errorCallback);
     }
 
     public void obtainOlderTimeline(long currentOldestDate, Interactor.Callback<Timeline> callback,
       Interactor.ErrorCallback errorCallback) {
-        getOlderEventTimelineInteractor.loadOlderEventTimeline(currentOldestDate, callback, errorCallback);
+        getOlderStreamTimelineInteractor.loadOlderStreamTimeline(currentOldestDate, callback, errorCallback);
     }
 }

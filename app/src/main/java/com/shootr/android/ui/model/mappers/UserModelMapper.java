@@ -20,9 +20,9 @@ public class UserModelMapper {
         userModel.setPhoto(user.getPhoto());
         userModel.setRelationship(user.isMe() ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(user));
         userModel.setWebsite(user.getWebsite());
-        userModel.setEventWatchingId(user.getIdWatchingEvent());
+        userModel.setEventWatchingId(user.getIdWatchingStream());
         userModel.setEventWatchingTitle(user.getWatchingEventTitle());
-        userModel.setJoinEventDate(user.getJoinEventDate());
+        userModel.setJoinEventDate(user.getJoinStreamDate());
         return userModel;
     }
 

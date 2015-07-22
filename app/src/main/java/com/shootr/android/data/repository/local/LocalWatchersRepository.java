@@ -40,12 +40,12 @@ public class LocalWatchersRepository implements WatchersRepository {
 
         Map<String, Integer> eventsWatchesCounts = new HashMap<>();
         for (User watcher : people) {
-            if (watcher.getIdWatchingEvent() != null) {
-                Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
+            if (watcher.getIdWatchingStream() != null) {
+                Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingStream());
                 if (currentCount != null) {
-                    eventsWatchesCounts.put(watcher.getIdWatchingEvent(), currentCount + 1);
+                    eventsWatchesCounts.put(watcher.getIdWatchingStream(), currentCount + 1);
                 } else {
-                    eventsWatchesCounts.put(watcher.getIdWatchingEvent(), 1);
+                    eventsWatchesCounts.put(watcher.getIdWatchingStream(), 1);
                 }
             }
         }

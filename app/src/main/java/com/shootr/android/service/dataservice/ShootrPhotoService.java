@@ -56,7 +56,7 @@ public class ShootrPhotoService implements PhotoService {
         return parseShotImageResponse(response);
     }
 
-    @Override public String uploadEventImageAndGetUrl(File imageFile, String idEvent) throws IOException {
+    @Override public String uploadStreamImageAndGetUrl(File imageFile, String idEvent) throws IOException {
         Timber.d("Uploading image with file path %s", imageFile.getAbsolutePath());
         RequestBody body = buildEventRequestBody(imageFile, idEvent);
         Response response = executeEventImageRequest(body);

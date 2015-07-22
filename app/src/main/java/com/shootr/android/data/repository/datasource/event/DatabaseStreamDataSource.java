@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.db.manager.StreamManager;
-import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
+import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -41,7 +41,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     }
 
     @Override
-    public void deleteStream(String idStream) throws DeleteEventNotAllowedException {
+    public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
         streamManager.deleteStream(idStream);
     }
 }

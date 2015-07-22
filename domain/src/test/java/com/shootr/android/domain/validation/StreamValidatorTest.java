@@ -39,6 +39,6 @@ public class StreamValidatorTest {
     }
 
     private String filter(String original) {
-        return original.replaceAll(EventValidator.EMOJI_RANGE_REGEX, "");
+        return original.replaceAll(StreamValidator.EMOJI_RANGE_REGEX, "");
     }
 }

@@ -8,7 +8,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
 import javax.inject.Inject;
 
-public class RefreshEventTimelineInteractor implements Interactor {
+public class RefreshStreamTimelineInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -17,14 +17,14 @@ public class RefreshEventTimelineInteractor implements Interactor {
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public RefreshEventTimelineInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-                                                  ShootrTimelineService shootrTimelineService) {
+    @Inject public RefreshStreamTimelineInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrTimelineService = shootrTimelineService;
     }
 
-    public void refreshEventTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void refreshStreamTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -36,7 +36,7 @@ public class RefreshEventTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            Timeline timeline = shootrTimelineService.refreshTimelinesForWatchingEvent();
+            Timeline timeline = shootrTimelineService.refreshTimelinesForWatchingStream();
             notifyLoaded(timeline);
         } catch (ShootrException error) {
             notifyError(error);

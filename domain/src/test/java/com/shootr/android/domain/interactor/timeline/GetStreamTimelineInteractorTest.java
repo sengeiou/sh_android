@@ -54,7 +54,7 @@ public class GetStreamTimelineInteractorTest {
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
     @Mock Interactor.ErrorCallback errorCallback;
 
-    private GetEventTimelineInteractor interactor;
+    private GetStreamTimelineInteractor interactor;
 
     @Before
     public void setUp() throws Exception {
@@ -65,7 +65,7 @@ public class GetStreamTimelineInteractorTest {
         when(localUserRepository.getPeople()).thenReturn(people());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
-        interactor = new GetEventTimelineInteractor(interactorHandler,
+        interactor = new GetStreamTimelineInteractor(interactorHandler,
           postExecutionThread,
           sessionRepository,
           localShotRepository, streamRepository,
@@ -77,17 +77,17 @@ public class GetStreamTimelineInteractorTest {
     public void shouldNotRetrieveTimelineWhenNoEventWatching() throws Exception {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
 
-        interactor.loadEventTimeline(spyCallback, errorCallback);
+        interactor.loadStreamTimeline(spyCallback, errorCallback);
 
-        verify(localShotRepository, never()).getShotsForEventTimeline(any(StreamTimelineParameters.class));
+        verify(localShotRepository, never()).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
     }
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
         setupWatchingEvent();
-        when(localShotRepository.getShotsForEventTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
+        when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
-        interactor.loadEventTimeline(spyCallback, errorCallback);
+        interactor.loadStreamTimeline(spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
@@ -96,14 +96,14 @@ public class GetStreamTimelineInteractorTest {
     private User currentUserNotWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(null);
+        user.setIdWatchingStream(null);
         return user;
     }
 
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_EVENT_ID);
         return user;
     }
 
@@ -163,7 +163,7 @@ public class GetStreamTimelineInteractorTest {
     //region Spies
     private StreamTimelineParameters captureTimelineParametersFromRepositoryCall(ShotRepository shotRepository) {
         ArgumentCaptor<StreamTimelineParameters> captor = ArgumentCaptor.forClass(StreamTimelineParameters.class);
-        verify(shotRepository).getShotsForEventTimeline(captor.capture());
+        verify(shotRepository).getShotsForStreamTimeline(captor.capture());
         return captor.getValue();
     }
 

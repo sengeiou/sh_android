@@ -1,26 +1,26 @@
 package com.shootr.android.domain.interactor.timeline;
 
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetOlderEventTimelineInteractor implements Interactor {
+public class GetOlderStreamTimelineInteractor implements Interactor {
 
     private final SessionRepository sessionRepository;
     private final InteractorHandler interactorHandler;
@@ -33,10 +33,10 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetOlderEventTimelineInteractor(InteractorHandler interactorHandler,
-                                                   PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-                                                   @Remote ShotRepository remoteShotRepository, @Local
-    StreamRepository localStreamRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetOlderStreamTimelineInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
+      @Remote ShotRepository remoteShotRepository, @Local StreamRepository localStreamRepository,
+      @Local UserRepository localUserRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.interactorHandler = interactorHandler;
@@ -45,7 +45,8 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderEventTimeline(Long currentOldestDate, Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadOlderStreamTimeline(Long currentOldestDate, Callback<Timeline> callback,
+      ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -55,7 +56,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             StreamTimelineParameters timelineParameters = buildTimelineParameters();
-            List<Shot> olderShots = remoteShotRepository.getShotsForEventTimeline(timelineParameters);
+            List<Shot> olderShots = remoteShotRepository.getShotsForStreamTimeline(timelineParameters);
             sortShotsByPublishDate(olderShots);
             notifyTimelineFromShots(olderShots);
         } catch (ShootrException error) {
@@ -64,7 +65,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     }
 
     private StreamTimelineParameters buildTimelineParameters() {
-        Stream visibleStream = getVisibleEvent();
+        Stream visibleStream = getVisibleStream();
         return StreamTimelineParameters.builder() //
                 .forEvent(visibleStream) //
                 .maxDate(currentOldestDate) //
@@ -96,10 +97,10 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         return timeline;
     }
 
-    private Stream getVisibleEvent() {
-        String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
-        if (visibleEventId != null) {
-            return localStreamRepository.getStreamById(visibleEventId);
+    private Stream getVisibleStream() {
+        String visibleStreamId = sessionRepository.getCurrentUser().getIdWatchingStream();
+        if (visibleStreamId != null) {
+            return localStreamRepository.getStreamById(visibleStreamId);
         }
         return null;
     }

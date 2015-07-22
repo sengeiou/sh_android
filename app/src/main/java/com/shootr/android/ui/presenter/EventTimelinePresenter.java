@@ -6,7 +6,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.SelectEventInteractor;
+import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -23,7 +23,7 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
     private final EventTimelineInteractorsWrapper timelineInteractorWrapper;
-    private final SelectEventInteractor selectEventInteractor;
+    private final SelectStreamInteractor selectStreamInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -35,12 +35,12 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean mightHaveMoreShots = true;
 
     @Inject public EventTimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper,
-      SelectEventInteractor selectEventInteractor,
+      SelectStreamInteractor selectStreamInteractor,
       ShotModelMapper shotModelMapper,
       @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, Poller poller) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
-        this.selectEventInteractor = selectEventInteractor;
+        this.selectStreamInteractor = selectStreamInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -72,9 +72,8 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void selectEvent() {
-        selectEventInteractor.selectEvent(eventId, new Interactor.Callback<StreamSearchResult>() {
-            @Override
-            public void onLoaded(StreamSearchResult streamSearchResult) {
+        selectStreamInteractor.selectStream(eventId, new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 loadTimeline();
             }
         });

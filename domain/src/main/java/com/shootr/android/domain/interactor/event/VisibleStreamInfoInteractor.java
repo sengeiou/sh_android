@@ -8,10 +8,10 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,10 +19,10 @@ import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class VisibleEventInfoInteractor implements Interactor {
+public class VisibleStreamInfoInteractor implements Interactor {
 
-    private static final String VISIBLE_EVENT = null;
-    private static final StreamInfo NO_EVENT_VISIBLE_INFO = null;
+    private static final String VISIBLE_STREAM = null;
+    private static final StreamInfo NO_STREAM_VISIBLE_INFO = null;
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -34,10 +34,10 @@ public class VisibleEventInfoInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private ErrorCallback errorCallback;
 
-    private String idEventWanted;
+    private String idStreamWanted;
     private Callback callback;
 
-    @Inject public VisibleEventInfoInteractor(InteractorHandler interactorHandler,
+    @Inject public VisibleStreamInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localWatchRepository,
       @Remote StreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository,
@@ -53,100 +53,100 @@ public class VisibleEventInfoInteractor implements Interactor {
     }
 
     //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
-    public void obtainEventInfo(String idEventWanted, Callback callback, ErrorCallback errorCallback) {
-        this.idEventWanted = idEventWanted;
+    public void obtainStreamInfo(String idStreamWanted, Callback callback, ErrorCallback errorCallback) {
+        this.idStreamWanted = idStreamWanted;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    public void obtainVisibleEventInfo(Callback callback, ErrorCallback errorCallback) {
-        obtainEventInfo(VISIBLE_EVENT, callback, errorCallback);
+    public void obtainVisibleStreamInfo(Callback callback, ErrorCallback errorCallback) {
+        obtainStreamInfo(VISIBLE_STREAM, callback, errorCallback);
     }
 
     @Override public void execute() throws Exception {
         try {
-            obtainLocalEventInfo();
-            obtainRemoteEventInfo();
+            obtainLocalStreamInfo();
+            obtainRemoteStreamInfo();
         }catch (ServerCommunicationException networkError) {
             notifyError(networkError);
         }
     }
 
-    protected void obtainLocalEventInfo() {
-        StreamInfo streamInfo = getEventInfo(localWatchRepository, localStreamRepository);
-        if (streamInfo != NO_EVENT_VISIBLE_INFO) {
+    protected void obtainLocalStreamInfo() {
+        StreamInfo streamInfo = getStreamInfo(localWatchRepository, localStreamRepository);
+        if (streamInfo != NO_STREAM_VISIBLE_INFO) {
             notifyLoaded(streamInfo);
         }
     }
 
-    protected void obtainRemoteEventInfo() {
-        StreamInfo streamInfo = getEventInfo(remoteUserRepository, remoteStreamRepository);
+    protected void obtainRemoteStreamInfo() {
+        StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository);
         if (streamInfo != null) {
             notifyLoaded(streamInfo);
         } else {
-            notifyLoaded(noEvent());
+            notifyLoaded(noStream());
         }
     }
 
-    protected StreamInfo getEventInfo(UserRepository userRepository, StreamRepository streamRepository) {
+    protected StreamInfo getStreamInfo(UserRepository userRepository, StreamRepository streamRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
 
-        String wantedEventId = getWantedEventId(currentUser);
+        String wantedStreamId = getWantedStreamId(currentUser);
 
-        if (wantedEventId != null) {
-            Stream visibleStream = streamRepository.getStreamById(wantedEventId);
+        if (wantedStreamId != null) {
+            Stream visibleStream = streamRepository.getStreamById(wantedStreamId);
             if (visibleStream == null) {
                 //TODO should not happen, but can't assert that right now
-                return NO_EVENT_VISIBLE_INFO;
+                return NO_STREAM_VISIBLE_INFO;
             }
 
             List<User> people = userRepository.getPeople();
-            List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
-            watchesFromPeople = sortWatchersListByJoinEventDate(watchesFromPeople);
-            return buildEventInfo(visibleStream, watchesFromPeople, currentUser);
+            List<User> watchesFromPeople = filterUsersWatchingStream(people, wantedStreamId);
+            watchesFromPeople = sortWatchersListByJoinStreamDate(watchesFromPeople);
+            return buildStreamInfo(visibleStream, watchesFromPeople, currentUser);
         }
-        return NO_EVENT_VISIBLE_INFO;
+        return NO_STREAM_VISIBLE_INFO;
     }
 
-    private List<User> sortWatchersListByJoinEventDate(List<User> watchesFromPeople) {
+    private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
         Collections.sort(watchesFromPeople, new Comparator<User>() {
             @Override
             public int compare(User userModel, User t1) {
-                return t1.getJoinEventDate().compareTo(userModel.getJoinEventDate());
+                return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate());
             }
         });
         return watchesFromPeople;
     }
 
-    private String getWantedEventId(User currentUser) {
-        if (idEventWanted != null && !idEventWanted.equals(VISIBLE_EVENT)) {
-            return idEventWanted;
+    private String getWantedStreamId(User currentUser) {
+        if (idStreamWanted != null && !idStreamWanted.equals(VISIBLE_STREAM)) {
+            return idStreamWanted;
         } else {
-            return currentUser.getIdWatchingEvent();
+            return currentUser.getIdWatchingStream();
         }
     }
 
-    protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
+    protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
-            if (idEvent.equals(user.getIdWatchingEvent())) {
+            if (idStream.equals(user.getIdWatchingStream())) {
                 watchers.add(user);
             }
         }
         return watchers;
     }
 
-    private StreamInfo buildEventInfo(Stream currentVisibleStream, List<User> eventWatchers, User currentUser) {
-        boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingEvent());
+    private StreamInfo buildStreamInfo(Stream currentVisibleStream, List<User> streamWatchers, User currentUser) {
+        boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
           .event(currentVisibleStream)
-          .watchers(eventWatchers)
+          .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();
     }
 
-    private StreamInfo noEvent() {
+    private StreamInfo noStream() {
         return new StreamInfo();
     }
 

@@ -93,7 +93,7 @@ public class GetActivityTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_EVENT_ID);
         return user;
     }
 

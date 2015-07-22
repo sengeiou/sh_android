@@ -144,11 +144,11 @@ public class User {
         this.email = email;
     }
 
-    public String getIdWatchingEvent() {
+    public String getIdWatchingStream() {
         return idWatchingEvent;
     }
 
-    public void setIdWatchingEvent(String idWatchingEvent) {
+    public void setIdWatchingStream(String idWatchingEvent) {
         this.idWatchingEvent = idWatchingEvent;
     }
 
@@ -156,7 +156,7 @@ public class User {
         return watchingEventTitle;
     }
 
-    public void setWatchingEventTitle(String watchingEventTitle) {
+    public void setWatchingStreamTitle(String watchingEventTitle) {
         this.watchingEventTitle = watchingEventTitle;
     }
 
@@ -168,11 +168,11 @@ public class User {
           '}';
     }
 
-    public Long getJoinEventDate() {
+    public Long getJoinStreamDate() {
         return joinEventDate;
     }
 
-    public void setJoinEventDate(Long joinEventDate) {
+    public void setJoinStreamDate(Long joinEventDate) {
         this.joinEventDate = joinEventDate;
     }
 

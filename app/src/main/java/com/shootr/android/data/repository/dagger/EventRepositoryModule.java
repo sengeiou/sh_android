@@ -1,6 +1,6 @@
 package com.shootr.android.data.repository.dagger;
 
-import com.shootr.android.data.repository.MemoryEventListSynchronizationRepository;
+import com.shootr.android.data.repository.MemoryStreamListSynchronizationRepository;
 import com.shootr.android.data.repository.datasource.event.DatabaseStreamDataSource;
 import com.shootr.android.data.repository.datasource.event.DatabaseMemoryStreamSearchDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
@@ -13,7 +13,7 @@ import com.shootr.android.data.repository.local.LocalStreamRepository;
 import com.shootr.android.data.repository.local.LocalStreamSearchRepository;
 import com.shootr.android.data.repository.remote.RemoteStreamSearchRepository;
 import com.shootr.android.data.repository.remote.SyncStreamRepository;
-import com.shootr.android.domain.repository.EventListSynchronizationRepository;
+import com.shootr.android.domain.repository.StreamListSynchronizationRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
@@ -75,8 +75,8 @@ public class EventRepositoryModule {
         return serviceEventSearchDataSource;
     }
 
-    @Provides @Singleton EventListSynchronizationRepository provideEventListSynchronizationRepository(
-      MemoryEventListSynchronizationRepository memoryEventListSynchronizationRepository) {
+    @Provides @Singleton StreamListSynchronizationRepository provideEventListSynchronizationRepository(
+      MemoryStreamListSynchronizationRepository memoryEventListSynchronizationRepository) {
         return memoryEventListSynchronizationRepository;
     }
 }

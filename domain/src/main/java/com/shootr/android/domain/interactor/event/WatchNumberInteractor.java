@@ -60,7 +60,7 @@ public class WatchNumberInteractor implements Interactor{
     protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
-            if (idEvent.equals(user.getIdWatchingEvent())) {
+            if (idEvent.equals(user.getIdWatchingStream())) {
                 watchers.add(user);
             }
         }
@@ -77,7 +77,7 @@ public class WatchNumberInteractor implements Interactor{
 
     protected String getCurrentVisibleEventId() {
         User currentUser = sessionRepository.getCurrentUser();
-        return currentUser.getIdWatchingEvent();
+        return currentUser.getIdWatchingStream();
     }
 
     //TODO want local or remote?
