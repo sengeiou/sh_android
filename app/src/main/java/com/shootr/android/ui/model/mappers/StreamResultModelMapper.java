@@ -11,11 +11,11 @@ import javax.inject.Singleton;
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 @Singleton
-public class EventResultModelMapper {
+public class StreamResultModelMapper {
 
     private final StreamModelMapper streamModelMapper;
 
-    @Inject public EventResultModelMapper(StreamModelMapper streamModelMapper) {
+    @Inject public StreamResultModelMapper(StreamModelMapper streamModelMapper) {
         this.streamModelMapper = streamModelMapper;
     }
 

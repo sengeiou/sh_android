@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public class FindEventsPresenter implements Presenter {
 
     private final StreamSearchInteractor streamSearchInteractor;
-    private final EventResultModelMapper eventResultModelMapper;
+    private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private FindEventsView findEventsView;
@@ -25,9 +25,9 @@ public class FindEventsPresenter implements Presenter {
     private boolean hasBeenPaused = false;
 
     @Inject public FindEventsPresenter(StreamSearchInteractor streamSearchInteractor,
-      EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamSearchInteractor = streamSearchInteractor;
-        this.eventResultModelMapper = eventResultModelMapper;
+        this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -67,7 +67,7 @@ public class FindEventsPresenter implements Presenter {
     private void onSearchResults(StreamSearchResultList streamSearchResultList) {
         List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
-            List<StreamResultModel> eventModels = eventResultModelMapper.transform(streamSearchResults);
+            List<StreamResultModel> eventModels = streamResultModelMapper.transform(streamSearchResults);
             renderViewEventsList(eventModels);
         } else {
             this.showViewEmpty();

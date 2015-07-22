@@ -8,7 +8,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.Collections;
@@ -43,9 +43,10 @@ public class FindEventsPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        EventResultModelMapper eventResultModelMapper =
-          new EventResultModelMapper(streamModelMapper);
-        findEventsPresenter = new FindEventsPresenter(streamSearchInteractor, eventResultModelMapper, errorMessageFactory);
+        StreamResultModelMapper streamResultModelMapper =
+          new StreamResultModelMapper(streamModelMapper);
+        findEventsPresenter = new FindEventsPresenter(streamSearchInteractor,
+          streamResultModelMapper, errorMessageFactory);
         findEventsPresenter.setView(findEventsView);
     }
 

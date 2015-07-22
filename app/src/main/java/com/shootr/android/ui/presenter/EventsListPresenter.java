@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamsListInteractor;
 import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
@@ -19,17 +19,17 @@ public class EventsListPresenter implements Presenter {
 
     private final StreamsListInteractor streamsListInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
-    private final EventResultModelMapper eventResultModelMapper;
+    private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(StreamsListInteractor streamsListInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor, EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      UnwatchStreamInteractor unwatchStreamInteractor, StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
-        this.eventResultModelMapper = eventResultModelMapper;
+        this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
@@ -86,10 +86,10 @@ public class EventsListPresenter implements Presenter {
     public void onDefaultEventListLoaded(StreamSearchResultList resultList) {
         List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
-            List<StreamResultModel> streamResultModels = eventResultModelMapper.transform(streamSearchResults);
+            List<StreamResultModel> streamResultModels = streamResultModelMapper.transform(streamSearchResults);
             this.renderViewEventsList(streamResultModels);
             StreamSearchResult currentWatchingEvent = resultList.getCurrentWatchingStream();
-            this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
+            this.setViewCurrentVisibleWatchingEvent(streamResultModelMapper.transform(currentWatchingEvent));
         }else{
             eventsListView.showLoading();
         }

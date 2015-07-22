@@ -10,7 +10,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -50,10 +50,9 @@ public class EventsListPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        EventResultModelMapper eventResultModelMapper =
-          new EventResultModelMapper(streamModelMapper);
-        presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor,
-          eventResultModelMapper,
+        StreamResultModelMapper streamResultModelMapper =
+          new StreamResultModelMapper(streamModelMapper);
+        presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(eventsListView);
     }

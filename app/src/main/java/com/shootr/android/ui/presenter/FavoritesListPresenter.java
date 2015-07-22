@@ -4,7 +4,7 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.List;
 import javax.inject.Inject;
@@ -12,15 +12,15 @@ import javax.inject.Inject;
 public class FavoritesListPresenter implements Presenter{
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
-    private final EventResultModelMapper eventResultModelMapper;
+    private final StreamResultModelMapper streamResultModelMapper;
 
     private FavoritesListView favoritesListView;
     private boolean hasBeenPaused = false;
 
     @Inject public FavoritesListPresenter(GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
-      EventResultModelMapper eventResultModelMapper) {
+      StreamResultModelMapper streamResultModelMapper) {
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
-        this.eventResultModelMapper = eventResultModelMapper;
+        this.streamResultModelMapper = streamResultModelMapper;
     }
 
     public void setView(FavoritesListView favoritesListView) {
@@ -41,7 +41,7 @@ public class FavoritesListPresenter implements Presenter{
                     favoritesListView.showEmpty();
                     favoritesListView.hideContent();
                 } else {
-                    List<StreamResultModel> eventModels = eventResultModelMapper.transform(events);
+                    List<StreamResultModel> eventModels = streamResultModelMapper.transform(events);
                     favoritesListView.renderFavorites(eventModels);
                     favoritesListView.showContent();
                     favoritesListView.hideEmpty();

@@ -4,7 +4,7 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetUserListingStreamsInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
 import javax.inject.Inject;
@@ -12,16 +12,16 @@ import javax.inject.Inject;
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    private final EventResultModelMapper eventResultModelMapper;
+    private final StreamResultModelMapper streamResultModelMapper;
 
     private ListingView listingView;
     private String profileIdUser;
     private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      EventResultModelMapper eventResultModelMapper) {
+      StreamResultModelMapper streamResultModelMapper) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
-        this.eventResultModelMapper = eventResultModelMapper;
+        this.streamResultModelMapper = streamResultModelMapper;
     }
 
     public void setView(ListingView listingView) {
@@ -46,7 +46,7 @@ public class ListingListPresenter implements Presenter{
 
     private void onListingLoaded(List<StreamSearchResult> events) {
         if (!events.isEmpty()) {
-            List<StreamResultModel> eventModels = eventResultModelMapper.transform(events);
+            List<StreamResultModel> eventModels = streamResultModelMapper.transform(events);
             this.renderViewEventsList(eventModels);
         }else{
             listingView.showLoading();

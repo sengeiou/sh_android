@@ -6,7 +6,7 @@ import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import dagger.Module;
@@ -17,7 +17,7 @@ import javax.inject.Singleton;
   complete = false,
   library = true,
   injects = {
-    EventResultModelMapper.class
+    StreamResultModelMapper.class
   }
 )
 public class MapperModule {

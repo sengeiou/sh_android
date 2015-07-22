@@ -5,7 +5,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class FavoritesListPresenterTest {
 
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
-    @Mock EventResultModelMapper eventResultModelMapper;
+    @Mock StreamResultModelMapper streamResultModelMapper;
     @Mock StreamModelMapper streamModelMapper;
 
     private FavoritesListPresenter presenter;
@@ -33,7 +33,7 @@ public class FavoritesListPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, eventResultModelMapper);
+        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, streamResultModelMapper);
         presenter.setView(favoritesListView);
     }
 
@@ -122,7 +122,7 @@ public class FavoritesListPresenterTest {
     }
 
     private List<StreamResultModel> stubResultModel() {
-        return eventResultModelMapper.transform(stubResult());
+        return streamResultModelMapper.transform(stubResult());
     }
 
     private List<StreamSearchResult> empty() {
