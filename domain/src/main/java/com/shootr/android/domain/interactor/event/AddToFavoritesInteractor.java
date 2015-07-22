@@ -52,7 +52,7 @@ public class AddToFavoritesInteractor implements Interactor {
 
     private Favorite favoriteFromParameters() {
         Favorite favorite = new Favorite();
-        favorite.setIdEvent(idEvent);
+        favorite.setIdStream(idEvent);
         favorite.setOrder(getNextOrder());
         return favorite;
     }

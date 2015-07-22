@@ -53,11 +53,11 @@ public class WatchNumberInteractor implements Interactor{
             return;
         }
         List<User> peopleAndMe = getPeopleAndMe();
-        List<User> watchers = filterUsersWatchingEvent(peopleAndMe, currentVisibleEventId);
+        List<User> watchers = filterUsersWatchingStream(peopleAndMe, currentVisibleEventId);
         notifyLoaded(watchers.size());
     }
 
-    protected List<User> filterUsersWatchingEvent(List<User> people, String idEvent) {
+    protected List<User> filterUsersWatchingStream(List<User> people, String idEvent) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idEvent.equals(user.getIdWatchingStream())) {

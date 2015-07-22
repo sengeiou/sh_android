@@ -29,7 +29,7 @@ public class PerformCheckinInteractorTest {
     @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckinInteractor interactor;
-    private String dummyIdEvent = "EVENT_ID";
+    private String dummyIdEvent = "STREAM_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -39,7 +39,7 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldCallbackCompleteIfServiceDoesntFail() throws Exception {
-        doNothing().when(shootrUserService).checkInEvent(anyString());
+        doNothing().when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 
@@ -47,7 +47,7 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInEvent(anyString());
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 
@@ -55,7 +55,7 @@ public class PerformCheckinInteractorTest {
     }
 
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInEvent(anyString());
+        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
 

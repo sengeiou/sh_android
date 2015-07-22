@@ -93,7 +93,7 @@ public class ShootrTimelineService {
             throw new IllegalArgumentException("Can't refresh null stream");
         }
 
-        Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(stream.getId());
+        Long eventRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(stream.getId());
 
         StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forStream(stream) //

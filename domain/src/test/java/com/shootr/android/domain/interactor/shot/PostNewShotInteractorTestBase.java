@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -26,8 +26,8 @@ public abstract class PostNewShotInteractorTestBase {
     public static final String COMMENT_STUB = "comment";
     public static final File IMAGE_NULL = null;
     public static final File IMAGE_STUB = new File(".");
-    public static final String EVENT_TITLE_STUB = "title";
-    public static final String EVENT_TAG_STUB = "tag";
+    public static final String STREAM_TITLE_STUB = "title";
+    public static final String STREAM_TAG_STUB = "tag";
 
     @Mock SessionRepository sessionRepository;
     @Mock ShotSender shotSender;
@@ -85,10 +85,10 @@ public abstract class PostNewShotInteractorTestBase {
         assertThat(userInfo.getAvatar()).isEqualTo(user.getPhoto());
     }
 
-    protected void assertEventInfoIsFromEvent(Shot.ShotStreamInfo eventInfo, Stream stream) {
-        assertThat(eventInfo.getIdStream()).isEqualTo(stream.getId());
-        assertThat(eventInfo.getStreamTitle()).isEqualTo(stream.getTitle());
-        assertThat(eventInfo.getStreamTag()).isEqualTo(stream.getTag());
+    protected void assertStreamInfoIsFromStream(Shot.ShotStreamInfo streamInfo, Stream stream) {
+        assertThat(streamInfo.getIdStream()).isEqualTo(stream.getId());
+        assertThat(streamInfo.getStreamTitle()).isEqualTo(stream.getTitle());
+        assertThat(streamInfo.getStreamTag()).isEqualTo(stream.getTag());
     }
     //endregion
 

@@ -35,7 +35,7 @@ public class GetFavoriteStatusInteractor implements Interactor {
     }
 
     private void loadFavoriteStatusFromLocal() {
-        Favorite favoriteStatus = localFavoriteRepository.getFavoriteByEvent(eventId);
+        Favorite favoriteStatus = localFavoriteRepository.getFavoriteByStream(eventId);
         checkFavoriteEventStatus(favoriteStatus);
     }
 

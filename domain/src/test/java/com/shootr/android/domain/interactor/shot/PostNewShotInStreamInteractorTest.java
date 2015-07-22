@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTestBase {
 
-    private static final String WATCHING_EVENT_ID = "1L";
+    private static final String WATCHING_STREAM_ID = "1L";
 
     @Mock StreamRepository localStreamRepository;
 
@@ -43,21 +43,21 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
     }
 
     @Test
-    public void shouldSendShotWithWatchingEventInfoWhenThereIsWatchingEvent() throws Exception {
+    public void shouldSendShotWithWatchingStreamInfoWhenThereIsWatchingStream() throws Exception {
         setupCurrentUserSession();
-        setupWatchingEvent();
+        setupWatchingStream();
 
         interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
 
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotStreamInfo eventInfo = publishedShot.getStreamInfo();
-        assertEventInfoIsFromEvent(eventInfo, watchingEvent());
+        Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
+        assertStreamInfoIsFromStream(streamInfo, watchingStream());
     }
 
     @Test
-    public void shouldSendShotWithoutEventInfoWhenNoEventWatching() throws Exception {
+    public void shouldSendShotWithoutStreamInfoWhenNoStreamWatching() throws Exception {
         setupCurrentUserSession();
 
         interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(), new DummyErrorCallback());
@@ -65,26 +65,26 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotStreamInfo eventInfo = publishedShot.getStreamInfo();
-        assertThat(eventInfo).isNull();
+        Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
+        assertThat(streamInfo).isNull();
     }
 
-    private void setupWatchingEvent() {
+    private void setupWatchingStream() {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUserWatching());
-        when(localStreamRepository.getStreamById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(WATCHING_STREAM_ID)).thenReturn(watchingStream());
     }
 
-    private Stream watchingEvent() {
+    private Stream watchingStream() {
         Stream stream = new Stream();
-        stream.setId(String.valueOf(WATCHING_EVENT_ID));
-        stream.setTitle(EVENT_TITLE_STUB);
-        stream.setTag(EVENT_TAG_STUB);
+        stream.setId(String.valueOf(WATCHING_STREAM_ID));
+        stream.setTitle(STREAM_TITLE_STUB);
+        stream.setTag(STREAM_TAG_STUB);
         return stream;
     }
 
     private User currentUserWatching() {
         User user = currentUser();
-        user.setIdWatchingStream(String.valueOf(WATCHING_EVENT_ID));
+        user.setIdWatchingStream(String.valueOf(WATCHING_STREAM_ID));
         return user;
     }
 }

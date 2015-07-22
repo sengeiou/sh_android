@@ -17,8 +17,8 @@ import static org.mockito.Mockito.when;
 
 public class RemoveFromFavoritesInteractorTest {
 
-    private static final String ID_EVENT_FAVORITE = "stream";
-    private static final String ID_EVENT_NOT_FAVORITE = "event_not_favorite";
+    private static final String ID_STREAM_FAVORITE = "stream";
+    private static final String ID_STREAM_NOT_FAVORITE = "stream_not_favorite";
 
     private RemoveFromFavoritesInteractor interactor;
 
@@ -36,55 +36,55 @@ public class RemoveFromFavoritesInteractorTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void shouldFailIfEventIsNotFoundInFavorites() throws Exception {
-        when(localFavoriteRepository.getFavoriteByEvent(ID_EVENT_NOT_FAVORITE)).thenReturn(null);
+    public void shouldFailIfStreamIsNotFoundInFavorites() throws Exception {
+        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_NOT_FAVORITE)).thenReturn(null);
 
-        interactor.removeFromFavorites(ID_EVENT_FAVORITE, callback);
+        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
     }
 
     @Test
     public void shouldRemoveFavoriteFromLocalRepository() throws Exception {
-        when(localFavoriteRepository.getFavoriteByEvent(ID_EVENT_FAVORITE)).thenReturn(favorite());
+        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
-        interactor.removeFromFavorites(ID_EVENT_FAVORITE, callback);
+        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
-        verify(localFavoriteRepository).removeFavoriteByEvent(ID_EVENT_FAVORITE);
+        verify(localFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
     @Test
     public void shouldRemoveFavoriteFromRemoteRepository() throws Exception {
-        when(localFavoriteRepository.getFavoriteByEvent(ID_EVENT_FAVORITE)).thenReturn(favorite());
+        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
-        interactor.removeFromFavorites(ID_EVENT_FAVORITE, callback);
+        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
-        verify(remoteFavoriteRepository).removeFavoriteByEvent(ID_EVENT_FAVORITE);
+        verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
     @Test
     public void shouldCallbackCompletedBeforeRemovingFavoriteFromRemote() throws Exception {
-        when(localFavoriteRepository.getFavoriteByEvent(ID_EVENT_FAVORITE)).thenReturn(favorite());
+        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
-        interactor.removeFromFavorites(ID_EVENT_FAVORITE, callback);
+        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
         InOrder inOrder = inOrder(callback, remoteFavoriteRepository);
         inOrder.verify(callback).onCompleted();
-        inOrder.verify(remoteFavoriteRepository).removeFavoriteByEvent(ID_EVENT_FAVORITE);
+        inOrder.verify(remoteFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
     }
 
     @Test
     public void shouldRemoveFavoriteFromLocalBeforeCallbackCompleted() throws Exception {
-        when(localFavoriteRepository.getFavoriteByEvent(ID_EVENT_FAVORITE)).thenReturn(favorite());
+        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
 
-        interactor.removeFromFavorites(ID_EVENT_FAVORITE, callback);
+        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
 
         InOrder inOrder = inOrder(localFavoriteRepository, callback);
-        inOrder.verify(localFavoriteRepository).removeFavoriteByEvent(ID_EVENT_FAVORITE);
+        inOrder.verify(localFavoriteRepository).removeFavoriteByStream(ID_STREAM_FAVORITE);
         inOrder.verify(callback).onCompleted();
     }
 
     private Favorite favorite() {
         Favorite favorite = new Favorite();
-        favorite.setIdEvent(ID_EVENT_FAVORITE);
+        favorite.setIdStream(ID_STREAM_FAVORITE);
         return favorite;
     }
 }

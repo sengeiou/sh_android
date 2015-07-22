@@ -19,9 +19,9 @@ import static org.mockito.Mockito.when;
 public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestBase{
 
     private static final String PARENT_SHOT_ID = "1L";
-    private static final Long PARENT_EVENT_ID = 2L;
-    private static final String PARENT_EVENT_TITLE = "title";
-    private static final String PARENT_EVENT_TAG = "tag";
+    private static final Long PARENT_STREAM_ID = 2L;
+    private static final String PARENT_STREAM_TITLE = "title";
+    private static final String PARENT_STREAM_TAG = "tag";
     private static final Long PARENT_SHOT_USER_ID = 3L;
     private static final String PARENT_SHOT_USERNAME = "parent username";
 
@@ -45,7 +45,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         return interactor;
     }
 
-    @Test public void shouldHaveParentEventInfo() throws Exception {
+    @Test public void shouldHaveParentStreamInfo() throws Exception {
         setupCurrentUserSession();
         setupParentShot();
 
@@ -55,7 +55,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
           new DummyErrorCallback());
 
         Shot sentShot = captureSentShot();
-        assertThat(sentShot.getStreamInfo()).isEqualTo(parentEventInfo());
+        assertThat(sentShot.getStreamInfo()).isEqualTo(parentStreamInfo());
     }
 
     @Test public void shouldHaveParentShotId() throws Exception {
@@ -111,11 +111,11 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         assertThat(sentShot.getParentShotUsername()).isEqualTo(PARENT_SHOT_USERNAME);
     }
 
-    private Shot.ShotStreamInfo parentEventInfo() {
+    private Shot.ShotStreamInfo parentStreamInfo() {
         Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
-        shotStreamInfo.setIdStream(String.valueOf(PARENT_EVENT_ID));
-        shotStreamInfo.setStreamTitle(PARENT_EVENT_TITLE);
-        shotStreamInfo.setStreamTag(PARENT_EVENT_TAG);
+        shotStreamInfo.setIdStream(String.valueOf(PARENT_STREAM_ID));
+        shotStreamInfo.setStreamTitle(PARENT_STREAM_TITLE);
+        shotStreamInfo.setStreamTag(PARENT_STREAM_TAG);
         return shotStreamInfo;
     }
 
@@ -131,7 +131,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     private Shot parentShot() {
         Shot shot = new Shot();
         shot.setIdShot(PARENT_SHOT_ID);
-        shot.setStreamInfo(parentEventInfo());
+        shot.setStreamInfo(parentStreamInfo());
         shot.setUserInfo(parentUserInfo());
         shot.setType(ShotType.COMMENT);
         return shot;

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class WatchNumberInteractorTest {
 
     public static final long ID_USER_ME = 666L;
-    public static final long ID_EVENT = 1L;
+    public static final long ID_STREAM = 1L;
     public static final long ID_USER_1 = 1L;
     public static final long ID_USER_2 = 2L;
 
@@ -70,11 +70,12 @@ public class WatchNumberInteractorTest {
     }
 
     @Test
-    public void shouldFilterOutPeopleNotWatchingTheEvent() throws Exception {
+    public void shouldFilterOutPeopleNotWatchingTheStream() throws Exception {
         List<User> oneUserWatchingAndOneNotWatching =
           Arrays.asList(newUserWatching(ID_USER_1), newUserNotWatching(ID_USER_2));
 
-        List<User> filteredUsers = interactor.filterUsersWatchingEvent(oneUserWatchingAndOneNotWatching, String.valueOf(ID_EVENT));
+        List<User> filteredUsers = interactor.filterUsersWatchingStream(oneUserWatchingAndOneNotWatching,
+          String.valueOf(ID_STREAM));
 
         assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
         assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
@@ -93,7 +94,7 @@ public class WatchNumberInteractorTest {
     private User me() {
         User user = newUserWatching(ID_USER_ME);
         user.setMe(true);
-        user.setIdWatchingStream(String.valueOf(ID_EVENT));
+        user.setIdWatchingStream(String.valueOf(ID_STREAM));
         return user;
     }
 
@@ -105,7 +106,7 @@ public class WatchNumberInteractorTest {
 
     private User newUserWatching(Long id) {
         User user = newUserNotWatching(id);
-        user.setIdWatchingStream(String.valueOf(ID_EVENT));
+        user.setIdWatchingStream(String.valueOf(ID_STREAM));
         return user;
     }
 

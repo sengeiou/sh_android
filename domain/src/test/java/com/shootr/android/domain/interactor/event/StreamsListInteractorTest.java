@@ -12,10 +12,10 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamListSynchronizationRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
@@ -78,8 +78,8 @@ public class StreamsListInteractorTest {
         setupLocalRepositoryReturnsCurrentUser();
     }
 
-    @Test public void shouldCallbackTwoEventResultsFirstWhenLocalRepositoryReturnsTwoEventResults() throws Exception {
-        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+    @Test public void shouldCallbackTwoStreamResultsFirstWhenLocalRepositoryReturnsTwoStreamResults() throws Exception {
+        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
@@ -87,9 +87,9 @@ public class StreamsListInteractorTest {
         assertThat(spyCallback.firstResult().getStreamSearchResults()).hasSize(2);
     }
 
-    @Test public void shouldLoadRemoteEventsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
+    @Test public void shouldLoadRemoteStreamsWhenLastRefreshMoreThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
       throws Exception {
-        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(SECONDS_AGO_31);
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
@@ -97,9 +97,9 @@ public class StreamsListInteractorTest {
         verify(remoteStreamSearchRepository).getDefaultStreams(anyString());
     }
 
-    @Test public void shouldNotLoadRemoteEventsWhenRefreshLessThanThirtySecondsAgoIfLocalRepositoryReturnsEvents()
+    @Test public void shouldNotLoadRemoteStreamsWhenRefreshLessThanThirtySecondsAgoIfLocalRepositoryReturnsStreams()
       throws Exception {
-        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(SECONDS_AGO_29);
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
@@ -107,7 +107,7 @@ public class StreamsListInteractorTest {
         verify(remoteStreamSearchRepository, never()).getDefaultStreams(anyString());
     }
 
-    @Test public void shouldLoadRemoteEventsWhenLastRefreshLessThanTirtySecondsAgoIfLocalRepositoryReturnsEmpty()
+    @Test public void shouldLoadRemoteStreamsWhenLastRefreshLessThanTirtySecondsAgoIfLocalRepositoryReturnsEmpty()
       throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(SECONDS_AGO_29);
@@ -117,48 +117,48 @@ public class StreamsListInteractorTest {
         verify(remoteStreamSearchRepository).getDefaultStreams(anyString());
     }
 
-    @Test public void shouldCallbackRemoteEventResultsWhenRefreshed() throws Exception {
+    @Test public void shouldCallbackRemoteStreamResultsWhenRefreshed() throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
         verify(spyCallback).onLoaded(emptyResultList());
-        verify(spyCallback).onLoaded(twoEventResultList());
+        verify(spyCallback).onLoaded(twoStreamResultList());
     }
 
-    @Test public void shouldOverwriteRemoteEventsInLocalRepositoryWhenRefreshed() throws Exception {
+    @Test public void shouldOverwriteRemoteStreamsInLocalRepositoryWhenRefreshed() throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
         verify(localStreamSearchRepository).deleteDefaultStreams();
-        verify(localStreamSearchRepository).putDefaultStreams(twoEventResults());
+        verify(localStreamSearchRepository).putDefaultStreams(twoStreamResults());
     }
 
-    @Test public void shouldCallbackRemoteEventResultsBeforeOverwrittingLocalRepository() throws Exception {
+    @Test public void shouldCallbackRemoteStreamResultsBeforeOverwrittingLocalRepository() throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
         InOrder inOrder = inOrder(spyCallback, localStreamSearchRepository);
-        inOrder.verify(spyCallback).onLoaded(twoEventResultList());
+        inOrder.verify(spyCallback).onLoaded(twoStreamResultList());
         inOrder.verify(localStreamSearchRepository).deleteDefaultStreams();
-        inOrder.verify(localStreamSearchRepository).putDefaultStreams(twoEventResults());
+        inOrder.verify(localStreamSearchRepository).putDefaultStreams(twoStreamResults());
     }
 
-    @Test public void shouldSetNowAsRefresDateWhenRemoteEventsRefreshed() throws Exception {
+    @Test public void shouldSetNowAsRefresDateWhenRemoteStreamsRefreshed() throws Exception {
         when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(emptyResults());
-        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(remoteStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
 
         verify(streamListSynchronizationRepository).setStreamsRefreshDate(NOW);
     }
 
-    @Test public void shouldNotSetRefreshDateWhenRemoteEventsNotRefreshed() throws Exception {
+    @Test public void shouldNotSetRefreshDateWhenRemoteStreamsNotRefreshed() throws Exception {
         setupNotNeedRefresh();
 
         interactor.loadStreams(spyCallback, dummyErrorCallback);
@@ -181,16 +181,16 @@ public class StreamsListInteractorTest {
     }
 
     private void setupNotNeedRefresh() {
-        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoEventResults());
+        when(localStreamSearchRepository.getDefaultStreams(anyString())).thenReturn(twoStreamResults());
         when(streamListSynchronizationRepository.getStreamsRefreshDate()).thenReturn(NOW);
     }
 
-    private List<StreamSearchResult> twoEventResults() {
-        return Arrays.asList(eventResult(), eventResult());
+    private List<StreamSearchResult> twoStreamResults() {
+        return Arrays.asList(streamResult(), streamResult());
     }
 
-    private StreamSearchResultList twoEventResultList() {
-        return new StreamSearchResultList(twoEventResults());
+    private StreamSearchResultList twoStreamResultList() {
+        return new StreamSearchResultList(twoStreamResults());
     }
 
     private List<StreamSearchResult> emptyResults() {
@@ -201,7 +201,7 @@ public class StreamsListInteractorTest {
         return new StreamSearchResultList(emptyResults());
     }
 
-    private StreamSearchResult eventResult() {
+    private StreamSearchResult streamResult() {
         StreamSearchResult result = new StreamSearchResult();
         result.setStream(new Stream());
         return result;

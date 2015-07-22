@@ -35,10 +35,10 @@ import static org.mockito.Mockito.when;
 
 public class GetStreamTimelineInteractorTest {
 
-    private static final String ID_SHOT_WITHOUT_EVENT = "shot_without_event";
-    private static final String WATCHING_EVENT_ID = "watching_event";
-    private static final String ID_SHOT_WITH_EVENT = "shot_with_event";
-    private static final String EVENT_AUTHOR_ID = "event_author";
+    private static final String ID_SHOT_WITHOUT_STREAM = "shot_without_stream";
+    private static final String WATCHING_STREAM_ID = "watching_stream";
+    private static final String ID_SHOT_WITH_STREAM = "shot_with_stream";
+    private static final String STREAM_AUTHOR_ID = "stream_author";
     private static final String ID_SHOT_FROM_AUTHOR = "shot_from_author";
     private static final String ID_CURRENT_USER = "current_user";
 
@@ -74,7 +74,7 @@ public class GetStreamTimelineInteractorTest {
     }
 
     @Test
-    public void shouldNotRetrieveTimelineWhenNoEventWatching() throws Exception {
+    public void shouldNotRetrieveTimelineWhenNoStreamWatching() throws Exception {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
 
         interactor.loadStreamTimeline(spyCallback, errorCallback);
@@ -84,7 +84,7 @@ public class GetStreamTimelineInteractorTest {
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupWatchingEvent();
+        setupWatchingStream();
         when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
         interactor.loadStreamTimeline(spyCallback, errorCallback);
@@ -103,7 +103,7 @@ public class GetStreamTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingStream(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 
@@ -117,9 +117,9 @@ public class GetStreamTimelineInteractorTest {
         return shot;
     }
 
-    private void setupWatchingEvent() {
+    private void setupWatchingStream() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(streamRepository.getStreamById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
+        when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
     }
 
     //region Stubs
@@ -138,23 +138,23 @@ public class GetStreamTimelineInteractorTest {
         return shot;
     }
 
-    private Shot shotWithEvent() {
+    private Shot shotWithStream() {
         Shot shot = new Shot();
-        shot.setIdShot(ID_SHOT_WITH_EVENT);
-        shot.setStreamInfo(watchingEventInfo());
+        shot.setIdShot(ID_SHOT_WITH_STREAM);
+        shot.setStreamInfo(watchingStreamInfo());
         return shot;
     }
 
-    private Shot.ShotStreamInfo watchingEventInfo() {
-        Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
-        eventInfo.setIdStream(WATCHING_EVENT_ID);
-        return eventInfo;
+    private Shot.ShotStreamInfo watchingStreamInfo() {
+        Shot.ShotStreamInfo streamInfo = new Shot.ShotStreamInfo();
+        streamInfo.setIdStream(WATCHING_STREAM_ID);
+        return streamInfo;
     }
 
-    private Stream watchingEvent() {
+    private Stream watchingStream() {
         Stream stream = new Stream();
-        stream.setId(WATCHING_EVENT_ID);
-        stream.setAuthorId(EVENT_AUTHOR_ID);
+        stream.setId(WATCHING_STREAM_ID);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
 

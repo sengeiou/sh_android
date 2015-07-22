@@ -62,13 +62,13 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     }
 
     @Override
-    public Favorite getFavoriteByEvent(String eventId) {
+    public Favorite getFavoriteByStream(String eventId) {
         FavoriteEntity favoriteEntity = remoteFavoriteDataSource.getFavoriteByIdEvent(eventId);
         return favoriteEntityMapper.transform(favoriteEntity);
     }
 
     @Override
-    public void removeFavoriteByEvent(String eventId) {
+    public void removeFavoriteByStream(String eventId) {
         try {
             syncTrigger.triggerSync();
             remoteFavoriteDataSource.removeFavoriteByIdEvent(eventId);

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 public class UnwatchStreamInteractorTest {
 
     public static final String USER_ID = "user_id";
-    public static final String WATCHING_EVENT_ID = "watching_event_id";
+    public static final String WATCHING_STREAM_ID = "watching_stream_id";
 
     @Mock SessionRepository sessionRepository;
     @Mock UserRepository localUserRepository;
@@ -46,7 +46,7 @@ public class UnwatchStreamInteractorTest {
     //region tests
     @Test
     public void shouldUpdateUserInfoInSessionRepositoryWhenUnwatch() throws Throwable {
-        setupUserWithWatchingEvent();
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -55,7 +55,7 @@ public class UnwatchStreamInteractorTest {
 
     @Test
     public void shouldUpdateUserInfoInLocalRepositoryWhenUnwatch() {
-        setupUserWithWatchingEvent();
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -64,7 +64,7 @@ public class UnwatchStreamInteractorTest {
 
     @Test
     public void shouldUpdateUserInfoInRemoteRepositoryWhenUnwatch() {
-        setupUserWithWatchingEvent();
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -72,8 +72,8 @@ public class UnwatchStreamInteractorTest {
     }
 
     @Test
-    public void shouldPutUserWithNoWatchingEventInSessionRepositoryWhenUnwatch() {
-        setupUserWithWatchingEvent();
+    public void shouldPutUserWithNoWatchingStreamInSessionRepositoryWhenUnwatch() {
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -84,7 +84,7 @@ public class UnwatchStreamInteractorTest {
 
     @Test
     public void shouldNotifyCompletedAfterLocalUserInfoUpdated() {
-        setupUserWithWatchingEvent();
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -95,7 +95,7 @@ public class UnwatchStreamInteractorTest {
 
     @Test
     public void shouldNotifyCompletedBeforeRemoteUserInfoUpdated() {
-        setupUserWithWatchingEvent();
+        setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
@@ -112,17 +112,17 @@ public class UnwatchStreamInteractorTest {
         return user;
     }
 
-    private User userWithWatchingEvent() {
+    private User userWithWatchingStream() {
         User user = new User();
         user.setIdUser(USER_ID);
-        user.setIdWatchingStream(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 
     //endregion
 
-    private void setupUserWithWatchingEvent() {
+    private void setupUserWithWatchingStream() {
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingEvent());
+        when(localUserRepository.getUserById(USER_ID)).thenReturn(userWithWatchingStream());
     }
 }

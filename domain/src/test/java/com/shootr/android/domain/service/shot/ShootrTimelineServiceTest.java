@@ -4,15 +4,15 @@ import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -40,10 +40,10 @@ public class ShootrTimelineServiceTest {
     private static final Long DATE_MIDDLE = 2L;
     private static final Long DATE_NEWER = 3L;
 
-    private static final String WATCHING_EVENT_ID = "watching_event";
-    private static final Long WATCHING_EVENT_REFRESH_DATE = 1000L;
+    private static final String WATCHING_STREAM_ID = "watching_stream";
+    private static final Long WATCHING_STREAM_REFRESH_DATE = 1000L;
 
-    private static final String EVENT_SHOT_ID = "event_shot";
+    private static final String STREAM_SHOT_ID = "stream_shot";
     private static final String CURRENT_USER_ID = "current_user";
     private static final Date DATE_STUB = new Date();
     public static final String USER_ID = "user_id";
@@ -70,20 +70,20 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldReturnEventTimelineWhenRefreshEventTimeline() throws Exception {
-        setupWatchingEvent();
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(
-          eventShotListWithMultipleShots());
+    public void shouldReturnStreamTimelineWhenRefreshStreamTimeline() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(
+          streamShotListWithMultipleShots());
 
         Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream();
 
-        assertThat(resultTimeline.getShots()).isEqualTo(eventShotListWithMultipleShots());
+        assertThat(resultTimeline.getShots()).isEqualTo(streamShotListWithMultipleShots());
     }
 
     @Test
-    public void shouldRefreshActivityShotsWhenRefreshEventTimeline() throws Exception {
-        setupWatchingEvent();
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
+    public void shouldRefreshActivityShotsWhenRefreshStreamTimeline() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
@@ -92,7 +92,7 @@ public class ShootrTimelineServiceTest {
 
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimeline() throws Exception {
-        setupWatchingEvent();
+        setupWatchingStream();
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
 
@@ -102,9 +102,9 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
+    public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         List<Activity> activities = activitiesList();
-        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingStream());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
@@ -115,31 +115,31 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldRefreshEventShotsWhenRefreshActivityTimeline() throws Exception {
-        setupWatchingEvent();
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(eventShotList());
+    public void shouldRefreshStreamShotsWhenRefreshActivityTimeline() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
 
         shootrTimelineService.refreshTimelinesForActivity();
 
-        verify(remoteShotRepository).getShotsForStreamTimeline(anyEventParameters());
+        verify(remoteShotRepository).getShotsForStreamTimeline(anyStreamParameters());
     }
 
     @Test
-    public void shouldNotRefreshEventShotsWhenRefreshActivityTimelineAndNotWatchingAnyEvent() throws Exception {
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(eventShotList());
-        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingEvent());
+    public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
+        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingStream());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
 
         shootrTimelineService.refreshTimelinesForActivity();
 
-        verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyEventParameters());
+        verify(remoteShotRepository, never()).getShotsForStreamTimeline(anyStreamParameters());
     }
 
     @Test
-    public void shouldRequestFewerNiceShotsWhenWatchingEventHasShotsInLocalRepository() throws Exception {
-        setupWatchingEvent();
-        when(localShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(unorderedShots());
+    public void shouldRequestFewerNiceShotsWhenWatchingStreamHasShotsInLocalRepository() throws Exception {
+        setupWatchingStream();
+        when(localShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
@@ -148,9 +148,9 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldRequestFullNiceShotsWhenWatchingEventDoesntHaveShotsInLocalRepository() throws Exception {
-        setupWatchingEvent();
-        when(localShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(Collections.<Shot>emptyList());
+    public void shouldRequestFullNiceShotsWhenWatchingStreamDoesntHaveShotsInLocalRepository() throws Exception {
+        setupWatchingStream();
+        when(localShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
@@ -159,30 +159,30 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldRequestTimelineWithEventIdWhenWatchingEvent() throws Exception {
-        setupWatchingEvent();
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(new ArrayList<Shot>());
+    public void shouldRequestTimelineWithStreamIdWhenWatchingStream() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
-        assertThat(captureTimelineParameters()).hasStreamId(WATCHING_EVENT_ID);
+        assertThat(captureTimelineParameters()).hasStreamId(WATCHING_STREAM_ID);
     }
 
     @Test
-    public void shouldRequestTimelinehWithEventRefreshDateWhenWatchingEvent() throws Exception {
-        setupWatchingEvent();
-        when(timelineSynchronizationRepository.getEventTimelineRefreshDate(WATCHING_EVENT_ID)).thenReturn(
-          WATCHING_EVENT_REFRESH_DATE);
+    public void shouldRequestTimelinehWithStreamRefreshDateWhenWatchingStream() throws Exception {
+        setupWatchingStream();
+        when(timelineSynchronizationRepository.getStreamTimelineRefreshDate(WATCHING_STREAM_ID)).thenReturn(
+          WATCHING_STREAM_REFRESH_DATE);
 
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
-        assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_EVENT_REFRESH_DATE);
+        assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_STREAM_REFRESH_DATE);
     }
 
     @Test
-    public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingEvent() throws Exception {
-        setupWatchingEvent();
-        when(remoteShotRepository.getShotsForStreamTimeline(anyEventParameters())).thenReturn(unorderedShots());
+    public void shouldReturnTimelineShotsOrderedByNewerAboveComparatorWhenWatchingStream() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
 
         Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream();
 
@@ -191,7 +191,7 @@ public class ShootrTimelineServiceTest {
 
     @Test
     public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity(){
-        setupWatchingEvent();
+        setupWatchingStream();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
@@ -203,7 +203,7 @@ public class ShootrTimelineServiceTest {
 
     @Test
     public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity(){
-        setupWatchingEvent();
+        setupWatchingStream();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
@@ -226,15 +226,15 @@ public class ShootrTimelineServiceTest {
     }
 
     //region Setups and stubs
-    private void setupWatchingEvent() {
+    private void setupWatchingStream() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
         when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatching());
-        when(localStreamRepository.getStreamById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
+        when(localStreamRepository.getStreamById(WATCHING_STREAM_ID)).thenReturn(watchingStream());
     }
 
     private User currentUserWatching() {
         User user = new User();
-        user.setIdWatchingStream(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 
@@ -242,9 +242,9 @@ public class ShootrTimelineServiceTest {
         return new User();
     }
 
-    private Stream watchingEvent() {
+    private Stream watchingStream() {
         Stream stream = new Stream();
-        stream.setId(WATCHING_EVENT_ID);
+        stream.setId(WATCHING_STREAM_ID);
         return stream;
     }
 
@@ -265,14 +265,14 @@ public class ShootrTimelineServiceTest {
         return parametersCaptor.getValue();
     }
 
-    private List<Shot> eventShotList() {
-        return Collections.singletonList(eventShot());
+    private List<Shot> streamShotList() {
+        return Collections.singletonList(streamShot());
     }
 
-    private List<Shot> eventShotListWithMultipleShots(){
+    private List<Shot> streamShotListWithMultipleShots(){
         List<Shot> shots = new ArrayList<>();
-        shots.add(eventShot());
-        shots.add(eventShot());
+        shots.add(streamShot());
+        shots.add(streamShot());
         return shots;
     }
 
@@ -289,14 +289,14 @@ public class ShootrTimelineServiceTest {
         return activity;
     }
 
-    private Shot eventShot() {
+    private Shot streamShot() {
         Shot shot = new Shot();
-        shot.setIdShot(EVENT_SHOT_ID);
+        shot.setIdShot(STREAM_SHOT_ID);
         shot.setPublishDate(DATE_STUB);
         return shot;
     }
 
-    private StreamTimelineParameters anyEventParameters() {
+    private StreamTimelineParameters anyStreamParameters() {
         return any(StreamTimelineParameters.class);
     }
 

@@ -34,7 +34,7 @@ public class PerformCheckinInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.checkInEvent(idEvent);
+            shootrUserService.checkInStream(idEvent);
             notifyCompleted();
         } catch (ShootrException error) {
             notifyError(error);

@@ -7,8 +7,8 @@ import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -29,11 +29,11 @@ import static org.mockito.Mockito.when;
 
 public class SelectStreamInteractorTest {
 
-    private static final String OLD_EVENT_ID = "old_event";
-    private static final String NEW_EVENT_ID = "new_event";
+    private static final String OLD_STREAM_ID = "old_stream";
+    private static final String NEW_STREAM_ID = "new_stream";
     private static final String CURRENT_USER_ID = "current_user";
-    private static final String OLD_EVENT_TITLE = "oldTitle";
-    private static final String NEW_EVENT_TITLE = "newTitle";
+    private static final String OLD_STREAM_TITLE = "oldTitle";
+    private static final String NEW_STREAM_TITLE = "newTitle";
 
     @Mock TestInteractorHandler interactorHandler;
     @Mock StreamRepository localStreamRepository;
@@ -62,55 +62,55 @@ public class SelectStreamInteractorTest {
     }
 
     @Test
-    public void shouldSetNewEventIdInSessionRepository() throws Exception {
-        setupOldWatchingEvent();
-        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
+    public void shouldSetNewStreamIdInSessionRepository() throws Exception {
+        setupOldWatchingStream();
+        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        verify(sessionRepository).setCurrentUser(currentUserWatchingNewEvent());
+        verify(sessionRepository).setCurrentUser(currentUserWatchingNewStream());
     }
 
     @Test
-    public void shouldSetNewEventIdInLocalRepository() throws Exception {
-        setupOldWatchingEvent();
-        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
+    public void shouldSetNewStreamIdInLocalRepository() throws Exception {
+        setupOldWatchingStream();
+        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        verify(localUserRepository).putUser(currentUserWatchingNewEvent());
+        verify(localUserRepository).putUser(currentUserWatchingNewStream());
     }
 
     @Test
-    public void shouldSetNewEventIdInRemoteRepository() throws Exception {
-        setupOldWatchingEvent();
-        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
+    public void shouldSetNewStreamIdInRemoteRepository() throws Exception {
+        setupOldWatchingStream();
+        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
 
-        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        verify(remoteUserRepository).putUser(currentUserWatchingNewEvent());
+        verify(remoteUserRepository).putUser(currentUserWatchingNewStream());
     }
 
     @Test @Ignore
-    public void selectedEventSavedInLocalIfNotExists() throws Exception {
-        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
+    public void selectedStreamSavedInLocalIfNotExists() throws Exception {
+        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
     }
 
     @Test
-    public void selectingCurrentEventDoesNotifyUi() throws Exception {
-        setupOldWatchingEvent();
-        when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
+    public void selectingCurrentStreamDoesNotifyUi() throws Exception {
+        setupOldWatchingStream();
+        when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
-        interactor.selectStream(OLD_EVENT_ID, dummyCallback);
+        interactor.selectStream(OLD_STREAM_ID, dummyCallback);
 
-        verify(dummyCallback).onLoaded(anyEvent());
+        verify(dummyCallback).onLoaded(anyStream());
     }
 
-    @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentEvent() throws Exception {
-        setupOldWatchingEvent();
-        when(localStreamRepository.getStreamById(OLD_EVENT_ID)).thenReturn(oldEvent());
+    @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentStream() throws Exception {
+        setupOldWatchingStream();
+        when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
-        interactor.selectStream(OLD_EVENT_ID, dummyCallback);
+        interactor.selectStream(OLD_STREAM_ID, dummyCallback);
 
         verify(localUserRepository, never()).putUser(any(User.class));
         verify(remoteUserRepository, never()).putUser(any(User.class));
@@ -119,66 +119,66 @@ public class SelectStreamInteractorTest {
 
     @Test
     public void shouldNotifyCallbackBeforeSettingUserInRemoteRepository() throws Exception {
-        when(localStreamRepository.getStreamById(NEW_EVENT_ID)).thenReturn(newEvent());
+        when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
-        interactor.selectStream(NEW_EVENT_ID, dummyCallback);
+        interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        inOrder.verify(dummyCallback).onLoaded(anyEvent());
+        inOrder.verify(dummyCallback).onLoaded(anyStream());
         inOrder.verify(remoteUserRepository).putUser(any(User.class));
     }
 
     @Test
-    public void should_setEventId_when_updateUserWithEventInfo() throws Exception {
-        User userWithOldEvent = currentUserWatchingOldEvent();
-        Stream selectedStream = newEvent();
+    public void shouldSetStreamIdWhenUpdateUserWithStreamInfo() throws Exception {
+        User userWithOldStream = currentUserWatchingOldStream();
+        Stream selectedStream = newStream();
 
-        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldEvent, selectedStream);
+        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldStream, selectedStream);
 
-        assertThat(updatedUser).hasWatchingEventId(NEW_EVENT_ID);
+        assertThat(updatedUser).hasWatchingStreamId(NEW_STREAM_ID);
     }
 
     @Test
-    public void should_setEventTitle_when_updateUserWithEventInfo() throws Exception {
-        User userWithOldEvent = currentUserWatchingOldEvent();
-        Stream selectedStream = newEvent();
+    public void should_setStreamTitle_when_updateUserWithStreamInfo() throws Exception {
+        User userWithOldStream = currentUserWatchingOldStream();
+        Stream selectedStream = newStream();
 
-        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldEvent, selectedStream);
+        User updatedUser = interactor.updateUserWithStreamInfo(userWithOldStream, selectedStream);
 
-        assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
+        assertThat(updatedUser).hasVisibleStreamTitle(NEW_STREAM_TITLE);
     }
 
-    private void setupOldWatchingEvent() {
+    private void setupOldWatchingStream() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
-        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatchingOldEvent());
+        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatchingOldStream());
     }
 
-    private User currentUserWatchingOldEvent() {
+    private User currentUserWatchingOldStream() {
         User user = currentUser();
-        user.setIdWatchingStream(OLD_EVENT_ID);
-        user.setWatchingStreamTitle(OLD_EVENT_TITLE);
+        user.setIdWatchingStream(OLD_STREAM_ID);
+        user.setWatchingStreamTitle(OLD_STREAM_TITLE);
         return user;
     }
 
-    private User currentUserWatchingNewEvent() {
+    private User currentUserWatchingNewStream() {
         User user = currentUser();
-        user.setIdWatchingStream(NEW_EVENT_ID);
+        user.setIdWatchingStream(NEW_STREAM_ID);
         return user;
     }
     //endregion
 
     //region Stub data
-    private Stream newEvent() {
+    private Stream newStream() {
         Stream stream = new Stream();
-        stream.setId(NEW_EVENT_ID);
-        stream.setTitle(NEW_EVENT_TITLE);
+        stream.setId(NEW_STREAM_ID);
+        stream.setTitle(NEW_STREAM_TITLE);
         return stream;
     }
 
-    private Stream oldEvent() {
+    private Stream oldStream() {
         Stream stream = new Stream();
-        stream.setId(OLD_EVENT_ID);
-        stream.setTitle(OLD_EVENT_TITLE);
+        stream.setId(OLD_STREAM_ID);
+        stream.setTitle(OLD_STREAM_TITLE);
         return stream;
     }
 
@@ -188,7 +188,7 @@ public class SelectStreamInteractorTest {
         return user;
     }
 
-    private StreamSearchResult anyEvent() {
+    private StreamSearchResult anyStream() {
         return any(StreamSearchResult.class);
     }
     //endregion

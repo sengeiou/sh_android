@@ -27,7 +27,7 @@ public class FavoriteEntityMapper {
             return null;
         }
         Favorite favorite = new Favorite();
-        favorite.setIdEvent(entity.getIdStream());
+        favorite.setIdStream(entity.getIdStream());
         favorite.setOrder(entity.getOrder());
         return favorite;
     }

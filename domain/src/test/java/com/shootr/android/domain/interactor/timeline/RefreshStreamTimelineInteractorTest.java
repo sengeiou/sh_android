@@ -39,15 +39,15 @@ public class RefreshStreamTimelineInteractorTest {
     }
 
     @Test
-    public void shouldCallbackEventTimelineWhenServiceReturnsTimelineForEvent() throws Exception {
-        when(shootrTimelineService.refreshTimelinesForWatchingStream()).thenReturn(timelineForEvent());
+    public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream() throws Exception {
+        when(shootrTimelineService.refreshTimelinesForWatchingStream()).thenReturn(timelineForStream());
 
         interactor.refreshStreamTimeline(spyCallback, errorCallback);
 
-        verify(spyCallback).onLoaded(timelineForEvent());
+        verify(spyCallback).onLoaded(timelineForStream());
     }
 
-    private Timeline timelineForEvent() {
+    private Timeline timelineForStream() {
         Timeline timeline = new Timeline();
         timeline.setShots(new ArrayList<Shot>());
         return timeline;

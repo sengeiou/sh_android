@@ -48,7 +48,7 @@ public class ShootrUserService {
         this.databaseUtils = databaseUtils;
     }
 
-    public void checkInEvent(String idEvent) {
+    public void checkInStream(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         try {
             checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);

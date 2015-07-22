@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class Favorite {
 
-    private String idEvent;
+    private String idStream;
     private Integer order;
 
     public Favorite() {
@@ -12,11 +12,11 @@ public class Favorite {
     }
 
     public String getIdStream() {
-        return idEvent;
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public Integer getOrder() {
@@ -33,19 +33,19 @@ public class Favorite {
 
         Favorite favorite = (Favorite) o;
 
-        if (idEvent != null ? !idEvent.equals(favorite.idEvent) : favorite.idEvent != null) return false;
+        if (idStream != null ? !idStream.equals(favorite.idStream) : favorite.idStream != null) return false;
         return !(order != null ? !order.equals(favorite.order) : favorite.order != null);
     }
 
     @Override public int hashCode() {
-        int result = idEvent != null ? idEvent.hashCode() : 0;
+        int result = idStream != null ? idStream.hashCode() : 0;
         result = 31 * result + (order != null ? order.hashCode() : 0);
         return result;
     }
 
     @Override public String toString() {
         return "Favorite{" +
-          "idEvent='" + idEvent + '\'' +
+          "idStream='" + idStream + '\'' +
           ", order=" + order +
           '}';
     }

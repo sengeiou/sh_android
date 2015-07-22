@@ -12,8 +12,8 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ import static org.mockito.Mockito.when;
 
 public class GetActivityTimelineInteractorTest {
 
-    private static final String WATCHING_EVENT_ID = "watching_event";
-    private static final String EVENT_AUTHOR_ID = "event_author";
+    private static final String WATCHING_STREAM_ID = "watching_stream";
+    private static final String STREAM_AUTHOR_ID = "stream_author";
     private static final String ID_CURRENT_USER = "current_user";
 
     private static final Long DATE_OLDER = 1000L;
@@ -69,7 +69,7 @@ public class GetActivityTimelineInteractorTest {
 
     @Test
     public void shouldCallbackShotsInOrderWithPublishDateComparator() throws Exception {
-        setupWatchingEvent();
+        setupWatchingStream();
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
@@ -80,7 +80,7 @@ public class GetActivityTimelineInteractorTest {
     }
 
     @Test
-    public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoEventWatching() throws Exception {
+    public void shouldCallbackShotsInOrderWithPublishDateComparatorWithNoStreamWatching() throws Exception {
         when(localActivityRepository.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           unorderedActivities());
 
@@ -93,7 +93,7 @@ public class GetActivityTimelineInteractorTest {
     private User currentUserWatching() {
         User user = new User();
         user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingStream(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 
@@ -107,9 +107,9 @@ public class GetActivityTimelineInteractorTest {
         return activity;
     }
 
-    private void setupWatchingEvent() {
+    private void setupWatchingStream() {
         when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserWatching());
-        when(streamRepository.getStreamById(eq(WATCHING_EVENT_ID))).thenReturn(watchingEvent());
+        when(streamRepository.getStreamById(eq(WATCHING_STREAM_ID))).thenReturn(watchingStream());
     }
 
     //region Stubs
@@ -117,10 +117,10 @@ public class GetActivityTimelineInteractorTest {
         return Arrays.asList(new User());
     }
 
-    private Stream watchingEvent() {
+    private Stream watchingStream() {
         Stream stream = new Stream();
-        stream.setId(WATCHING_EVENT_ID);
-        stream.setAuthorId(EVENT_AUTHOR_ID);
+        stream.setId(WATCHING_STREAM_ID);
+        stream.setAuthorId(STREAM_AUTHOR_ID);
         return stream;
     }
 
