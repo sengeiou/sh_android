@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 public class EventDetailPresenterTest {
 
-    private EventDetailPresenter presenter;
+    private StreamDetailPresenter presenter;
 
     @Mock Bus bus;
     @Mock VisibleStreamInfoInteractor eventInfoInteractor;
@@ -40,7 +40,7 @@ public class EventDetailPresenterTest {
         streamModelMapper = new StreamModelMapper(sessionRepository);
         userModelMapper= new UserModelMapper();
 
-        presenter = new EventDetailPresenter(bus,
+        presenter = new StreamDetailPresenter(bus,
           eventInfoInteractor, changeStreamPhotoInteractor, streamModelMapper,
           userModelMapper,
           errorMessageFactory,

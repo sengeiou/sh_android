@@ -11,17 +11,17 @@ import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventMediaPresenter implements Presenter {
+public class StreamMediaPresenter implements Presenter {
 
     private final GetStreamMediaInteractor getStreamMediaInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private StreamMediaView streamMediaView;
-    private String idEvent;
-    private Integer eventMediaCount;
+    private String idStream;
+    private Integer streamMediaCount;
 
-    @Inject public EventMediaPresenter(GetStreamMediaInteractor getStreamMediaInteractor, ShotModelMapper shotModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+    @Inject public StreamMediaPresenter(GetStreamMediaInteractor getStreamMediaInteractor,
+      ShotModelMapper shotModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getStreamMediaInteractor = getStreamMediaInteractor;
         this.shotModelMapper = shotModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -31,24 +31,24 @@ public class EventMediaPresenter implements Presenter {
         this.streamMediaView = streamMediaView;
     }
 
-    public void initialize(StreamMediaView streamMediaView, String idEvent, Integer eventMediaCount) {
+    public void initialize(StreamMediaView streamMediaView, String idStream, Integer streamMediaCount) {
         this.setView(streamMediaView);
-        this.idEvent = idEvent;
-        this.eventMediaCount = eventMediaCount;
+        this.idStream = idStream;
+        this.streamMediaCount = streamMediaCount;
         streamMediaView.showEmpty();
         retrieveMedia();
     }
 
     public void retrieveMedia(){
-        if(eventMediaCount > 0){
+        if(streamMediaCount > 0){
             streamMediaView.showLoading();
             streamMediaView.hideEmpty();
         }
-        renderMedia(idEvent);
+        renderMedia(idStream);
     }
 
-    private void renderMedia(String idEvent) {
-        getStreamMediaInteractor.getStreamMedia(idEvent, new Interactor.Callback<List<Shot>>() {
+    private void renderMedia(String idStream) {
+        getStreamMediaInteractor.getStreamMedia(idStream, new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shotsWithMedia) {
                 if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
                     streamMediaView.hideEmpty();

@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
+import com.shootr.android.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -45,19 +45,19 @@ public class StreamTimelinePresenterTest {
     private static final String SELECTED_EVENT_ID = "stream";
 
     @Mock StreamTimelineView streamTimelineView;
-    @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
+    @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
 
-    private EventTimelinePresenter presenter;
+    private StreamTimelinePresenter presenter;
     private ShotSent.Receiver shotSentReceiver;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
-        presenter = new EventTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
+        presenter = new StreamTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
           shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
@@ -77,7 +77,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldLoadTimlelineWhenSelectEventIfSelectEventCallbacks() throws Exception {
         setupSelectEventInteractorCallbacksEvent();
 
-        presenter.selectEvent();
+        presenter.selectStream();
 
         verify(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
     }

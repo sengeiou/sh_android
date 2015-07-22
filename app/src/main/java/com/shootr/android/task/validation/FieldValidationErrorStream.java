@@ -2,11 +2,11 @@ package com.shootr.android.task.validation;
 
 import java.util.List;
 
-public class FieldValidationErrorEvent {
+public class FieldValidationErrorStream {
 
     private List<FieldValidationError> fieldValidationErrors;
 
-    public FieldValidationErrorEvent(List<FieldValidationError> fieldValidationErrors) {
+    public FieldValidationErrorStream(List<FieldValidationError> fieldValidationErrors) {
         this.fieldValidationErrors = fieldValidationErrors;
     }
 

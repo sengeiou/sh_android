@@ -93,13 +93,13 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
     }
 
     @Subscribe @Override
-    public void onCommunicationError(CommunicationErrorStream event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         this.hideViewLoading();
         this.showErrorInView(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     @Subscribe @Override
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         this.hideViewLoading();
         this.showErrorInView(errorMessageFactory.getConnectionNotAvailableMessage());
     }

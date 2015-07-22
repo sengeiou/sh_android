@@ -25,46 +25,47 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class EventDetailPresenter implements Presenter, CommunicationPresenter {
+public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
     private final Bus bus;
-    private final VisibleStreamInfoInteractor eventInfoInteractor;
+    private final VisibleStreamInfoInteractor streamInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final WatchersTimeFormatter watchersTimeFormatter;
-    private final GetStreamMediaCountInteractor eventMediaCountInteractor;
+    private final GetStreamMediaCountInteractor streamMediaCountInteractor;
 
     private StreamDetailView streamDetailView;
-    private String idEvent;
+    private String idStream;
 
     private UserModel currentUserWatchingModel;
     private StreamModel streamModel;
 
-    private Integer eventMediaCount;
+    private Integer streamMediaCount;
 
     @Inject
-    public EventDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor eventInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
-      WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor eventMediaCountInteractor) {
+    public StreamDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor streamInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper,
+      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+      WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor streamMediaCountInteractor) {
         this.bus = bus;
-        this.eventInfoInteractor = eventInfoInteractor;
+        this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.watchersTimeFormatter = watchersTimeFormatter;
-        this.eventMediaCountInteractor = eventMediaCountInteractor;
+        this.streamMediaCountInteractor = streamMediaCountInteractor;
     }
     //endregion
 
-    public void initialize(StreamDetailView streamDetailView, String idEvent) {
+    public void initialize(StreamDetailView streamDetailView, String idStream) {
         setView(streamDetailView);
-        this.idEvent = idEvent;
-        this.loadEventInfo();
+        this.idStream = idStream;
+        this.loadStreamInfo();
     }
 
     protected void setView(StreamDetailView streamDetailView){
@@ -73,21 +74,21 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     //region Edit stream
-    public void editEventClick() {
+    public void editStreamClick() {
         streamDetailView.showEditStreamPhotoOrInfo();
     }
 
-    public void editEventInfo() {
-        streamDetailView.navigateToEditStream(idEvent);
+    public void editStreamInfo() {
+        streamDetailView.navigateToEditStream(idStream);
     }
 
-    public void resultFromEditEventInfo(String idEventEdited) {
-        if (idEventEdited.equals(streamModel.getIdStream())) {
-            loadEventInfo();
+    public void resultFromEditStreamInfo(String idStreamEdited) {
+        if (idStreamEdited.equals(streamModel.getIdStream())) {
+            loadStreamInfo();
         }
     }
 
-    public void editEventPhoto() {
+    public void editStreamPhoto() {
         streamDetailView.showPhotoPicker();
     }
 
@@ -97,7 +98,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
           photoFile,
           new ChangeStreamPhotoInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
-                  renderEventInfo(stream);
+                  renderStreamInfo(stream);
                   streamDetailView.hideLoadingPictureUpload();
                   streamDetailView.showEditPicture(stream.getPicture());
               }
@@ -113,20 +114,20 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    //region Event info
+    //region Stream info
     public void refreshInfo() {
-        this.getEventInfo();
+        this.getStreamInfo();
     }
 
-    public void loadEventInfo() {
+    public void loadStreamInfo() {
         this.showViewLoading();
-        this.getEventInfo();
+        this.getStreamInfo();
     }
 
-    public void getEventInfo() {
-        eventInfoInteractor.obtainStreamInfo(idEvent, new VisibleStreamInfoInteractor.Callback() {
+    public void getStreamInfo() {
+        streamInfoInteractor.obtainStreamInfo(idStream, new VisibleStreamInfoInteractor.Callback() {
             @Override public void onLoaded(StreamInfo streamInfo) {
-                onEventInfoLoaded(streamInfo);
+                onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -136,12 +137,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         });
     }
 
-    public void onEventInfoLoaded(StreamInfo streamInfo) {
+    public void onStreamInfoLoaded(StreamInfo streamInfo) {
         if (streamInfo.getStream() == null) {
             this.showViewEmpty();
         } else {
             this.hideViewEmpty();
-            this.renderEventInfo(streamInfo.getStream());
+            this.renderStreamInfo(streamInfo.getStream());
             this.renderWatchersList(streamInfo.getWatchers());
             this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
             this.renderWatchersCount(streamInfo.getWatchersCount());
@@ -152,9 +153,9 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void loadMediaCount() {
-        eventMediaCountInteractor.getStreamMediaCount(idEvent, new Interactor.Callback<Integer>() {
+        streamMediaCountInteractor.getStreamMediaCount(idStream, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer count) {
-                eventMediaCount = count;
+                streamMediaCount = count;
                 streamDetailView.showMediaCount();
                 streamDetailView.setMediaCount(count);
             }
@@ -178,7 +179,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoClick() {
         if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
-            editEventPhoto();
+            editStreamPhoto();
         } else {
             zoomPhoto();
         }
@@ -209,7 +210,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         }
     }
 
-    private void renderEventInfo(Stream stream) {
+    private void renderStreamInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
         streamDetailView.setStreamTitle(streamModel.getTitle());
         streamDetailView.setStreamPicture(streamModel.getPicture());
@@ -248,12 +249,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    @Subscribe @Override public void onCommunicationError(CommunicationErrorStream event) {
+    @Subscribe @Override public void onCommunicationError(CommunicationErrorStream stream) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         streamDetailView.showError(communicationErrorMessage);
     }
 
-    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
+    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         streamDetailView.showError(connectionNotAvailableMessage);
     }
@@ -271,6 +272,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void clickMedia() {
-        streamDetailView.navigateToMedia(idEvent, eventMediaCount);
+        streamDetailView.navigateToMedia(idStream, streamMediaCount);
     }
 }

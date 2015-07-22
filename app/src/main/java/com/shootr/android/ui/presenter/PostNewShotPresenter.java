@@ -113,7 +113,7 @@ public class PostNewShotPresenter implements Presenter {
 
     private void startSendingShot() {
         if (!isReply) {
-            postEventShot();
+            postStreamShot();
         } else {
             postReplyShot();
         }
@@ -135,7 +135,7 @@ public class PostNewShotPresenter implements Presenter {
           });
     }
 
-    private void postEventShot() {
+    private void postStreamShot() {
         postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend,
           selectedImageFile,
           new Interactor.CompletedCallback() {
@@ -197,13 +197,13 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorStream event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }

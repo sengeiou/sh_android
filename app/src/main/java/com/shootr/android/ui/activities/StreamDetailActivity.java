@@ -31,7 +31,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseNoToolbarActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.CheckinPresenter;
-import com.shootr.android.ui.presenter.EventDetailPresenter;
+import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.CheckinView;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.ui.widgets.ObservableScrollView;
@@ -84,7 +84,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @Bind(R.id.stream_checkin) View checkinButton;
 
-    @Inject EventDetailPresenter eventDetailPresenter;
+    @Inject StreamDetailPresenter streamDetailPresenter;
     @Inject CheckinPresenter checkinPresenter;
     @Inject PicassoWrapper picasso;
 
@@ -112,7 +112,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     }
 
     private void initializePresenter(String idStream) {
-        eventDetailPresenter.initialize(this, idStream);
+        streamDetailPresenter.initialize(this, idStream);
         checkinPresenter.initialize(this, idStream);
     }
 
@@ -130,7 +130,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
           R.color.refresh_4);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                eventDetailPresenter.refreshInfo();
+                streamDetailPresenter.refreshInfo();
             }
         });
         final ViewTreeObserver scrollViewViewTreeObserver = scrollView.getViewTreeObserver();
@@ -159,12 +159,12 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @OnClick(R.id.stream_author)
     public void onAuthorClick() {
-        eventDetailPresenter.clickAuthor();
+        streamDetailPresenter.clickAuthor();
     }
 
     @OnClick(R.id.stream_detail_media)
     public void onMediaClick() {
-        eventDetailPresenter.clickMedia();
+        streamDetailPresenter.clickMedia();
     }
 
     @OnClick(R.id.stream_checkin)
@@ -175,7 +175,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     //region Edit photo
     @OnClick(R.id.stream_photo_container)
     public void onPhotoClick() {
-        eventDetailPresenter.photoClick();
+        streamDetailPresenter.photoClick();
     }
 
     private void choosePhotoFromGallery() {
@@ -301,7 +301,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_edit) {
-            eventDetailPresenter.editEventClick();
+            streamDetailPresenter.editStreamClick();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             finish();
@@ -315,28 +315,28 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
             String idStreamEdited = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-            eventDetailPresenter.resultFromEditEventInfo(idStreamEdited);
+            streamDetailPresenter.resultFromEditStreamInfo(idStreamEdited);
         }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
             File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
-            eventDetailPresenter.photoSelected(photoFile);
+            streamDetailPresenter.photoSelected(photoFile);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             File photoFile = getCameraPhotoFile();
-            eventDetailPresenter.photoSelected(photoFile);
+            streamDetailPresenter.photoSelected(photoFile);
         }
     }
 
     @Override protected void onResume() {
         super.onResume();
-        eventDetailPresenter.resume();
+        streamDetailPresenter.resume();
     }
 
     @Override protected void onPause() {
         super.onPause();
-        eventDetailPresenter.pause();
+        streamDetailPresenter.pause();
     }
     //endregion
 
@@ -375,10 +375,10 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
                       case R.id.menu_stream_edit_photo:
-                          eventDetailPresenter.editEventPhoto();
+                          streamDetailPresenter.editStreamPhoto();
                           break;
                       case R.id.menu_stream_edit_info:
-                          eventDetailPresenter.editEventInfo();
+                          streamDetailPresenter.editStreamInfo();
                           break;
                   }
               }

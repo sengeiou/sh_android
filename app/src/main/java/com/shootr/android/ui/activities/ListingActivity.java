@@ -47,7 +47,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override public void onEventClick(StreamResultModel event) {
-                presenter.selectEvent(event);
+                presenter.selectStream(event);
             }
         });
         listingList.setAdapter(adapter);

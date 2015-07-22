@@ -27,12 +27,12 @@ public class NewStreamPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewStreamView newStreamView;
 
-    private NewEventPresenter presenter;
+    private NewStreamPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new NewEventPresenter(createStreamInteractor, getStreamInteractor,
+        presenter = new NewStreamPresenter(createStreamInteractor, getStreamInteractor,
           deleteStreamInteractor, streamModelMapper, errorMessageFactory);
     }
 

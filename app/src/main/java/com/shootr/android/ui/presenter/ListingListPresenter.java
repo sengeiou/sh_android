@@ -37,25 +37,25 @@ public class ListingListPresenter implements Presenter{
     private void loadListingList() {
         listingView.showLoading();
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> events) {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
                 listingView.hideLoading();
-                onListingLoaded(events);
+                onListingLoaded(streams);
             }
         }, profileIdUser);
     }
 
-    private void onListingLoaded(List<StreamSearchResult> events) {
-        if (!events.isEmpty()) {
-            List<StreamResultModel> eventModels = streamResultModelMapper.transform(events);
-            this.renderViewEventsList(eventModels);
+    private void onListingLoaded(List<StreamSearchResult> streams) {
+        if (!streams.isEmpty()) {
+            List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
+            this.renderViewStreamList(streamModels);
         }else{
             listingView.showLoading();
         }
     }
 
-    private void renderViewEventsList(List<StreamResultModel> eventModels) {
+    private void renderViewStreamList(List<StreamResultModel> streamModels) {
         listingView.showContent();
-        listingView.renderStreams(eventModels);
+        listingView.renderStreams(streamModels);
     }
 
     @Override public void resume() {
@@ -68,11 +68,11 @@ public class ListingListPresenter implements Presenter{
         hasBeenPaused = true;
     }
 
-    public void selectEvent(StreamResultModel event) {
-        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
+    public void selectStream(StreamResultModel stream) {
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
     }
 
-    private void selectEvent(final String idEvent, String eventTitle) {
-        listingView.navigateToStreamTimeline(idEvent, eventTitle);
+    private void selectStream(final String idStream, String streamTitle) {
+        listingView.navigateToStreamTimeline(idStream, streamTitle);
     }
 }

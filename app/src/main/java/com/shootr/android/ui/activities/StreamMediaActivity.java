@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.presenter.EventMediaPresenter;
+import com.shootr.android.ui.presenter.StreamMediaPresenter;
 import com.shootr.android.ui.views.StreamMediaView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
@@ -29,7 +29,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.media_empty) View emptyView;
     @Bind(R.id.stream_media_loading) View loadingView;
 
-    @Inject EventMediaPresenter presenter;
+    @Inject StreamMediaPresenter presenter;
     @Inject PicassoWrapper picasso;
 
     @Override protected int getLayoutResource() {

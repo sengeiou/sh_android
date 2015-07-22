@@ -31,7 +31,7 @@ public class CheckinPresenterTest {
         MockitoAnnotations.initMocks(this);
         presenter = new CheckinPresenter(performCheckinInteractor);
         presenter.setView(checkinView);
-        presenter.setEventId(EVENT_ID);
+        presenter.setStreamId(EVENT_ID);
     }
 
     //region Check in

@@ -83,7 +83,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(StreamResultModel event) {
-                favoritesListPresenter.selectEvent(event);
+                favoritesListPresenter.selectStream(event);
             }
         });
         favoritesList.setAdapter(adapter);

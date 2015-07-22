@@ -28,7 +28,7 @@ import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.presenter.EventsListPresenter;
+import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullEventListView;
 import com.shootr.android.util.PicassoWrapper;
@@ -44,7 +44,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Bind(R.id.events_empty) View emptyView;
     @Bind(R.id.events_loading) View loadingView;
 
-    @Inject EventsListPresenter presenter;
+    @Inject StreamsListPresenter presenter;
     @Inject PicassoWrapper picasso;
     @Inject ToolbarDecorator toolbarDecorator;
 
@@ -89,12 +89,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(StreamResultModel event) {
-                presenter.selectEvent(event);
+                presenter.selectStream(event);
             }
         });
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
             @Override public void onUnwatchClick() {
-                presenter.unwatchEvent();
+                presenter.unwatchStream();
             }
         });
         eventsList.setAdapter(adapter);
@@ -163,7 +163,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         if (requestCode == REQUEST_NEW_EVENT && resultCode == Activity.RESULT_OK) {
             String eventId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
             String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
-            presenter.eventCreated(eventId, title);
+            presenter.streamCreated(eventId, title);
         }
     }
 

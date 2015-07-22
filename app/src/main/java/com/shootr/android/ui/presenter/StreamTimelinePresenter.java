@@ -10,7 +10,7 @@ import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
+import com.shootr.android.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -18,11 +18,11 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
+public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
-    private final EventTimelineInteractorsWrapper timelineInteractorWrapper;
+    private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     private final SelectStreamInteractor selectStreamInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
@@ -30,14 +30,12 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final Poller poller;
 
     private StreamTimelineView streamTimelineView;
-    private String eventId;
+    private String streamId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
 
-    @Inject public EventTimelinePresenter(EventTimelineInteractorsWrapper timelineInteractorWrapper,
-      SelectStreamInteractor selectStreamInteractor,
-      ShotModelMapper shotModelMapper,
-      @Main Bus bus,
+    @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
+      SelectStreamInteractor selectStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, Poller poller) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
@@ -51,10 +49,10 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.streamTimelineView = streamTimelineView;
     }
 
-    public void initialize(StreamTimelineView streamTimelineView, String eventId) {
-        this.eventId = eventId;
+    public void initialize(StreamTimelineView streamTimelineView, String streamId) {
+        this.streamId = streamId;
         this.setView(streamTimelineView);
-        this.selectEvent();
+        this.selectStream();
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override
             public void run() {
@@ -71,8 +69,8 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         poller.stopPolling();
     }
 
-    protected void selectEvent() {
-        selectStreamInteractor.selectStream(eventId, new Interactor.Callback<StreamSearchResult>() {
+    protected void selectStream() {
+        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
             @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 loadTimeline();
             }

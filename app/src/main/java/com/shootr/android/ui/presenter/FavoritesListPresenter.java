@@ -35,14 +35,14 @@ public class FavoritesListPresenter implements Presenter{
     protected void loadFavorites() {
         favoritesListView.showLoading();
         getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> events) {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
                 favoritesListView.hideLoading();
-                if (events.isEmpty()) {
+                if (streams.isEmpty()) {
                     favoritesListView.showEmpty();
                     favoritesListView.hideContent();
                 } else {
-                    List<StreamResultModel> eventModels = streamResultModelMapper.transform(events);
-                    favoritesListView.renderFavorites(eventModels);
+                    List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
+                    favoritesListView.renderFavorites(streamModels);
                     favoritesListView.showContent();
                     favoritesListView.hideEmpty();
                 }
@@ -50,12 +50,12 @@ public class FavoritesListPresenter implements Presenter{
         });
     }
 
-    public void selectEvent(StreamResultModel event) {
-        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
+    public void selectStream(StreamResultModel stream) {
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
     }
 
-    private void selectEvent(final String idEvent, String eventTitle) {
-        favoritesListView.navigateToStreamTimeline(idEvent, eventTitle);
+    private void selectStream(final String idStream, String streamTitle) {
+        favoritesListView.navigateToStreamTimeline(idStream, streamTitle);
     }
 
     @Override

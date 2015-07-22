@@ -45,9 +45,9 @@ public class ProfilePresenter implements Presenter {
 
     public void loadCurrentUserListing() {
         getListingCountInteractor.loadListingCount(profileIdUser, new Interactor.Callback<Integer>() {
-            @Override public void onLoaded(Integer numberOfListingEvents) {
-                if (numberOfListingEvents > 0) {
-                    profileView.showListingCount(numberOfListingEvents);
+            @Override public void onLoaded(Integer numberOfListingStreams) {
+                if (numberOfListingStreams > 0) {
+                    profileView.showListingCount(numberOfListingStreams);
                 }
             }
         });

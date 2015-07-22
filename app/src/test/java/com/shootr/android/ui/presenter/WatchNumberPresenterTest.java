@@ -83,7 +83,7 @@ public class WatchNumberPresenterTest {
 
     @Test
     public void shouldHideCountViewWhenNoEvent() throws Exception {
-        setupWatchNumberInteractorCallbacks(WatchNumberInteractor.NO_EVENT);
+        setupWatchNumberInteractorCallbacks(WatchNumberInteractor.NO_STREAM);
 
         presenter.retrieveData();
 

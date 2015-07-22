@@ -2,18 +2,18 @@ package com.shootr.android.ui.presenter.interactorwrapper;
 
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.timeline.GetStreamTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.GetOlderStreamTimelineInteractor;
+import com.shootr.android.domain.interactor.timeline.GetStreamTimelineInteractor;
 import com.shootr.android.domain.interactor.timeline.RefreshStreamTimelineInteractor;
 import javax.inject.Inject;
 
-public class EventTimelineInteractorsWrapper {
+public class StreamTimelineInteractorsWrapper {
 
     private final RefreshStreamTimelineInteractor refreshStreamTimelineInteractor;
     private final GetStreamTimelineInteractor getStreamTimelineInteractor;
     private final GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor;
 
-    @Inject public EventTimelineInteractorsWrapper(RefreshStreamTimelineInteractor refreshStreamTimelineInteractor,
+    @Inject public StreamTimelineInteractorsWrapper(RefreshStreamTimelineInteractor refreshStreamTimelineInteractor,
       GetStreamTimelineInteractor getStreamTimelineInteractor,
       GetOlderStreamTimelineInteractor getOlderStreamTimelineInteractor) {
         this.refreshStreamTimelineInteractor = refreshStreamTimelineInteractor;

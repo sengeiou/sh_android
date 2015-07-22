@@ -26,7 +26,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FindEventsPresenterTest {
+public class FindStreamsPresenterTest {
 
     private static final String SELECTED_EVENT_ID = "selected_event";
     private static final String SELECTED_EVENT_TITLE = "title";
@@ -38,28 +38,28 @@ public class FindEventsPresenterTest {
     @Mock SessionRepository sessionRepository;
     @Mock FindStreamsView findStreamsView;
 
-    private FindEventsPresenter findEventsPresenter;
+    private FindStreamsPresenter findStreamsPresenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
           new StreamResultModelMapper(streamModelMapper);
-        findEventsPresenter = new FindEventsPresenter(streamSearchInteractor,
+        findStreamsPresenter = new FindStreamsPresenter(streamSearchInteractor,
           streamResultModelMapper, errorMessageFactory);
-        findEventsPresenter.setView(findStreamsView);
+        findStreamsPresenter.setView(findStreamsView);
     }
 
     @Test
     public void shouldHideEventListWhileSearching() throws Exception {
-        findEventsPresenter.search(QUERY);
+        findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).hideContent();
     }
 
     @Test
     public void shouldShowLoadingWhileSearching() throws Exception {
-        findEventsPresenter.search(QUERY);
+        findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).showLoading();
     }
@@ -68,7 +68,7 @@ public class FindEventsPresenterTest {
     public void shouldHideLoadingWhenFinishSearching() throws Exception {
         setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        findEventsPresenter.search(QUERY);
+        findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).hideLoading();
     }
@@ -77,7 +77,7 @@ public class FindEventsPresenterTest {
     public void shouldHideLoadingWhenErrorWhileSearching() throws Exception {
         setupSearchEventInteractorErrorCallbacks(Collections.singletonList(eventResult()));
 
-        findEventsPresenter.search(QUERY);
+        findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).hideLoading();
     }
@@ -86,7 +86,7 @@ public class FindEventsPresenterTest {
     public void shouldShowEventListWhenFinishSearching() throws Exception {
         setupSearchEventInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        findEventsPresenter.search(QUERY);
+        findStreamsPresenter.search(QUERY);
 
         verify(findStreamsView, times(1)).showContent();
     }

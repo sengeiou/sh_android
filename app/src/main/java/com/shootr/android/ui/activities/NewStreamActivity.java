@@ -17,7 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.ui.presenter.NewEventPresenter;
+import com.shootr.android.ui.presenter.NewStreamPresenter;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.util.MenuItemValueHolder;
@@ -33,7 +33,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     private static final String EXTRA_EDITED_TITLE = "title";
     private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
-    @Inject NewEventPresenter presenter;
+    @Inject NewStreamPresenter presenter;
 
     @Bind(R.id.new_stream_title) EditText titleView;
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
@@ -210,7 +210,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         new AlertDialog.Builder(this).setMessage(R.string.delete_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmDeleteEvent();
+                  presenter.confirmDeleteStream();
               }
           })
           .setNegativeButton(R.string.cancel, null)

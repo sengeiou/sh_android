@@ -14,7 +14,7 @@ import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindEventsPresenter implements Presenter {
+public class FindStreamsPresenter implements Presenter {
 
     private final StreamSearchInteractor streamSearchInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
@@ -24,7 +24,7 @@ public class FindEventsPresenter implements Presenter {
     private String lastQueryText;
     private boolean hasBeenPaused = false;
 
-    @Inject public FindEventsPresenter(StreamSearchInteractor streamSearchInteractor,
+    @Inject public FindStreamsPresenter(StreamSearchInteractor streamSearchInteractor,
       StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamSearchInteractor = streamSearchInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
@@ -56,19 +56,19 @@ public class FindEventsPresenter implements Presenter {
         });
     }
 
-    public void selectEvent(StreamResultModel event) {
-        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
+    public void selectStream(StreamResultModel stream) {
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
     }
 
-    private void selectEvent(final String idEvent, String eventTitle) {
-        findStreamsView.navigateToStreamTimeline(idEvent, eventTitle);
+    private void selectStream(final String idStream, String streamTitle) {
+        findStreamsView.navigateToStreamTimeline(idStream, streamTitle);
     }
 
     private void onSearchResults(StreamSearchResultList streamSearchResultList) {
         List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
-            List<StreamResultModel> eventModels = streamResultModelMapper.transform(streamSearchResults);
-            renderViewEventsList(eventModels);
+            List<StreamResultModel> streamModels = streamResultModelMapper.transform(streamSearchResults);
+            renderViewStreamsList(streamModels);
         } else {
             this.showViewEmpty();
         }
@@ -80,10 +80,10 @@ public class FindEventsPresenter implements Presenter {
         findStreamsView.hideContent();
     }
 
-    private void renderViewEventsList(List<StreamResultModel> eventModels) {
+    private void renderViewStreamsList(List<StreamResultModel> streamModels) {
         findStreamsView.showContent();
         findStreamsView.hideEmpty();
-        findStreamsView.renderStreams(eventModels);
+        findStreamsView.renderStreams(streamModels);
     }
 
     private void showViewError(ShootrException error) {
@@ -99,7 +99,7 @@ public class FindEventsPresenter implements Presenter {
         findStreamsView.showError(errorMessage);
     }
 
-    public void restoreEvents(List<StreamResultModel> restoredResults) {
+    public void restoreStreams(List<StreamResultModel> restoredResults) {
         if (restoredResults != null && !restoredResults.isEmpty()) {
             findStreamsView.renderStreams(restoredResults);
         }

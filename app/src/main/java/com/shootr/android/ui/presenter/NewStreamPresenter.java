@@ -18,7 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class NewEventPresenter implements Presenter {
+public class NewStreamPresenter implements Presenter {
 
     public static final int MINIMUM_TITLE_LENGTH = 3;
     public static final int MINIMUM_SHORT_TITLE_LENGTH = 3;
@@ -30,23 +30,21 @@ public class NewEventPresenter implements Presenter {
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private NewStreamView newEventView;
+    private NewStreamView newStreamView;
 
-    private boolean isNewEvent;
+    private boolean isNewStream;
     private String preloadedTitle;
     private String preloadedShortTitle;
-    private String preloadedEventId;
+    private String preloadedStreamId;
     private String currentTitle;
     private String currentShortTitle;
     private boolean notifyCreation;
     private boolean shortTitleEditedManually;
 
     //region Initialization
-    @Inject public NewEventPresenter(CreateStreamInteractor createStreamInteractor,
-      GetStreamInteractor getStreamInteractor,
-      DeleteStreamInteractor deleteStreamInteractor,
-      StreamModelMapper streamModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+    @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
+      GetStreamInteractor getStreamInteractor, DeleteStreamInteractor deleteStreamInteractor,
+      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
         this.deleteStreamInteractor = deleteStreamInteractor;
@@ -54,36 +52,36 @@ public class NewEventPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(NewStreamView newEventView, String optionalIdEventToEdit) {
-        this.newEventView = newEventView;
-        this.isNewEvent = optionalIdEventToEdit == null;
+    public void initialize(NewStreamView newStreamView, String optionalIdStreamToEdit) {
+        this.newStreamView = newStreamView;
+        this.isNewStream = optionalIdStreamToEdit == null;
         this.shortTitleEditedManually = false;
-        if (!isNewEvent) {
-            this.preloadEventToEdit(optionalIdEventToEdit);
+        if (!isNewStream) {
+            this.preloadStreamToEdit(optionalIdStreamToEdit);
         }
         updateDoneButtonStatus();
     }
 
-    private void preloadEventToEdit(String optionalIdEventToEdit) {
-        getStreamInteractor.loadStream(optionalIdEventToEdit, new GetStreamInteractor.Callback() {
+    private void preloadStreamToEdit(String optionalIdStreamToEdit) {
+        getStreamInteractor.loadStream(optionalIdStreamToEdit, new GetStreamInteractor.Callback() {
             @Override public void onLoaded(Stream stream) {
-                setDefaultEventInfo(streamModelMapper.transform(stream));
+                setDefaultStreamInfo(streamModelMapper.transform(stream));
             }
         });
     }
 
-    private void setDefaultEventInfo(StreamModel streamModel) {
-        preloadedEventId = streamModel.getIdStream();
+    private void setDefaultStreamInfo(StreamModel streamModel) {
+        preloadedStreamId = streamModel.getIdStream();
         preloadedTitle = streamModel.getTitle();
-        newEventView.setStreamTitle(preloadedTitle);
-        newEventView.showDeleteStreamButton();
+        newStreamView.setStreamTitle(preloadedTitle);
+        newStreamView.showDeleteStreamButton();
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
             preloadedShortTitle = streamModel.getTag();
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
-            newEventView.setStreamTitle(preloadedTitle);
-            newEventView.showShortTitle(preloadedShortTitle);
+            newStreamView.setStreamTitle(preloadedTitle);
+            newStreamView.showShortTitle(preloadedShortTitle);
 
             bindShortTitleToTitleIfMatches();
         }
@@ -95,7 +93,7 @@ public class NewEventPresenter implements Presenter {
         currentTitle = filterTitle(title);
         if(!shortTitleEditedManually){
             currentShortTitle = filterShortTitle(title);
-            newEventView.showShortTitle(currentShortTitle);
+            newStreamView.showShortTitle(currentShortTitle);
         }
         this.updateDoneButtonStatus();
     }
@@ -107,75 +105,75 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void done() {
-        newEventView.hideKeyboard();
-        if (isNewEvent) {
+        newStreamView.hideKeyboard();
+        if (isNewStream) {
             this.askNotificationConfirmation();
         } else {
-            newEventView.showLoading();
-            this.editEvent(preloadedEventId);
+            newStreamView.showLoading();
+            this.editStream(preloadedStreamId);
         }
     }
 
     private void askNotificationConfirmation() {
-        newEventView.showNotificationConfirmation();
+        newStreamView.showNotificationConfirmation();
     }
 
     public void confirmNotify(boolean notify) {
         notifyCreation = notify;
-        newEventView.showLoading();
-        createEvent();
+        newStreamView.showLoading();
+        createStream();
     }
 
     public void delete() {
-        newEventView.askDeleteStreamConfirmation();
+        newStreamView.askDeleteStreamConfirmation();
     }
 
-    public void confirmDeleteEvent() {
-        deleteStreamInteractor.deleteStream(preloadedEventId, new Interactor.CompletedCallback() {
+    public void confirmDeleteStream() {
+        deleteStreamInteractor.deleteStream(preloadedStreamId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                newEventView.closeScreenWithExitStream();
+                newStreamView.closeScreenWithExitStream();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
-                newEventView.showError(errorMessage);
+                newStreamView.showError(errorMessage);
             }
         });
     }
 
-    private void createEvent() {
-        sendEvent(null);
+    private void createStream() {
+        sendStream(null);
     }
 
-    private void editEvent(String preloadedEventId) {
-        sendEvent(preloadedEventId);
+    private void editStream(String preloadedStreamId) {
+        sendStream(preloadedStreamId);
     }
 
-    private void sendEvent(String preloadedEventId) {
-        String title = filterTitle(newEventView.getStreamTitle());
-        String shortTitle = filterShortTitle(newEventView.getStreamShortTitle());
-        createStreamInteractor.sendStream(preloadedEventId,
+    private void sendStream(String preloadedStreamId) {
+        String title = filterTitle(newStreamView.getStreamTitle());
+        String shortTitle = filterShortTitle(newStreamView.getStreamShortTitle());
+        createStreamInteractor.sendStream(preloadedStreamId,
           title,
           shortTitle,
           notifyCreation,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
-                  eventCreated(stream);
+                  streamCreated(stream);
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  eventCreationError(error);
+                  streamCreationError(error);
               }
           });
     }
 
-    private void eventCreated(Stream stream) {
-        newEventView.closeScreenWithResult(stream.getId(), stream.getTitle());
+    private void streamCreated(Stream stream) {
+        newStreamView.closeScreenWithResult(stream.getId(), stream.getTitle());
     }
 
-    private void eventCreationError(ShootrException error) {
-        newEventView.hideLoading();
+    private void streamCreationError(ShootrException error) {
+        newStreamView.hideLoading();
         if (error instanceof DomainValidationException) {
             DomainValidationException validationException = (DomainValidationException) error;
             List<FieldValidationError> errors = validationException.getErrors();
@@ -209,11 +207,11 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void showViewTitleError(String errorMessage) {
-        newEventView.showTitleError(errorMessage);
+        newStreamView.showTitleError(errorMessage);
     }
 
     private void showViewError(String errorMessage) {
-        newEventView.showError(errorMessage);
+        newStreamView.showError(errorMessage);
     }
     //endregion
 
@@ -231,10 +229,10 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void updateDoneButtonStatus() {
-        newEventView.doneButtonEnabled(canSendEvent());
+        newStreamView.doneButtonEnabled(canSendStream());
     }
 
-    private boolean canSendEvent() {
+    private boolean canSendStream() {
         return isValidTitle() && isValidShortTitle();
     }
 

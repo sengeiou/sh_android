@@ -19,7 +19,7 @@ import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.presenter.FindEventsPresenter;
+import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.Serializable;
@@ -39,7 +39,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.find_streams_empty) View emptyView;
     @Bind(R.id.find_streams_loading) View loadingView;
 
-    @Inject FindEventsPresenter findEventsPresenter;
+    @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject PicassoWrapper picasso;
 
 
@@ -78,14 +78,14 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(StreamResultModel event) {
-                findEventsPresenter.selectEvent(event);
+                findStreamsPresenter.selectStream(event);
             }
         });
         streamsList.setAdapter(adapter);
     }
 
     private void searchStreams() {
-        findEventsPresenter.search(currentSearchQuery);
+        findStreamsPresenter.search(currentSearchQuery);
     }
 
     //region Lifecycle methods
@@ -140,23 +140,23 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
         List<StreamResultModel> restoredResults = (List<StreamResultModel>) savedInstanceState.getSerializable(
           EXTRA_RESULTS);
-        findEventsPresenter.restoreEvents(restoredResults);
+        findStreamsPresenter.restoreStreams(restoredResults);
     }
 
     @Override public void initializePresenter() {
-        findEventsPresenter.initialize(this);
+        findStreamsPresenter.initialize(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        findEventsPresenter.resume();
+        findStreamsPresenter.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        findEventsPresenter.pause();
+        findStreamsPresenter.pause();
     }
 
     @Override public void finish() {

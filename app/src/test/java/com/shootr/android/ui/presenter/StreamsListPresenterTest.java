@@ -32,7 +32,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class EventsListPresenterTest {
+public class StreamsListPresenterTest {
 
     private static final String SELECTED_EVENT_ID = "selected_event";
     private static final String SELECTED_EVENT_TITLE = "title";
@@ -45,14 +45,14 @@ public class EventsListPresenterTest {
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
 
-    private EventsListPresenter presenter;
+    private StreamsListPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
           new StreamResultModelMapper(streamModelMapper);
-        presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
+        presenter = new StreamsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }
@@ -64,19 +64,19 @@ public class EventsListPresenterTest {
     }
 
     @Test public void shouldNavigateToEventTimelineWhenEventSelected() throws Exception {
-        presenter.selectEvent(selectedEventModel());
+        presenter.selectStream(selectedEventModel());
 
         verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldNavigateToEventTimelineWhenNewEventCreated() throws Exception {
-        presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        presenter.streamCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
         verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldNavigateToEventTimelineWhenNewEventCreatedIfSelectEventInteractorCallbacksEventId() throws Exception {
-        presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        presenter.streamCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
         verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
@@ -84,7 +84,7 @@ public class EventsListPresenterTest {
     @Test public void shouldRenderEventListWhenEventListInteractorCallbacksResults() throws Exception {
         setupEventListInteractorCallbacks(Arrays.asList(eventResult(), eventResult()));
 
-        presenter.loadDefaultEventList();
+        presenter.loadDefaultStreamList();
 
         verify(streamsListView).renderStream(anyListOf(StreamResultModel.class));
     }
@@ -92,7 +92,7 @@ public class EventsListPresenterTest {
     @Test public void shouldHideLoadingWhenEventListInteractorCallbacksResults() throws Exception {
         setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        presenter.loadDefaultEventList();
+        presenter.loadDefaultStreamList();
 
         verify(streamsListView).hideLoading();
     }
@@ -100,7 +100,7 @@ public class EventsListPresenterTest {
     @Test public void shouldNotShowLoadingWhenEventListInteractorCallbacksResults() throws Exception {
         setupEventListInteractorCallbacks(Collections.singletonList(eventResult()));
 
-        presenter.loadDefaultEventList();
+        presenter.loadDefaultStreamList();
 
         verify(streamsListView, never()).showLoading();
     }
@@ -108,7 +108,7 @@ public class EventsListPresenterTest {
     @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {
         setupEventListInteractorCallbacks(new ArrayList<StreamSearchResult>());
 
-        presenter.loadDefaultEventList();
+        presenter.loadDefaultStreamList();
 
         verify(streamsListView).showLoading();
     }
