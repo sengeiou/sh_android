@@ -1,7 +1,7 @@
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class EventsListActivityTest {
+public class StreamsListActivityTest {
 
     @Test @Ignore
     public void shouldBeLauncherActivity() throws Exception {
