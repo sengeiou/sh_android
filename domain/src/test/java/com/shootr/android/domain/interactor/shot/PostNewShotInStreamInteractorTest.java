@@ -52,7 +52,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
+        Shot.ShotStreamInfo eventInfo = publishedShot.getStreamInfo();
         assertEventInfoIsFromEvent(eventInfo, watchingEvent());
     }
 
@@ -65,7 +65,7 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
         ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
         verify(shotSender).sendShot(shotArgumentCaptor.capture(), any(File.class));
         Shot publishedShot = shotArgumentCaptor.getValue();
-        Shot.ShotEventInfo eventInfo = publishedShot.getEventInfo();
+        Shot.ShotStreamInfo eventInfo = publishedShot.getStreamInfo();
         assertThat(eventInfo).isNull();
     }
 

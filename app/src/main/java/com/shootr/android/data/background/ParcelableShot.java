@@ -38,10 +38,10 @@ public class ParcelableShot implements Parcelable {
         dest.writeString(userInfo != null ? userInfo.getUsername() : null);
         dest.writeString(userInfo != null ? userInfo.getAvatar() : null);
 
-        Shot.ShotEventInfo eventInfo = shot.getEventInfo();
-        dest.writeString(eventInfo != null ? eventInfo.getIdEvent() : null);
-        dest.writeString(eventInfo != null ? eventInfo.getEventTitle() : null);
-        dest.writeString(eventInfo != null ? eventInfo.getEventTag() : null);
+        Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
+        dest.writeString(eventInfo != null ? eventInfo.getIdStream() : null);
+        dest.writeString(eventInfo != null ? eventInfo.getStreamTitle() : null);
+        dest.writeString(eventInfo != null ? eventInfo.getStreamTag() : null);
 
         dest.writeString(shot.getParentShotId());
         dest.writeString(shot.getParentShotUserId());
@@ -71,13 +71,13 @@ public class ParcelableShot implements Parcelable {
             shot.setUserInfo(userInfo);
         }
 
-        Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(parcel.readString());
-        eventInfo.setEventTitle(parcel.readString());
-        eventInfo.setEventTag(parcel.readString());
-        String idEvent = eventInfo.getIdEvent();
+        Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+        eventInfo.setIdStream(parcel.readString());
+        eventInfo.setStreamTitle(parcel.readString());
+        eventInfo.setStreamTag(parcel.readString());
+        String idEvent = eventInfo.getIdStream();
         if (idEvent != null) {
-            shot.setEventInfo(eventInfo);
+            shot.setStreamInfo(eventInfo);
         }
 
         shot.setParentShotId(parcel.readString());

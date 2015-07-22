@@ -60,7 +60,7 @@ public class StreamInfo {
             return this;
         }
 
-        public Builder event(Stream stream) {
+        public Builder stream(Stream stream) {
             streamInfo.setStream(stream);
             return this;
         }

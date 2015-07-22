@@ -55,7 +55,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
           new DummyErrorCallback());
 
         Shot sentShot = captureSentShot();
-        assertThat(sentShot.getEventInfo()).isEqualTo(parentEventInfo());
+        assertThat(sentShot.getStreamInfo()).isEqualTo(parentEventInfo());
     }
 
     @Test public void shouldHaveParentShotId() throws Exception {
@@ -111,12 +111,12 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
         assertThat(sentShot.getParentShotUsername()).isEqualTo(PARENT_SHOT_USERNAME);
     }
 
-    private Shot.ShotEventInfo parentEventInfo() {
-        Shot.ShotEventInfo shotEventInfo = new Shot.ShotEventInfo();
-        shotEventInfo.setIdEvent(String.valueOf(PARENT_EVENT_ID));
-        shotEventInfo.setEventTitle(PARENT_EVENT_TITLE);
-        shotEventInfo.setEventTag(PARENT_EVENT_TAG);
-        return shotEventInfo;
+    private Shot.ShotStreamInfo parentEventInfo() {
+        Shot.ShotStreamInfo shotStreamInfo = new Shot.ShotStreamInfo();
+        shotStreamInfo.setIdStream(String.valueOf(PARENT_EVENT_ID));
+        shotStreamInfo.setStreamTitle(PARENT_EVENT_TITLE);
+        shotStreamInfo.setStreamTag(PARENT_EVENT_TAG);
+        return shotStreamInfo;
     }
 
     private void setupParentShot() {
@@ -131,7 +131,7 @@ public class PostNewShotAsReplyInteractorTest extends PostNewShotInteractorTestB
     private Shot parentShot() {
         Shot shot = new Shot();
         shot.setIdShot(PARENT_SHOT_ID);
-        shot.setEventInfo(parentEventInfo());
+        shot.setStreamInfo(parentEventInfo());
         shot.setUserInfo(parentUserInfo());
         shot.setType(ShotType.COMMENT);
         return shot;

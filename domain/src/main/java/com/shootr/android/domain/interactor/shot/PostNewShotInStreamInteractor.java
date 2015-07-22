@@ -32,11 +32,11 @@ public class PostNewShotInStreamInteractor extends PostNewShotInteractor {
     @Override protected void fillShotStreamInfo(Shot shot) {
         Stream stream = currentVisibleStream();
         if (stream != null) {
-            Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(stream.getId());
-            eventInfo.setEventTitle(stream.getTitle());
-            eventInfo.setEventTag(stream.getTag());
-            shot.setEventInfo(eventInfo);
+            Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+            eventInfo.setIdStream(stream.getId());
+            eventInfo.setStreamTitle(stream.getTitle());
+            eventInfo.setStreamTag(stream.getTag());
+            shot.setStreamInfo(eventInfo);
         }
     }
 

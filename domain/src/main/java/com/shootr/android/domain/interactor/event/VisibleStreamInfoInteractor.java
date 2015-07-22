@@ -140,7 +140,7 @@ public class VisibleStreamInfoInteractor implements Interactor {
     private StreamInfo buildStreamInfo(Stream currentVisibleStream, List<User> streamWatchers, User currentUser) {
         boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
-          .event(currentVisibleStream)
+          .stream(currentVisibleStream)
           .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();

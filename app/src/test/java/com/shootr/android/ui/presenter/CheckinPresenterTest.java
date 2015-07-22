@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 public class CheckinPresenterTest {
 
-    private static final String EVENT_ID = "event";
+    private static final String EVENT_ID = "stream";
 
     @Mock PerformCheckinInteractor performCheckinInteractor;
     @Mock CheckinView checkinView;

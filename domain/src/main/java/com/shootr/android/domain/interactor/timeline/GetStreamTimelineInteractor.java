@@ -72,7 +72,7 @@ public class GetStreamTimelineInteractor implements Interactor {
 
     private StreamTimelineParameters buildParameters(Stream stream) {
         return StreamTimelineParameters.builder()
-          .forEvent(stream)
+          .forStream(stream)
           .build();
     }
 

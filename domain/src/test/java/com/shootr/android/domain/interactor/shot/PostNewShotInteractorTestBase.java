@@ -85,10 +85,10 @@ public abstract class PostNewShotInteractorTestBase {
         assertThat(userInfo.getAvatar()).isEqualTo(user.getPhoto());
     }
 
-    protected void assertEventInfoIsFromEvent(Shot.ShotEventInfo eventInfo, Stream stream) {
-        assertThat(eventInfo.getIdEvent()).isEqualTo(stream.getId());
-        assertThat(eventInfo.getEventTitle()).isEqualTo(stream.getTitle());
-        assertThat(eventInfo.getEventTag()).isEqualTo(stream.getTag());
+    protected void assertEventInfoIsFromEvent(Shot.ShotStreamInfo eventInfo, Stream stream) {
+        assertThat(eventInfo.getIdStream()).isEqualTo(stream.getId());
+        assertThat(eventInfo.getStreamTitle()).isEqualTo(stream.getTitle());
+        assertThat(eventInfo.getStreamTag()).isEqualTo(stream.getTag());
     }
     //endregion
 

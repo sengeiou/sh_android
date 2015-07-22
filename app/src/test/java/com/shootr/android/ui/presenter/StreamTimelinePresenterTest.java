@@ -43,7 +43,7 @@ public class StreamTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
-    private static final String SELECTED_EVENT_ID = "event";
+    private static final String SELECTED_EVENT_ID = "stream";
 
     @Mock EventTimelineView eventTimelineView;
     @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
@@ -64,7 +64,7 @@ public class StreamTimelinePresenterTest {
         shotSentReceiver = presenter;
     }
 
-    //region Select event
+    //region Select stream
 
     @Test
     public void shouldSelectEventWhenInitialized() throws Exception {

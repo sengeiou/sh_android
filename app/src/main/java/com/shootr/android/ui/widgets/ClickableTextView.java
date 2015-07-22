@@ -104,7 +104,7 @@ public class ClickableTextView extends TextView {
     }
 
     /**
-     * Triggers ClickableSpans' onClick event when tapped over the span, and does nothing otherwise.
+     * Triggers ClickableSpans' onClick stream when tapped over the span, and does nothing otherwise.
      * Mirror implementation from {@link LinkMovementMethod}
      */
     @Override public boolean onTouchEvent(@NonNull MotionEvent event) {

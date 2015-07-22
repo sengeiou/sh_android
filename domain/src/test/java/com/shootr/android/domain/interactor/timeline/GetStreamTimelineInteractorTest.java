@@ -141,13 +141,13 @@ public class GetStreamTimelineInteractorTest {
     private Shot shotWithEvent() {
         Shot shot = new Shot();
         shot.setIdShot(ID_SHOT_WITH_EVENT);
-        shot.setEventInfo(watchingEventInfo());
+        shot.setStreamInfo(watchingEventInfo());
         return shot;
     }
 
-    private Shot.ShotEventInfo watchingEventInfo() {
-        Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(WATCHING_EVENT_ID);
+    private Shot.ShotStreamInfo watchingEventInfo() {
+        Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+        eventInfo.setIdStream(WATCHING_EVENT_ID);
         return eventInfo;
     }
 

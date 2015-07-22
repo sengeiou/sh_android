@@ -67,7 +67,7 @@ public class GetOlderStreamTimelineInteractor implements Interactor {
     private StreamTimelineParameters buildTimelineParameters() {
         Stream visibleStream = getVisibleStream();
         return StreamTimelineParameters.builder() //
-                .forEvent(visibleStream) //
+                .forStream(visibleStream) //
                 .maxDate(currentOldestDate) //
                 .build();
     }

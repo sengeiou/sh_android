@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class RemoveFromFavoritesInteractorTest {
 
-    private static final String ID_EVENT_FAVORITE = "event";
+    private static final String ID_EVENT_FAVORITE = "stream";
     private static final String ID_EVENT_NOT_FAVORITE = "event_not_favorite";
 
     private RemoveFromFavoritesInteractor interactor;

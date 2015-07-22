@@ -14,7 +14,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Gives the number of people watching the event the current user has visible.
+ * Gives the number of people watching the stream the current user has visible.
  */
 public class WatchNumberInteractor implements Interactor{
 

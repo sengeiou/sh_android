@@ -19,6 +19,6 @@ public interface FavoriteApiService {
     @POST("/user/favorites/")
     FavoriteApiEntity createFavorite(@Body FavoriteEntity favorite) throws IOException;
 
-    @DELETE("/user/favorites/event/{idEvent}")
+    @DELETE("/user/favorites/stream/{idEvent}")
     Response deleteFavorite(@Path("idEvent") String idEvent) throws IOException;
 }

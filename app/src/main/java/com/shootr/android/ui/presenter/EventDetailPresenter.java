@@ -72,7 +72,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    //region Edit event
+    //region Edit stream
     public void editEventClick() {
         eventDetailView.showEditEventPhotoOrInfo();
     }
@@ -107,7 +107,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
                   eventDetailView.showEditPicture(eventModel.getPicture());
                   eventDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
-                  Timber.e(error, "Error changing event photo");
+                  Timber.e(error, "Error changing stream photo");
               }
           });
     }

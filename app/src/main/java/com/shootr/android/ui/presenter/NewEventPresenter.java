@@ -184,7 +184,7 @@ public class NewEventPresenter implements Presenter {
             onCommunicationError();
         } else {
             //TODO more error type handling
-            Timber.e(error, "Unhandled error creating event.");
+            Timber.e(error, "Unhandled error creating stream.");
             showViewError(errorMessageFactory.getUnknownErrorMessage());
         }
     }

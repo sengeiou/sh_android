@@ -80,7 +80,7 @@ public class ParcelableShotTest {
     @Test
     public void testShotFromParcelableHasEventInfo() throws Exception {
         Shot shotStub = shotStub();
-        Shot.ShotEventInfo eventInfoStub = shotStub.getEventInfo();
+        Shot.ShotStreamInfo eventInfoStub = shotStub.getStreamInfo();
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
 
         Parcel parcel = MockParcel.obtain();
@@ -89,17 +89,17 @@ public class ParcelableShotTest {
 
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
-        Shot.ShotEventInfo eventInfoFromParcel = shotFromParcel.getEventInfo();
+        Shot.ShotStreamInfo eventInfoFromParcel = shotFromParcel.getStreamInfo();
 
-        assertThat(eventInfoFromParcel.getIdEvent()).isEqualTo(eventInfoStub.getIdEvent());
-        assertThat(eventInfoFromParcel.getEventTitle()).isEqualTo(eventInfoStub.getEventTitle());
-        assertThat(eventInfoFromParcel.getEventTag()).isEqualTo(eventInfoStub.getEventTag());
+        assertThat(eventInfoFromParcel.getIdStream()).isEqualTo(eventInfoStub.getIdStream());
+        assertThat(eventInfoFromParcel.getStreamTitle()).isEqualTo(eventInfoStub.getStreamTitle());
+        assertThat(eventInfoFromParcel.getStreamTag()).isEqualTo(eventInfoStub.getStreamTag());
     }
 
     @Test
     public void testEventInfoFromParcelableIsNullIfOriginalWasNull() throws Exception {
         Shot shotStub = shotStub();
-        shotStub.setEventInfo(null);
+        shotStub.setStreamInfo(null);
         ParcelableShot parcelableShot = new ParcelableShot(shotStub);
 
         Parcel parcel = MockParcel.obtain();
@@ -107,7 +107,7 @@ public class ParcelableShotTest {
 
         ParcelableShot createdFromParcel = ParcelableShot.CREATOR.createFromParcel(parcel);
         Shot shotFromParcel = createdFromParcel.getShot();
-        Shot.ShotEventInfo eventInfoFromParcel = shotFromParcel.getEventInfo();
+        Shot.ShotStreamInfo eventInfoFromParcel = shotFromParcel.getStreamInfo();
         assertThat(eventInfoFromParcel).isNull();
     }
 
@@ -177,15 +177,15 @@ public class ParcelableShotTest {
         shot.setImage(IMAGE_STUB);
         shot.setPublishDate(new Date());
         shot.setUserInfo(userInfo());
-        shot.setEventInfo(eventInfo());
+        shot.setStreamInfo(eventInfo());
         return shot;
     }
 
-    private Shot.ShotEventInfo eventInfo() {
-        Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-        eventInfo.setIdEvent(String.valueOf(EVENT_ID));
-        eventInfo.setEventTitle(EVENT_TITLE);
-        eventInfo.setEventTag(EVENT_TAG);
+    private Shot.ShotStreamInfo eventInfo() {
+        Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+        eventInfo.setIdStream(String.valueOf(EVENT_ID));
+        eventInfo.setStreamTitle(EVENT_TITLE);
+        eventInfo.setStreamTag(EVENT_TAG);
         return eventInfo;
     }
 

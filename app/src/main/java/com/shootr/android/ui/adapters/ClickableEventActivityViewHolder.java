@@ -44,7 +44,7 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
             return super.formatActivityComment(activity);
         }
         String commentPattern = getPatternText();
-        String eventPlaceholder = "\\(event\\)";
+        String eventPlaceholder = "\\(stream\\)";
         String eventTitle = activity.getEventTitle();
         SpannableStringBuilder spannableCheckinPattern = new SpannableStringBuilder(commentPattern);
 
