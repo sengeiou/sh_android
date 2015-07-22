@@ -10,7 +10,7 @@
   >
 
   <ImageView
-    android:id="@+id/event_media_item"
+    android:id="@+id/stream_media_item"
     android:layout_width="match_parent"
     android:scaleType="centerCrop"
     android:layout_height="120dp"

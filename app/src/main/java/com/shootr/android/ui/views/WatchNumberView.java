@@ -7,5 +7,5 @@ public interface WatchNumberView {
 
     void hideWatchingPeopleCount();
 
-    void navigateToEventDetail(String idEvent);
+    void navigateToStreamDetail(String idStream);
 }

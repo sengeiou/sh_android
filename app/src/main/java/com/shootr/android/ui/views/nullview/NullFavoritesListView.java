@@ -7,7 +7,7 @@ import java.util.List;
 public class NullFavoritesListView implements FavoritesListView {
 
     @Override
-    public void renderFavorites(List<StreamResultModel> eventModels) {
+    public void renderFavorites(List<StreamResultModel> streamModels) {
         /* no-op */
     }
 
@@ -22,7 +22,7 @@ public class NullFavoritesListView implements FavoritesListView {
     }
 
     @Override
-    public void navigateToEventTimeline(String idEvent, String title) {
+    public void navigateToStreamTimeline(String idStream, String title) {
         /* no-op */
     }
 

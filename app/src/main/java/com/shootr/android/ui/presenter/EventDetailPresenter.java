@@ -15,7 +15,7 @@ import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
-import com.shootr.android.ui.views.EventDetailView;
+import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.WatchersTimeFormatter;
 import com.squareup.otto.Bus;
@@ -38,7 +38,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final WatchersTimeFormatter watchersTimeFormatter;
     private final GetStreamMediaCountInteractor eventMediaCountInteractor;
 
-    private EventDetailView eventDetailView;
+    private StreamDetailView streamDetailView;
     private String idEvent;
 
     private UserModel currentUserWatchingModel;
@@ -61,24 +61,24 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
-    public void initialize(EventDetailView eventDetailView, String idEvent) {
-        setView(eventDetailView);
+    public void initialize(StreamDetailView streamDetailView, String idEvent) {
+        setView(streamDetailView);
         this.idEvent = idEvent;
         this.loadEventInfo();
     }
 
-    protected void setView(EventDetailView eventDetailView){
-        this.eventDetailView = eventDetailView;
+    protected void setView(StreamDetailView streamDetailView){
+        this.streamDetailView = streamDetailView;
     }
     //endregion
 
     //region Edit stream
     public void editEventClick() {
-        eventDetailView.showEditEventPhotoOrInfo();
+        streamDetailView.showEditStreamPhotoOrInfo();
     }
 
     public void editEventInfo() {
-        eventDetailView.navigateToEditEvent(idEvent);
+        streamDetailView.navigateToEditStream(idEvent);
     }
 
     public void resultFromEditEventInfo(String idEventEdited) {
@@ -88,24 +88,24 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void editEventPhoto() {
-        eventDetailView.showPhotoPicker();
+        streamDetailView.showPhotoPicker();
     }
 
     public void photoSelected(File photoFile) {
-        eventDetailView.showLoadingPictureUpload();
+        streamDetailView.showLoadingPictureUpload();
         changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(),
           photoFile,
           new ChangeStreamPhotoInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   renderEventInfo(stream);
-                  eventDetailView.hideLoadingPictureUpload();
-                  eventDetailView.showEditPicture(stream.getPicture());
+                  streamDetailView.hideLoadingPictureUpload();
+                  streamDetailView.showEditPicture(stream.getPicture());
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  eventDetailView.showEditPicture(streamModel.getPicture());
-                  eventDetailView.hideLoadingPictureUpload();
+                  streamDetailView.showEditPicture(streamModel.getPicture());
+                  streamDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
                   Timber.e(error, "Error changing stream photo");
               }
@@ -131,7 +131,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
-                eventDetailView.showError(errorMessage);
+                streamDetailView.showError(errorMessage);
             }
         });
     }
@@ -155,8 +155,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         eventMediaCountInteractor.getStreamMediaCount(idEvent, new Interactor.Callback<Integer>() {
             @Override public void onLoaded(Integer count) {
                 eventMediaCount = count;
-                eventDetailView.showMediaCount();
-                eventDetailView.setMediaCount(count);
+                streamDetailView.showMediaCount();
+                streamDetailView.setMediaCount(count);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -166,13 +166,13 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void showViewDetail() {
-        eventDetailView.showContent();
-        eventDetailView.showDetail();
+        streamDetailView.showContent();
+        streamDetailView.showDetail();
     }
     //endregion
 
     public void clickAuthor() {
-        eventDetailView.navigateToUser(streamModel.getAuthorId());
+        streamDetailView.navigateToUser(streamModel.getAuthorId());
     }
     //endregion
 
@@ -185,14 +185,14 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void zoomPhoto() {
-        eventDetailView.zoomPhoto(streamModel.getPicture());
+        streamDetailView.zoomPhoto(streamModel.getPicture());
     }
 
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
         obtainJoinDatesInText(watcherModels);
-        eventDetailView.setWatchers(watcherModels);
+        streamDetailView.setWatchers(watcherModels);
     }
 
     private void obtainJoinDatesInText(List<UserModel> watcherModels) {
@@ -205,61 +205,61 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         if(currentUserWatch != null){
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             currentUserWatchingModel.setJoinStreamDateText(watchersTimeFormatter.jointDateText(currentUserWatchingModel.getJoinStreamDate()));
-            eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
+            streamDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }
 
     private void renderEventInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
-        eventDetailView.setEventTitle(streamModel.getTitle());
-        eventDetailView.setEventPicture(streamModel.getPicture());
-        eventDetailView.setEventAuthor(streamModel.getAuthorUsername());
+        streamDetailView.setStreamTitle(streamModel.getTitle());
+        streamDetailView.setStreamPicture(streamModel.getPicture());
+        streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
         if (streamModel.amIAuthor()) {
-            eventDetailView.showEditEventButton();
-            eventDetailView.showEditPicture(streamModel.getPicture());
+            streamDetailView.showEditStreamButton();
+            streamDetailView.showEditPicture(streamModel.getPicture());
         } else {
-            eventDetailView.hideEditEventButton();
-            eventDetailView.hideEditPicture();
+            streamDetailView.hideEditStreamButton();
+            streamDetailView.hideEditPicture();
         }
     }
 
     private void renderWatchersCount(int watchersCount) {
-        eventDetailView.setWatchersCount(watchersCount);
+        streamDetailView.setWatchersCount(watchersCount);
     }
     //endregion
 
     //region View methods
     private void showViewLoading() {
-        eventDetailView.hideContent();
-        eventDetailView.showLoading();
+        streamDetailView.hideContent();
+        streamDetailView.showLoading();
     }
 
     private void hideViewLoading() {
-        eventDetailView.hideLoading();
+        streamDetailView.hideLoading();
     }
 
     private void showViewEmpty() {
-        eventDetailView.showContent();
-        eventDetailView.showEmpty();
+        streamDetailView.showContent();
+        streamDetailView.showEmpty();
     }
 
     private void hideViewEmpty() {
-        eventDetailView.hideEmpty();
+        streamDetailView.hideEmpty();
     }
     //endregion
 
     @Subscribe @Override public void onCommunicationError(CommunicationErrorStream event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        eventDetailView.showError(communicationErrorMessage);
+        streamDetailView.showError(communicationErrorMessage);
     }
 
     @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
-        eventDetailView.showError(connectionNotAvailableMessage);
+        streamDetailView.showError(connectionNotAvailableMessage);
     }
 
     private void showImageUploadError() {
-        eventDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
+        streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
     }
 
     @Override public void resume() {
@@ -271,6 +271,6 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void clickMedia() {
-        eventDetailView.navigateToMedia(idEvent, eventMediaCount);
+        streamDetailView.navigateToMedia(idEvent, eventMediaCount);
     }
 }

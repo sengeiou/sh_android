@@ -3,7 +3,7 @@ package com.shootr.android.ui.views;
 import com.shootr.android.ui.model.ShotModel;
 import java.util.List;
 
-public interface EventMediaView {
+public interface StreamMediaView {
 
     void setMedia(List<ShotModel> shotsWithMedia);
 

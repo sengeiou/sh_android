@@ -55,7 +55,7 @@ public class ListingListPresenter implements Presenter{
 
     private void renderViewEventsList(List<StreamResultModel> eventModels) {
         listingView.showContent();
-        listingView.renderEvents(eventModels);
+        listingView.renderStreams(eventModels);
     }
 
     @Override public void resume() {
@@ -73,6 +73,6 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        listingView.navigateToEventTimeline(idEvent, eventTitle);
+        listingView.navigateToStreamTimeline(idEvent, eventTitle);
     }
 }

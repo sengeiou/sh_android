@@ -4,13 +4,15 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface FavoritesListView extends LoadDataView {
+public interface StreamsListView extends LoadDataView {
 
-    void renderFavorites(List<StreamResultModel> streamModels);
+    void renderStream(List<StreamResultModel> streams);
+
+    void setCurrentWatchingStreamId(StreamResultModel streamId);
 
     void showContent();
 
-    void hideContent();
-
     void navigateToStreamTimeline(String idStream, String title);
+
+    void showNotificationsOff();
 }

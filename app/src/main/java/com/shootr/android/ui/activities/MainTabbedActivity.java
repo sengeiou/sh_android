@@ -17,7 +17,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.fragments.EventsListFragment;
+import com.shootr.android.ui.fragments.StreamsListFragment;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.model.UserModel;
@@ -132,7 +132,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 case 0:
                     return FavoritesFragment.newInstance();
                 case 1:
-                    return EventsListFragment.newInstance();
+                    return StreamsListFragment.newInstance();
                 case 2:
                     return PeopleFragment.newInstance();
                 default:

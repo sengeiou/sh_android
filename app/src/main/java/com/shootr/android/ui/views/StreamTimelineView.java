@@ -4,7 +4,7 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface EventTimelineView extends LoadDataView{
+public interface StreamTimelineView extends LoadDataView{
 
     void setShots(List<ShotModel> shots);
 

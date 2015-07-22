@@ -20,13 +20,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.NewEventActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -39,13 +38,13 @@ import com.shootr.android.ui.presenter.EventTimelinePresenter;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
-import com.shootr.android.ui.views.EventTimelineView;
+import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
 import com.shootr.android.ui.views.WatchNumberView;
-import com.shootr.android.ui.views.nullview.NullEventTimelineView;
+import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
@@ -58,11 +57,11 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class EventTimelineFragment extends BaseFragment
-  implements EventTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView {
+public class StreamTimelineFragment extends BaseFragment
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView {
 
-    public static final String EXTRA_EVENT_ID = "eventId";
-    public static final String EXTRA_EVENT_TITLE = "eventTitle";
+    public static final String EXTRA_STREAM_ID = "streamId";
+    public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_EVENT_DETAIL = 1;
 
     //region Fields
@@ -99,15 +98,15 @@ public class EventTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
 
-    public static EventTimelineFragment newInstance(String eventId, String eventTitle) {
+    public static StreamTimelineFragment newInstance(String eventId, String eventTitle) {
         Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putString(EXTRA_EVENT_ID, eventId);
-        fragmentArguments.putString(EXTRA_EVENT_TITLE, eventTitle);
+        fragmentArguments.putString(EXTRA_STREAM_ID, eventId);
+        fragmentArguments.putString(EXTRA_STREAM_TITLE, eventTitle);
         return newInstance(fragmentArguments);
     }
 
-    public static EventTimelineFragment newInstance(Bundle fragmentArguments) {
-        EventTimelineFragment fragment = new EventTimelineFragment();
+    public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
+        StreamTimelineFragment fragment = new StreamTimelineFragment();
         fragment.setArguments(fragmentArguments);
         return fragment;
     }
@@ -128,7 +127,7 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        eventTimelinePresenter.setView(new NullEventTimelineView());
+        eventTimelinePresenter.setView(new NullStreamTimelineView());
         newShotBarPresenter.setView(new NullNewShotBarView());
         watchNumberPresenter.setView(new NullWatchNumberView());
         favoriteStatusPresenter.setView(new NullFavoriteStatusView());
@@ -137,13 +136,13 @@ public class EventTimelineFragment extends BaseFragment
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        String idEvent = getArguments().getString(EXTRA_EVENT_ID);
+        String idEvent = getArguments().getString(EXTRA_STREAM_ID);
         initializeToolbar();
         initializePresenters(idEvent);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EVENT_DETAIL && resultCode == NewEventActivity.RESULT_EXIT_EVENT) {
+        if (requestCode == REQUEST_EVENT_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -450,9 +449,9 @@ public class EventTimelineFragment extends BaseFragment
         footerProgress.setVisibility(View.GONE);
     }
 
-    @Override public void navigateToEventDetail(String idEvent) {
-        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        intent.putExtra(EXTRA_EVENT_ID, idEvent);
+    @Override public void navigateToStreamDetail(String idStream) {
+        Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
+        intent.putExtra(EXTRA_STREAM_ID, idStream);
         startActivityForResult(intent, REQUEST_EVENT_DETAIL);
     }
 

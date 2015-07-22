@@ -4,15 +4,15 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface EventDetailView extends LoadDataView {
+public interface StreamDetailView extends LoadDataView {
 
-    void setEventTitle(String title);
+    void setStreamTitle(String title);
 
-    void setEventAuthor(String author);
+    void setStreamAuthor(String author);
 
-    void setEventPicture(String picture);
+    void setStreamPicture(String picture);
 
-    void showEditEventPhotoOrInfo();
+    void showEditStreamPhotoOrInfo();
 
     void showPhotoPicker();
 
@@ -32,7 +32,7 @@ public interface EventDetailView extends LoadDataView {
 
     void setCurrentUserWatching(UserModel userWatchingModel);
 
-    void navigateToEditEvent(String idEvent);
+    void navigateToEditStream(String idStream);
 
     void navigateToUser(String userId);
 
@@ -42,13 +42,13 @@ public interface EventDetailView extends LoadDataView {
 
     void showDetail();
 
-    void showEditEventButton();
+    void showEditStreamButton();
 
-    void hideEditEventButton();
+    void hideEditStreamButton();
 
     void setMediaCount(Integer mediaCount);
 
-    void navigateToMedia(String idEvent, Integer eventMediaCount);
+    void navigateToMedia(String idStream, Integer streamMediaCount);
 
     void showMediaCount();
 }

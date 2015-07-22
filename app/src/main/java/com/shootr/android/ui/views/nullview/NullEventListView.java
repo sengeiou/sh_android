@@ -1,16 +1,16 @@
 package com.shootr.android.ui.views.nullview;
 
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.ui.views.StreamsListView;
 import java.util.List;
 
-public class NullEventListView implements EventsListView {
+public class NullEventListView implements StreamsListView {
 
-    @Override public void renderEvents(List<StreamResultModel> events) {
+    @Override public void renderStream(List<StreamResultModel> streams) {
         /* no-op */
     }
 
-    @Override public void setCurrentWatchingEventId(StreamResultModel eventId) {
+    @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
         /* no-op */
     }
 
@@ -18,7 +18,7 @@ public class NullEventListView implements EventsListView {
         /* no-op */
     }
 
-    @Override public void navigateToEventTimeline(String idEvent, String title) {
+    @Override public void navigateToStreamTimeline(String idStream, String title) {
         /* no-op */
     }
 

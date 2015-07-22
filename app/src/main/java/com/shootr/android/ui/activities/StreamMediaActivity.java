@@ -13,27 +13,27 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.EventMediaPresenter;
-import com.shootr.android.ui.views.EventMediaView;
+import com.shootr.android.ui.views.StreamMediaView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventMediaActivity extends BaseToolbarDecoratedActivity implements EventMediaView {
+public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements StreamMediaView {
 
-    private static final String EXTRA_EVENT_ID = "eventId";
-    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
+    private static final String EXTRA_STREAM_ID = "streamId";
+    private static final String EXTRA_STREAM_MEDIA_COUNT = "streamMediaCount";
 
     private MediaAdapter mediaAdapter;
 
-    @Bind(R.id.event_media_recycler_view) RecyclerView mediaView;
+    @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
     @Bind(R.id.media_empty) View emptyView;
-    @Bind(R.id.event_media_loading) View loadingView;
+    @Bind(R.id.stream_media_loading) View loadingView;
 
     @Inject EventMediaPresenter presenter;
     @Inject PicassoWrapper picasso;
 
     @Override protected int getLayoutResource() {
-        return R.layout.activity_event_media;
+        return R.layout.activity_stream_media;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class EventMediaActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
-        String idEvent = intent.getStringExtra(EXTRA_EVENT_ID);
-        Integer eventMediaCount = intent.getIntExtra(EXTRA_EVENT_MEDIA_COUNT, 0);
-        presenter.initialize(this, idEvent, eventMediaCount);
+        String idStream = intent.getStringExtra(EXTRA_STREAM_ID);
+        Integer streamMediaCount = intent.getIntExtra(EXTRA_STREAM_MEDIA_COUNT, 0);
+        presenter.initialize(this, idStream, streamMediaCount);
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {

@@ -55,7 +55,7 @@ public class FavoritesListPresenter implements Presenter{
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        favoritesListView.navigateToEventTimeline(idEvent, eventTitle);
+        favoritesListView.navigateToStreamTimeline(idEvent, eventTitle);
     }
 
     @Override

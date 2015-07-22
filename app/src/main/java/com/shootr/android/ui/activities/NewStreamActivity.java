@@ -18,28 +18,28 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewEventPresenter;
-import com.shootr.android.ui.views.NewEventView;
+import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.util.MenuItemValueHolder;
 import javax.inject.Inject;
 
-public class NewEventActivity extends BaseToolbarActivity implements NewEventView {
+public class NewStreamActivity extends BaseToolbarActivity implements NewStreamView {
 
-    public static final int RESULT_EXIT_EVENT = 1;
-    public static final String KEY_EVENT_ID = "event_id";
+    public static final int RESULT_EXIT_STREAM = 1;
+    public static final String KEY_STREAM_ID = "stream_id";
 
-    public static final String KEY_EVENT_TITLE = "event_title";
+    public static final String KEY_STREAM_TITLE = "stream_title";
 
     private static final String EXTRA_EDITED_TITLE = "title";
     private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewEventPresenter presenter;
 
-    @Bind(R.id.new_event_title) EditText titleView;
-    @Bind(R.id.new_event_title_label) FloatLabelLayout titleLabelView;
-    @Bind(R.id.new_event_title_error) TextView titleErrorView;
-    @Bind(R.id.new_event_short_title) EditText shortTitleView;
-    @Bind(R.id.new_event_short_title_warning) TextView shortTitleErrorView;
+    @Bind(R.id.new_stream_title) EditText titleView;
+    @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
+    @Bind(R.id.new_stream_title_error) TextView titleErrorView;
+    @Bind(R.id.new_stream_short_title) EditText shortTitleView;
+    @Bind(R.id.new_stream_short_title_warning) TextView shortTitleErrorView;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
@@ -48,13 +48,13 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContainerContent(R.layout.activity_new_event);
-        String idEventToEdit = getIntent().getStringExtra(KEY_EVENT_ID);
+        setContainerContent(R.layout.activity_new_stream);
+        String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
-        initializeViews(idEventToEdit);
-        setupActionbar(idEventToEdit);
+        initializeViews(idStreamToEdit);
+        setupActionbar(idStreamToEdit);
 
-        initializePresenter(idEventToEdit);
+        initializePresenter(idStreamToEdit);
 
         if (savedInstanceState != null) {
             String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
@@ -72,7 +72,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
-    private void initializeViews(String idEventToEdit) {
+    private void initializeViews(String idStreamToEdit) {
         ButterKnife.bind(this);
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
@@ -103,25 +103,25 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         });
     }
 
-    private void setupActionbar(String idEventToEdit) {
+    private void setupActionbar(String idStreamToEdit) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
 
-        if (idEventToEdit != null) {
-            actionBar.setTitle(R.string.activity_edit_event_title);
+        if (idStreamToEdit != null) {
+            actionBar.setTitle(R.string.activity_edit_stream_title);
         }
     }
 
-    private void initializePresenter(String idEventToEdit) {
-        presenter.initialize(this, idEventToEdit);
+    private void initializePresenter(String idStreamToEdit) {
+        presenter.initialize(this, idStreamToEdit);
     }
     //endregion
 
     //region Activity methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_event, menu);
+        getMenuInflater().inflate(R.menu.new_stream, menu);
         doneMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_done));
         deleteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_delete));
         return true;
@@ -149,12 +149,12 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     //region View Methods
 
-    @Override public void setEventTitle(String title) {
+    @Override public void setStreamTitle(String title) {
         titleLabelView.showLabelWithoutAnimation();
         titleView.setText(title);
     }
 
-    @Override public String getEventTitle() {
+    @Override public String getStreamTitle() {
         return titleView.getText().toString();
     }
 
@@ -162,16 +162,16 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         titleErrorView.setText(errorMessage);
     }
 
-    @Override public void closeScreenWithResult(String eventId, String title) {
+    @Override public void closeScreenWithResult(String streamId, String title) {
         setResult(RESULT_OK, new Intent() //
-          .putExtra(KEY_EVENT_ID, eventId) //
-          .putExtra(KEY_EVENT_TITLE, title));
+          .putExtra(KEY_STREAM_ID, streamId) //
+          .putExtra(KEY_STREAM_TITLE, title));
         finish();
     }
 
     @Override
-    public void closeScreenWithExitEvent() {
-        setResult(RESULT_EXIT_EVENT);
+    public void closeScreenWithExitStream() {
+        setResult(RESULT_EXIT_STREAM);
         finish();
     }
 
@@ -186,13 +186,13 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
 
     @Override public void showNotificationConfirmation() {
         new AlertDialog.Builder(this)
-          .setMessage(getString(R.string.event_notification_confirmation_message))
-          .setPositiveButton(getString(R.string.event_notification_confirmation_yes), new DialogInterface.OnClickListener() {
+          .setMessage(getString(R.string.stream_notification_confirmation_message))
+          .setPositiveButton(getString(R.string.stream_notification_confirmation_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmNotify(true);
               }
           })
-          .setNegativeButton(getString(R.string.event_notification_confirmation_no), new DialogInterface.OnClickListener() {
+          .setNegativeButton(getString(R.string.stream_notification_confirmation_no), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmNotify(false);
               }
@@ -201,13 +201,13 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
     }
 
     @Override
-    public void showDeleteEventButton() {
+    public void showDeleteStreamButton() {
         deleteMenuItem.setVisible(true);
     }
 
     @Override
-    public void askDeleteEventConfirmation() {
-        new AlertDialog.Builder(this).setMessage(R.string.delete_event_confirmation)
+    public void askDeleteStreamConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.delete_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   presenter.confirmDeleteEvent();
@@ -221,7 +221,7 @@ public class NewEventActivity extends BaseToolbarActivity implements NewEventVie
         shortTitleView.setText(currentShortTitle);
     }
 
-    @Override public String getEventShortTitle() {
+    @Override public String getStreamShortTitle() {
         return shortTitleView.getText().toString();
     }
 

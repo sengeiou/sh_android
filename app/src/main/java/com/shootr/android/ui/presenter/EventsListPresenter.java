@@ -10,7 +10,7 @@ import com.shootr.android.domain.interactor.event.StreamsListInteractor;
 import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
-import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,7 +22,7 @@ public class EventsListPresenter implements Presenter {
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private EventsListView eventsListView;
+    private StreamsListView streamsListView;
     private boolean hasBeenPaused;
 
     @Inject public EventsListPresenter(StreamsListInteractor streamsListInteractor,
@@ -34,12 +34,12 @@ public class EventsListPresenter implements Presenter {
     }
     //endregion
 
-    public void setView(EventsListView eventsListView) {
-        this.eventsListView = eventsListView;
+    public void setView(StreamsListView streamsListView) {
+        this.streamsListView = streamsListView;
     }
 
-    public void initialize(EventsListView eventsListView) {
-        this.setView(eventsListView);
+    public void initialize(StreamsListView streamsListView) {
+        this.setView(streamsListView);
         this.loadDefaultEventList();
     }
 
@@ -48,12 +48,12 @@ public class EventsListPresenter implements Presenter {
     }
 
     public void selectEvent(StreamResultModel event) {
-        eventsListView.setCurrentWatchingEventId(event);
+        streamsListView.setCurrentWatchingStreamId(event);
         selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTag());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        eventsListView.navigateToEventTimeline(idEvent, eventTitle);
+        streamsListView.navigateToStreamTimeline(idEvent, eventTitle);
     }
 
     public void unwatchEvent() {
@@ -61,19 +61,19 @@ public class EventsListPresenter implements Presenter {
             @Override public void onCompleted() {
                 loadDefaultEventList();
                 removeCurrentWatchingEvent();
-                eventsListView.showNotificationsOff();
+                streamsListView.showNotificationsOff();
             }
         });
     }
 
     private void removeCurrentWatchingEvent() {
-        eventsListView.setCurrentWatchingEventId(null);
+        streamsListView.setCurrentWatchingStreamId(null);
     }
 
     protected void loadDefaultEventList() {
         streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
             @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
-                eventsListView.hideLoading();
+                streamsListView.hideLoading();
                 onDefaultEventListLoaded(streamSearchResultList);
             }
         }, new Interactor.ErrorCallback() {
@@ -91,7 +91,7 @@ public class EventsListPresenter implements Presenter {
             StreamSearchResult currentWatchingEvent = resultList.getCurrentWatchingStream();
             this.setViewCurrentVisibleWatchingEvent(streamResultModelMapper.transform(currentWatchingEvent));
         }else{
-            eventsListView.showLoading();
+            streamsListView.showLoading();
         }
     }
 
@@ -100,13 +100,13 @@ public class EventsListPresenter implements Presenter {
     }
 
     private void setViewCurrentVisibleWatchingEvent(StreamResultModel currentVisibleEvent) {
-        eventsListView.setCurrentWatchingEventId(currentVisibleEvent);
+        streamsListView.setCurrentWatchingStreamId(currentVisibleEvent);
     }
 
     private void renderViewEventsList(List<StreamResultModel> eventModels) {
-        eventsListView.showContent();
-        eventsListView.hideEmpty();
-        eventsListView.renderEvents(eventModels);
+        streamsListView.showContent();
+        streamsListView.hideEmpty();
+        streamsListView.renderStream(eventModels);
     }
 
     private void showViewError(ShootrException error) {
@@ -119,11 +119,11 @@ public class EventsListPresenter implements Presenter {
         } else {
             errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
-        eventsListView.showError(errorMessage);
+        streamsListView.showError(errorMessage);
     }
 
     public void onCommunicationError() {
-        eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
+        streamsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     //region Lifecycle

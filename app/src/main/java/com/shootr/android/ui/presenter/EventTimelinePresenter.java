@@ -11,7 +11,7 @@ import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
-import com.shootr.android.ui.views.EventTimelineView;
+import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -29,7 +29,7 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final ErrorMessageFactory errorMessageFactory;
     private final Poller poller;
 
-    private EventTimelineView eventTimelineView;
+    private StreamTimelineView streamTimelineView;
     private String eventId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
@@ -47,13 +47,13 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.poller = poller;
     }
 
-    public void setView(EventTimelineView eventTimelineView) {
-        this.eventTimelineView = eventTimelineView;
+    public void setView(StreamTimelineView streamTimelineView) {
+        this.streamTimelineView = streamTimelineView;
     }
 
-    public void initialize(EventTimelineView eventTimelineView, String eventId) {
+    public void initialize(StreamTimelineView streamTimelineView, String eventId) {
         this.eventId = eventId;
-        this.setView(eventTimelineView);
+        this.setView(streamTimelineView);
         this.selectEvent();
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override
@@ -80,31 +80,31 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-        eventTimelineView.showLoading();
+        streamTimelineView.showLoading();
         timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                eventTimelineView.hideLoading();
-                eventTimelineView.setShots(shotModels);
+                streamTimelineView.hideLoading();
+                streamTimelineView.setShots(shotModels);
                 if (!shotModels.isEmpty()) {
-                    eventTimelineView.hideEmpty();
-                    eventTimelineView.showShots();
+                    streamTimelineView.hideEmpty();
+                    streamTimelineView.showShots();
                 } else {
-                    eventTimelineView.showEmpty();
-                    eventTimelineView.hideShots();
+                    streamTimelineView.showEmpty();
+                    streamTimelineView.hideShots();
                 }
                 loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                eventTimelineView.hideLoading();
-                eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                streamTimelineView.hideLoading();
+                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
         });
     }
 
     public void refresh() {
-        eventTimelineView.showLoading();
+        streamTimelineView.showLoading();
         this.loadNewShots();
     }
 
@@ -119,38 +119,38 @@ public class EventTimelinePresenter implements Presenter, ShotSent.Receiver {
             @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
-                    eventTimelineView.addNewShots(shotModels);
-                    eventTimelineView.hideEmpty();
-                    eventTimelineView.showShots();
+                    streamTimelineView.addNewShots(shotModels);
+                    streamTimelineView.hideEmpty();
+                    streamTimelineView.showShots();
                 }
-                eventTimelineView.hideLoading();
+                streamTimelineView.hideLoading();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-                eventTimelineView.hideLoading();
+                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                streamTimelineView.hideLoading();
             }
         });
     }
 
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
-        eventTimelineView.showLoadingOldShots();
+        streamTimelineView.showLoadingOldShots();
         timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
               @Override public void onLoaded(Timeline timeline) {
                   isLoadingOlderShots = false;
-                  eventTimelineView.hideLoadingOldShots();
+                  streamTimelineView.hideLoadingOldShots();
                   List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                   if (!shotModels.isEmpty()) {
-                      eventTimelineView.addOldShots(shotModels);
+                      streamTimelineView.addOldShots(shotModels);
                   } else {
                       mightHaveMoreShots = false;
                   }
               }
           }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  eventTimelineView.hideLoadingOldShots();
-                  eventTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                  streamTimelineView.hideLoadingOldShots();
+                  streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
               }
           });
     }

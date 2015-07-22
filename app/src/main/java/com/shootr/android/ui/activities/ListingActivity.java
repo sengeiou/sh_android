@@ -84,12 +84,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         presenter.pause();
     }
 
-    @Override public void renderEvents(List<StreamResultModel> events) {
-        adapter.setEvents(events);
+    @Override public void renderStreams(List<StreamResultModel> streams) {
+        adapter.setEvents(streams);
     }
 
-    @Override public void navigateToEventTimeline(String idEvent, String title) {
-        startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
+    @Override public void navigateToStreamTimeline(String idStream, String title) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, title));
     }
 
     @Override public void hideLoading() {

@@ -3,13 +3,13 @@ package com.shootr.android.ui.dagger;
 import com.shootr.android.ShootrModule;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.android.ui.fragments.EventsListFragment;
+import com.shootr.android.ui.fragments.StreamsListFragment;
 import dagger.Module;
 import dagger.Provides;
 
 @Module(
   injects = {
-    EventsListFragment.class
+    StreamsListFragment.class
   },
   addsTo = ShootrModule.class
 )

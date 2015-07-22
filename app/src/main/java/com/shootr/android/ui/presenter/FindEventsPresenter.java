@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
-import com.shootr.android.ui.views.FindEventsView;
+import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class FindEventsPresenter implements Presenter {
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private FindEventsView findEventsView;
+    private FindStreamsView findStreamsView;
     private String lastQueryText;
     private boolean hasBeenPaused = false;
 
@@ -31,26 +31,26 @@ public class FindEventsPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void setView(FindEventsView findEventsView) {
-        this.findEventsView = findEventsView;
+    public void setView(FindStreamsView findStreamsView) {
+        this.findStreamsView = findStreamsView;
     }
 
-    public void initialize(FindEventsView findEventsView) {
-        this.setView(findEventsView);
+    public void initialize(FindStreamsView findStreamsView) {
+        this.setView(findStreamsView);
     }
 
     public void search(String queryText) {
         this.lastQueryText = queryText;
-        findEventsView.hideContent();
-        findEventsView.hideKeyboard();
-        findEventsView.showLoading();
+        findStreamsView.hideContent();
+        findStreamsView.hideKeyboard();
+        findStreamsView.showLoading();
         streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
             @Override public void onLoaded(StreamSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                findEventsView.hideLoading();
+                findStreamsView.hideLoading();
                 showViewError(error);
             }
         });
@@ -61,7 +61,7 @@ public class FindEventsPresenter implements Presenter {
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
-        findEventsView.navigateToEventTimeline(idEvent, eventTitle);
+        findStreamsView.navigateToStreamTimeline(idEvent, eventTitle);
     }
 
     private void onSearchResults(StreamSearchResultList streamSearchResultList) {
@@ -72,18 +72,18 @@ public class FindEventsPresenter implements Presenter {
         } else {
             this.showViewEmpty();
         }
-        findEventsView.hideLoading();
+        findStreamsView.hideLoading();
     }
 
     private void showViewEmpty() {
-        findEventsView.showEmpty();
-        findEventsView.hideContent();
+        findStreamsView.showEmpty();
+        findStreamsView.hideContent();
     }
 
     private void renderViewEventsList(List<StreamResultModel> eventModels) {
-        findEventsView.showContent();
-        findEventsView.hideEmpty();
-        findEventsView.renderEvents(eventModels);
+        findStreamsView.showContent();
+        findStreamsView.hideEmpty();
+        findStreamsView.renderStreams(eventModels);
     }
 
     private void showViewError(ShootrException error) {
@@ -96,12 +96,12 @@ public class FindEventsPresenter implements Presenter {
         } else {
             errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
-        findEventsView.showError(errorMessage);
+        findStreamsView.showError(errorMessage);
     }
 
     public void restoreEvents(List<StreamResultModel> restoredResults) {
         if (restoredResults != null && !restoredResults.isEmpty()) {
-            findEventsView.renderEvents(restoredResults);
+            findStreamsView.renderStreams(restoredResults);
         }
     }
 

@@ -7,7 +7,7 @@ import com.shootr.android.domain.interactor.event.VisibleStreamInfoInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
-import com.shootr.android.ui.views.EventDetailView;
+import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.WatchersTimeFormatter;
 import com.squareup.otto.Bus;
@@ -24,7 +24,7 @@ public class EventDetailPresenterTest {
     @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock EventDetailView eventDetailView;
+    @Mock StreamDetailView streamDetailView;
 
     @Mock SessionRepository sessionRepository;
 
@@ -46,6 +46,6 @@ public class EventDetailPresenterTest {
           errorMessageFactory,
           watchersTimeFormatter, eventMediaCountInteractor);
 
-        presenter.setView(eventDetailView);
+        presenter.setView(streamDetailView);
     }
 }

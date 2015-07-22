@@ -17,8 +17,8 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
     private final PicassoWrapper picasso;
 
     @Bind(R.id.event_picture) ImageView picture;
-    @Bind(R.id.event_title) TextView title;
-    @Bind(R.id.event_author) TextView author;
+    @Bind(R.id.stream_title) TextView title;
+    @Bind(R.id.stream_author) TextView author;
     @Bind(R.id.event_watchers) TextView watchers;
 
     public EventResultViewHolder(View itemView,

@@ -6,7 +6,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetStreamMediaInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.views.EventMediaView;
+import com.shootr.android.ui.views.StreamMediaView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ public class EventMediaPresenter implements Presenter {
     private final GetStreamMediaInteractor getStreamMediaInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
-    private EventMediaView eventMediaView;
+    private StreamMediaView streamMediaView;
     private String idEvent;
     private Integer eventMediaCount;
 
@@ -27,22 +27,22 @@ public class EventMediaPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    protected void setView(EventMediaView eventMediaView) {
-        this.eventMediaView = eventMediaView;
+    protected void setView(StreamMediaView streamMediaView) {
+        this.streamMediaView = streamMediaView;
     }
 
-    public void initialize(EventMediaView eventMediaView, String idEvent, Integer eventMediaCount) {
-        this.setView(eventMediaView);
+    public void initialize(StreamMediaView streamMediaView, String idEvent, Integer eventMediaCount) {
+        this.setView(streamMediaView);
         this.idEvent = idEvent;
         this.eventMediaCount = eventMediaCount;
-        eventMediaView.showEmpty();
+        streamMediaView.showEmpty();
         retrieveMedia();
     }
 
     public void retrieveMedia(){
         if(eventMediaCount > 0){
-            eventMediaView.showLoading();
-            eventMediaView.hideEmpty();
+            streamMediaView.showLoading();
+            streamMediaView.hideEmpty();
         }
         renderMedia(idEvent);
     }
@@ -51,16 +51,16 @@ public class EventMediaPresenter implements Presenter {
         getStreamMediaInteractor.getStreamMedia(idEvent, new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shotsWithMedia) {
                 if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
-                    eventMediaView.hideEmpty();
+                    streamMediaView.hideEmpty();
                     List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
-                    eventMediaView.setMedia(shotModels);
-                    eventMediaView.hideLoading();
+                    streamMediaView.setMedia(shotModels);
+                    streamMediaView.hideLoading();
                 }
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
-                eventMediaView.showError(errorMessage);
+                streamMediaView.showError(errorMessage);
             }
         });
     }

@@ -28,7 +28,7 @@
       android:layout_toRightOf="@+id/event_picture"
       android:orientation="vertical">
 
-      <TextView android:id="@+id/event_title"
+      <TextView android:id="@+id/stream_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
@@ -39,7 +39,7 @@
         android:textSize="14sp"
         tools:text="Titulo Dos líneas" />
 
-      <TextView android:id="@+id/event_author"
+      <TextView android:id="@+id/stream_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_60"

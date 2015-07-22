@@ -78,6 +78,6 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     }
 
     public void onWatchNumberClick() {
-        watchNumberView.navigateToEventDetail(idEvent);
+        watchNumberView.navigateToStreamDetail(idEvent);
     }
 }

@@ -11,7 +11,7 @@ import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
-import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class EventsListPresenterTest {
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
-    @Mock EventsListView eventsListView;
+    @Mock StreamsListView streamsListView;
 
     private EventsListPresenter presenter;
 
@@ -54,11 +54,11 @@ public class EventsListPresenterTest {
           new StreamResultModelMapper(streamModelMapper);
         presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
-        presenter.setView(eventsListView);
+        presenter.setView(streamsListView);
     }
 
     @Test public void shouldLoadEventListOnInitialized() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize(streamsListView);
 
         verify(streamsListInteractor).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
@@ -66,19 +66,19 @@ public class EventsListPresenterTest {
     @Test public void shouldNavigateToEventTimelineWhenEventSelected() throws Exception {
         presenter.selectEvent(selectedEventModel());
 
-        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldNavigateToEventTimelineWhenNewEventCreated() throws Exception {
         presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
-        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldNavigateToEventTimelineWhenNewEventCreatedIfSelectEventInteractorCallbacksEventId() throws Exception {
         presenter.eventCreated(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
 
-        verify(eventsListView).navigateToEventTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_EVENT_ID, SELECTED_EVENT_TITLE);
     }
 
     @Test public void shouldRenderEventListWhenEventListInteractorCallbacksResults() throws Exception {
@@ -86,7 +86,7 @@ public class EventsListPresenterTest {
 
         presenter.loadDefaultEventList();
 
-        verify(eventsListView).renderEvents(anyListOf(StreamResultModel.class));
+        verify(streamsListView).renderStream(anyListOf(StreamResultModel.class));
     }
 
     @Test public void shouldHideLoadingWhenEventListInteractorCallbacksResults() throws Exception {
@@ -94,7 +94,7 @@ public class EventsListPresenterTest {
 
         presenter.loadDefaultEventList();
 
-        verify(eventsListView).hideLoading();
+        verify(streamsListView).hideLoading();
     }
 
     @Test public void shouldNotShowLoadingWhenEventListInteractorCallbacksResults() throws Exception {
@@ -102,7 +102,7 @@ public class EventsListPresenterTest {
 
         presenter.loadDefaultEventList();
 
-        verify(eventsListView, never()).showLoading();
+        verify(streamsListView, never()).showLoading();
     }
 
     @Test public void shouldShowLoadingWhenEventListInteractorCallbacksEmpty() throws Exception {
@@ -110,18 +110,18 @@ public class EventsListPresenterTest {
 
         presenter.loadDefaultEventList();
 
-        verify(eventsListView).showLoading();
+        verify(streamsListView).showLoading();
     }
 
     @Test public void shouldLoadEventListOnceWhenInitializedAndResumed() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize(streamsListView);
         presenter.resume();
 
         verify(streamsListInteractor, times(1)).loadStreams(anyEventsCallback(), anyErrorCallback());
     }
 
     @Test public void shouldLoadEventListTwiceWhenInitializedPausedAndResumed() throws Exception {
-        presenter.initialize(eventsListView);
+        presenter.initialize(streamsListView);
         presenter.pause();
         presenter.resume();
 

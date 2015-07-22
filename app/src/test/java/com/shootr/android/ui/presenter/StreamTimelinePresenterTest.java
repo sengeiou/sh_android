@@ -10,7 +10,7 @@ import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.presenter.interactorwrapper.EventTimelineInteractorsWrapper;
-import com.shootr.android.ui.views.EventTimelineView;
+import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -44,7 +44,7 @@ public class StreamTimelinePresenterTest {
     private static final ShotSent.Stream SHOT_SENT_STREAM = null;
     private static final String SELECTED_EVENT_ID = "stream";
 
-    @Mock EventTimelineView eventTimelineView;
+    @Mock StreamTimelineView streamTimelineView;
     @Mock EventTimelineInteractorsWrapper timelineInteractorWrapper;
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock Bus bus;
@@ -59,7 +59,7 @@ public class StreamTimelinePresenterTest {
         ShotModelMapper shotModelMapper = new ShotModelMapper();
         presenter = new EventTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
           shotModelMapper, bus, errorMessageFactory, poller);
-        presenter.setView(eventTimelineView);
+        presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }
 
@@ -67,7 +67,7 @@ public class StreamTimelinePresenterTest {
 
     @Test
     public void shouldSelectEventWhenInitialized() throws Exception {
-        presenter.initialize(eventTimelineView, SELECTED_EVENT_ID);
+        presenter.initialize(streamTimelineView, SELECTED_EVENT_ID);
 
         verify(selectStreamInteractor).selectStream(eq(SELECTED_EVENT_ID), anySelectCallback());
     }
@@ -87,7 +87,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView).setShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -95,13 +95,13 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView).showShots();
+        verify(streamTimelineView).showShots();
     }
 
     @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 
-        verify(eventTimelineView, times(1)).showLoading();
+        verify(streamTimelineView, times(1)).showLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -109,7 +109,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView, times(1)).hideLoading();
+        verify(streamTimelineView, times(1)).hideLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
@@ -117,7 +117,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView, times(1)).hideLoading();
+        verify(streamTimelineView, times(1)).hideLoading();
     }
 
     @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
@@ -125,7 +125,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView).showEmpty();
+        verify(streamTimelineView).showEmpty();
     }
 
     @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -133,7 +133,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView).hideEmpty();
+        verify(streamTimelineView).hideEmpty();
     }
 
     @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
@@ -141,7 +141,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(eventTimelineView).hideShots();
+        verify(streamTimelineView).hideShots();
     }
 
     @Test public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
@@ -150,7 +150,7 @@ public class StreamTimelinePresenterTest {
         presenter.loadTimeline();
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-        verify(eventTimelineView).setShots(captor.capture());
+        verify(streamTimelineView).setShots(captor.capture());
         List renderedShotList = captor.<List<ShotModel>>getValue();
         assertThat(renderedShotList).isEmpty();
     }
@@ -162,7 +162,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView).addNewShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView).addNewShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -170,13 +170,13 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView, never()).addNewShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView, never()).addNewShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldShowLoadingWhenRefreshTimeline() throws Exception {
         presenter.refresh();
 
-        verify(eventTimelineView, times(1)).showLoading();
+        verify(streamTimelineView, times(1)).showLoading();
     }
 
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
@@ -184,7 +184,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView).hideLoading();
+        verify(streamTimelineView).hideLoading();
     }
 
     @Test public void shouldHideLoadingWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -192,7 +192,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView).hideLoading();
+        verify(streamTimelineView).hideLoading();
     }
 
     @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
@@ -200,7 +200,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView).hideEmpty();
+        verify(streamTimelineView).hideEmpty();
     }
 
     @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
@@ -208,7 +208,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.refresh();
 
-        verify(eventTimelineView).showShots();
+        verify(streamTimelineView).showShots();
     }
 
     //endregion
@@ -230,7 +230,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
         presenter.showingLastShot(lastShotModel());
 
-        verify(eventTimelineView).showLoadingOldShots();
+        verify(streamTimelineView).showLoadingOldShots();
     }
 
     @Test public void shouldObtainOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {

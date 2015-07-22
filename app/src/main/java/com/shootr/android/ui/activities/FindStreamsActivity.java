@@ -20,13 +20,13 @@ import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindEventsPresenter;
-import com.shootr.android.ui.views.FindEventsView;
+import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindEventsActivity extends BaseToolbarDecoratedActivity implements FindEventsView {
+public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements FindStreamsView {
 
     private static final String EXTRA_RESULTS = "results";
     private static final String EXTRA_SEARCH_TEXT = "search";
@@ -35,9 +35,9 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     private String currentSearchQuery;
     private EventsListAdapter adapter;
 
-    @Bind(R.id.find_events_list) RecyclerView eventsList;
-    @Bind(R.id.find_events_empty) View emptyView;
-    @Bind(R.id.find_events_loading) View loadingView;
+    @Bind(R.id.find_streams_list) RecyclerView streamsList;
+    @Bind(R.id.find_streams_empty) View emptyView;
+    @Bind(R.id.find_streams_loading) View loadingView;
 
     @Inject FindEventsPresenter findEventsPresenter;
     @Inject PicassoWrapper picasso;
@@ -54,7 +54,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
                 currentSearchQuery = queryText;
-                searchEvents();
+                searchStreams();
                 hideKeyboard();
                 return true;
             }
@@ -74,30 +74,30 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
     }
 
-    private void initializeEventListAdapter() {
+    private void initializeStreamListAdapter() {
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
             public void onEventClick(StreamResultModel event) {
                 findEventsPresenter.selectEvent(event);
             }
         });
-        eventsList.setAdapter(adapter);
+        streamsList.setAdapter(adapter);
     }
 
-    private void searchEvents() {
+    private void searchStreams() {
         findEventsPresenter.search(currentSearchQuery);
     }
 
     //region Lifecycle methods
     @Override protected int getLayoutResource() {
-        return R.layout.activity_find_events;
+        return R.layout.activity_find_streams;
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        eventsList.setLayoutManager(new LinearLayoutManager(this));
-        eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
-        initializeEventListAdapter();
+        streamsList.setLayoutManager(new LinearLayoutManager(this));
+        streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
+        initializeStreamListAdapter();
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -167,7 +167,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
 
     //region View methods
     @Override public void hideContent() {
-        eventsList.setVisibility(View.GONE);
+        streamsList.setVisibility(View.GONE);
     }
 
     @Override public void hideKeyboard() {
@@ -188,23 +188,23 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void showContent() {
-        eventsList.setVisibility(View.VISIBLE);
+        streamsList.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override public void renderEvents(List<StreamResultModel> eventModels) {
-        adapter.setEvents(eventModels);
+    @Override public void renderStreams(List<StreamResultModel> streamModels) {
+        adapter.setEvents(streamModels);
     }
 
     @Override public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void navigateToEventTimeline(String idEvent, String eventTitle) {
-        startActivity(EventTimelineActivity.newIntent(this, idEvent, eventTitle));
+    @Override public void navigateToStreamTimeline(String idStream, String streamTitle) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle));
     }
 
     //endregion

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
-import com.shootr.android.ui.activities.EventTimelineActivity;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.base.BaseFragment;
@@ -94,8 +94,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void renderFavorites(List<StreamResultModel> eventModels) {
-        adapter.setEvents(eventModels);
+    public void renderFavorites(List<StreamResultModel> streamModels) {
+        adapter.setEvents(streamModels);
     }
 
     @Override
@@ -109,8 +109,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void navigateToEventTimeline(String idEvent, String title) {
-        startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
+    public void navigateToStreamTimeline(String idStream, String title) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
     }
 
     @Override

@@ -19,9 +19,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.activities.EventTimelineActivity;
-import com.shootr.android.ui.activities.FindEventsActivity;
-import com.shootr.android.ui.activities.NewEventActivity;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
+import com.shootr.android.ui.activities.FindStreamsActivity;
+import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
@@ -29,13 +29,13 @@ import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
-import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullEventListView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListFragment extends BaseFragment implements EventsListView {
+public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
     public static final int REQUEST_NEW_EVENT = 1;
 
@@ -50,8 +50,8 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
     private EventsListAdapter adapter;
 
-    public static EventsListFragment newInstance() {
-        return new EventsListFragment();
+    public static StreamsListFragment newInstance() {
+        return new StreamsListFragment();
     }
 
     //region Lifecycle
@@ -115,13 +115,13 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     }
 
     private void navigateToFindEvents() {
-        Intent intent = new Intent(getActivity(), FindEventsActivity.class);
+        Intent intent = new Intent(getActivity(), FindStreamsActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     @OnClick(R.id.events_add_event) public void onAddEvent() {
-        startActivityForResult(new Intent(getActivity(), NewEventActivity.class), REQUEST_NEW_EVENT);
+        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_EVENT);
     }
 
     //region Activity methods
@@ -161,27 +161,27 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_EVENT && resultCode == Activity.RESULT_OK) {
-            String eventId = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
-            String title = data.getStringExtra(NewEventActivity.KEY_EVENT_TITLE);
+            String eventId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+            String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
             presenter.eventCreated(eventId, title);
         }
     }
 
     //region View methods
-    @Override public void renderEvents(List<StreamResultModel> events) {
-        adapter.setEvents(events);
+    @Override public void renderStream(List<StreamResultModel> streams) {
+        adapter.setEvents(streams);
     }
 
-    @Override public void setCurrentWatchingEventId(StreamResultModel event) {
-        adapter.setCurrentWatchingEvent(event);
+    @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
+        adapter.setCurrentWatchingEvent(streamId);
     }
 
     @Override public void showContent() {
         eventsList.setVisibility(View.VISIBLE);
     }
 
-    @Override public void navigateToEventTimeline(String idEvent, String title) {
-        startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
+    @Override public void navigateToStreamTimeline(String idStream, String title) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
     }
 
     @Override public void showNotificationsOff() {

@@ -3,7 +3,7 @@ package com.shootr.android.ui.views;
 import com.shootr.android.ui.model.StreamResultModel;
 import java.util.List;
 
-public interface FindEventsView {
+public interface FindStreamsView {
 
     void hideContent();
 
@@ -19,9 +19,9 @@ public interface FindEventsView {
 
     void hideEmpty();
 
-    void renderEvents(List<StreamResultModel> eventModels);
+    void renderStreams(List<StreamResultModel> streamModels);
 
     void showError(String errorMessage);
 
-    void navigateToEventTimeline(String idEvent, String eventTitle);
+    void navigateToStreamTimeline(String idStream, String streamTitle);
 }

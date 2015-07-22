@@ -4,7 +4,7 @@ import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
 import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.event.GetStreamInteractor;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
-import com.shootr.android.ui.views.NewEventView;
+import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class NewStreamPresenterTest {
     @Mock DeleteStreamInteractor deleteStreamInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock NewEventView newEventView;
+    @Mock NewStreamView newStreamView;
 
     private NewEventPresenter presenter;
 
@@ -38,50 +38,50 @@ public class NewStreamPresenterTest {
 
     @Test
     public void shouldChangeShortTitleWhenEditTitle() {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.titleTextChanged("Short Title");
-        verify(newEventView).showShortTitle(anyString());
+        verify(newStreamView).showShortTitle(anyString());
     }
 
     @Test
     public void shouldHaveShortTitleWith15charactersMax() {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.titleTextChanged("Title with more than tewnty and some characters");
-        verify(newEventView).showShortTitle("Title with more than");
+        verify(newStreamView).showShortTitle("Title with more than");
     }
 
     @Test
     public void shouldUpdateDoneButtonWhenEditShortTitle() {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.shortTitleTextChanged("Short Title");
-        verify(newEventView, atLeastOnce()).doneButtonEnabled(anyBoolean());
+        verify(newStreamView, atLeastOnce()).doneButtonEnabled(anyBoolean());
     }
 
     @Test
     public void shouldUpdateDoneButtonStatusWhenEditTitle() {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.titleTextChanged("Title with more than 15 characters");
-        verify(newEventView).showShortTitle(anyString());
+        verify(newStreamView).showShortTitle(anyString());
     }
 
     @Test
     public void shouldShortTitleBeSameAsTitleWhenTitleEdited() throws Exception {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.titleTextChanged("title");
 
-        verify(newEventView).showShortTitle("title");
+        verify(newStreamView).showShortTitle("title");
     }
 
     @Test
     public void shouldShortTitleNotBeSameAsTitleWhenTitleEditedAfterShortTitleHasBeenEdited() throws Exception {
-        presenter.initialize(newEventView, null);
+        presenter.initialize(newStreamView, null);
         presenter.titleTextChanged("old title");
         presenter.shortTitleTextChanged("short title");
-        reset(newEventView);
+        reset(newStreamView);
 
         presenter.titleTextChanged("new title");
 
-        verify(newEventView, never()).showShortTitle(anyString());
+        verify(newStreamView, never()).showShortTitle(anyString());
     }
 
 }

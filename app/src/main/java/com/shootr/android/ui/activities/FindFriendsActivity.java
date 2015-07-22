@@ -16,8 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
@@ -224,9 +224,9 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void receivedRemoteResult(SearchPeopleRemoteResultStream event) {
+    public void receivedRemoteResult(SearchPeopleRemoteResultStream stream) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<UserModel>> results = event.getResult();
+        PaginatedResult<List<UserModel>> results = stream.getResult();
         List<UserModel> users = results.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
@@ -247,8 +247,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void receivedLocalResult(SearchPeopleLocalResultStream event) {
-        List<UserModel> results = event.getResult();
+    public void receivedLocalResult(SearchPeopleLocalResultStream stream) {
+        List<UserModel> results = stream.getResult();
         Timber.d("Received %d local results", results.size());
         setListContent(results, NO_OFFSET);
         setEmpty(false);
@@ -256,7 +256,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
         setLoading(false);
         isLoadingRemoteData = false;
@@ -266,7 +266,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorStream event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         Timber.d("No local results. Waiting for remote results");
     }
 
@@ -372,8 +372,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream event) {
-        Pair<String, Boolean> result = event.getResult();
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream stream) {
+        Pair<String, Boolean> result = stream.getResult();
         String idUser = result.first;
         Boolean following = result.second;
 

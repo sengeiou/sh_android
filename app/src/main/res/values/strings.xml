@@ -152,7 +152,7 @@
     <string name="add_photo">Add Photo</string>
     <string name="edit_event">Edit Stream</string>
     <string name="activity_new_event_title">New stream</string>
-    <string name="activity_edit_event_title">Edit stream</string>
+    <string name="activity_edit_stream_title">Edit stream</string>
     <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
     <string name="activity_pick_timezone_title">Select time zone</string>
     <string name="new_event_title_label">Title</string>
@@ -160,9 +160,9 @@
     <string name="new_event_timezone_label">Time zone</string>
     <string name="new_event_ends_label">Ends before</string>
     <string name="event_subtitle_nothing">Hall</string>
-    <string name="event_notification_confirmation_message">Notify your followers about this addition?</string>
-    <string name="event_notification_confirmation_yes">Notify</string>
-    <string name="event_notification_confirmation_no">Nope</string>
+    <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
+    <string name="stream_notification_confirmation_yes">Notify</string>
+    <string name="stream_notification_confirmation_no">Nope</string>
     <string name="profile_watching_label">Watching</string>
     <string name="menu_event_edit_info">Stream info</string>
     <string name="menu_event_edit_photo">Photo</string>
@@ -236,7 +236,7 @@
         </item>
     </plurals>
 
-    <plurals name="event_watching_watchers_number">
+    <plurals name="stream_watching_watchers_number">
         <item quantity="one">
             Friends
         </item>
@@ -258,7 +258,7 @@
     <string name="event_media_empty_title">No photos or videos.</string>
     <string name="event_detail_media">Media</string>
     <string name="event_detail_media_number">0</string>
-    <string name="event_detail_edit_menu_title">Edit</string>
+    <string name="stream_detail_edit_menu_title">Edit</string>
     <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
     <string name="done">Done</string>
     <string name="reset_password_send_email">Send a Password Reset Email</string>
@@ -287,7 +287,7 @@
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="whale_retry_button_text">OK</string>
     <string name="delete_event_label">Delete stream</string>
-    <string name="delete_event_confirmation">Delete stream?</string>
+    <string name="delete_stream_confirmation">Delete stream?</string>
 
     <plurals name="nice_count_pattern">
         <item quantity="one">

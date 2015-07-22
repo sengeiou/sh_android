@@ -10,19 +10,19 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
+import com.shootr.android.ui.fragments.StreamTimelineFragment;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
 
-public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
+public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject SelectStreamInteractor selectStreamInteractor;
 
-    public static Intent newIntent(Context context, String eventId, String eventTitle) {
-        Intent intent = new Intent(context, EventTimelineActivity.class);
-        intent.putExtra(EventTimelineFragment.EXTRA_EVENT_ID, eventId);
-        intent.putExtra(EventTimelineFragment.EXTRA_EVENT_TITLE, eventTitle);
+    public static Intent newIntent(Context context, String streamId, String streamTitle) {
+        Intent intent = new Intent(context, StreamTimelineActivity.class);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
         return intent;
     }
 
@@ -35,28 +35,28 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
             throw new RuntimeException("No intent extras, no party");
         }
 
-        String eventId = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_ID);
+        String streamId = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_ID);
 
-        setEventTitleFromIntent();
+        setStreamTitleFromIntent();
 
-        getEvent(eventId);
+        getStream(streamId);
 
         setupAndAddFragment(savedInstanceState);
     }
 
     //FIXME Esto es una ñapa como un castillo
-    private void getEvent(String eventId) {
-        selectStreamInteractor.selectStream(eventId, new Interactor.Callback<StreamSearchResult>() {
+    private void getStream(String streamId) {
+        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
             @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-                setEventTitle(streamSearchResult.getStream().getTag());
+                setStreamTitle(streamSearchResult.getStream().getTag());
             }
         });
     }
 
     @Override public void onResume() {
         super.onResume();
-        String eventId = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_ID);
-        getEvent(eventId);
+        String streamId = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_ID);
+        getStream(streamId);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,20 +73,20 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
 
         if (!fragmentAlreadyAddedBySystem) {
             Bundle fragmentArguments = getIntent().getExtras();
-            EventTimelineFragment eventTimelineFragment = EventTimelineFragment.newInstance(fragmentArguments);
+            StreamTimelineFragment streamTimelineFragment = StreamTimelineFragment.newInstance(fragmentArguments);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, eventTimelineFragment, ProfileFragment.TAG);
+            transaction.add(R.id.container, streamTimelineFragment, ProfileFragment.TAG);
             transaction.commit();
         }
     }
 
-    private void setEventTitleFromIntent() {
-        String eventTitle = getIntent().getStringExtra(EventTimelineFragment.EXTRA_EVENT_TITLE);
-        getToolbarDecorator().setTitle(eventTitle);
+    private void setStreamTitleFromIntent() {
+        String streamTitle = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE);
+        getToolbarDecorator().setTitle(streamTitle);
     }
 
-    private void setEventTitle(String title) {
+    private void setStreamTitle(String title) {
         getToolbarDecorator().setTitle(title);
     }
 

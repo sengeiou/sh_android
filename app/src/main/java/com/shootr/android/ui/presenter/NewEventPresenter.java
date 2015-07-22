@@ -8,11 +8,11 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
 import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.event.GetStreamInteractor;
-import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
+import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
-import com.shootr.android.ui.views.NewEventView;
+import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ public class NewEventPresenter implements Presenter {
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
-    private NewEventView newEventView;
+    private NewStreamView newEventView;
 
     private boolean isNewEvent;
     private String preloadedTitle;
@@ -54,7 +54,7 @@ public class NewEventPresenter implements Presenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void initialize(NewEventView newEventView, String optionalIdEventToEdit) {
+    public void initialize(NewStreamView newEventView, String optionalIdEventToEdit) {
         this.newEventView = newEventView;
         this.isNewEvent = optionalIdEventToEdit == null;
         this.shortTitleEditedManually = false;
@@ -75,14 +75,14 @@ public class NewEventPresenter implements Presenter {
     private void setDefaultEventInfo(StreamModel streamModel) {
         preloadedEventId = streamModel.getIdStream();
         preloadedTitle = streamModel.getTitle();
-        newEventView.setEventTitle(preloadedTitle);
-        newEventView.showDeleteEventButton();
+        newEventView.setStreamTitle(preloadedTitle);
+        newEventView.showDeleteStreamButton();
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
             preloadedShortTitle = streamModel.getTag();
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
-            newEventView.setEventTitle(preloadedTitle);
+            newEventView.setStreamTitle(preloadedTitle);
             newEventView.showShortTitle(preloadedShortTitle);
 
             bindShortTitleToTitleIfMatches();
@@ -127,13 +127,13 @@ public class NewEventPresenter implements Presenter {
     }
 
     public void delete() {
-        newEventView.askDeleteEventConfirmation();
+        newEventView.askDeleteStreamConfirmation();
     }
 
     public void confirmDeleteEvent() {
         deleteStreamInteractor.deleteStream(preloadedEventId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                newEventView.closeScreenWithExitEvent();
+                newEventView.closeScreenWithExitStream();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -152,8 +152,8 @@ public class NewEventPresenter implements Presenter {
     }
 
     private void sendEvent(String preloadedEventId) {
-        String title = filterTitle(newEventView.getEventTitle());
-        String shortTitle = filterShortTitle(newEventView.getEventShortTitle());
+        String title = filterTitle(newEventView.getStreamTitle());
+        String shortTitle = filterShortTitle(newEventView.getStreamShortTitle());
         createStreamInteractor.sendStream(preloadedEventId,
           title,
           shortTitle,

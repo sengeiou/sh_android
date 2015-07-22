@@ -33,7 +33,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.CheckinPresenter;
 import com.shootr.android.ui.presenter.EventDetailPresenter;
 import com.shootr.android.ui.views.CheckinView;
-import com.shootr.android.ui.views.EventDetailView;
+import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
@@ -45,44 +45,44 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class EventDetailActivity extends BaseNoToolbarActivity
-  implements EventDetailView, CheckinView, ObservableScrollView.Callbacks {
+public class StreamDetailActivity extends BaseNoToolbarActivity
+  implements StreamDetailView, CheckinView, ObservableScrollView.Callbacks {
 
-    private static final int REQUEST_EDIT_EVENT = 3;
+    private static final int REQUEST_EDIT_STREAM = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 4;
     private static final int REQUEST_TAKE_PHOTO = 5;
     private static final float PHOTO_ASPECT_RATIO = 2.3f;
 
-    private static final String EXTRA_EVENT_ID = "eventId";
-    private static final String EXTRA_EVENT_MEDIA_COUNT = "eventMediaCount";
+    private static final String EXTRA_STREAM_ID = "streamId";
+    private static final String EXTRA_STREAM_MEDIA_COUNT = "streamMediaCount";
 
     @Bind(R.id.scroll) ObservableScrollView scrollView;
     @Bind(R.id.scroll_child) View scrollChild;
-    @Bind(R.id.event_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.stream_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.event_loading) View loadingView;
+    @Bind(R.id.stream_loading) View loadingView;
 
-    @Bind(R.id.event_photo) ImageView photo;
-    @Bind(R.id.event_photo_edit_indicator) ImageView photoEditIndicator;
-    @Bind(R.id.event_photo_edit_loading) ProgressBar photoLoadingIndicator;
-    @Bind(R.id.event_photo_container) View photoContainer;
+    @Bind(R.id.stream_photo) ImageView photo;
+    @Bind(R.id.stream_photo_edit_indicator) ImageView photoEditIndicator;
+    @Bind(R.id.stream_photo_edit_loading) ProgressBar photoLoadingIndicator;
+    @Bind(R.id.stream_photo_container) View photoContainer;
 
-    @Bind(R.id.event_title_container) View titleContainer;
+    @Bind(R.id.stream_title_container) View titleContainer;
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
-    @Bind(R.id.event_title) TextView titleText;
-    @Bind(R.id.event_author) TextView authorText;
+    @Bind(R.id.stream_title) TextView titleText;
+    @Bind(R.id.stream_author) TextView authorText;
 
-    @Bind(R.id.event_content_container) View contentContainer;
-    @Bind(R.id.event_content_empty) View contentEmpty;
-    @Bind(R.id.event_content_detail) View contentDetail;
+    @Bind(R.id.stream_content_container) View contentContainer;
+    @Bind(R.id.stream_content_empty) View contentEmpty;
+    @Bind(R.id.stream_content_detail) View contentDetail;
 
-    @Bind(R.id.event_content_detail_watchers_number) TextView watchersNumber;
-    @Bind(R.id.event_content_detail_watchers_list) WatchersView watchersList;
+    @Bind(R.id.stream_content_detail_watchers_number) TextView watchersNumber;
+    @Bind(R.id.stream_content_detail_watchers_list) WatchersView watchersList;
 
-    @Bind(R.id.event_detail_media) TextView eventMedia;
-    @Bind(R.id.event_detail_media_number) TextView eventMediaNumber;
+    @Bind(R.id.stream_detail_media) TextView streamMedia;
+    @Bind(R.id.stream_detail_media_number) TextView streamMediaNumber;
 
-    @Bind(R.id.event_checkin) View checkinButton;
+    @Bind(R.id.stream_checkin) View checkinButton;
 
     @Inject EventDetailPresenter eventDetailPresenter;
     @Inject CheckinPresenter checkinPresenter;
@@ -95,25 +95,25 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     private boolean showEditButton;
     private float headerMaxElevation;
 
-    public static Intent getIntent(Context context, String eventId) {
-        Intent intent = new Intent(context, EventDetailActivity.class);
-        intent.putExtra(EXTRA_EVENT_ID, eventId);
+    public static Intent getIntent(Context context, String streamId) {
+        Intent intent = new Intent(context, StreamDetailActivity.class);
+        intent.putExtra(EXTRA_STREAM_ID, streamId);
         return intent;
     }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContainerContent(R.layout.activity_event_detail);
+        setContainerContent(R.layout.activity_stream_detail);
         initializeViews();
         setupActionbar();
 
-        String idEvent = getIntent().getStringExtra(EXTRA_EVENT_ID);
-        initializePresenter(idEvent);
+        String idStream = getIntent().getStringExtra(EXTRA_STREAM_ID);
+        initializePresenter(idStream);
     }
 
-    private void initializePresenter(String idEvent) {
-        eventDetailPresenter.initialize(this, idEvent);
-        checkinPresenter.initialize(this, idEvent);
+    private void initializePresenter(String idStream) {
+        eventDetailPresenter.initialize(this, idStream);
+        checkinPresenter.initialize(this, idStream);
     }
 
     private void initializeViews() {
@@ -157,23 +157,23 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         editMenuItem.setVisible(showEditButton);
     }
 
-    @OnClick(R.id.event_author)
+    @OnClick(R.id.stream_author)
     public void onAuthorClick() {
         eventDetailPresenter.clickAuthor();
     }
 
-    @OnClick(R.id.event_detail_media)
+    @OnClick(R.id.stream_detail_media)
     public void onMediaClick() {
         eventDetailPresenter.clickMedia();
     }
 
-    @OnClick(R.id.event_checkin)
+    @OnClick(R.id.stream_checkin)
     public void onCheckinClick() {
         checkinPresenter.checkIn();
     }
 
     //region Edit photo
-    @OnClick(R.id.event_photo_container)
+    @OnClick(R.id.stream_photo_container)
     public void onPhotoClick() {
         eventDetailPresenter.photoClick();
     }
@@ -203,7 +203,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     private File getCameraPhotoFile() {
-        return new File(getExternalFilesDir("tmp"), "eventUpload.jpg");
+        return new File(getExternalFilesDir("tmp"), "streamUpload.jpg");
     }
     //endregion
 
@@ -292,7 +292,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     //region Activity Methods
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.event, menu);
+        getMenuInflater().inflate(R.menu.stream, menu);
 
         editMenuItem = menu.findItem(R.id.menu_edit);
         updateEditIcon();
@@ -313,11 +313,11 @@ public class EventDetailActivity extends BaseNoToolbarActivity
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_EDIT_EVENT && resultCode == RESULT_OK) {
-            String idEventEdited = data.getStringExtra(NewEventActivity.KEY_EVENT_ID);
-            eventDetailPresenter.resultFromEditEventInfo(idEventEdited);
-        }else if (requestCode == REQUEST_EDIT_EVENT && resultCode == NewEventActivity.RESULT_EXIT_EVENT) {
-            setResult(NewEventActivity.RESULT_EXIT_EVENT);
+        if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
+            String idStreamEdited = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+            eventDetailPresenter.resultFromEditEventInfo(idStreamEdited);
+        }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
+            setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImageUri = data.getData();
@@ -341,15 +341,15 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     //endregion
 
     //region View methods
-    @Override public void setEventTitle(String title) {
+    @Override public void setStreamTitle(String title) {
         titleText.setText(title);
     }
 
-    @Override public void setEventAuthor(String author) {
+    @Override public void setStreamAuthor(String author) {
         authorText.setText(author);
     }
 
-    @Override public void setEventPicture(String picture) {
+    @Override public void setStreamPicture(String picture) {
         if (picture != null) {
             hasPicture = true;
             picasso.load(picture).into(photo, new Callback() {
@@ -368,16 +368,16 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         }
     }
 
-    @Override public void showEditEventPhotoOrInfo() {
-        new BottomSheet.Builder(this).title(getString(R.string.event_detail_edit_menu_title))
-          .sheet(R.menu.event_edit_photo_or_info)
+    @Override public void showEditStreamPhotoOrInfo() {
+        new BottomSheet.Builder(this).title(getString(R.string.stream_detail_edit_menu_title))
+          .sheet(R.menu.stream_edit_photo_or_info)
           .listener(new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   switch (which) {
-                      case R.id.menu_event_edit_photo:
+                      case R.id.menu_stream_edit_photo:
                           eventDetailPresenter.editEventPhoto();
                           break;
-                      case R.id.menu_event_edit_info:
+                      case R.id.menu_stream_edit_info:
                           eventDetailPresenter.editEventInfo();
                           break;
                   }
@@ -442,7 +442,7 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setWatchersCount(int watchersCount) {
-        watchersNumber.setText(getResources().getQuantityString(R.plurals.event_watching_watchers_number,
+        watchersNumber.setText(getResources().getQuantityString(R.plurals.stream_watching_watchers_number,
           watchersCount,
           watchersCount));
     }
@@ -451,9 +451,9 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         watchersList.setCurrentUserWatching(userWatchingModel);
     }
 
-    @Override public void navigateToEditEvent(String idEvent) {
-        Intent editIntent = new Intent(this, NewEventActivity.class).putExtra(NewEventActivity.KEY_EVENT_ID, idEvent);
-        startActivityForResult(editIntent, REQUEST_EDIT_EVENT);
+    @Override public void navigateToEditStream(String idStream) {
+        Intent editIntent = new Intent(this, NewStreamActivity.class).putExtra(NewStreamActivity.KEY_STREAM_ID, idStream);
+        startActivityForResult(editIntent, REQUEST_EDIT_STREAM);
     }
 
     @Override public void navigateToUser(String userId) {
@@ -476,14 +476,14 @@ public class EventDetailActivity extends BaseNoToolbarActivity
         contentDetail.setVisibility(View.VISIBLE);
     }
 
-    @Override public void showEditEventButton() {
+    @Override public void showEditStreamButton() {
         showEditButton = true;
         if (editMenuItem != null) {
             updateEditIcon();
         }
     }
 
-    @Override public void hideEditEventButton() {
+    @Override public void hideEditStreamButton() {
         showEditButton = false;
         if (editMenuItem != null) {
             updateEditIcon();
@@ -491,18 +491,18 @@ public class EventDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setMediaCount(Integer mediaCount) {
-        eventMediaNumber.setText(mediaCount.toString());
+        streamMediaNumber.setText(mediaCount.toString());
     }
 
-    @Override public void navigateToMedia(String idEvent, Integer eventMediaCount) {
-        Intent intent = new Intent(this, EventMediaActivity.class);
-        intent.putExtra(EXTRA_EVENT_ID, idEvent);
-        intent.putExtra(EXTRA_EVENT_MEDIA_COUNT, eventMediaCount);
+    @Override public void navigateToMedia(String idStream, Integer streamMediaCount) {
+        Intent intent = new Intent(this, StreamMediaActivity.class);
+        intent.putExtra(EXTRA_STREAM_ID, idStream);
+        intent.putExtra(EXTRA_STREAM_MEDIA_COUNT, streamMediaCount);
         this.startActivity(intent);
     }
 
     @Override public void showMediaCount() {
-        eventMediaNumber.setVisibility(View.VISIBLE);
+        streamMediaNumber.setVisibility(View.VISIBLE);
     }
 
     @Override public void showEmpty() {

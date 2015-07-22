@@ -9,7 +9,7 @@ import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
-import com.shootr.android.ui.views.FindEventsView;
+import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ public class FindEventsPresenterTest {
     @Mock StreamSearchInteractor streamSearchInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
-    @Mock FindEventsView findEventsView;
+    @Mock FindStreamsView findStreamsView;
 
     private FindEventsPresenter findEventsPresenter;
 
@@ -47,21 +47,21 @@ public class FindEventsPresenterTest {
           new StreamResultModelMapper(streamModelMapper);
         findEventsPresenter = new FindEventsPresenter(streamSearchInteractor,
           streamResultModelMapper, errorMessageFactory);
-        findEventsPresenter.setView(findEventsView);
+        findEventsPresenter.setView(findStreamsView);
     }
 
     @Test
     public void shouldHideEventListWhileSearching() throws Exception {
         findEventsPresenter.search(QUERY);
 
-        verify(findEventsView, times(1)).hideContent();
+        verify(findStreamsView, times(1)).hideContent();
     }
 
     @Test
     public void shouldShowLoadingWhileSearching() throws Exception {
         findEventsPresenter.search(QUERY);
 
-        verify(findEventsView, times(1)).showLoading();
+        verify(findStreamsView, times(1)).showLoading();
     }
 
     @Test
@@ -70,7 +70,7 @@ public class FindEventsPresenterTest {
 
         findEventsPresenter.search(QUERY);
 
-        verify(findEventsView, times(1)).hideLoading();
+        verify(findStreamsView, times(1)).hideLoading();
     }
 
     @Test
@@ -79,7 +79,7 @@ public class FindEventsPresenterTest {
 
         findEventsPresenter.search(QUERY);
 
-        verify(findEventsView, times(1)).hideLoading();
+        verify(findStreamsView, times(1)).hideLoading();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class FindEventsPresenterTest {
 
         findEventsPresenter.search(QUERY);
 
-        verify(findEventsView, times(1)).showContent();
+        verify(findStreamsView, times(1)).showContent();
     }
 
     private void setupSearchEventInteractorCallbacks(final List<StreamSearchResult> result) {

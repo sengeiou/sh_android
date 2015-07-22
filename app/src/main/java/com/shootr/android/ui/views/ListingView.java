@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface ListingView {
 
-    void renderEvents(List<StreamResultModel> events);
+    void renderStreams(List<StreamResultModel> streams);
 
     void showContent();
 
-    void navigateToEventTimeline(String idEvent, String title);
+    void navigateToStreamTimeline(String idStream, String title);
 
     void hideLoading();
 
