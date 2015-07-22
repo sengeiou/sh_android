@@ -12,17 +12,17 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
-    @GET("/events/popular?includeLinks=false&includeEmbed=false")
+    @GET("/streams/popular?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamList(@Query("locale") String locale) throws IOException;
 
-    @GET("/user/{idUser}/events?includeLinks=false&includeEmbed=false")
-    List<StreamEntity> getStreamListing(@Path("idUser") String idUserEvent,
-      @Query("count") Integer maxNumberOfListingEvents) throws IOException;
+    @GET("/user/{idUser}/streams?includeLinks=false&includeEmbed=false")
+    List<StreamEntity> getStreamListing(@Path("idUser") String idUserStream,
+      @Query("count") Integer maxNumberOfListingStreams) throws IOException;
 
-    @GET("/events/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
+    @GET("/streams/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
       @Query("query") String query, @Query("locale") String locale) throws
       IOException;
 
-    @DELETE("/events/{idEvent}")
-    Response deleteStream(@Path("idEvent") String idEvent) throws ApiException, IOException;
+    @DELETE("/streams/{idStream}")
+    Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
 }
