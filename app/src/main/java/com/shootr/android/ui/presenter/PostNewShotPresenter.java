@@ -5,8 +5,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.android.domain.interactor.shot.PostNewShotInStreamInteractor;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
 import com.shootr.android.ui.views.PostNewShotView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -197,13 +197,13 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream event) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
         this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }

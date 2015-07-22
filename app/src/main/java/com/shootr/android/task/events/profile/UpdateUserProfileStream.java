@@ -2,9 +2,9 @@ package com.shootr.android.task.events.profile;
 
 import com.shootr.android.task.jobs.ShootrBaseJob;
 
-public class UpdateUserProfileEvent extends ShootrBaseJob.SuccessEvent<Void> {
+public class UpdateUserProfileStream extends ShootrBaseJob.SuccessEvent<Void> {
 
-    public UpdateUserProfileEvent(Void result) {
+    public UpdateUserProfileStream(Void result) {
         super(result);
     }
 }

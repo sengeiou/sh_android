@@ -1,14 +1,14 @@
 package com.shootr.android.task.events.loginregister;
 
-public class RegistrationCompletedEvent {
+public class RegistrationCompletedStream {
 
     private Exception error;
 
-    public RegistrationCompletedEvent() {
+    public RegistrationCompletedStream() {
 
     }
 
-    public RegistrationCompletedEvent(Exception error) {
+    public RegistrationCompletedStream(Exception error) {
         this.error = error;
     }
 
