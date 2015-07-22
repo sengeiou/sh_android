@@ -24,28 +24,28 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
-import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.presenter.StreamTimelinePresenter;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
+import com.shootr.android.ui.presenter.StreamTimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
-import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
+import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
-import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
+import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -62,7 +62,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
-    private static final int REQUEST_EVENT_DETAIL = 1;
+    private static final int REQUEST_STREAM_DETAIL = 1;
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -98,10 +98,10 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
 
-    public static StreamTimelineFragment newInstance(String eventId, String eventTitle) {
+    public static StreamTimelineFragment newInstance(String streamId, String streamTitle) {
         Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putString(EXTRA_STREAM_ID, eventId);
-        fragmentArguments.putString(EXTRA_STREAM_TITLE, eventTitle);
+        fragmentArguments.putString(EXTRA_STREAM_ID, streamId);
+        fragmentArguments.putString(EXTRA_STREAM_TITLE, streamTitle);
         return newInstance(fragmentArguments);
     }
 
@@ -136,13 +136,13 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        String idEvent = getArguments().getString(EXTRA_STREAM_ID);
+        String idStream = getArguments().getString(EXTRA_STREAM_ID);
         initializeToolbar();
-        initializePresenters(idEvent);
+        initializePresenters(idStream);
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EVENT_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
+        if (requestCode == REQUEST_STREAM_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -210,11 +210,11 @@ public class StreamTimelineFragment extends BaseFragment
         toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
     }
 
-    private void initializePresenters(String idEvent) {
-        streamTimelinePresenter.initialize(this, idEvent);
+    private void initializePresenters(String idStream) {
+        streamTimelinePresenter.initialize(this, idStream);
         newShotBarPresenter.initialize(this);
-        watchNumberPresenter.initialize(this, idEvent);
-        favoriteStatusPresenter.initialize(this, idEvent);
+        watchNumberPresenter.initialize(this, idStream);
+        favoriteStatusPresenter.initialize(this, idStream);
     }
 
     //endregion
@@ -452,7 +452,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override public void navigateToStreamDetail(String idStream) {
         Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
         intent.putExtra(EXTRA_STREAM_ID, idStream);
-        startActivityForResult(intent, REQUEST_EVENT_DETAIL);
+        startActivityForResult(intent, REQUEST_STREAM_DETAIL);
     }
 
     @Override public void showEmpty() {

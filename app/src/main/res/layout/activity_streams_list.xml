@@ -7,12 +7,12 @@
   android:background="@color/white"
   android:animateLayoutChanges="true">
 
-    <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/events_list_swipe_refresh"
+    <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/streams_list_swipe_refresh"
       xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView android:id="@+id/events_list"
+        <android.support.v7.widget.RecyclerView android:id="@+id/streams_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:clipToPadding="false"
@@ -21,7 +21,7 @@
           android:scrollbars="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ProgressBar android:id="@+id/events_loading"
+    <ProgressBar android:id="@+id/streams_loading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -30,7 +30,7 @@
       tools:visibility="visible" />
 
     <!-- emtpy -->
-    <TextView android:id="@+id/events_empty"
+    <TextView android:id="@+id/streams_empty"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -42,7 +42,7 @@
       android:visibility="gone"
       tools:visibility="visible" />
 
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/events_add_event"
+    <com.melnykov.fab.FloatingActionButton android:id="@+id/streams_add_stream"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|right"

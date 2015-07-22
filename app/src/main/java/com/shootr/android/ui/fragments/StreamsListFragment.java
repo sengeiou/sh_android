@@ -14,14 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
@@ -37,12 +37,12 @@ import javax.inject.Inject;
 
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
-    public static final int REQUEST_NEW_EVENT = 1;
+    public static final int REQUEST_NEW_STREAM = 1;
 
-    @Bind(R.id.events_list) RecyclerView eventsList;
-    @Bind(R.id.events_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.events_empty) View emptyView;
-    @Bind(R.id.events_loading) View loadingView;
+    @Bind(R.id.streams_list) RecyclerView streamsList;
+    @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.streams_empty) View emptyView;
+    @Bind(R.id.streams_loading) View loadingView;
 
     @Inject StreamsListPresenter presenter;
     @Inject PicassoWrapper picasso;
@@ -83,8 +83,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this, getView());
-        eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
+        streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
         adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
             @Override
@@ -97,7 +97,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
                 presenter.unwatchStream();
             }
         });
-        eventsList.setAdapter(adapter);
+        streamsList.setAdapter(adapter);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
           R.color.refresh_2,
@@ -114,14 +114,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         presenter.initialize(this);
     }
 
-    private void navigateToFindEvents() {
+    private void navigateToFindstreams() {
         Intent intent = new Intent(getActivity(), FindStreamsActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
-    @OnClick(R.id.events_add_event) public void onAddEvent() {
-        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_EVENT);
+    @OnClick(R.id.streams_add_stream) public void onAddStream() {
+        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
     }
 
     //region Activity methods
@@ -133,7 +133,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                navigateToFindEvents();
+                navigateToFindstreams();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -143,11 +143,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override
     public void onResume() {
         super.onResume();
-        redrawEventListWithCurrentValues();
+        redrawStreamListWithCurrentValues();
         presenter.resume();
     }
 
-    private void redrawEventListWithCurrentValues() {
+    private void redrawStreamListWithCurrentValues() {
         adapter.notifyDataSetChanged();
     }
 
@@ -160,10 +160,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_NEW_EVENT && resultCode == Activity.RESULT_OK) {
-            String eventId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+        if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
+            String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
             String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
-            presenter.streamCreated(eventId, title);
+            presenter.streamCreated(streamId, title);
         }
     }
 
@@ -177,7 +177,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void showContent() {
-        eventsList.setVisibility(View.VISIBLE);
+        streamsList.setVisibility(View.VISIBLE);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String title) {

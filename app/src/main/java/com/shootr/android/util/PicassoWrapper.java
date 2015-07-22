@@ -11,12 +11,12 @@ public class PicassoWrapper {
 
     private final Picasso picasso;
     private final int defaultImageRes;
-    private int defaultEventPictureRes;
+    private int defaultStreamPictureRes;
 
     public PicassoWrapper(Picasso picasso) {
         this.picasso = picasso;
         defaultImageRes = R.drawable.ic_contact_picture_default;
-        defaultEventPictureRes = R.drawable.ic_stream_picture_default;
+        defaultStreamPictureRes = R.drawable.ic_stream_picture_default;
     }
 
     public RequestCreator loadProfilePhoto(String path) {
@@ -37,9 +37,9 @@ public class PicassoWrapper {
         if (isValidPicture) {
             loadResult = picasso.load(pictureUrl);
         } else {
-            loadResult = load(defaultEventPictureRes);
+            loadResult = load(defaultStreamPictureRes);
         }
-        loadResult.placeholder(defaultEventPictureRes);
+        loadResult.placeholder(defaultStreamPictureRes);
         return loadResult;
     }
 
