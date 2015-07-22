@@ -6,7 +6,7 @@ import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.sync.SyncableEventEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
@@ -30,7 +30,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         this.syncableEventEntityFactory = syncableEventEntityFactory;
     }
 
-    @Override public Event getStreamById(String idStream) {
+    @Override public Stream getStreamById(String idStream) {
         StreamEntity streamEntity = remoteStreamDataSource.getStreamById(idStream);
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
@@ -41,19 +41,19 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         }
     }
 
-    @Override public List<Event> getStreamsByIds(List<String> streamIds) {
+    @Override public List<Stream> getStreamsByIds(List<String> streamIds) {
         List<StreamEntity> remoteEvents = remoteStreamDataSource.getStreamByIds(streamIds);
         markEntitiesAsSynchronized(remoteEvents);
         localStreamDataSource.putStreams(remoteEvents);
         return streamEntityMapper.transform(remoteEvents);
     }
 
-    @Override public Event putStream(Event event) {
-        return putStream(event, false);
+    @Override public Stream putStream(Stream stream) {
+        return putStream(stream, false);
     }
 
-    @Override public Event putStream(Event event, boolean notify) {
-        StreamEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(event);
+    @Override public Stream putStream(Stream stream, boolean notify) {
+        StreamEntity currentOrNewEntity = syncableEventEntityFactory.updatedOrNewEntity(stream);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
         StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity);

@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SelectEventInteractorTest {
+public class SelectStreamInteractorTest {
 
     private static final String OLD_EVENT_ID = "old_event";
     private static final String NEW_EVENT_ID = "new_event";
@@ -131,9 +131,9 @@ public class SelectEventInteractorTest {
     @Test
     public void should_setEventId_when_updateUserWithEventInfo() throws Exception {
         User userWithOldEvent = currentUserWatchingOldEvent();
-        Event selectedEvent = newEvent();
+        Stream selectedStream = newEvent();
 
-        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
+        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedStream);
 
         assertThat(updatedUser).hasWatchingEventId(NEW_EVENT_ID);
     }
@@ -141,9 +141,9 @@ public class SelectEventInteractorTest {
     @Test
     public void should_setEventTitle_when_updateUserWithEventInfo() throws Exception {
         User userWithOldEvent = currentUserWatchingOldEvent();
-        Event selectedEvent = newEvent();
+        Stream selectedStream = newEvent();
 
-        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedEvent);
+        User updatedUser = interactor.updateUserWithEventInfo(userWithOldEvent, selectedStream);
 
         assertThat(updatedUser).hasVisibleEventTitle(NEW_EVENT_TITLE);
     }
@@ -168,18 +168,18 @@ public class SelectEventInteractorTest {
     //endregion
 
     //region Stub data
-    private Event newEvent() {
-        Event event = new Event();
-        event.setId(NEW_EVENT_ID);
-        event.setTitle(NEW_EVENT_TITLE);
-        return event;
+    private Stream newEvent() {
+        Stream stream = new Stream();
+        stream.setId(NEW_EVENT_ID);
+        stream.setTitle(NEW_EVENT_TITLE);
+        return stream;
     }
 
-    private Event oldEvent() {
-        Event event = new Event();
-        event.setId(OLD_EVENT_ID);
-        event.setTitle(OLD_EVENT_TITLE);
-        return event;
+    private Stream oldEvent() {
+        Stream stream = new Stream();
+        stream.setId(OLD_EVENT_ID);
+        stream.setTitle(OLD_EVENT_TITLE);
+        return stream;
     }
 
     private User currentUser() {

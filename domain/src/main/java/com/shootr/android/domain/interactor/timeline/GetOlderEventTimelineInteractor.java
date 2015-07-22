@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -64,9 +64,9 @@ public class GetOlderEventTimelineInteractor implements Interactor {
     }
 
     private EventTimelineParameters buildTimelineParameters() {
-        Event visibleEvent = getVisibleEvent();
+        Stream visibleStream = getVisibleEvent();
         return EventTimelineParameters.builder() //
-                .forEvent(visibleEvent) //
+                .forEvent(visibleStream) //
                 .maxDate(currentOldestDate) //
                 .build();
     }
@@ -96,7 +96,7 @@ public class GetOlderEventTimelineInteractor implements Interactor {
         return timeline;
     }
 
-    private Event getVisibleEvent() {
+    private Stream getVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {
             return localStreamRepository.getStreamById(visibleEventId);

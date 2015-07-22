@@ -3,7 +3,7 @@ package com.shootr.android.domain.interactor.timeline;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -117,11 +117,11 @@ public class GetActivityTimelineInteractorTest {
         return Arrays.asList(new User());
     }
 
-    private Event watchingEvent() {
-        Event event = new Event();
-        event.setId(WATCHING_EVENT_ID);
-        event.setAuthorId(EVENT_AUTHOR_ID);
-        return event;
+    private Stream watchingEvent() {
+        Stream stream = new Stream();
+        stream.setId(WATCHING_EVENT_ID);
+        stream.setAuthorId(EVENT_AUTHOR_ID);
+        return stream;
     }
 
     static class SpyCallback implements Interactor.Callback<Timeline> {

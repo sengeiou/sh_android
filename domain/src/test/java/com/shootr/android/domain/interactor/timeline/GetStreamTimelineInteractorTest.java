@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GetEventTimelineInteractorTest {
+public class GetStreamTimelineInteractorTest {
 
     private static final String ID_SHOT_WITHOUT_EVENT = "shot_without_event";
     private static final String WATCHING_EVENT_ID = "watching_event";
@@ -151,11 +151,11 @@ public class GetEventTimelineInteractorTest {
         return eventInfo;
     }
 
-    private Event watchingEvent() {
-        Event event = new Event();
-        event.setId(WATCHING_EVENT_ID);
-        event.setAuthorId(EVENT_AUTHOR_ID);
-        return event;
+    private Stream watchingEvent() {
+        Stream stream = new Stream();
+        stream.setId(WATCHING_EVENT_ID);
+        stream.setAuthorId(EVENT_AUTHOR_ID);
+        return stream;
     }
 
     //endregion

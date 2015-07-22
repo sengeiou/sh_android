@@ -4,7 +4,7 @@ import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -242,10 +242,10 @@ public class ShootrTimelineServiceTest {
         return new User();
     }
 
-    private Event watchingEvent() {
-        Event event = new Event();
-        event.setId(WATCHING_EVENT_ID);
-        return event;
+    private Stream watchingEvent() {
+        Stream stream = new Stream();
+        stream.setId(WATCHING_EVENT_ID);
+        return stream;
     }
 
     private List<Shot> unorderedShots() {

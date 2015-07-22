@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -66,8 +66,8 @@ public class NewEventPresenter implements Presenter {
 
     private void preloadEventToEdit(String optionalIdEventToEdit) {
         getEventInteractor.loadEvent(optionalIdEventToEdit, new GetEventInteractor.Callback() {
-            @Override public void onLoaded(Event event) {
-                setDefaultEventInfo(eventModelMapper.transform(event));
+            @Override public void onLoaded(Stream stream) {
+                setDefaultEventInfo(eventModelMapper.transform(stream));
             }
         });
     }
@@ -161,8 +161,8 @@ public class NewEventPresenter implements Presenter {
           shortTitle,
           notifyCreation,
           new CreateEventInteractor.Callback() {
-              @Override public void onLoaded(Event event) {
-                  eventCreated(event);
+              @Override public void onLoaded(Stream stream) {
+                  eventCreated(stream);
               }
           },
           new Interactor.ErrorCallback() {
@@ -172,8 +172,8 @@ public class NewEventPresenter implements Presenter {
           });
     }
 
-    private void eventCreated(Event event) {
-        newEventView.closeScreenWithResult(event.getId(), event.getTitle());
+    private void eventCreated(Stream stream) {
+        newEventView.closeScreenWithResult(stream.getId(), stream.getTitle());
     }
 
     private void eventCreationError(ShootrException error) {

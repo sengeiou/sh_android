@@ -2,28 +2,28 @@ package com.shootr.android.domain;
 
 public class EventSearchResult {
 
-    private Event event;
+    private Stream stream;
     private int watchersNumber;
 
     public EventSearchResult() {
     }
 
-    public EventSearchResult(Event event, int watchersNumber) {
-        this.event = event;
+    public EventSearchResult(Stream stream, int watchersNumber) {
+        this.stream = stream;
         this.watchersNumber = watchersNumber;
     }
 
-    public EventSearchResult(Event event, Integer watchersNumber) {
-        this.event = event;
+    public EventSearchResult(Stream stream, Integer watchersNumber) {
+        this.stream = stream;
         this.watchersNumber = watchersNumber != null ? watchersNumber : 0;
     }
 
-    public Event getEvent() {
-        return event;
+    public Stream getStream() {
+        return stream;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setStream(Stream stream) {
+        this.stream = stream;
     }
 
     public int getWatchersNumber() {
@@ -41,18 +41,18 @@ public class EventSearchResult {
         EventSearchResult that = (EventSearchResult) o;
 
         if (watchersNumber != that.watchersNumber) return false;
-        return event.equals(that.event);
+        return stream.equals(that.stream);
     }
 
     @Override public int hashCode() {
-        int result = event.hashCode();
+        int result = stream.hashCode();
         result = 31 * result + watchersNumber;
         return result;
     }
 
     @Override public String toString() {
         return "EventSearchResult{" +
-          "event=" + event +
+          "event=" + stream +
           ", watchersNumber=" + watchersNumber +
           '}';
     }

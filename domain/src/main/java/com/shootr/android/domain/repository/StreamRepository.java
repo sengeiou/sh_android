@@ -1,18 +1,18 @@
 package com.shootr.android.domain.repository;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import java.util.List;
 
 public interface StreamRepository {
 
-    Event getStreamById(String idStream);
+    Stream getStreamById(String idStream);
 
-    List<Event> getStreamsByIds(List<String> streamIds);
+    List<Stream> getStreamsByIds(List<String> streamIds);
 
-    Event putStream(Event event);
+    Stream putStream(Stream stream);
 
-    Event putStream(Event event, boolean notify);
+    Stream putStream(Stream stream, boolean notify);
 
     Integer getListingCount(String idUser);
 

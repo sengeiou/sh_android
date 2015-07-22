@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -30,17 +30,17 @@ public class PostNewShotInEventInteractor extends PostNewShotInteractor {
     }
 
     @Override protected void fillShotEventInfo(Shot shot) {
-        Event event = currentVisibleEvent();
-        if (event != null) {
+        Stream stream = currentVisibleEvent();
+        if (stream != null) {
             Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(event.getId());
-            eventInfo.setEventTitle(event.getTitle());
-            eventInfo.setEventTag(event.getTag());
+            eventInfo.setIdEvent(stream.getId());
+            eventInfo.setEventTitle(stream.getTitle());
+            eventInfo.setEventTag(stream.getTag());
             shot.setEventInfo(eventInfo);
         }
     }
 
-    private Event currentVisibleEvent() {
+    private Stream currentVisibleEvent() {
         String visibleEventId = sessionRepository.getCurrentUser().getIdWatchingEvent();
         if (visibleEventId != null) {
             return localStreamRepository.getStreamById(visibleEventId);

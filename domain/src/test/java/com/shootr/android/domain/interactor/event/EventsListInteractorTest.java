@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.User;
@@ -203,7 +203,7 @@ public class EventsListInteractorTest {
 
     private EventSearchResult eventResult() {
         EventSearchResult result = new EventSearchResult();
-        result.setEvent(new Event());
+        result.setStream(new Stream());
         return result;
     }
 

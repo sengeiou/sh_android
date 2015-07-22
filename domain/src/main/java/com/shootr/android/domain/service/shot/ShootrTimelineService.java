@@ -3,7 +3,7 @@ package com.shootr.android.domain.service.shot;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -81,22 +81,22 @@ public class ShootrTimelineService {
     }
 
     private List<Shot> refreshWatchingEventShots() {
-        Event watchingEvent = getWatchingEvent();
-        if (watchingEvent != null) {
-            return refreshEventShots(watchingEvent);
+        Stream watchingStream = getWatchingEvent();
+        if (watchingStream != null) {
+            return refreshEventShots(watchingStream);
         }
         return null;
     }
 
-    private List<Shot> refreshEventShots(Event event) {
-        if (event == null) {
+    private List<Shot> refreshEventShots(Stream stream) {
+        if (stream == null) {
             throw new IllegalArgumentException("Can't refresh null event");
         }
 
-        Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(event.getId());
+        Long eventRefreshDateSince = timelineSynchronizationRepository.getEventTimelineRefreshDate(stream.getId());
 
         EventTimelineParameters eventTimelineParameters = EventTimelineParameters.builder() //
-          .forEvent(event) //
+          .forEvent(stream) //
           .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(eventRefreshDateSince) //
           .build();
@@ -138,7 +138,7 @@ public class ShootrTimelineService {
         return ids;
     }
 
-    private Event getWatchingEvent() {
+    private Stream getWatchingEvent() {
         String currentUserId = sessionRepository.getCurrentUserId();
         User currentUser = localUserRepository.getUserById(currentUserId);
         String watchingEventId = currentUser.getIdWatchingEvent();

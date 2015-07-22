@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.User;
@@ -116,10 +116,10 @@ public class EventsListInteractor implements Interactor {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         String idWatchingEvent = currentUser.getIdWatchingEvent();
         if (idWatchingEvent != null) {
-            Event event = localStreamRepository.getStreamById(idWatchingEvent);
+            Stream stream = localStreamRepository.getStreamById(idWatchingEvent);
             Integer watchers = watchersRepository.getWatchers(idWatchingEvent);
             EventSearchResult eventSearchResult = new EventSearchResult();
-            eventSearchResult.setEvent(event);
+            eventSearchResult.setStream(stream);
             eventSearchResult.setWatchersNumber(watchers);
             return eventSearchResult;
         } else {

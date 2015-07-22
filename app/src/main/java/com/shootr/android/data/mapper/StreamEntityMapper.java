@@ -2,7 +2,7 @@ package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -12,43 +12,43 @@ public class StreamEntityMapper {
     @Inject public StreamEntityMapper() {
     }
 
-    public Event transform(StreamEntity streamEntity) {
+    public Stream transform(StreamEntity streamEntity) {
         if (streamEntity == null) {
             return null;
         }
-        Event event = new Event();
-        event.setId(streamEntity.getIdEvent());
-        event.setAuthorId(streamEntity.getIdUser());
-        event.setTitle(streamEntity.getTitle());
-        event.setPicture(streamEntity.getPhoto());
-        event.setTag(streamEntity.getTag());
-        event.setAuthorUsername(streamEntity.getUserName());
-        event.setLocale(streamEntity.getLocale());
-        return event;
+        Stream stream = new Stream();
+        stream.setId(streamEntity.getIdEvent());
+        stream.setAuthorId(streamEntity.getIdUser());
+        stream.setTitle(streamEntity.getTitle());
+        stream.setPicture(streamEntity.getPhoto());
+        stream.setTag(streamEntity.getTag());
+        stream.setAuthorUsername(streamEntity.getUserName());
+        stream.setLocale(streamEntity.getLocale());
+        return stream;
     }
 
-    public List<Event> transform(List<StreamEntity> eventEntities) {
-        List<Event> events = new ArrayList<>(eventEntities.size());
+    public List<Stream> transform(List<StreamEntity> eventEntities) {
+        List<Stream> streams = new ArrayList<>(eventEntities.size());
         for (StreamEntity streamEntity : eventEntities) {
-            events.add(transform(streamEntity));
+            streams.add(transform(streamEntity));
         }
-        return events;
+        return streams;
     }
 
-    public StreamEntity transform(Event event) {
+    public StreamEntity transform(Stream stream) {
         StreamEntity streamEntity = new StreamEntity();
-        transformToTemplate(event, streamEntity);
+        transformToTemplate(stream, streamEntity);
         return streamEntity;
     }
 
-    protected void transformToTemplate(Event event, StreamEntity entityTemplate) {
-        entityTemplate.setIdEvent(event.getId());
-        entityTemplate.setIdUser(event.getAuthorId());
-        entityTemplate.setTitle(event.getTitle());
-        entityTemplate.setPhoto(event.getPicture());
-        entityTemplate.setTag(event.getTag());
-        entityTemplate.setUserName(event.getAuthorUsername());
-        entityTemplate.setLocale(event.getLocale());
+    protected void transformToTemplate(Stream stream, StreamEntity entityTemplate) {
+        entityTemplate.setIdEvent(stream.getId());
+        entityTemplate.setIdUser(stream.getAuthorId());
+        entityTemplate.setTitle(stream.getTitle());
+        entityTemplate.setPhoto(stream.getPicture());
+        entityTemplate.setTag(stream.getTag());
+        entityTemplate.setUserName(stream.getAuthorUsername());
+        entityTemplate.setLocale(stream.getLocale());
 
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }

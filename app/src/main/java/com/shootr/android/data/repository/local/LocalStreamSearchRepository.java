@@ -6,7 +6,7 @@ import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.mapper.StreamSearchEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.Local;
@@ -62,10 +62,10 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
       Map<String, Integer> watchers) {
         List<EventSearchResult> results = new ArrayList<>(eventEntities.size());
         for (StreamEntity streamEntity : eventEntities) {
-            Event event = streamEntityMapper.transform(streamEntity);
-            Integer eventWatchers = watchers.get(event.getId());
+            Stream stream = streamEntityMapper.transform(streamEntity);
+            Integer eventWatchers = watchers.get(stream.getId());
             EventSearchResult eventSearchResult =
-              new EventSearchResult(event, eventWatchers != null ? eventWatchers : 0);
+              new EventSearchResult(stream, eventWatchers != null ? eventWatchers : 0);
             results.add(eventSearchResult);
         }
         return results;

@@ -23,8 +23,8 @@ public class EventResultModelMapper {
         if (eventSearchResult == null) {
             return null;
         }
-        checkNotNull(eventSearchResult.getEvent());
-        EventModel eventModel = eventModelMapper.transform(eventSearchResult.getEvent());
+        checkNotNull(eventSearchResult.getStream());
+        EventModel eventModel = eventModelMapper.transform(eventSearchResult.getStream());
 
         EventResultModel resultModel = new EventResultModel();
         resultModel.setEventModel(eventModel);

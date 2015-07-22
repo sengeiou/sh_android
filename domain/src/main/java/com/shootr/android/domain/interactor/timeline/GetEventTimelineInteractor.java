@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.timeline;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -57,9 +57,9 @@ public class GetEventTimelineInteractor implements Interactor {
     }
 
     private void loadLocalShots() {
-        Event visibleEvent = getVisibleEvent();
-        if (visibleEvent != null) {
-            List<Shot> shots = loadLocalShots(buildParameters(visibleEvent));
+        Stream visibleStream = getVisibleEvent();
+        if (visibleStream != null) {
+            List<Shot> shots = loadLocalShots(buildParameters(visibleStream));
             shots = sortShotsByPublishDate(shots);
             notifyTimelineFromShots(shots);
         } else {
@@ -71,9 +71,9 @@ public class GetEventTimelineInteractor implements Interactor {
         return localShotRepository.getShotsForEventTimeline(timelineParameters);
     }
 
-    private EventTimelineParameters buildParameters(Event event) {
+    private EventTimelineParameters buildParameters(Stream stream) {
         return EventTimelineParameters.builder()
-          .forEvent(event)
+          .forEvent(stream)
           .build();
     }
 
@@ -90,7 +90,7 @@ public class GetEventTimelineInteractor implements Interactor {
         return ids;
     }
 
-    private Event getVisibleEvent() {
+    private Stream getVisibleEvent() {
         String visibleEventId = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingEvent();
         if (visibleEventId != null) {
             return localStreamRepository.getStreamById(visibleEventId);

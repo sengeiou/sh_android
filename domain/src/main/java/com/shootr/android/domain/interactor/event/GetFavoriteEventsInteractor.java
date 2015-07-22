@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -65,15 +65,15 @@ public class GetFavoriteEventsInteractor implements Interactor {
 
     private void loadFavoritesFrom(FavoriteRepository favoriteRepository) {
         List<Favorite> favorites = favoriteRepository.getFavorites();
-        List<Event> favoriteEvents = eventsFromFavorites(favorites);
-        favoriteEvents = sortEventsByName(favoriteEvents);
-        List<EventSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteEvents);
+        List<Stream> favoriteStreams = eventsFromFavorites(favorites);
+        favoriteStreams = sortEventsByName(favoriteStreams);
+        List<EventSearchResult> favoriteEventsWithWatchers = addWatchersToEvents(favoriteStreams);
         notifyLoaded(favoriteEventsWithWatchers);
     }
 
-    private List<Event> sortEventsByName(List<Event> events) {
-        Collections.sort(events, new Event.EventNameComparator());
-        return events;
+    private List<Stream> sortEventsByName(List<Stream> streams) {
+        Collections.sort(streams, new Stream.StreamNameComparator());
+        return streams;
     }
 
     private List<String> idsFromFavorites(List<Favorite> favorites) {
@@ -84,7 +84,7 @@ public class GetFavoriteEventsInteractor implements Interactor {
         return ids;
     }
 
-    private List<Event> eventsFromFavorites(List<Favorite> favorites) {
+    private List<Stream> eventsFromFavorites(List<Favorite> favorites) {
         List<String> idEvents = new ArrayList<>();
         for (Favorite favorite : favorites) {
             idEvents.add(favorite.getIdEvent());
@@ -92,12 +92,12 @@ public class GetFavoriteEventsInteractor implements Interactor {
         return localStreamRepository.getStreamsByIds(idEvents);
     }
 
-    private List<EventSearchResult> addWatchersToEvents(List<Event> events) {
+    private List<EventSearchResult> addWatchersToEvents(List<Stream> streams) {
         Map<String, Integer> watchersInEvents = watchersRepository.getWatchers();
-        List<EventSearchResult> eventsWithWatchers = new ArrayList<>(events.size());
-        for (Event event : events) {
-            Integer eventWatchers = watchersInEvents.get(event.getId());
-            eventsWithWatchers.add(new EventSearchResult(event, eventWatchers));
+        List<EventSearchResult> eventsWithWatchers = new ArrayList<>(streams.size());
+        for (Stream stream : streams) {
+            Integer eventWatchers = watchersInEvents.get(stream.getId());
+            eventsWithWatchers.add(new EventSearchResult(stream, eventWatchers));
         }
         return eventsWithWatchers;
     }

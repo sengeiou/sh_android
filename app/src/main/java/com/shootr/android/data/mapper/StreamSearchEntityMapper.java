@@ -1,7 +1,7 @@
 package com.shootr.android.data.mapper;
 
 import com.shootr.android.data.entity.StreamSearchEntity;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,10 +17,10 @@ public class StreamSearchEntityMapper {
     }
 
     public EventSearchResult transform(StreamSearchEntity streamSearchEntity) {
-        Event event = streamEntityMapper.transform(streamSearchEntity);
+        Stream stream = streamEntityMapper.transform(streamSearchEntity);
 
         EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setEvent(event);
+        eventSearchResult.setStream(stream);
         eventSearchResult.setWatchersNumber(streamSearchEntity.getWatchers());
 
         return eventSearchResult;
@@ -35,10 +35,10 @@ public class StreamSearchEntityMapper {
     }
 
     public StreamSearchEntity transform(EventSearchResult eventSearchResult) {
-        Event event = eventSearchResult.getEvent();
+        Stream stream = eventSearchResult.getStream();
 
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
-        streamEntityMapper.transformToTemplate(event, streamSearchEntity);
+        streamEntityMapper.transformToTemplate(stream, streamSearchEntity);
 
         streamSearchEntity.setWatchers(eventSearchResult.getWatchersNumber());
 

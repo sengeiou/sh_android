@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
@@ -151,7 +151,7 @@ public class EventsListPresenterTest {
 
     private EventSearchResult eventResult() {
         EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setEvent(selectedEvent());
+        eventSearchResult.setStream(selectedEvent());
         return eventSearchResult;
     }
 
@@ -165,11 +165,11 @@ public class EventsListPresenterTest {
         return eventResultModel;
     }
 
-    private Event selectedEvent() {
-        Event event = new Event();
-        event.setId(SELECTED_EVENT_ID);
-        event.setTitle(SELECTED_EVENT_TITLE);
-        event.setAuthorId(EVENT_AUTHOR_ID);
-        return event;
+    private Stream selectedEvent() {
+        Stream stream = new Stream();
+        stream.setId(SELECTED_EVENT_ID);
+        stream.setTitle(SELECTED_EVENT_TITLE);
+        stream.setAuthorId(EVENT_AUTHOR_ID);
+        return stream;
     }
 }

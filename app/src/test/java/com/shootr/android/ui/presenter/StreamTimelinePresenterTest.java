@@ -1,6 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
@@ -39,7 +39,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class EventTimelinePresenterTest {
+public class StreamTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
     private static final ShotSent.Event SHOT_SENT_EVENT = null;
@@ -303,15 +303,15 @@ public class EventTimelinePresenterTest {
         return shot;
     }
 
-    private Event selectedEvent() {
-        Event event = new Event();
-        event.setId(SELECTED_EVENT_ID);
-        return event;
+    private Stream selectedEvent() {
+        Stream stream = new Stream();
+        stream.setId(SELECTED_EVENT_ID);
+        return stream;
     }
 
     private EventSearchResult eventResult() {
         EventSearchResult eventSearchResult = new EventSearchResult();
-        eventSearchResult.setEvent(selectedEvent());
+        eventSearchResult.setStream(selectedEvent());
         return eventSearchResult;
     }
 

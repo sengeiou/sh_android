@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -20,7 +20,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestBase {
+public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTestBase {
 
     private static final String WATCHING_EVENT_ID = "1L";
 
@@ -80,12 +80,12 @@ public class PostNewShotInEventInteractorTest extends PostNewShotInteractorTestB
         when(localStreamRepository.getStreamById(WATCHING_EVENT_ID)).thenReturn(watchingEvent());
     }
 
-    private Event watchingEvent() {
-        Event event = new Event();
-        event.setId(String.valueOf(WATCHING_EVENT_ID));
-        event.setTitle(EVENT_TITLE_STUB);
-        event.setTag(EVENT_TAG_STUB);
-        return event;
+    private Stream watchingEvent() {
+        Stream stream = new Stream();
+        stream.setId(String.valueOf(WATCHING_EVENT_ID));
+        stream.setTitle(EVENT_TITLE_STUB);
+        stream.setTag(EVENT_TAG_STUB);
+        return stream;
     }
 
     private User currentUserWatching() {

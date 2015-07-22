@@ -49,7 +49,7 @@ public class EventTimelineActivity extends BaseToolbarDecoratedActivity {
         selectEventInteractor.selectEvent(eventId, new Interactor.Callback<EventSearchResult>() {
             @Override
             public void onLoaded(EventSearchResult eventSearchResult) {
-                setEventTitle(eventSearchResult.getEvent().getTag());
+                setEventTitle(eventSearchResult.getStream().getTag());
             }
         });
     }

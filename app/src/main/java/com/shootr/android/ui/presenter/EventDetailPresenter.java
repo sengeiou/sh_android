@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
@@ -96,10 +96,10 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         changeEventPhotoInteractor.changeEventPhoto(eventModel.getIdEvent(),
           photoFile,
           new ChangeEventPhotoInteractor.Callback() {
-              @Override public void onLoaded(Event event) {
-                  renderEventInfo(event);
+              @Override public void onLoaded(Stream stream) {
+                  renderEventInfo(stream);
                   eventDetailView.hideLoadingPictureUpload();
-                  eventDetailView.showEditPicture(event.getPicture());
+                  eventDetailView.showEditPicture(stream.getPicture());
               }
           },
           new Interactor.ErrorCallback() {
@@ -137,11 +137,11 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void onEventInfoLoaded(EventInfo eventInfo) {
-        if (eventInfo.getEvent() == null) {
+        if (eventInfo.getStream() == null) {
             this.showViewEmpty();
         } else {
             this.hideViewEmpty();
-            this.renderEventInfo(eventInfo.getEvent());
+            this.renderEventInfo(eventInfo.getStream());
             this.renderWatchersList(eventInfo.getWatchers());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatching());
             this.renderWatchersCount(eventInfo.getWatchersCount());
@@ -212,8 +212,8 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
         }
     }
 
-    private void renderEventInfo(Event event) {
-        eventModel = eventModelMapper.transform(event);
+    private void renderEventInfo(Stream stream) {
+        eventModel = eventModelMapper.transform(stream);
         eventDetailView.setEventTitle(eventModel.getTitle());
         eventDetailView.setEventPicture(eventModel.getPicture());
         eventDetailView.setEventAuthor(eventModel.getAuthorUsername());

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Event {
+public class Stream {
 
     private String id;
     private String authorId;
@@ -15,7 +15,7 @@ public class Event {
     private String tag;
     private String locale;
 
-    public Event() {
+    public Stream() {
     }
 
     public String getLocale() {
@@ -77,19 +77,19 @@ public class Event {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Event)) return false;
+        if (!(o instanceof Stream)) return false;
 
-        Event event = (Event) o;
+        Stream stream = (Stream) o;
 
-        if (id != null ? !id.equals(event.id) : event.id != null) return false;
-        if (authorId != null ? !authorId.equals(event.authorId) : event.authorId != null) return false;
-        if (authorUsername != null ? !authorUsername.equals(event.authorUsername) : event.authorUsername != null) {
+        if (id != null ? !id.equals(stream.id) : stream.id != null) return false;
+        if (authorId != null ? !authorId.equals(stream.authorId) : stream.authorId != null) return false;
+        if (authorUsername != null ? !authorUsername.equals(stream.authorUsername) : stream.authorUsername != null) {
             return false;
         }
-        if (title != null ? !title.equals(event.title) : event.title != null) return false;
-        if (picture != null ? !picture.equals(event.picture) : event.picture != null) return false;
-        if (tag != null ? !tag.equals(event.tag) : event.tag != null) return false;
-        return !(locale != null ? !locale.equals(event.locale) : event.locale != null);
+        if (title != null ? !title.equals(stream.title) : stream.title != null) return false;
+        if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
+        if (tag != null ? !tag.equals(stream.tag) : stream.tag != null) return false;
+        return !(locale != null ? !locale.equals(stream.locale) : stream.locale != null);
     }
 
     @Override
@@ -106,42 +106,42 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "Stream{" +
           "id=" + id +
           ", title='" + title + '\'' +
           '}';
     }
 
-    public static class EventExplicitComparator implements Comparator<Event> {
+    public static class StreamExplicitComparator implements Comparator<Stream> {
 
         private Map<String, Integer> indexMap = new HashMap<>();
 
-        public EventExplicitComparator(List<String> orderedEventIds) {
-            for (int i = 0; i < orderedEventIds.size(); i++) {
-                String id = orderedEventIds.get(i);
+        public StreamExplicitComparator(List<String> orderedStreamIds) {
+            for (int i = 0; i < orderedStreamIds.size(); i++) {
+                String id = orderedStreamIds.get(i);
                 indexMap.put(id, i);
             }
         }
 
         @Override
-        public int compare(Event ev1, Event ev2) {
-            return rank(ev1) - rank(ev2);
+        public int compare(Stream stream1, Stream stream2) {
+            return rank(stream1) - rank(stream2);
         }
 
-        private int rank(Event event) {
-            Integer rank = indexMap.get(event.getId());
+        private int rank(Stream stream) {
+            Integer rank = indexMap.get(stream.getId());
             if (rank == null) {
-                throw new IllegalStateException(String.format("Event id not found in explicit list: %s",
-                  event.toString()));
+                throw new IllegalStateException(String.format("Stream id not found in explicit list: %s",
+                  stream.toString()));
             }
             return rank;
         }
     }
 
-    public static class EventNameComparator implements Comparator<Event> {
+    public static class StreamNameComparator implements Comparator<Stream> {
 
         @Override
-        public int compare(Event left, Event right) {
+        public int compare(Stream left, Stream right) {
             return left.getTitle().compareTo(right.getTitle());
         }
     }

@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -124,11 +124,11 @@ public class GetFavoriteEventsInteractorTest {
         return new EventSearchResult(event(eventId), 0);
     }
 
-    private Event event(String eventId) {
-        Event event = new Event();
-        event.setId(eventId);
-        event.setTitle("title_"+eventId);
-        return event;
+    private Stream event(String eventId) {
+        Stream stream = new Stream();
+        stream.setId(eventId);
+        stream.setTitle("title_"+eventId);
+        return stream;
     }
 
     private Favorite favorite(String eventId, int order) {
@@ -153,24 +153,24 @@ public class GetFavoriteEventsInteractorTest {
         return strings;
     }
 
-    private List<Event> listWithOneEvent() {
-        List<Event> events = new ArrayList<>();
-        Event event = new Event();
-        event.setId(EVENT_ID);
-        events.add(event);
-        return events;
+    private List<Stream> listWithOneEvent() {
+        List<Stream> streams = new ArrayList<>();
+        Stream stream = new Stream();
+        stream.setId(EVENT_ID);
+        streams.add(stream);
+        return streams;
     }
 
     protected void setupEventRepositoryReturnsEventsWithInputIds() {
-        when(localStreamRepository.getStreamsByIds(anyListOf(String.class))).thenAnswer(new Answer<List<Event>>() {
+        when(localStreamRepository.getStreamsByIds(anyListOf(String.class))).thenAnswer(new Answer<List<Stream>>() {
             @Override
-            public List<Event> answer(InvocationOnMock invocation) throws Throwable {
+            public List<Stream> answer(InvocationOnMock invocation) throws Throwable {
                 List<String> ids = (List<String>) invocation.getArguments()[0];
-                List<Event> events = new ArrayList<Event>();
+                List<Stream> streams = new ArrayList<Stream>();
                 for (String id : ids) {
-                    events.add(event(id));
+                    streams.add(event(id));
                 }
-                return events;
+                return streams;
             }
         });
     }

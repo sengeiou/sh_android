@@ -88,7 +88,7 @@ public class EventsSearchInteractor implements Interactor {
     }
 
     private boolean matchesQuery(EventSearchResult event) {
-        return event.getEvent().getTitle().toLowerCase().contains(query.toLowerCase());
+        return event.getStream().getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
     private void notifySearchResultsSuccessful(final EventSearchResultList events) {

@@ -1,6 +1,6 @@
 package com.shootr.android.domain.validation;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +23,25 @@ public class EventValidator {
         fieldValidationErrors = new ArrayList<>();
     }
 
-    public List<FieldValidationError> validate(Event event) {
-        validateTitle(event);
-        validateShortTitle(event);
+    public List<FieldValidationError> validate(Stream stream) {
+        validateTitle(stream);
+        validateShortTitle(stream);
         return fieldValidationErrors;
     }
 
-    private void validateShortTitle(Event event) {
-        validateShortTitleTooShort(event);
-        validateShortTitleTooLong(event);
+    private void validateShortTitle(Stream stream) {
+        validateShortTitleTooShort(stream);
+        validateShortTitleTooLong(stream);
     }
 
     //region Title
-    private void validateTitle(Event event) {
-        validateTitleTooShort(event);
-        validateTitleTooLong(event);
+    private void validateTitle(Stream stream) {
+        validateTitleTooShort(stream);
+        validateTitleTooLong(stream);
     }
 
-    private void validateTitleTooShort(Event event) {
-        String title = event.getTitle();
+    private void validateTitleTooShort(Stream stream) {
+        String title = stream.getTitle();
         if (title == null || alphanumericLength(title) < TITLE_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT, FIELD_TITLE));
@@ -52,8 +52,8 @@ public class EventValidator {
         return title.replaceAll(ALPHANUMERIC_REGEX, "").length();
     }
 
-    private void validateTitleTooLong(Event event) {
-        if (event.getTitle() != null && alphanumericLength(event.getTitle()) > TITLE_MAXIMUN_LENGTH) {
+    private void validateTitleTooLong(Stream stream) {
+        if (stream.getTitle() != null && alphanumericLength(stream.getTitle()) > TITLE_MAXIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG, FIELD_TITLE));
         }
@@ -61,15 +61,15 @@ public class EventValidator {
     //endregion
 
     //region Short Title
-    private void validateShortTitleTooLong(Event event) {
-        if (event.getTag() != null && alphanumericLength(event.getTag()) > TAG_MAXIMUM_LENGTH) {
+    private void validateShortTitleTooLong(Stream stream) {
+        if (stream.getTag() != null && alphanumericLength(stream.getTag()) > TAG_MAXIMUM_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_LONG, FIELD_SHORT_TITLE));
         }
     }
 
-    private void validateShortTitleTooShort(Event event) {
-        String shortTitle = event.getTag();
+    private void validateShortTitleTooShort(Stream stream) {
+        String shortTitle = stream.getTag();
         if (shortTitle == null || alphanumericLength(shortTitle) < TAG_MINIMUN_LENGTH) {
             fieldValidationErrors.add(
               new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_SHORT, FIELD_SHORT_TITLE));

@@ -56,8 +56,8 @@ public class EventTimelineParameters extends TimelineParameters {
             parameters.shotType = ShotType.COMMENT;
         }
 
-        public Builder forEvent(Event event) {
-            parameters.eventId = event.getId();
+        public Builder forEvent(Stream stream) {
+            parameters.eventId = stream.getId();
             return this;
         }
 

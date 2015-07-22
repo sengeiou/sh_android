@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -52,10 +52,10 @@ public class ChangeEventPhotoInteractor implements Interactor {
         try {
             File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
             String imageUrl = photoService.uploadEventImageAndGetUrl(resizedImageFile, idEvent);
-            Event event = localStreamRepository.getStreamById(idEvent);
-            event.setPicture(imageUrl);
-            Event remoteEvent = remoteStreamRepository.putStream(event);
-            notifyLoaded(remoteEvent);
+            Stream stream = localStreamRepository.getStreamById(idEvent);
+            stream.setPicture(imageUrl);
+            Stream remoteStream = remoteStreamRepository.putStream(stream);
+            notifyLoaded(remoteStream);
         } catch (IOException e) {
             notifyError(new ServerCommunicationException(e));
         } catch (ServerCommunicationException e) {
@@ -63,10 +63,10 @@ public class ChangeEventPhotoInteractor implements Interactor {
         }
     }
 
-    private void notifyLoaded(final Event remoteEvent) {
+    private void notifyLoaded(final Stream remoteStream) {
         postExecutionThread.post(new Runnable() {
             public void run() {
-                callback.onLoaded(remoteEvent);
+                callback.onLoaded(remoteStream);
             }
         });
     }
@@ -81,7 +81,7 @@ public class ChangeEventPhotoInteractor implements Interactor {
 
     public interface Callback {
 
-        public void onLoaded(Event event);
+        public void onLoaded(Stream stream);
 
     }
 }

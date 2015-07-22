@@ -8,7 +8,7 @@ public class EventInfo {
 
     private User currentUserWatching;
 
-    private Event event;
+    private Stream stream;
 
     public int getWatchersCount() {
         return currentUserWatching != null ? watchers.size() + 1 : watchers.size();
@@ -22,12 +22,12 @@ public class EventInfo {
         this.watchers = watchers;
     }
 
-    public Event getEvent() {
-        return event;
+    public Stream getStream() {
+        return stream;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setStream(Stream stream) {
+        this.stream = stream;
     }
 
     public static Builder builder() {
@@ -60,8 +60,8 @@ public class EventInfo {
             return this;
         }
 
-        public Builder event(Event event) {
-            eventInfo.setEvent(event);
+        public Builder event(Stream stream) {
+            eventInfo.setStream(stream);
             return this;
         }
 

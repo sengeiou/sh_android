@@ -19,7 +19,7 @@ import org.mockito.Spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class RefreshEventTimelineInteractorTest {
+public class RefreshStreamTimelineInteractorTest {
 
     private RefreshEventTimelineInteractor interactor;
 

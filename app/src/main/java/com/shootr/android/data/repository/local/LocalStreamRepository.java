@@ -4,7 +4,7 @@ import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
@@ -24,7 +24,7 @@ public class LocalStreamRepository implements StreamRepository {
         this.streamEntityMapper = streamEntityMapper;
     }
 
-    @Override public Event getStreamById(String idStream) {
+    @Override public Stream getStreamById(String idStream) {
         StreamEntity streamEntity = localStreamDataSource.getStreamById(idStream);
         if (streamEntity == null) {
             streamEntity = fallbackOnSearchResults(idStream);
@@ -40,18 +40,18 @@ public class LocalStreamRepository implements StreamRepository {
         return streamEntity;
     }
 
-    @Override public List<Event> getStreamsByIds(List<String> streamIds) {
+    @Override public List<Stream> getStreamsByIds(List<String> streamIds) {
         List<StreamEntity> eventEntities = localStreamDataSource.getStreamByIds(streamIds);
         return streamEntityMapper.transform(eventEntities);
     }
 
-    @Override public Event putStream(Event event) {
-        StreamEntity streamEntity = streamEntityMapper.transform(event);
+    @Override public Stream putStream(Stream stream) {
+        StreamEntity streamEntity = streamEntityMapper.transform(stream);
         localStreamDataSource.putStream(streamEntity);
-        return event;
+        return stream;
     }
 
-    @Override public Event putStream(Event event, boolean notify) {
+    @Override public Stream putStream(Stream stream, boolean notify) {
         throw new IllegalStateException("Notify not allowed in local repository.");
     }
 

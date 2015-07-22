@@ -20,7 +20,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class UnwatchEventInteractorTest {
+public class UnwatchStreamInteractorTest {
 
     public static final String USER_ID = "user_id";
     public static final String WATCHING_EVENT_ID = "watching_event_id";

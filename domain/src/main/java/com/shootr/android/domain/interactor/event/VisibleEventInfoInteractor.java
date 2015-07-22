@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -95,8 +95,8 @@ public class VisibleEventInfoInteractor implements Interactor {
         String wantedEventId = getWantedEventId(currentUser);
 
         if (wantedEventId != null) {
-            Event visibleEvent = streamRepository.getStreamById(wantedEventId);
-            if (visibleEvent == null) {
+            Stream visibleStream = streamRepository.getStreamById(wantedEventId);
+            if (visibleStream == null) {
                 //TODO should not happen, but can't assert that right now
                 return NO_EVENT_VISIBLE_INFO;
             }
@@ -104,7 +104,7 @@ public class VisibleEventInfoInteractor implements Interactor {
             List<User> people = userRepository.getPeople();
             List<User> watchesFromPeople = filterUsersWatchingEvent(people, wantedEventId);
             watchesFromPeople = sortWatchersListByJoinEventDate(watchesFromPeople);
-            return buildEventInfo(visibleEvent, watchesFromPeople, currentUser);
+            return buildEventInfo(visibleStream, watchesFromPeople, currentUser);
         }
         return NO_EVENT_VISIBLE_INFO;
     }
@@ -137,10 +137,10 @@ public class VisibleEventInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private EventInfo buildEventInfo(Event currentVisibleEvent, List<User> eventWatchers, User currentUser) {
-        boolean isCurrentUserWatching = currentVisibleEvent.getId().equals(currentUser.getIdWatchingEvent());
+    private EventInfo buildEventInfo(Stream currentVisibleStream, List<User> eventWatchers, User currentUser) {
+        boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingEvent());
         return EventInfo.builder()
-          .event(currentVisibleEvent)
+          .event(currentVisibleStream)
           .watchers(eventWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();

@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
@@ -85,10 +85,10 @@ public abstract class PostNewShotInteractorTestBase {
         assertThat(userInfo.getAvatar()).isEqualTo(user.getPhoto());
     }
 
-    protected void assertEventInfoIsFromEvent(Shot.ShotEventInfo eventInfo, Event event) {
-        assertThat(eventInfo.getIdEvent()).isEqualTo(event.getId());
-        assertThat(eventInfo.getEventTitle()).isEqualTo(event.getTitle());
-        assertThat(eventInfo.getEventTag()).isEqualTo(event.getTag());
+    protected void assertEventInfoIsFromEvent(Shot.ShotEventInfo eventInfo, Stream stream) {
+        assertThat(eventInfo.getIdEvent()).isEqualTo(stream.getId());
+        assertThat(eventInfo.getEventTitle()).isEqualTo(stream.getTitle());
+        assertThat(eventInfo.getEventTag()).isEqualTo(stream.getTag());
     }
     //endregion
 

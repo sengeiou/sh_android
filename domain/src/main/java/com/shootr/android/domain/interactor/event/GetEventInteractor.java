@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -35,30 +35,30 @@ public class GetEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        Event localEvent = localStreamRepository.getStreamById(idEvent);
-        if (localEvent != null) {
-            notifyLoaded(localEvent);
+        Stream localStream = localStreamRepository.getStreamById(idEvent);
+        if (localStream != null) {
+            notifyLoaded(localStream);
         } else {
-            Event remoteEvent = remoteStreamRepository.getStreamById(idEvent);
-            if (remoteEvent != null) {
-                notifyLoaded(remoteEvent);
+            Stream remoteStream = remoteStreamRepository.getStreamById(idEvent);
+            if (remoteStream != null) {
+                notifyLoaded(remoteStream);
             } else {
               //TODO notify error...
             }
         }
     }
 
-    private void notifyLoaded(final Event event) {
+    private void notifyLoaded(final Stream stream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(event);
+                callback.onLoaded(stream);
             }
         });
     }
 
     public interface Callback {
 
-        void onLoaded(Event event);
+        void onLoaded(Stream stream);
 
     }
 }

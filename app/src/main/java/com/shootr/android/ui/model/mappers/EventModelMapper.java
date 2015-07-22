@@ -1,6 +1,6 @@
 package com.shootr.android.ui.model.mappers;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.EventModel;
 import java.util.ArrayList;
@@ -15,22 +15,22 @@ public class EventModelMapper {
         this.sessionRepository = sessionRepository;
     }
 
-    public EventModel transform(Event event) {
+    public EventModel transform(Stream stream) {
         EventModel eventModel = new EventModel();
-        eventModel.setIdEvent(event.getId());
-        eventModel.setTitle(event.getTitle());
-        eventModel.setPicture(event.getPicture());
-        eventModel.setTag(event.getTag());
-        eventModel.setAmIAuthor(event.getAuthorId().equals(sessionRepository.getCurrentUserId()));
-        eventModel.setAuthorId(event.getAuthorId());
-        eventModel.setAuthorUsername(event.getAuthorUsername());
+        eventModel.setIdEvent(stream.getId());
+        eventModel.setTitle(stream.getTitle());
+        eventModel.setPicture(stream.getPicture());
+        eventModel.setTag(stream.getTag());
+        eventModel.setAmIAuthor(stream.getAuthorId().equals(sessionRepository.getCurrentUserId()));
+        eventModel.setAuthorId(stream.getAuthorId());
+        eventModel.setAuthorUsername(stream.getAuthorUsername());
         return eventModel;
     }
 
-    public List<EventModel> transform(List<Event> events) {
-        List<EventModel> models = new ArrayList<>(events.size());
-        for (Event event : events) {
-            models.add(transform(event));
+    public List<EventModel> transform(List<Stream> streams) {
+        List<EventModel> models = new ArrayList<>(streams.size());
+        for (Stream stream : streams) {
+            models.add(transform(stream));
         }
         return models;
     }

@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.event;
 
-import com.shootr.android.domain.Event;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -53,45 +53,45 @@ public class CreateEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        Event event = eventFromParameters();
+        Stream stream = eventFromParameters();
 
-        if (validateEvent(event)) {
+        if (validateEvent(stream)) {
             try {
-                Event savedEvent = sendEventToServer(event, notifyCreation);
-                notifyLoaded(savedEvent);
+                Stream savedStream = sendEventToServer(stream, notifyCreation);
+                notifyLoaded(savedStream);
             } catch (ShootrException e) {
                 handleServerError(e);
             }
         }
     }
 
-    private Event eventFromParameters() {
-        Event event;
+    private Stream eventFromParameters() {
+        Stream stream;
         if (isNewEvent()) {
-            event = new Event();
-            event.setLocale(localeProvider.getLocale());
+            stream = new Stream();
+            stream.setLocale(localeProvider.getLocale());
         } else {
-            event = remoteStreamRepository.getStreamById(idEvent);
+            stream = remoteStreamRepository.getStreamById(idEvent);
         }
-        event.setTitle(title);
-        event.setTag(shortTitle);
+        stream.setTitle(title);
+        stream.setTag(shortTitle);
         String currentUserId = sessionRepository.getCurrentUserId();
-        event.setAuthorId(currentUserId);
-        event.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
-        return event;
+        stream.setAuthorId(currentUserId);
+        stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
+        return stream;
     }
 
     private boolean isNewEvent() {
         return idEvent == null;
     }
 
-    private Event sendEventToServer(Event event, boolean notify) {
-        return remoteStreamRepository.putStream(event, notify);
+    private Stream sendEventToServer(Stream stream, boolean notify) {
+        return remoteStreamRepository.putStream(stream, notify);
     }
 
     //region Validation
-    private boolean validateEvent(Event event) {
-        List<FieldValidationError> validationErrors = new EventValidator().validate(event);
+    private boolean validateEvent(Stream stream) {
+        List<FieldValidationError> validationErrors = new EventValidator().validate(stream);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
@@ -132,10 +132,10 @@ public class CreateEventInteractor implements Interactor {
     }
     //endregion
 
-    private void notifyLoaded(final Event event) {
+    private void notifyLoaded(final Stream stream) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(event);
+                callback.onLoaded(stream);
             }
         });
     }
@@ -149,6 +149,6 @@ public class CreateEventInteractor implements Interactor {
     }
 
     public interface Callback {
-        void onLoaded(Event event);
+        void onLoaded(Stream stream);
     }
 }
