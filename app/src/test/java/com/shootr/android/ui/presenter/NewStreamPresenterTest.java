@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
 import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.event.GetStreamInteractor;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class NewStreamPresenterTest {
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
     @Mock DeleteStreamInteractor deleteStreamInteractor;
-    @Mock EventModelMapper eventModelMapper;
+    @Mock StreamModelMapper streamModelMapper;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewEventView newEventView;
 
@@ -33,7 +33,7 @@ public class NewStreamPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new NewEventPresenter(createStreamInteractor, getStreamInteractor,
-          deleteStreamInteractor, eventModelMapper, errorMessageFactory);
+          deleteStreamInteractor, streamModelMapper, errorMessageFactory);
     }
 
     @Test

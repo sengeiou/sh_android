@@ -10,8 +10,8 @@ import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.event.GetStreamInteractor;
 import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.StreamModel;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.views.NewEventView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
@@ -27,7 +27,7 @@ public class NewEventPresenter implements Presenter {
     private final CreateStreamInteractor createStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
     private final DeleteStreamInteractor deleteStreamInteractor;
-    private final EventModelMapper eventModelMapper;
+    private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private NewEventView newEventView;
@@ -45,12 +45,12 @@ public class NewEventPresenter implements Presenter {
     @Inject public NewEventPresenter(CreateStreamInteractor createStreamInteractor,
       GetStreamInteractor getStreamInteractor,
       DeleteStreamInteractor deleteStreamInteractor,
-      EventModelMapper eventModelMapper,
+      StreamModelMapper streamModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
         this.deleteStreamInteractor = deleteStreamInteractor;
-        this.eventModelMapper = eventModelMapper;
+        this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -67,19 +67,19 @@ public class NewEventPresenter implements Presenter {
     private void preloadEventToEdit(String optionalIdEventToEdit) {
         getStreamInteractor.loadStream(optionalIdEventToEdit, new GetStreamInteractor.Callback() {
             @Override public void onLoaded(Stream stream) {
-                setDefaultEventInfo(eventModelMapper.transform(stream));
+                setDefaultEventInfo(streamModelMapper.transform(stream));
             }
         });
     }
 
-    private void setDefaultEventInfo(EventModel eventModel) {
-        preloadedEventId = eventModel.getIdEvent();
-        preloadedTitle = eventModel.getTitle();
+    private void setDefaultEventInfo(StreamModel streamModel) {
+        preloadedEventId = streamModel.getIdStream();
+        preloadedTitle = streamModel.getTitle();
         newEventView.setEventTitle(preloadedTitle);
         newEventView.showDeleteEventButton();
         if (currentTitle == null && currentShortTitle == null) {
-            preloadedTitle = eventModel.getTitle();
-            preloadedShortTitle = eventModel.getTag();
+            preloadedTitle = streamModel.getTitle();
+            preloadedShortTitle = streamModel.getTag();
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
             newEventView.setEventTitle(preloadedTitle);

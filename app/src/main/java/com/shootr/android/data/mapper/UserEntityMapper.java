@@ -58,7 +58,7 @@ public class UserEntityMapper {
 
         userEntity.setIdWatchingStream(user.getIdWatchingStream());
 
-        userEntity.setWatchingStreamTitle(user.getWatchingEventTitle());
+        userEntity.setWatchingStreamTitle(user.getWatchingStreamTitle());
 
         userEntity.setJoinStreamDate(user.getJoinStreamDate());
 

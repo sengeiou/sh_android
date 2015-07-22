@@ -8,11 +8,11 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 
-public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, EventResultModel, EventResultModel> {
+public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
 
     private final PicassoWrapper picasso;
 
@@ -24,7 +24,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
         this.onEventClickListener = onEventClickListener;
     }
 
-    public void setEvents(List<EventResultModel> events) {
+    public void setEvents(List<StreamResultModel> events) {
         boolean wasEmpty = getItems().isEmpty();
         setItems(events);
         if (wasEmpty) {
@@ -56,7 +56,7 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        EventResultModel event = getHeader();
+        StreamResultModel event = getHeader();
 
         WatchingEventResultViewHolder watchingEventResultViewHolder =
           new WatchingEventResultViewHolder(viewHolder.itemView, onEventClickListener, picasso, onUnwatchClickListener);
@@ -71,11 +71,11 @@ public class EventsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        EventResultModel event = getItem(position);
+        StreamResultModel event = getItem(position);
         ((EventResultViewHolder) viewHolder).render(event);
     }
 
-    public void setCurrentWatchingEvent(EventResultModel event) {
+    public void setCurrentWatchingEvent(StreamResultModel event) {
         this.setHeader(event);
     }
 

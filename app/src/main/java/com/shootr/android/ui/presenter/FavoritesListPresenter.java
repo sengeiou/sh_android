@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.List;
@@ -41,7 +41,7 @@ public class FavoritesListPresenter implements Presenter{
                     favoritesListView.showEmpty();
                     favoritesListView.hideContent();
                 } else {
-                    List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+                    List<StreamResultModel> eventModels = eventResultModelMapper.transform(events);
                     favoritesListView.renderFavorites(eventModels);
                     favoritesListView.showContent();
                     favoritesListView.hideEmpty();
@@ -50,8 +50,8 @@ public class FavoritesListPresenter implements Presenter{
         });
     }
 
-    public void selectEvent(EventResultModel event) {
-        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
+    public void selectEvent(StreamResultModel event) {
+        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {

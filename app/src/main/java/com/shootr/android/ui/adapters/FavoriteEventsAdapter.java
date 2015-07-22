@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.Collections;
 import java.util.List;
@@ -16,14 +16,14 @@ public class FavoriteEventsAdapter extends RecyclerView.Adapter<EventResultViewH
     private final PicassoWrapper picasso;
 
     private OnEventClickListener onEventClickListener;
-    private List<EventResultModel> events = Collections.EMPTY_LIST;
+    private List<StreamResultModel> events = Collections.EMPTY_LIST;
 
     public FavoriteEventsAdapter(PicassoWrapper picasso, OnEventClickListener onEventClickListener) {
         this.picasso = picasso;
         this.onEventClickListener = onEventClickListener;
     }
 
-    public void setEvents(List<EventResultModel> events) {
+    public void setEvents(List<StreamResultModel> events) {
         boolean wasEmpty = this.events.isEmpty();
         this.events = events;
         if (wasEmpty) {
@@ -41,7 +41,7 @@ public class FavoriteEventsAdapter extends RecyclerView.Adapter<EventResultViewH
 
     @Override
     public void onBindViewHolder(EventResultViewHolder holder, int position) {
-        EventResultModel event = events.get(position);
+        StreamResultModel event = events.get(position);
         holder.render(event);
     }
 

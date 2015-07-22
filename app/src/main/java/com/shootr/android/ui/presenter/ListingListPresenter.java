@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetUserListingStreamsInteractor;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
@@ -46,14 +46,14 @@ public class ListingListPresenter implements Presenter{
 
     private void onListingLoaded(List<StreamSearchResult> events) {
         if (!events.isEmpty()) {
-            List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+            List<StreamResultModel> eventModels = eventResultModelMapper.transform(events);
             this.renderViewEventsList(eventModels);
         }else{
             listingView.showLoading();
         }
     }
 
-    private void renderViewEventsList(List<EventResultModel> eventModels) {
+    private void renderViewEventsList(List<StreamResultModel> eventModels) {
         listingView.showContent();
         listingView.renderEvents(eventModels);
     }
@@ -68,8 +68,8 @@ public class ListingListPresenter implements Presenter{
         hasBeenPaused = true;
     }
 
-    public void selectEvent(EventResultModel event) {
-        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
+    public void selectEvent(StreamResultModel event) {
+        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {

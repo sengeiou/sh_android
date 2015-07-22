@@ -7,7 +7,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamSearchInteractor;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -56,8 +56,8 @@ public class FindEventsPresenter implements Presenter {
         });
     }
 
-    public void selectEvent(EventResultModel event) {
-        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTitle());
+    public void selectEvent(StreamResultModel event) {
+        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTitle());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
@@ -67,7 +67,7 @@ public class FindEventsPresenter implements Presenter {
     private void onSearchResults(StreamSearchResultList streamSearchResultList) {
         List<StreamSearchResult> streamSearchResults = streamSearchResultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
-            List<EventResultModel> eventModels = eventResultModelMapper.transform(streamSearchResults);
+            List<StreamResultModel> eventModels = eventResultModelMapper.transform(streamSearchResults);
             renderViewEventsList(eventModels);
         } else {
             this.showViewEmpty();
@@ -80,7 +80,7 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.hideContent();
     }
 
-    private void renderViewEventsList(List<EventResultModel> eventModels) {
+    private void renderViewEventsList(List<StreamResultModel> eventModels) {
         findEventsView.showContent();
         findEventsView.hideEmpty();
         findEventsView.renderEvents(eventModels);
@@ -99,7 +99,7 @@ public class FindEventsPresenter implements Presenter {
         findEventsView.showError(errorMessage);
     }
 
-    public void restoreEvents(List<EventResultModel> restoredResults) {
+    public void restoreEvents(List<StreamResultModel> restoredResults) {
         if (restoredResults != null && !restoredResults.isEmpty()) {
             findEventsView.renderEvents(restoredResults);
         }

@@ -2,9 +2,9 @@ package com.shootr.android.ui.model;
 
 import java.io.Serializable;
 
-public class EventModel implements Serializable {
+public class StreamModel implements Serializable {
 
-    private String idEvent;
+    private String idStream;
     private String authorId;
     private String authorUsername;
     private String title;
@@ -12,12 +12,12 @@ public class EventModel implements Serializable {
     private String tag;
     private boolean amIAuthor;
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public String getTitle() {
@@ -38,9 +38,9 @@ public class EventModel implements Serializable {
             return false;
         }
 
-        EventModel that = (EventModel) o;
+        StreamModel that = (StreamModel) o;
 
-        if (!idEvent.equals(that.idEvent)) {
+        if (!idStream.equals(that.idStream)) {
             return false;
         }
 
@@ -49,7 +49,7 @@ public class EventModel implements Serializable {
 
     @Override
     public int hashCode() {
-        return idEvent.hashCode();
+        return idStream.hashCode();
     }
 
     public String getPicture() {

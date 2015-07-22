@@ -27,7 +27,7 @@ import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.ui.views.nullview.NullEventListView;
@@ -88,7 +88,7 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
 
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventResultModel event) {
+            public void onEventClick(StreamResultModel event) {
                 presenter.selectEvent(event);
             }
         });
@@ -168,11 +168,11 @@ public class EventsListFragment extends BaseFragment implements EventsListView {
     }
 
     //region View methods
-    @Override public void renderEvents(List<EventResultModel> events) {
+    @Override public void renderEvents(List<StreamResultModel> events) {
         adapter.setEvents(events);
     }
 
-    @Override public void setCurrentWatchingEventId(EventResultModel event) {
+    @Override public void setCurrentWatchingEventId(StreamResultModel event) {
         adapter.setCurrentWatchingEvent(event);
     }
 

@@ -152,7 +152,7 @@ public class User {
         this.idWatchingEvent = idWatchingEvent;
     }
 
-    public String getWatchingEventTitle() {
+    public String getWatchingStreamTitle() {
         return watchingEventTitle;
     }
 

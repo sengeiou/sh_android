@@ -11,9 +11,9 @@ import com.shootr.android.domain.interactor.event.GetStreamMediaCountInteractor;
 import com.shootr.android.domain.interactor.event.VisibleStreamInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EventDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -32,7 +32,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private final VisibleStreamInfoInteractor eventInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
-    private final EventModelMapper eventModelMapper;
+    private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final WatchersTimeFormatter watchersTimeFormatter;
@@ -42,18 +42,18 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     private String idEvent;
 
     private UserModel currentUserWatchingModel;
-    private EventModel eventModel;
+    private StreamModel streamModel;
 
     private Integer eventMediaCount;
 
     @Inject
     public EventDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor eventInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, EventModelMapper eventModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
       WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor eventMediaCountInteractor) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
-        this.eventModelMapper = eventModelMapper;
+        this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.watchersTimeFormatter = watchersTimeFormatter;
@@ -82,7 +82,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromEditEventInfo(String idEventEdited) {
-        if (idEventEdited.equals(eventModel.getIdEvent())) {
+        if (idEventEdited.equals(streamModel.getIdStream())) {
             loadEventInfo();
         }
     }
@@ -93,7 +93,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     public void photoSelected(File photoFile) {
         eventDetailView.showLoadingPictureUpload();
-        changeStreamPhotoInteractor.changeStreamPhoto(eventModel.getIdEvent(),
+        changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(),
           photoFile,
           new ChangeStreamPhotoInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
@@ -104,7 +104,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  eventDetailView.showEditPicture(eventModel.getPicture());
+                  eventDetailView.showEditPicture(streamModel.getPicture());
                   eventDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
                   Timber.e(error, "Error changing stream photo");
@@ -172,12 +172,12 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     //endregion
 
     public void clickAuthor() {
-        eventDetailView.navigateToUser(eventModel.getAuthorId());
+        eventDetailView.navigateToUser(streamModel.getAuthorId());
     }
     //endregion
 
     public void photoClick() {
-        if (eventModel.amIAuthor() && eventModel.getPicture() == null) {
+        if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
             editEventPhoto();
         } else {
             zoomPhoto();
@@ -185,7 +185,7 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void zoomPhoto() {
-        eventDetailView.zoomPhoto(eventModel.getPicture());
+        eventDetailView.zoomPhoto(streamModel.getPicture());
     }
 
     //region renders
@@ -197,29 +197,26 @@ public class EventDetailPresenter implements Presenter, CommunicationPresenter {
 
     private void obtainJoinDatesInText(List<UserModel> watcherModels) {
         for (UserModel watcherModel : watcherModels) {
-            watcherModel.setJoinEventDateText(
-                    watchersTimeFormatter.jointDateText(watcherModel.getJoinEventDate()));
+            watcherModel.setJoinStreamDateText(watchersTimeFormatter.jointDateText(watcherModel.getJoinStreamDate()));
         }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
         if(currentUserWatch != null){
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-            currentUserWatchingModel.setJoinEventDateText(
-              watchersTimeFormatter.jointDateText(
-                currentUserWatchingModel.getJoinEventDate()));
+            currentUserWatchingModel.setJoinStreamDateText(watchersTimeFormatter.jointDateText(currentUserWatchingModel.getJoinStreamDate()));
             eventDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }
 
     private void renderEventInfo(Stream stream) {
-        eventModel = eventModelMapper.transform(stream);
-        eventDetailView.setEventTitle(eventModel.getTitle());
-        eventDetailView.setEventPicture(eventModel.getPicture());
-        eventDetailView.setEventAuthor(eventModel.getAuthorUsername());
-        if (eventModel.amIAuthor()) {
+        streamModel = streamModelMapper.transform(stream);
+        eventDetailView.setEventTitle(streamModel.getTitle());
+        eventDetailView.setEventPicture(streamModel.getPicture());
+        eventDetailView.setEventAuthor(streamModel.getAuthorUsername());
+        if (streamModel.amIAuthor()) {
             eventDetailView.showEditEventButton();
-            eventDetailView.showEditPicture(eventModel.getPicture());
+            eventDetailView.showEditPicture(streamModel.getPicture());
         } else {
             eventDetailView.hideEditEventButton();
             eventDetailView.hideEditPicture();

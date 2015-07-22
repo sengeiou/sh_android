@@ -1,9 +1,6 @@
 package com.shootr.android.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +8,7 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
 public class EventResultViewHolder extends RecyclerView.ViewHolder {
@@ -33,9 +30,9 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void render(EventResultModel event) {
+    public void render(StreamResultModel event) {
         this.setClickListener(event);
-        title.setText(event.getEventModel().getTitle());
+        title.setText(event.getStreamModel().getTitle());
         int watchersCount = event.getWatchers();
         if (watchersCount > 0) {
             watchers.setVisibility(View.VISIBLE);
@@ -43,14 +40,14 @@ public class EventResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             watchers.setVisibility(View.GONE);
         }
-        author.setText(event.getEventModel().getAuthorUsername());
+        author.setText(event.getStreamModel().getAuthorUsername());
 
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
-        String pictureUrl = event.getEventModel().getPicture();
+        String pictureUrl = event.getStreamModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(picture);
     }
 
-    private void setClickListener(final EventResultModel eventResult) {
+    private void setClickListener(final StreamResultModel eventResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onEventClickListener.onEventClick(eventResult);

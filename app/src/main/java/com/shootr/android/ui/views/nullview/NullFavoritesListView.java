@@ -1,13 +1,13 @@
 package com.shootr.android.ui.views.nullview;
 
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.List;
 
 public class NullFavoritesListView implements FavoritesListView {
 
     @Override
-    public void renderFavorites(List<EventResultModel> eventModels) {
+    public void renderFavorites(List<StreamResultModel> eventModels) {
         /* no-op */
     }
 

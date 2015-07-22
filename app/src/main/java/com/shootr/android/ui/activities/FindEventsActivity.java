@@ -18,7 +18,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindEventsPresenter;
 import com.shootr.android.ui.views.FindEventsView;
 import com.shootr.android.util.PicassoWrapper;
@@ -77,7 +77,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
     private void initializeEventListAdapter() {
         adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventResultModel event) {
+            public void onEventClick(StreamResultModel event) {
                 findEventsPresenter.selectEvent(event);
             }
         });
@@ -138,7 +138,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         super.onRestoreInstanceState(savedInstanceState);
         initializePresenter();
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
-        List<EventResultModel> restoredResults = (List<EventResultModel>) savedInstanceState.getSerializable(
+        List<StreamResultModel> restoredResults = (List<StreamResultModel>) savedInstanceState.getSerializable(
           EXTRA_RESULTS);
         findEventsPresenter.restoreEvents(restoredResults);
     }
@@ -195,7 +195,7 @@ public class FindEventsActivity extends BaseToolbarDecoratedActivity implements 
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override public void renderEvents(List<EventResultModel> eventModels) {
+    @Override public void renderEvents(List<StreamResultModel> eventModels) {
         adapter.setEvents(eventModels);
     }
 

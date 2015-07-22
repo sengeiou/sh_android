@@ -3,8 +3,8 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.GetFavoriteStreamsInteractor;
-import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.StreamResultModel;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class FavoritesListPresenterTest {
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     @Mock EventResultModelMapper eventResultModelMapper;
-    @Mock EventModelMapper eventModelMapper;
+    @Mock StreamModelMapper streamModelMapper;
 
     private FavoritesListPresenter presenter;
 
@@ -121,7 +121,7 @@ public class FavoritesListPresenterTest {
         return Arrays.asList(stubEvent());
     }
 
-    private List<EventResultModel> stubResultModel() {
+    private List<StreamResultModel> stubResultModel() {
         return eventResultModelMapper.transform(stubResult());
     }
 

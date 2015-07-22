@@ -338,9 +338,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         private void showEventTitle(ShotModel shotModel) {
-            String title = shotModel.getEventTitle();
+            String title = shotModel.getStreamTitle();
             if (title != null) {
-                eventTitle.setText(shotModel.getEventTitle());
+                eventTitle.setText(shotModel.getStreamTitle());
                 eventTitle.setVisibility(View.VISIBLE);
             } else {
                 eventTitle.setVisibility(View.GONE);

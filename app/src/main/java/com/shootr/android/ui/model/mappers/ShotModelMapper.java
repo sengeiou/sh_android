@@ -23,10 +23,10 @@ public class ShotModelMapper {
         shotModel.setIdUser(userInfo.getIdUser());
         shotModel.setPhoto(userInfo.getAvatar());
 
-        Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
-        if (eventInfo != null) {
-            shotModel.setEventTag(eventInfo.getStreamTag());
-            shotModel.setEventTitle(eventInfo.getStreamTitle());
+        Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
+        if (streamInfo != null) {
+            shotModel.setStreamTag(streamInfo.getStreamTag());
+            shotModel.setStreamTitle(streamInfo.getStreamTitle());
         }
 
         shotModel.setReplyUsername(shot.getParentShotUsername());

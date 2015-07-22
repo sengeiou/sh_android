@@ -7,9 +7,9 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamsListInteractor;
 import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
+import com.shootr.android.ui.model.StreamModel;
+import com.shootr.android.ui.model.StreamResultModel;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -49,9 +49,9 @@ public class EventsListPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        EventModelMapper eventModelMapper = new EventModelMapper(sessionRepository);
+        StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         EventResultModelMapper eventResultModelMapper =
-          new EventResultModelMapper(eventModelMapper);
+          new EventResultModelMapper(streamModelMapper);
         presenter = new EventsListPresenter(streamsListInteractor, unwatchStreamInteractor,
           eventResultModelMapper,
           errorMessageFactory);
@@ -87,7 +87,7 @@ public class EventsListPresenterTest {
 
         presenter.loadDefaultEventList();
 
-        verify(eventsListView).renderEvents(anyListOf(EventResultModel.class));
+        verify(eventsListView).renderEvents(anyListOf(StreamResultModel.class));
     }
 
     @Test public void shouldHideLoadingWhenEventListInteractorCallbacksResults() throws Exception {
@@ -154,14 +154,14 @@ public class EventsListPresenterTest {
         return streamSearchResult;
     }
 
-    private EventResultModel selectedEventModel() {
-        EventModel eventModel = new EventModel();
-        eventModel.setIdEvent(SELECTED_EVENT_ID);
-        eventModel.setTitle(SELECTED_EVENT_TITLE);
-        eventModel.setTag(SELECTED_EVENT_TITLE);
-        EventResultModel eventResultModel = new EventResultModel();
-        eventResultModel.setEventModel(eventModel);
-        return eventResultModel;
+    private StreamResultModel selectedEventModel() {
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(SELECTED_EVENT_ID);
+        streamModel.setTitle(SELECTED_EVENT_TITLE);
+        streamModel.setTag(SELECTED_EVENT_TITLE);
+        StreamResultModel streamResultModel = new StreamResultModel();
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
     }
 
     private Stream selectedEvent() {

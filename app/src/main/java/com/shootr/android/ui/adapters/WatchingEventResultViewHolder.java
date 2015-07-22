@@ -6,7 +6,7 @@ import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
 public class WatchingEventResultViewHolder extends EventResultViewHolder {
@@ -21,7 +21,7 @@ public class WatchingEventResultViewHolder extends EventResultViewHolder {
         this.unwatchClickListener = unwatchClickListener;
     }
 
-    public void render(EventResultModel event) {
+    public void render(StreamResultModel event) {
         super.render(event);
         remove.setVisibility(View.VISIBLE);
         setUnwatchClickListener();

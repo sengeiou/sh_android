@@ -148,8 +148,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     protected void bindComment(ShotModel item, ViewHolder vh) {
         String comment = item.getComment();
         String tag = null;
-        if (shouldShowTag() && item.getEventTag() != null) {
-            tag = item.getEventTag();
+        if (shouldShowTag() && item.getStreamTag() != null) {
+            tag = item.getStreamTag();
         }
 
         SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);

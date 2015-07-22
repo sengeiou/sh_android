@@ -26,11 +26,11 @@ public class ActivityEntityMapper {
 
 
         if (activityEntity.getIdStream() != null) {
-            Activity.ActivityEventInfo eventInfo = new Activity.ActivityEventInfo();
-            eventInfo.setIdEvent(activityEntity.getIdStream());
-            eventInfo.setEventTitle(activityEntity.getStreamTitle());
-            eventInfo.setEventTag(activityEntity.getStreamTag());
-            activity.setEventInfo(eventInfo);
+            Activity.ActivityStreamInfo eventInfo = new Activity.ActivityStreamInfo();
+            eventInfo.setIdStream(activityEntity.getIdStream());
+            eventInfo.setStreamTitle(activityEntity.getStreamTitle());
+            eventInfo.setStreamTag(activityEntity.getStreamTag());
+            activity.setStreamInfo(eventInfo);
         }
 
         Activity.ActivityUserInfo userInfo = new Activity.ActivityUserInfo();
@@ -64,11 +64,11 @@ public class ActivityEntityMapper {
 
         String idUser = activity.getUserInfo().getIdUser();
         activityEntity.setIdUser(idUser);
-        Activity.ActivityEventInfo eventInfo = activity.getEventInfo();
+        Activity.ActivityStreamInfo eventInfo = activity.getStreamInfo();
         if (eventInfo != null) {
-            activityEntity.setIdStream(eventInfo.getIdEvent());
-            activityEntity.setStreamTitle(eventInfo.getEventTitle());
-            activityEntity.setStreamTag(eventInfo.getEventTag());
+            activityEntity.setIdStream(eventInfo.getIdStream());
+            activityEntity.setStreamTitle(eventInfo.getStreamTitle());
+            activityEntity.setStreamTag(eventInfo.getStreamTag());
         }
         Activity.ActivityUserInfo userInfo = activity.getUserInfo();
         if (userInfo != null) {

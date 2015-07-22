@@ -16,7 +16,7 @@ import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
@@ -82,7 +82,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
             @Override
-            public void onEventClick(EventResultModel event) {
+            public void onEventClick(StreamResultModel event) {
                 favoritesListPresenter.selectEvent(event);
             }
         });
@@ -94,7 +94,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void renderFavorites(List<EventResultModel> eventModels) {
+    public void renderFavorites(List<StreamResultModel> eventModels) {
         adapter.setEvents(eventModels);
     }
 

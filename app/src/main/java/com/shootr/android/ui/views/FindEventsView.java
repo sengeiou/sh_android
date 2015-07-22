@@ -1,6 +1,6 @@
 package com.shootr.android.ui.views;
 
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import java.util.List;
 
 public interface FindEventsView {
@@ -19,7 +19,7 @@ public interface FindEventsView {
 
     void hideEmpty();
 
-    void renderEvents(List<EventResultModel> eventModels);
+    void renderEvents(List<StreamResultModel> eventModels);
 
     void showError(String errorMessage);
 

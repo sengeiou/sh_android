@@ -1,8 +1,8 @@
 package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.domain.StreamSearchResult;
-import com.shootr.android.ui.model.EventModel;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -13,27 +13,27 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 @Singleton
 public class EventResultModelMapper {
 
-    private final EventModelMapper eventModelMapper;
+    private final StreamModelMapper streamModelMapper;
 
-    @Inject public EventResultModelMapper(EventModelMapper eventModelMapper) {
-        this.eventModelMapper = eventModelMapper;
+    @Inject public EventResultModelMapper(StreamModelMapper streamModelMapper) {
+        this.streamModelMapper = streamModelMapper;
     }
 
-    public EventResultModel transform(StreamSearchResult streamSearchResult) {
+    public StreamResultModel transform(StreamSearchResult streamSearchResult) {
         if (streamSearchResult == null) {
             return null;
         }
         checkNotNull(streamSearchResult.getStream());
-        EventModel eventModel = eventModelMapper.transform(streamSearchResult.getStream());
+        StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
 
-        EventResultModel resultModel = new EventResultModel();
-        resultModel.setEventModel(eventModel);
+        StreamResultModel resultModel = new StreamResultModel();
+        resultModel.setStreamModel(streamModel);
         resultModel.setWatchers(streamSearchResult.getWatchersNumber());
         return resultModel;
     }
 
-    public List<EventResultModel> transform(List<StreamSearchResult> streamSearchResults) {
-        List<EventResultModel> models = new ArrayList<>(streamSearchResults.size());
+    public List<StreamResultModel> transform(List<StreamSearchResult> streamSearchResults) {
+        List<StreamResultModel> models = new ArrayList<>(streamSearchResults.size());
         for (StreamSearchResult streamSearchResult : streamSearchResults) {
             models.add(transform(streamSearchResult));
         }

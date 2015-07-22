@@ -15,8 +15,8 @@ public class ShotModel implements Serializable{
     private String idUser;
     private String userName;
     private String photo;
-    private String eventTag;
-    private String eventTitle;
+    private String streamTag;
+    private String streamTitle;
     private String type;
 
     private String replyUsername;
@@ -96,20 +96,20 @@ public class ShotModel implements Serializable{
         this.type = type;
     }
 
-    public String getEventTag() {
-        return eventTag;
+    public String getStreamTag() {
+        return streamTag;
     }
 
-    public void setEventTag(String eventTag) {
-        this.eventTag = eventTag;
+    public void setStreamTag(String streamTag) {
+        this.streamTag = streamTag;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
+    public String getStreamTitle() {
+        return streamTitle;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
     }
 
     public String getReplyUsername() {

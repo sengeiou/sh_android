@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.event.StreamsListInteractor;
 import com.shootr.android.domain.interactor.event.UnwatchStreamInteractor;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.ui.views.EventsListView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -47,9 +47,9 @@ public class EventsListPresenter implements Presenter {
         this.loadDefaultEventList();
     }
 
-    public void selectEvent(EventResultModel event) {
+    public void selectEvent(StreamResultModel event) {
         eventsListView.setCurrentWatchingEventId(event);
-        selectEvent(event.getEventModel().getIdEvent(), event.getEventModel().getTag());
+        selectEvent(event.getStreamModel().getIdStream(), event.getStreamModel().getTag());
     }
 
     private void selectEvent(final String idEvent, String eventTitle) {
@@ -86,8 +86,8 @@ public class EventsListPresenter implements Presenter {
     public void onDefaultEventListLoaded(StreamSearchResultList resultList) {
         List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
         if (!streamSearchResults.isEmpty()) {
-            List<EventResultModel> eventResultModels = eventResultModelMapper.transform(streamSearchResults);
-            this.renderViewEventsList(eventResultModels);
+            List<StreamResultModel> streamResultModels = eventResultModelMapper.transform(streamSearchResults);
+            this.renderViewEventsList(streamResultModels);
             StreamSearchResult currentWatchingEvent = resultList.getCurrentWatchingStream();
             this.setViewCurrentVisibleWatchingEvent(eventResultModelMapper.transform(currentWatchingEvent));
         }else{
@@ -99,11 +99,11 @@ public class EventsListPresenter implements Presenter {
         selectEvent(eventId, eventTitle);
     }
 
-    private void setViewCurrentVisibleWatchingEvent(EventResultModel currentVisibleEvent) {
+    private void setViewCurrentVisibleWatchingEvent(StreamResultModel currentVisibleEvent) {
         eventsListView.setCurrentWatchingEventId(currentVisibleEvent);
     }
 
-    private void renderViewEventsList(List<EventResultModel> eventModels) {
+    private void renderViewEventsList(List<StreamResultModel> eventModels) {
         eventsListView.showContent();
         eventsListView.hideEmpty();
         eventsListView.renderEvents(eventModels);

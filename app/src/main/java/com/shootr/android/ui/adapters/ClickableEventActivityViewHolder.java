@@ -40,18 +40,18 @@ public abstract class ClickableEventActivityViewHolder extends ActivityViewHolde
 
     @Override
     protected CharSequence formatActivityComment(final ActivityModel activity) {
-        if (activity.getIdEvent() == null) {
+        if (activity.getIdStream() == null) {
             return super.formatActivityComment(activity);
         }
         String commentPattern = getPatternText();
         String eventPlaceholder = "\\(stream\\)";
-        String eventTitle = activity.getEventTitle();
+        String eventTitle = activity.getStreamTitle();
         SpannableStringBuilder spannableCheckinPattern = new SpannableStringBuilder(commentPattern);
 
         replacePlaceholderWithEventTitleSpan(spannableCheckinPattern,
           eventPlaceholder,
           eventTitle,
-          new EventTitleSpan(activity.getIdEvent(), activity.getEventTitle()) {
+          new EventTitleSpan(activity.getIdStream(), activity.getStreamTitle()) {
               @Override
               public void onEventClick(String eventId, String eventTitle) {
                   onEventTitleClickListener.onClick(eventId, eventTitle);
