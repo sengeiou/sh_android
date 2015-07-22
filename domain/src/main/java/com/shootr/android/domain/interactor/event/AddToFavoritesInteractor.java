@@ -20,7 +20,7 @@ public class AddToFavoritesInteractor implements Interactor {
 
     private Interactor.CompletedCallback callback;
 
-    private String idEvent;
+    private String idStream;
 
     @Inject public AddToFavoritesInteractor(@Local FavoriteRepository localFavoriteRepository,
       @Remote FavoriteRepository remoteFavoriteRepository,
@@ -32,9 +32,9 @@ public class AddToFavoritesInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void addToFavorites(String idEvent, Interactor.CompletedCallback callback) {
+    public void addToFavorites(String idStream, Interactor.CompletedCallback callback) {
         this.callback = callback;
-        this.idEvent = idEvent;
+        this.idStream = idStream;
         interactorHandler.execute(this);
     }
 
@@ -52,7 +52,7 @@ public class AddToFavoritesInteractor implements Interactor {
 
     private Favorite favoriteFromParameters() {
         Favorite favorite = new Favorite();
-        favorite.setIdStream(idEvent);
+        favorite.setIdStream(idStream);
         favorite.setOrder(getNextOrder());
         return favorite;
     }

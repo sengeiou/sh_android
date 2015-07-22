@@ -22,14 +22,13 @@ import static org.mockito.Mockito.verify;
 
 public class PerformCheckinInteractorTest {
 
-    private static final String ANY_EVENT_ID = "any_event_id";
+    private static final String ANY_STREAM_ID = "any_stream_id";
 
     @Mock ShootrUserService shootrUserService;
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock Interactor.ErrorCallback errorCallback;
 
     private PerformCheckinInteractor interactor;
-    private String dummyIdEvent = "STREAM_ID";
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -41,7 +40,7 @@ public class PerformCheckinInteractorTest {
     @Test public void shouldCallbackCompleteIfServiceDoesntFail() throws Exception {
         doNothing().when(shootrUserService).checkInStream(anyString());
 
-        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
+        interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 
         verify(completedCallback).onCompleted();
     }
@@ -49,7 +48,7 @@ public class PerformCheckinInteractorTest {
     @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
         doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
 
-        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
+        interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
@@ -57,7 +56,7 @@ public class PerformCheckinInteractorTest {
     @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
         doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
 
-        interactor.performCheckin(ANY_EVENT_ID, completedCallback, errorCallback);
+        interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 
         verify(completedCallback, never()).onCompleted();
     }

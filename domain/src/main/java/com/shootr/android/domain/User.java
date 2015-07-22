@@ -14,10 +14,10 @@ public class User {
     private String website;
     private String bio;
     private Long points;
-    private Long joinEventDate;
+    private Long joinStreamDate;
 
-    private String idWatchingEvent;
-    private String watchingEventTitle;
+    private String idWatchingStream;
+    private String watchingStreamTitle;
 
     private boolean isFollowing;
     private boolean isFollower;
@@ -145,35 +145,35 @@ public class User {
     }
 
     public String getIdWatchingStream() {
-        return idWatchingEvent;
+        return idWatchingStream;
     }
 
-    public void setIdWatchingStream(String idWatchingEvent) {
-        this.idWatchingEvent = idWatchingEvent;
+    public void setIdWatchingStream(String idWatchingStream) {
+        this.idWatchingStream = idWatchingStream;
     }
 
     public String getWatchingStreamTitle() {
-        return watchingEventTitle;
+        return watchingStreamTitle;
     }
 
-    public void setWatchingStreamTitle(String watchingEventTitle) {
-        this.watchingEventTitle = watchingEventTitle;
+    public void setWatchingStreamTitle(String watchingStreamTitle) {
+        this.watchingStreamTitle = watchingStreamTitle;
     }
 
     @Override public String toString() {
         return "User{" +
           "idUser=" + idUser +
           ", username='" + username + '\'' +
-          ", idWatchingEvent=" + idWatchingEvent +
+          ", idWatchingStream=" + idWatchingStream +
           '}';
     }
 
     public Long getJoinStreamDate() {
-        return joinEventDate;
+        return joinStreamDate;
     }
 
-    public void setJoinStreamDate(Long joinEventDate) {
-        this.joinEventDate = joinEventDate;
+    public void setJoinStreamDate(Long joinStreamDate) {
+        this.joinStreamDate = joinStreamDate;
     }
 
     public static class UsernameComparator implements Comparator<User> {

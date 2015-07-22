@@ -20,7 +20,7 @@ public class RemoveFromFavoritesInteractor implements Interactor {
 
     private CompletedCallback callback;
 
-    private String idEvent;
+    private String idStream;
 
     @Inject public RemoveFromFavoritesInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -32,14 +32,14 @@ public class RemoveFromFavoritesInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void removeFromFavorites(String idEvent, CompletedCallback callback) {
+    public void removeFromFavorites(String idStream, CompletedCallback callback) {
         this.callback = callback;
-        this.idEvent = idEvent;
+        this.idStream = idStream;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        Favorite existingFavorite = localFavoriteRepository.getFavoriteByStream(idEvent);
+        Favorite existingFavorite = localFavoriteRepository.getFavoriteByStream(idStream);
         checkNotNull(existingFavorite);
         localFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
         notifyCompleted();

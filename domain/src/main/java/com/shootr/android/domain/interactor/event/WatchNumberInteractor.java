@@ -47,20 +47,20 @@ public class WatchNumberInteractor implements Interactor{
     }
 
     @Override public void execute() throws Exception {
-        String currentVisibleEventId = getCurrentVisibleEventId();
-        if (currentVisibleEventId == null) {
+        String currentVisibleStreamId = getCurrentVisibleStreamId();
+        if (currentVisibleStreamId == null) {
             notifyLoaded(NO_STREAM);
             return;
         }
         List<User> peopleAndMe = getPeopleAndMe();
-        List<User> watchers = filterUsersWatchingStream(peopleAndMe, currentVisibleEventId);
+        List<User> watchers = filterUsersWatchingStream(peopleAndMe, currentVisibleStreamId);
         notifyLoaded(watchers.size());
     }
 
-    protected List<User> filterUsersWatchingStream(List<User> people, String idEvent) {
+    protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
-            if (idEvent.equals(user.getIdWatchingStream())) {
+            if (idStream.equals(user.getIdWatchingStream())) {
                 watchers.add(user);
             }
         }
@@ -75,7 +75,7 @@ public class WatchNumberInteractor implements Interactor{
         });
     }
 
-    protected String getCurrentVisibleEventId() {
+    protected String getCurrentVisibleStreamId() {
         User currentUser = sessionRepository.getCurrentUser();
         return currentUser.getIdWatchingStream();
     }

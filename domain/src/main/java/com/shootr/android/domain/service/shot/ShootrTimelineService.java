@@ -3,17 +3,17 @@ package com.shootr.android.domain.service.shot;
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
+import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.ActivityRepository;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class ShootrTimelineService {
     public ActivityTimeline refreshTimelinesForActivity() {
         List<Activity> activities = refreshActivityShots();
 
-        refreshWatchingEventShots();
+        refreshWatchingStreamShots();
 
         return buildSortedActivityTimeline(activities);
     }
@@ -73,32 +73,32 @@ public class ShootrTimelineService {
     }
 
     public Timeline refreshTimelinesForWatchingStream() {
-        List<Shot> shotsForEvent = refreshWatchingEventShots();
+        List<Shot> shotsForStream = refreshWatchingStreamShots();
 
         refreshActivityShots();
 
-        return buildSortedTimeline(shotsForEvent);
+        return buildSortedTimeline(shotsForStream);
     }
 
-    private List<Shot> refreshWatchingEventShots() {
-        Stream watchingStream = getWatchingEvent();
+    private List<Shot> refreshWatchingStreamShots() {
+        Stream watchingStream = getWatchingStream();
         if (watchingStream != null) {
-            return refreshEventShots(watchingStream);
+            return refreshStreamShots(watchingStream);
         }
         return null;
     }
 
-    private List<Shot> refreshEventShots(Stream stream) {
+    private List<Shot> refreshStreamShots(Stream stream) {
         if (stream == null) {
             throw new IllegalArgumentException("Can't refresh null stream");
         }
 
-        Long eventRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(stream.getId());
+        Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(stream.getId());
 
         StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forStream(stream) //
           .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
-          .since(eventRefreshDateSince) //
+          .since(streamRefreshDateSince) //
           .build();
 
         List<Shot> localShots = localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
@@ -138,12 +138,12 @@ public class ShootrTimelineService {
         return ids;
     }
 
-    private Stream getWatchingEvent() {
+    private Stream getWatchingStream() {
         String currentUserId = sessionRepository.getCurrentUserId();
         User currentUser = localUserRepository.getUserById(currentUserId);
-        String watchingEventId = currentUser.getIdWatchingStream();
-        if (watchingEventId != null) {
-            return localStreamRepository.getStreamById(watchingEventId);
+        String watchingStreamId = currentUser.getIdWatchingStream();
+        if (watchingStreamId != null) {
+            return localStreamRepository.getStreamById(watchingStreamId);
         }
         return null;
     }
