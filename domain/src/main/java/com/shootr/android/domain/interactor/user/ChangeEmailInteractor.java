@@ -1,8 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
-import com.shootr.android.domain.exception.EmailMatchNewEmailException;
+import com.shootr.android.domain.exception.EmailAlreadyConfirmed;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.UnauthorizedRequestException;
@@ -13,7 +12,6 @@ import com.shootr.android.domain.service.EmailInUseException;
 import com.shootr.android.domain.service.EmailIsAuthenticatedException;
 import com.shootr.android.domain.service.InsufficientAuthenticationException;
 import com.shootr.android.domain.service.user.ShootrUserService;
-import com.shootr.android.domain.validation.FieldValidationError;
 import javax.inject.Inject;
 
 public class ChangeEmailInteractor implements Interactor {
@@ -50,7 +48,7 @@ public class ChangeEmailInteractor implements Interactor {
             notifyError(new EmailInUseException(error));
         } catch (UnauthorizedRequestException error) {
             notifyError(new InsufficientAuthenticationException(error));
-        } catch (EmailMatchNewEmailException error) {
+        } catch (EmailAlreadyConfirmed error) {
             notifyError(new EmailIsAuthenticatedException(error));
         } catch (NullPointerException unknownError) {
             notifyError(new InsufficientAuthenticationException(unknownError));
