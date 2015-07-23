@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -146,6 +146,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -231,12 +232,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
+        changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_profile_logout) {
             profilePresenter.logoutSelected();
+            return true;
+        } else if (id == R.id.menu_profile_change_password) {
+            // TODO: Jump to another activity
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -756,6 +761,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override public void showLogoutButton() {
         logoutMenuItem.setVisible(true);
+    }
+
+    @Override public void showChangePasswordButton() {
+        changePasswordMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)
