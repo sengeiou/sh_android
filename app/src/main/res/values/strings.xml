@@ -307,4 +307,5 @@
     <string name="support_terms_service">Terms of Service</string>
     <string name="support_privacy_policy">Privacy Policy</string>
     <string name="support_faq">FAQ</string>
+    <string name="support_version_number">0</string>
 </resources>
