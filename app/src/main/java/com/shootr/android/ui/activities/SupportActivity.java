@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -16,12 +17,12 @@ import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity {
 
-    public static final String TERMS_OF_SERVICE_BASE_URL = "http://docs.shootr.com/#/terms/";
-    public static final String PRIVACY_POLICY_SERVICE_BASE_URL = "http://docs.shootr.com/#/privacy/";
-
     @Inject LocaleProvider localeProvider;
 
     @Bind(R.id.support_version_number) TextView versionNumber;
+
+    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -52,13 +53,13 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @OnClick(R.id.support_terms_service_container)
     public void onTermsAndServiceClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TERMS_OF_SERVICE_BASE_URL + localeProvider.getLanguage()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
         startActivity(browserIntent);
     }
 
     @OnClick(R.id.support_privacy_policy_container)
     public void onPrivacyPolicyClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_SERVICE_BASE_URL + localeProvider.getLanguage()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl + localeProvider.getLanguage()));
         startActivity(browserIntent);
     }
 

@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
@@ -40,15 +41,15 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    public static final String TERMS_OF_SERVICE_BASE_URL = "http://docs.shootr.com/#/terms/";
-    public static final String PRIVACY_POLICY_SERVICE_BASE_URL = "http://docs.shootr.com/#/privacy/";
-
     @Bind(R.id.registration_email) AutoCompleteTextView emailInput;
     @Bind(R.id.registration_username) EditText usernameInput;
     @Bind(R.id.registration_password) EditText passwordInput;
     @Bind(R.id.registration_create_button) View createButton;
     @Bind(R.id.registration_create_progress) View progress;
     @Bind(R.id.registration_legal_disclaimer) TextView disclaimer;
+
+    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
 
     @Inject EmailRegistrationPresenter presenter;
     @Inject LocaleProvider localeProvider;
@@ -93,7 +94,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
         final View.OnClickListener termsClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TERMS_OF_SERVICE_BASE_URL + localeProvider.getLanguage()));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
                 startActivity(browserIntent);
             }
         };
@@ -103,7 +104,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
         final View.OnClickListener privacyClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_SERVICE_BASE_URL
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl
                   + localeProvider.getLanguage()));
                 startActivity(browserIntent);
             }
