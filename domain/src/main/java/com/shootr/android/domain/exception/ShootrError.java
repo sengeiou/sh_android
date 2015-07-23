@@ -57,6 +57,9 @@ public interface ShootrError {
     String ERROR_SUBCODE_MORE_THAN_ONE_VALID_LINK = "VE_004";
 
 
+    String ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD = "???2";
+    String ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN = "???3";
+
     String getErrorCode();
 
     String getMessage();
