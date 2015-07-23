@@ -1,0 +1,125 @@
+package com.shootr.android.ui.presenter;
+
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.ChangePasswordInteractor;
+import com.shootr.android.domain.service.ChangePasswordInvalidException;
+import com.shootr.android.domain.validation.ChangePasswordValidator;
+import com.shootr.android.domain.validation.FieldValidationError;
+import com.shootr.android.ui.views.ChangePasswordView;
+import com.shootr.android.util.ErrorMessageFactory;
+import java.util.List;
+import javax.inject.Inject;
+import timber.log.Timber;
+
+public class ChangePasswordPresenter implements Presenter {
+
+    private final ErrorMessageFactory errorMessageFactory;
+    private final ChangePasswordInteractor changePasswordInteractor;
+
+    private ChangePasswordView changePasswordView;
+
+    @Inject public ChangePasswordPresenter(ErrorMessageFactory errorMessageFactory,
+      ChangePasswordInteractor changePasswordInteractor) {
+        this.errorMessageFactory = errorMessageFactory;
+        this.changePasswordInteractor = changePasswordInteractor;
+    }
+
+    protected void setView(ChangePasswordView changePasswordView) {
+        this.changePasswordView = changePasswordView;
+    }
+
+    public void initialize(ChangePasswordView changePasswordView) {
+        setView(changePasswordView);
+    }
+
+    public void attempToChangePassword(String currentPassword, String newPassword, String newPasswordAgain) {
+        if(validatePasswords(currentPassword, newPassword, newPasswordAgain)) {
+            changePasswordView.showError(newPassword);
+            changePasswordInteractor.attempToChangePassword(currentPassword,
+              newPassword,
+              new Interactor.CompletedCallback() {
+                  @Override public void onCompleted() {
+                        //TODO Something with the view
+                  }
+              },
+              new Interactor.ErrorCallback() {
+                  @Override public void onError(ShootrException error) {
+                      showErrorInView(error);
+                  }
+              });
+        }
+
+    }
+
+    private void showErrorInView(ShootrException error) {
+        String errorMessage;
+        if(error instanceof ChangePasswordInvalidException){
+            errorMessage = errorMessageFactory.getChangePasswordError();
+        }else if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        }else{
+            Timber.e(error, "Unhandled error logging in");
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        changePasswordView.showError(errorMessage);
+    }
+
+    private boolean validatePasswords(String currentPassword, String newPassword, String newPasswordAgain) {
+        boolean validationSuccessful = true;
+        if (!validateFieldOrShowError(currentPassword, newPassword, newPasswordAgain)) {
+            validationSuccessful = false;
+        }
+        return validationSuccessful;
+    }
+
+    private boolean validateFieldOrShowError(String currentPassword, String newPassword, String newPasswordAgain) {
+        List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword, newPassword, newPasswordAgain);
+        showValidationErrors(errors);
+        return errors.size() == 0;
+    }
+
+    private void showValidationErrors(List<FieldValidationError> errors) {
+        for (FieldValidationError validationError : errors) {
+            String errorMessage = errorMessageFactory.getMessageForCode(validationError.getErrorCode());
+            switch (validationError.getField()) {
+                case ChangePasswordValidator.FIELD_CURRENT_PASSWORD:
+                    showViewCurrentPasswordError(errorMessage);
+                    break;
+                case ChangePasswordValidator.FIELD_NEW_PASSWORD:
+                    showViewNewPasswordError(errorMessage);
+                    break;
+                case ChangePasswordValidator.FIELD_NEW_PASSWORD_AGAIN:
+                    showViewNewPasswordAgainError(errorMessage);
+                    break;
+                default:
+                    showViewError(errorMessage);
+            }
+        }
+    }
+
+    private void showViewCurrentPasswordError(String errorMessage) {
+        changePasswordView.showCurrentPasswordError(errorMessage);
+    }
+
+    private void showViewNewPasswordError(String errorMessage) {
+        changePasswordView.showNewPasswordError(errorMessage);
+    }
+
+    private void showViewNewPasswordAgainError(String errorMessage) {
+        changePasswordView.showNewPasswordAgainError(errorMessage);
+    }
+
+    private void showViewError(String errorMessage) {
+        changePasswordView.showError(errorMessage);
+    }
+
+    @Override public void resume() {
+        /* no-op */
+    }
+
+    @Override public void pause() {
+        /* no-op */
+    }
+}
