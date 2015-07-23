@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,8 +21,6 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @Inject LocaleProvider localeProvider;
 
-    @Bind(R.id.support_terms_service_container) FrameLayout termsAndService;
-    @Bind(R.id.support_privacy_policy_container) FrameLayout privacyPolicy;
     @Bind(R.id.support_version_number) TextView versionNumber;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -37,8 +33,7 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        versionNumber.setVisibility(View.VISIBLE);
-        versionNumber.setText(String.valueOf(VersionUtils.getVersionName(getApplication())));
+        versionNumber.setText(VersionUtils.getVersionName(getApplication()));
     }
 
     @Override protected void initializePresenter() {
