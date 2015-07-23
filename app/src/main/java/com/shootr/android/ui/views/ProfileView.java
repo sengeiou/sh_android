@@ -15,4 +15,6 @@ public interface ProfileView {
     void navigateToWelcomeScreen();
 
     void showLogoutButton();
+
+    void showSupportButton();
 }

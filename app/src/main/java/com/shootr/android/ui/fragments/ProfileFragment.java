@@ -147,6 +147,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -232,7 +233,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
-        logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
+        supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -762,6 +763,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Override public void showLogoutButton() {
         logoutMenuItem.setVisible(true);
+    }
+
+    @Override public void showSupportButton() {
+        supportMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)
