@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
@@ -12,6 +12,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
+import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamListSynchronizationRepository;
 import com.shootr.android.domain.repository.StreamRepository;

@@ -1,8 +1,8 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.interactor.event.CreateStreamInteractor;
-import com.shootr.android.domain.interactor.event.DeleteStreamInteractor;
-import com.shootr.android.domain.interactor.event.GetStreamInteractor;
+import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
+import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
+import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.util.ErrorMessageFactory;

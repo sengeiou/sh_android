@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -28,7 +28,7 @@ public class WatchNumberInteractorTest {
     public static final long ID_USER_1 = 1L;
     public static final long ID_USER_2 = 2L;
 
-    private WatchNumberInteractor interactor;
+    private com.shootr.android.domain.interactor.stream.WatchNumberInteractor interactor;
 
     @Mock UserRepository remoteUserRepository;
     @Mock UserRepository localUserRepository;
@@ -41,7 +41,7 @@ public class WatchNumberInteractorTest {
         MockitoAnnotations.initMocks(this);
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         TestInteractorHandler testInteractorHandler = new TestInteractorHandler();
-        interactor = new WatchNumberInteractor(testInteractorHandler,
+        interactor = new com.shootr.android.domain.interactor.stream.WatchNumberInteractor(testInteractorHandler,
           postExecutionThread,
           sessionRepository,
           remoteUserRepository,
@@ -116,7 +116,7 @@ public class WatchNumberInteractorTest {
         return user;
     }
 
-    private class SpyCallback implements WatchNumberInteractor.Callback {
+    private class SpyCallback implements com.shootr.android.domain.interactor.stream.WatchNumberInteractor.Callback {
 
         public Integer count;
 

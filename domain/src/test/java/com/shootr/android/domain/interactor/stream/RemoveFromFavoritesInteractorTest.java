@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -20,7 +20,7 @@ public class RemoveFromFavoritesInteractorTest {
     private static final String ID_STREAM_FAVORITE = "stream";
     private static final String ID_STREAM_NOT_FAVORITE = "stream_not_favorite";
 
-    private RemoveFromFavoritesInteractor interactor;
+    private com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor interactor;
 
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
@@ -29,7 +29,7 @@ public class RemoveFromFavoritesInteractorTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        interactor = new RemoveFromFavoritesInteractor(new TestInteractorHandler(),
+        interactor = new com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor(new TestInteractorHandler(),
           new TestPostExecutionThread(),
           localFavoriteRepository,
           remoteFavoriteRepository);

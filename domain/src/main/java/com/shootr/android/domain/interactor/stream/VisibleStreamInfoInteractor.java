@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamInfo;

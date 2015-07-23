@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -26,14 +26,14 @@ public class GetFavoriteStatusInteractorTest {
     @Mock Interactor.Callback<Boolean> callback;
     @Mock FavoriteRepository localFavoriteRepository;
 
-    private GetFavoriteStatusInteractor getFavoriteStatusInteractor;
+    private com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor getFavoriteStatusInteractor;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        getFavoriteStatusInteractor = new GetFavoriteStatusInteractor(interactorHandler, postExecutionThread, localFavoriteRepository);
+        getFavoriteStatusInteractor = new com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor(interactorHandler, postExecutionThread, localFavoriteRepository);
     }
 
     @Test

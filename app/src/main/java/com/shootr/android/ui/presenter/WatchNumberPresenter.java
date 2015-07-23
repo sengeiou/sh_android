@@ -5,7 +5,7 @@ import com.shootr.android.domain.bus.StreamChanged;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.WatchNumberInteractor;
+import com.shootr.android.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;

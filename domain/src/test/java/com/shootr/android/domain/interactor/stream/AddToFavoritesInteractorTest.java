@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -30,14 +30,14 @@ public class AddToFavoritesInteractorTest {
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Favorite favorite;
 
-    private AddToFavoritesInteractor addToFavoritesInteractor;
+    private com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor addToFavoritesInteractor;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
-        addToFavoritesInteractor = new AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
+        addToFavoritesInteractor = new com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
           interactorHandler, postExecutionThread);
     }
 

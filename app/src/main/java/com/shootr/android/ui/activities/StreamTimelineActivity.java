@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.shootr.android.R;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.fragments.StreamTimelineFragment;

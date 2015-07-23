@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.event;
+package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;

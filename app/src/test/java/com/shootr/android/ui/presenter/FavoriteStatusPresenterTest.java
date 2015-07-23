@@ -1,9 +1,9 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
-import com.shootr.android.domain.interactor.event.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import org.junit.Before;
 import org.junit.Test;
