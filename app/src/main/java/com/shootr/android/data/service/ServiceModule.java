@@ -1,6 +1,7 @@
 package com.shootr.android.data.service;
 
 import com.shootr.android.domain.service.shot.ShotGateway;
+import com.shootr.android.domain.service.user.ChangePasswordGateway;
 import com.shootr.android.domain.service.user.CheckinGateway;
 import com.shootr.android.domain.service.user.CreateAccountGateway;
 import com.shootr.android.domain.service.user.LoginGateway;
@@ -17,6 +18,10 @@ public class ServiceModule {
 
     @Provides CheckinGateway provideCheckinGateway(DataserviceCheckinGateway dataserviceCheckinGateway) {
         return dataserviceCheckinGateway;
+    }
+
+    @Provides ChangePasswordGateway provideChangePasswordGateway(DataserviceChangePasswordGateway dataserviceChangePasswordGateway) {
+        return dataserviceChangePasswordGateway;
     }
 
     @Provides CreateAccountGateway provideCreateAccountGateway(DataserviceCreateAccountGateway dataserviceCreateAccountGateway) {

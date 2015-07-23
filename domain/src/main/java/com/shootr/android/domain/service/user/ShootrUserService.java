@@ -7,6 +7,7 @@ import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
+import com.shootr.android.domain.exception.InvalidPasswordException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
@@ -26,6 +27,7 @@ public class ShootrUserService {
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
+    private final ChangePasswordGateway changePasswordGateway;
     private final EventRepository remoteEventRepository;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
@@ -33,15 +35,15 @@ public class ShootrUserService {
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
-      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
-      DatabaseUtils databaseUtils) {
+      ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway, @Remote EventRepository remoteEventRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
         this.resetPasswordGateway = resetPasswordGateway;
+        this.changePasswordGateway = changePasswordGateway;
         this.remoteEventRepository = remoteEventRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
@@ -112,5 +114,9 @@ public class ShootrUserService {
 
     private void removeSession() {
         sessionRepository.destroySession();
+    }
+
+    public void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException {
+        changePasswordGateway.changePassword(currentPassword, newPassword);
     }
 }
