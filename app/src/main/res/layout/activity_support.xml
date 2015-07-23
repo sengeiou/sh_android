@@ -5,22 +5,16 @@
   android:orientation="vertical"
   tools:context="com.shootr.android.ui.activities.SupportActivity">
 
-  <FrameLayout android:id="@+id/profile_faq_container"
+  <TextView
+    android:id="@+id/support_faq_text"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-
-    <TextView
-      android:id="@+id/support_faq_text"
-      android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:layout_marginLeft="16dp"
-      android:gravity="center_vertical"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_60"
-      android:text="@string/support_faq"
-      />
-
-  </FrameLayout>
+    android:layout_height="56dp"
+    android:layout_marginLeft="16dp"
+    android:gravity="center_vertical"
+    android:textAppearance="@style/TextAppearance.Switch"
+    android:textColor="@color/gray_60"
+    android:text="@string/support_faq"
+    />
 
   <View android:layout_width="match_parent"
     android:layout_height="0.5dp"
