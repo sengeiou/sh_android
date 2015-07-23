@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +25,7 @@ public class ShootrUserServiceCheckinTest {
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
+    @Mock ChangePasswordGateway changePasswordGateway;
     @Mock EventRepository remoteEventRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
@@ -36,7 +36,9 @@ public class ShootrUserServiceCheckinTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway, remoteEventRepository, remoteUserRepository,
+          createAccountGateway, loginGateway, resetPasswordGateway,
+          changePasswordGateway,
+          remoteEventRepository, remoteUserRepository,
           resetPasswordEmailGateway, databaseUtils);
     }
 
