@@ -2,6 +2,7 @@ package com.shootr.android.ui;
 
 import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
+import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EventDetailActivity;
 import com.shootr.android.ui.activities.EventMediaActivity;
@@ -66,6 +67,7 @@ import javax.inject.Singleton;
     EventTimelineFragment.class,
     FindEventsActivity.class,
     WhaleActivity.class,
+    ChangePasswordActivity.class,
   },
   complete = false) public class UiModule {
 

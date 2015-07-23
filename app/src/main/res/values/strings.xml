@@ -301,4 +301,9 @@
     <string name="new_event_short_title_label">Short title</string>
     <string name="short_title_warning">3 to 15 characters</string>
     <string name="menu_profile_chage_password">Change password</string>
+    <string name="title_activity_change_password">Change Password</string>
+    <string name="current_password_hint">Current password</string>
+    <string name="change_password_button_text">CHANGE PASSWORD</string>
+    <string name="new_password_hint">New password</string>
+    <string name="new_password_again_hint">New password again</string>
 </resources>

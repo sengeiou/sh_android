@@ -57,6 +57,7 @@ import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -241,7 +242,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             profilePresenter.logoutSelected();
             return true;
         } else if (id == R.id.menu_profile_change_password) {
-            // TODO: Jump to another activity
+            startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -744,8 +745,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void navigateToWelcomeScreen() {
         if(getActivity() != null) {
             new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     hideLogoutInProgress();
                     redirectToWelcome();
                 }
