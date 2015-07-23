@@ -5,10 +5,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
-import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.EmailInUseException;
-import com.shootr.android.domain.service.ResetPasswordException;
 import com.shootr.android.domain.validation.EmailConfirmationValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.ui.model.UserModel;
@@ -26,7 +24,6 @@ public class EmailConfirmationPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final ConfirmEmailInteractor confirmEmailInteractor;
     private final ChangeEmailInteractor changeEmailInteractor;
-    private final UpdateUserInteractor updateUserInteractor;
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
 
@@ -35,11 +32,10 @@ public class EmailConfirmationPresenter implements Presenter {
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
       ConfirmEmailInteractor confirmEmailInteractor, ChangeEmailInteractor changeEmailInteractor,
-      UpdateUserInteractor updateUserInteractor, SessionRepository sessionRepository, UserModelMapper userModelMapper) {
+      SessionRepository sessionRepository, UserModelMapper userModelMapper) {
         this.errorMessageFactory = errorMessageFactory;
         this.confirmEmailInteractor = confirmEmailInteractor;
         this.changeEmailInteractor = changeEmailInteractor;
-        this.updateUserInteractor = updateUserInteractor;
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
     }
@@ -55,26 +51,18 @@ public class EmailConfirmationPresenter implements Presenter {
     }
 
     protected void confirmEmail(final String email) {
-        updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-                if (!currentUserModel.getEmailConfirmed()) {
-                    confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
-                        @Override public void onCompleted() {
-                            emailConfirmationView.showConfirmationToUser(email);
-                        }
-                    }, new Interactor.ErrorCallback() {
-                        @Override public void onError(ShootrException error) {
-                            showViewError(error);
-                        }
-                    });
+        UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+        if (!currentUserModel.getEmailConfirmed()) {
+            confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    emailConfirmationView.showConfirmationToUser(email);
                 }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                emailConfirmationView.showError(error.getMessage());
-            }
-        });
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    showViewError(error);
+                }
+            });
+        }
     }
 
     protected void setUserEmail(String userEmail) {

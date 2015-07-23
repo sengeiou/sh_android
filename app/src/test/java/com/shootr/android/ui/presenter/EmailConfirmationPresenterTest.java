@@ -5,7 +5,6 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
-import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EmailConfirmationView;
@@ -35,7 +34,6 @@ public class EmailConfirmationPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ConfirmEmailInteractor confirmEmailInteractor;
     @Mock ChangeEmailInteractor changeEmailInteractor;
-    @Mock UpdateUserInteractor updateUserInteractor;
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock SessionRepository sessionRepository;
@@ -47,14 +45,12 @@ public class EmailConfirmationPresenterTest {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper();
         presenter = new EmailConfirmationPresenter(errorMessageFactory, confirmEmailInteractor, changeEmailInteractor,
-          updateUserInteractor,
           sessionRepository, userModelMapper);
         presenter.setView(emailConfirmationView);
     }
 
     @Test
     public void shouldShowAlertWhenPresenterInitializedAndEmailNotConfirmed() {
-        setupUpdateUserCompletedCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
         setupConfirmEmailCallbackCompleted();
 
@@ -75,7 +71,6 @@ public class EmailConfirmationPresenterTest {
 
     @Test
     public void shouldShowErrorWhenPresenterInitializedAndNoConnection() {
-        setupUpdateUserErrorCallback();
         setupConfirmEmailErrorCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
@@ -122,7 +117,6 @@ public class EmailConfirmationPresenterTest {
 
     @Test
     public void shouldShowConfirmationWhenEmailIsValidAndDoneButtonPressed() {
-        setupUpdateUserCompletedCallback();
         setupConfirmEmailCallbackCompleted();
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
@@ -134,7 +128,6 @@ public class EmailConfirmationPresenterTest {
 
     @Test
     public void shouldHideDoneButtonWhenEmailIsValidAndDoneButtonPressed() {
-        setupUpdateUserCompletedCallback();
         setupConfirmEmailCallbackCompleted();
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
@@ -146,7 +139,6 @@ public class EmailConfirmationPresenterTest {
 
     @Test
     public void shouldShowAlertWhenEmailChangedAndIsValid() {
-        setupUpdateUserCompletedCallback();
         setupChangeEmailCallbackCompleted();
         setupConfirmEmailCallbackCompleted();
 
@@ -166,28 +158,6 @@ public class EmailConfirmationPresenterTest {
         presenter.attempToChangeEmail(ANOTHER_EMAIL);
 
         verify(emailConfirmationView).showError(anyString());
-    }
-
-    private void setupUpdateUserCompletedCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback = (Interactor.CompletedCallback) invocation.getArguments()[0];
-                completedCallback.onCompleted();
-                return null;
-            }
-        }).when(updateUserInteractor)
-          .updateCurrentUser(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
-    }
-
-    private void setupUpdateUserErrorCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[1];
-                errorCallback.onError(new ServerCommunicationException(new Throwable()));
-                return null;
-            }
-        }).when(updateUserInteractor)
-          .updateCurrentUser(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupoChangeEmailInteractorErrorCallback() {
