@@ -5,6 +5,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangePasswordInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ChangePasswordInvalidException;
 import com.shootr.android.domain.validation.ChangePasswordValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -19,14 +20,17 @@ public class ChangePasswordPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final ChangePasswordInteractor changePasswordInteractor;
     private final LogoutInteractor logoutInteractor;
+    private final SessionRepository sessionRepository;
 
     private ChangePasswordView changePasswordView;
 
     @Inject public ChangePasswordPresenter(ErrorMessageFactory errorMessageFactory,
-      ChangePasswordInteractor changePasswordInteractor, LogoutInteractor logoutInteractor) {
+      ChangePasswordInteractor changePasswordInteractor, LogoutInteractor logoutInteractor,
+      SessionRepository sessionRepository) {
         this.errorMessageFactory = errorMessageFactory;
         this.changePasswordInteractor = changePasswordInteractor;
         this.logoutInteractor = logoutInteractor;
+        this.sessionRepository = sessionRepository;
     }
 
     protected void setView(ChangePasswordView changePasswordView) {
@@ -87,7 +91,7 @@ public class ChangePasswordPresenter implements Presenter {
     }
 
     private boolean validateFieldOrShowError(String currentPassword, String newPassword, String newPasswordAgain) {
-        List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword, newPassword, newPasswordAgain);
+        List<FieldValidationError> errors = new ChangePasswordValidator().validate(currentPassword, newPassword, newPasswordAgain, sessionRepository.getCurrentUser().getUsername());
         showValidationErrors(errors);
         return errors.size() == 0;
     }

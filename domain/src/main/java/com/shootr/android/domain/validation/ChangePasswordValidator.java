@@ -22,13 +22,14 @@ public class ChangePasswordValidator {
         fieldValidationErrors = new ArrayList<>();
     }
 
-    public List<FieldValidationError> validate(String currentPassword, String newPassword, String newPasswordAgain) {
-        validatePassword(currentPassword, newPassword, newPasswordAgain);
+    public List<FieldValidationError> validate(String currentPassword, String newPassword, String newPasswordAgain,
+      String username) {
+        validatePassword(currentPassword, newPassword, newPasswordAgain, username);
         return fieldValidationErrors;
     }
 
     //region Password
-    private void validatePassword(String currentPassword, String newPassword, String newPasswordAgain) {
+    private void validatePassword(String currentPassword, String newPassword, String newPasswordAgain, String username) {
 
         List<String> passwords = Arrays.asList(currentPassword, newPassword, newPasswordAgain);
 
@@ -41,7 +42,13 @@ public class ChangePasswordValidator {
 
         validateNewPasswordIsDifferentFromCurrentPassword(currentPassword, newPassword);
         validateNewPasswordEqualsNewPasswordAgain(newPassword, newPasswordAgain);
+        validateNewPasswordIsDifferentUsername(newPassword, username);
+    }
 
+    private void validateNewPasswordIsDifferentUsername(String newPassword, String username) {
+        if(newPassword != null && newPassword.equals(username)) {
+            addError(ShootrError.ERROR_CODE_NEW_PASSWORD_EQUALS_USERNAME, FIELD_NEW_PASSWORD_AGAIN);
+        }
     }
 
     private void validatePassWordHasNotInvalidCharacters(String password, int field) {

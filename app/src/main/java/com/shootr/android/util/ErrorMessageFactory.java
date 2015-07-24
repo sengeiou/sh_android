@@ -61,6 +61,7 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS, R.string.error_message_registration_password_invalid);
         codeResourceMap.put(ShootrError.ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD, R.string.error_message_change_password_new_password_same_current_password);
         codeResourceMap.put(ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN, R.string.error_message_change_password_new_password_and_again_must_match);
+        codeResourceMap.put(ShootrError.ERROR_CODE_NEW_PASSWORD_EQUALS_USERNAME, R.string.error_message_registration_password_equals_username);
     }
 
     public String getMessageForError(ShootrError shootrError) {
