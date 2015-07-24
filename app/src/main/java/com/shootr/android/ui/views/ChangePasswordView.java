@@ -9,4 +9,6 @@ public interface ChangePasswordView {
     void showNewPasswordAgainError(String errorMessage);
 
     void showError(String errorMessage);
+
+    void navigateToWelcomeScreen();
 }

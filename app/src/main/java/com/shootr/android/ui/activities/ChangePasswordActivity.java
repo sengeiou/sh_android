@@ -1,6 +1,8 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -10,11 +12,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.presenter.ChangePasswordPresenter;
 import com.shootr.android.ui.views.ChangePasswordView;
 import javax.inject.Inject;
 
 public class ChangePasswordActivity extends BaseToolbarDecoratedActivity implements ChangePasswordView {
+
+    public static final int LOGOUT_DISMISS_DELAY = 1500;
 
     @Bind(R.id.current_password) EditText currentPasswordInput;
     @Bind(R.id.new_password) EditText newPasswordInput;
@@ -69,5 +74,19 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
 
     @Override public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+    }
+
+    @Override public void navigateToWelcomeScreen() {
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                redirectToWelcome();
+            }
+        }, LOGOUT_DISMISS_DELAY);
+    }
+
+    private void redirectToWelcome() {
+        Intent intent = new Intent(this, LoginSelectionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

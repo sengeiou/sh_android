@@ -4,6 +4,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangePasswordInteractor;
+import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.domain.service.ChangePasswordInvalidException;
 import com.shootr.android.domain.validation.ChangePasswordValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -17,13 +18,15 @@ public class ChangePasswordPresenter implements Presenter {
 
     private final ErrorMessageFactory errorMessageFactory;
     private final ChangePasswordInteractor changePasswordInteractor;
+    private final LogoutInteractor logoutInteractor;
 
     private ChangePasswordView changePasswordView;
 
     @Inject public ChangePasswordPresenter(ErrorMessageFactory errorMessageFactory,
-      ChangePasswordInteractor changePasswordInteractor) {
+      ChangePasswordInteractor changePasswordInteractor, LogoutInteractor logoutInteractor) {
         this.errorMessageFactory = errorMessageFactory;
         this.changePasswordInteractor = changePasswordInteractor;
+        this.logoutInteractor = logoutInteractor;
     }
 
     protected void setView(ChangePasswordView changePasswordView) {
@@ -40,7 +43,15 @@ public class ChangePasswordPresenter implements Presenter {
               newPassword,
               new Interactor.CompletedCallback() {
                   @Override public void onCompleted() {
-                        //TODO Something with the view
+                      logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
+                          @Override public void onCompleted() {
+                                changePasswordView.navigateToWelcomeScreen();
+                          }
+                      }, new Interactor.ErrorCallback() {
+                          @Override public void onError(ShootrException error) {
+                              showErrorInView(error);
+                          }
+                      });
                   }
               },
               new Interactor.ErrorCallback() {
