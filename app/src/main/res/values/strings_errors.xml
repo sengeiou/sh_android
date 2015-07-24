@@ -47,8 +47,8 @@
     <string name="error_message_registration_password_too_long">6 to 20 characters</string>
     <string name="error_message_registration_password_equals_username">Password and username must not match</string>
     <string name="error_message_registration_password_invalid">Invalid characters</string>
-    <string name="error_message_change_password_new_password_same_current_password">!! Current password and new password must not match</string>
-    <string name="error_message_change_password_new_password_and_again_must_match">!! New passwords must be the same</string>
+    <string name="error_message_change_password_new_password_same_current_password">Your new password must be different</string>
+    <string name="error_message_change_password_new_password_and_again_must_match">Passwords don\'t match</string>
 
     <!-- Forgot password -->
     <string name="error_reset_password">We couldn\'t find any matching accounts.</string>
