@@ -52,7 +52,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @OnClick(R.id.change_password_button)
     public void onChangePasswordButtonPressed() {
         changePasswordPresenter.attempToChangePassword(currentPasswordInput.getText().toString(),
-          newPasswordInput.getText().toString(), currentPasswordInput.getText().toString());
+          newPasswordInput.getText().toString(), newPasswordAgainInput.getText().toString());
     }
 
     @Override public void showCurrentPasswordError(String errorMessage) {
