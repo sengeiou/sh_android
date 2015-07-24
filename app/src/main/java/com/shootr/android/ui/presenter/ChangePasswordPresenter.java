@@ -36,7 +36,6 @@ public class ChangePasswordPresenter implements Presenter {
 
     public void attempToChangePassword(String currentPassword, String newPassword, String newPasswordAgain) {
         if(validatePasswords(currentPassword, newPassword, newPasswordAgain)) {
-            changePasswordView.showError(newPassword);
             changePasswordInteractor.attempToChangePassword(currentPassword,
               newPassword,
               new Interactor.CompletedCallback() {
