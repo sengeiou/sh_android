@@ -11,4 +11,8 @@ public interface ChangePasswordView {
     void showError(String errorMessage);
 
     void navigateToWelcomeScreen();
+
+    void showLogoutInProgress();
+
+    void hideLogoutInProgress();
 }

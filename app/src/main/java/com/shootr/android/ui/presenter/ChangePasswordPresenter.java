@@ -43,12 +43,14 @@ public class ChangePasswordPresenter implements Presenter {
               newPassword,
               new Interactor.CompletedCallback() {
                   @Override public void onCompleted() {
+                      changePasswordView.showLogoutInProgress();
                       logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
                           @Override public void onCompleted() {
                                 changePasswordView.navigateToWelcomeScreen();
                           }
                       }, new Interactor.ErrorCallback() {
                           @Override public void onError(ShootrException error) {
+                              changePasswordView.hideLogoutInProgress();
                               showErrorInView(error);
                           }
                       });

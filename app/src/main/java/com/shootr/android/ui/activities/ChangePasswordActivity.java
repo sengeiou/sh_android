@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,8 @@ import javax.inject.Inject;
 public class ChangePasswordActivity extends BaseToolbarDecoratedActivity implements ChangePasswordView {
 
     public static final int LOGOUT_DISMISS_DELAY = 1500;
+
+    private ProgressDialog progress;
 
     @Bind(R.id.current_password) EditText currentPasswordInput;
     @Bind(R.id.new_password) EditText newPasswordInput;
@@ -79,9 +82,21 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @Override public void navigateToWelcomeScreen() {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
+                hideLogoutInProgress();
                 redirectToWelcome();
             }
         }, LOGOUT_DISMISS_DELAY);
+    }
+
+    @Override public void showLogoutInProgress() {
+        progress = ProgressDialog.show(this,
+          null,
+          this.getString(R.string.sign_out_message),
+          true);
+    }
+
+    @Override public void hideLogoutInProgress() {
+        progress.dismiss();
     }
 
     private void redirectToWelcome() {
