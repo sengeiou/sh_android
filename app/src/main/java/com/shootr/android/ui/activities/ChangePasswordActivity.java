@@ -91,7 +91,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @Override public void showLogoutInProgress() {
         progress = ProgressDialog.show(this,
           null,
-          this.getString(R.string.sign_out_message),
+          getString(R.string.change_password_logout_message),
           true);
     }
 

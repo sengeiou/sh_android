@@ -303,8 +303,9 @@
     <string name="menu_profile_chage_password">Change password</string>
     <string name="title_activity_change_password">Change Password</string>
     <string name="current_password_hint">Current password</string>
-    <string name="change_password_button_text">CHANGE PASSWORD</string>
+    <string name="change_password_button_text">DONE</string>
     <string name="new_password_hint">New password</string>
     <string name="new_password_again_hint">New password again</string>
     <string name="error_message_invalid_change_password">Invalid password</string>
+    <string name="change_password_logout_message">Password changed, please sign in again...</string>
 </resources>
