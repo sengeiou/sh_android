@@ -40,7 +40,7 @@ public class ChangePasswordValidator {
         }
 
         validateNewPasswordIsDifferentFromCurrentPassword(currentPassword, newPassword);
-        validateNewPasswordEqualsNewPasswordAgain(newPasswordAgain, newPasswordAgain);
+        validateNewPasswordEqualsNewPasswordAgain(newPassword, newPasswordAgain);
 
     }
 
