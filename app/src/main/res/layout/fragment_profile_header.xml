@@ -132,31 +132,31 @@
 
     </FrameLayout>
 
-  <FrameLayout android:id="@+id/profile_open_stream_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/profile_scores_bar"
-    android:visibility="gone"
-    tools:visibility="visible">
-
-    <ImageView android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:layout_marginLeft="16dp"
-      android:src="@drawable/ic_action_profile_open_stream_gray_24" />
-    <TextView android:id="@+id/profile_open_stream"
+    <FrameLayout android:id="@+id/profile_open_stream_container"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:background="?selectableItemBackground"
-      android:clickable="true"
-      android:gravity="center_vertical"
-      android:paddingLeft="@dimen/keyline_2"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="@color/gray_30"
-      android:text="@string/profile_open_stream"
-      tools:text="Open stream" />
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/profile_scores_bar"
+      android:visibility="gone"
+      tools:visibility="visible">
 
-  </FrameLayout>
+      <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_action_profile_open_stream_gray_24" />
+      <TextView android:id="@+id/profile_open_stream"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/keyline_2"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_30"
+        android:text="@string/profile_open_stream"
+        tools:text="Open stream" />
+  
+    </FrameLayout>
 
     <!-- Follow buttons -->
     <com.shootr.android.ui.widgets.FollowButton
