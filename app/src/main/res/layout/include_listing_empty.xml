@@ -18,15 +18,5 @@
     android:text="@string/include_listing_empty"
     android:textColor="@color/gray_50"
     android:textSize="20sp" />
-
-  <TextView
-    android:id="@+id/media_subtitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:fontFamily="sans-serif-light"
-    android:gravity="center"
-    android:text="@string/activity_timeline_empty_message"
-    android:textColor="@color/gray_50"
-    android:textSize="16sp" />
+  
 </LinearLayout>
