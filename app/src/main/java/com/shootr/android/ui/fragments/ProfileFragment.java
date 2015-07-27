@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -114,6 +114,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Bind(R.id.profile_shots_empty) View shotsListEmpty;
     @Bind(R.id.profile_shots_list) ViewGroup shotsList;
+
+    @Bind(R.id.profile_all_shots_container) View allShotContainer;
 
     @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
@@ -359,8 +361,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                   jobManager.addJobInBackground(removeProfilePhotoJob);
               }
           })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
+          .setNegativeButton(R.string.cancel, null).show();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -633,7 +634,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                       return true;
                   }
               };
-            latestsShotsAdapter.setShots(shots);
+            latestsShotsAdapter.setShots(shots.subList(0,3));
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 setShotItemBackgroundRetainPaddings(shotView);
@@ -647,9 +648,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
+            allShotContainer.setVisibility(View.VISIBLE);
             shotsListEmpty.setVisibility(View.GONE);
         } else {
             shotsList.setVisibility(View.GONE);
+            allShotContainer.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
     }
@@ -761,5 +764,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @OnClick(R.id.profile_listing)
     public void onListingClick() {
         profilePresenter.clickListing();
+    }
+
+    @OnClick(R.id.profile_all_shots_button)
+    public void onAllShotsClick() {
+        //TODO intent to all shots activity
     }
 }
