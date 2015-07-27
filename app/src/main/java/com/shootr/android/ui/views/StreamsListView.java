@@ -15,4 +15,6 @@ public interface StreamsListView extends LoadDataView {
     void navigateToStreamTimeline(String idStream, String title);
 
     void showNotificationsOff();
+
+    void navigateToCreatedStreamDetail(String streamId);
 }

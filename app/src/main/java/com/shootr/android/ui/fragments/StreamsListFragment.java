@@ -21,6 +21,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
@@ -37,7 +38,7 @@ import javax.inject.Inject;
 
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
-    public static final int REQUEST_NEW_STREAM = 1;
+    public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.streams_list) RecyclerView streamsList;
     @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -162,8 +163,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
             String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-            String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
-            presenter.streamCreated(streamId, title);
+            presenter.streamCreated(streamId);
         }
     }
 
@@ -186,6 +186,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override public void showNotificationsOff() {
         Toast.makeText(getActivity(),getResources().getString(R.string.notifications_off_alert), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void navigateToCreatedStreamDetail(String streamId) {
+        startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
 
     @Override public void showEmpty() {

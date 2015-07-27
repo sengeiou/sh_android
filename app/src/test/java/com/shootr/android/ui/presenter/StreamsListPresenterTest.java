@@ -69,16 +69,16 @@ public class StreamsListPresenterTest {
         verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
     }
 
-    @Test public void shouldNavigateToStreamTimelineWhenNewStreamCreated() throws Exception {
-        presenter.streamCreated(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
+        presenter.streamCreated(SELECTED_STREAM_ID);
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+        verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
-    @Test public void shouldNavigateToStreamTimelineWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
-        presenter.streamCreated(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
+        presenter.streamCreated(SELECTED_STREAM_ID);
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+        verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
     @Test public void shouldRenderStreamListWhenStreamListInteractorCallbacksResults() throws Exception {

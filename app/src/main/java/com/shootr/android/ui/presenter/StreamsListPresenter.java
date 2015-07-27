@@ -96,8 +96,12 @@ public class StreamsListPresenter implements Presenter {
         }
     }
 
-    public void streamCreated(String streamId, String streamTitle) {
-        selectStream(streamId, streamTitle);
+    public void streamCreated(String streamId) {
+        selectStreamCreated(streamId);
+    }
+
+    public void selectStreamCreated(String streamId) {
+        streamsListView.navigateToCreatedStreamDetail(streamId);
     }
 
     private void setViewCurrentVisibleWatchingStream(StreamResultModel currentVisibleStream) {
