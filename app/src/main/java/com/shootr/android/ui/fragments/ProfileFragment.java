@@ -45,12 +45,12 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
-import com.shootr.android.task.events.profile.UserInfoResultEvent;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
+import com.shootr.android.task.events.profile.UserInfoResultStream;
+import com.shootr.android.task.events.shots.LatestShotsResultStream;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
@@ -392,7 +392,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onPhotoUploaded(UploadProfilePhotoEvent event) {
+    public void onPhotoUploaded(UploadProfilePhotoStream event) {
         uploadingPhoto = false;
         UserModel updateduser = event.getResult();
         hideLoadingPhoto();
@@ -406,7 +406,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
         Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
         hideLoadingPhoto();
     }
@@ -422,7 +422,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream event) {
         String messageForError;
         Exception exceptionProduced = event.getException();
         if (exceptionProduced != null && exceptionProduced instanceof ShootrServerException) {
@@ -484,14 +484,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void userInfoReceived(UserInfoResultEvent event) {
+    public void userInfoReceived(UserInfoResultStream event) {
         if (event.getResult() != null) {
             setUserInfo(event.getResult());
         }
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream event) {
         Pair<String, Boolean> result = event.getResult();
         if (result != null) {
             String idUserFromResult = result.first;
@@ -622,7 +622,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onLatestShotsLoaded(LatestShotsResultEvent event) {
+    public void onLatestShotsLoaded(LatestShotsResultStream event) {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();

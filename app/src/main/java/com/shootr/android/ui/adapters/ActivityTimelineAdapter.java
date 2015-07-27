@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -29,19 +29,19 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final AndroidTimeUtils timeUtils;
     private final OnAvatarClickListener avatarClickListener;
     private final UsernameClickListener usernameClickListener;
-    private final OnEventTitleClickListener eventTitleClickListener;
+    private final OnStreamTitleClickListener streamTitleClickListener;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
     private boolean showFooter = false;
 
     public ActivityTimelineAdapter(PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
-      UsernameClickListener usernameClickListener, OnEventTitleClickListener eventTitleClickListener) {
+      UsernameClickListener usernameClickListener, OnStreamTitleClickListener streamTitleClickListener) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.usernameClickListener = usernameClickListener;
         this.timeUtils = timeUtils;
-        this.eventTitleClickListener = eventTitleClickListener;
+        this.streamTitleClickListener = streamTitleClickListener;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -53,7 +53,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             String activityType = activities.get(position).getType();
             if (ActivityType.CHECKIN.equals(activityType)) {
                 return TYPE_CHECKIN;
-            } else if (ActivityType.LISTED_EVENT.equals(activityType)) {
+            } else if (ActivityType.LISTED_STREAM.equals(activityType)) {
                 return TYPE_LISTED;
             } else if (ActivityType.STARTED_SHOOTING.equals(activityType)) {
                 return TYPE_STARTED_SHOOTING;
@@ -102,8 +102,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          usernameClickListener,
-          eventTitleClickListener);
+          usernameClickListener, streamTitleClickListener);
     }
 
     private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
@@ -113,8 +112,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          usernameClickListener,
-          eventTitleClickListener);
+          usernameClickListener, streamTitleClickListener);
     }
 
     private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent, int viewType) {
@@ -124,8 +122,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          usernameClickListener,
-          eventTitleClickListener);
+          usernameClickListener, streamTitleClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {

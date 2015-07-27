@@ -8,16 +8,16 @@ public class Activity {
     private String idActivity;
     private String idUser;
     private String username;
-    private String idEvent;
-    private String eventTitle;
-    private String eventTag;
+    private String idStream;
+    private String streamTitle;
+    private String streamTag;
     private String comment;
     private String type;
     private Date publishDate;
 
     private ActivityUserInfo userInfo;
 
-    private ActivityEventInfo eventInfo;
+    private ActivityStreamInfo streamInfo;
 
     public Date getPublishDate() {
         return publishDate;
@@ -35,12 +35,12 @@ public class Activity {
         this.userInfo = userInfo;
     }
 
-    public ActivityEventInfo getEventInfo() {
-        return eventInfo;
+    public ActivityStreamInfo getStreamInfo() {
+        return streamInfo;
     }
 
-    public void setEventInfo(ActivityEventInfo eventInfo) {
-        this.eventInfo = eventInfo;
+    public void setStreamInfo(ActivityStreamInfo streamInfo) {
+        this.streamInfo = streamInfo;
     }
 
     public String getIdActivity() {
@@ -67,28 +67,28 @@ public class Activity {
         this.username = username;
     }
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
+    public String getStreamTitle() {
+        return streamTitle;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
     }
 
-    public String getEventTag() {
-        return eventTag;
+    public String getStreamTag() {
+        return streamTag;
     }
 
-    public void setEventTag(String eventTag) {
-        this.eventTag = eventTag;
+    public void setStreamTag(String streamTag) {
+        this.streamTag = streamTag;
     }
 
     public String getComment() {
@@ -112,14 +112,14 @@ public class Activity {
           "idActivity='" + idActivity + '\'' +
           ", idUser='" + idUser + '\'' +
           ", username='" + username + '\'' +
-          ", idEvent='" + idEvent + '\'' +
-          ", eventTitle='" + eventTitle + '\'' +
-          ", eventTag='" + eventTag + '\'' +
+          ", idStream='" + idStream + '\'' +
+          ", streamTitle='" + streamTitle + '\'' +
+          ", streamTag='" + streamTag + '\'' +
           ", comment='" + comment + '\'' +
           ", type='" + type + '\'' +
           ", publishDate=" + publishDate +
           ", userInfo=" + userInfo +
-          ", eventInfo=" + eventInfo +
+          ", streamInfo=" + streamInfo +
           '}';
     }
 
@@ -132,29 +132,29 @@ public class Activity {
         if (idActivity != null ? !idActivity.equals(activity.idActivity) : activity.idActivity != null) return false;
         if (idUser != null ? !idUser.equals(activity.idUser) : activity.idUser != null) return false;
         if (username != null ? !username.equals(activity.username) : activity.username != null) return false;
-        if (idEvent != null ? !idEvent.equals(activity.idEvent) : activity.idEvent != null) return false;
-        if (eventTitle != null ? !eventTitle.equals(activity.eventTitle) : activity.eventTitle != null) return false;
-        if (eventTag != null ? !eventTag.equals(activity.eventTag) : activity.eventTag != null) return false;
+        if (idStream != null ? !idStream.equals(activity.idStream) : activity.idStream != null) return false;
+        if (streamTitle != null ? !streamTitle.equals(activity.streamTitle) : activity.streamTitle != null) return false;
+        if (streamTag != null ? !streamTag.equals(activity.streamTag) : activity.streamTag != null) return false;
         if (comment != null ? !comment.equals(activity.comment) : activity.comment != null) return false;
         if (type != null ? !type.equals(activity.type) : activity.type != null) return false;
         if (publishDate != null ? !publishDate.equals(activity.publishDate) : activity.publishDate != null)
             return false;
         if (userInfo != null ? !userInfo.equals(activity.userInfo) : activity.userInfo != null) return false;
-        return !(eventInfo != null ? !eventInfo.equals(activity.eventInfo) : activity.eventInfo != null);
+        return !(streamInfo != null ? !streamInfo.equals(activity.streamInfo) : activity.streamInfo != null);
     }
 
     @Override public int hashCode() {
         int result = idActivity != null ? idActivity.hashCode() : 0;
         result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (idEvent != null ? idEvent.hashCode() : 0);
-        result = 31 * result + (eventTitle != null ? eventTitle.hashCode() : 0);
-        result = 31 * result + (eventTag != null ? eventTag.hashCode() : 0);
+        result = 31 * result + (idStream != null ? idStream.hashCode() : 0);
+        result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
+        result = 31 * result + (streamTag != null ? streamTag.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
-        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
+        result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
         return result;
     }
 
@@ -213,57 +213,57 @@ public class Activity {
         }
     }
 
-    public static class ActivityEventInfo {
+    public static class ActivityStreamInfo {
 
-        private String idEvent;
-        private String eventTitle;
-        private String eventTag;
+        private String idStream;
+        private String streamTitle;
+        private String streamTag;
 
-        public String getEventTag() {
-            return eventTag;
+        public String getStreamTag() {
+            return streamTag;
         }
 
-        public void setEventTag(String eventTag) {
-            this.eventTag = eventTag;
+        public void setStreamTag(String streamTag) {
+            this.streamTag = streamTag;
         }
 
-        public String getEventTitle() {
-            return eventTitle;
+        public String getStreamTitle() {
+            return streamTitle;
         }
 
-        public void setEventTitle(String eventTitle) {
-            this.eventTitle = eventTitle;
+        public void setStreamTitle(String streamTitle) {
+            this.streamTitle = streamTitle;
         }
 
-        public String getIdEvent() {
-            return idEvent;
+        public String getIdStream() {
+            return idStream;
         }
 
-        public void setIdEvent(String idEvent) {
-            this.idEvent = idEvent;
+        public void setIdStream(String idStream) {
+            this.idStream = idStream;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof ActivityEventInfo)) return false;
+            if (!(o instanceof ActivityStreamInfo)) return false;
 
-            ActivityEventInfo that = (ActivityEventInfo) o;
+            ActivityStreamInfo that = (ActivityStreamInfo) o;
 
-            if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null) return false;
+            if (idStream != null ? !idStream.equals(that.idStream) : that.idStream != null) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            return idEvent != null ? idEvent.hashCode() : 0;
+            return idStream != null ? idStream.hashCode() : 0;
         }
 
         @Override public String toString() {
-            return "ActivityEventInfo{" +
-              "eventTitle='" + eventTitle + '\'' +
-              ", idEvent=" + idEvent +
+            return "ActivityStreamInfo{" +
+              "streamTitle='" + streamTitle + '\'' +
+              ", idStream=" + idStream +
               '}';
         }
     }

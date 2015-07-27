@@ -8,9 +8,9 @@ public interface FavoriteDataSource extends SyncableDataSource<FavoriteEntity> {
 
     FavoriteEntity putFavorite(FavoriteEntity favoriteEntity);
 
-    FavoriteEntity getFavoriteByIdEvent(String idEvent);
+    FavoriteEntity getFavoriteByIdStream(String idStream);
 
     List<FavoriteEntity> getFavorites();
 
-    void removeFavoriteByIdEvent(String eventId);
+    void removeFavoriteByIdStream(String streamId);
 }

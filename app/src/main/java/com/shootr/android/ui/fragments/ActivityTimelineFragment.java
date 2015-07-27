@@ -12,15 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.EventTimelineActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnEventTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
@@ -81,7 +81,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                startActivity(new Intent(getActivity(), EventDetailActivity.class));
+                startActivity(new Intent(getActivity(), StreamDetailActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -129,10 +129,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
             public void onClick(String username) {
                 goToUserProfile(username);
             }
-        }, new OnEventTitleClickListener() {
+        }, new OnStreamTitleClickListener() {
             @Override
-            public void onClick(String eventId, String eventTitle) {
-                openEvent(eventId, eventTitle);
+            public void onClick(String streamId, String streamTitle) {
+                openStream(streamId, streamTitle);
             }
         });
 
@@ -185,9 +185,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         startActivity(profileIntent);
     }
 
-    protected void openEvent(String idEvent, String eventTitle) {
-        Intent eventIntent = EventTimelineActivity.newIntent(getActivity(), idEvent, eventTitle);
-        startActivity(eventIntent);
+    protected void openStream(String idStream, String streamTitle) {
+        Intent streamIntent = StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle);
+        startActivity(streamIntent);
     }
 
     //region View methods

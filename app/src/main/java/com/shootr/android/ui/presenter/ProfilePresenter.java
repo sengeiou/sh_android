@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
+import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import javax.inject.Inject;
@@ -45,9 +45,9 @@ public class ProfilePresenter implements Presenter {
 
     public void loadCurrentUserListing() {
         getListingCountInteractor.loadListingCount(profileIdUser, new Interactor.Callback<Integer>() {
-            @Override public void onLoaded(Integer numberOfListingEvents) {
-                if (numberOfListingEvents > 0) {
-                    profileView.showListingCount(numberOfListingEvents);
+            @Override public void onLoaded(Integer numberOfListingStreams) {
+                if (numberOfListingStreams > 0) {
+                    profileView.showListingCount(numberOfListingStreams);
                 }
             }
         });

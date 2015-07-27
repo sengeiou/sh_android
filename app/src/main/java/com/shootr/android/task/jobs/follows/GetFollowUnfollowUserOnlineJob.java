@@ -9,7 +9,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
+import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetFollowUnfollowUserOnlineJob extends ShootrBaseJob<FollowUnFollowResultEvent> {
+public class GetFollowUnfollowUserOnlineJob extends ShootrBaseJob<FollowUnFollowResultStream> {
 
     private static final int PRIORITY = 6;
 

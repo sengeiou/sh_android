@@ -23,12 +23,12 @@ public class ShotEntityMapper {
         shot.setComment(shotEntity.getComment());
         shot.setImage(shotEntity.getImage());
         shot.setPublishDate(shotEntity.getBirth());
-        if (shotEntity.getIdEvent() != null) {
-            Shot.ShotEventInfo eventInfo = new Shot.ShotEventInfo();
-            eventInfo.setIdEvent(shotEntity.getIdEvent());
-            eventInfo.setEventTitle(shotEntity.getEventTitle());
-            eventInfo.setEventTag(shotEntity.getEventTag());
-            shot.setEventInfo(eventInfo);
+        if (shotEntity.getIdStream() != null) {
+            Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+            eventInfo.setIdStream(shotEntity.getIdStream());
+            eventInfo.setStreamTitle(shotEntity.getStreamTitle());
+            eventInfo.setStreamTag(shotEntity.getStreamTag());
+            shot.setStreamInfo(eventInfo);
         }
 
         Shot.ShotUserInfo userInfo = new Shot.ShotUserInfo();
@@ -74,11 +74,11 @@ public class ShotEntityMapper {
         shotEntity.setType(shot.getType());
         String idUser = shot.getUserInfo().getIdUser();
         shotEntity.setIdUser(idUser);
-        Shot.ShotEventInfo eventInfo = shot.getEventInfo();
+        Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         if (eventInfo != null) {
-            shotEntity.setIdEvent(eventInfo.getIdEvent());
-            shotEntity.setEventTitle(eventInfo.getEventTitle());
-            shotEntity.setEventTag(eventInfo.getEventTag());
+            shotEntity.setIdStream(eventInfo.getIdStream());
+            shotEntity.setStreamTitle(eventInfo.getStreamTitle());
+            shotEntity.setStreamTag(eventInfo.getStreamTag());
         }
 
         shotEntity.setIdShotParent(shot.getParentShotId());

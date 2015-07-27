@@ -15,10 +15,10 @@ public class UserModel implements Serializable, Cloneable {
     private String bio;
     private int relationship;
     private Long points;
-    private String eventWatchingId;
-    private String eventWatchingTitle;
-    private Long joinEventDate;
-    private String joinEventDateText;
+    private String streamWatchingId;
+    private String streamWatchingTitle;
+    private Long joinStreamDate;
+    private String joinStreamDateText;
 
     public Long getPoints() {
         return points;
@@ -117,35 +117,35 @@ public class UserModel implements Serializable, Cloneable {
           '}';
     }
 
-    public String getEventWatchingId() {
-        return eventWatchingId;
+    public String getStreamWatchingId() {
+        return streamWatchingId;
     }
 
-    public void setEventWatchingId(String eventWatchingId) {
-        this.eventWatchingId = eventWatchingId;
+    public void setStreamWatchingId(String streamWatchingId) {
+        this.streamWatchingId = streamWatchingId;
     }
 
-    public String getEventWatchingTitle() {
-        return eventWatchingTitle;
+    public String getStreamWatchingTitle() {
+        return streamWatchingTitle;
     }
 
-    public void setEventWatchingTitle(String eventWatchingTitle) {
-        this.eventWatchingTitle = eventWatchingTitle;
+    public void setStreamWatchingTitle(String streamWatchingTitle) {
+        this.streamWatchingTitle = streamWatchingTitle;
     }
 
-    public Long getJoinEventDate() {
-        return joinEventDate;
+    public Long getJoinStreamDate() {
+        return joinStreamDate;
     }
 
-    public void setJoinEventDate(Long joinEventDate) {
-        this.joinEventDate = joinEventDate;
+    public void setJoinStreamDate(Long joinStreamDate) {
+        this.joinStreamDate = joinStreamDate;
     }
 
-    public String getJoinEventDateText() {
-        return joinEventDateText;
+    public String getJoinStreamDateText() {
+        return joinStreamDateText;
     }
 
-    public void setJoinEventDateText(String joinEventDateText) {
-        this.joinEventDateText = joinEventDateText;
+    public void setJoinStreamDateText(String joinStreamDateText) {
+        this.joinStreamDateText = joinStreamDateText;
     }
 }

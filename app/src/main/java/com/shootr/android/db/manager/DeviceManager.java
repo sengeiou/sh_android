@@ -63,7 +63,7 @@ public class DeviceManager extends AbstractManager {
           null,
           null);
         if (c.getCount() > 0) {
-            getWritableDatabase().delete(DatabaseContract.EventTable.TABLE, args, stringArgs);
+            getWritableDatabase().delete(DatabaseContract.StreamTable.TABLE, args, stringArgs);
         }
         c.close();
     }

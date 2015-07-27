@@ -2,7 +2,7 @@ package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.RepositoryException;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,8 +30,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     }
 
     @Override
-    public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
-        return shotManager.getShotsByEventParameters(parameters);
+    public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
+        return shotManager.getShotsByStreamParameters(parameters);
     }
 
     @Override public ShotEntity getShot(String shotId) {
@@ -42,12 +42,12 @@ public class DatabaseShotDataSource implements ShotDataSource {
         return shotManager.getRepliesTo(shotId);
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
-        return shotManager.getEventMediaShotsCount(idEvent, idUsers);
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
+        return shotManager.getStreamMediaShotsCount(idStream, idUsers);
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
-        return shotManager.getEventMediaShots(idEvent, userIds);
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
+        return shotManager.getStreamMediaShots(idStream, userIds);
     }
 
     @Override

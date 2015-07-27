@@ -1,7 +1,7 @@
 package com.shootr.android.data.repository.datasource.shot;
 
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import java.util.List;
 
 public interface ShotDataSource {
@@ -10,15 +10,15 @@ public interface ShotDataSource {
 
     void putShots(List<ShotEntity> shotEntities);
 
-    List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters);
+    List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
     ShotEntity getShot(String shotId);
 
     List<ShotEntity> getReplies(String shotId);
 
-    Integer getEventMediaShotsCount(String idEvent, List<String> idUser);
+    Integer getStreamMediaShotsCount(String idStream, List<String> idUser);
 
-    List<ShotEntity> getEventMediaShots(String idEvent, List<String> userId);
+    List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId);
 
     List<ShotEntity> getShotsFromUser(String idUser, Integer limit);
 }

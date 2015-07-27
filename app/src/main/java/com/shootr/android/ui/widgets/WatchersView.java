@@ -114,14 +114,14 @@ public class WatchersView extends LinearLayout{
     private void bindWatcherData(WatcherViewHolder viewHolder, UserModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
-        viewHolder.watchingText.setText(userWatching.getJoinEventDateText());
+        viewHolder.watchingText.setText(userWatching.getJoinStreamDateText());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
         }
     }
 
     private WatcherViewHolder createViewHolder() {
-        View itemView = layoutInflater.inflate(R.layout.item_list_event_watcher, this, false);
+        View itemView = layoutInflater.inflate(R.layout.item_list_stream_watcher, this, false);
         return new WatcherViewHolder(itemView);
     }
 

@@ -10,7 +10,7 @@ import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -26,14 +26,14 @@ public class ShootrUserService {
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
-    private final EventRepository remoteEventRepository;
+    private final StreamRepository remoteStreamRepository;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, @Remote EventRepository remoteEventRepository,
+      ResetPasswordGateway resetPasswordGateway, @Remote StreamRepository remoteStreamRepository,
       @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
       DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
@@ -42,13 +42,13 @@ public class ShootrUserService {
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
         this.resetPasswordGateway = resetPasswordGateway;
-        this.remoteEventRepository = remoteEventRepository;
+        this.remoteStreamRepository = remoteStreamRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
         this.databaseUtils = databaseUtils;
     }
 
-    public void checkInEvent(String idEvent) {
+    public void checkInStream(String idEvent) {
         User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
         try {
             checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);
@@ -75,9 +75,9 @@ public class ShootrUserService {
 
     private void retrievePostLoginInformation(LoginResult loginResult) {
         storeSession(loginResult);
-        String visibleEventId = loginResult.getUser().getIdWatchingEvent();
+        String visibleEventId = loginResult.getUser().getIdWatchingStream();
         if (visibleEventId != null) {
-            remoteEventRepository.getEventById(visibleEventId);
+            remoteStreamRepository.getStreamById(visibleEventId);
         }
         remoteUserRepository.getPeople();
     }

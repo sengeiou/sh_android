@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -30,8 +30,8 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(responseShotEntity);
     }
 
-    @Override public List<Shot> getShotsForEventTimeline(EventTimelineParameters parameters) {
-        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForEventTimeline(parameters);
+    @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
+        List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForStreamTimeline(parameters);
         localShotDataSource.putShots(shotEntitiesFromTimeline);
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }
@@ -48,12 +48,12 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(remoteShotDataSource.getReplies(shot));
     }
 
-    @Override public Integer getMediaCountByIdEvent(String idEvent, List<String> idUsers) {
-        return remoteShotDataSource.getEventMediaShotsCount(idEvent, idUsers);
+    @Override public Integer getMediaCountByIdStream(String idEvent, List<String> idUsers) {
+        return remoteShotDataSource.getStreamMediaShotsCount(idEvent, idUsers);
     }
 
-    @Override public List<Shot> getMediaByIdEvent(String idEvent, List<String> userId) {
-        List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getEventMediaShots(idEvent, userId);
+    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userId) {
+        List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getStreamMediaShots(idEvent, userId);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }

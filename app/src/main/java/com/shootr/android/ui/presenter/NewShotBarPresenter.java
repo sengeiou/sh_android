@@ -67,7 +67,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     }
 
     @Subscribe
-    @Override public void onShotFailed(ShotFailed.Event event) {
+    @Override public void onShotFailed(ShotFailed.Stream stream) {
         updateDraftsButtonVisibility();
     }
 }

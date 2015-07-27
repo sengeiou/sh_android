@@ -22,8 +22,8 @@ public class LocalWatchersRepository implements WatchersRepository {
     }
 
     @Override
-    public Integer getWatchers(String eventId) {
-        Integer watchers = getWatchersCountByEvents().get(eventId);
+    public Integer getWatchers(String streamId) {
+        Integer watchers = getWatchersCountByStreams().get(streamId);
         if (watchers == null) {
             watchers = 0;
         }
@@ -32,23 +32,23 @@ public class LocalWatchersRepository implements WatchersRepository {
 
     @Override
     public Map<String, Integer> getWatchers() {
-        return getWatchersCountByEvents();
+        return getWatchersCountByStreams();
     }
 
-    private Map<String, Integer> getWatchersCountByEvents() {
+    private Map<String, Integer> getWatchersCountByStreams() {
         List<User> people = localUserRepository.getPeople();
 
-        Map<String, Integer> eventsWatchesCounts = new HashMap<>();
+        Map<String, Integer> streamsWatchesCounts = new HashMap<>();
         for (User watcher : people) {
-            if (watcher.getIdWatchingEvent() != null) {
-                Integer currentCount = eventsWatchesCounts.get(watcher.getIdWatchingEvent());
+            if (watcher.getIdWatchingStream() != null) {
+                Integer currentCount = streamsWatchesCounts.get(watcher.getIdWatchingStream());
                 if (currentCount != null) {
-                    eventsWatchesCounts.put(watcher.getIdWatchingEvent(), currentCount + 1);
+                    streamsWatchesCounts.put(watcher.getIdWatchingStream(), currentCount + 1);
                 } else {
-                    eventsWatchesCounts.put(watcher.getIdWatchingEvent(), 1);
+                    streamsWatchesCounts.put(watcher.getIdWatchingStream(), 1);
                 }
             }
         }
-        return eventsWatchesCounts;
+        return streamsWatchesCounts;
     }
 }

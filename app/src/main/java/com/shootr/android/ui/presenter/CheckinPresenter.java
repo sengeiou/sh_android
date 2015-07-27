@@ -11,7 +11,7 @@ public class CheckinPresenter implements Presenter {
     private final PerformCheckinInteractor performCheckinInteractor;
 
     private CheckinView checkinView;
-    private String idEvent;
+    private String idStream;
 
 
     @Inject public CheckinPresenter(PerformCheckinInteractor performCheckinInteractor) {
@@ -22,12 +22,12 @@ public class CheckinPresenter implements Presenter {
         this.checkinView = checkinView;
     }
 
-    protected void setEventId(String idEvent) {
-        this.idEvent = idEvent;
+    protected void setStreamId(String idStream) {
+        this.idStream = idStream;
     }
 
-    public void initialize(CheckinView checkinView, String idEvent) {
-        this.setEventId(idEvent);
+    public void initialize(CheckinView checkinView, String idStream) {
+        this.setStreamId(idStream);
         this.setView(checkinView);
     }
 
@@ -37,7 +37,7 @@ public class CheckinPresenter implements Presenter {
 
     public void confirmCheckin() {
         checkinView.disableCheckinButton();
-        performCheckinInteractor.performCheckin(idEvent, new Interactor.CompletedCallback() {
+        performCheckinInteractor.performCheckin(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 checkinView.showCheckinDone();
             }

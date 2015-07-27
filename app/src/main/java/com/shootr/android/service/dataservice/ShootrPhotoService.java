@@ -25,7 +25,7 @@ public class ShootrPhotoService implements PhotoService {
 
     public final String uploadProfilePhotoEndpoint;
     public final String uploadShotPhotoEndpoint;
-    public final String uploadEventPhotoEndpoint;
+    public final String uploadStreamPhotoEndpoint;
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;
@@ -37,7 +37,7 @@ public class ShootrPhotoService implements PhotoService {
         this.objectMapper = objectMapper;
         uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/upload/img/profile";
         uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/shot";
-        uploadEventPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/event";
+        uploadStreamPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/stream";
     }
 
     @Override public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException {
@@ -56,11 +56,11 @@ public class ShootrPhotoService implements PhotoService {
         return parseShotImageResponse(response);
     }
 
-    @Override public String uploadEventImageAndGetUrl(File imageFile, String idEvent) throws IOException {
+    @Override public String uploadStreamImageAndGetUrl(File imageFile, String idStream) throws IOException {
         Timber.d("Uploading image with file path %s", imageFile.getAbsolutePath());
-        RequestBody body = buildEventRequestBody(imageFile, idEvent);
-        Response response = executeEventImageRequest(body);
-        return parseEventImageResponse(response);
+        RequestBody body = buildStreamRequestBody(imageFile, idStream);
+        Response response = executeStreamImageRequest(body);
+        return parseStreamImageResponse(response);
     }
 
     private RequestBody buildRequestBody(File photoFile) {
@@ -74,12 +74,12 @@ public class ShootrPhotoService implements PhotoService {
           .build();
     }
 
-    private RequestBody buildEventRequestBody(File photoFile, String idEvent) {
+    private RequestBody buildStreamRequestBody(File photoFile, String idStream) {
         return new MultipartBuilder().type(MultipartBuilder.FORM)
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
             RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getCurrentUserId()))
-          .addPart(Headers.of("Content-Disposition", "form-data; name=\"idEvent\""),
-            RequestBody.create(MediaType.parse("text/plain"), idEvent))
+          .addPart(Headers.of("Content-Disposition", "form-data; name=\"idStream\""),
+            RequestBody.create(MediaType.parse("text/plain"), idStream))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
             RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getSessionToken()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
@@ -97,8 +97,8 @@ public class ShootrPhotoService implements PhotoService {
 
 
 
-    private Response executeEventImageRequest(RequestBody body) throws IOException {
-        return executeRequest(body, uploadEventPhotoEndpoint);
+    private Response executeStreamImageRequest(RequestBody body) throws IOException {
+        return executeRequest(body, uploadStreamPhotoEndpoint);
     }
 
     private Response executeRequest(RequestBody body, String endpoint) throws IOException {
@@ -132,10 +132,10 @@ public class ShootrPhotoService implements PhotoService {
         }
     }
 
-    private String parseEventImageResponse(Response response) throws IOException {
+    private String parseStreamImageResponse(Response response) throws IOException {
         try {
             JSONObject responseJson = getJsonFromResponse(response);
-            return readJsonFromEventImage(responseJson);
+            return readJsonFromStreamImage(responseJson);
         } catch (JSONException e) {
             ShootrError
               jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
@@ -168,8 +168,8 @@ public class ShootrPhotoService implements PhotoService {
     }
 
 
-    private String readJsonFromEventImage(JSONObject jsonObject) throws IOException, JSONException {
-        String imageUrl = getEventImageUrlFromJson(jsonObject);
+    private String readJsonFromStreamImage(JSONObject jsonObject) throws IOException, JSONException {
+        String imageUrl = getStreamImageUrlFromJson(jsonObject);
 
         boolean imageUploadedSuccessfully = imageUrl != null && !imageUrl.isEmpty();
         if (imageUploadedSuccessfully) {
@@ -197,8 +197,8 @@ public class ShootrPhotoService implements PhotoService {
         return responseJson.optString("shotImageUrl");
     }
 
-    private String getEventImageUrlFromJson(JSONObject responseJson) {
-        return responseJson.optString("eventImageUrl");
+    private String getStreamImageUrlFromJson(JSONObject responseJson) {
+        return responseJson.optString("streamImageUrl");
     }
 
     private JSONObject getJsonFromResponse(Response response) throws IOException, JSONException {

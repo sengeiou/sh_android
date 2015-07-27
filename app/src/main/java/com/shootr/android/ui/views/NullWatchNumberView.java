@@ -10,7 +10,7 @@ public class NullWatchNumberView implements WatchNumberView {
         /* no-op */
     }
 
-    @Override public void navigateToEventDetail(String idEvent) {
+    @Override public void navigateToStreamDetail(String idStream) {
         /* no-op */
     }
 }

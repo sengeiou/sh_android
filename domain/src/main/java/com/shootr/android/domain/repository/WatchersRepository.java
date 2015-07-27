@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface WatchersRepository {
 
-    Integer getWatchers(String eventId);
+    Integer getWatchers(String streamId);
 
     Map<String, Integer> getWatchers();
 }

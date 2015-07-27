@@ -2,12 +2,12 @@ package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.DeviceEntity;
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.EventEntityMapper;
+import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
@@ -20,7 +20,7 @@ import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
-import com.shootr.android.service.dataservice.dto.EventDtoFactory;
+import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -52,13 +52,13 @@ public class ShootrDataService implements ShootrService {
 
     private final UserDtoFactory userDtoFactory;
     private final ShotDtoFactory shotDtoFactory;
-    private final EventDtoFactory eventDtoFactory;
+    private final StreamDtoFactory streamDtoFactory;
     private final DeviceDtoFactory deviceDtoFactory;
 
     private final UserMapper userMapper;
     private final FollowMapper followMapper;
     private final ShotEntityMapper shotEntityMapper;
-    private final EventEntityMapper eventEntityMapper;
+    private final StreamEntityMapper streamEntityMapper;
     private final DeviceMapper deviceMapper;
 
     private final TimeUtils timeUtils;
@@ -74,15 +74,15 @@ public class ShootrDataService implements ShootrService {
       UserMapper userMapper,
       FollowMapper followMapper,
       ShotEntityMapper shotEntityMapper,
-      EventDtoFactory eventDtoFactory,
+      StreamDtoFactory streamDtoFactory,
       DeviceMapper deviceMapper,
-      EventEntityMapper eventEntityMapper,
+      StreamEntityMapper streamEntityMapper,
       TimeUtils timeUtils,
       VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
-        this.eventDtoFactory = eventDtoFactory;
+        this.streamDtoFactory = streamDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
         this.deviceDtoFactory = deviceDtoFactory;
@@ -90,7 +90,7 @@ public class ShootrDataService implements ShootrService {
         this.followMapper = followMapper;
         this.shotEntityMapper = shotEntityMapper;
         this.deviceMapper = deviceMapper;
-        this.eventEntityMapper = eventEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
     }
@@ -271,24 +271,24 @@ public class ShootrDataService implements ShootrService {
         return followReceived;
     }
 
-    @Override public EventEntity saveEvent(EventEntity eventEntity) throws IOException {
-        GenericDto requestDto = eventDtoFactory.saveEvent(eventEntity);
+    @Override public StreamEntity saveStream(StreamEntity streamEntity) throws IOException {
+        GenericDto requestDto = streamDtoFactory.saveStream(streamEntity);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        EventEntity eventsReceived = null;
+        StreamEntity streamsReceived = null;
         if (ops.length > 0) {
-            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
-        return eventsReceived;
+        return streamsReceived;
     }
 
-    @Override public List<EventEntity> getEventsByIds(List<String> eventIds) throws IOException {
-        List<EventEntity> eventsReceived = new ArrayList<>();
-        GenericDto requestDto = eventDtoFactory.getEventsNotEndedByIds(eventIds);
+    @Override public List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException {
+        List<StreamEntity> streamsReceived = new ArrayList<>();
+        GenericDto requestDto = streamDtoFactory.getStreamsNotEndedByIds(streamIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -298,25 +298,25 @@ public class ShootrDataService implements ShootrService {
             Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                eventsReceived.add(eventEntityMapper.fromDto(dataItem));
+                streamsReceived.add(streamEntityMapper.fromDto(dataItem));
             }
         }
-        return eventsReceived;
+        return streamsReceived;
     }
 
-    @Override public EventEntity getEventById(String idEvent) throws IOException {
-        GenericDto requestDto = eventDtoFactory.getEventById(idEvent);
+    @Override public StreamEntity getStreamById(String idStream) throws IOException {
+        GenericDto requestDto = streamDtoFactory.getStreamById(idStream);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
         }
-        EventEntity eventsReceived = null;
+        StreamEntity streamsReceived = null;
         if(ops.length>0){
-            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
+            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
         }
-        return eventsReceived;
+        return streamsReceived;
 
     }
 
@@ -333,8 +333,8 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public void performCheckin(String idUser, String idEvent) throws IOException {
-        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idEvent);
+    @Override public void performCheckin(String idUser, String idStream) throws IOException {
+        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idStream);
         postRequest(checkinDto);
     }
 
@@ -355,9 +355,9 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) throws IOException {
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) throws IOException {
         Integer numberOfMedia = 0;
-        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByEvent(idEvent, idUsers);
+        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idStream, idUsers);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -369,9 +369,9 @@ public class ShootrDataService implements ShootrService {
         return numberOfMedia;
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) throws IOException {
-        List<ShotEntity> shotsByUserInEvent = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getMediaShotsByEvent(idEvent, userIds);
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) throws IOException {
+        List<ShotEntity> shotsByUserInStream = new ArrayList<>();
+        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idStream, userIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -381,24 +381,24 @@ public class ShootrDataService implements ShootrService {
             Long items = md.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                shotsByUserInEvent.add(shotEntityMapper.fromDto(dataItem));
+                shotsByUserInStream.add(shotEntityMapper.fromDto(dataItem));
             }
         }
-        return shotsByUserInEvent;
+        return shotsByUserInStream;
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {
-        Integer numberOfEvents = 0;
-        GenericDto requestDto = eventDtoFactory.getListingCount(idUser);
+        Integer numberOfStreams = 0;
+        GenericDto requestDto = streamDtoFactory.getListingCount(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
         }else {
             MetadataDto metadata = ops[0].getMetadata();
-            numberOfEvents = metadata.getTotalItems().intValue();
+            numberOfStreams = metadata.getTotalItems().intValue();
         }
-        return numberOfEvents;
+        return numberOfStreams;
     }
 
     @Override public void logout(String idUser, String idDevice) throws IOException {

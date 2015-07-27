@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 
 public class NewShotBarPresenterTest {
 
-    private static final ShotFailed.Event SHOT_FAILED_EVENT = null;
+    private static final ShotFailed.Stream SHOT_FAILED_STREAM = null;
 
     @Mock GetDraftsInteractor getDraftsInteractor;
     @Mock NewShotBarView newShotBarView;
@@ -67,10 +67,10 @@ public class NewShotBarPresenterTest {
     }
 
     @Test
-    public void shouldShowDraftsButtonWhenShotFailedEventReceived() throws Exception {
+    public void shouldShowDraftsButtonWhenShotFailedStreamReceived() throws Exception {
         setupDraftsInteractorCallbacks(draftsList());
 
-        shotFailedReceiver.onShotFailed(SHOT_FAILED_EVENT);
+        shotFailedReceiver.onShotFailed(SHOT_FAILED_STREAM);
 
         verify(newShotBarView).showDraftsButton();
     }
@@ -98,7 +98,7 @@ public class NewShotBarPresenterTest {
     public void shouldReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = ShotFailed.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = shotFailedReceiver.getClass().getMethod(receiverMethodName, ShotFailed.Event.class);
+        Method receiverDeclaredMethod = shotFailedReceiver.getClass().getMethod(receiverMethodName, ShotFailed.Stream.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }

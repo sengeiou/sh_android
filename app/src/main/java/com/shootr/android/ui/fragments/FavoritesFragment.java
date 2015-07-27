@@ -12,11 +12,11 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
-import com.shootr.android.ui.activities.EventTimelineActivity;
-import com.shootr.android.ui.adapters.FavoriteEventsAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
+import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
@@ -33,7 +33,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
 
-    private FavoriteEventsAdapter adapter;
+    private FavoriteStreamsAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -80,10 +80,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavoriteEventsAdapter(picasso, new OnEventClickListener() {
+        adapter = new FavoriteStreamsAdapter(picasso, new OnStreamClickListener() {
             @Override
-            public void onEventClick(EventResultModel event) {
-                favoritesListPresenter.selectEvent(event);
+            public void onStreamClick(StreamResultModel stream) {
+                favoritesListPresenter.selectStream(stream);
             }
         });
         favoritesList.setAdapter(adapter);
@@ -94,8 +94,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void renderFavorites(List<EventResultModel> eventModels) {
-        adapter.setEvents(eventModels);
+    public void renderFavorites(List<StreamResultModel> streamModels) {
+        adapter.setStreams(streamModels);
     }
 
     @Override
@@ -109,8 +109,8 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void navigateToEventTimeline(String idEvent, String title) {
-        startActivity(EventTimelineActivity.newIntent(getActivity(), idEvent, title));
+    public void navigateToStreamTimeline(String idStream, String title) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
     }
 
     @Override

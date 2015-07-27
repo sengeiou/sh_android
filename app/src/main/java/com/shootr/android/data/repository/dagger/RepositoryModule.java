@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 @Module(
   includes = {
     UserRepositoryModule.class,
-    EventRepositoryModule.class,
+    StreamRepositoryModule.class,
     ShotRepositoryModule.class,
     WatchersRepositoryModule.class,
     FavoriteRepositoryModule.class,

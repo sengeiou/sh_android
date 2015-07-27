@@ -5,7 +5,7 @@ import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
@@ -41,9 +41,9 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         try {
-            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getEventId(),
+            List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),
@@ -73,17 +73,17 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
         try {
-            return shootrService.getEventMediaShotsCount(idEvent, idUsers);
+            return shootrService.getStreamMediaShotsCount(idStream, idUsers);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
         try {
-            return shootrService.getEventMediaShots(idEvent, userIds);
+            return shootrService.getStreamMediaShots(idStream, userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

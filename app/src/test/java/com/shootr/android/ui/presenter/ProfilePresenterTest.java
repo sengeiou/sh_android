@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetListingCountInteractor;
+import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import org.junit.Before;

@@ -1,9 +1,9 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
-import com.shootr.android.domain.interactor.event.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 public class FavoriteStatusPresenterTest {
 
-    private static final String STUB_EVENT_ID = "event_id";
+    private static final String STUB_STREAM_ID = "stream_id";
 
     @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
@@ -41,16 +41,16 @@ public class FavoriteStatusPresenterTest {
     public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite() throws Exception {
         setupFavoriteStatusCallbacks(true);
 
-        presenter.initialize(favoriteStatusView, STUB_EVENT_ID);
+        presenter.initialize(favoriteStatusView, STUB_STREAM_ID);
 
         verify(favoriteStatusView).showRemoveFromFavoritesButton();
     }
 
     @Test
-    public void shouldShowAddToFavoritesButtonWhenInitializeIfEventIsNotFavorite() throws Exception {
+    public void shouldShowAddToFavoritesButtonWhenInitializeIfStreamIsNotFavorite() throws Exception {
         setupFavoriteStatusCallbacks(false);
 
-        presenter.initialize(favoriteStatusView, STUB_EVENT_ID);
+        presenter.initialize(favoriteStatusView, STUB_STREAM_ID);
 
         verify(favoriteStatusView).showAddToFavoritesButton();
     }

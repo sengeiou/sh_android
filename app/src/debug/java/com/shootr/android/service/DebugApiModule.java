@@ -5,7 +5,7 @@ import com.shootr.android.data.ApiEndpoint;
 import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
-import com.shootr.android.data.api.service.EventApiService;
+import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -65,10 +65,9 @@ public class DebugApiModule {
         return mockOrRealService(ResetPasswordApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
-    @Provides
-    EventApiService provideEventApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
     BooleanPreference debugMode) {
-      return mockOrRealService(EventApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+      return mockOrRealService(StreamApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
     @Provides

@@ -36,7 +36,7 @@ public class AndroidBus extends Bus {
         if (deadEvent.event instanceof Throwable) {
             Timber.e(((Throwable) deadEvent.event), "Dead throwable in the bus");
         } else {
-            Timber.d("Dead event: %s", deadEvent.event);
+            Timber.d("Dead stream: %s", deadEvent.event);
         }
     }
 }

@@ -5,7 +5,7 @@ import com.shootr.android.data.api.entity.EmbedUserApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
-import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.bus.BusPublisher;
@@ -41,7 +41,7 @@ public class ServiceActivityDataSourceTest {
     @Mock BusPublisher busPublisher;
     @Mock SessionRepository sessionRepository;
     @Mock ActivityApiService activityApiService;
-    @Mock EventDataSource localEventDataSource;
+    @Mock StreamDataSource localStreamDataSource;
     @Mock ActivityTimelineParameters activityTimelineParameters;
     private ServiceActivityDataSource datasource;
 
@@ -52,35 +52,34 @@ public class ServiceActivityDataSourceTest {
         datasource = new ServiceActivityDataSource(activityApiService,
           activityApiEntityMapper,
           busPublisher,
-          sessionRepository,
-          localEventDataSource);
+          sessionRepository, localStreamDataSource);
     }
 
     @Test
-    public void shouldPostEventToBusWhenSyncTriggerActivityReceived() throws Exception {
+    public void shouldPostStreamToBusWhenSyncTriggerActivityReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
         verify(busPublisher).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
+    public void shouldPostOnlyOneStreamWhenTwhoSyncTriggerActivitiesReceived() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(Arrays.asList(
           syncActivityApi()));
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
         verify(busPublisher, times(1)).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
+    public void shouldPostOnlyOneStreamWhenReceivedActivityWithSameDateThanPreviousTime() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -88,13 +87,13 @@ public class ServiceActivityDataSourceTest {
         datasource.getActivityTimeline(activityTimelineParameters);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
         verify(busPublisher, times(1)).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
     }
 
     @Test
-    public void shouldPostOnlyOneEventWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
+    public void shouldPostOnlyOneStreamWhenReceivedActivityWithOlderDateThanPreviousTime() throws Exception {
         when(activityApiService.getActivityTimeline(anyList(), anyInt(), anyLong(), anyLong())).thenReturn(
           twoTriggerActivityWithDifferentDates());
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
@@ -102,20 +101,20 @@ public class ServiceActivityDataSourceTest {
         datasource.getActivityTimeline(activityTimelineParameters);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
+        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
         verify(busPublisher).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
     }
 
     @Test
-    public void shouldNotPostEventWhenTriggerActivityFromCurrentUser() throws Exception {
+    public void shouldNotPostStreamWhenTriggerActivityFromCurrentUser() throws Exception {
         when(activityDataSource.getActivityTimeline(any(ActivityTimelineParameters.class))).thenReturn(
           oneTriggerActivity());
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER_STUB);
 
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        verify(busPublisher, never()).post(any(WatchUpdateRequest.Event.class));
+        verify(busPublisher, never()).post(any(WatchUpdateRequest.Stream.class));
     }
 
     private List<ActivityEntity> oneTriggerActivity() {

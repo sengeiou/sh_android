@@ -3,7 +3,7 @@ package com.shootr.android.data.repository.local;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
-import com.shootr.android.domain.EventTimelineParameters;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -25,8 +25,8 @@ public class LocalShotRepository implements ShotRepository {
         return shot;
     }
 
-    @Override public List<Shot> getShotsForEventTimeline(EventTimelineParameters parameters) {
-        List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForEventTimeline(parameters);
+    @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
+        List<ShotEntity> shotsForEvent = localShotDataSource.getShotsForStreamTimeline(parameters);
         return shotEntityMapper.transform(shotsForEvent);
     }
 
@@ -43,12 +43,12 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 
-    @Override public Integer getMediaCountByIdEvent(String idEvent, List<String> idUser) {
-        return localShotDataSource.getEventMediaShotsCount(idEvent, idUser);
+    @Override public Integer getMediaCountByIdStream(String idEvent, List<String> idUser) {
+        return localShotDataSource.getStreamMediaShotsCount(idEvent, idUser);
     }
 
-    @Override public List<Shot> getMediaByIdEvent(String idEvent, List<String> userIds) {
-        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getEventMediaShots(idEvent, userIds);
+    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds) {
+        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getStreamMediaShots(idEvent, userIds);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }

@@ -65,13 +65,13 @@ public class DatabaseContract {
         public static final String NAME_NORMALIZED = "nameNormalized";
         public static final String USER_NAME_NORMALIZED = "userNameNormalized";
         public static final String EMAIL_NORMALIZED = "emailNormalized";
-        public static final String WATCHING_EVENT_ID = "idWatchingEvent";
-        public static final String WATCHING_EVENT_TITLE = "watchingEventTitle";
-        public static final String JOIN_EVENT_DATE = "joinEventDate";
+        public static final String ID_WATCHING_STREAM = "idWatchingStream";
+        public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
+        public static final String JOIN_STREAM_DATE = "joinStreamDate";
 
         public static final String[] PROJECTION = {
           ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
-          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_EVENT_DATE, WATCHING_EVENT_ID, WATCHING_EVENT_TITLE,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
           BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
@@ -90,9 +90,9 @@ public class DatabaseContract {
         public static final String USER_PHOTO = "userPhoto";
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
-        public static final String ID_EVENT = "idEvent";
-        public static final String EVENT_TAG = "eventTag";
-        public static final String EVENT_TITLE = "eventTitle";
+        public static final String ID_STREAM = "idStream";
+        public static final String STREAM_TAG = "streamTag";
+        public static final String STREAM_TITLE = "streamTitle";
         public static final String NICE_COUNT = "niceCount";
         public static final String TYPE = "type";
 
@@ -105,7 +105,7 @@ public class DatabaseContract {
         public static final String VIDEO_DURATION = "videoDuration";
 
         public static final String[] PROJECTION = {
-          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
+          ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG, STREAM_TITLE,
           NICE_COUNT, TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
@@ -152,16 +152,16 @@ public class DatabaseContract {
         };
     }
 
-    public static class EventTable implements SyncColumns {
+    public static class StreamTable implements SyncColumns {
 
-        private EventTable() {
+        private StreamTable() {
 
         }
 
-        public static final String TABLE = "EventMongo";
-        public static final String ID_EVENT = "idEvent";
+        public static final String TABLE = "StreamMongo";
+        public static final String ID_STREAM = "idStream";
         public static final String ID_USER = "idUser";
-        public static final String ID_USER_EVENT = "idUserEvent";
+        public static final String ID_USER_STREAM = "idUserStream";
         public static final String USERNAME = "userName";
         public static final String TITLE = "title";
         public static final String PHOTO = "photo";
@@ -171,20 +171,19 @@ public class DatabaseContract {
         public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-                ID_EVENT, ID_USER, ID_USER_EVENT, USERNAME, TITLE,
+          ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE,
                 PHOTO, TAG, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
-    public static class EventSearchTable extends EventTable {
+    public static class StreamSearchTable extends StreamTable {
 
-        public static final String TABLE = "SearchEventMongo";
+        public static final String TABLE = "SearchStreamMongo";
 
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS, LOCALE,
-          ID_EVENT, ID_USER, USERNAME, TITLE, PHOTO, TAG, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          WATCHERS, LOCALE, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, TAG, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
 
     }
@@ -204,9 +203,9 @@ public class DatabaseContract {
         public static final String USER_PHOTO = "userPhoto";
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
-        public static final String ID_EVENT = "idEvent";
-        public static final String EVENT_TAG = "eventTag";
-        public static final String EVENT_TITLE = "eventTitle";
+        public static final String ID_STREAM = "idStream";
+        public static final String STREAM_TAG = "streamTag";
+        public static final String STREAM_TITLE = "streamTitle";
         public static final String TYPE = "type";
 
         public static final String ID_SHOT_PARENT = "idShotParent";
@@ -218,7 +217,8 @@ public class DatabaseContract {
         public static final String VIDEO_DURATION = "videoDuration";
 
         public static final String[] PROJECTION = {
-          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_EVENT, EVENT_TAG, EVENT_TITLE,
+          ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, ID_STREAM, STREAM_TAG,
+          STREAM_TITLE,
           TYPE,
           ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
           VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
@@ -232,11 +232,11 @@ public class DatabaseContract {
 
         public static final String TABLE = "Favorite";
 
-        public static final String ID_EVENT = "idEvent";
+        public static final String ID_STREAM = "idStream";
         public static final String ORDER = "position";
 
         public static final String[] PROJECTION = {
-          ID_EVENT, ORDER,
+          ID_STREAM, ORDER,
           SYNCHRONIZED,
         };
 
@@ -253,15 +253,15 @@ public class DatabaseContract {
         public static final String ID_ACTIVITY = "idActivity";
         public static final String ID_USER = "idUser";
         public static final String USERNAME = "userName";
-        public static final String ID_EVENT = "idEvent";
+        public static final String ID_STREAM = "idStream";
         public static final String USER_PHOTO = "userPhoto";
-        public static final String EVENT_TAG = "eventTag";
-        public static final String EVENT_TITLE = "eventTitle";
+        public static final String STREAM_TAG = "streamTag";
+        public static final String STREAM_TITLE = "streamTitle";
         public static final String COMMENT = "comment";
         public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
-          ID_ACTIVITY, ID_USER, USERNAME, ID_EVENT, USER_PHOTO, EVENT_TAG, EVENT_TITLE,
+          ID_ACTIVITY, ID_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TAG, STREAM_TITLE,
           COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
