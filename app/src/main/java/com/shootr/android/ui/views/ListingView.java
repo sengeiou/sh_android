@@ -14,4 +14,8 @@ public interface ListingView {
     void hideLoading();
 
     void showLoading();
+
+    void showNoStreams();
+
+    void hideContent();
 }

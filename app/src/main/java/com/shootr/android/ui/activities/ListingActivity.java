@@ -7,8 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
@@ -25,6 +25,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
+    @Bind(R.id.listing_empty) View emptyView;
 
     @Inject ListingListPresenter presenter;
 
@@ -98,6 +99,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showNoStreams() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideContent() {
+        listingList.setVisibility(View.GONE);
     }
 
     @Override public void showContent() {

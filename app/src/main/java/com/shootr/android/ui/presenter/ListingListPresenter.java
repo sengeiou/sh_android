@@ -49,7 +49,8 @@ public class ListingListPresenter implements Presenter{
             List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
             this.renderViewStreamList(streamModels);
         }else{
-            listingView.showLoading();
+            listingView.hideContent();
+            listingView.showNoStreams();
         }
     }
 
