@@ -57,6 +57,7 @@ import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -768,6 +769,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @OnClick(R.id.profile_all_shots_button)
     public void onAllShotsClick() {
-        //TODO intent to all shots activity
+        startActivity(new Intent(getActivity(), AllShotsActivity.class));
     }
 }
