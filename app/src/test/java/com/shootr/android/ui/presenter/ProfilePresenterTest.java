@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import org.junit.Before;
@@ -25,6 +26,7 @@ public class ProfilePresenterTest {
 
     @Mock GetListingCountInteractor getListingCountInteractor;
     @Mock LogoutInteractor logoutInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock ProfileView profileView;
 
     private ProfilePresenter profilePresenter;
@@ -32,7 +34,7 @@ public class ProfilePresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor);
+        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor, selectStreamInteractor);
         profilePresenter.setView(profileView);
         profilePresenter.setCurrentUser(true);
     }
@@ -142,6 +144,12 @@ public class ProfilePresenterTest {
         profilePresenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
+    }
+
+    @Test public void shouldSelectStreamWhenNewStreamCreated() throws Exception {
+        profilePresenter.streamCreated(SELECTED_STREAM_ID);
+
+        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
     }
 
     private void setupLogoutInteractorCompletedCallback() {

@@ -4,6 +4,7 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -27,6 +28,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -41,6 +43,7 @@ public class StreamsListPresenterTest {
     @Mock Bus bus;
     @Mock StreamsListInteractor streamsListInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
@@ -52,7 +55,9 @@ public class StreamsListPresenterTest {
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
           new StreamResultModelMapper(streamModelMapper);
-        presenter = new StreamsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
+        presenter = new StreamsListPresenter(streamsListInteractor, unwatchStreamInteractor,
+          selectStreamInteractor,
+          streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }
@@ -73,6 +78,12 @@ public class StreamsListPresenterTest {
         presenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
+    }
+
+    @Test public void shouldSelectStreamWhenNewStreamCreated() throws Exception {
+        presenter.streamCreated(SELECTED_STREAM_ID);
+
+        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {

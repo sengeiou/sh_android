@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -19,6 +20,7 @@ public class StreamsListPresenter implements Presenter {
 
     private final StreamsListInteractor streamsListInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
+    private final SelectStreamInteractor selectStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -26,10 +28,11 @@ public class StreamsListPresenter implements Presenter {
     private boolean hasBeenPaused;
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor, StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      UnwatchStreamInteractor unwatchStreamInteractor, SelectStreamInteractor selectStreamInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
+        this.selectStreamInteractor = selectStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -102,6 +105,11 @@ public class StreamsListPresenter implements Presenter {
 
     public void selectStreamCreated(String streamId) {
         streamsListView.navigateToCreatedStreamDetail(streamId);
+        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                /* no-op */
+            }
+        });
     }
 
     private void setViewCurrentVisibleWatchingStream(StreamResultModel currentVisibleStream) {
