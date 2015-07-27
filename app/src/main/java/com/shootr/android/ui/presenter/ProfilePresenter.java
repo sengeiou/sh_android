@@ -53,10 +53,16 @@ public class ProfilePresenter implements Presenter {
                 if (numberOfListingStreams > 0) {
                     profileView.showListingCount(numberOfListingStreams);
                 } else {
-                    profileView.showOpenStream();
+                    showCurrentUserOpenStream();
                 }
             }
         });
+    }
+
+    private void showCurrentUserOpenStream() {
+        if(isCurrentUser){
+            profileView.showOpenStream();
+        }
     }
 
     public void clickListing() {
