@@ -17,6 +17,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class ProfilePresenterTest {
@@ -80,9 +81,25 @@ public class ProfilePresenterTest {
         }).when(getListingCountInteractor)
           .loadListingCount(anyString(), any(Interactor.Callback.class));
 
-        profilePresenter.initialize(profileView, ID_USER, false);
+        profilePresenter.initialize(profileView, ID_USER, true);
 
         verify(profileView).showOpenStream();
+    }
+
+    @Test
+    public void shouldNotShowOpenStreamWhenInOtherUsersProfile() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(0);
+                return null;
+            }
+        }).when(getListingCountInteractor)
+          .loadListingCount(anyString(), any(Interactor.Callback.class));
+
+        profilePresenter.initialize(profileView, ID_USER, false);
+
+        verify(profileView, never()).showOpenStream();
     }
 
     @Test
@@ -144,12 +161,6 @@ public class ProfilePresenterTest {
         profilePresenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
-    }
-
-    @Test public void shouldSelectStreamWhenNewStreamCreated() throws Exception {
-        profilePresenter.streamCreated(SELECTED_STREAM_ID);
-
-        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
     }
 
     private void setupLogoutInteractorCompletedCallback() {
