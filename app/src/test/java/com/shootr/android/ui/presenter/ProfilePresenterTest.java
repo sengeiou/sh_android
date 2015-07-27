@@ -13,6 +13,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -47,6 +48,38 @@ public class ProfilePresenterTest {
         profilePresenter.clickListing();
 
         verify(profileView).navigateToListing(anyString());
+    }
+
+    @Test
+    public void shouldShowCurrentUserListingWhenPresenterInitializedAndUserHasStreams() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(1);
+                return null;
+            }
+        }).when(getListingCountInteractor)
+          .loadListingCount(anyString(), any(Interactor.Callback.class));
+
+        profilePresenter.initialize(profileView, ID_USER, false);
+
+        verify(profileView).showListingCount(anyInt());
+    }
+
+    @Test
+    public void shouldShowOpenStreamWhenPresenterInitializedAndUserHasNoStreams() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
+                callback.onLoaded(0);
+                return null;
+            }
+        }).when(getListingCountInteractor)
+          .loadListingCount(anyString(), any(Interactor.Callback.class));
+
+        profilePresenter.initialize(profileView, ID_USER, false);
+
+        verify(profileView).showOpenStream();
     }
 
     @Test
@@ -120,4 +153,5 @@ public class ProfilePresenterTest {
         }).when(logoutInteractor)
           .attempLogout(any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
+
 }

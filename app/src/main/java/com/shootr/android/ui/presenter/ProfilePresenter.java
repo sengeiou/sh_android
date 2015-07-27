@@ -48,6 +48,8 @@ public class ProfilePresenter implements Presenter {
             @Override public void onLoaded(Integer numberOfListingStreams) {
                 if (numberOfListingStreams > 0) {
                     profileView.showListingCount(numberOfListingStreams);
+                } else {
+                    profileView.showOpenStream();
                 }
             }
         });

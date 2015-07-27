@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -58,6 +58,7 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.ListingActivity;
+import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
@@ -106,6 +107,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Bind(R.id.profile_listing_container) View listingContainerView;
     @Bind(R.id.profile_listing) TextView listingText;
     @Bind(R.id.profile_listing_number) TextView listingNumber;
+
+    @Bind(R.id.profile_open_stream_container) View openStreamContainerView;
 
     @Bind(R.id.profile_marks_followers) TextView followersTextView;
     @Bind(R.id.profile_marks_following) TextView followingTextView;
@@ -758,8 +761,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         logoutMenuItem.setVisible(true);
     }
 
+    @Override public void showOpenStream() {
+        openStreamContainerView.setVisibility(View.VISIBLE);
+    }
+
     @OnClick(R.id.profile_listing)
     public void onListingClick() {
         profilePresenter.clickListing();
+    }
+
+    @OnClick(R.id.profile_open_stream)
+    public void onOpenStreamClick() {
+        getActivity().startActivity(new Intent(getActivity(), NewStreamActivity.class));
     }
 }
