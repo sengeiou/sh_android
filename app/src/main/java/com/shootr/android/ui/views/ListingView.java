@@ -18,4 +18,6 @@ public interface ListingView {
     void showNoStreams();
 
     void hideContent();
+
+    void navigateToCreatedStreamDetail(String streamId);
 }
