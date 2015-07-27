@@ -17,4 +17,6 @@ public interface ProfileView {
     void showLogoutButton();
 
     void showOpenStream();
+
+    void navigateToCreatedStreamDetail(String streamId);
 }

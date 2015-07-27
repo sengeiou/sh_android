@@ -80,4 +80,8 @@ public class ProfilePresenter implements Presenter {
     @Override public void pause() {
         /* no-op */
     }
+
+    public void streamCreated(String streamId) {
+        profileView.navigateToCreatedStreamDetail(streamId);
+    }
 }

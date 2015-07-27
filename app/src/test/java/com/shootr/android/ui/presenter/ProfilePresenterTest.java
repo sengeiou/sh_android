@@ -21,7 +21,8 @@ import static org.mockito.Mockito.verify;
 public class ProfilePresenterTest {
 
     public static final String ID_USER = "id_user";
-    
+    public static final String SELECTED_STREAM_ID = "selected_stream_id";
+
     @Mock GetListingCountInteractor getListingCountInteractor;
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
@@ -129,6 +130,18 @@ public class ProfilePresenterTest {
         profilePresenter.initialize(profileView, ID_USER, true);
 
         verify(profileView).showLogoutButton();
+    }
+
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
+        profilePresenter.streamCreated(SELECTED_STREAM_ID);
+
+        verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
+    }
+
+    @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {
+        profilePresenter.streamCreated(SELECTED_STREAM_ID);
+
+        verify(profileView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
     }
 
     private void setupLogoutInteractorCompletedCallback() {
