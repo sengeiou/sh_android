@@ -20,4 +20,10 @@ public interface AllShotsView {
     void hideShots();
 
     void showLoading();
+
+    void showLoadingOldShots();
+
+    void hideLoadingOldShots();
+
+    void addOldShots(List<ShotModel> shotModels);
 }

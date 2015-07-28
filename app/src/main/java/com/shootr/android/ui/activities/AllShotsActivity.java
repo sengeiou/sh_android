@@ -19,6 +19,7 @@ import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.views.AllShotsView;
+import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.UsernameClickListener;
 import java.util.List;
@@ -60,6 +61,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             throw new RuntimeException("No intent extras, no party");
         }
         setupListAdapter();
+        setupListScrollListeners();
     }
 
     @Override protected void initializePresenter() {
@@ -82,6 +84,30 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         ShotModel shot = adapter.getItem(position);
         Intent intent = ShotDetailActivity.getIntentForActivity(this, shot);
         startActivity(intent);
+    }
+
+    private void setupListScrollListeners() {
+        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                if (delta < -10) {
+                    // going down
+                } else if (delta > 10) {
+                    // going up
+                }
+            }
+
+            @Override public void onScrollIdle() {
+                checkIfEndOfListVisible();
+            }
+        });
+    }
+
+    private void checkIfEndOfListVisible() {
+        int lastItemPosition = listView.getAdapter().getCount() - 1;
+        int lastVisiblePosition = listView.getLastVisiblePosition();
+        if (lastItemPosition == lastVisiblePosition) {
+            presenter.showingLastShot(adapter.getLastShot());
+        }
     }
 
     private void setupListAdapter() {
@@ -190,5 +216,17 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showLoadingOldShots() {
+        footerProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoadingOldShots() {
+        footerProgress.setVisibility(View.GONE);
+    }
+
+    @Override public void addOldShots(List<ShotModel> shotModels) {
+        adapter.addShotsBelow(shotModels);
     }
 }

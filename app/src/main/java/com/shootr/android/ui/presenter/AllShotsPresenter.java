@@ -4,6 +4,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetAllShotsByUserInteractor;
+import com.shootr.android.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.AllShotsView;
@@ -14,15 +15,20 @@ import javax.inject.Inject;
 public class AllShotsPresenter implements Presenter {
 
     private final GetAllShotsByUserInteractor getAllShotsByUserInteractor;
+    private final GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final ShotModelMapper shotModelMapper;
 
     private AllShotsView allShotsView;
     private String userId;
+    private boolean isLoadingOlderShots;
+    private boolean mightHaveMoreShots = true;
 
     @Inject public AllShotsPresenter(GetAllShotsByUserInteractor getAllShotsByUserInteractor,
-      ErrorMessageFactory errorMessageFactory, ShotModelMapper shotModelMapper) {
+      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, ErrorMessageFactory errorMessageFactory,
+      ShotModelMapper shotModelMapper) {
         this.getAllShotsByUserInteractor = getAllShotsByUserInteractor;
+        this.getOlderAllShotsByUserInteractor = getOlderAllShotsByUserInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.shotModelMapper = shotModelMapper;
     }
@@ -57,6 +63,37 @@ public class AllShotsPresenter implements Presenter {
 
     private void setView(AllShotsView allShotsView) {
         this.allShotsView = allShotsView;
+    }
+
+    public void showingLastShot(ShotModel lastShot) {
+        if (!isLoadingOlderShots && mightHaveMoreShots) {
+            this.loadOlderShots(lastShot.getBirth().getTime());
+        }
+    }
+
+    private void loadOlderShots(long lastShotInScreenDate) {
+        isLoadingOlderShots = true;
+        allShotsView.showLoadingOldShots();
+        getOlderAllShotsByUserInteractor.loadAllShots(userId,
+          lastShotInScreenDate,
+          new Interactor.Callback<List<Shot>>() {
+              @Override public void onLoaded(List<Shot> shots) {
+                  isLoadingOlderShots = false;
+                  List<ShotModel> shotModels = shotModelMapper.transform(shots);
+                  if (!shotModels.isEmpty()) {
+                      allShotsView.addOldShots(shotModels);
+                  } else {
+                      mightHaveMoreShots = false;
+                  }
+                  allShotsView.hideLoadingOldShots();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  allShotsView.hideLoadingOldShots();
+                  allShotsView.showError(errorMessageFactory.getCommunicationErrorMessage());
+              }
+          });
     }
 
     @Override public void resume() {
