@@ -35,12 +35,20 @@ public class AllShotsPresenter implements Presenter {
 
     public void initialize(final AllShotsView allShotsView, String userId) {
         setView(allShotsView);
-        this.userId = userId;
-        allShotsView.showLoading();
+        setUserId(userId);
         loadAllShots(allShotsView, userId);
     }
 
+    protected void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    protected void setView(AllShotsView allShotsView) {
+        this.allShotsView = allShotsView;
+    }
+
     private void loadAllShots(final AllShotsView allShotsView, String userId) {
+        allShotsView.showLoading();
         getAllShotsByUserInteractor.loadAllShots(userId, new Interactor.Callback<List<Shot>>() {
             @Override public void onLoaded(List<Shot> shots) {
                 List<ShotModel> shotModels = shotModelMapper.transform(shots);
@@ -56,13 +64,10 @@ public class AllShotsPresenter implements Presenter {
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
+                allShotsView.hideLoading();
                 allShotsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
-    }
-
-    private void setView(AllShotsView allShotsView) {
-        this.allShotsView = allShotsView;
     }
 
     public void showingLastShot(ShotModel lastShot) {
@@ -71,7 +76,7 @@ public class AllShotsPresenter implements Presenter {
         }
     }
 
-    private void loadOlderShots(long lastShotInScreenDate) {
+    protected void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
         allShotsView.showLoadingOldShots();
         getOlderAllShotsByUserInteractor.loadAllShots(userId,
