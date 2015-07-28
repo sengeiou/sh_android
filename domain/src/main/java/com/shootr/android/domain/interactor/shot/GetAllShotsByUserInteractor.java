@@ -40,21 +40,21 @@ public class GetAllShotsByUserInteractor implements Interactor {
     @Override public void execute() throws Exception {
         List<Shot> localShots = localShotRepository.getAllShotsFromUser(userId);
         if (!localShots.isEmpty()) {
-            notifyLoaded(orderShots(localShots));
+            notifyLoaded(sortShotsByPublishDate(localShots));
         }
         try {
             List<Shot> remoteShots = remoteShotRepository.getAllShotsFromUser(userId);
             if (!remoteShots.isEmpty()) {
-                notifyLoaded(orderShots(remoteShots));
+                notifyLoaded(sortShotsByPublishDate(remoteShots));
             }
         } catch (ShootrException error) {
             notifyError(error);
         }
     }
 
-    private List<Shot> orderShots(List<Shot> replies) {
-        Collections.sort(replies, new Shot.NewerBelowComparator());
-        return replies;
+    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
+        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
+        return remoteShots;
     }
 
     private void notifyLoaded(final List<Shot> result) {
