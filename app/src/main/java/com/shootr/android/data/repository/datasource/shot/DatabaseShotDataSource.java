@@ -54,4 +54,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
         return shotManager.getShotsFromUser(idUser, limit);
     }
+
+    @Override public List<ShotEntity> getAllShotsFromUser(String userId) {
+        return shotManager.getAllShotsFromUser(userId);
+    }
 }

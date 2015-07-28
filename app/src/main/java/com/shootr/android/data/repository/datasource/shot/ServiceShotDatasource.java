@@ -5,8 +5,8 @@ import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -94,6 +94,14 @@ public class ServiceShotDatasource implements ShotDataSource {
         try {
             List<ShotApiEntity> userApiShots = shotApiService.getShotsFromUser(idUser, limit, ShotType.TYPES_SHOWN);
             return shotApiEntityMapper.transform(userApiShots);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
+    @Override public List<ShotEntity> getAllShotsFromUser(String userId) {
+        try {
+            return shotApiService.getAllShotsFromUser(userId);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }

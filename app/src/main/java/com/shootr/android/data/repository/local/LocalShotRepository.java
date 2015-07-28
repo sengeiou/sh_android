@@ -57,4 +57,8 @@ public class LocalShotRepository implements ShotRepository {
     public List<Shot> getShotsFromUser(String idUser, Integer limit) {
         return shotEntityMapper.transform(localShotDataSource.getShotsFromUser(idUser, limit));
     }
+
+    @Override public List<Shot> getAllShotsFromUser(String userId) {
+        return shotEntityMapper.transform(localShotDataSource.getAllShotsFromUser(userId));
+    }
 }
