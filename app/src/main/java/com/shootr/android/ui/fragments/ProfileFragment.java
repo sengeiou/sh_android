@@ -769,6 +769,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @OnClick(R.id.profile_all_shots_button)
     public void onAllShotsClick() {
-        startActivity(new Intent(getActivity(), AllShotsActivity.class));
+        startActivity(AllShotsActivity.newIntent(getActivity(), user.getIdUser()));
     }
 }
