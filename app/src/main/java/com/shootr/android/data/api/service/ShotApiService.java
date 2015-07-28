@@ -28,5 +28,5 @@ public interface ShotApiService {
       @Query("types") String[] types) throws ApiException, IOException;
 
     @GET("/shots/user/{idUser}/?includeLinks=false")
-    List<ShotEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
+    List<ShotApiEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
 }

@@ -101,7 +101,8 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getAllShotsFromUser(String userId) {
         try {
-            return shotApiService.getAllShotsFromUser(userId);
+            List<ShotApiEntity> allShotsFromUser = shotApiService.getAllShotsFromUser(userId);
+            return shotApiEntityMapper.transform(allShotsFromUser);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
