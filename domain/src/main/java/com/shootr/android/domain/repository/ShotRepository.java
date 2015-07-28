@@ -21,4 +21,6 @@ public interface ShotRepository {
     List<Shot> getShotsFromUser(String idUser, Integer limit);
 
     List<Shot> getAllShotsFromUser(String userId);
+
+    List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
 }

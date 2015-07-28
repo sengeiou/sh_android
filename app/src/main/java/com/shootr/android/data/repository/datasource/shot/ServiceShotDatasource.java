@@ -107,4 +107,13 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(error);
         }
     }
+
+    @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
+        try {
+            List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserAndDate(userId, currentOldestDate);
+            return shotApiEntityMapper.transform(allShotsFromUserAndDate);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
 }

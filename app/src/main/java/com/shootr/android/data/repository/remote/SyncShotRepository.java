@@ -66,4 +66,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public List<Shot> getAllShotsFromUser(String userId) {
         return shotEntityMapper.transform(remoteShotDataSource.getAllShotsFromUser(userId));
     }
+
+    @Override public List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
+        return shotEntityMapper.transform(remoteShotDataSource.getAllShotsFromUserAndDate(userId, currentOldestDate));
+    }
 }
