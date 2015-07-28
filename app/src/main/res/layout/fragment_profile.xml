@@ -57,5 +57,17 @@
               android:textSize="20sp" />
         </FrameLayout>
 
+        <View android:id="@+id/profile_divider"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_gravity="bottom"
+          android:layout_below="@+id/profile_shots_container"
+          android:background="?dividerHorizontal" />
+
+        <include layout="@layout/suggested_people"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_below="@+id/profile_divider" />
+
     </RelativeLayout>
 </ScrollView>
