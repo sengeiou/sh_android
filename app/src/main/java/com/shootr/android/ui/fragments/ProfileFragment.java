@@ -72,6 +72,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
 import com.shootr.android.ui.views.ProfileView;
+import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -87,7 +88,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment implements ProfileView {
+public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;

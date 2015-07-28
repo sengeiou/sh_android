@@ -24,12 +24,13 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
+import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
-public class PeopleFragment extends BaseFragment implements PeopleView{
+public class PeopleFragment extends BaseFragment implements PeopleView, SuggestedPeopleView{
 
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
