@@ -635,7 +635,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                       return true;
                   }
               };
-            latestsShotsAdapter.setShots(shots.subList(0,3));
+            latestsShotsAdapter.setShots(shots);
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 setShotItemBackgroundRetainPaddings(shotView);
