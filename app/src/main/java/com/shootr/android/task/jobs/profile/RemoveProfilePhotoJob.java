@@ -29,17 +29,19 @@ public class RemoveProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoStrea
     private final SessionRepository sessionRepository;
     private final UserEntityModelMapper userModelMapper;
     private final TimeUtils timeUtils;
+    private final UserEntityMapper userEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
 
     @Inject public RemoveProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       ShootrService shootrService, UserManager userManager, SessionRepository sessionRepository, UserEntityModelMapper userModelMapper, TimeUtils timeUtils,
-      SyncableUserEntityFactory syncableUserEntityFactory) {
+      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.userManager = userManager;
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.timeUtils = timeUtils;
+        this.userEntityMapper = userEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
     }
 
@@ -50,14 +52,19 @@ public class RemoveProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoStrea
     }
 
     private UserEntity setCurrentUserWithoutPhoto() throws IOException {
-        User currentUser= sessionRepository.getCurrentUser();
+        User currentUser = sessionRepository.getCurrentUser();
         UserEntity currentUserEntity = syncableUserEntityFactory.updatedOrNewEntity(currentUser);
         currentUserEntity.setPhoto(null);
         currentUserEntity.setModified(timeUtils.getCurrentDate());
-        userManager.saveUser(currentUserEntity);
-        currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
-        userManager.saveUser(currentUserEntity);
+        storeUpdatedUser(currentUserEntity);
+        UserEntity remoteUpdatedUserEntity = shootrService.saveUserProfile(currentUserEntity);
+        storeUpdatedUser(remoteUpdatedUserEntity);
         return currentUserEntity;
+    }
+
+    private void storeUpdatedUser(UserEntity updatedUserEntity) {
+        userManager.saveUser(updatedUserEntity);
+        sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity));
     }
 
     @Override protected boolean isNetworkRequired() {
