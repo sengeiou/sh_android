@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
+import com.shootr.android.domain.SuggestedPeople;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -65,6 +66,11 @@ public class LocalUserRepository implements UserRepository {
         UserEntity currentOrNewEntity = syncableUserEntityFactory.updatedOrNewEntity(user);
         localUserDataSource.putUser(currentOrNewEntity);
         return user;
+    }
+
+    @Override public List<SuggestedPeople> getSuggestedPeople() {
+        // TODO
+        return null;
     }
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {

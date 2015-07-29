@@ -36,7 +36,9 @@ public class UserDtoFactory {
     private static final String ENTITY_LOGOUT = "LogoutMongo";
     private static final String ALIAS_LOGOUT = "Logout";
     private static final String ENTITY_CHECKIN = "CheckInMongo";
+    private static final String ENTITY_SUGGESTED_PEOPLE = "SuggestedPeopleMongo";
     private static final String ALIAS_CHECKIN = "CHECKIN";
+    private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
@@ -47,6 +49,7 @@ public class UserDtoFactory {
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
     public static final String CHECK_IN_ID_USER = "idUser";
+    public static final String SUGGESTED_PEOPLE_ID_USER = "idUser";
     public static final String CHECK_IN_ID_STREAM_CHECKED = "idStream";
 
     private UtilityDtoFactory utilityDtoFactory;
@@ -284,5 +287,17 @@ public class UserDtoFactory {
           .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGOUT, operation);
+    }
+
+    public GenericDto getSuggestedPeople(String currentUserId) {
+        MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_SUGGESTED_PEOPLE)
+          .putKey(SUGGESTED_PEOPLE_ID_USER, currentUserId)
+          .operation(ServiceConstants.OPERATION_RETRIEVE)
+          .items(MAX_FOLLOWS_ITEMS)
+          .build();
+
+        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).setData(null).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SUGGESTED_PEOPLE, operationDto);
     }
 }
