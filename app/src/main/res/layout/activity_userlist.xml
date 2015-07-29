@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="match_parent">
 
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <FrameLayout android:id="@+id/userlist_people_container"
-      xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
       <ListView
         android:id="@+id/userlist_list"
@@ -43,19 +43,12 @@
         android:visibility="gone"
         tools:text="@string/following_list_empty"
         tools:visibility="visible" />
-    </FrameLayout>
-
-    <View android:id="@+id/userlist_divider"
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_gravity="bottom"
-      android:layout_below="@+id/userlist_people_container"
-      android:background="?dividerHorizontal" />
+    </LinearLayout>
 
     <include layout="@layout/suggested_people"
       android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      android:layout_below="@+id/userlist_divider" />
+      android:layout_width="match_parent" />
 
-  </RelativeLayout>
+  </LinearLayout>
+
 </ScrollView>
