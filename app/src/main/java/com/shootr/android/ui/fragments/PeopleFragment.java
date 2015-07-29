@@ -19,12 +19,10 @@ import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
-import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FriendsAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
-import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
@@ -37,18 +35,12 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
     @Inject PeoplePresenter presenter;
-    @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
-    @Bind(R.id.profile_userlist) ListView suggestedListView;
-    @Bind(R.id.profile_userlist_progress) ProgressBar suggestedProgressBar;
-    @Bind(R.id.profile_suggested_people_container) View suggestedPeopleContainer;
-
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     private FriendsAdapter peopleAdapter;
-    private UserListAdapter suggestedPeopleAdapter;
 
     public static PeopleFragment newInstance() {
         return new PeopleFragment();
@@ -64,7 +56,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         super.onActivityCreated(savedInstanceState);
         presenter.setView(this);
         presenter.initialize();
-        suggestedPeoplePresenter.initialize(this);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -75,7 +66,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         userlistListView.setAdapter(getPeopleAdapter());
-        suggestedListView.setAdapter(getSuggestedPeopleAdapter());
         setEmptyMessageForPeople();
     }
 
@@ -84,7 +74,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         super.onDestroyView();
         ButterKnife.unbind(this);
         presenter.setView(new NullPeopleView());
-        //TODO should do the same?
     }
 
     @Override public void onResume() {
@@ -137,13 +126,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         return peopleAdapter;
     }
 
-    private UserListAdapter getSuggestedPeopleAdapter() {
-        if (suggestedPeopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
-        }
-        return suggestedPeopleAdapter;
-    }
-
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         presenter.refresh();
@@ -177,11 +159,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void renderSuggestedPeopleList(List<UserModel> people) {
-        suggestedPeopleContainer.setVisibility(View.VISIBLE);
-        suggestedListView.setVisibility(View.VISIBLE);
-        suggestedProgressBar.setVisibility(View.GONE);
-        getSuggestedPeopleAdapter().setItems(people);
-        getSuggestedPeopleAdapter().notifyDataSetChanged();
+    @Override public void renderSuggestedPeopleList(List<UserModel> users) {
+        //TODO
     }
 }

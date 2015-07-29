@@ -71,7 +71,6 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
-import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
@@ -132,7 +131,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     UserModelMapper userModelMapper;
 
     @Inject ProfilePresenter profilePresenter;
-    @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     //endregion
 
     // Args
@@ -406,7 +404,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void initializePresenter() {
         profilePresenter.initialize(this, idUser, isCurrentUser());
-        suggestedPeoplePresenter.initialize(this);
     }
 
     @Subscribe
@@ -768,7 +765,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
-        //LATER
+        //TODO
     }
 
     @Override public void showError(String messageForError) {
