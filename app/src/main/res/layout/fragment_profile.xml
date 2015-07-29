@@ -57,5 +57,11 @@
               android:textSize="20sp" />
         </FrameLayout>
 
+      <com.shootr.android.ui.widgets.SuggestedPeopleListView
+        android:id="@+id/profile_suggested_people"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/profile_shots_container"
+        android:layout_height="wrap_content" />
+
     </RelativeLayout>
 </ScrollView>

@@ -65,15 +65,18 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
+import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
@@ -118,6 +121,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
+    @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
+
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
@@ -131,6 +136,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     UserModelMapper userModelMapper;
 
     @Inject ProfilePresenter profilePresenter;
+    @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     //endregion
 
     // Args
@@ -147,6 +153,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
+    private UserListAdapter suggestedPeopleAdapter;
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -274,6 +281,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
+        suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+        suggestedPeopleListView.setAdapter(suggestedPeopleAdapter);
     }
 
 
@@ -404,6 +413,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void initializePresenter() {
         profilePresenter.initialize(this, idUser, isCurrentUser());
+        suggestedPeoplePresenter.initialize(this);
     }
 
     @Subscribe
@@ -765,7 +775,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
-        //TODO
+        suggestedPeopleAdapter.setItems(users);
+        suggestedPeopleAdapter.notifyDataSetChanged();
     }
 
     @Override public void showError(String messageForError) {
