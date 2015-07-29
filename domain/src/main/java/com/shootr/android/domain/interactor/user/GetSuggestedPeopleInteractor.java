@@ -38,7 +38,8 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     }
 
     private void obtainRemoteSuggestedPeople() {
-        //TODO real implementation
+        List<SuggestedPeople> suggestedPeople = remoteUserRepository.getSuggestedPeople();
+        notifyResult(suggestedPeople);
     }
 
     private void obtainLocalSuggestedPeople() {
