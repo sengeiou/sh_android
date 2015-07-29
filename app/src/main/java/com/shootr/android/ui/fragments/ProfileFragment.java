@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -769,5 +769,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
         //LATER
+    }
+
+    @Override public void showError(String messageForError) {
+        Toast.makeText(getActivity(), messageForError, Toast.LENGTH_SHORT).show();
     }
 }
