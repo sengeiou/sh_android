@@ -19,10 +19,12 @@ import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FriendsAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
+import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
@@ -35,12 +37,14 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
     @Inject PeoplePresenter presenter;
+    @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     @Bind(R.id.userlist_empty) TextView emptyTextView;
     private FriendsAdapter peopleAdapter;
+    private UserListAdapter suggestedPeopleAdapter;
 
     public static PeopleFragment newInstance() {
         return new PeopleFragment();
@@ -56,6 +60,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         super.onActivityCreated(savedInstanceState);
         presenter.setView(this);
         presenter.initialize();
+        suggestedPeoplePresenter.initialize(this);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -121,7 +126,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     private FriendsAdapter getPeopleAdapter() {
         if (peopleAdapter == null) {
-            peopleAdapter = new FriendsAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            peopleAdapter = new FriendsAdapter(getActivity(), picasso, suggestedPeopleAdapter);
         }
         return peopleAdapter;
     }
@@ -160,6 +166,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
-        //TODO
+        suggestedPeopleAdapter.setItems(users);
+        suggestedPeopleAdapter.notifyDataSetChanged();
     }
 }
