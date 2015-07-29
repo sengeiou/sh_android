@@ -272,7 +272,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "UserMongo";
+        public static final String TABLE = "SuggestedPeople";
 
         public static final String ID = "idUser";
         public static final String SESSION_TOKEN = "sessionToken";

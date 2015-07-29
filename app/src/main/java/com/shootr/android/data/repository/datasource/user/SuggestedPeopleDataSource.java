@@ -7,4 +7,5 @@ public interface SuggestedPeopleDataSource {
 
     List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId);
 
+    void putSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople);
 }

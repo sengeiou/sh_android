@@ -28,17 +28,17 @@ public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSourc
             suggestedPeople = localSuggestedPeopleDataSource.getSuggestedPeople(currentUserId);
         }
         if (suggestedPeople != null) {
-            //TODO  Si no es nulo lo devuelves y tal
             return suggestedPeople;
         } else {
-            //TODO Lo apillas de remoto y lo arremetes en local
             suggestedPeople = remoteSuggestedPeopleDataSource.getSuggestedPeople(currentUserId);
-            localSuggestedPeopleDataSource.
+            localSuggestedPeopleDataSource.putSuggestedPeople(suggestedPeople);
             this.resetCachedUpdateTime();
-           return remotUser;
+           return suggestedPeople;
         }
+    }
 
-        return null;
+    @Override public void putSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople) {
+        throw new IllegalStateException("putSuggestedPeople not cacheable");
     }
 
     @Override public boolean isValid() {

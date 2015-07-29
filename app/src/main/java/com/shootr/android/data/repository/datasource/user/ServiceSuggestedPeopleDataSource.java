@@ -22,4 +22,8 @@ public class ServiceSuggestedPeopleDataSource implements SuggestedPeopleDataSour
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public void putSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople) {
+        throw new IllegalStateException("putSuggestedPeople cannot be done in remote");
+    }
 }

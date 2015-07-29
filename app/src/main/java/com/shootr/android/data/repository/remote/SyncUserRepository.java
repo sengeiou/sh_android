@@ -7,6 +7,7 @@ import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.CachedUserDataSource;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
 import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -36,6 +37,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final UserDataSource remoteUserDataSource;
     private final SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
     private final CachedUserDataSource cachedRemoteUserDataSource;
+    private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
     private final FollowDataSource localFollowDataSource;
     private final UserEntityMapper userEntityMapper;
     private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
@@ -46,13 +48,15 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
       @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource, CachedUserDataSource cachedRemoteUserDataSource,
-      @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus) {
+      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
+      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
+      SyncTrigger syncTrigger, @Default Bus bus) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
         this.remoteSuggestedPeopleDataSource = remoteSuggestedPeopleDataSource;
         this.cachedRemoteUserDataSource = cachedRemoteUserDataSource;
+        this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
         this.localFollowDataSource = localFollowDataSource;
         this.userEntityMapper = userEntityMapper;
         this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
@@ -160,7 +164,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public List<SuggestedPeople> getSuggestedPeople() {
-        List<SuggestedPeopleEntity> suggestedPeopleEntities = remoteSuggestedPeopleDataSource.getSuggestedPeople(sessionRepository.getCurrentUserId());
+        List<SuggestedPeopleEntity> suggestedPeopleEntities = cachedSuggestedPeopleDataSource.getSuggestedPeople(
+          sessionRepository.getCurrentUserId());
         return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }
 

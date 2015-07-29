@@ -14,7 +14,10 @@ public class DatabaseSuggestedPeopleDataSource implements SuggestedPeopleDataSou
     }
 
     @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) {
-        //TODO real shit
-        return null;
+        return suggestedPeopleManager.getSuggestedPeople(currentUserId);
+    }
+
+    @Override public void putSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople) {
+        suggestedPeopleManager.saveSuggestedPeople(suggestedPeople);
     }
 }
