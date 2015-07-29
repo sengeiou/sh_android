@@ -1,6 +1,8 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.SuggestedPeople;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -18,6 +20,7 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private final UserRepository localUserRepository;
 
     private Callback<List<SuggestedPeople>> callback;
+    private ErrorCallback errorCallback;
 
     @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
@@ -27,14 +30,19 @@ public class GetSuggestedPeopleInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void obtainSuggestedPeople(Callback<List<SuggestedPeople>> callback){
+    public void obtainSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback){
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
         obtainLocalSuggestedPeople();
-        obtainRemoteSuggestedPeople();
+        try {
+            obtainRemoteSuggestedPeople();
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        }
     }
 
     private void obtainRemoteSuggestedPeople() {
@@ -43,7 +51,8 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     }
 
     private void obtainLocalSuggestedPeople() {
-        //TODO real implementation (later)
+        List<SuggestedPeople> suggestedPeople = localUserRepository.getSuggestedPeople();
+        notifyResult(suggestedPeople);
     }
 
     private void notifyResult(final List<SuggestedPeople> suggestedPeople) {
@@ -53,4 +62,13 @@ public class GetSuggestedPeopleInteractor implements Interactor {
             }
         });
     }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
+            }
+        });
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.shootr.android.data.repository.local;
 
+import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.android.domain.SuggestedPeople;
@@ -17,15 +20,20 @@ public class LocalUserRepository implements UserRepository {
 
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
+    private final SuggestedPeopleDataSource localSuggestedPeopleDataSource;
     private final UserEntityMapper userEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
+    private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
 
     @Inject public LocalUserRepository(SessionRepository sessionRepository, @Local UserDataSource userDataSource,
-      UserEntityMapper userEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory) {
+      @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource, UserEntityMapper userEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
         this.sessionRepository = sessionRepository;
         localUserDataSource = userDataSource;
+        this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
         this.userEntityMapper = userEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
+        this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
     }
 
     @Override public List<User> getPeople() {
@@ -69,8 +77,9 @@ public class LocalUserRepository implements UserRepository {
     }
 
     @Override public List<SuggestedPeople> getSuggestedPeople() {
-        // TODO
-        return null;
+        List<SuggestedPeopleEntity> suggestedPeople =
+          localSuggestedPeopleDataSource.getSuggestedPeople(sessionRepository.getCurrentUserId());
+        return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
@@ -81,5 +90,20 @@ public class LocalUserRepository implements UserRepository {
             userList.add(user);
         }
         return userList;
+    }
+
+    private SuggestedPeople suggestedPeopleEntityToDomain(SuggestedPeopleEntity remoteSuggestedPeopleEntity) {
+        if (remoteSuggestedPeopleEntity == null) {
+            return null;
+        }
+        return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
+    }
+
+    private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
+        List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
+        for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
+            suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
+        }
+        return suggestedPeoples;
     }
 }

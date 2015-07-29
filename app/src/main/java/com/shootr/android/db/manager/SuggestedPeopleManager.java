@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
-import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.SuggestedPeopleMapper;
 import java.util.ArrayList;
@@ -55,12 +54,10 @@ public class SuggestedPeopleManager extends AbstractManager {
         return res;
     }
 
-    public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) {
+    public List<SuggestedPeopleEntity> getSuggestedPeople() {
         List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
-        String args = DatabaseContract.SuggestedPeopleTable.ID + "= ?";
-        String[] argsString = new String[] { currentUserId };
 
-        Cursor c = getReadableDatabase().query(SUGGESTED_PEOPLE_TABLE, DatabaseContract.SuggestedPeopleTable.PROJECTION, args, argsString, null, null, null, null);
+        Cursor c = getReadableDatabase().query(DatabaseContract.SuggestedPeopleTable.TABLE, DatabaseContract.SuggestedPeopleTable.PROJECTION, null, null, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             do {
