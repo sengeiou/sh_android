@@ -86,7 +86,7 @@ public class SuggestedPeoplePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        /* no-op */
+        obtainSuggestedPeople();
     }
 
     @Override public void pause() {

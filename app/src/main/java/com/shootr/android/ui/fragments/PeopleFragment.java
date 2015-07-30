@@ -103,6 +103,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         super.onResume();
         bus.register(this);
         presenter.resume();
+        suggestedPeoplePresenter.resume();
     }
 
     @Override public void onPause() {
