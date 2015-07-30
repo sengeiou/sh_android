@@ -8,7 +8,7 @@
       android:layout_height="wrap_content"
       android:text="@string/suggested_people_section_title"
       android:textAppearance="@style/SectionTitleAppearance"
-      android:paddingTop="16dp"
+      android:paddingTop="24dp"
       android:paddingLeft="16dp"/>
 
     <LinearLayout android:id="@+id/suggested_people_list"
