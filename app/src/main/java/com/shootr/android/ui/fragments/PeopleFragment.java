@@ -1,8 +1,11 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,10 +16,18 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -29,20 +40,26 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.util.PicassoWrapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class PeopleFragment extends BaseFragment implements PeopleView, SuggestedPeopleView{
+public class PeopleFragment extends BaseFragment implements PeopleView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
+    @Inject SessionRepository sessionRepository;
+    @Inject JobManager jobManager;
+    @Inject @Main Bus bus;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     @Bind(R.id.userlist_empty) TextView emptyTextView;
+
     private FriendsAdapter peopleAdapter;
     private UserListAdapter suggestedPeopleAdapter;
 
@@ -61,6 +78,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         presenter.setView(this);
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
+        userlistListView.setAdapter(getPeopleAdapter());
+        startJob();
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -70,7 +89,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
     }
 
@@ -83,11 +101,13 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onResume() {
         super.onResume();
+        bus.register(this);
         presenter.resume();
     }
 
     @Override public void onPause() {
         super.onPause();
+        bus.unregister(this);
         presenter.pause();
     }
 
@@ -126,7 +146,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     private FriendsAdapter getPeopleAdapter() {
         if (peopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter = getSuggestedPeopleAdapter();
             peopleAdapter = new FriendsAdapter(getActivity(), picasso, suggestedPeopleAdapter);
         }
         return peopleAdapter;
@@ -161,12 +181,62 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         progressBar.setVisibility(View.GONE);
     }
 
+    @Override public void renderSuggestedPeopleList(List<UserModel> users) {
+        suggestedPeopleAdapter.setItems(users);
+        suggestedPeopleAdapter.notifyDataSetChanged();
+        getPeopleAdapter().notifyDataSetChanged();
+    }
+
     @Override public void showError(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void renderSuggestedPeopleList(List<UserModel> users) {
-        suggestedPeopleAdapter.setItems(users);
-        suggestedPeopleAdapter.notifyDataSetChanged();
+    @Override public void follow(int position) {
+        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
     }
+
+    @Override public void unFollow(final int position) {
+        final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  suggestedPeoplePresenter.unfollowUser(userModel, getActivity());
+              }
+          })
+          .setNegativeButton("No", null)
+          .create()
+          .show();
+    }
+
+    private UserListAdapter getSuggestedPeopleAdapter() {
+        if (suggestedPeopleAdapter == null) {
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter.setCallback(this);
+        }
+        return suggestedPeopleAdapter;
+    }
+
+    public void startJob(){
+        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
+        job.init(sessionRepository.getCurrentUserId(), UserDtoFactory.FOLLOW_TYPE);
+        jobManager.addJobInBackground(job);
+        suggestedPeoplePresenter.setJobManager(jobManager);
+    }
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream event){
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
+        Boolean following = result.second;
+        List<UserModel> usersInList = getSuggestedPeopleAdapter().getItems();
+        for (int i = 0; i < usersInList.size(); i++) {
+            UserModel userModel = usersInList.get(i);
+            if (userModel.getIdUser().equals(idUser)) {
+                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                getSuggestedPeopleAdapter().notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
 }
