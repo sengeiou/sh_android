@@ -8,4 +8,5 @@ public interface SuggestedPeopleView {
     void renderSuggestedPeopleList(List<UserModel> users);
 
     void showError(String messageForError);
+
 }

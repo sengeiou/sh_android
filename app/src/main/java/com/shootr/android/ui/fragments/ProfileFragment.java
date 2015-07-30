@@ -453,13 +453,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             initializePresenter();
         }else{
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-                @Override
-                public void onLoaded(User userFromCallback) {
+                @Override public void onLoaded(User userFromCallback) {
                     loadProfileUsingUser(userFromCallback);
                 }
             }, new Interactor.ErrorCallback() {
-                @Override
-                public void onError(ShootrException error) {
+                @Override public void onError(ShootrException error) {
                     userNotFoundNotification();
                 }
             });
@@ -499,23 +497,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public void userInfoReceived(UserInfoResultStream event) {
         if (event.getResult() != null) {
             setUserInfo(event.getResult());
-        }
-    }
-
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream event){
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-
-        List<UserModel> usersInList = getSuggestedPeopleAdapter().getItems();
-        for (int i = 0; i < usersInList.size(); i++) {
-            UserModel userModel = usersInList.get(i);
-            if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
-                getSuggestedPeopleAdapter().notifyDataSetChanged();
-                break;
-            }
         }
     }
 
@@ -798,7 +779,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void follow(int position) {
-        followUser(getSuggestedPeopleAdapter().getItem(position));
+        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
     }
 
     @Override public void unFollow(final int position) {
@@ -806,7 +787,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  unfollowUser(userModel);
+                  suggestedPeoplePresenter.unfollowUser(userModel, getActivity());
               }
           })
           .setNegativeButton("No", null)
@@ -814,30 +795,30 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .show();
     }
 
-    public void followUser(UserModel user){
-        startFollowUnfollowUserJob(user, getActivity(), UserDtoFactory.FOLLOW_TYPE);
-    }
-
-    public void unfollowUser(UserModel user){
-        startFollowUnfollowUserJob(user, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
-    }
-
-    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        //Proceso de insercción en base de datos
-        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
-          GetFollowUnFollowUserOfflineJob.class);
-        job2.init(userVO.getIdUser(),followType);
-        jobManager.addJobInBackground(job2);
-
-        //Al instante
-        GetFollowUnfollowUserOnlineJob
-          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(job);
-    }
-
     public void startJob(){
         GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
         job.init(idUser, UserDtoFactory.FOLLOW_TYPE);
         jobManager.addJobInBackground(job);
+        suggestedPeoplePresenter.setJobManager(jobManager);
     }
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream event){
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
+        Boolean following = result.second;
+        List<UserModel> usersInList = getSuggestedPeopleAdapter().getItems();
+        for (int i = 0; i < usersInList.size(); i++) {
+            UserModel userModel = usersInList.get(i);
+            if (userModel.getIdUser().equals(idUser)) {
+                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                getSuggestedPeopleAdapter().notifyDataSetChanged();
+                 break;
+            }
+        }
+        if (idUser.equals(this.idUser)) {
+            followButton.setFollowing(following);
+        }
+    }
+
 }

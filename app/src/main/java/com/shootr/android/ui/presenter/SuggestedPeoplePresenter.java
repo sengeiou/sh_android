@@ -1,10 +1,16 @@
 package com.shootr.android.ui.presenter;
 
+import android.content.Context;
+import com.path.android.jobqueue.JobManager;
+import com.shootr.android.ShootrApplication;
 import com.shootr.android.domain.SuggestedPeople;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetSuggestedPeopleInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.SuggestedPeopleView;
@@ -19,6 +25,7 @@ public class SuggestedPeoplePresenter implements Presenter {
     private final GetSuggestedPeopleInteractor getSuggestedPeopleInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
+    private JobManager jobManager;
     private SuggestedPeopleView suggestedPeopleView;
 
     @Inject public SuggestedPeoplePresenter(SessionRepository sessionRepository,
@@ -57,11 +64,36 @@ public class SuggestedPeoplePresenter implements Presenter {
         }
     }
 
+    public void followUser(UserModel user, Context context){
+        startFollowUnfollowUserJob(user, context, UserDtoFactory.FOLLOW_TYPE);
+    }
+
+    public void unfollowUser(UserModel user, Context context){
+        startFollowUnfollowUserJob(user, context, UserDtoFactory.UNFOLLOW_TYPE);
+    }
+
+    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
+        //Proceso de insercción en base de datos
+        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
+          GetFollowUnFollowUserOfflineJob.class);
+        job2.init(userVO.getIdUser(),followType);
+        jobManager.addJobInBackground(job2);
+
+        //Al instante
+        GetFollowUnfollowUserOnlineJob
+          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
+        jobManager.addJobInBackground(job);
+    }
+
     @Override public void resume() {
         /* no-op */
     }
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void setJobManager(JobManager jobManager) {
+        this.jobManager = jobManager;
     }
 }
