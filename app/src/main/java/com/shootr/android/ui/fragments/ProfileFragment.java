@@ -482,6 +482,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         loadLatestShots();
     }
 
+    private void loadBasicProfileUsingJob(String idUser) {
+        Context context = getActivity();
+        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
+        job.init(idUser);
+        jobManager.addJobInBackground(job);
+    }
+
     public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
@@ -761,7 +768,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void renderSuggestedPeopleList(List<UserModel> users) {
-        // TODO Cribar los suggested users
         suggestedPeopleAdapter.setItems(users);
         suggestedPeopleAdapter.notifyDataSetChanged();
     }
@@ -819,6 +825,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         if (idUser.equals(this.idUser)) {
             followButton.setFollowing(following);
         }
+        loadBasicProfileUsingJob(user.getIdUser());
     }
 
 }
