@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.SuggestedPeople;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -9,6 +10,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -47,12 +49,24 @@ public class GetSuggestedPeopleInteractor implements Interactor {
 
     private void obtainRemoteSuggestedPeople() {
         List<SuggestedPeople> suggestedPeople = remoteUserRepository.getSuggestedPeople();
-        notifyResult(suggestedPeople);
+        List<SuggestedPeople> suggestedPeoples = retainAllFollowedUsers(suggestedPeople,
+          remoteUserRepository.getPeople());
+        notifyResult(suggestedPeoples);
     }
 
     private void obtainLocalSuggestedPeople() {
         List<SuggestedPeople> suggestedPeople = localUserRepository.getSuggestedPeople();
-        notifyResult(suggestedPeople);
+        List<SuggestedPeople> suggestedPeoples = retainAllFollowedUsers(suggestedPeople, localUserRepository.getPeople());
+        notifyResult(suggestedPeoples);
+    }
+
+    private List<SuggestedPeople> retainAllFollowedUsers(List<SuggestedPeople> suggestedPeople, List<User> people) {
+        List<SuggestedPeople> suggestedPeoples = new ArrayList<>();
+        for (SuggestedPeople suggested : suggestedPeople) {
+            if(!people.contains(suggested.getUser()) && !suggestedPeoples.contains(suggested))
+                suggestedPeoples.add(suggested);
+        }
+        return suggestedPeoples;
     }
 
     private void notifyResult(final List<SuggestedPeople> suggestedPeople) {
