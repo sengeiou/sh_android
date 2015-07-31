@@ -3,6 +3,8 @@ package com.shootr.android.data.mapper;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.data.entity.Synchronized;
+import com.shootr.android.domain.EntityMetadata;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
 import java.util.ArrayList;
@@ -50,7 +52,20 @@ public class ShotEntityMapper {
         shot.setType(shotEntity.getType());
         shot.setNiceCount(shotEntity.getNiceCount());
 
+        shot.setMetadata(metadataFromEntity(shotEntity));
+
         return shot;
+    }
+
+    private EntityMetadata metadataFromEntity(Synchronized entity) {
+        EntityMetadata metadata = new EntityMetadata();
+        metadata.setBirth(entity.getBirth());
+        metadata.setModified(entity.getModified());
+        metadata.setDeleted(entity.getDeleted());
+        metadata.setRevision(entity.getRevision());
+        metadata.setSynchronizedStatus(entity.getSynchronizedStatus());
+        return metadata;
+
     }
 
     public List<Shot> transform(List<ShotEntity> shotEntities) {
@@ -75,7 +90,12 @@ public class ShotEntityMapper {
         shotEntity.setImage(shot.getImage());
         shotEntity.setType(shot.getType());
         String idUser = shot.getUserInfo().getIdUser();
+        String username = shot.getUserInfo().getUsername();
+        String avatar = shot.getUserInfo().getAvatar();
         shotEntity.setIdUser(idUser);
+        shotEntity.setUsername(username);
+        shotEntity.setUserPhoto(avatar);
+
         Shot.ShotStreamInfo eventInfo = shot.getStreamInfo();
         if (eventInfo != null) {
             shotEntity.setIdStream(eventInfo.getIdStream());
@@ -93,7 +113,17 @@ public class ShotEntityMapper {
         shotEntity.setNiceCount(shot.getNiceCount());
 
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
+
+        metadataToEntity(shotEntity, shot.getMetadata());
         return shotEntity;
+    }
+
+    private void metadataToEntity(Synchronized entity, EntityMetadata metadata) {
+        entity.setBirth(metadata.getBirth());
+        entity.setModified(metadata.getModified());
+        entity.setDeleted(metadata.getDeleted());
+        entity.setRevision(metadata.getRevision());
+        entity.setSynchronizedStatus(metadata.getSynchronizedStatus());
     }
 
     public ShotDetail transform(ShotDetailEntity shotDetailEntity) {

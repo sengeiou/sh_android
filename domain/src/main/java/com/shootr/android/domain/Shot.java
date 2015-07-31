@@ -24,6 +24,8 @@ public class Shot {
     private String type;
     private Integer niceCount;
 
+    private EntityMetadata metadata;
+
     public String getIdShot() {
         return idShot;
     }
@@ -146,6 +148,14 @@ public class Shot {
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
+    }
+
+    public EntityMetadata getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(EntityMetadata metadata) {
+        this.metadata = metadata;
     }
 
     public static class ShotStreamInfo {
