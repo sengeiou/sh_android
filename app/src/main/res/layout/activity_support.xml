@@ -83,7 +83,6 @@
       android:paddingRight="16dp"
       android:layout_gravity="end|center_vertical"
       android:textAppearance="@style/TextAppearance.Switch"
-      android:text="@string/support_version_number"
       android:textColor="@color/gray_60"
       tools:text="0.47 - 6" />
 

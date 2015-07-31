@@ -307,7 +307,6 @@
     <string name="support_terms_service">Terms of Service</string>
     <string name="support_privacy_policy">Privacy Policy</string>
     <string name="support_faq">FAQ</string>
-    <string name="support_version_number">0</string>
     <string name="terms_of_service_base_url">http://docs.shootr.com/#/terms/</string>
     <string name="privay_policy_service_base_url">http://docs.shootr.com/#/privacy/</string>
 </resources>
