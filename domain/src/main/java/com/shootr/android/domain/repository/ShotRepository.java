@@ -23,4 +23,6 @@ public interface ShotRepository {
     List<Shot> getAllShotsFromUser(String userId);
 
     List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
+
+    void putShots(List<Shot> shotsFromUser);
 }

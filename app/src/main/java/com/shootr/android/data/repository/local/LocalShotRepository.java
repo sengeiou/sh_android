@@ -65,4 +65,10 @@ public class LocalShotRepository implements ShotRepository {
     @Override public List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
         return shotEntityMapper.transform(localShotDataSource.getAllShotsFromUserAndDate(userId, currentOldestDate));
     }
+
+    @Override public void putShots(List<Shot> shotsFromUser) {
+        for (Shot shot : shotsFromUser) {
+            putShot(shot);
+        }
+    }
 }
