@@ -53,13 +53,13 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @OnClick(R.id.support_terms_service_text)
     public void onTermsAndServiceClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(termsOfServiceBaseUrl, localeProvider.getLanguage())));
         startActivity(browserIntent);
     }
 
     @OnClick(R.id.privacy_policy_text)
     public void onPrivacyPolicyClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl + localeProvider.getLanguage()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage())));
         startActivity(browserIntent);
     }
 
