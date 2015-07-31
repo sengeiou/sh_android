@@ -119,11 +119,13 @@ public class ShotEntityMapper {
     }
 
     private void metadataToEntity(Synchronized entity, EntityMetadata metadata) {
-        entity.setBirth(metadata.getBirth());
-        entity.setModified(metadata.getModified());
-        entity.setDeleted(metadata.getDeleted());
-        entity.setRevision(metadata.getRevision());
-        entity.setSynchronizedStatus(metadata.getSynchronizedStatus());
+        if (metadata != null) {
+            entity.setBirth(metadata.getBirth());
+            entity.setModified(metadata.getModified());
+            entity.setDeleted(metadata.getDeleted());
+            entity.setRevision(metadata.getRevision());
+            entity.setSynchronizedStatus(metadata.getSynchronizedStatus());
+        }
     }
 
     public ShotDetail transform(ShotDetailEntity shotDetailEntity) {
