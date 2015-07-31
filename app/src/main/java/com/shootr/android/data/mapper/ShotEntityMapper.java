@@ -85,6 +85,9 @@ public class ShotEntityMapper {
         shotEntity.setIdUserParent(shot.getParentShotUserId());
         shotEntity.setUserNameParent(shot.getParentShotUsername());
 
+        shotEntity.setUsername(shot.getUserInfo().getUsername());
+        shotEntity.setBirth(shot.getPublishDate());
+
         shotEntity.setVideoUrl(shot.getVideoUrl());
         shotEntity.setVideoTitle(shot.getVideoTitle());
         shotEntity.setVideoDuration(shot.getVideoDuration());
