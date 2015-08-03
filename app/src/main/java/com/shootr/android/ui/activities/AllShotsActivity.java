@@ -24,6 +24,8 @@ import com.shootr.android.util.UsernameClickListener;
 import java.util.List;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView {
 
     private static final String ARGUMENT_USER = "user";
@@ -58,15 +60,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        if (getIntent().getExtras() == null) {
-            throw new RuntimeException("No intent extras, no party");
-        }
         setupListAdapter();
         setupListScrollListeners();
     }
 
     @Override protected void initializePresenter() {
-        String userId = getIntent().getStringExtra(ARGUMENT_USER);
+        String userId = checkNotNull(getIntent().getStringExtra(ARGUMENT_USER));
         presenter.initialize(this, userId);
     }
 
