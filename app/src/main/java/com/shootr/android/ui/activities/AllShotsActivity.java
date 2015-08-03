@@ -15,7 +15,6 @@ import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.views.AllShotsView;
@@ -26,6 +25,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView {
+
+    private static final String ARGUMENT_USER = "user";
 
     @Inject AllShotsPresenter presenter;
     @Inject AndroidTimeUtils timeUtils;
@@ -43,7 +44,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     public static Intent newIntent(Context context, String userId) {
         Intent intent = new Intent(context, AllShotsActivity.class);
-        intent.putExtra(ProfileFragment.ARGUMENT_USER, userId);
+        intent.putExtra(ARGUMENT_USER, userId);
         return intent;
     }
 
@@ -65,7 +66,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override protected void initializePresenter() {
-        String userId = getIntent().getStringExtra(ProfileFragment.ARGUMENT_USER);
+        String userId = getIntent().getStringExtra(ARGUMENT_USER);
         presenter.initialize(this, userId);
     }
 
