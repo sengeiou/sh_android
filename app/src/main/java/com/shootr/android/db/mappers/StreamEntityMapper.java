@@ -23,6 +23,7 @@ public class StreamEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.StreamTable.TITLE, streamEntity.getTitle());
         contentValues.put(DatabaseContract.StreamTable.PHOTO, streamEntity.getPhoto());
         contentValues.put(DatabaseContract.StreamTable.TAG, streamEntity.getTag());
+        contentValues.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity.getDescription());
         contentValues.put(DatabaseContract.StreamTable.LOCALE, streamEntity.getLocale());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
@@ -38,14 +39,16 @@ public class StreamEntityMapper extends GenericMapper{
           : ((String) (dto.get(DatabaseContract.StreamTable.ID_STREAM))));
         streamEntity.setIdUser(dto.get(DatabaseContract.StreamTable.ID_USER) == null ? null
           : ((String) (dto.get(DatabaseContract.StreamTable.ID_USER))));
-        streamEntity.setTitle((String) dto.get(DatabaseContract.StreamTable.TITLE) == null ? null
+        streamEntity.setTitle(dto.get(DatabaseContract.StreamTable.TITLE) == null ? null
           : (String) dto.get(DatabaseContract.StreamTable.TITLE));
-        streamEntity.setUserName((String) dto.get(DatabaseContract.StreamTable.USERNAME) == null ? null
+        streamEntity.setUserName(dto.get(DatabaseContract.StreamTable.USERNAME) == null ? null
           : (String) dto.get(DatabaseContract.StreamTable.USERNAME));
-        streamEntity.setPhoto((String) dto.get(DatabaseContract.StreamTable.PHOTO) == null ? null
+        streamEntity.setPhoto(dto.get(DatabaseContract.StreamTable.PHOTO) == null ? null
           : (String) dto.get(DatabaseContract.StreamTable.PHOTO));
-        streamEntity.setTag((String) dto.get(DatabaseContract.StreamTable.TAG) == null ? null
+        streamEntity.setTag(dto.get(DatabaseContract.StreamTable.TAG) == null ? null
           : (String) dto.get(DatabaseContract.StreamTable.TAG));
+        streamEntity.setDescription(dto.get(DatabaseContract.StreamTable.DESCRIPTION) == null ? null
+          : (String) dto.get(DatabaseContract.StreamTable.DESCRIPTION));
         streamEntity.setLocale(dto.get(DatabaseContract.StreamTable.LOCALE) == null ? null
                 : (String) dto.get(DatabaseContract.StreamTable.LOCALE));
         setSynchronizedfromDto(dto, streamEntity);
@@ -59,6 +62,7 @@ public class StreamEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.StreamTable.TITLE, streamEntity == null ? null : streamEntity.getTitle());
         dto.put(DatabaseContract.StreamTable.PHOTO, streamEntity == null ? null : streamEntity.getPhoto());
         dto.put(DatabaseContract.StreamTable.TAG, streamEntity == null ? null : streamEntity.getTag());
+        dto.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity == null ? null : streamEntity.getDescription());
         dto.put(DatabaseContract.StreamTable.LOCALE, streamEntity == null ? null : streamEntity.getLocale());
         dto.put(DatabaseContract.StreamTable.NOTIFY_CREATION,
           streamEntity == null ? null : streamEntity.getNotifyCreation());
@@ -79,6 +83,7 @@ public class StreamEntityMapper extends GenericMapper{
         streamEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TITLE)));
         streamEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.PHOTO)));
         streamEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TAG)));
+        streamEntity.setDescription(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.DESCRIPTION)));
         streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.LOCALE)));
         setSynchronizedfromCursor(c, streamEntity);
     }
