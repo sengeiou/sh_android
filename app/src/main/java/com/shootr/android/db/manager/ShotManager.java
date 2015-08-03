@@ -43,7 +43,7 @@ public class ShotManager extends  AbstractManager{
     public List<ShotEntity> getShotsFromUser(String idUser, Integer latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
-        String[] whereArguments = new String[]{String.valueOf(idUser)};
+        String[] whereArguments = new String[]{idUser};
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE,
@@ -70,7 +70,7 @@ public class ShotManager extends  AbstractManager{
     public List<ShotEntity> getAllShotsFromUser(String idUser) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
-        String[] whereArguments = new String[]{String.valueOf(idUser)};
+        String[] whereArguments = new String[]{idUser};
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE,
