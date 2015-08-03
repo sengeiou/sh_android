@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
-import com.shootr.android.domain.exception.EmailAlreadyConfirmed;
+import com.shootr.android.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.UnauthorizedRequestException;
@@ -48,7 +48,7 @@ public class ChangeEmailInteractor implements Interactor {
             notifyError(new EmailInUseException(error));
         } catch (UnauthorizedRequestException error) {
             notifyError(new InsufficientAuthenticationException(error));
-        } catch (EmailAlreadyConfirmed error) {
+        } catch (EmailAlreadyConfirmedException error) {
             notifyError(new EmailIsAuthenticatedException(error));
         } catch (NullPointerException unknownError) {
             notifyError(new InsufficientAuthenticationException(unknownError));
