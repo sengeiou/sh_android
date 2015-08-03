@@ -152,6 +152,9 @@ public class NewStreamPresenter implements Presenter {
     private void sendStream(String preloadedStreamId) {
         String title = filterTitle(newStreamView.getStreamTitle());
         String shortTitle = filterShortTitle(newStreamView.getStreamShortTitle());
+        String description = filterDescription(newStreamView.getStreamDescription());
+
+
         createStreamInteractor.sendStream(preloadedStreamId,
           title,
           shortTitle,
@@ -226,6 +229,10 @@ public class NewStreamPresenter implements Presenter {
         }else {
             return shortTitle.substring(0,20).trim();
         }
+    }
+
+    private String filterDescription(String streamDescription) {
+        return streamDescription.trim();
     }
 
     private void updateDoneButtonStatus() {
