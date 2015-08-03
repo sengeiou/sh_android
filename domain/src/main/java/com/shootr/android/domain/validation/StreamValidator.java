@@ -11,11 +11,13 @@ public class StreamValidator {
     public static final int TITLE_MAXIMUN_LENGTH = 50;
     public static final int TAG_MINIMUN_LENGTH = 3;
     public static final int TAG_MAXIMUM_LENGTH = 20;
+    public static final int DESCRIPTION_MAXIMUM_LENGTH = 60;
     public static final String EMOJI_RANGE_REGEX = "[\\x{1F300}-\\x{1F64F}\\x{1f680}-\\x{1f6ff}\\x{2600}-\\x{27bf}]";
-    public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
 
+    public static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9 ]";
     public static final int FIELD_TITLE = 1;
     public static final int FIELD_SHORT_TITLE = 2;
+    public static final int FIELD_DESCRIPTION = 3;
 
     private List<FieldValidationError> fieldValidationErrors;
 
@@ -26,7 +28,12 @@ public class StreamValidator {
     public List<FieldValidationError> validate(Stream stream) {
         validateTitle(stream);
         validateShortTitle(stream);
+        validateDescription(stream);
         return fieldValidationErrors;
+    }
+
+    private void validateDescription(Stream stream) {
+        validateDescriptionTooLong(stream);
     }
 
     private void validateShortTitle(Stream stream) {
@@ -58,7 +65,6 @@ public class StreamValidator {
               new FieldValidationError(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, FIELD_TITLE));
         }
     }
-    //endregion
 
     //region Short Title
     private void validateShortTitleTooLong(Stream stream) {
@@ -75,6 +81,15 @@ public class StreamValidator {
               new FieldValidationError(ShootrError.ERROR_SUBCODE_TAG_TOO_SHORT, FIELD_SHORT_TITLE));
         }
     }
+
     //endregion
+    //endregion
+
+    private void validateDescriptionTooLong(Stream stream) {
+        if (stream.getDescription() != null && alphanumericLength(stream.getDescription()) > DESCRIPTION_MAXIMUM_LENGTH) {
+            fieldValidationErrors.add(
+              new FieldValidationError(ShootrError.ERROR_SUBCODE_DESCRIPTION_TOO_LONG, FIELD_DESCRIPTION));
+        }
+    }
 
 }

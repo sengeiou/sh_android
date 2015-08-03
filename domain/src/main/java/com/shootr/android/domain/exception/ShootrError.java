@@ -43,7 +43,7 @@ public interface ShootrError {
 
     String ERROR_SUBCODE_TAG_TOO_SHORT = "E017";
     String ERROR_SUBCODE_TAG_TOO_LONG = "E018";
-
+    String ERROR_SUBCODE_DESCRIPTION_TOO_LONG = "???0";
 
     // Local validation error codes
     String ERROR_CODE_REGISTRATION_PASSWORD_TOO_SHORT = "US009.1-local";
