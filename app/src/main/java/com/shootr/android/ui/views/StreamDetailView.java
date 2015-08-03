@@ -51,4 +51,6 @@ public interface StreamDetailView extends LoadDataView {
     void navigateToMedia(String idStream, Integer streamMediaCount);
 
     void showMediaCount();
+
+    void setStreamDescription(String description);
 }

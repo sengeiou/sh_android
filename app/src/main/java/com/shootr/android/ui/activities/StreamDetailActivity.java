@@ -70,6 +70,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Bind(R.id.stream_title_container) View titleContainer;
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
     @Bind(R.id.stream_title) TextView titleText;
+    @Bind(R.id.stream_description) TextView descriptionText;
     @Bind(R.id.stream_author) TextView authorText;
 
     @Bind(R.id.stream_content_container) View contentContainer;
@@ -503,6 +504,11 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @Override public void showMediaCount() {
         streamMediaNumber.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void setStreamDescription(String description) {
+        descriptionText.setVisibility(View.VISIBLE);
+        descriptionText.setText(description);
     }
 
     @Override public void showEmpty() {
