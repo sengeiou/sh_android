@@ -50,9 +50,9 @@ public class GetAllShotsByUserInteractor implements Interactor {
         }
     }
 
-    private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
-        Collections.sort(remoteShots, new Shot.NewerAboveComparator());
-        return remoteShots;
+    private List<Shot> sortShotsByPublishDate(List<Shot> shots) {
+        Collections.sort(shots, new Shot.NewerAboveComparator());
+        return shots;
     }
 
     private void notifyLoaded(final List<Shot> result) {
