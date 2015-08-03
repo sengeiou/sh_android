@@ -230,6 +230,10 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         return descriptionView.getText().toString();
     }
 
+    @Override public void showDescription(String description) {
+        descriptionView.setText(description);
+    }
+
     @Override public void showLoading() {
         doneMenuItem.setActionView(R.layout.item_list_loading);
     }
