@@ -95,13 +95,20 @@ public class CreateStreamInteractor implements Interactor {
 
     //region Validation
     private boolean validateStream(Stream stream) {
-        List<FieldValidationError> validationErrors = new StreamValidator().validate(stream);
+        Stream streamToValidate = removeDescriptionLineBreaks(stream);
+        List<FieldValidationError> validationErrors = new StreamValidator().validate(streamToValidate);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
             notifyError(new DomainValidationException(validationErrors));
             return false;
         }
+    }
+
+    private Stream removeDescriptionLineBreaks(Stream stream) {
+        String description = stream.getDescription().replace("\n", "").replace("\r", "");
+        stream.setDescription(description);
+        return stream;
     }
 
     private void handleServerError(ShootrException e) {
