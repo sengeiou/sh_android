@@ -82,10 +82,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         streamDetailView.navigateToEditStream(idStream);
     }
 
-    public void resultFromEditStreamInfo(String idStreamEdited) {
-        if (idStreamEdited.equals(streamModel.getIdStream())) {
-            loadStreamInfo();
-        }
+    public void resultFromEditStreamInfo() {
+        loadStreamInfo();
     }
 
     public void editStreamPhoto() {

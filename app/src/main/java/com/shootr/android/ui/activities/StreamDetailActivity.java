@@ -315,8 +315,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
-            String idStreamEdited = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-            streamDetailPresenter.resultFromEditStreamInfo(idStreamEdited);
+            streamDetailPresenter.resultFromEditStreamInfo();
         }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
