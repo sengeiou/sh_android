@@ -44,9 +44,7 @@ public class GetAllShotsByUserInteractor implements Interactor {
         }
         try {
             List<Shot> remoteShots = remoteShotRepository.getAllShotsFromUser(userId);
-            if (!remoteShots.isEmpty()) {
-                notifyLoaded(sortShotsByPublishDate(remoteShots));
-            }
+            notifyLoaded(sortShotsByPublishDate(remoteShots));
         } catch (ShootrException error) {
             notifyError(error);
         }
