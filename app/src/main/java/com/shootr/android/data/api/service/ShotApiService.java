@@ -30,5 +30,6 @@ public interface ShotApiService {
     List<ShotApiEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
 
     @GET("/shots/user/{idUser}/?includeLinks=false")
-    List<ShotApiEntity> getAllShotsFromUserAndDate(@Path("idUser") String userId, @Query("maxTimestamp") Long currentOldestDate) throws ApiException, IOException;
+    List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
+      @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
 }

@@ -110,7 +110,8 @@ public class ServiceShotDatasource implements ShotDataSource {
 
     @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
         try {
-            List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserAndDate(userId, currentOldestDate);
+            List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserWithMaxDate(userId,
+              currentOldestDate);
             return shotApiEntityMapper.transform(allShotsFromUserAndDate);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
