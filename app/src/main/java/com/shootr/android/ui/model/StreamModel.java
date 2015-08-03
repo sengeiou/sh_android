@@ -10,6 +10,7 @@ public class StreamModel implements Serializable {
     private String title;
     private String picture;
     private String tag;
+    private String description;
     private boolean amIAuthor;
 
     public String getIdStream() {
@@ -26,6 +27,14 @@ public class StreamModel implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
