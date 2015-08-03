@@ -27,12 +27,10 @@ import static org.mockito.Mockito.verify;
 
 public class AllShotsPresenterTest {
 
-    public static final String STREAM_ID = "stream_id";
-    public static final String STREAM_AUTHOR_ID = "stream_author_id";
-    public static final String STREAM_TITLE = "stream_title";
     public static final String USER_ID = "user_id";
     public static final String AVATAR = "avatar";
     public static final String USERNAME = "username";
+    public static final long ANY_TIMESTAMP = 0L;
 
     @Mock GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
@@ -53,7 +51,7 @@ public class AllShotsPresenterTest {
 
     @Test
     public void shouldShowAllShotsWhenLoadAllShots() {
-        setupAllShotsInteractorCallback();
+        setupAllShotsInteractorCallback(shotList());
 
         allShotsPresenter.initialize(allShotsView, USER_ID);
 
@@ -62,7 +60,7 @@ public class AllShotsPresenterTest {
 
     @Test
     public void shouldHideLoadingWhenLoadAllShots() {
-        setupAllShotsInteractorCallback();
+        setupAllShotsInteractorCallback(shotList());
 
         allShotsPresenter.initialize(allShotsView, USER_ID);
 
@@ -71,7 +69,7 @@ public class AllShotsPresenterTest {
 
     @Test
     public void shouldShowEmptyWhenLoadAllShotsAndNothingFound() {
-        setupAllShotsInteractorEmptyCallback();
+        setupAllShotsInteractorCallback(emptyShotList());
 
         allShotsPresenter.initialize(allShotsView, USER_ID);
 
@@ -80,7 +78,7 @@ public class AllShotsPresenterTest {
 
     @Test
     public void shouldHideShotsListWhenLoadAllShotsAndNothingFound() {
-        setupAllShotsInteractorEmptyCallback();
+        setupAllShotsInteractorCallback(emptyShotList());
 
         allShotsPresenter.initialize(allShotsView, USER_ID);
 
@@ -88,19 +86,19 @@ public class AllShotsPresenterTest {
     }
 
     @Test
-    public void shouldShowOlderAllShotsWhenLoadAllShots() {
-        setupOlderAllShotsInteractorCallback();
+    public void shouldShowOlderAllShotsWhenLoadOlderAllShots() {
+        setupOlderAllShotsInteractorCallback(shotList());
 
-        allShotsPresenter.loadOlderShots(0L);
+        allShotsPresenter.loadOlderShots(ANY_TIMESTAMP);
 
         verify(allShotsView).addOldShots(anyList());
     }
 
     @Test
     public void shouldHideLoadingOldShotsWhenLoadOlderAllShots() {
-        setupOlderAllShotsInteractorCallback();
+        setupOlderAllShotsInteractorCallback(shotList());
 
-        allShotsPresenter.loadOlderShots(0L);
+        allShotsPresenter.loadOlderShots(ANY_TIMESTAMP);
 
         verify(allShotsView).hideLoadingOldShots();
     }
@@ -109,7 +107,7 @@ public class AllShotsPresenterTest {
     public void shouldHideLoadingOldShotsWhenLoadOlderAllShotsAndNothingFound() {
         setupOlderAllShotsInteractorEmptyCallback();
 
-        allShotsPresenter.loadOlderShots(0L);
+        allShotsPresenter.loadOlderShots(ANY_TIMESTAMP);
 
         verify(allShotsView).hideLoadingOldShots();
     }
@@ -118,7 +116,7 @@ public class AllShotsPresenterTest {
     public void shouldHideLoadingOldShotsWhenCommunicationErrorLoadingOlderAllShots() {
         setupOlderAllShotsInteractorErrorCallback();
 
-        allShotsPresenter.loadOlderShots(0L);
+        allShotsPresenter.loadOlderShots(ANY_TIMESTAMP);
 
         verify(allShotsView).hideLoadingOldShots();
     }
@@ -127,7 +125,7 @@ public class AllShotsPresenterTest {
     public void shouldShowErrorWhenCommunicationErrorLoadingOlderAllShots() {
         setupOlderAllShotsInteractorErrorCallback();
 
-        allShotsPresenter.loadOlderShots(0L);
+        allShotsPresenter.loadOlderShots(ANY_TIMESTAMP);
 
         verify(allShotsView).showError(anyString());
     }
@@ -164,33 +162,22 @@ public class AllShotsPresenterTest {
         return Arrays.asList(shot);
     }
 
-    private void setupAllShotsInteractorCallback() {
+    private void setupAllShotsInteractorCallback(final List<Shot> shotList) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<Shot>> callback = (Interactor.Callback<List<Shot>>) invocation.getArguments()[1];
-                callback.onLoaded(shotList());
+                callback.onLoaded(shotList);
                 return null;
             }
         }).when(getAllShotsByUserInteractor)
           .loadAllShots(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
-    private void setupAllShotsInteractorEmptyCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<Shot>> callback = (Interactor.Callback<List<Shot>>) invocation.getArguments()[1];
-                callback.onLoaded(emptyShotList());
-                return null;
-            }
-        }).when(getAllShotsByUserInteractor)
-          .loadAllShots(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
-    }
-
-    private void setupOlderAllShotsInteractorCallback() {
+    private void setupOlderAllShotsInteractorCallback(final List<Shot> shotList) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.Callback<List<Shot>> callback = (Interactor.Callback<List<Shot>>) invocation.getArguments()[2];
-                callback.onLoaded(shotList());
+                callback.onLoaded(shotList);
                 return null;
             }
         }).when(getOlderAllShotsByUserInteractor)
