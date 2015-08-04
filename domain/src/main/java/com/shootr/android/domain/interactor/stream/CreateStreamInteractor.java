@@ -57,8 +57,8 @@ public class CreateStreamInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         Stream stream = streamFromParameters();
-
-        if (validateStream(stream)) {
+        Stream streamToValidate = removeDescriptionLineBreaks(stream);
+        if (validateStream(streamToValidate)) {
             try {
                 Stream savedStream = sendStreamToServer(stream, notifyCreation);
                 notifyLoaded(savedStream);
@@ -95,8 +95,7 @@ public class CreateStreamInteractor implements Interactor {
 
     //region Validation
     private boolean validateStream(Stream stream) {
-        Stream streamToValidate = removeDescriptionLineBreaks(stream);
-        List<FieldValidationError> validationErrors = new StreamValidator().validate(streamToValidate);
+        List<FieldValidationError> validationErrors = new StreamValidator().validate(stream);
         if (validationErrors.isEmpty()) {
             return true;
         } else {
