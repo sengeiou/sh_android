@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -12,18 +13,18 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetRepliesFromShotInteractor implements Interactor {
+public class GetShotDetailInteractor implements Interactor{
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
-    private String shotId;
-    private Callback<List<Shot>> callback;
+
+    private String idShot;
+    private Callback<ShotDetail> callback;
     private ErrorCallback errorCallback;
 
-    @Inject
-    public GetRepliesFromShotInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
@@ -31,26 +32,36 @@ public class GetRepliesFromShotInteractor implements Interactor {
         this.remoteShotRepository = remoteShotRepository;
     }
 
-    public void loadReplies(String shotId, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
-        this.shotId = shotId;
+    public void loadShotDetail(String idShot, Callback<ShotDetail> callback, ErrorCallback errorCallback) {
+        this.idShot = idShot;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
-    @Override public void execute() throws Exception {
-        List<Shot> localReplies = localShotRepository.getReplies(shotId);
-        if (!localReplies.isEmpty()) {
-            notifyLoaded(orderShots(localReplies));
+    @Override
+    public void execute() throws Exception {
+        ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
+        if (localShotDetail != null) {
+            notifyLoaded(reoderReplies(localShotDetail));
         }
+
         try {
-            List<Shot> updatedReplies = remoteShotRepository.getReplies(shotId);
-            if (!updatedReplies.isEmpty()) {
-                notifyLoaded(orderShots(updatedReplies));
+            ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
+            notifyLoaded(reoderReplies(remoteShotDetail));
+            if (localShotDetail != null) {
+                localShotRepository.putShot(remoteShotDetail.getShot());
             }
         } catch (ShootrException error) {
             notifyError(error);
         }
+    }
+
+    private ShotDetail reoderReplies(ShotDetail shotDetail) {
+        List<Shot> unorderedReplies = shotDetail.getReplies();
+        List<Shot> reorderedReplies = orderShots(unorderedReplies);
+        shotDetail.setReplies(reorderedReplies);
+        return shotDetail;
     }
 
     private List<Shot> orderShots(List<Shot> replies) {
@@ -58,19 +69,18 @@ public class GetRepliesFromShotInteractor implements Interactor {
         return replies;
     }
 
-    private void notifyLoaded(final List<Shot> result) {
+    private void notifyLoaded(final ShotDetail shotDetail) {
         postExecutionThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onLoaded(result);
+                callback.onLoaded(shotDetail);
             }
         });
     }
 
-    protected void notifyError(final ShootrException error) {
+    private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

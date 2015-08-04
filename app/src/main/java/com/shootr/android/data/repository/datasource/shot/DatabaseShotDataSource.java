@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.shot;
 
+import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.domain.StreamTimelineParameters;
@@ -53,5 +54,25 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override
     public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
         return shotManager.getShotsFromUser(idUser, limit);
+    }
+
+    @Override
+    public ShotDetailEntity getShotDetail(String idShot) {
+        ShotEntity shot = getShot(idShot);
+        if (shot != null) {
+            ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
+            shotDetailEntity.setShot(shot);
+
+            shotDetailEntity.setReplies(getReplies(idShot));
+
+            String parentId = shot.getIdShotParent();
+            if (parentId != null) {
+                shotDetailEntity.setParentShot(getShot(parentId));
+            }
+
+            return shotDetailEntity;
+        } else {
+            return null;
+        }
     }
 }

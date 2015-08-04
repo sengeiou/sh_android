@@ -4,6 +4,7 @@ import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
+import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.ShotType;
@@ -96,6 +97,27 @@ public class ServiceShotDatasource implements ShotDataSource {
             return shotApiEntityMapper.transform(userApiShots);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
+        }
+    }
+
+    @Override
+    public ShotDetailEntity getShotDetail(String idShot) {
+        try {
+            ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
+
+            ShotEntity shotEntity = shotApiEntityMapper.transform(shotApiEntity);
+            List<ShotEntity> repliesEntities = shotApiEntityMapper.transform(shotApiEntity.getReplies());
+            ShotEntity parentEntity = shotApiEntityMapper.transform(shotApiEntity.getParent());
+
+
+            ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
+            shotDetailEntity.setShot(shotEntity);
+            shotDetailEntity.setReplies(repliesEntities);
+            shotDetailEntity.setParentShot(parentEntity);
+            return shotDetailEntity;
+
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
         }
     }
 }

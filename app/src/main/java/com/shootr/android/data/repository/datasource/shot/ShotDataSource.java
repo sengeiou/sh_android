@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.shot;
 
+import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.StreamTimelineParameters;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ShotDataSource {
     List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId);
 
     List<ShotEntity> getShotsFromUser(String idUser, Integer limit);
+
+    ShotDetailEntity getShotDetail(String idShot);
 }

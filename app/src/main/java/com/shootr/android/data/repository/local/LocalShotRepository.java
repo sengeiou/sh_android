@@ -5,6 +5,7 @@ import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
 import java.util.List;
@@ -56,5 +57,10 @@ public class LocalShotRepository implements ShotRepository {
     @Override
     public List<Shot> getShotsFromUser(String idUser, Integer limit) {
         return shotEntityMapper.transform(localShotDataSource.getShotsFromUser(idUser, limit));
+    }
+
+    @Override
+    public ShotDetail getShotDetail(String idShot) {
+        return shotEntityMapper.transform(localShotDataSource.getShotDetail(idShot));
     }
 }
