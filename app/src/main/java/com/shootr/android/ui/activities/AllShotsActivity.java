@@ -28,7 +28,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView {
 
-    private static final String ARGUMENT_USER = "user";
+    private static final String EXTRA_USER = "user";
 
     @Inject AllShotsPresenter presenter;
     @Inject AndroidTimeUtils timeUtils;
@@ -46,7 +46,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     public static Intent newIntent(Context context, String userId) {
         Intent intent = new Intent(context, AllShotsActivity.class);
-        intent.putExtra(ARGUMENT_USER, userId);
+        intent.putExtra(EXTRA_USER, userId);
         return intent;
     }
 
@@ -65,7 +65,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override protected void initializePresenter() {
-        String userId = checkNotNull(getIntent().getStringExtra(ARGUMENT_USER));
+        String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
         presenter.initialize(this, userId);
     }
 
