@@ -11,7 +11,7 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.Collections;
 import java.util.List;
 
-public class FavoriteStreamsAdapter extends RecyclerView.Adapter<StreamResultViewHolder> {
+public class FavoriteStreamsAdapter extends RecyclerView.Adapter<FavoriteStreamResultViewHolder> {
 
     private final PicassoWrapper picasso;
 
@@ -34,15 +34,15 @@ public class FavoriteStreamsAdapter extends RecyclerView.Adapter<StreamResultVie
     }
 
     @Override
-    public StreamResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavoriteStreamResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
+        return new FavoriteStreamResultViewHolder(view, onStreamClickListener, picasso);
     }
 
     @Override
-    public void onBindViewHolder(StreamResultViewHolder holder, int position) {
+    public void onBindViewHolder(FavoriteStreamResultViewHolder holder, int position) {
         StreamResultModel streamResultModel = streams.get(position);
-        holder.render(streamResultModel, position);
+        holder.render(streamResultModel);
     }
 
     @Override
