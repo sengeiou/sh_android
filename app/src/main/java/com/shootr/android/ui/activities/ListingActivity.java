@@ -11,7 +11,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.ListingStreamsAdapter;
+import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
@@ -29,7 +30,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Inject ListingListPresenter presenter;
 
-    private StreamsListAdapter adapter;
+    private ListingStreamsAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -46,9 +47,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
+            }
+        });
+        adapter.setOnFavoriteClickListener(new OnFavoriteClickListener() {
+            @Override public void onFavoriteClik() {
+                
             }
         });
         listingList.setAdapter(adapter);
