@@ -42,7 +42,7 @@ public class FavoriteStreamsAdapter extends RecyclerView.Adapter<StreamResultVie
     @Override
     public void onBindViewHolder(StreamResultViewHolder holder, int position) {
         StreamResultModel streamResultModel = streams.get(position);
-        holder.render(streamResultModel);
+        holder.render(streamResultModel, position);
     }
 
     @Override

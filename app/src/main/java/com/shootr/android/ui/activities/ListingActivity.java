@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
+    public static final int ADD_TO_FAVORITES_MENU_ID = 0;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
@@ -82,6 +84,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override public boolean onContextItemSelected(MenuItem item) {
+        if(item.getItemId() == ADD_TO_FAVORITES_MENU_ID) {
+            StreamResultModel item1 = adapter.getItem(item.getOrder());
+            Toast.makeText(this, item1.getStreamModel().getTitle(), Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {

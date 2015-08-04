@@ -38,6 +38,7 @@ import javax.inject.Inject;
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
     public static final int REQUEST_NEW_STREAM = 1;
+    public static final int ADD_TO_FAVORITES_MENU_ID = 0;
 
     @Bind(R.id.streams_list) RecyclerView streamsList;
     @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -165,6 +166,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
             presenter.streamCreated(streamId, title);
         }
+    }
+
+    @Override public boolean onContextItemSelected(MenuItem item) {
+        if(item.getItemId() == ADD_TO_FAVORITES_MENU_ID) {
+            StreamResultModel item1 = adapter.getItem(item.getOrder());
+            Toast.makeText(this.getActivity(), item1.getStreamModel().getTitle(), Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     //region View methods

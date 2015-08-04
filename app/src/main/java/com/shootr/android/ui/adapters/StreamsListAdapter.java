@@ -61,7 +61,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
         WatchingStreamResultViewHolder watchingStreamResultViewHolder =
           new WatchingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso, onUnwatchClickListener);
 
-        watchingStreamResultViewHolder.render(stream);
+        watchingStreamResultViewHolder.render(stream, position);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getItem(position);
-        ((StreamResultViewHolder) viewHolder).render(stream);
+        ((StreamResultViewHolder) viewHolder).render(stream, position);
     }
 
     public void setCurrentWatchingStream(StreamResultModel streamResultModel) {
