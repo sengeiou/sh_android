@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -57,18 +56,6 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(ProfileEditActivity.EXTRA_USER_EMAIL, email.getText().toString());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        initializePresenter();
     }
 
     @Override public void showConfirmationToUser(String email) {
