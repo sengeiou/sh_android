@@ -8,7 +8,8 @@
   android:orientation="vertical"
   android:paddingLeft="16dp"
   android:paddingRight="16dp"
-  android:paddingTop="16dp">
+  android:paddingTop="16dp"
+  android:paddingBottom="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
       android:layout_width="@dimen/shot_avatar_size"
@@ -94,7 +95,6 @@
       android:layout_height="@dimen/nice_button_size"
       android:layout_alignParentRight="true"
       android:layout_below="@+id/shot_media_content"
-      android:layout_marginBottom="8dp"
       android:layout_marginTop="4dp"
       style="@style/NiceButton" />
 
