@@ -33,7 +33,7 @@ public class AllShotsPresenter implements Presenter {
         this.shotModelMapper = shotModelMapper;
     }
 
-    public void initialize(final AllShotsView allShotsView, String userId) {
+    public void initialize(AllShotsView allShotsView, String userId) {
         setView(allShotsView);
         setUserId(userId);
         loadAllShots(allShotsView, userId);
