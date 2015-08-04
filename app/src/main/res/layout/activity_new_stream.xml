@@ -97,7 +97,7 @@
           android:layout_height="wrap_content"
           android:hint="@string/new_stream_description_label"
           android:imeOptions="actionDone"
-          android:inputType="text|textCapSentences|textNoSuggestions|textMultiLine"
+          android:inputType="text|textCapSentences|textMultiLine"
           android:maxLength="60"
           android:lines="2"
           android:singleLine="false"
