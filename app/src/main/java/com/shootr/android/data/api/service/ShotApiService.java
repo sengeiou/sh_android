@@ -28,4 +28,11 @@ public interface ShotApiService {
     List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit,
       @Query("types") String[] types) throws ApiException, IOException;
+
+    @GET("/shots/user/{idUser}/?includeLinks=false")
+    List<ShotApiEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
+
+    @GET("/shots/user/{idUser}/?includeLinks=false")
+    List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
+      @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
 }

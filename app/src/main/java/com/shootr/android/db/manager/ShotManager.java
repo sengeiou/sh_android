@@ -43,7 +43,7 @@ public class ShotManager extends  AbstractManager{
     public List<ShotEntity> getShotsFromUser(String idUser, Integer latestShotsNumber) {
         List<ShotEntity> latestShots = new ArrayList<>();
         String whereSelection = ShotTable.ID_USER + " = ?";
-        String[] whereArguments = new String[]{String.valueOf(idUser)};
+        String[] whereArguments = new String[]{idUser};
 
         Cursor queryResult =
           getReadableDatabase().query(ShotTable.TABLE,
@@ -54,6 +54,32 @@ public class ShotManager extends  AbstractManager{
             null,
             ShotTable.BIRTH + " DESC",
             String.valueOf(latestShotsNumber));
+
+        ShotEntity shotEntity;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                shotEntity = shotEntityMapper.fromCursor(queryResult);
+                latestShots.add(shotEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return latestShots;
+    }
+
+    public List<ShotEntity> getAllShotsFromUser(String idUser) {
+        List<ShotEntity> latestShots = new ArrayList<>();
+        String whereSelection = ShotTable.ID_USER + " = ?";
+        String[] whereArguments = new String[]{idUser};
+
+        Cursor queryResult =
+          getReadableDatabase().query(ShotTable.TABLE,
+            ShotTable.PROJECTION,
+            whereSelection,
+            whereArguments,
+            null,
+            null,
+            ShotTable.BIRTH + " DESC", null);
 
         ShotEntity shotEntity;
         if (queryResult.getCount() > 0) {

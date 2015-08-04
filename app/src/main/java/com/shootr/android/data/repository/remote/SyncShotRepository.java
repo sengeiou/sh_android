@@ -3,9 +3,9 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.ShotEntityMapper;
 import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
-import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -67,5 +67,13 @@ public class SyncShotRepository implements ShotRepository {
     @Override
     public ShotDetail getShotDetail(String idShot) {
         return shotEntityMapper.transform(remoteShotDataSource.getShotDetail(idShot));
+    }
+
+    @Override public List<Shot> getAllShotsFromUser(String userId) {
+        return shotEntityMapper.transform(remoteShotDataSource.getAllShotsFromUser(userId));
+    }
+
+    @Override public List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
+        return shotEntityMapper.transform(remoteShotDataSource.getAllShotsFromUserAndDate(userId, currentOldestDate));
     }
 }

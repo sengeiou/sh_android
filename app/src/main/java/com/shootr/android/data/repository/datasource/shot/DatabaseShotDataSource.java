@@ -75,4 +75,12 @@ public class DatabaseShotDataSource implements ShotDataSource {
             return null;
         }
     }
+
+    @Override public List<ShotEntity> getAllShotsFromUser(String userId) {
+        return shotManager.getAllShotsFromUser(userId);
+    }
+
+    @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
+        throw new IllegalArgumentException("getAllShotsFromUserWithMaxDate should have no local implementation");
+    }
 }

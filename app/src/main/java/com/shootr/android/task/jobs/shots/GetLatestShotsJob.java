@@ -23,7 +23,7 @@ import javax.inject.Inject;
 public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
 
     private static final int PRIORITY = 5;
-    public static final Integer LATEST_SHOTS_NUMBER = 10;
+    public static final Integer LATEST_SHOTS_NUMBER = 3;
 
     private final ShootrService service;
     private final UserManager userManager;

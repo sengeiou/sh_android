@@ -24,4 +24,8 @@ public interface ShotDataSource {
     List<ShotEntity> getShotsFromUser(String idUser, Integer limit);
 
     ShotDetailEntity getShotDetail(String idShot);
+
+    List<ShotEntity> getAllShotsFromUser(String userId);
+
+    List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
 }
