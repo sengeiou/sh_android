@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
+    private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
 
     private ListingView listingView;
@@ -19,8 +21,9 @@ public class ListingListPresenter implements Presenter{
     private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      StreamResultModelMapper streamResultModelMapper) {
+      AddToFavoritesInteractor addToFavoritesInteractor, StreamResultModelMapper streamResultModelMapper) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
+        this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
     }
 
@@ -74,5 +77,13 @@ public class ListingListPresenter implements Presenter{
 
     private void selectStream(final String idStream, String streamTitle) {
         listingView.navigateToStreamTimeline(idStream, streamTitle);
+    }
+
+    public void addToFavorite(StreamResultModel streamResultModel) {
+        addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                //TODO interacción con la estrellita
+            }
+        });
     }
 }

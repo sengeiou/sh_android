@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 public class StreamsListPresenter implements Presenter {
 
     private final StreamsListInteractor streamsListInteractor;
+    private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -26,9 +28,10 @@ public class StreamsListPresenter implements Presenter {
     private boolean hasBeenPaused;
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor, StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      AddToFavoritesInteractor addToFavoritesInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
+        this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -125,6 +128,15 @@ public class StreamsListPresenter implements Presenter {
 
     public void onCommunicationError() {
         streamsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
+    }
+
+    public void addToFavorites(StreamResultModel streamResultModel) {
+        addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                /* no-op */
+              }
+          });
     }
 
     //region Lifecycle

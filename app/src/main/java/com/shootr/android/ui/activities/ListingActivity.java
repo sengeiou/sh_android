@@ -7,9 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
@@ -88,8 +87,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public boolean onContextItemSelected(MenuItem item) {
         if(item.getItemId() == ADD_TO_FAVORITES_MENU_ID) {
-            StreamResultModel item1 = adapter.getItem(item.getOrder());
-            Toast.makeText(this, item1.getStreamModel().getTitle(), Toast.LENGTH_SHORT).show();
+            StreamResultModel streamResultModel = adapter.getItem(item.getOrder());
+            presenter.addToFavorite(streamResultModel);
         }
         return true;
     }

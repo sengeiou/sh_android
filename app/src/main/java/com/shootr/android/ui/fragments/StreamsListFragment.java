@@ -170,8 +170,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override public boolean onContextItemSelected(MenuItem item) {
         if(item.getItemId() == ADD_TO_FAVORITES_MENU_ID) {
-            StreamResultModel item1 = adapter.getItem(item.getOrder());
-            Toast.makeText(this.getActivity(), item1.getStreamModel().getTitle(), Toast.LENGTH_SHORT).show();
+            StreamResultModel streamResultModel = adapter.getItem(item.getOrder());
+            presenter.addToFavorites(streamResultModel);
         }
         return true;
     }
