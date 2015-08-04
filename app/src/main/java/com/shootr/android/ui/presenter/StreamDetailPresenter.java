@@ -211,9 +211,11 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private void renderStreamInfo(Stream stream) {
         streamModel = streamModelMapper.transform(stream);
         streamDetailView.setStreamTitle(streamModel.getTitle());
-        streamDetailView.setStreamDescription(streamModel.getDescription());
         streamDetailView.setStreamPicture(streamModel.getPicture());
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
+        if (!streamModel.getDescription().isEmpty()) {
+            streamDetailView.setStreamDescription(streamModel.getDescription());
+        }
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
             streamDetailView.showEditPicture(streamModel.getPicture());
