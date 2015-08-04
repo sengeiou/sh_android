@@ -66,6 +66,8 @@ public class StreamValidator {
         }
     }
 
+    //endregion
+
     //region Short Title
     private void validateShortTitleTooLong(Stream stream) {
         if (stream.getTag() != null && alphanumericLength(stream.getTag()) > TAG_MAXIMUM_LENGTH) {
@@ -82,7 +84,6 @@ public class StreamValidator {
         }
     }
 
-    //endregion
     //endregion
 
     private void validateDescriptionTooLong(Stream stream) {
