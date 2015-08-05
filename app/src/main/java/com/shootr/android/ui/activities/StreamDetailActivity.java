@@ -510,6 +510,10 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         descriptionText.setText(description);
     }
 
+    @Override public void hideStreamDescription() {
+        descriptionText.setVisibility(View.GONE);
+    }
+
     @Override public void showEmpty() {
         contentEmpty.setVisibility(View.VISIBLE);
         contentDetail.setVisibility(View.INVISIBLE);

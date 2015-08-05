@@ -53,4 +53,6 @@ public interface StreamDetailView extends LoadDataView {
     void showMediaCount();
 
     void setStreamDescription(String description);
+
+    void hideStreamDescription();
 }

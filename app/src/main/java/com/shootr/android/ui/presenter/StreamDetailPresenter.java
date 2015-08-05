@@ -215,6 +215,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
         if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
             streamDetailView.setStreamDescription(streamModel.getDescription());
+        } else {
+            streamDetailView.hideStreamDescription();
         }
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
