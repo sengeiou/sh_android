@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
+import com.shootr.android.ui.adapters.listeners.OnRemoveFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -18,10 +19,13 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
 
     private OnStreamClickListener onStreamClickListener;
     private OnFavoriteClickListener onFavoriteClickListener;
+    private OnRemoveFavoriteClickListener onRemoveFavoriteClickListener;
 
-    public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener) {
+    public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener, OnRemoveFavoriteClickListener onRemoveFavoriteClickListener) {
         this.picasso = picasso;
         this.onStreamClickListener = onStreamClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
+        this.onRemoveFavoriteClickListener = onRemoveFavoriteClickListener;
     }
 
     public void setStreams(List<StreamResultModel> streams) {
@@ -37,7 +41,8 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
+        return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener,
+          onRemoveFavoriteClickListener);
     }
 
     @Override
@@ -51,7 +56,8 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
+        return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener,
+          onRemoveFavoriteClickListener);
     }
 
     @Override
@@ -60,7 +66,7 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
 
         ListingStreamResultViewHolder listingStreamResultViewHolder =
           new ListingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso,
-            onFavoriteClickListener);
+            onFavoriteClickListener, onRemoveFavoriteClickListener);
 
         listingStreamResultViewHolder.render(stream, position);
     }
@@ -74,10 +80,6 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getItem(position);
         ((StreamResultViewHolder) viewHolder).render(stream, position);
-    }
-
-    public void setOnFavoriteClickListener(OnFavoriteClickListener onFavoriteClickListener) {
-        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
 }

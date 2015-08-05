@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
+import com.shootr.android.ui.adapters.listeners.OnRemoveFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
@@ -12,30 +13,37 @@ import com.shootr.android.util.PicassoWrapper;
 public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
     private final OnFavoriteClickListener onFavoriteClickListener;
+    private final OnRemoveFavoriteClickListener onRemoveFavoriteClickListener;
 
     @Bind(R.id.favorite_stream_added) ImageView favoriteAdded;
     @Bind(R.id.favorite_stream_not_added) ImageView favoriteNotAdded;
 
     public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      PicassoWrapper picasso, OnFavoriteClickListener onFavoriteClickListener) {
+      PicassoWrapper picasso, OnFavoriteClickListener onFavoriteClickListener,
+      OnRemoveFavoriteClickListener onRemoveFavoriteClickListener) {
         super(itemView, onStreamClickListener, picasso);
         this.onFavoriteClickListener = onFavoriteClickListener;
+        this.onRemoveFavoriteClickListener = onRemoveFavoriteClickListener;
     }
 
     public void render(StreamResultModel streamResultModel, Integer position) {
         super.render(streamResultModel, position);
-        setUnwatchClickListener();
+        setFavoriteClickListener(streamResultModel);
     }
 
-    private void setUnwatchClickListener() {
+    private void setFavoriteClickListener(final StreamResultModel streamResult) {
         favoriteAdded.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                onFavoriteClickListener.onFavoriteClik();
+                onRemoveFavoriteClickListener.onRemoveFavoriteClick(streamResult);
+                favoriteAdded.setVisibility(View.GONE);
+                favoriteNotAdded.setVisibility(View.VISIBLE);
             }
         });
         favoriteNotAdded.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                onFavoriteClickListener.onFavoriteClik();
+                onFavoriteClickListener.onFavoriteClick(streamResult);
+                favoriteAdded.setVisibility(View.VISIBLE);
+                favoriteNotAdded.setVisibility(View.GONE);
             }
         });
     }

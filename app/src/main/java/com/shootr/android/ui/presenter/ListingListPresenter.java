@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -19,6 +20,7 @@ public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
+    private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -27,10 +29,11 @@ public class ListingListPresenter implements Presenter{
     private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor, StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
+        this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -114,4 +117,11 @@ public class ListingListPresenter implements Presenter{
         listingView.showError(errorMessage);
     }
 
+    public void removeFromFavorites(StreamResultModel stream) {
+        removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                // TODO Do something
+            }
+        });
+    }
 }
