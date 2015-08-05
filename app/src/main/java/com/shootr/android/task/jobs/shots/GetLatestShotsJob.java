@@ -6,7 +6,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -19,7 +18,6 @@ import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -67,13 +65,11 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
 
     public List<ShotModel> getLatestsShotsFromService() throws IOException {
         List<Shot> shotsFromUser = remoteShotRepository.getShotsFromUser(idUser, LATEST_SHOTS_NUMBER);
-        List<String> followingIds = new ArrayList<>();
-        for (User user : userRepository.getPeople()) {
-            followingIds.add(user.getIdUser());
-        }
-        if(followingIds.contains(idUser)) {
+
+        if (userRepository.isFollowing(idUser)) {
             localShotRepository.putShots(shotsFromUser);
         }
+
         return shotModelMapper.transform(shotsFromUser);
     }
 
