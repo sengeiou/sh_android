@@ -55,8 +55,8 @@
       style="@style/WatchersIndicator" />
 
     <ImageView android:id="@+id/favorite_stream_not_added"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:background="?selectableItemBackground"
       android:src="@drawable/ic_favorite_not_added_24_gray50"
       android:layout_alignParentEnd="true"
@@ -65,8 +65,8 @@
       android:scaleType="centerCrop"/>
 
     <ImageView android:id="@+id/favorite_stream_added"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:background="?selectableItemBackground"
       android:src="@drawable/ic_favorite_added_24_gray50"
       android:layout_alignParentEnd="true"
