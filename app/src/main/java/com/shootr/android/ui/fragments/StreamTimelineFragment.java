@@ -71,7 +71,7 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
-    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy", "Report"};
+    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy text", "Report"};
     private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
     public static final String CLIPBOARD_LABEL = "clipboard_label";
 

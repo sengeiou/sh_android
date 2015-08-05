@@ -36,7 +36,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, SessionUserView {
 
-    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy", "Report"};
+    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy text", "Report"};
     private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
     public static final String CLIPBOARD_LABEL = "clipboard_label";
 
