@@ -1,5 +1,8 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -39,12 +42,14 @@ import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
+import com.shootr.android.ui.presenter.SessionUserPresenter;
 import com.shootr.android.ui.presenter.StreamTimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
+import com.shootr.android.ui.views.SessionUserView;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
@@ -61,20 +66,21 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, SessionUserView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
     private static final String[] CONTEXT_MENU_OPTIONS = {"Copy", "Report"};
     private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
-    private static final int REQUEST_EVENT_DETAIL = 1;
+    public static final String CLIPBOARD_LABEL = "clipboard_label";
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
+    @Inject SessionUserPresenter sessionUserPresenter;
 
     @Inject PicassoWrapper picasso;
 
@@ -244,7 +250,11 @@ public class StreamTimelineFragment extends BaseFragment
             ShotModel shotModel = adapter.getItem(position);
             int itemId = item.getItemId();
             if(itemId == CONTEXT_MENU_OPTIONS_INDEX[0]) {
-                Toast.makeText(this.getActivity(), shotModel.getComment(), Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                clipboard.setPrimaryClip(clip);
+            } else if (itemId == CONTEXT_MENU_OPTIONS_INDEX[1]) {
+                sessionUserPresenter.initialize(this, shotModel);
             }
         }
         return true;
@@ -573,6 +583,22 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void showAddedToFavorites() {
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://report.shootr.com/#/?token=" + sessionToken + "&idShot=" + shotModel.getIdShot()));
+        startActivity(browserIntent);
+    }
+
+    @Override public void showConfirmationMessage() {
+        AlertDialog.Builder builder =
+          new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
+          .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
+          .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
+
+        builder.create().show();
     }
     //endregion
 }
