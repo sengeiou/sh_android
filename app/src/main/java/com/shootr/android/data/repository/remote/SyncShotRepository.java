@@ -76,4 +76,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public List<Shot> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
         return shotEntityMapper.transform(remoteShotDataSource.getAllShotsFromUserAndDate(userId, currentOldestDate));
     }
+
+    @Override public void putShots(List<Shot> shotsFromUser) {
+        throw new IllegalArgumentException("putShots not implemented in remote");
+    }
 }
