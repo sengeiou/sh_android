@@ -57,8 +57,7 @@ public class CreateStreamInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         Stream stream = streamFromParameters();
-        Stream streamToValidate = removeDescriptionLineBreaks(stream);
-        if (validateStream(streamToValidate)) {
+        if (validateStream(stream)) {
             try {
                 Stream savedStream = sendStreamToServer(stream, notifyCreation);
                 notifyLoaded(savedStream);
@@ -78,7 +77,7 @@ public class CreateStreamInteractor implements Interactor {
         }
         stream.setTitle(title);
         stream.setTag(shortTitle);
-        stream.setDescription(description);
+        stream.setDescription(removeDescriptionLineBreaks(description));
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
         stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
@@ -104,10 +103,8 @@ public class CreateStreamInteractor implements Interactor {
         }
     }
 
-    private Stream removeDescriptionLineBreaks(Stream stream) {
-        String description = stream.getDescription().replace("\n", "").replace("\r", "");
-        stream.setDescription(description);
-        return stream;
+    private String removeDescriptionLineBreaks(String description) {
+        return description.replace("\n", "").replace("\r", "");
     }
 
     private void handleServerError(ShootrException e) {
