@@ -6,6 +6,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String idUser;
     private String userName;
     private String tag;
+    private String description;
     private String title;
     private String photo;
     private Integer notifyCreation;
@@ -25,6 +26,14 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

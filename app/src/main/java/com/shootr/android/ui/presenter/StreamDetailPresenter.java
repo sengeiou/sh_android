@@ -82,10 +82,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         streamDetailView.navigateToEditStream(idStream);
     }
 
-    public void resultFromEditStreamInfo(String idStreamEdited) {
-        if (idStreamEdited.equals(streamModel.getIdStream())) {
-            loadStreamInfo();
-        }
+    public void resultFromEditStreamInfo() {
+        loadStreamInfo();
     }
 
     public void editStreamPhoto() {
@@ -215,6 +213,11 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         streamDetailView.setStreamTitle(streamModel.getTitle());
         streamDetailView.setStreamPicture(streamModel.getPicture());
         streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
+        if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
+            streamDetailView.setStreamDescription(streamModel.getDescription());
+        } else {
+            streamDetailView.hideStreamDescription();
+        }
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
             streamDetailView.showEditPicture(streamModel.getPicture());

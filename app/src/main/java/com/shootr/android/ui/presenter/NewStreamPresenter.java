@@ -74,6 +74,8 @@ public class NewStreamPresenter implements Presenter {
         preloadedStreamId = streamModel.getIdStream();
         preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
+        newStreamView.showShortTitle(streamModel.getTag());
+        newStreamView.showDescription(streamModel.getDescription());
         newStreamView.showDeleteStreamButton();
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
@@ -81,8 +83,6 @@ public class NewStreamPresenter implements Presenter {
             currentTitle = preloadedTitle;
             currentShortTitle = preloadedShortTitle;
             newStreamView.setStreamTitle(preloadedTitle);
-            newStreamView.showShortTitle(preloadedShortTitle);
-
             bindShortTitleToTitleIfMatches();
         }
     }
@@ -152,9 +152,12 @@ public class NewStreamPresenter implements Presenter {
     private void sendStream(String preloadedStreamId) {
         String title = filterTitle(newStreamView.getStreamTitle());
         String shortTitle = filterShortTitle(newStreamView.getStreamShortTitle());
+        String description = filterDescription(newStreamView.getStreamDescription());
+
         createStreamInteractor.sendStream(preloadedStreamId,
           title,
           shortTitle,
+          description,
           notifyCreation,
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
@@ -226,6 +229,10 @@ public class NewStreamPresenter implements Presenter {
         }else {
             return shortTitle.substring(0,20).trim();
         }
+    }
+
+    private String filterDescription(String streamDescription) {
+        return streamDescription.trim();
     }
 
     private void updateDoneButtonStatus() {

@@ -24,6 +24,7 @@ public class StreamEntityMapper {
         stream.setTag(streamEntity.getTag());
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setLocale(streamEntity.getLocale());
+        stream.setDescription(streamEntity.getDescription());
         return stream;
     }
 
@@ -49,6 +50,7 @@ public class StreamEntityMapper {
         entityTemplate.setTag(stream.getTag());
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setLocale(stream.getLocale());
+        entityTemplate.setDescription(stream.getDescription());
 
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }

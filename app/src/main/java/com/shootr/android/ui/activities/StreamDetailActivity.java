@@ -70,6 +70,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Bind(R.id.stream_title_container) View titleContainer;
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
     @Bind(R.id.stream_title) TextView titleText;
+    @Bind(R.id.stream_description) TextView descriptionText;
     @Bind(R.id.stream_author) TextView authorText;
 
     @Bind(R.id.stream_content_container) View contentContainer;
@@ -314,8 +315,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
-            String idStreamEdited = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
-            streamDetailPresenter.resultFromEditStreamInfo(idStreamEdited);
+            streamDetailPresenter.resultFromEditStreamInfo();
         }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
@@ -503,6 +503,15 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @Override public void showMediaCount() {
         streamMediaNumber.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void setStreamDescription(String description) {
+        descriptionText.setVisibility(View.VISIBLE);
+        descriptionText.setText(description);
+    }
+
+    @Override public void hideStreamDescription() {
+        descriptionText.setVisibility(View.GONE);
     }
 
     @Override public void showEmpty() {

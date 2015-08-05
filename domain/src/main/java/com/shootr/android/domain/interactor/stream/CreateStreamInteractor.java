@@ -8,12 +8,12 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
-import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.domain.validation.FieldValidationError;
+import com.shootr.android.domain.validation.StreamValidator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,6 +28,7 @@ public class CreateStreamInteractor implements Interactor {
     private String idStream;
     private String title;
     private String shortTitle;
+    private String description;
     private boolean notifyCreation;
     private Callback callback;
     private ErrorCallback errorCallback;
@@ -42,11 +43,12 @@ public class CreateStreamInteractor implements Interactor {
         this.localeProvider = localeProvider;
     }
 
-    public void sendStream(String idStream, String title, String shortTitle, boolean notifyCreation, Callback callback,
-      ErrorCallback errorCallback) {
+    public void sendStream(String idStream, String title, String shortTitle, String description, boolean notifyCreation,
+      Callback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.title = title;
         this.shortTitle = shortTitle;
+        this.description = description;
         this.notifyCreation = notifyCreation;
         this.callback = callback;
         this.errorCallback = errorCallback;
@@ -55,7 +57,6 @@ public class CreateStreamInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         Stream stream = streamFromParameters();
-
         if (validateStream(stream)) {
             try {
                 Stream savedStream = sendStreamToServer(stream, notifyCreation);
@@ -76,6 +77,7 @@ public class CreateStreamInteractor implements Interactor {
         }
         stream.setTitle(title);
         stream.setTag(shortTitle);
+        stream.setDescription(removeDescriptionLineBreaks(description));
         String currentUserId = sessionRepository.getCurrentUserId();
         stream.setAuthorId(currentUserId);
         stream.setAuthorUsername(sessionRepository.getCurrentUser().getUsername());
@@ -99,6 +101,10 @@ public class CreateStreamInteractor implements Interactor {
             notifyError(new DomainValidationException(validationErrors));
             return false;
         }
+    }
+
+    private String removeDescriptionLineBreaks(String description) {
+        return description.replace("\n", "").replace("\r", "");
     }
 
     private void handleServerError(ShootrException e) {

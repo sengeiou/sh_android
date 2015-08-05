@@ -40,6 +40,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     @Bind(R.id.new_stream_title_error) TextView titleErrorView;
     @Bind(R.id.new_stream_short_title) EditText shortTitleView;
     @Bind(R.id.new_stream_short_title_warning) TextView shortTitleErrorView;
+    @Bind(R.id.new_stream_description) EditText descriptionView;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
@@ -223,6 +224,14 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
 
     @Override public String getStreamShortTitle() {
         return shortTitleView.getText().toString();
+    }
+
+    @Override public String getStreamDescription() {
+        return descriptionView.getText().toString();
+    }
+
+    @Override public void showDescription(String description) {
+        descriptionView.setText(description);
     }
 
     @Override public void showLoading() {

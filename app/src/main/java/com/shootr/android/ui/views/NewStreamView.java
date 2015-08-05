@@ -28,4 +28,7 @@ public interface NewStreamView extends DataTransferView{
 
     String getStreamShortTitle();
 
+    String getStreamDescription();
+
+    void showDescription(String description);
 }

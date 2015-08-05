@@ -13,9 +13,18 @@ public class Stream {
     private String title;
     private String picture;
     private String tag;
+    private String description;
     private String locale;
 
     public Stream() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getLocale() {
@@ -74,8 +83,7 @@ public class Stream {
         this.authorUsername = authorUsername;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Stream)) return false;
 
@@ -89,17 +97,18 @@ public class Stream {
         if (title != null ? !title.equals(stream.title) : stream.title != null) return false;
         if (picture != null ? !picture.equals(stream.picture) : stream.picture != null) return false;
         if (tag != null ? !tag.equals(stream.tag) : stream.tag != null) return false;
+        if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
         return !(locale != null ? !locale.equals(stream.locale) : stream.locale != null);
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (authorId != null ? authorId.hashCode() : 0);
         result = 31 * result + (authorUsername != null ? authorUsername.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (picture != null ? picture.hashCode() : 0);
         result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (locale != null ? locale.hashCode() : 0);
         return result;
     }

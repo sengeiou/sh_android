@@ -24,6 +24,7 @@ public class StreamModelMapper {
         streamModel.setAmIAuthor(stream.getAuthorId().equals(sessionRepository.getCurrentUserId()));
         streamModel.setAuthorId(stream.getAuthorId());
         streamModel.setAuthorUsername(stream.getAuthorUsername());
+        streamModel.setDescription(stream.getDescription());
         return streamModel;
     }
 
