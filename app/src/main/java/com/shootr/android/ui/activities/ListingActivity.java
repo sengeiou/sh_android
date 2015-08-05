@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
@@ -113,6 +114,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showContent() {

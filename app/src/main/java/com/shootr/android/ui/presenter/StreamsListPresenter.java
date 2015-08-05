@@ -9,6 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.StreamsListView;
@@ -120,6 +121,8 @@ public class StreamsListPresenter implements Presenter {
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
         } else if (error instanceof ServerCommunicationException) {
             errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        } else if (error instanceof StreamIsAlreadyInFavoritesException) {
+            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
         } else {
             errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
@@ -135,6 +138,10 @@ public class StreamsListPresenter implements Presenter {
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                 /* no-op */
+              }
+          }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showViewError(error);
               }
           });
     }

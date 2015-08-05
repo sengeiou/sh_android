@@ -5,6 +5,7 @@ import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.ui.views.FavoriteStatusView;
+import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,6 +26,7 @@ public class FavoriteStatusPresenterTest {
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock FavoriteStatusView favoriteStatusView;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private FavoriteStatusPresenter presenter;
 
@@ -33,7 +35,7 @@ public class FavoriteStatusPresenterTest {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoriteStatusPresenter(getFavoriteStatusInteractor,
           addToFavoritesInteractor,
-          removeFromFavoritesInteractor);
+          removeFromFavoritesInteractor, errorMessageFactory);
         presenter.setView(favoriteStatusView);
     }
 
@@ -108,7 +110,8 @@ public class FavoriteStatusPresenterTest {
                 ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
                 return null;
             }
-        }).when(addToFavoritesInteractor).addToFavorites(anyString(), any(Interactor.CompletedCallback.class));
+        }).when(addToFavoritesInteractor).addToFavorites(anyString(), any(Interactor.CompletedCallback.class), any(
+          Interactor.ErrorCallback.class));
     }
 
     private void setupFavoriteStatusCallbacks(final boolean isFavorite) {

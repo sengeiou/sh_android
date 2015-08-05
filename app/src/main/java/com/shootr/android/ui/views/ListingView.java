@@ -14,4 +14,6 @@ public interface ListingView {
     void hideLoading();
 
     void showLoading();
+
+    void showError(String errorMessage);
 }

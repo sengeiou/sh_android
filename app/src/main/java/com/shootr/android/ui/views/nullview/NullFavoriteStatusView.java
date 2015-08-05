@@ -28,4 +28,8 @@ public class NullFavoriteStatusView implements FavoriteStatusView {
     public void showAddedToFavorites() {
         /* no-op */
     }
+
+    @Override public void showError(String errorMessage) {
+        /* no-op */
+    }
 }

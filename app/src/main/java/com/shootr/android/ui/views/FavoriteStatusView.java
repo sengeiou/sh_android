@@ -11,4 +11,6 @@ public interface FavoriteStatusView {
     void hideRemoveFromFavoritesButton();
 
     void showAddedToFavorites();
+
+    void showError(String errorMessage);
 }

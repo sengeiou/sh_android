@@ -107,4 +107,8 @@ public class ErrorMessageFactory {
     public String getLoginCredentialsError(){
         return context.getString(R.string.error_login_credentials_invalid);
     }
+
+    public String getStreamIsAlreadyInFavoritesError(){
+        return context.getString(R.string.error_stream_already_favorites);
+    }
 }

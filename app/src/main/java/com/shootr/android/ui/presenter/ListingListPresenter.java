@@ -1,30 +1,38 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
+import com.shootr.android.util.ErrorMessageFactory;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private ListingView listingView;
     private String profileIdUser;
     private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor, StreamResultModelMapper streamResultModelMapper) {
+      AddToFavoritesInteractor addToFavoritesInteractor, StreamResultModelMapper streamResultModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(ListingView listingView) {
@@ -80,10 +88,30 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void addToFavorite(StreamResultModel streamResultModel) {
-        addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                //TODO interacción con la estrellita
-            }
-        });
+        addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  //TODO interacción con la estrellita
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showErrorInView(error);
+              }
+          });
     }
+
+    private void showErrorInView(ShootrException error) {
+        String errorMessage;
+        if(error instanceof StreamIsAlreadyInFavoritesException){
+            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
+        }else if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        }else{
+            Timber.e(error, "Unhandled error logging in");
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        listingView.showError(errorMessage);
+    }
+
 }
