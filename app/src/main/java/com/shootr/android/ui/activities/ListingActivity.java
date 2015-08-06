@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
-    public static final int ADD_TO_FAVORITES_MENU_ID = 0;
+    public static final String ADD_TO_FAVORITES_MENU_TITLE = "Add to Favorites";
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
@@ -49,20 +49,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
-            @Override public void onStreamClick(StreamResultModel stream) {
-                presenter.selectStream(stream);
-            }
-        }, new OnFavoriteClickListener() {
-            @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
-                presenter.addToFavorite(streamResultModel);
-            }
-        }, new OnRemoveFavoriteClickListener() {
-            @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-                presenter.removeFromFavorites(stream);
-            }
-        });
-        listingList.setAdapter(adapter);
     }
 
     @Override protected void initializePresenter() {
@@ -97,9 +83,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public boolean onContextItemSelected(MenuItem item) {
-        if(item.getItemId() == ADD_TO_FAVORITES_MENU_ID) {
+        if(item.getTitle().equals(ADD_TO_FAVORITES_MENU_TITLE)) {
             StreamResultModel streamResultModel = adapter.getItem(item.getOrder());
             presenter.addToFavorite(streamResultModel);
+            initializePresenter();
         }
         return true;
     }
@@ -122,6 +109,29 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams, List<StreamResultModel> listingStreams) {
+        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
+            @Override public void onStreamClick(StreamResultModel stream) {
+                presenter.selectStream(stream);
+            }
+        }, new OnFavoriteClickListener() {
+            @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
+                presenter.addToFavorite(streamResultModel);
+                onResume();
+            }
+        }, new OnRemoveFavoriteClickListener() {
+            @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
+                presenter.removeFromFavorites(stream);
+                onResume();
+            }
+        }, favoriteStreams);
+
+        adapter.setStreams(listingStreams);
+        listingList.setAdapter(adapter);
+
+        adapter.setFavoriteStreams(favoriteStreams);
     }
 
     @Override public void showContent() {

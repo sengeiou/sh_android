@@ -11,6 +11,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
@@ -20,12 +21,16 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
     private OnStreamClickListener onStreamClickListener;
     private OnFavoriteClickListener onFavoriteClickListener;
     private OnRemoveFavoriteClickListener onRemoveFavoriteClickListener;
+    private List<StreamResultModel> favoriteStreams;
 
-    public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener, OnRemoveFavoriteClickListener onRemoveFavoriteClickListener) {
+    public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener,
+      OnFavoriteClickListener onFavoriteClickListener, OnRemoveFavoriteClickListener onRemoveFavoriteClickListener,
+      List<StreamResultModel> transform) {
         this.picasso = picasso;
         this.onStreamClickListener = onStreamClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
         this.onRemoveFavoriteClickListener = onRemoveFavoriteClickListener;
+        this.favoriteStreams = transform;
     }
 
     public void setStreams(List<StreamResultModel> streams) {
@@ -47,9 +52,7 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
 
     @Override
     protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_card_separator,
-          parent,
-          false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_card_separator, parent, false);
         return new SubheaderViewHolder(view);
     }
 
@@ -78,8 +81,24 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel stream = getItem(position);
-        ((StreamResultViewHolder) viewHolder).render(stream, position);
+        StreamResultModel stream = getItems().get(position);
+
+        List<String> favoriteIds = new ArrayList<>();
+
+        for (StreamResultModel favoriteStream : favoriteStreams) {
+            favoriteIds.add(favoriteStream.getStreamModel().getIdStream());
+        }
+
+        if(favoriteIds.contains(stream.getStreamModel().getIdStream())) {
+            ((ListingStreamResultViewHolder) viewHolder).render(stream, position, true);
+        } else {
+            ((ListingStreamResultViewHolder) viewHolder).render(stream, position, false);
+        }
+
+        ((ListingStreamResultViewHolder) viewHolder).render(stream, position);
     }
 
+    public void setFavoriteStreams(List<StreamResultModel> transform) {
+        //this.favoriteStreams = transform;
+    }
 }

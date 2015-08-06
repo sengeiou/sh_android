@@ -16,4 +16,6 @@ public interface ListingView {
     void showLoading();
 
     void showError(String errorMessage);
+
+    void setFavoriteStreams(List<StreamResultModel> transform, List<StreamResultModel> listing);
 }

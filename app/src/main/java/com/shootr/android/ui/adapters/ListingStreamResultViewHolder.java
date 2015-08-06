@@ -26,9 +26,16 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         this.onRemoveFavoriteClickListener = onRemoveFavoriteClickListener;
     }
 
-    public void render(StreamResultModel streamResultModel, Integer position) {
+    public void render(StreamResultModel streamResultModel, Integer position, Boolean favorite) {
         super.render(streamResultModel, position);
         setFavoriteClickListener(streamResultModel);
+        if(favorite) {
+            favoriteAdded.setVisibility(View.VISIBLE);
+            favoriteNotAdded.setVisibility(View.GONE);
+        } else {
+            favoriteNotAdded.setVisibility(View.VISIBLE);
+            favoriteAdded.setVisibility(View.GONE);
+        }
     }
 
     private void setFavoriteClickListener(final StreamResultModel streamResult) {

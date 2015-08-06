@@ -5,6 +5,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
@@ -21,19 +22,24 @@ public class ListingListPresenter implements Presenter{
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
     private ListingView listingView;
     private String profileIdUser;
     private boolean hasBeenPaused = false;
+    private List<StreamSearchResult> streamSearchResults;
+    private List<StreamSearchResult> favoriteStreamSearchResults;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, StreamResultModelMapper streamResultModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+        this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -45,6 +51,7 @@ public class ListingListPresenter implements Presenter{
     public void initialize(ListingView listingView, String profileIdUser) {
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
+        this.getFavoriteStreams();
         this.loadListingList();
     }
 
@@ -53,28 +60,35 @@ public class ListingListPresenter implements Presenter{
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override public void onLoaded(List<StreamSearchResult> streams) {
                 listingView.hideLoading();
-                onListingLoaded(streams);
+                streamSearchResults = streams;
+                renderStreams();
             }
         }, profileIdUser);
     }
 
-    private void onListingLoaded(List<StreamSearchResult> streams) {
-        if (!streams.isEmpty()) {
-            List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
-            this.renderViewStreamList(streamModels);
-        }else{
-            listingView.showLoading();
-        }
+    private void resumeListingList() {
+        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
+                streamSearchResults = streams;
+                renderStreams();
+            }
+        }, profileIdUser);
     }
 
-    private void renderViewStreamList(List<StreamResultModel> streamModels) {
-        listingView.showContent();
-        listingView.renderStreams(streamModels);
+    private void renderStreams() {
+        if (streamSearchResults != null && favoriteStreamSearchResults != null) {
+            List<StreamResultModel> streamModels = streamResultModelMapper.transform(streamSearchResults);
+            List<StreamResultModel> favoriteStreamModels = streamResultModelMapper.transform(favoriteStreamSearchResults);
+
+            listingView.showContent();
+            listingView.setFavoriteStreams(favoriteStreamModels, streamModels);
+        }
     }
 
     @Override public void resume() {
         if (hasBeenPaused) {
-            loadListingList();
+            resumeListingList();
+            getFavoriteStreams();
         }
     }
 
@@ -94,7 +108,7 @@ public class ListingListPresenter implements Presenter{
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  //TODO interacción con la estrellita
+                  /* no - op*/
               }
           },
           new Interactor.ErrorCallback() {
@@ -118,9 +132,19 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void removeFromFavorites(StreamResultModel stream) {
-        removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                // TODO Do something
+        removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  /* no - op*/
+              }
+          });
+    }
+
+    public void getFavoriteStreams() {
+        getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streamSearchResults) {
+                favoriteStreamSearchResults = streamSearchResults;
+                renderStreams();
             }
         });
     }
