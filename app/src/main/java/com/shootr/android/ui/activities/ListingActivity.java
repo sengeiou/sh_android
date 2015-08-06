@@ -119,12 +119,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         }, new OnFavoriteClickListener() {
             @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
                 presenter.addToFavorite(streamResultModel);
-                onResume();
             }
         }, new OnRemoveFavoriteClickListener() {
             @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
                 presenter.removeFromFavorites(stream);
-                onResume();
             }
         }, favoriteStreams);
 
