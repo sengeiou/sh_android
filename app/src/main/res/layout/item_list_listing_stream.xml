@@ -26,7 +26,8 @@
       android:layout_gravity="center_vertical"
       android:layout_toLeftOf="@+id/stream_watchers"
       android:layout_toRightOf="@+id/stream_picture"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:id="@+id/linearLayout">
 
       <TextView android:id="@+id/stream_title"
         android:layout_width="wrap_content"
@@ -55,24 +56,24 @@
       style="@style/WatchersIndicator" />
 
     <ImageView android:id="@+id/favorite_stream_not_added"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
+      android:layout_width="26dp"
+      android:layout_height="26dp"
       android:background="?selectableItemBackground"
-      android:src="@drawable/ic_favorite_not_added_24_gray50"
-      android:layout_alignParentEnd="true"
+      android:src="@drawable/ic_favorite_not_added_28_gray50"
+      android:scaleType="centerCrop"
+      android:layout_below="@+id/linearLayout"
       android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
-      android:scaleType="centerCrop"/>
+      android:layout_alignParentEnd="true" />
 
     <ImageView android:id="@+id/favorite_stream_added"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
+      android:layout_width="26dp"
+      android:layout_height="26dp"
       android:background="?selectableItemBackground"
-      android:src="@drawable/ic_favorite_added_24_gray50"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
+      android:src="@drawable/ic_favorite_added_28_gray50"
       android:scaleType="centerCrop"
+      android:layout_below="@+id/linearLayout"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:visibility="gone" />
 
   </RelativeLayout>
