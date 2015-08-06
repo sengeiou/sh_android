@@ -26,6 +26,10 @@ public class NullFavoritesListView implements FavoritesListView {
         /* no-op */
     }
 
+    @Override public void hideLoadingSwipe() {
+        /* no-op */
+    }
+
     @Override
     public void showEmpty() {
         /* no-op */

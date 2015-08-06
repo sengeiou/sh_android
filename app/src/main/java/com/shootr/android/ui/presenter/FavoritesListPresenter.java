@@ -58,6 +58,11 @@ public class FavoritesListPresenter implements Presenter{
         favoritesListView.navigateToStreamTimeline(idStream, streamTitle);
     }
 
+    public void refresh() {
+        this.loadFavorites();
+        favoritesListView.hideLoadingSwipe();
+    }
+
     @Override
     public void resume() {
         if (hasBeenPaused) {
