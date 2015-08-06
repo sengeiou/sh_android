@@ -35,13 +35,6 @@ public class RemoveFromFavoritesInteractorTest {
           remoteFavoriteRepository);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void shouldFailIfStreamIsNotFoundInFavorites() throws Exception {
-        when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_NOT_FAVORITE)).thenReturn(null);
-
-        interactor.removeFromFavorites(ID_STREAM_FAVORITE, callback);
-    }
-
     @Test
     public void shouldRemoveFavoriteFromLocalRepository() throws Exception {
         when(localFavoriteRepository.getFavoriteByStream(ID_STREAM_FAVORITE)).thenReturn(favorite());
