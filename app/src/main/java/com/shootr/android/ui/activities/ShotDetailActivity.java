@@ -17,6 +17,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.android.ui.model.ShotModel;
@@ -129,11 +130,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
               }
           }, //
           new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-            @Override
-            public void onShown() {
-                detailList.scrollToPosition(0);
-            }
-        }, //
+              @Override
+              public void onShown() {
+                  detailList.scrollToPosition(0);
+              }
+          }, //
+          new NiceShotListener() {
+              @Override
+              public void markNice(String idShot) {
+                  detailPresenter.markNiceShot(idShot);
+              }
+
+              @Override
+              public void unmarkNice(String idShot) {
+                  detailPresenter.unmarkNiceShot(idShot);
+              }
+          }, //
           timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);

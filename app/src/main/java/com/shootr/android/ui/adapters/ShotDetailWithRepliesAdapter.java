@@ -14,7 +14,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -42,6 +44,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
+    private final NiceShotListener niceShotListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -50,9 +53,13 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, AvatarClickListener avatarClickListener,
-      ImageClickListener imageClickListener, TimelineAdapter.VideoClickListener videoClickListener, UsernameClickListener usernameClickListener,
-      OnParentShownListener onParentShownListener, TimeFormatter timeFormatter, Resources resources,
+    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso,
+      AvatarClickListener avatarClickListener,
+      ImageClickListener imageClickListener,
+      TimelineAdapter.VideoClickListener videoClickListener,
+      UsernameClickListener usernameClickListener,
+      OnParentShownListener onParentShownListener, NiceShotListener niceShotListener, TimeFormatter timeFormatter,
+      Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
@@ -63,6 +70,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
+        this.niceShotListener = niceShotListener;
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -233,7 +241,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) Checkable niceButton;
+        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -315,12 +323,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             } else {
                 this.niceCount.setVisibility(View.GONE);
             }
-        }
 
-        @OnClick(R.id.shot_nice_button)
-        public void onNiceClick() {
-            //TODO real functional implementation
-            niceButton.toggle();
+            niceButton.setChecked(shotModel.isMarkedAsNice());
+            niceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (shotModel.isMarkedAsNice()) {
+                        niceShotListener.unmarkNice(shotModel.getIdShot());
+                    } else {
+                        niceShotListener.markNice(shotModel.getIdShot());
+                    }
+                }
+            });
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
