@@ -89,17 +89,6 @@ public class ListingListPresenter implements Presenter{
         }
     }
 
-    @Override public void resume() {
-        if (hasBeenPaused) {
-            resumeListingList();
-            resumeFavoriteStreams();
-        }
-    }
-
-    @Override public void pause() {
-        hasBeenPaused = true;
-    }
-
     public void selectStream(StreamResultModel stream) {
         selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
     }
@@ -160,5 +149,16 @@ public class ListingListPresenter implements Presenter{
                 renderStreams();
             }
         });
+    }
+
+    @Override public void resume() {
+        if (hasBeenPaused) {
+            resumeListingList();
+            resumeFavoriteStreams();
+        }
+    }
+
+    @Override public void pause() {
+        hasBeenPaused = true;
     }
 }
