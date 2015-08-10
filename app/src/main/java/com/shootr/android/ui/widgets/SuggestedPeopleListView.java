@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
@@ -15,6 +16,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 public class SuggestedPeopleListView extends FrameLayout {
 
     @Bind(R.id.suggested_people_list) LinearLayout suggestedPeopleList;
+    @Bind(R.id.suggested_people_title) TextView suggestedPeopleTitle;
 
     private UserListAdapter userListAdapter;
 
@@ -53,6 +55,9 @@ public class SuggestedPeopleListView extends FrameLayout {
         for (int i = 0; i < userListAdapter.getCount(); i++) {
             View itemView = userListAdapter.getView(i, null, suggestedPeopleList);
             suggestedPeopleList.addView(itemView);
+        }
+        if(userListAdapter.getCount() > 0) {
+            suggestedPeopleTitle.setVisibility(VISIBLE);
         }
     }
 }
