@@ -4,6 +4,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.NiceShotRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.service.shot.ShootrShotService;
@@ -22,7 +23,7 @@ public class MarkNiceShotInteractor implements Interactor {
 
     @Inject public MarkNiceShotInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      ShootrShotService shootrShotService, NiceShotRepository niceShotRepository, ShotRepository localShotRepository) {
+      ShootrShotService shootrShotService, NiceShotRepository niceShotRepository, @Local ShotRepository localShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrShotService = shootrShotService;
