@@ -36,7 +36,7 @@ public class ChangePasswordValidator {
         for(int field = 0; field< passwords.size(); field++ ) {
             validatePasswordNotNull(passwords.get(field), field + 1);
             validatePassWordHasNotInvalidCharacters(passwords.get(field), field + 1);
-            validatePasswordHasLesThanTwentyCharacters(passwords.get(field), field + 1);
+            validatePasswordHasLessThanTwentyCharacters(passwords.get(field), field + 1);
             validatePasswordHasMoreThanSixCharacters(passwords.get(field), field + 1);
         }
 
@@ -68,12 +68,12 @@ public class ChangePasswordValidator {
     }
 
     private void validateNewPasswordEqualsNewPasswordAgain(String newPassword, String newPasswordAgain) {
-        if(newPasswordAgain!=null && !newPassword.equals(newPasswordAgain)){
+        if(newPassword != null && newPasswordAgain!=null && !newPassword.equals(newPasswordAgain)){
             addError(ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN, FIELD_NEW_PASSWORD_AGAIN);
         }
     }
 
-    private void validatePasswordHasLesThanTwentyCharacters(String password, int field) {
+    private void validatePasswordHasLessThanTwentyCharacters(String password, int field) {
         if(password!=null && password.length()> PASSWORD_MAXIMUM_LENGTH){
             addError(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG, field);
         }
