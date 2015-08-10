@@ -14,7 +14,8 @@ import javax.inject.Singleton;
     WatchersRepositoryModule.class,
     FavoriteRepositoryModule.class,
     ActivityRepositoryModule.class,
-    DatabaseUtilsModule.class
+    DatabaseUtilsModule.class,
+    NiceShotRepositoryModule.class,
   },
   complete = false,
   library = true
