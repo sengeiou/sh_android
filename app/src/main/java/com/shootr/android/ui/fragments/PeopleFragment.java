@@ -19,15 +19,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
-import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -52,7 +48,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject SessionRepository sessionRepository;
-    @Inject JobManager jobManager;
     @Inject @Main Bus bus;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
@@ -79,7 +74,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
         userlistListView.setAdapter(getPeopleAdapter());
-        startJob();
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -215,13 +209,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
             suggestedPeopleAdapter.setCallback(this);
         }
         return suggestedPeopleAdapter;
-    }
-
-    public void startJob(){
-        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(sessionRepository.getCurrentUserId(), UserDtoFactory.FOLLOW_TYPE);
-        jobManager.addJobInBackground(job);
-        suggestedPeoplePresenter.setJobManager(jobManager);
     }
 
     @Subscribe

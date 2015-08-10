@@ -53,7 +53,6 @@ import com.shootr.android.task.events.profile.UserInfoResultStream;
 import com.shootr.android.task.events.shots.LatestShotsResultStream;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
@@ -283,7 +282,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
         suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
-        startJob();
     }
 
 
@@ -799,13 +797,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .setNegativeButton("No", null)
           .create()
           .show();
-    }
-
-    public void startJob(){
-        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(idUser, UserDtoFactory.FOLLOW_TYPE);
-        jobManager.addJobInBackground(job);
-        suggestedPeoplePresenter.setJobManager(jobManager);
     }
 
     @Subscribe

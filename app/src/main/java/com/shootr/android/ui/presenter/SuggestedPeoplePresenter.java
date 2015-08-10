@@ -25,16 +25,17 @@ public class SuggestedPeoplePresenter implements Presenter {
     private final GetSuggestedPeopleInteractor getSuggestedPeopleInteractor;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
-    private JobManager jobManager;
+    private final JobManager jobManager;
     private SuggestedPeopleView suggestedPeopleView;
 
     @Inject public SuggestedPeoplePresenter(SessionRepository sessionRepository,
       GetSuggestedPeopleInteractor getSuggestedPeopleInteractor, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.sessionRepository = sessionRepository;
         this.getSuggestedPeopleInteractor = getSuggestedPeopleInteractor;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
+        this.jobManager = jobManager;
     }
 
     protected void setView(SuggestedPeopleView suggestedPeopleView) {
@@ -91,9 +92,5 @@ public class SuggestedPeoplePresenter implements Presenter {
 
     @Override public void pause() {
         /* no-op */
-    }
-
-    public void setJobManager(JobManager jobManager) {
-        this.jobManager = jobManager;
     }
 }
