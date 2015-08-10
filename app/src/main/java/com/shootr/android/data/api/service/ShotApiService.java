@@ -4,7 +4,10 @@ import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import java.io.IOException;
 import java.util.List;
+import retrofit.client.Response;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -28,4 +31,10 @@ public interface ShotApiService {
     List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit,
       @Query("types") String[] types) throws ApiException, IOException;
+
+    @PUT("/shots/{idShot}/nice")
+    Response markNice(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shots/{idShot}/nice")
+    Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
 }
