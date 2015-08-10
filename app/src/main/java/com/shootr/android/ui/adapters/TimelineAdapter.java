@@ -9,14 +9,14 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
 import butterknife.Bind;
-import butterknife.OnClick;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -33,6 +33,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
     private final VideoClickListener videoClickListener;
+    private final NiceShotListener niceShotListener;
     private UsernameClickListener clickListener;
     private AndroidTimeUtils timeUtils;
     private int tagColor;
@@ -42,14 +43,14 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
       PicassoWrapper picasso,
       View.OnClickListener avatarClickListener,
       View.OnClickListener imageClickListener,
-      VideoClickListener videoClickListener,
-      UsernameClickListener clickListener,
+      VideoClickListener videoClickListener, NiceShotListener niceShotListener, UsernameClickListener clickListener,
       AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
+        this.niceShotListener = niceShotListener;
         this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
@@ -187,8 +188,18 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         }
     }
 
-    private void bindNiceInfo(ShotModel item, ViewHolder vh) {
-        //TODO add nice(d?) status to the button
+    private void bindNiceInfo(final ShotModel item, ViewHolder vh) {
+        vh.niceButton.setChecked(item.isMarkedAsNice());
+        vh.niceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.isMarkedAsNice()) {
+                    niceShotListener.unmarkNice(item.getIdShot());
+                } else {
+                    niceShotListener.markNice(item.getIdShot());
+                }
+            }
+        });
     }
 
     private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
@@ -260,7 +271,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) public View videoFrame;
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
-        @Bind(R.id.shot_nice_button) public Checkable niceButton;
+        @Bind(R.id.shot_nice_button) public CheckableImageView niceButton;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
@@ -268,12 +279,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
-        }
-
-        @OnClick(R.id.shot_nice_button)
-        public void onNiceClick() {
-            // TODO trigger listener instead
-            niceButton.toggle();
         }
 
         public void setVideoClickListener(View.OnClickListener videoClickListener) {
