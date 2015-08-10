@@ -65,18 +65,38 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void loadShotDetail() {
         shotDetailView.renderShot(shotModel);
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
-            @Override public void onLoaded(ShotDetail shotDetail) {
-                shotModel = shotModelMapper.transform(shotDetail.getShot());
-                shotDetailView.renderShot(shotModel);
-                shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
-                onRepliesLoaded(shotDetail.getReplies());
-                shotDetailView.setReplyUsername(shotModel.getUsername());
+            @Override
+            public void onLoaded(ShotDetail shotDetail) {
+                onShotDetailLoaded(shotDetail);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    private void loadShotDetailLocally() {
+        getShotDetailInteractor.loadShotDetailLocalOnly(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
+            @Override
+            public void onLoaded(ShotDetail shotDetail) {
+                onShotDetailLoaded(shotDetail);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    protected void onShotDetailLoaded(ShotDetail shotDetail) {
+        shotModel = shotModelMapper.transform(shotDetail.getShot());
+        shotDetailView.renderShot(shotModel);
+        shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
+        onRepliesLoaded(shotDetail.getReplies());
+        shotDetailView.setReplyUsername(shotModel.getUsername());
     }
 
     public void imageClick(ShotModel shot) {
@@ -96,7 +116,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
-                loadShotDetail();
+                loadShotDetailLocally();
             }
         });
     }
@@ -105,7 +125,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
-                loadShotDetail();
+                loadShotDetailLocally();
             }
         });
     }
