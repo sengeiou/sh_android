@@ -25,7 +25,6 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
-    public static final String ADD_TO_FAVORITES_MENU_TITLE = "Add to Favorites";
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
@@ -83,10 +82,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle().equals(ADD_TO_FAVORITES_MENU_TITLE)) {
+        if(item.getTitle().equals(getString(R.string.add_to_favorites_menu_title))) {
             StreamResultModel streamResultModel = adapter.getItem(item.getOrder());
             presenter.addToFavorite(streamResultModel);
-            initializePresenter();
+            presenter.resumeFavoriteStreams();
         }
         return true;
     }

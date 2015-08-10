@@ -38,7 +38,6 @@ import javax.inject.Inject;
 public class StreamsListFragment extends BaseFragment implements StreamsListView {
 
     public static final int REQUEST_NEW_STREAM = 1;
-    public static final String ADD_TO_FAVORITES_MENU_TITLE = "Add to Favorites";
 
     @Bind(R.id.streams_list) RecyclerView streamsList;
     @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -169,7 +168,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle().equals(ADD_TO_FAVORITES_MENU_TITLE)) {
+        if(item.getTitle().equals(getActivity().getString(R.string.add_to_favorites_menu_title))) {
             StreamResultModel streamResultModel;
             if (adapter.getHeader() == null) {
                 streamResultModel = adapter.getItems().get(item.getOrder());
@@ -177,7 +176,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
                 streamResultModel = adapter.getItem(item.getOrder());
             }
             presenter.addToFavorites(streamResultModel);
-            onResume();
         }
         return true;
     }

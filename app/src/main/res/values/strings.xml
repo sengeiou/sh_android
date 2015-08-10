@@ -301,4 +301,5 @@
     <string name="new_stream_short_title_label">Short title</string>
     <string name="short_title_warning">3 to 15 characters</string>
     <string name="error_stream_already_favorites">Already in favorites</string>
+    <string name="add_to_favorites_menu_title">Add to Favorites</string>
 </resources>
