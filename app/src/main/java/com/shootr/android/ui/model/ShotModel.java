@@ -27,6 +27,7 @@ public class ShotModel implements Serializable{
     private String videoDuration;
 
     private Integer niceCount;
+    private Boolean isMarkedAsNice;
 
     public Boolean isActivity() {
         return !getType().equals(ShotType.COMMENT);
@@ -166,5 +167,13 @@ public class ShotModel implements Serializable{
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
+    }
+
+    public Boolean isMarkedAsNice() {
+        return isMarkedAsNice;
+    }
+
+    public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
+        this.isMarkedAsNice = isMarkedAsNice;
     }
 }

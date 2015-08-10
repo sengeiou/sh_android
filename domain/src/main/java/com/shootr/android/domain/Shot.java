@@ -23,6 +23,7 @@ public class Shot {
 
     private String type;
     private Integer niceCount;
+    private Boolean isMarkedAsNice;
 
     private EntityMetadata metadata;
 
@@ -156,6 +157,14 @@ public class Shot {
 
     public void setMetadata(EntityMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    public Boolean isMarkedAsNice() {
+        return isMarkedAsNice;
+    }
+
+    public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
+        this.isMarkedAsNice = isMarkedAsNice;
     }
 
     public static class ShotStreamInfo {
