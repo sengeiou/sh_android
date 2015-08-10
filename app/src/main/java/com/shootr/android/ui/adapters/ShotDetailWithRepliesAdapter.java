@@ -376,7 +376,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) Checkable niceButton;
+        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
 
         public ShotDetailParentViewHolder(View itemView) {
             super(itemView);
@@ -441,12 +441,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setVisibility(View.GONE);
                 this.videoFrame.setOnClickListener(null);
             }
-        }
 
-        @OnClick(R.id.shot_nice_button)
-        public void onNiceClick() {
-            //TODO real functional implementation
-            niceButton.toggle();
+            niceButton.setChecked(shotModel.isMarkedAsNice());
+            niceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (shotModel.isMarkedAsNice()) {
+                        niceShotListener.unmarkNice(shotModel.getIdShot());
+                    } else {
+                        niceShotListener.markNice(shotModel.getIdShot());
+                    }
+                }
+            });
         }
 
         private String getUsernameTitle(ShotModel shotModel) {
@@ -476,6 +482,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);
@@ -533,6 +540,18 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setVisibility(View.GONE);
                 this.videoFrame.setOnClickListener(null);
             }
+
+            niceButton.setChecked(reply.isMarkedAsNice());
+            niceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (reply.isMarkedAsNice()) {
+                        niceShotListener.unmarkNice(reply.getIdShot());
+                    } else {
+                        niceShotListener.markNice(reply.getIdShot());
+                    }
+                }
+            });
         }
     }
 
