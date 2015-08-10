@@ -28,7 +28,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
-    @Bind(R.id.listing_empty) View emptyView;
+    @Bind(R.id.listing_empty_title) View emptyView;
 
     @Inject ListingListPresenter presenter;
 
@@ -109,12 +109,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         loadingView.setVisibility(View.GONE);
     }
 
-    @Override public void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
+    @Override public void showError(String message) {
+        /* no-op */
     }
 
-    @Override public void showNoStreams() {
-        emptyView.setVisibility(View.VISIBLE);
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideContent() {
@@ -131,5 +131,13 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @OnClick(R.id.listing_add_stream) public void onAddStream() {
         startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
     }
 }

@@ -1,9 +1,10 @@
 package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.model.StreamResultModel;
+import com.shootr.android.ui.views.base.LoadDataView;
 import java.util.List;
 
-public interface ListingView {
+public interface ListingView extends LoadDataView {
 
     void renderStreams(List<StreamResultModel> streams);
 
@@ -14,8 +15,6 @@ public interface ListingView {
     void hideLoading();
 
     void showLoading();
-
-    void showNoStreams();
 
     void hideContent();
 

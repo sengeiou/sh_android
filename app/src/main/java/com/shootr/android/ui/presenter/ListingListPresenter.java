@@ -51,9 +51,10 @@ public class ListingListPresenter implements Presenter{
         if (!streams.isEmpty()) {
             List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
             this.renderViewStreamList(streamModels);
+            listingView.hideEmpty();
         }else{
             listingView.hideContent();
-            listingView.showNoStreams();
+            listingView.showEmpty();
         }
     }
 
