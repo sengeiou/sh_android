@@ -3,7 +3,6 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
@@ -13,7 +12,6 @@ import javax.inject.Inject;
 public class ListingListPresenter implements Presenter{
 
     private final GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    private final SelectStreamInteractor selectStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
 
     private ListingView listingView;
@@ -21,9 +19,8 @@ public class ListingListPresenter implements Presenter{
     private boolean hasBeenPaused = false;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
-      SelectStreamInteractor selectStreamInteractor, StreamResultModelMapper streamResultModelMapper) {
+      StreamResultModelMapper streamResultModelMapper) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
-        this.selectStreamInteractor = selectStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
     }
 
@@ -83,10 +80,5 @@ public class ListingListPresenter implements Presenter{
 
     public void streamCreated(String streamId) {
         listingView.navigateToCreatedStreamDetail(streamId);
-        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-                /* no-op */
-            }
-        });
     }
 }

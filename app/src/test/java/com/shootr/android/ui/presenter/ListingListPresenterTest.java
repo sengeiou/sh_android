@@ -4,7 +4,6 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -33,7 +32,6 @@ public class ListingListPresenterTest {
     public static final String STREAM_TITLE = "stream_title";
 
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
-    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock ListingView listingView;
     @Mock SessionRepository sessionRepository;
 
@@ -44,7 +42,7 @@ public class ListingListPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
-        listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor, selectStreamInteractor, streamResultModelMapper);
+        listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor, streamResultModelMapper);
         listingListPresenter.setView(listingView);
     }
 
@@ -81,7 +79,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER);
 
-        verify(listingView).showNoStreams();
+        verify(listingView).showEmpty();
     }
 
     private List<StreamSearchResult> emptyStreamsList() {
