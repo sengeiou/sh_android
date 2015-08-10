@@ -7,6 +7,8 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetShotDetailInteractor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
@@ -19,6 +21,8 @@ import javax.inject.Inject;
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private final GetShotDetailInteractor getShotDetailInteractor;
+    private final MarkNiceShotInteractor markNiceShotInteractor;
+    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -29,9 +33,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private boolean justSentReply = false;
 
     @Inject
-    public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor, ShotModelMapper shotModelMapper,
-      @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
+    public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShotModelMapper shotModelMapper,
+      @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
+        this.markNiceShotInteractor = markNiceShotInteractor;
+        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -82,6 +90,24 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void usernameClick(String username) {
         goToUserProfile(username);
 
+    }
+
+    public void markNiceShot(String idShot) {
+        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                loadShotDetail();
+            }
+        });
+    }
+
+    public void unmarkNiceShot(String idShot) {
+        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                loadShotDetail();
+            }
+        });
     }
 
     private void startProfileContainerActivity(String username) {
