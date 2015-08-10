@@ -47,7 +47,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
-import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
 import com.shootr.android.task.events.profile.UserInfoResultStream;
 import com.shootr.android.task.events.shots.LatestShotsResultStream;
@@ -800,7 +800,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream event){
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
         Pair<String, Boolean> result = event.getResult();
         String idUser = result.first;
         Boolean following = result.second;

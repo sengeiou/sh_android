@@ -23,7 +23,7 @@ import com.shootr.android.R;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -212,7 +212,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream event){
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
         Pair<String, Boolean> result = event.getResult();
         String idUser = result.first;
         Boolean following = result.second;

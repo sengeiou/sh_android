@@ -11,7 +11,7 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Date;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFollowResultStream> {
+public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFollowResultEvent> {
 
     private static final Boolean NOT_FOLLOWING = false;
     private static final Boolean FOLLOWING = true;
@@ -95,7 +95,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     }
 
     private void success(String followingUserId, Boolean following) {
-        postSuccessfulEvent(new FollowUnFollowResultStream(followingUserId, following));
+        postSuccessfulEvent(new FollowUnFollowResultEvent(followingUserId, following));
     }
 
     private UserEntity storeUserFollowed(String idUserToFollow) {
