@@ -53,7 +53,6 @@ public class SuggestedPeoplePresenter implements Presenter {
     }
 
     public void initialize(SuggestedPeopleView suggestedPeopleView) {
-        bus.register(this);
         setView(suggestedPeopleView);
         obtainSuggestedPeople();
         suggestedPeople = new ArrayList<>();

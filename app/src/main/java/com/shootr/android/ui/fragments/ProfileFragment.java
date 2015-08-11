@@ -260,6 +260,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public void onResume() {
         super.onResume();
         bus.register(this);
+        suggestedPeoplePresenter.resume();
         if (!uploadingPhoto) {
             retrieveUserInfo();
         }
@@ -268,6 +269,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Override
     public void onPause() {
         super.onDetach();
+        suggestedPeoplePresenter.pause();
         bus.unregister(this);
     }
 

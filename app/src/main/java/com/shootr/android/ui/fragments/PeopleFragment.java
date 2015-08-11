@@ -95,6 +95,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Override public void onPause() {
         super.onPause();
         presenter.pause();
+        suggestedPeoplePresenter.pause();
     }
 
     @OnItemClick(R.id.userlist_list)
