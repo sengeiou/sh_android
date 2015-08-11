@@ -265,4 +265,17 @@ public class DatabaseContract {
           COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
+
+    public static final class NiceShotTable implements SyncColumns {
+
+        private NiceShotTable() {
+            /* non instanciable */
+        }
+
+        public static final String TABLE = "NiceShot";
+
+        public static final String ID_SHOT = "idShot";
+
+        public static final String[] PROJECTION = { ID_SHOT };
+    }
 }

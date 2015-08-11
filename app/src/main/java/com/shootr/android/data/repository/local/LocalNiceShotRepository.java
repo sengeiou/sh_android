@@ -1,29 +1,28 @@
 package com.shootr.android.data.repository.local;
 
+import com.shootr.android.db.manager.NiceManager;
 import com.shootr.android.domain.repository.NiceShotRepository;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class LocalNiceShotRepository implements NiceShotRepository {
 
-    private List<String> markedShots;
+    private final NiceManager niceManager;
 
-    @Inject public LocalNiceShotRepository() {
-        markedShots = new ArrayList<>();
+    @Inject public LocalNiceShotRepository(NiceManager niceManager) {
+        this.niceManager = niceManager;
     }
 
     @Override public void mark(String idShot) {
-        markedShots.add(idShot);
+        niceManager.mark(idShot);
     }
 
     @Override
     public boolean isMarked(String idShot) {
-        return markedShots.contains(idShot);
+        return niceManager.isMarked(idShot);
     }
 
     @Override
     public void unmark(String idShot) {
-        markedShots.remove(idShot);
+        niceManager.unmark(idShot);
     }
 }

@@ -187,4 +187,7 @@ public class SQLiteUtils {
       + SyncColumns.REVISION + " INT NOT NULL,"
       + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
 
+    public static final String CREATE_TABLE_NICE_SHOTS = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.NiceShotTable.TABLE +" ("
+      + DatabaseContract.NiceShotTable.ID_SHOT + " TEXT NOT NULL PRIMARY KEY)";
+
 }
