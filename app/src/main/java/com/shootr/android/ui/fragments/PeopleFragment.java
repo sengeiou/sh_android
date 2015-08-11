@@ -99,6 +99,15 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
           REQUEST_CAN_CHANGE_DATA);
     }
 
+    @OnClick(R.id.userlist_invite_friend)
+    public void onInviteFriendClick() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
+        intent.setType("text/plain");
+        startActivity(intent);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.people, menu);
