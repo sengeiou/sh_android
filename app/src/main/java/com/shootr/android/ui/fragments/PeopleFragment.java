@@ -13,9 +13,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -39,6 +41,9 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     @Bind(R.id.userlist_empty) TextView emptyTextView;
+
+    @Bind(R.id.userlist_invite_friend) FloatingActionButton inviteFriend;
+
     private FriendsAdapter peopleAdapter;
 
     public static PeopleFragment newInstance() {
@@ -64,6 +69,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        inviteFriend.setVisibility(View.VISIBLE);
         userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
     }
