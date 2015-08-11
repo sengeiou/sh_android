@@ -192,6 +192,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     @Override public void resume() {
         bus.register(this);
+        loadTimeline();
         startPollingShots();
     }
 
