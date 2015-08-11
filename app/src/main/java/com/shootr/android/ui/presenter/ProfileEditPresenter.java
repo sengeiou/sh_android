@@ -4,9 +4,6 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShootrValidationException;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
@@ -27,7 +24,6 @@ import javax.inject.Inject;
 public class ProfileEditPresenter implements Presenter {
 
     private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
-    public static final String EMAIL_HAS_NOT_BEEN_CONFIRMED_YET = "Email has not been confirmed yet";
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
@@ -36,19 +32,18 @@ public class ProfileEditPresenter implements Presenter {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final JobManager jobManager;
-    private final UpdateUserInteractor updateUserInteractor;
 
     private UserModel currentUserModel;
-    private boolean hasBeenInitialized = false;
+    private boolean hasBeenPaused = false;
+    private boolean discardConfirmEmailAlert = false;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, JobManager jobManager, UpdateUserInteractor updateUserInteractor) {
+      ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.jobManager = jobManager;
-        this.updateUserInteractor = updateUserInteractor;
     }
 
     public void initialize(ProfileEditView profileEditView, ObjectGraph objectGraph) {
@@ -59,19 +54,11 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void fillCurrentUserData() {
-        updateUserInteractor.updateCurrentUser(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-                profileEditView.renderUserInfo(currentUserModel);
-                if (!currentUserModel.getEmailConfirmed() && !hasBeenInitialized) {
-                    profileEditView.showEmailNotConfirmedError(EMAIL_HAS_NOT_BEEN_CONFIRMED_YET);
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                showViewError(error);
-            }
-        });
+        currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+        this.profileEditView.renderUserInfo(currentUserModel);
+        if(!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
+            profileEditView.showEmailNotConfirmedError();
+        }
     }
 
     private void showViewError(ShootrException error) {
@@ -97,11 +84,11 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     public void done() {
-        UserModel updatedUserModel = this.getUpadtedUserData();
+        UserModel updatedUserModel = this.getUpdatedUserData();
         this.saveUpdatedProfile(updatedUserModel);
     }
 
-    private UserModel getUpadtedUserData() {
+    private UserModel getUpdatedUserData() {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
@@ -110,9 +97,8 @@ public class ProfileEditPresenter implements Presenter {
         return updatedUserModel;
     }
 
-
     private boolean hasChangedData() {
-        UserModel updatedUserData = getUpadtedUserData();
+        UserModel updatedUserData = getUpdatedUserData();
         boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
         boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null : !currentUserModel.getName().equals(updatedUserData.getName());
         boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null : !currentUserModel.getBio().equals(updatedUserData.getBio());
@@ -248,14 +234,21 @@ public class ProfileEditPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
-        fillCurrentUserData();
+        if (hasBeenPaused) {
+            fillCurrentUserData();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        hasBeenPaused = true;
     }
 
-    public void setHasBeenInitialized(boolean hasBeenInitialized) {
-        this.hasBeenInitialized = hasBeenInitialized;
+    public void editEmail() {
+        if (!currentUserModel.isEmailConfirmed()) {
+            profileEditView.hideEmailNotConfirmedError();
+        }
+        discardConfirmEmailAlert = true;
+        profileEditView.navigateToEditEmail();
     }
 }

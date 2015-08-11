@@ -38,7 +38,11 @@ public interface ProfileEditView {
 
     void alertConnectionNotAvailable();
 
-    void showEmailNotConfirmedError(String error);
+    void showEmailNotConfirmedError();
+
+    void hideEmailNotConfirmedError();
 
     void showError(String errorMessage);
+
+    void navigateToEditEmail();
 }

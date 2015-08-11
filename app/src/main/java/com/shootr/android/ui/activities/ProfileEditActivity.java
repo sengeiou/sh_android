@@ -180,12 +180,22 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void showEmailNotConfirmedError(String error) {
-        email.setError(error);
+    @Override public void showEmailNotConfirmedError() {
+        email.setError(" ");
+    }
+
+    @Override
+    public void hideEmailNotConfirmedError() {
+        email.setError(null);
     }
 
     @Override public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void navigateToEditEmail() {
+        startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,8 +217,6 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @OnClick(R.id.profile_edit_email_layout)
     public void onEmailClick() {
-        presenter.setHasBeenInitialized(true);
-        startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
-        email.setError(null);
+        presenter.editEmail();
     }
 }

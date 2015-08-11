@@ -123,8 +123,7 @@ public class ShootrUserService {
     }
 
     public void changeEmail(String email)
-      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException,
-      UnauthorizedRequestException {
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
         String currentUserId = sessionRepository.getCurrentUserId();
         User user = localUserRepository.getUserById(currentUserId);
         user.setEmail(email);
@@ -133,12 +132,5 @@ public class ShootrUserService {
         localUserRepository.putUser(user);
 
         confirmEmailGateway.changeEmail(email);
-    }
-
-    public void updateCurrentUser() {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        User remoteUser = remoteUserRepository.getUserById(currentUserId);
-        localUserRepository.putUser(remoteUser);
-        sessionRepository.setCurrentUser(remoteUser);
     }
 }
