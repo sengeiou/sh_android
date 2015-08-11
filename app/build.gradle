@@ -34,7 +34,7 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 0
 def versionMinor = 1
-def versionRevision = 13
+def versionRevision = 11
 def databaseVersion = 5
 def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
 
