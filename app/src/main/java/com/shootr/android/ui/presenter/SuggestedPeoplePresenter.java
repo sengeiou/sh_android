@@ -36,6 +36,7 @@ public class SuggestedPeoplePresenter implements Presenter {
 
     private SuggestedPeopleView suggestedPeopleView;
     private List<UserModel> suggestedPeople;
+    private Boolean hasBeenPaused = false;
 
     @Inject public SuggestedPeoplePresenter(SessionRepository sessionRepository,
       GetSuggestedPeopleInteractor getSuggestedPeopleInteractor, UserModelMapper userModelMapper,
@@ -115,10 +116,13 @@ public class SuggestedPeoplePresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
-        obtainSuggestedPeople();
+        if (hasBeenPaused) {
+            obtainSuggestedPeople();
+        }
     }
 
     @Override public void pause() {
+        hasBeenPaused = true;
         bus.unregister(this);
     }
 }
