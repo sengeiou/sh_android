@@ -119,12 +119,6 @@ public class ShootrUserService {
     }
 
     public void confirmEmail() throws InvalidEmailConfirmationException {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        User user = localUserRepository.getUserById(currentUserId);
-        user.setEmailConfirmed(1);
-        sessionRepository.setCurrentUser(user);
-        localUserRepository.putUser(user);
-
         confirmEmailGateway.confirmEmail();
     }
 
