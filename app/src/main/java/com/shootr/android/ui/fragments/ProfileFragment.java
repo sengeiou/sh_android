@@ -66,6 +66,7 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -277,6 +278,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
+            @Override
+            public void onUserClick(String idUser) {
+                Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+                startActivity(suggestedUserIntent);
+            }
+        });
     }
 
     @Override

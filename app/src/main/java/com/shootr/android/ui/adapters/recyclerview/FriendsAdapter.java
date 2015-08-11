@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.PicassoWrapper;
@@ -17,10 +18,12 @@ public class FriendsAdapter extends UserListAdapter {
     private final UserListAdapter suggestedPeopleAdapter;
 
     private SuggestedPeopleListView suggestedPeopleListView;
+    private OnUserClickListener onUserClickListener;
 
-    public FriendsAdapter(Context context, PicassoWrapper picasso, UserListAdapter suggestedPeopleAdapter) {
+    public FriendsAdapter(Context context, PicassoWrapper picasso, UserListAdapter suggestedPeopleAdapter, OnUserClickListener onUserClickListener) {
         super(context, picasso);
         this.suggestedPeopleAdapter = suggestedPeopleAdapter;
+        this.onUserClickListener = onUserClickListener;
     }
 
     @Override public boolean isFollowButtonVisible() {
@@ -66,6 +69,7 @@ public class FriendsAdapter extends UserListAdapter {
             if (suggestedPeopleListView == null) {
                 suggestedPeopleListView = new SuggestedPeopleListView(container.getContext());
                 suggestedPeopleListView.setAdapter(suggestedPeopleAdapter);
+                suggestedPeopleListView.setOnUserClickListener(onUserClickListener);
             }
             return suggestedPeopleListView;
         }
@@ -79,5 +83,10 @@ public class FriendsAdapter extends UserListAdapter {
 
     @Override public UserModel getItem(int position) {
         return isSuggestedPeopleView(position) ? null : super.getItem(position);
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return !isSuggestedPeopleView(position);
     }
 }

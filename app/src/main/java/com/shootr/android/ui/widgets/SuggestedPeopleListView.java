@@ -12,6 +12,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
+import com.shootr.android.ui.model.UserModel;
 
 public class SuggestedPeopleListView extends FrameLayout {
 
@@ -19,6 +21,7 @@ public class SuggestedPeopleListView extends FrameLayout {
     @Bind(R.id.suggested_people_title) TextView suggestedPeopleTitle;
 
     private UserListAdapter userListAdapter;
+    private OnUserClickListener onUserClickListener;
 
     public SuggestedPeopleListView(Context context) {
         super(context);
@@ -40,6 +43,10 @@ public class SuggestedPeopleListView extends FrameLayout {
         ButterKnife.bind(this);
     }
 
+    public void setOnUserClickListener(OnUserClickListener onUserClickListener) {
+        this.onUserClickListener = onUserClickListener;
+    }
+
     public void setAdapter(UserListAdapter adapter) {
         userListAdapter = adapter;
         userListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -53,7 +60,16 @@ public class SuggestedPeopleListView extends FrameLayout {
     private void renderUsers() {
         suggestedPeopleList.removeAllViews();
         for (int i = 0; i < userListAdapter.getCount(); i++) {
+            final int position = i;
             View itemView = userListAdapter.getView(i, null, suggestedPeopleList);
+            itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserModel user = userListAdapter.getItem(position);
+                    onUserClickListener.onUserClick(user.getIdUser());
+                }
+            });
+            //TODO set selectable background
             suggestedPeopleList.addView(itemView);
         }
         if(userListAdapter.getCount() > 0) {

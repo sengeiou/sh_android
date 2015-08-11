@@ -23,6 +23,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.recyclerview.FriendsAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
@@ -99,10 +100,14 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @OnItemClick(R.id.userlist_list)
-    public void openUserProfile(int position) {
+    public void onUserClick(int position) {
         // TODO not going through the presenter? You naughty boy...
         UserModel user = getPeopleAdapter().getItem(position);
-        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()),
+        openUserProfile(user.getIdUser());
+    }
+
+    private void openUserProfile(String idUser) {
+        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser),
           REQUEST_CAN_CHANGE_DATA);
     }
 
@@ -134,7 +139,12 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     private FriendsAdapter getPeopleAdapter() {
         if (peopleAdapter == null) {
             suggestedPeopleAdapter = getSuggestedPeopleAdapter();
-            peopleAdapter = new FriendsAdapter(getActivity(), picasso, suggestedPeopleAdapter);
+            peopleAdapter = new FriendsAdapter(getActivity(), picasso, suggestedPeopleAdapter, new OnUserClickListener() {
+                @Override
+                public void onUserClick(String idUser) {
+                    openUserProfile(idUser);
+                }
+            });
         }
         return peopleAdapter;
     }

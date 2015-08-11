@@ -104,11 +104,6 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
          }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                getContext().startActivity(ProfileContainerActivity.getIntentWithUsername(getContext(), item.getUsername()));
-            }
-        });
     }
 
     protected boolean showSubtitle(UserModel item) {
