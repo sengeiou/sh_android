@@ -18,6 +18,7 @@ import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
+import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -271,7 +272,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) public View videoFrame;
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
-        @Bind(R.id.shot_nice_button) public CheckableImageView niceButton;
+        @Bind(R.id.shot_nice_button) public NiceButtonView niceButton;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {

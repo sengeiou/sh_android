@@ -89,7 +89,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <com.shootr.android.ui.widgets.CheckableImageView android:id="@+id/shot_nice_button"
+    <com.shootr.android.ui.widgets.NiceButtonView android:id="@+id/shot_nice_button"
       android:layout_width="@dimen/nice_button_size"
       android:layout_height="@dimen/nice_button_size"
       android:layout_alignParentRight="true"

@@ -7,17 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
+import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -241,7 +240,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
+        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
         @Bind(R.id.shot_nice_count) TextView niceCount;
 
         public ShotDetailMainViewHolder(View itemView) {
@@ -482,7 +481,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.shot_image) public ImageView image;
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.shot_nice_button) CheckableImageView niceButton;
+        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
         public ShotDetailReplyHolder(View itemView) {
             super(itemView);
