@@ -54,9 +54,9 @@ public class EmailConfirmationPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
         setupConfirmEmailCallbackCompleted();
 
-        presenter.confirmEmail(EMAIL);
+        presenter.requestEmailConfirmataionIfNotConfirmed(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationToUser(anyString());
+        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.initialize(emailConfirmationView, EMAIL);
 
-        verify(emailConfirmationView, never()).showConfirmationToUser(EMAIL);
+        verify(emailConfirmationView, never()).showConfirmationAlertToUser(EMAIL);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.onEmailEdited(INVALID_EMAIL);
 
-        verify(emailConfirmationView, never()).updateDoneButton();
+        verify(emailConfirmationView, never()).showDoneButton();
     }
 
     @Test
@@ -103,7 +103,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.onEmailEdited(EMAIL);
 
-        verify(emailConfirmationView).updateDoneButton();
+        verify(emailConfirmationView).showDoneButton();
     }
 
     @Test
@@ -121,9 +121,9 @@ public class EmailConfirmationPresenterTest {
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
-        presenter.attempToChangeEmail(EMAIL);
+        presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationToUser(anyString());
+        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
     }
 
     @Test
@@ -132,9 +132,9 @@ public class EmailConfirmationPresenterTest {
         setupChangeEmailCallbackCompleted();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
-        presenter.attempToChangeEmail(EMAIL);
+        presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationToUser(anyString());
+        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
     }
 
     @Test
@@ -145,9 +145,9 @@ public class EmailConfirmationPresenterTest {
 
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
-        presenter.attempToChangeEmail(ANOTHER_EMAIL);
+        presenter.done(ANOTHER_EMAIL);
 
-        verify(emailConfirmationView).showConfirmationToUser(ANOTHER_EMAIL);
+        verify(emailConfirmationView).showConfirmationAlertToUser(ANOTHER_EMAIL);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class EmailConfirmationPresenterTest {
         setupoChangeEmailInteractorErrorCallback();
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
 
-        presenter.attempToChangeEmail(ANOTHER_EMAIL);
+        presenter.done(ANOTHER_EMAIL);
 
         verify(emailConfirmationView).showError(anyString());
     }

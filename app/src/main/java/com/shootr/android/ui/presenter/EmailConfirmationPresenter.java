@@ -13,7 +13,6 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EmailConfirmationView;
 import com.shootr.android.util.ErrorMessageFactory;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,7 +27,7 @@ public class EmailConfirmationPresenter implements Presenter {
     private final UserModelMapper userModelMapper;
 
     private EmailConfirmationView emailConfirmationView;
-    private String initializedEmail;
+    private String currentEmail;
 
     @Inject public EmailConfirmationPresenter(ErrorMessageFactory errorMessageFactory,
       ConfirmEmailInteractor confirmEmailInteractor, ChangeEmailInteractor changeEmailInteractor,
@@ -44,58 +43,59 @@ public class EmailConfirmationPresenter implements Presenter {
         this.emailConfirmationView = emailConfirmationView;
     }
 
-    public void initialize(EmailConfirmationView emailConfirmationView, String email) {
-        this.setView(emailConfirmationView);
-        this.setUserEmail(email);
-        this.confirmEmail(email);
-    }
-
-    protected void confirmEmail(final String email) {
-        UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        if (!currentUserModel.isEmailConfirmed()) {
-            confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
-                @Override public void onCompleted() {
-                    emailConfirmationView.showConfirmationToUser(email);
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
-                    showViewError(error);
-                }
-            });
-        }
-    }
-
-    protected void setUserEmail(String userEmail) {
-        this.initializedEmail = userEmail;
+    protected void setCurrentEmail(String userEmail) {
+        this.currentEmail = userEmail;
         emailConfirmationView.showUserEmail(userEmail);
     }
 
+    public void initialize(EmailConfirmationView emailConfirmationView, String email) {
+        this.setView(emailConfirmationView);
+        this.setCurrentEmail(email);
+        this.requestEmailConfirmataionIfNotConfirmed();
+    }
+
+    protected void requestEmailConfirmataionIfNotConfirmed() {
+        UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
+        if (!currentUserModel.isEmailConfirmed()) {
+            requestEmailConfirmation(currentEmail);
+        }
+    }
+
+    private void requestEmailConfirmation(final String email) {
+        confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                emailConfirmationView.showConfirmationAlertToUser(email);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
+    }
+
     public void onEmailEdited(String editedEmail) {
-        if(!editedEmail.equals(initializedEmail) && verifyEmailBeforeConfirmating(editedEmail)) {
-            emailConfirmationView.updateDoneButton();
-        } else if (!verifyEmailBeforeConfirmating(editedEmail)) {
+        if (!editedEmail.equals(currentEmail)) {
+            boolean isValidEmail = validateEmailAndShowErrors(editedEmail);
+            if (isValidEmail) {
+                emailConfirmationView.showDoneButton();
+            } else {
+                emailConfirmationView.hideDoneButton();
+            }
+        } else {
             emailConfirmationView.hideDoneButton();
         }
     }
 
-    private boolean verifyEmailBeforeConfirmating(String editedEmail) {
-        boolean validationSuccessful = true;
-        if (!validateFieldOrShowError(editedEmail, EmailConfirmationValidator.FIELD_EMAIL)) {
-            validationSuccessful = false;
-        }
-        return validationSuccessful;
-    }
-
-    private Boolean validateFieldOrShowError(String editedEmail, int field) {
+    private boolean validateEmailAndShowErrors(String editedEmail) {
         List<FieldValidationError> errors = new EmailConfirmationValidator().validate(editedEmail);
-        List<FieldValidationError> fieldErrors = new ArrayList<>();
-        for (FieldValidationError error : errors) {
-            if (error.getField() == field) {
-                fieldErrors.add(error);
-            }
+        if (errors.isEmpty()) {
+            return true;
+        } else {
+            showValidationErrors(errors);
+            return false;
         }
-        showValidationErrors(fieldErrors);
-        return fieldErrors.size() == 0;
     }
 
     private void showValidationErrors(List<FieldValidationError> errors) {
@@ -106,13 +106,9 @@ public class EmailConfirmationPresenter implements Presenter {
                     showViewEmailError(errorMessage);
                     break;
                 default:
-                    showViewError(errorMessage);
+                    emailConfirmationView.showError(errorMessage);
             }
         }
-    }
-
-    private void showViewError(String errorMessage) {
-        emailConfirmationView.showError(errorMessage);
     }
 
     private void showViewError(ShootrException error) {
@@ -131,19 +127,19 @@ public class EmailConfirmationPresenter implements Presenter {
         emailConfirmationView.showEmailError(errorMessage);
     }
 
-    public void attempToChangeEmail(String emailEdited) {
-        if(verifyEmailBeforeConfirmating(emailEdited) && !emailEdited.equals(initializedEmail)) {
-            changeEmail(emailEdited);
+    public void done(String editedEmail) {
+        if(validateEmailAndShowErrors(editedEmail) && !editedEmail.equals(currentEmail)) {
+            changeEmail(editedEmail);
             emailConfirmationView.hideDoneButton();
         } else {
-            emailConfirmationView.goBack();
+            emailConfirmationView.closeScreen();
         }
     }
 
     private void changeEmail(final String emailEdited) {
         changeEmailInteractor.changeEmail(emailEdited, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                confirmEmail(emailEdited);
+                requestEmailConfirmation(emailEdited);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

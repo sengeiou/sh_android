@@ -2,7 +2,7 @@ package com.shootr.android.ui.views;
 
 public interface EmailConfirmationView {
 
-    void showConfirmationToUser(String email);
+    void showConfirmationAlertToUser(String email);
 
     void showUserEmail(String userEmail);
 
@@ -10,9 +10,9 @@ public interface EmailConfirmationView {
 
     void showEmailError(String errorMessage);
 
-    void updateDoneButton();
+    void showDoneButton();
 
     void hideDoneButton();
 
-    void goBack();
+    void closeScreen();
 }

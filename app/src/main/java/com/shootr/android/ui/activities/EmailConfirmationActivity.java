@@ -31,6 +31,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         return intent;
     }
 
+    //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(false);
         toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,6 +49,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         String email = getIntent().getStringExtra(ProfileEditActivity.EXTRA_USER_EMAIL);
         presenter.initialize(this, email);
     }
+    //endregion
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -58,7 +60,18 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         }
     }
 
-    @Override public void showConfirmationToUser(String email) {
+    @OnTextChanged(R.id.email_confirmation_email)
+    public void onEmailChanged(CharSequence email) {
+        presenter.onEmailEdited(email.toString());
+    }
+
+    @OnClick(R.id.email_confirmation_confirm_button)
+    public void onDoneButtonClick() {
+        presenter.done(email.getText().toString());
+    }
+
+    //region View methods
+    @Override public void showConfirmationAlertToUser(String email) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
           .setMessage(getString(R.string.email_confirmation_message_content) + email) //
@@ -77,7 +90,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         email.setError(errorMessage);
     }
 
-    @Override public void updateDoneButton() {
+    @Override public void showDoneButton() {
         confirmButton.setVisibility(View.VISIBLE);
     }
 
@@ -85,17 +98,9 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
         confirmButton.setVisibility(View.GONE);
     }
 
-    @Override public void goBack() {
+    @Override public void closeScreen() {
         this.finish();
     }
+    //endregion
 
-    @OnTextChanged(R.id.email_confirmation_email)
-    public void onEmailChanged() {
-        presenter.onEmailEdited(email.getText().toString());
-    }
-
-    @OnClick(R.id.email_confirmation_confirm_button)
-    public void onDoneButtonClick() {
-        presenter.attempToChangeEmail(email.getText().toString());
-    }
 }
