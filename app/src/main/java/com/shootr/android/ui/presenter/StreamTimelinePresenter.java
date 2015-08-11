@@ -37,6 +37,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private String streamId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
+    private boolean isRefreshing = false;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -127,6 +128,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadNewShots() {
+        if (isRefreshing) {
+            return;
+        }
+        isRefreshing = true;
         timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
@@ -137,12 +142,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                     streamTimelineView.showShots();
                 }
                 streamTimelineView.hideLoading();
+                isRefreshing = false;
             }
         }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 streamTimelineView.hideLoading();
+                isRefreshing = false;
             }
         });
     }
