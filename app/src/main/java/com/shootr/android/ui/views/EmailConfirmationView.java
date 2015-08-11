@@ -2,7 +2,7 @@ package com.shootr.android.ui.views;
 
 public interface EmailConfirmationView {
 
-    void showConfirmationAlertToUser(String email);
+    void showConfirmationEmailSentAlert(String email, Runnable alertCallback);
 
     void showUserEmail(String userEmail);
 

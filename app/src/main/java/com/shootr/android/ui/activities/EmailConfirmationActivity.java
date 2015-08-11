@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -71,11 +72,18 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     //region View methods
-    @Override public void showConfirmationAlertToUser(String email) {
+    @Override public void showConfirmationEmailSentAlert(String email, final Runnable alertCallback) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(getString(R.string.email_confirmation_title)) //
           .setMessage(getString(R.string.email_confirmation_message_content) + email) //
-          .setPositiveButton(getString(R.string.email_confirmation_ok), null).show();
+          .setPositiveButton(getString(R.string.email_confirmation_ok), new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  if (alertCallback != null) {
+                      alertCallback.run();
+                  }
+              }
+          }).show();
     }
 
     @Override public void showUserEmail(String userEmail) {

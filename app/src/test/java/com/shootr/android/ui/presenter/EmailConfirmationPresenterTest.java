@@ -56,7 +56,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.requestEmailConfirmataionIfNotConfirmed(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.initialize(emailConfirmationView, EMAIL);
 
-        verify(emailConfirmationView, never()).showConfirmationAlertToUser(EMAIL);
+        verify(emailConfirmationView, never()).showConfirmationEmailSentAlert(EMAIL);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationAlertToUser(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(ANOTHER_EMAIL);
 
-        verify(emailConfirmationView).showConfirmationAlertToUser(ANOTHER_EMAIL);
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(ANOTHER_EMAIL);
     }
 
     @Test
