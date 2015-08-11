@@ -18,6 +18,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -54,9 +55,9 @@ public class EmailConfirmationPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutEmailConfirmed());
         setupConfirmEmailCallbackCompleted();
 
-        presenter.requestEmailConfirmataionIfNotConfirmed(EMAIL);
+        presenter.requestEmailConfirmataionIfNotConfirmed();
 
-        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
     @Test
@@ -66,7 +67,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.initialize(emailConfirmationView, EMAIL);
 
-        verify(emailConfirmationView, never()).showConfirmationEmailSentAlert(EMAIL);
+        verify(emailConfirmationView, never()).showConfirmationEmailSentAlert(eq(EMAIL), any(Runnable.class));
     }
 
     @Test
@@ -123,7 +124,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
     @Test
@@ -134,7 +135,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(EMAIL);
 
-        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString());
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(anyString(), any(Runnable.class));
     }
 
     @Test
@@ -147,7 +148,7 @@ public class EmailConfirmationPresenterTest {
 
         presenter.done(ANOTHER_EMAIL);
 
-        verify(emailConfirmationView).showConfirmationEmailSentAlert(ANOTHER_EMAIL);
+        verify(emailConfirmationView).showConfirmationEmailSentAlert(eq(ANOTHER_EMAIL), any(Runnable.class));
     }
 
     @Test
@@ -207,13 +208,13 @@ public class EmailConfirmationPresenterTest {
 
     private User userWithoutEmailConfirmed() {
         User user = new User();
-        user.setEmailConfirmed(0);
+        user.setEmailConfirmed(false);
         return user;
     }
 
     private User userWithEmailConfirmed() {
         User user = new User();
-        user.setEmailConfirmed(1);
+        user.setEmailConfirmed(true);
         return user;
     }
 
