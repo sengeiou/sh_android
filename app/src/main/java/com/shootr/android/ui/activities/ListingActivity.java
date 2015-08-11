@@ -11,9 +11,9 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.EventsListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnEventClickListener;
-import com.shootr.android.ui.model.EventResultModel;
+import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Inject ListingListPresenter presenter;
 
-    private EventsListAdapter adapter;
+    private StreamsListAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -45,9 +45,9 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
         listingList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new EventsListAdapter(picasso, new OnEventClickListener() {
-            @Override public void onEventClick(EventResultModel event) {
-                presenter.selectEvent(event);
+        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+            @Override public void onStreamClick(StreamResultModel stream) {
+                presenter.selectStream(stream);
             }
         });
         listingList.setAdapter(adapter);
@@ -84,12 +84,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         presenter.pause();
     }
 
-    @Override public void renderEvents(List<EventResultModel> events) {
-        adapter.setEvents(events);
+    @Override public void renderStreams(List<StreamResultModel> streams) {
+        adapter.setStreams(streams);
     }
 
-    @Override public void navigateToEventTimeline(String idEvent, String title) {
-        startActivity(EventTimelineActivity.newIntent(this, idEvent, title));
+    @Override public void navigateToStreamTimeline(String idStream, String title) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, title));
     }
 
     @Override public void hideLoading() {

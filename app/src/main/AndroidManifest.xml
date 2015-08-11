@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.EventTimelineActivity" >
+        <activity android:name=".ui.activities.StreamTimelineActivity" >
         </activity>
         <activity
             android:name=".ui.activities.registro.LoginSelectionActivity"
@@ -89,7 +89,7 @@
                 android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.EventDetailActivity"
+            android:name=".ui.activities.StreamDetailActivity"
             android:label="@string/activity_info_title"
             android:theme="@style/ShootrTheme.TranslucentToolbar" >
             <meta-data
@@ -107,18 +107,18 @@
         </activity>
         <activity
             android:name=".ui.activities.ShotDetailActivity"
-            android:parentActivityName=".ui.activities.EventTimelineActivity" >
+            android:parentActivityName=".ui.activities.StreamTimelineActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.EventTimelineActivity" />
+                android:value=".ui.activities.StreamTimelineActivity" />
         </activity>
         <activity
             android:name=".ui.activities.PhotoViewActivity"
             android:theme="@style/ShootrTheme.PhotoViewer" >
         </activity>
         <activity
-            android:name=".ui.activities.NewEventActivity"
-            android:label="@string/activity_new_event_title"
+            android:name=".ui.activities.NewStreamActivity"
+            android:label="@string/activity_new_stream_title"
             android:theme="@style/ShootrTheme.Closable" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -171,8 +171,8 @@
             android:value="51ae38f9afc83455fd0ae5f47de08cc2aff97662" />
 
         <activity
-            android:name=".ui.activities.EventMediaActivity"
-            android:label="@string/title_activity_event_media" />
+            android:name=".ui.activities.StreamMediaActivity"
+            android:label="@string/title_activity_stream_media" />
         <activity
             android:name=".ui.activities.registro.ResetPasswordActivity"
             android:configChanges="orientation|screenSize"
@@ -183,8 +183,8 @@
             android:label="@string/title_activity_listing" >
         </activity>
         <activity
-            android:name=".ui.activities.FindEventsActivity"
-            android:label="@string/activity_find_events_title"
+            android:name=".ui.activities.FindStreamsActivity"
+            android:label="@string/activity_find_streams_title"
             android:theme="@style/ShootrTheme.Closable" >
         </activity>
         <activity
@@ -196,6 +196,10 @@
             android:name=".ui.activities.EmailConfirmationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_email_confirmation" >
+        </activity>
+        <activity
+            android:name=".ui.activities.AllShotsActivity"
+            android:label="@string/title_activity_all_shots" >
         </activity>
     </application>
 

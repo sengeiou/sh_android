@@ -147,7 +147,7 @@ public class UserManager extends AbstractManager {
         }
 
         String whereSelection =
-          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ") AND " + UserTable.WATCHING_EVENT_ID + " IS NOT NULL";
+          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ") AND " + UserTable.ID_WATCHING_STREAM + " IS NOT NULL";
 
         String[] selectionArguments = new String[userIdsSize];
         for (int i = 0; i < userIdsSize; i++) {

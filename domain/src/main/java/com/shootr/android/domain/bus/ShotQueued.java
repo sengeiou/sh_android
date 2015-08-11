@@ -6,14 +6,14 @@ public interface ShotQueued {
 
     interface Receiver {
 
-        void onShotQueued(Event event);
+        void onShotQueued(Stream stream);
     }
 
-    class Event {
+    class Stream {
 
         private QueuedShot queuedShot;
 
-        public Event(QueuedShot queuedShot) {
+        public Stream(QueuedShot queuedShot) {
             this.queuedShot = queuedShot;
         }
 
@@ -22,7 +22,7 @@ public interface ShotQueued {
         }
 
         @Override public String toString() {
-            return "Event{" +
+            return "Stream{" +
               "queuedShot=" + queuedShot.toString() +
               '}';
         }

@@ -2,16 +2,13 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.shot.GetRepliesFromShotInteractor;
-import com.shootr.android.domain.interactor.shot.GetReplyParentInteractor;
-import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
+import com.shootr.android.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
@@ -21,8 +18,7 @@ import javax.inject.Inject;
 
 public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
-    private final GetRepliesFromShotInteractor getRepliesFromShotInteractor;
-    private final GetReplyParentInteractor getReplyParentInteractor;
+    private final GetShotDetailInteractor getShotDetailInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -33,12 +29,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private boolean justSentReply = false;
 
     @Inject
-    public ShotDetailPresenter(GetRepliesFromShotInteractor getRepliesFromShotInteractor,
-      GetReplyParentInteractor getReplyParentInteractor,
-      ShotModelMapper shotModelMapper,
+    public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor, ShotModelMapper shotModelMapper,
       @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
-        this.getRepliesFromShotInteractor = getRepliesFromShotInteractor;
-        this.getReplyParentInteractor = getReplyParentInteractor;
+        this.getShotDetailInteractor = getShotDetailInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -48,59 +41,32 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.shotDetailView = shotDetailView;
         this.shotModel = shotModel;
         this.loadShotDetail();
-        this.loadReplies();
     }
 
-    private void loadReplies() {
-        boolean canHaveReplies = !shotModel.isActivity();
-        if(canHaveReplies) {
-            getRepliesFromShotInteractor.loadReplies(shotModel.getIdShot(), new Interactor.Callback<List<Shot>>() {
-
-                @Override
-                public void onLoaded(List<Shot> replies) {
-                    int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
-                    int newReplyCount = replies.size();
-                    repliesModels = shotModelMapper.transform(replies);
-                    shotDetailView.renderReplies(repliesModels);
-                    if (justSentReply && previousReplyCount < newReplyCount) {
-                        shotDetailView.scrollToBottom();
-                        justSentReply = false;
-                    }
-                }
-            }, new Interactor.ErrorCallback() {
-                @Override
-                public void onError(ShootrException error) {
-                    shotDetailView.showError(errorMessageFactory.getMessageForError(error));
-                }
-            });
+    private void onRepliesLoaded(List<Shot> replies) {
+        int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
+        int newReplyCount = replies.size();
+        repliesModels = shotModelMapper.transform(replies);
+        shotDetailView.renderReplies(repliesModels);
+        if (justSentReply && previousReplyCount < newReplyCount) {
+            shotDetailView.scrollToBottom();
+            justSentReply = false;
         }
     }
 
     private void loadShotDetail() {
         shotDetailView.renderShot(shotModel);
-        if (shotModel.isActivity()) {
-            shotDetailView.hideNewReply();
-        } else {
-            shotDetailView.setReplyUsername(shotModel.getUsername());
-            if (shotModel.isReply()) {
-                this.loadParentShot();
-            }
-        }
-    }
-
-    private void loadParentShot() {
-        getReplyParentInteractor.loadReplyParent(shotModel.getParentShotId(), new Interactor.Callback<Shot>() {
-            @Override
-            public void onLoaded(Shot shot) {
-                if (shot != null) {
-                    shotDetailView.renderParent(shotModelMapper.transform(shot));
-                }
+        getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
+            @Override public void onLoaded(ShotDetail shotDetail) {
+                shotModel = shotModelMapper.transform(shotDetail.getShot());
+                shotDetailView.renderShot(shotModel);
+                shotDetailView.renderParent(shotModelMapper.transform(shotDetail.getParentShot()));
+                onRepliesLoaded(shotDetail.getReplies());
+                shotDetailView.setReplyUsername(shotModel.getUsername());
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                shotDetailView.showError(errorMessage);
+            @Override public void onError(ShootrException error) {
+                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
@@ -126,9 +92,9 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         startProfileContainerActivity(username);
     }
 
-    @Subscribe @Override public void onShotSent(ShotSent.Event event) {
+    @Subscribe @Override public void onShotSent(ShotSent.Stream stream) {
         justSentReply = true;
-        this.loadReplies();
+        this.loadShotDetail();
     }
 
     @Override public void resume() {

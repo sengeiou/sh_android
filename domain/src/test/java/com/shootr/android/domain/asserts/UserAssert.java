@@ -343,22 +343,22 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
   }
 
   /**
-   * Verifies that the actual User's visibleEventId is equal to the given one.
-   * @param visibleEventId the given visibleEventId to compare the actual User's visibleEventId to.
+   * Verifies that the actual User's visibleStreamId is equal to the given one.
+   * @param visibleStreamId the given visibleStreamId to compare the actual User's visibleStreamId to.
    * @return this assertion object.
-   * @throws AssertionError - if the actual User's visibleEventId is not equal to the given one.
+   * @throws AssertionError - if the actual User's visibleStreamId is not equal to the given one.
    */
-  public UserAssert hasWatchingEventId(String visibleEventId) {
+  public UserAssert hasWatchingStreamId(String visibleStreamId) {
     // check that actual User we want to make assertions on is not null.
     isNotNull();
 
     // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpected visibleEventId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
+    String assertjErrorMessage = "\nExpected visibleStreamId of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    String actualWatchingEventId = actual.getIdWatchingEvent();
-    if (!Objects.areEqual(actualWatchingEventId, visibleEventId)) {
-      failWithMessage(assertjErrorMessage, actual, visibleEventId, actualWatchingEventId);
+    String actualWatchingStreamId = actual.getIdWatchingStream();
+    if (!Objects.areEqual(actualWatchingStreamId, visibleStreamId)) {
+      failWithMessage(assertjErrorMessage, actual, visibleStreamId, actualWatchingStreamId);
     }
 
     // return the current assertion for method chaining
@@ -366,22 +366,22 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
   }
 
   /**
-   * Verifies that the actual User's visibleEventTitle is equal to the given one.
-   * @param visibleEventTitle the given visibleEventTitle to compare the actual User's visibleEventTitle to.
+   * Verifies that the actual User's visibleStreamTitle is equal to the given one.
+   * @param visibleStreamTitle the given visibleStreamTitle to compare the actual User's visibleStreamTitle to.
    * @return this assertion object.
-   * @throws AssertionError - if the actual User's visibleEventTitle is not equal to the given one.
+   * @throws AssertionError - if the actual User's visibleStreamTitle is not equal to the given one.
    */
-  public UserAssert hasVisibleEventTitle(String visibleEventTitle) {
+  public UserAssert hasVisibleStreamTitle(String visibleStreamTitle) {
     // check that actual User we want to make assertions on is not null.
     isNotNull();
 
     // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpected visibleEventTitle of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
+    String assertjErrorMessage = "\nExpected visibleStreamTitle of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    String actualVisibleEventTitle = actual.getWatchingEventTitle();
-    if (!Objects.areEqual(actualVisibleEventTitle, visibleEventTitle)) {
-      failWithMessage(assertjErrorMessage, actual, visibleEventTitle, actualVisibleEventTitle);
+    String actualVisibleStreamTitle = actual.getWatchingStreamTitle();
+    if (!Objects.areEqual(actualVisibleStreamTitle, visibleStreamTitle)) {
+      failWithMessage(assertjErrorMessage, actual, visibleStreamTitle, actualVisibleStreamTitle);
     }
 
     // return the current assertion for method chaining

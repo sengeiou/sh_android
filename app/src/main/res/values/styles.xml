@@ -306,4 +306,10 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="NiceButton">
+        <item name="android:background">@drawable/bg_nice_action</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_thumb_up_16_checkable_nopadding</item>
+    </style>
+
 </resources>

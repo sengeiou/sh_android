@@ -8,9 +8,11 @@ public class ShotEntity extends Synchronized{
     private String userPhoto; /* Only local and api, not datasource. Super clean, right? */
     private String comment;
     private String image;
-    private String idEvent;
-    private String eventTag;
-    private String eventTitle;
+    private String idStream;
+    private String streamTag;
+    private String streamTitle;
+
+    private Integer niceCount;
 
     private String type;
 
@@ -54,12 +56,12 @@ public class ShotEntity extends Synchronized{
         this.image = image;
     }
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public String getType() {
@@ -70,20 +72,20 @@ public class ShotEntity extends Synchronized{
         this.type = type;
     }
 
-    public String getEventTag() {
-        return eventTag;
+    public String getStreamTag() {
+        return streamTag;
     }
 
-    public void setEventTag(String eventTag) {
-        this.eventTag = eventTag;
+    public void setStreamTag(String streamTag) {
+        this.streamTag = streamTag;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
+    public String getStreamTitle() {
+        return streamTitle;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
     }
 
     public String getIdShotParent() {
@@ -148,5 +150,13 @@ public class ShotEntity extends Synchronized{
 
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    public Integer getNiceCount() {
+        return niceCount;
+    }
+
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount = niceCount;
     }
 }

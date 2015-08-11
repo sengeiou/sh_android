@@ -316,15 +316,6 @@
       android:layout_width="0dp"
       android:layout_gravity="start|center_vertical|fill_horizontal" />
 
-    <TextView style="@style/Widget.U2020.DebugDrawer.RowTitle"
-      android:layout_gravity="start|center_vertical"
-      android:text="Date" />
-
-    <TextView android:id="@+id/debug_build_date"
-      style="@style/Widget.U2020.DebugDrawer.RowValue"
-      android:layout_width="0dp"
-      android:layout_gravity="start|center_vertical|fill_horizontal" />
-
     <!-- DEVICE INFORMATION SECTION -->
 
     <TextView style="@style/Widget.U2020.DebugDrawer.Header"

@@ -1,11 +1,11 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.GetFavoriteEventsInteractor;
-import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
-import com.shootr.android.ui.model.mappers.EventResultModelMapper;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.android.ui.model.StreamResultModel;
+import com.shootr.android.ui.model.mappers.StreamModelMapper;
+import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,16 +24,16 @@ import static org.mockito.Mockito.verify;
 public class FavoritesListPresenterTest {
 
     @Mock FavoritesListView favoritesListView;
-    @Mock GetFavoriteEventsInteractor getFavoriteEventsInteractor;
-    @Mock EventResultModelMapper eventResultModelMapper;
-    @Mock EventModelMapper eventModelMapper;
+    @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
+    @Mock StreamResultModelMapper streamResultModelMapper;
+    @Mock StreamModelMapper streamModelMapper;
 
     private FavoritesListPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new FavoritesListPresenter(getFavoriteEventsInteractor, eventResultModelMapper);
+        presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, streamResultModelMapper);
         presenter.setView(favoritesListView);
     }
 
@@ -41,7 +41,7 @@ public class FavoritesListPresenterTest {
     public void shouldLoadFavoritesWhenInitialized() throws Exception {
         presenter.initialize(favoritesListView);
 
-        verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class FavoritesListPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        verify(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 
     @Test
@@ -113,34 +113,34 @@ public class FavoritesListPresenterTest {
         verify(favoritesListView).renderFavorites(stubResultModel());
     }
 
-    private EventSearchResult stubEvent() {
-        return new EventSearchResult();
+    private StreamSearchResult stubStream() {
+        return new StreamSearchResult();
     }
 
-    private List<EventSearchResult> stubResult() {
-        return Arrays.asList(stubEvent());
+    private List<StreamSearchResult> stubResult() {
+        return Arrays.asList(stubStream());
     }
 
-    private List<EventResultModel> stubResultModel() {
-        return eventResultModelMapper.transform(stubResult());
+    private List<StreamResultModel> stubResultModel() {
+        return streamResultModelMapper.transform(stubResult());
     }
 
-    private List<EventSearchResult> empty() {
+    private List<StreamSearchResult> empty() {
         return Collections.EMPTY_LIST;
     }
 
-    protected Interactor.Callback<List<EventSearchResult>> anyCallback() {
+    protected Interactor.Callback<List<StreamSearchResult>> anyCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupInteractorCallbacks(final List<EventSearchResult> result) {
+    private void setupInteractorCallbacks(final List<StreamSearchResult> result) {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<EventSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
+                Interactor.Callback<List<StreamSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
                 callback.onLoaded(result);
                 return null;
             }
-        }).when(getFavoriteEventsInteractor).loadFavoriteEvents(anyCallback());
+        }).when(getFavoriteStreamsInteractor).loadFavoriteStreams(anyCallback());
     }
 }

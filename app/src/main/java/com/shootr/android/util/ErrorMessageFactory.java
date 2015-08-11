@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
-import com.shootr.android.domain.exception.DeleteEventNotAllowedException;
+import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -43,9 +43,9 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_SHOT_TEXT_DUPLICATED, R.string.new_shot_repeated);
         codeResourceMap.put(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT, R.string.error_message_search_too_short);
-        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_SHORT, R.string.error_message_event_title_too_short);
-        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_TITLE_TOO_LONG, R.string.error_message_event_title_too_long);
-        codeResourceMap.put(ShootrError.ERROR_CODE_EVENT_START_DATE_TOO_LATE, R.string.error_message_event_start_date_too_late);
+        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_SHORT, R.string.error_message_event_title_too_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_TITLE_TOO_LONG, R.string.error_message_event_title_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_STREAM_START_DATE_TOO_LATE, R.string.error_message_event_start_date_too_late);
         codeResourceMap.put(ShootrError.ERROR_CODE_UPDATE_REQUIRED, R.string.error_message_update_required);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_DUPLICATE, R.string.error_message_registration_username_duplicated);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_USERNAME_NULL, R.string.error_message_registration_username_empty);
@@ -98,7 +98,7 @@ public class ErrorMessageFactory {
     public String getMessageForError(ShootrException error) {
         if (error instanceof ServerCommunicationException || error.getCause() instanceof  ServerCommunicationException) {
             return getCommunicationErrorMessage();
-        }else if(error instanceof DeleteEventNotAllowedException) {
+        }else if(error instanceof DeleteStreamNotAllowedException) {
             return context.getString(R.string.error_message_event_has_watchers);
         }else if(error instanceof EmailInUseException) {
             return context.getString(R.string.email_already_registered);

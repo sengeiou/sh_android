@@ -3,7 +3,7 @@ package com.shootr.android.domain.service.user;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.DatabaseUtils;
-import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import org.junit.Before;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class ShootrUserServiceLoginTest {
 
     private static final String CURRENT_USER_ID = "user_id";
-    private static final String WATCHING_EVENT_ID = "watching_id";
+    private static final String WATCHING_STREAM_ID = "watching_id";
     private static final String USERNAME_OR_EMAIL_STUB = "username_or_email";
     private static final String SESSION_TOKEN_STUB = "sessionToken";
 
@@ -31,7 +31,7 @@ public class ShootrUserServiceLoginTest {
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
     @Mock ConfirmEmailGateway confirmEmailGateway;
-    @Mock EventRepository remoteEventRepository;
+    @Mock StreamRepository remoteStreamRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
@@ -43,7 +43,7 @@ public class ShootrUserServiceLoginTest {
         shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
           createAccountGateway, loginGateway, resetPasswordGateway,
           confirmEmailGateway,
-          remoteEventRepository, remoteUserRepository,
+          remoteStreamRepository, remoteUserRepository,
           resetPasswordEmailGateway, databaseUtils);
     }
 
@@ -55,46 +55,46 @@ public class ShootrUserServiceLoginTest {
         verify(sessionRepository).createSession(CURRENT_USER_ID, SESSION_TOKEN_STUB, currentUser());
     }
 
-    @Test public void shouldDownloadEventIfUserHasEventsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithEvent());
+    @Test public void shouldDownloadStreamIfUserHasStreamsWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithStream());
 
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
 
-        verify(remoteEventRepository).getEventById(WATCHING_EVENT_ID);
+        verify(remoteStreamRepository).getStreamById(WATCHING_STREAM_ID);
     }
 
-    @Test public void shouldNotDownloadAnyEventIfUserHasNotEventsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutEvent());
+    @Test public void shouldNotDownloadAnyStreamIfUserHasNotStreamsWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithoutStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-        verify(remoteEventRepository, never()).getEventById(anyString());
+        verify(remoteStreamRepository, never()).getStreamById(anyString());
     }
 
-    @Test public void shouldDownloadPeopleIfUserHasEventsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithEvent());
-        shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-        verify(remoteUserRepository).getPeople();
-    }
-
-    @Test public void shouldDownlaodPeopleIfUserHasNotEventsWhenLoginCorrect() throws Exception {
-        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutEvent());
+    @Test public void shouldDownloadPeopleIfUserHasStreamsWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(),anyString())).thenReturn(loginResultWithStream());
         shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
         verify(remoteUserRepository).getPeople();
     }
 
-    private LoginResult loginResultWithoutEvent() {
-        User user = currentUserWithoutEvents();
+    @Test public void shouldDownlaodPeopleIfUserHasNotStreamsWhenLoginCorrect() throws Exception {
+        when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithoutStream());
+        shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
+        verify(remoteUserRepository).getPeople();
+    }
+
+    private LoginResult loginResultWithoutStream() {
+        User user = currentUserWithoutStreams();
         return new LoginResult(user,SESSION_TOKEN_STUB);
     }
 
-    private User currentUserWithoutEvents() {
+    private User currentUserWithoutStreams() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
         return user;
     }
 
-    private LoginResult loginResultWithEvent() {
+    private LoginResult loginResultWithStream() {
         User user = currentUser();
-        user.setIdWatchingEvent(String.valueOf(WATCHING_EVENT_ID));
+        user.setIdWatchingStream(String.valueOf(WATCHING_STREAM_ID));
         return new LoginResult(user, SESSION_TOKEN_STUB);
     }
 
@@ -105,7 +105,7 @@ public class ShootrUserServiceLoginTest {
     private User currentUser() {
         User user = new User();
         user.setIdUser(String.valueOf(CURRENT_USER_ID));
-        user.setIdWatchingEvent(WATCHING_EVENT_ID);
+        user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
     }
 }

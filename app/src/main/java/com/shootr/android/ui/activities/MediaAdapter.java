@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
@@ -33,7 +33,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View layoutView = LayoutInflater
           .from(viewGroup.getContext())
-          .inflate(R.layout.event_media_layout, viewGroup, false);
+          .inflate(R.layout.stream_media_layout, viewGroup, false);
         return new ViewHolder(layoutView, new TimelineAdapter.VideoClickListener() {
             @Override
             public void onClick(String url) {
@@ -74,7 +74,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         @Bind(R.id.shot_video_frame) View videoFrame;
         @Bind(R.id.shot_video_duration) TextView videoDuration;
-        @Bind(R.id.event_media_item) ImageView mediaImage;
+        @Bind(R.id.stream_media_item) ImageView mediaImage;
 
         private TimelineAdapter.VideoClickListener videoClickListener;
 

@@ -8,12 +8,12 @@ import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.UpdateUserInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.profile.UpdateUserProfileStream;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
-import com.shootr.android.task.validation.FieldValidationErrorEvent;
+import com.shootr.android.task.validation.FieldValidationErrorStream;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileEditView;
@@ -173,15 +173,15 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onUserProfileUpdated(UpdateUserProfileEvent event) {
+    public void onUserProfileUpdated(UpdateUserProfileStream stream) {
         profileEditView.showUpdatedSuccessfulAlert();
         profileEditView.closeScreen();
     }
 
     @Subscribe
-    public void onValidationErrors(FieldValidationErrorEvent event) {
+    public void onValidationErrors(FieldValidationErrorStream stream) {
         this.hideLoading();
-        List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
+        List<FieldValidationError> fieldValidationErrors = stream.getFieldValidationErrors();
         for (FieldValidationError validationError : fieldValidationErrors) {
             this.showValidationError(validationError);
         }
@@ -235,13 +235,13 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.hideLoadingIndicator();
     }
     @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         this.hideLoading();
         this.profileEditView.alertComunicationError();
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         this.hideLoading();
         this.profileEditView.alertConnectionNotAvailable();
     }

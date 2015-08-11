@@ -9,7 +9,7 @@ public class Shot {
     private String comment;
     private String image;
     private ShotUserInfo userInfo;
-    private ShotEventInfo eventInfo;
+    private ShotStreamInfo streamInfo;
     private Date publishDate;
     private Long idQueue;
 
@@ -22,6 +22,9 @@ public class Shot {
     private Long videoDuration;
 
     private String type;
+    private Integer niceCount;
+
+    private EntityMetadata metadata;
 
     public String getIdShot() {
         return idShot;
@@ -55,12 +58,12 @@ public class Shot {
         this.userInfo = userInfo;
     }
 
-    public ShotEventInfo getEventInfo() {
-        return eventInfo;
+    public ShotStreamInfo getStreamInfo() {
+        return streamInfo;
     }
 
-    public void setEventInfo(ShotEventInfo eventInfo) {
-        this.eventInfo = eventInfo;
+    public void setStreamInfo(ShotStreamInfo streamInfo) {
+        this.streamInfo = streamInfo;
     }
 
     public Date getPublishDate() {
@@ -139,57 +142,73 @@ public class Shot {
         this.type = type;
     }
 
-    public static class ShotEventInfo {
+    public Integer getNiceCount() {
+        return niceCount;
+    }
 
-        private String idEvent;
-        private String eventTitle;
-        private String eventTag;
+    public void setNiceCount(Integer niceCount) {
+        this.niceCount = niceCount;
+    }
 
-        public String getEventTag() {
-            return eventTag;
+    public EntityMetadata getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(EntityMetadata metadata) {
+        this.metadata = metadata;
+    }
+
+    public static class ShotStreamInfo {
+
+        private String idStream;
+        private String streamTitle;
+        private String streamTag;
+
+        public String getStreamTag() {
+            return streamTag;
         }
 
-        public void setEventTag(String eventTag) {
-            this.eventTag = eventTag;
+        public void setStreamTag(String streamTag) {
+            this.streamTag = streamTag;
         }
 
-        public String getEventTitle() {
-            return eventTitle;
+        public String getStreamTitle() {
+            return streamTitle;
         }
 
-        public void setEventTitle(String eventTitle) {
-            this.eventTitle = eventTitle;
+        public void setStreamTitle(String streamTitle) {
+            this.streamTitle = streamTitle;
         }
 
-        public String getIdEvent() {
-            return idEvent;
+        public String getIdStream() {
+            return idStream;
         }
 
-        public void setIdEvent(String idEvent) {
-            this.idEvent = idEvent;
+        public void setIdStream(String idStream) {
+            this.idStream = idStream;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof ShotEventInfo)) return false;
+            if (!(o instanceof ShotStreamInfo)) return false;
 
-            ShotEventInfo that = (ShotEventInfo) o;
+            ShotStreamInfo that = (ShotStreamInfo) o;
 
-            if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null) return false;
+            if (idStream != null ? !idStream.equals(that.idStream) : that.idStream != null) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            return idEvent != null ? idEvent.hashCode() : 0;
+            return idStream != null ? idStream.hashCode() : 0;
         }
 
         @Override public String toString() {
-            return "ShotEventInfo{" +
-              "eventTitle='" + eventTitle + '\'' +
-              ", idEvent=" + idEvent +
+            return "ShotStreamInfo{" +
+              "streamTitle='" + streamTitle + '\'' +
+              ", idStream=" + idStream +
               '}';
         }
     }
@@ -273,7 +292,7 @@ public class Shot {
         if (comment != null ? !comment.equals(shot.comment) : shot.comment != null) return false;
         if (image != null ? !image.equals(shot.image) : shot.image != null) return false;
         if (userInfo != null ? !userInfo.equals(shot.userInfo) : shot.userInfo != null) return false;
-        if (eventInfo != null ? !eventInfo.equals(shot.eventInfo) : shot.eventInfo != null) return false;
+        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) return false;
         if (publishDate != null ? !publishDate.equals(shot.publishDate) : shot.publishDate != null) return false;
         if (idQueue != null ? !idQueue.equals(shot.idQueue) : shot.idQueue != null) return false;
         if (parentShotId != null ? !parentShotId.equals(shot.parentShotId) : shot.parentShotId != null) return false;
@@ -298,7 +317,7 @@ public class Shot {
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
-        result = 31 * result + (eventInfo != null ? eventInfo.hashCode() : 0);
+        result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
         result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
         result = 31 * result + (idQueue != null ? idQueue.hashCode() : 0);
         result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);

@@ -16,8 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
@@ -26,11 +26,11 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
-import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.SearchPeopleLocalResultStream;
+import com.shootr.android.task.events.follows.SearchPeopleRemoteResultStream;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
@@ -224,9 +224,9 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void receivedRemoteResult(SearchPeopleRemoteResultEvent event) {
+    public void receivedRemoteResult(SearchPeopleRemoteResultStream stream) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<UserModel>> results = event.getResult();
+        PaginatedResult<List<UserModel>> results = stream.getResult();
         List<UserModel> users = results.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
@@ -247,8 +247,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void receivedLocalResult(SearchPeopleLocalResultEvent event) {
-        List<UserModel> results = event.getResult();
+    public void receivedLocalResult(SearchPeopleLocalResultStream stream) {
+        List<UserModel> results = stream.getResult();
         Timber.d("Received %d local results", results.size());
         setListContent(results, NO_OFFSET);
         setEmpty(false);
@@ -256,7 +256,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
         setLoading(false);
         isLoadingRemoteData = false;
@@ -266,7 +266,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         Timber.d("No local results. Waiting for remote results");
     }
 
@@ -372,8 +372,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<String, Boolean> result = event.getResult();
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream stream) {
+        Pair<String, Boolean> result = stream.getResult();
         String idUser = result.first;
         Boolean following = result.second;
 

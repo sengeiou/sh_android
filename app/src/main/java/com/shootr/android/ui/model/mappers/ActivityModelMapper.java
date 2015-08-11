@@ -23,11 +23,11 @@ public class ActivityModelMapper {
         activityModel.setIdUser(userInfo.getIdUser());
         activityModel.setUserPhoto(userInfo.getAvatar());
 
-        Activity.ActivityEventInfo eventInfo = activity.getEventInfo();
-        if (eventInfo != null) {
-            activityModel.setIdEvent(eventInfo.getIdEvent());
-            activityModel.setEventTag(eventInfo.getEventTag());
-            activityModel.setEventTitle(eventInfo.getEventTitle());
+        Activity.ActivityStreamInfo streamInfo = activity.getStreamInfo();
+        if (streamInfo != null) {
+            activityModel.setIdStream(streamInfo.getIdStream());
+            activityModel.setStreamTag(streamInfo.getStreamTag());
+            activityModel.setStreamTitle(streamInfo.getStreamTitle());
         }
 
         return activityModel;

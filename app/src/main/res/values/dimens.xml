@@ -34,9 +34,9 @@
 
     <!--Badge-->
     <dimen name="badge_text_size">10sp</dimen>
-    <dimen name="event_result_picture_height">84dp</dimen>
-    <dimen name="event_result_picture_width">112dp</dimen>
-    <dimen name="event_header_elevation">4dp</dimen>
+    <dimen name="stream_result_picture_height">84dp</dimen>
+    <dimen name="stream_result_picture_width">112dp</dimen>
+    <dimen name="stream_header_elevation">4dp</dimen>
     <dimen name="navdrawer_profile_avatar_size">64dp</dimen>
     <dimen name="checkin_bar_height">56dp</dimen>
     <dimen name="shot_item_image_height">185dp</dimen>
@@ -44,9 +44,14 @@
     <dimen name="toolbar_title_padding">16dp</dimen>
     <dimen name="tabbar_shadow_height">4dp</dimen>
     <dimen name="reset_password_avatar_size">80dp</dimen>
+
     <dimen name="email_confirmation_button_padding">16dp</dimen>
     <dimen name="email_confirmation_button_text_size">14sp</dimen>
     <dimen name="email_confirmation_message_width">360dp</dimen>
     <dimen name="email_confirmation_message_text_size">18sp</dimen>
+
+    <dimen name="logo_size_104">104dp</dimen>
+    <dimen name="nice_button_size">36dp</dimen>
+
 
 </resources>

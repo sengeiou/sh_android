@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -41,10 +40,10 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
         fillReplyInfo(shot);
     }
 
-    @Override protected void fillShotEventInfo(Shot shot) {
+    @Override protected void fillShotStreamInfo(Shot shot) {
         Shot parentShot = getParentShot();
         checkNotNull(parentShot, "Parent shot not found with id=%s", replyParentId);
-        shot.setEventInfo(parentShot.getEventInfo());
+        shot.setStreamInfo(parentShot.getStreamInfo());
     }
 
     private void fillReplyInfo(Shot shot) {

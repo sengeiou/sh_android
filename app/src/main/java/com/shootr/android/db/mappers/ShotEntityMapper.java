@@ -26,10 +26,11 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USER_PHOTO)));
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
-        shot.setEventTag(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TAG)));
-        shot.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.EVENT_TITLE)));
-        shot.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
+        shot.setStreamTag(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.STREAM_TAG)));
+        shot.setStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.STREAM_TITLE)));
+        shot.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_STREAM)));
         shot.setType(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.TYPE)));
+        shot.setNiceCount(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.NICE_COUNT)));
         shot.setIdShotParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT_PARENT)));
         shot.setIdUserParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER_PARENT)));
         shot.setUserNameParent(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.USERNAME_PARENT)));
@@ -48,10 +49,11 @@ public class ShotEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.USER_PHOTO, shot.getUserPhoto());
         cv.put(DatabaseContract.ShotTable.COMMENT, shot.getComment());
         cv.put(DatabaseContract.ShotTable.IMAGE, shot.getImage());
-        cv.put(DatabaseContract.ShotTable.EVENT_TAG, shot.getEventTag());
-        cv.put(DatabaseContract.ShotTable.EVENT_TITLE, shot.getEventTitle());
-        cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
+        cv.put(DatabaseContract.ShotTable.STREAM_TAG, shot.getStreamTag());
+        cv.put(DatabaseContract.ShotTable.STREAM_TITLE, shot.getStreamTitle());
+        cv.put(DatabaseContract.ShotTable.ID_STREAM, shot.getIdStream());
         cv.put(DatabaseContract.ShotTable.TYPE, shot.getType());
+        cv.put(DatabaseContract.ShotTable.NICE_COUNT, shot.getNiceCount());
         cv.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot.getIdShotParent());
         cv.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot.getIdUserParent());
         cv.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot.getUserNameParent());
@@ -71,9 +73,9 @@ public class ShotEntityMapper extends GenericMapper {
         shot.setUserPhoto(avatarProvider.thumbnail(shot.getIdUser()));
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
-        shot.setEventTag((String) dto.get(DatabaseContract.ShotTable.EVENT_TAG));
-        shot.setEventTitle((String) dto.get(DatabaseContract.ShotTable.EVENT_TITLE));
-        shot.setIdEvent((String) dto.get(DatabaseContract.ShotTable.ID_EVENT));
+        shot.setStreamTag((String) dto.get(DatabaseContract.ShotTable.STREAM_TAG));
+        shot.setStreamTitle((String) dto.get(DatabaseContract.ShotTable.STREAM_TITLE));
+        shot.setIdStream((String) dto.get(DatabaseContract.ShotTable.ID_STREAM));
         shot.setType((String) dto.get(DatabaseContract.ShotTable.TYPE));
         shot.setIdShotParent((String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT));
         shot.setIdUserParent((String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT));
@@ -97,9 +99,9 @@ public class ShotEntityMapper extends GenericMapper {
         /* no user photo to dataservice */
         dto.put(DatabaseContract.ShotTable.COMMENT, shot == null ? null : shot.getComment());
         dto.put(DatabaseContract.ShotTable.IMAGE, shot == null ? null : shot.getImage());
-        dto.put(DatabaseContract.ShotTable.EVENT_TAG, shot == null ? null : shot.getEventTag());
-        dto.put(DatabaseContract.ShotTable.EVENT_TITLE, shot == null ? null : shot.getEventTitle());
-        dto.put(DatabaseContract.ShotTable.ID_EVENT, shot == null ? null : shot.getIdEvent());
+        dto.put(DatabaseContract.ShotTable.STREAM_TAG, shot == null ? null : shot.getStreamTag());
+        dto.put(DatabaseContract.ShotTable.STREAM_TITLE, shot == null ? null : shot.getStreamTitle());
+        dto.put(DatabaseContract.ShotTable.ID_STREAM, shot == null ? null : shot.getIdStream());
         dto.put(DatabaseContract.ShotTable.TYPE, shot == null ? null : shot.getType());
         dto.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot == null ? null : shot.getIdShotParent());
         dto.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot == null ? null : shot.getIdUserParent());

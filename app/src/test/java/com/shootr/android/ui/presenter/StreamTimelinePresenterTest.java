@@ -1,0 +1,356 @@
+package com.shootr.android.ui.presenter;
+
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.Timeline;
+import com.shootr.android.domain.bus.ShotSent;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.ui.Poller;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
+import com.shootr.android.ui.views.StreamTimelineView;
+import com.shootr.android.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+public class StreamTimelinePresenterTest {
+
+    private static final Date LAST_SHOT_DATE = new Date();
+    private static final ShotSent.Stream SHOT_SENT_STREAM = null;
+    private static final String SELECTED_STREAM_ID = "stream";
+
+    @Mock StreamTimelineView streamTimelineView;
+    @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
+    @Mock SelectStreamInteractor selectStreamInteractor;
+    @Mock Bus bus;
+    @Mock ErrorMessageFactory errorMessageFactory;
+    @Mock Poller poller;
+
+    private StreamTimelinePresenter presenter;
+    private ShotSent.Receiver shotSentReceiver;
+
+    @Before public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        ShotModelMapper shotModelMapper = new ShotModelMapper();
+        presenter = new StreamTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
+          shotModelMapper, bus, errorMessageFactory, poller);
+        presenter.setView(streamTimelineView);
+        shotSentReceiver = presenter;
+    }
+
+    //region Select stream
+
+    @Test
+    public void shouldSelectStreamWhenInitialized() throws Exception {
+        presenter.initialize(streamTimelineView, SELECTED_STREAM_ID);
+
+        verify(selectStreamInteractor).selectStream(eq(SELECTED_STREAM_ID), anySelectCallback());
+    }
+    //endregion
+
+    //region Load timeline
+    @Test public void shouldLoadTimlelineWhenSelectStreamIfSelectStreamCallbacks() throws Exception {
+        setupSelectStreamInteractorCallbacksStream();
+
+        presenter.selectStream();
+
+        verify(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldShowShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).showShots();
+    }
+
+    @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
+        presenter.loadTimeline();
+
+        verify(streamTimelineView, times(1)).showLoading();
+    }
+
+    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView, times(1)).hideLoading();
+    }
+
+    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView, times(1)).hideLoading();
+    }
+
+    @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).showEmpty();
+    }
+
+    @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).hideEmpty();
+    }
+
+    @Test public void shouldHideTimelineShotsWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).hideShots();
+    }
+
+    @Test public void shouldRenderEmtpyShotListWhenGetMainTimelineRespondsEmptyShotList() throws Exception {
+        setupLoadTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.loadTimeline();
+
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(streamTimelineView).setShots(captor.capture());
+        List renderedShotList = captor.<List<ShotModel>>getValue();
+        assertThat(renderedShotList).isEmpty();
+    }
+    //endregion
+
+    //region Refresh main timeline
+    @Test public void shouldAddNewShotsWhenRefreshTimelineRespondsShots() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(streamTimelineView).addNewShots(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.refresh();
+
+        verify(streamTimelineView, never()).addNewShots(anyListOf(ShotModel.class));
+    }
+
+    @Test public void shouldShowLoadingWhenRefreshTimeline() throws Exception {
+        presenter.refresh();
+
+        verify(streamTimelineView, times(1)).showLoading();
+    }
+
+    @Test public void shouldHideLoadingWhenRefreshTimelineRespondsShots() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(streamTimelineView).hideLoading();
+    }
+
+    @Test public void shouldHideLoadingWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.refresh();
+
+        verify(streamTimelineView).hideLoading();
+    }
+
+    @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(streamTimelineView).hideEmpty();
+    }
+
+    @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
+        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.refresh();
+
+        verify(streamTimelineView).showShots();
+    }
+
+    //endregion
+
+    //region Older shots
+    @Test public void shouldObtainOlderTimelineWhenShowingLastShot() throws Exception {
+        presenter.showingLastShot(lastShotModel());
+
+        verify(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldObtainOlderTimelineOnceWhenShowingLastShotTwiceWithoutCallbackExecuted() throws Exception {
+        presenter.showingLastShot(lastShotModel());
+        presenter.showingLastShot(lastShotModel());
+
+        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldShowLoadingOlderShotsWhenShowingLastShot() throws Exception {
+        presenter.showingLastShot(lastShotModel());
+
+        verify(streamTimelineView).showLoadingOldShots();
+    }
+
+    @Test public void shouldObtainOlderTimelineOnlyOnceWhenCallbacksEmptyList() throws Exception {
+        setupGetOlderTimelineInteractorCallbacks(emptyTimeline());
+
+        presenter.showingLastShot(lastShotModel());
+        presenter.showingLastShot(lastShotModel());
+
+        verify(timelineInteractorWrapper, times(1)).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
+    }
+    //endregion
+
+    //region Bus streams
+    @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
+        shotSentReceiver.onShotSent(SHOT_SENT_STREAM);
+
+        verify(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
+        String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
+
+        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Stream.class);
+        boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
+        assertThat(annotationPresent).isTrue();
+    }
+
+    //region Matchers
+    private Interactor.ErrorCallback anyErrorCallback() {
+        return any(Interactor.ErrorCallback.class);
+    }
+
+    public Interactor.Callback<Timeline> anyCallback() {
+        return any(Interactor.Callback.class);
+    }
+
+    private Interactor.Callback<StreamSearchResult> anySelectCallback() {
+        return any(Interactor.Callback.class);
+    }
+    //endregion
+
+    //region Stubs
+    private ShotModel lastShotModel() {
+        ShotModel shotModel = new ShotModel();
+        shotModel.setBirth(LAST_SHOT_DATE);
+        return shotModel;
+    }
+
+    private Timeline timelineWithShots() {
+        Timeline timeline = new Timeline();
+        timeline.setShots(shotList());
+        return timeline;
+    }
+
+    private Timeline emptyTimeline() {
+        Timeline timeline = new Timeline();
+        timeline.setShots(new ArrayList<Shot>());
+        return timeline;
+    }
+
+    private List<Shot> shotList() {
+        return Arrays.asList(shot());
+    }
+
+    private Shot shot() {
+        Shot shot = new Shot();
+        shot.setUserInfo(new Shot.ShotUserInfo());
+        return shot;
+    }
+
+    private com.shootr.android.domain.Stream selectedStream() {
+        com.shootr.android.domain.Stream stream = new com.shootr.android.domain.Stream();
+        stream.setId(SELECTED_STREAM_ID);
+        return stream;
+    }
+
+    private StreamSearchResult streamResult() {
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(selectedStream());
+        return streamSearchResult;
+    }
+
+    //endregion
+
+    //region Setups
+    private void setupGetOlderTimelineInteractorCallbacks(final Timeline timeline) {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[1]).onLoaded(timeline);
+                return null;
+            }
+        }).when(timelineInteractorWrapper).obtainOlderTimeline(anyLong(), anyCallback(), anyErrorCallback());
+    }
+
+    private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {
+        doAnswer(new Answer<Void>() {
+            @Override public Void answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[0]).onLoaded(timeline);
+                return null;
+            }
+        }).when(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
+    }
+
+    private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {
+        doAnswer(new Answer<Void>() {
+            @Override public Void answer(InvocationOnMock invocation) throws Throwable {
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[0]).onLoaded(timeline);
+                return null;
+            }
+        }).when(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
+    }
+
+    private void setupSelectStreamInteractorCallbacksStream() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<StreamSearchResult> callback = (Interactor.Callback<StreamSearchResult>) invocation.getArguments()[1];
+                callback.onLoaded(streamResult());
+                return null;
+            }
+        }).when(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
+    }
+    //endregion
+}

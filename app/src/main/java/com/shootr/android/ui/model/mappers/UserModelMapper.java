@@ -20,12 +20,11 @@ public class UserModelMapper {
         userModel.setPhoto(user.getPhoto());
         userModel.setRelationship(user.isMe() ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(user));
         userModel.setWebsite(user.getWebsite());
-        userModel.setEventWatchingId(user.getIdWatchingEvent());
-        userModel.setEventWatchingTitle(user.getWatchingEventTitle());
-        userModel.setIdCheckedEvent(user.getIdCheckedEvent());
-        userModel.setJoinEventDate(user.getJoinEventDate());
         userModel.setEmail(user.getEmail());
         userModel.setEmailConfirmed(user.getEmailConfirmed() == 1);
+        userModel.setStreamWatchingId(user.getIdWatchingStream());
+        userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
+        userModel.setJoinStreamDate(user.getJoinStreamDate());
         return userModel;
     }
 

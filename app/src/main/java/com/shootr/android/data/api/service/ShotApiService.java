@@ -10,13 +10,10 @@ import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shots/boxTimeline?includeLinks=false")
-    List<ShotApiEntity> getEventTimeline(@Query("idEvent") String event,
-      @Query("count") Integer count,
-      @Query("sinceTimestamp") Long sinceTimestamp,
-      @Query("maxTimestamp") Long maxTimestamp,
-      @Query("includeNice") Boolean includeNice,
-      @Query("maxNice") Integer maxNice) throws IOException;
+    @GET("/shots/streamTimeline?includeLinks=false")
+    List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream, @Query("count") Integer count,
+      @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp,
+      @Query("includeNice") Boolean includeNice, @Query("maxNice") Integer maxNice) throws IOException;
 
     @GET("/shots/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
@@ -24,8 +21,18 @@ public interface ShotApiService {
     @GET("/shots/{idShot}/?includeLinks=false&includeReplies=true")
     ShotApiEntity getShotWithReplies(@Path("idShot") String idShot) throws ApiException, IOException;
 
+    @GET("/shots/{idShot}/?includeLinks=false&includeReplies=true&includeParent=true")
+    ShotApiEntity getShotDetail(@Path("idShot") String idShot) throws ApiException, IOException;
+
     @GET("/shots/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getShotsFromUser(@Path("idUser") String idUser,
       @Query("count") Integer limit,
       @Query("types") String[] types) throws ApiException, IOException;
+
+    @GET("/shots/user/{idUser}/?includeLinks=false")
+    List<ShotApiEntity> getAllShotsFromUser(@Path("idUser") String userId) throws ApiException, IOException;
+
+    @GET("/shots/user/{idUser}/?includeLinks=false")
+    List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
+      @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
 }

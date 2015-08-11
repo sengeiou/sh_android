@@ -1,14 +1,14 @@
 package com.shootr.android.data.api.entity;
 
-import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.StreamEntity;
 
 public class FavoriteApiEntity {
 
     private String idUser;
-    private String idEvent;
+    private String idStream;
     private Integer order;
 
-    private EventEntity event;
+    private StreamEntity stream;
 
     public String getIdUser() {
         return idUser;
@@ -18,12 +18,12 @@ public class FavoriteApiEntity {
         this.idUser = idUser;
     }
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
     public Integer getOrder() {
@@ -34,12 +34,12 @@ public class FavoriteApiEntity {
         this.order = order;
     }
 
-    public EventEntity getEvent() {
-        return event;
+    public StreamEntity getStream() {
+        return stream;
     }
 
-    public void setEvent(EventEntity event) {
-        this.event = event;
+    public void setStream(StreamEntity stream) {
+        this.stream = stream;
     }
 
 }

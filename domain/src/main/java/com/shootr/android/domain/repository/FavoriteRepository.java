@@ -9,7 +9,7 @@ public interface FavoriteRepository {
 
     List<Favorite> getFavorites();
 
-    Favorite getFavoriteByEvent(String eventId);
+    Favorite getFavoriteByStream(String eventId);
 
-    void removeFavoriteByEvent(String eventId);
+    void removeFavoriteByStream(String eventId);
 }

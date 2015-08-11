@@ -3,7 +3,6 @@ package com.shootr.android.domain.interactor.shot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -75,7 +74,7 @@ public abstract class PostNewShotInteractor implements Interactor {
 
     protected void fillShotContextualInfo(Shot shot) {
         fillShotUserInfo(shot);
-        fillShotEventInfo(shot);
+        fillShotStreamInfo(shot);
     }
 
     private void fillShotUserInfo(Shot shot) {
@@ -89,7 +88,7 @@ public abstract class PostNewShotInteractor implements Interactor {
         shot.setUserInfo(userInfo);
     }
 
-    protected abstract void fillShotEventInfo(Shot shot);
+    protected abstract void fillShotStreamInfo(Shot shot);
 
     private void notifyReadyToSend() {
         postExecutionThread.post(new Runnable() {

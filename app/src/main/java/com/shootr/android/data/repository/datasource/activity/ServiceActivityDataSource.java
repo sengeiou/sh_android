@@ -4,8 +4,8 @@ import com.shootr.android.data.api.entity.ActivityApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
-import com.shootr.android.data.entity.EventEntity;
-import com.shootr.android.data.repository.datasource.event.EventDataSource;
+import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.bus.BusPublisher;
@@ -25,7 +25,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
     private final ActivityApiEntityMapper activityApiEntityMapper;
     private final BusPublisher busPublisher;
     private final SessionRepository sessionRepository;
-    private final EventDataSource localEventDataSource;
+    private final StreamDataSource localStreamDataSource;
     private long lastTriggerDate;
 
     @Inject
@@ -33,18 +33,18 @@ public class ServiceActivityDataSource implements ActivityDataSource{
       ActivityApiEntityMapper activityApiEntityMapper,
       BusPublisher busPublisher,
       SessionRepository sessionRepository,
-      @Local EventDataSource localEventDataSource) {
+      @Local StreamDataSource localStreamDataSource) {
         this.activityApiService = activityApiService;
         this.activityApiEntityMapper = activityApiEntityMapper;
         this.busPublisher = busPublisher;
         this.sessionRepository = sessionRepository;
-        this.localEventDataSource = localEventDataSource;
+        this.localStreamDataSource = localStreamDataSource;
     }
 
     @Override public List<ActivityEntity> getActivityTimeline(ActivityTimelineParameters parameters) {
         try {
             List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
-            storeEmbedEvents(activities);
+            storeEmbedStreams(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
@@ -65,12 +65,12 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         throw new IllegalArgumentException("method not implemented");
     }
 
-    private void storeEmbedEvents(List<ActivityApiEntity> activities) {
+    private void storeEmbedStreams(List<ActivityApiEntity> activities) {
         for (ActivityApiEntity activity : activities) {
-            EventEntity event = activity.getEvent();
-            boolean hasAssociatedEvent = event != null;
-            if (hasAssociatedEvent) {
-                localEventDataSource.putEvent(event);
+            StreamEntity stream = activity.getStream();
+            boolean hasAssociatedStream = stream != null;
+            if (hasAssociatedStream) {
+                localStreamDataSource.putStream(stream);
             }
         }
     }
@@ -97,7 +97,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
             if (isSyncTriggerActivity(newActivity)
               && isNewerThanLastTrigger(newActivity)
               && !newActivity.getIdUser().equals(currentUserId)) {
-                busPublisher.post(new WatchUpdateRequest.Event());
+                busPublisher.post(new WatchUpdateRequest.Stream());
                 lastTriggerDate = newActivity.getBirth().getTime();
                 break;
             }

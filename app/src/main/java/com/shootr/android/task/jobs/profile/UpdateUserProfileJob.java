@@ -12,10 +12,10 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
+import com.shootr.android.task.events.profile.UpdateUserProfileStream;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationError;
-import com.shootr.android.task.validation.FieldValidationErrorEvent;
+import com.shootr.android.task.validation.FieldValidationErrorStream;
 import com.shootr.android.task.validation.profile.BioValidator;
 import com.shootr.android.task.validation.profile.NameValidator;
 import com.shootr.android.task.validation.profile.UsernameValidator;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 
-public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
+public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileStream> {
 
     private static final int PRIORITY = 8;
 
@@ -69,7 +69,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
         try {
             sendUpdatedProfileToServer();
-            postSuccessfulEvent(new UpdateUserProfileEvent(null));
+            postSuccessfulEvent(new UpdateUserProfileStream(null));
         } catch (ShootrServerException serverException) {
             ShootrError shootrError = serverException.getShootrError();
             FieldValidationError fieldValidationError = fieldErrorFromServer(shootrError.getErrorCode());
@@ -87,7 +87,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     }
 
     private void postValidationErrors() {
-        postCustomEvent(new FieldValidationErrorEvent(fieldValidationErrors));
+        postCustomEvent(new FieldValidationErrorStream(fieldValidationErrors));
     }
 
     private FieldValidationError fieldErrorFromServer(String errorCode) {

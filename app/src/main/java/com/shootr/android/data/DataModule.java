@@ -24,7 +24,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.domain.utils.EventDateTimeTextProvider;
+import com.shootr.android.domain.utils.StreamDateTimeTextProvider;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -51,8 +51,8 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.fragments.UserFollowsFragment;
-import com.shootr.android.ui.presenter.EventDetailPresenter;
-import com.shootr.android.ui.presenter.EventsListPresenter;
+import com.shootr.android.ui.presenter.StreamDetailPresenter;
+import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
@@ -63,7 +63,7 @@ import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.ResourcesEventDateTimeTextProvider;
+import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
@@ -121,9 +121,9 @@ import static android.content.Context.MODE_PRIVATE;
 
     PeoplePresenter.class,
 
-    EventDetailPresenter.class,
+    StreamDetailPresenter.class,
 
-    EventsListPresenter.class,
+    StreamsListPresenter.class,
 
     TimeFormatter.class,
 
@@ -155,7 +155,8 @@ public class DataModule {
         return new ShootrDbOpenHelper(application.getApplicationContext(), version);
     }
 
-    @Provides @Singleton EventDateTimeTextProvider provideEventTimeFormatter(ResourcesEventDateTimeTextProvider timeTextFormatter) {
+    @Provides @Singleton
+    StreamDateTimeTextProvider provideStreamTimeFormatter(ResourcesStreamDateTimeTextProvider timeTextFormatter) {
         return timeTextFormatter;
     }
 

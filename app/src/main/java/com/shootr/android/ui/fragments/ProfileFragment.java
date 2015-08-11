@@ -28,8 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
@@ -45,18 +45,19 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
-import com.shootr.android.task.events.profile.UserInfoResultEvent;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
+import com.shootr.android.task.events.profile.UserInfoResultStream;
+import com.shootr.android.task.events.shots.LatestShotsResultStream;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
+import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -114,6 +115,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Bind(R.id.profile_shots_empty) View shotsListEmpty;
     @Bind(R.id.profile_shots_list) ViewGroup shotsList;
+
+    @Bind(R.id.profile_all_shots_container) View allShotContainer;
 
     @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
@@ -359,8 +362,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                   jobManager.addJobInBackground(removeProfilePhotoJob);
               }
           })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
+          .setNegativeButton(R.string.cancel, null).show();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -392,7 +394,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onPhotoUploaded(UploadProfilePhotoEvent event) {
+    public void onPhotoUploaded(UploadProfilePhotoStream event) {
         uploadingPhoto = false;
         UserModel updateduser = event.getResult();
         hideLoadingPhoto();
@@ -406,7 +408,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
         Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
         hideLoadingPhoto();
     }
@@ -422,7 +424,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream event) {
         String messageForError;
         Exception exceptionProduced = event.getException();
         if (exceptionProduced != null && exceptionProduced instanceof ShootrServerException) {
@@ -484,14 +486,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void userInfoReceived(UserInfoResultEvent event) {
+    public void userInfoReceived(UserInfoResultStream event) {
         if (event.getResult() != null) {
             setUserInfo(event.getResult());
         }
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+    public void onFollowUnfollowReceived(FollowUnFollowResultStream event) {
         Pair<String, Boolean> result = event.getResult();
         if (result != null) {
             String idUserFromResult = result.first;
@@ -622,7 +624,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     }
 
     @Subscribe
-    public void onLatestShotsLoaded(LatestShotsResultEvent event) {
+    public void onLatestShotsLoaded(LatestShotsResultStream event) {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
@@ -647,9 +649,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
+            allShotContainer.setVisibility(View.VISIBLE);
             shotsListEmpty.setVisibility(View.GONE);
         } else {
             shotsList.setVisibility(View.GONE);
+            allShotContainer.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
     }
@@ -720,7 +724,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void showLogoutInProgress() {
         if(getActivity() != null) {
             progress = ProgressDialog.show(getActivity(),
-              getActivity().getString(R.string.sign_out_title),
+              null,
               getActivity().getString(R.string.sign_out_message),
               true);
         }
@@ -761,5 +765,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @OnClick(R.id.profile_listing)
     public void onListingClick() {
         profilePresenter.clickListing();
+    }
+
+    @OnClick(R.id.profile_all_shots_button)
+    public void onAllShotsClick() {
+        startActivity(AllShotsActivity.newIntent(getActivity(), user.getIdUser()));
     }
 }

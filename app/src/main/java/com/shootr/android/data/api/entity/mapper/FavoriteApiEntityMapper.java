@@ -15,7 +15,7 @@ public class FavoriteApiEntityMapper {
 
     public FavoriteEntity transform(FavoriteApiEntity apiEntity) {
         FavoriteEntity entity = new FavoriteEntity();
-        entity.setIdEvent(apiEntity.getIdEvent());
+        entity.setIdStream(apiEntity.getIdStream());
         entity.setOrder(apiEntity.getOrder());
         entity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
         return entity;

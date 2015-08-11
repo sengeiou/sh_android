@@ -47,7 +47,7 @@ public class UserDtoFactory {
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
     public static final String CHECK_IN_ID_USER = "idUser";
-    public static final String CHECK_IN_ID_EVENT_CHECKED = "idEvent";
+    public static final String CHECK_IN_ID_STREAM_CHECKED = "idStream";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -59,10 +59,10 @@ public class UserDtoFactory {
         this.followMapper = followMapper;
     }
 
-    public GenericDto getCheckinOperationDto(String idUser, String idEvent) {
+    public GenericDto getCheckinOperationDto(String idUser, String idStream) {
         MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
           .putKey(CHECK_IN_ID_USER, idUser)
-          .putKey(CHECK_IN_ID_EVENT_CHECKED, idEvent)
+          .putKey(CHECK_IN_ID_STREAM_CHECKED, idStream)
           .operation(ServiceConstants.OPERATION_RETRIEVE)
           .build();
 

@@ -122,7 +122,7 @@ public class DebugServiceAdapter {
         }
 
         if (interrupted) {
-            // Important: we don't want to quietly eat an interrupt() event,
+            // Important: we don't want to quietly eat an interrupt() stream,
             // so we make sure to re-interrupt the thread so that the next
             // call to Thread.sleep() or Object.wait() will be interrupted.
             Thread.currentThread().interrupt();

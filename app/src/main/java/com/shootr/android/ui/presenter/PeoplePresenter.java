@@ -4,8 +4,8 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.CommunicationErrorStream;
+import com.shootr.android.task.events.ConnectionNotAvailableStream;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.PeopleView;
@@ -93,13 +93,13 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
     }
 
     @Subscribe @Override
-    public void onCommunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorStream stream) {
         this.hideViewLoading();
         this.showErrorInView(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     @Subscribe @Override
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
         this.hideViewLoading();
         this.showErrorInView(errorMessageFactory.getConnectionNotAvailableMessage());
     }

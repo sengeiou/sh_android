@@ -4,9 +4,10 @@ import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ShotApiService;
+import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.domain.EventTimelineParameters;
 import com.shootr.android.domain.ShotType;
+import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -41,9 +42,9 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public List<ShotEntity> getShotsForEventTimeline(EventTimelineParameters parameters) {
+    @Override public List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         try {
-            List<ShotApiEntity> shots = shotApiService.getEventTimeline(parameters.getEventId(),
+            List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
               parameters.getMaxDate(),
@@ -73,17 +74,17 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public Integer getEventMediaShotsCount(String idEvent, List<String> idUsers) {
+    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
         try {
-            return shootrService.getEventMediaShotsCount(idEvent, idUsers);
+            return shootrService.getStreamMediaShotsCount(idStream, idUsers);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
-    @Override public List<ShotEntity> getEventMediaShots(String idEvent, List<String> userIds) {
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
         try {
-            return shootrService.getEventMediaShots(idEvent, userIds);
+            return shootrService.getStreamMediaShots(idStream, userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }
@@ -94,6 +95,44 @@ public class ServiceShotDatasource implements ShotDataSource {
         try {
             List<ShotApiEntity> userApiShots = shotApiService.getShotsFromUser(idUser, limit, ShotType.TYPES_SHOWN);
             return shotApiEntityMapper.transform(userApiShots);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
+    @Override
+    public ShotDetailEntity getShotDetail(String idShot) {
+        try {
+            ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
+
+            ShotEntity shotEntity = shotApiEntityMapper.transform(shotApiEntity);
+            List<ShotEntity> repliesEntities = shotApiEntityMapper.transform(shotApiEntity.getReplies());
+            ShotEntity parentEntity = shotApiEntityMapper.transform(shotApiEntity.getParent());
+
+            ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
+            shotDetailEntity.setShot(shotEntity);
+            shotDetailEntity.setReplies(repliesEntities);
+            shotDetailEntity.setParentShot(parentEntity);
+            return shotDetailEntity;
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public List<ShotEntity> getAllShotsFromUser(String userId) {
+        try {
+            List<ShotApiEntity> allShotsFromUser = shotApiService.getAllShotsFromUser(userId);
+            return shotApiEntityMapper.transform(allShotsFromUser);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
+    @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
+        try {
+            List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserWithMaxDate(userId,
+              currentOldestDate);
+            return shotApiEntityMapper.transform(allShotsFromUserAndDate);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }

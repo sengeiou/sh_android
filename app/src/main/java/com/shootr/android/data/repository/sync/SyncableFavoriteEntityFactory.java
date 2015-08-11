@@ -21,7 +21,7 @@ public class SyncableFavoriteEntityFactory extends SyncableEntityFactory<Favorit
 
     @Override
     protected FavoriteEntity currentEntity(Favorite favorite) {
-        return localFavoriteDataSource.getFavoriteByIdEvent(favorite.getIdEvent());
+        return localFavoriteDataSource.getFavoriteByIdStream(favorite.getIdStream());
     }
 
     @Override

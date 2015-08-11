@@ -25,9 +25,9 @@ public class ActivityApiEntityMapper {
         activityEntity.setIdUser(userApiEntity.getIdUser());
         activityEntity.setUserPhoto(userApiEntity.getPhoto());
 
-        activityEntity.setIdEvent(activityApiEntity.getIdEvent());
-        activityEntity.setEventTag(activityApiEntity.getEventTag());
-        activityEntity.setEventTitle(activityApiEntity.getEventTitle());
+        activityEntity.setIdStream(activityApiEntity.getIdStream());
+        activityEntity.setStreamTag(activityApiEntity.getStreamTag());
+        activityEntity.setStreamTitle(activityApiEntity.getStreamTitle());
 
         activityEntity.setBirth(new Date(activityApiEntity.getBirth()));
         activityEntity.setModified(new Date(activityApiEntity.getModified()));

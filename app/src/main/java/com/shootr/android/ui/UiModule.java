@@ -2,21 +2,22 @@ package com.shootr.android.ui;
 
 import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
+import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.EmailConfirmationActivity;
-import com.shootr.android.ui.activities.EventDetailActivity;
-import com.shootr.android.ui.activities.EventMediaActivity;
-import com.shootr.android.ui.activities.EventTimelineActivity;
-import com.shootr.android.ui.activities.FindEventsActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
-import com.shootr.android.ui.activities.NewEventActivity;
+import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.StreamMediaActivity;
+import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
@@ -26,9 +27,9 @@ import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
-import com.shootr.android.ui.fragments.EventTimelineFragment;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
+import com.shootr.android.ui.fragments.StreamTimelineFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
 import dagger.Module;
@@ -46,15 +47,15 @@ import javax.inject.Singleton;
     ProfileContainerActivity.class,
     UserFollowsContainerActivity.class,
     FindFriendsActivity.class,
-    EventDetailActivity.class,
+    StreamDetailActivity.class,
     ProfileEditActivity.class,
     ShotDetailActivity.class,
     PhotoViewActivity.class,
-    EventTimelineActivity.class,
+    StreamTimelineActivity.class,
     PeopleFragment.class,
     WatchersView.class,
-    NewEventActivity.class,
-    EventMediaActivity.class,
+    NewStreamActivity.class,
+    StreamMediaActivity.class,
     UpdateWarningActivity.class,
     DraftsActivity.class,
     DraftsPresenter.class,
@@ -64,10 +65,11 @@ import javax.inject.Singleton;
     FavoritesFragment.class,
     ActivityTimelineContainerActivity.class,
     ActivityTimelineFragment.class,
-    EventTimelineFragment.class,
-    FindEventsActivity.class,
+    StreamTimelineFragment.class,
+    FindStreamsActivity.class,
     WhaleActivity.class,
     EmailConfirmationActivity.class,
+    AllShotsActivity.class,
   },
   complete = false) public class UiModule {
 

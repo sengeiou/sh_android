@@ -3,33 +3,33 @@ package com.shootr.android.ui.model;
 
 public class WatchingRequestModel {
 
-    private String eventId;
+    private String streamId;
     private String title;
     private String subtitle;
-    private Long eventDate;
+    private Long streamDate;
 
-    public String getEventId() {
-        return eventId;
+    public String getStreamId() {
+        return streamId;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String eventTitle) {
-        this.title = eventTitle;
+    public void setTitle(String streamTitle) {
+        this.title = streamTitle;
     }
 
-    public Long getEventDate() {
-        return eventDate;
+    public Long getStreamDate() {
+        return streamDate;
     }
 
-    public void setEventDate(Long eventDate) {
-        this.eventDate = eventDate;
+    public void setStreamDate(Long streamDate) {
+        this.streamDate = streamDate;
     }
 
     public String getSubtitle() {
@@ -50,11 +50,11 @@ public class WatchingRequestModel {
             return false;
         }
         WatchingRequestModel that = (WatchingRequestModel) o;
-        return eventId.equals(that.eventId);
+        return streamId.equals(that.streamId);
     }
 
     @Override
     public int hashCode() {
-        return eventId.hashCode();
+        return streamId.hashCode();
     }
 }

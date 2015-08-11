@@ -55,10 +55,9 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
             cv.put(UserTable.EMAIL_CONFIRMED,u.getEmailConfirmed());
             cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
-            cv.put(UserTable.WATCHING_EVENT_ID, u.getIdWatchingEvent());
-            cv.put(UserTable.WATCHING_EVENT_TITLE, u.getWatchingEventTitle());
-            cv.put(UserTable.ID_CHECKED_EVENT, u.getIdCheckedEvent());
-            cv.put(UserTable.JOIN_EVENT_DATE, u.getJoinEventDate());
+            cv.put(UserTable.ID_WATCHING_STREAM, u.getIdWatchingStream());
+            cv.put(UserTable.WATCHING_STREAM_TITLE, u.getWatchingStreamTitle());
+            cv.put(UserTable.JOIN_STREAM_DATE, u.getJoinStreamDate());
             setSynchronizedtoContentValues(u, cv);
         }
         return cv;
@@ -86,17 +85,17 @@ public class UserMapper extends GenericMapper {
         if(dto.get(UserTable.RANK) != null){
             user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
         }
-        String eventId = (String) dto.get(UserTable.WATCHING_EVENT_ID);
+        String eventId = (String) dto.get(UserTable.ID_WATCHING_STREAM);
         if (eventId != null) {
-            user.setIdWatchingEvent(eventId);
+            user.setIdWatchingStream(eventId);
         }
 
-        user.setWatchingEventTitle(dto.containsKey(UserTable.WATCHING_EVENT_TITLE) ? (String) dto.get(UserTable.WATCHING_EVENT_TITLE) : null);
-        if(dto.get(UserTable.ID_CHECKED_EVENT)!=null){
-            user.setIdCheckedEvent(dto.containsKey(UserTable.ID_CHECKED_EVENT) ? (String) dto.get(UserTable.ID_CHECKED_EVENT) : null);
-        }
-        if(dto.get(UserTable.JOIN_EVENT_DATE)!=null) {
-            user.setJoinEventDate(dto.containsKey(UserTable.JOIN_EVENT_DATE) ? ((Number) dto.get(UserTable.JOIN_EVENT_DATE)).longValue() : null);
+        user.setWatchingStreamTitle(
+          dto.containsKey(UserTable.WATCHING_STREAM_TITLE) ? (String) dto.get(UserTable.WATCHING_STREAM_TITLE) : null);
+        if(dto.get(UserTable.JOIN_STREAM_DATE)!=null) {
+            user.setJoinStreamDate(
+              dto.containsKey(UserTable.JOIN_STREAM_DATE) ? ((Number) dto.get(UserTable.JOIN_STREAM_DATE)).longValue()
+                : null);
         }
         setSynchronizedfromDto(dto,user);
         return user;
@@ -130,10 +129,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.BIO, user == null ? null : user.getBio());
         dto.put(UserTable.RANK, user == null ? null : user.getRank());
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        dto.put(UserTable.WATCHING_EVENT_ID, user == null ? null : user.getIdWatchingEvent());
-        dto.put(UserTable.WATCHING_EVENT_TITLE, user == null ? null : user.getWatchingEventTitle());
-        dto.put(UserTable.ID_CHECKED_EVENT, user == null ? null : user.getIdCheckedEvent());
-        dto.put(UserTable.JOIN_EVENT_DATE, user == null ? null : user.getJoinEventDate());
+        dto.put(UserTable.ID_WATCHING_STREAM, user == null ? null : user.getIdWatchingStream());
+        dto.put(UserTable.WATCHING_STREAM_TITLE, user == null ? null : user.getWatchingStreamTitle());
+        dto.put(UserTable.JOIN_STREAM_DATE, user == null ? null : user.getJoinStreamDate());
         setSynchronizedtoDto(user, dto);
         return dto;
     }
@@ -152,10 +150,9 @@ public class UserMapper extends GenericMapper {
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
-        user.setIdWatchingEvent(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_ID)));
-        user.setWatchingEventTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_EVENT_TITLE)));
-        user.setIdCheckedEvent(c.getString(c.getColumnIndex(UserTable.ID_CHECKED_EVENT)));
-        user.setJoinEventDate(c.getLong(c.getColumnIndex(UserTable.JOIN_EVENT_DATE)));
+        user.setIdWatchingStream(c.getString(c.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
+        user.setWatchingStreamTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_STREAM_TITLE)));
+        user.setJoinStreamDate(c.getLong(c.getColumnIndex(UserTable.JOIN_STREAM_DATE)));
         return user;
     }
 

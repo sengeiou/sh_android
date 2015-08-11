@@ -9,7 +9,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
+import com.shootr.android.task.events.follows.SearchPeopleLocalResultStream;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultEvent> {
+public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultStream> {
 
     private static final int PRIORITY = 4;
 
@@ -48,7 +48,7 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
 
     @Override protected void run() throws SQLException, IOException {
         List<UserEntity> results = retrieveDataFromDatabase();
-        postSuccessfulEvent(new SearchPeopleLocalResultEvent(getUserVOs(results)));
+        postSuccessfulEvent(new SearchPeopleLocalResultStream(getUserVOs(results)));
     }
 
     @Override protected boolean isNetworkRequired() {

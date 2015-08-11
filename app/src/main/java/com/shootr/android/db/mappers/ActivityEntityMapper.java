@@ -3,10 +3,7 @@ package com.shootr.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.android.data.entity.ActivityEntity;
-import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.DatabaseContract;
-import java.util.HashMap;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class ActivityEntityMapper extends GenericMapper {
@@ -21,9 +18,9 @@ public class ActivityEntityMapper extends GenericMapper {
         activity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_USER)));
         activity.setUsername(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.USERNAME)));
         activity.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.USER_PHOTO)));
-        activity.setIdEvent(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_EVENT)));
-        activity.setEventTitle(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.EVENT_TITLE)));
-        activity.setEventTag(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.EVENT_TAG)));
+        activity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_STREAM)));
+        activity.setStreamTitle(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_TITLE)));
+        activity.setStreamTag(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_TAG)));
         activity.setComment(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.COMMENT)));
         activity.setType(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TYPE)));
         setSynchronizedfromCursor(c, activity);
@@ -36,9 +33,9 @@ public class ActivityEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ActivityTable.ID_USER, activity.getIdUser());
         cv.put(DatabaseContract.ActivityTable.USERNAME, activity.getUsername());
         cv.put(DatabaseContract.ActivityTable.USER_PHOTO, activity.getUserPhoto());
-        cv.put(DatabaseContract.ActivityTable.ID_EVENT, activity.getIdEvent());
-        cv.put(DatabaseContract.ActivityTable.EVENT_TITLE, activity.getEventTitle());
-        cv.put(DatabaseContract.ActivityTable.EVENT_TAG, activity.getEventTag());
+        cv.put(DatabaseContract.ActivityTable.ID_STREAM, activity.getIdStream());
+        cv.put(DatabaseContract.ActivityTable.STREAM_TITLE, activity.getStreamTitle());
+        cv.put(DatabaseContract.ActivityTable.STREAM_TAG, activity.getStreamTag());
         cv.put(DatabaseContract.ActivityTable.COMMENT, activity.getComment());
         cv.put(DatabaseContract.ActivityTable.TYPE, activity.getType());
         setSynchronizedtoContentValues(activity,cv);

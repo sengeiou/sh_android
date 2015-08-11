@@ -5,9 +5,9 @@ public class ActivityEntity extends Synchronized {
     private String idActivity;
     private String idUser;
     private String username;
-    private String idEvent;
-    private String eventTitle;
-    private String eventTag;
+    private String idStream;
+    private String streamTitle;
+    private String streamTag;
     private String comment;
     private String type;
     private String userPhoto;
@@ -44,28 +44,28 @@ public class ActivityEntity extends Synchronized {
         this.username = username;
     }
 
-    public String getIdEvent() {
-        return idEvent;
+    public String getIdStream() {
+        return idStream;
     }
 
-    public void setIdEvent(String idEvent) {
-        this.idEvent = idEvent;
+    public void setIdStream(String idStream) {
+        this.idStream = idStream;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
+    public String getStreamTitle() {
+        return streamTitle;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setStreamTitle(String streamTitle) {
+        this.streamTitle = streamTitle;
     }
 
-    public String getEventTag() {
-        return eventTag;
+    public String getStreamTag() {
+        return streamTag;
     }
 
-    public void setEventTag(String eventTag) {
-        this.eventTag = eventTag;
+    public void setStreamTag(String streamTag) {
+        this.streamTag = streamTag;
     }
 
     public String getComment() {

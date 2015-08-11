@@ -1,9 +1,9 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.event.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.event.GetFavoriteStatusInteractor;
-import com.shootr.android.domain.interactor.event.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import javax.inject.Inject;
 
@@ -14,7 +14,7 @@ public class FavoriteStatusPresenter implements Presenter {
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
 
     private FavoriteStatusView favoriteStatusView;
-    private String idEvent;
+    private String idStream;
 
     @Inject
     public FavoriteStatusPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
@@ -28,14 +28,14 @@ public class FavoriteStatusPresenter implements Presenter {
         this.favoriteStatusView = favoriteStatusView;
     }
 
-    public void initialize(FavoriteStatusView favoriteStatusView, String idEvent) {
-        this.idEvent = idEvent;
+    public void initialize(FavoriteStatusView favoriteStatusView, String idStream) {
+        this.idStream = idStream;
         this.setView(favoriteStatusView);
         this.loadFavoriteStatus();
     }
 
     private void loadFavoriteStatus() {
-        getFavoriteStatusInteractor.loadFavoriteStatus(idEvent, new Interactor.Callback<Boolean>() {
+        getFavoriteStatusInteractor.loadFavoriteStatus(idStream, new Interactor.Callback<Boolean>() {
             @Override
             public void onLoaded(Boolean isFavorite) {
                 if (!isFavorite) {
@@ -48,7 +48,7 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     public void addToFavorites() {
-        addToFavoritesInteractor.addToFavorites(idEvent, new Interactor.CompletedCallback() {
+        addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
                 favoriteStatusView.hideAddToFavoritesButton();
@@ -59,7 +59,7 @@ public class FavoriteStatusPresenter implements Presenter {
     }
 
     public void removeFromFavorites() {
-        removeFromFavoritesInteractor.removeFromFavorites(idEvent, new Interactor.CompletedCallback() {
+        removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
                 favoriteStatusView.showAddToFavoritesButton();
