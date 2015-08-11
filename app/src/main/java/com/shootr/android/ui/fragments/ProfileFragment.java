@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
 import com.shootr.android.task.events.profile.UserInfoResultStream;
 import com.shootr.android.task.events.shots.LatestShotsResultStream;
@@ -800,6 +802,18 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
           .setNegativeButton("No", null)
           .create()
           .show();
+    }
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+        Pair<String, Boolean> result = event.getResult();
+        if (result != null) {
+            String idUserFromResult = result.first;
+            Boolean following = result.second;
+            if (idUserFromResult.equals(this.idUser)) {
+                followButton.setFollowing(following);
+            }
+        }
     }
 
 }
