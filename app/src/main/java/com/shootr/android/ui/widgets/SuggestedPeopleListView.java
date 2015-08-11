@@ -21,9 +21,9 @@ public class SuggestedPeopleListView extends FrameLayout {
 
     @Bind(R.id.suggested_people_list) LinearLayout suggestedPeopleList;
     @Bind(R.id.suggested_people_title) TextView suggestedPeopleTitle;
-
     private UserListAdapter userListAdapter;
     private OnUserClickListener onUserClickListener;
+    private Drawable selectableBackground;
 
     public SuggestedPeopleListView(Context context) {
         super(context);
@@ -43,6 +43,9 @@ public class SuggestedPeopleListView extends FrameLayout {
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.include_suggested_people, this, true);
         ButterKnife.bind(this);
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.selectableItemBackground });
+        selectableBackground = a.getDrawable(0);
+        a.recycle();
     }
 
     public void setOnUserClickListener(OnUserClickListener onUserClickListener) {
@@ -83,15 +86,8 @@ public class SuggestedPeopleListView extends FrameLayout {
         int paddingLeft = itemView.getPaddingLeft();
         int paddingRight = itemView.getPaddingRight();
         int paddingTop = itemView.getPaddingTop();
-        itemView.setBackgroundDrawable(getSelectableBackground());
+        itemView.setBackgroundDrawable(selectableBackground.getConstantState().newDrawable());
         itemView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-    }
-
-    private Drawable getSelectableBackground() {
-        TypedArray a = getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.selectableItemBackground });
-        Drawable drawable = a.getDrawable(0);
-        a.recycle();
-        return drawable;
     }
 
 }
