@@ -32,7 +32,7 @@ public class ConfirmEmailInteractor implements Interactor{
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.confirmEmail();
+            shootrUserService.requestEmailConfirmation();
             notifyLoaded();
         } catch (ServerCommunicationException error) {
             notifyError(error);

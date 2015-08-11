@@ -118,7 +118,7 @@ public class ShootrUserService {
         sessionRepository.destroySession();
     }
 
-    public void confirmEmail() throws InvalidEmailConfirmationException {
+    public void requestEmailConfirmation() throws InvalidEmailConfirmationException {
         confirmEmailGateway.confirmEmail();
     }
 
