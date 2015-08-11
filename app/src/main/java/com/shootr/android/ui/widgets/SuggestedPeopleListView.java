@@ -1,7 +1,9 @@
 package com.shootr.android.ui.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,17 +65,33 @@ public class SuggestedPeopleListView extends FrameLayout {
             final int position = i;
             View itemView = userListAdapter.getView(i, null, suggestedPeopleList);
             itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     UserModel user = userListAdapter.getItem(position);
                     onUserClickListener.onUserClick(user.getIdUser());
                 }
             });
-            //TODO set selectable background
+            setItemBackgroundRetainPaddings(itemView);
             suggestedPeopleList.addView(itemView);
         }
         if(userListAdapter.getCount() > 0) {
             suggestedPeopleTitle.setVisibility(VISIBLE);
         }
     }
+
+    private void setItemBackgroundRetainPaddings(View itemView) {
+        int paddingBottom = itemView.getPaddingBottom();
+        int paddingLeft = itemView.getPaddingLeft();
+        int paddingRight = itemView.getPaddingRight();
+        int paddingTop = itemView.getPaddingTop();
+        itemView.setBackgroundDrawable(getSelectableBackground());
+        itemView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+    }
+
+    private Drawable getSelectableBackground() {
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.selectableItemBackground });
+        Drawable drawable = a.getDrawable(0);
+        a.recycle();
+        return drawable;
+    }
+
 }
