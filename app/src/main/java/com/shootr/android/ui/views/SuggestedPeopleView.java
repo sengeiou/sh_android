@@ -9,4 +9,5 @@ public interface SuggestedPeopleView {
 
     void showError(String messageForError);
 
+    void refreshSuggestedPeople(List<UserModel> suggestedPeople);
 }

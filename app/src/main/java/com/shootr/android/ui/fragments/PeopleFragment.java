@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,10 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
-import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -36,8 +32,6 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,7 +42,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject SessionRepository sessionRepository;
-    @Inject @Main Bus bus;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -95,14 +88,12 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onResume() {
         super.onResume();
-        bus.register(this);
         presenter.resume();
         suggestedPeoplePresenter.resume();
     }
 
     @Override public void onPause() {
         super.onPause();
-        bus.unregister(this);
         presenter.pause();
     }
 
@@ -186,6 +177,11 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
+        getSuggestedPeopleAdapter().setItems(suggestedPeople);
+        getSuggestedPeopleAdapter().notifyDataSetChanged();
+    }
+
     @Override public void follow(int position) {
         suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
     }
@@ -209,22 +205,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
             suggestedPeopleAdapter.setCallback(this);
         }
         return suggestedPeopleAdapter;
-    }
-
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-        List<UserModel> usersInList = getSuggestedPeopleAdapter().getItems();
-        for (int i = 0; i < usersInList.size(); i++) {
-            UserModel userModel = usersInList.get(i);
-            if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
-                getSuggestedPeopleAdapter().notifyDataSetChanged();
-                break;
-            }
-        }
     }
 
 }
