@@ -149,7 +149,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileStream>
         updatedUserEntity.setBio(updatedUserModel.getBio());
         updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
         updatedUserEntity.setEmail(updatedUserModel.getEmail());
-        updatedUserEntity.setEmailConfirmed(updatedUserModel.getEmailConfirmed().equals(true) ? 1:0);
+        updatedUserEntity.setEmailConfirmed(updatedUserModel.isEmailConfirmed() ? 1:0);
         return updatedUserEntity;
     }
 

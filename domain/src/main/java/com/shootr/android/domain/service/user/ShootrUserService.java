@@ -128,7 +128,7 @@ public class ShootrUserService {
         String currentUserId = sessionRepository.getCurrentUserId();
         User user = localUserRepository.getUserById(currentUserId);
         user.setEmail(email);
-        user.setEmailConfirmed(0);
+        user.setEmailConfirmed(false);
         sessionRepository.setCurrentUser(user);
         localUserRepository.putUser(user);
 

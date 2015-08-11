@@ -22,7 +22,7 @@ public class UserModel implements Serializable, Cloneable {
     private String email;
     private Boolean emailConfirmed;
 
-    public Boolean getEmailConfirmed() {
+    public Boolean isEmailConfirmed() {
         return emailConfirmed;
     }
 

@@ -52,7 +52,7 @@ public class EmailConfirmationPresenter implements Presenter {
 
     protected void confirmEmail(final String email) {
         UserModel currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        if (!currentUserModel.getEmailConfirmed()) {
+        if (!currentUserModel.isEmailConfirmed()) {
             confirmEmailInteractor.confirmEmail(new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
                     emailConfirmationView.showConfirmationToUser(email);
