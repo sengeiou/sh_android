@@ -105,7 +105,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
         intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
         intent.setType("text/plain");
-        startActivity(intent);
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
     }
 
     @Override
