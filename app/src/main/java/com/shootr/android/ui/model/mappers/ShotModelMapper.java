@@ -41,6 +41,7 @@ public class ShotModelMapper {
 
         shotModel.setType(shot.getType());
         shotModel.setNiceCount(shot.getNiceCount());
+        shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
 
         return shotModel;
     }

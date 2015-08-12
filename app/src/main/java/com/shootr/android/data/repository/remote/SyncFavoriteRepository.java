@@ -9,6 +9,7 @@ import com.shootr.android.data.repository.sync.SyncableFavoriteEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -38,7 +39,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     }
 
     @Override
-    public void putFavorite(Favorite favorite) {
+    public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
         FavoriteEntity updatedOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         try {
             FavoriteEntity remoteFavoriteEntity = remoteFavoriteDataSource.putFavorite(updatedOrNewEntity);
@@ -56,7 +57,11 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites();
         // TODO Use method for putting the entire collection at once
         for (FavoriteEntity remoteFavorite : remoteFavorites) {
-            localFavoriteDataSource.putFavorite(remoteFavorite);
+            try {
+                localFavoriteDataSource.putFavorite(remoteFavorite);
+            } catch (StreamAlreadyInFavoritesException e) {
+                /* swallow it */
+            }
         }
         return favoriteEntityMapper.transformEntities(remoteFavorites);
     }
@@ -102,7 +107,11 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
         if (!isReadyForSync(favoriteEntity)) {
             favoriteEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
         }
-        localFavoriteDataSource.putFavorite(favoriteEntity);
+        try {
+            localFavoriteDataSource.putFavorite(favoriteEntity);
+        } catch (StreamAlreadyInFavoritesException e) {
+            /* swallow it */
+        }
     }
 
     private boolean isReadyForSync(FavoriteEntity favoriteEntity) {
@@ -119,9 +128,13 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
                 remoteFavoriteDataSource.removeFavoriteByIdStream(favoriteEntityEntity.getIdStream());
                 localFavoriteDataSource.removeFavoriteByIdStream(favoriteEntityEntity.getIdStream());
             } else {
-                FavoriteEntity synchedEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
-                synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-                localFavoriteDataSource.putFavorite(synchedEntity);
+                try {
+                    FavoriteEntity favoriteEntity = remoteFavoriteDataSource.putFavorite(favoriteEntityEntity);
+                    favoriteEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+                    localFavoriteDataSource.putFavorite(favoriteEntity);
+                } catch (StreamAlreadyInFavoritesException e) {
+                    /* swallow it */
+                }
             }
         }
     }

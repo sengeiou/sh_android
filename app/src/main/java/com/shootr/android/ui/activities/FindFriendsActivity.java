@@ -28,7 +28,7 @@ import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
-import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultStream;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultStream;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
@@ -372,7 +372,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream stream) {
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent stream) {
         Pair<String, Boolean> result = stream.getResult();
         String idUser = result.first;
         Boolean following = result.second;

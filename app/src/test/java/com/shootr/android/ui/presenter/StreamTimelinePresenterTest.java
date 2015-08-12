@@ -5,6 +5,8 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
@@ -47,6 +49,8 @@ public class StreamTimelinePresenterTest {
     @Mock StreamTimelineView streamTimelineView;
     @Mock StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     @Mock SelectStreamInteractor selectStreamInteractor;
+    @Mock MarkNiceShotInteractor markNiceShotInteractor;
+    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
@@ -58,6 +62,8 @@ public class StreamTimelinePresenterTest {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper();
         presenter = new StreamTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
+          markNiceShotInteractor,
+          unmarkNiceShotInteractor,
           shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
@@ -98,10 +104,10 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).showShots();
     }
 
-    @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
+    @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 
-        verify(streamTimelineView, times(1)).showLoading();
+        verify(streamTimelineView, never()).showLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {

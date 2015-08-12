@@ -74,6 +74,12 @@
 
         </FrameLayout>
 
+      <com.shootr.android.ui.widgets.SuggestedPeopleListView
+        android:id="@+id/profile_suggested_people"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/profile_all_shots_container"
+        android:layout_height="wrap_content" />
+
     </RelativeLayout>
 
 </ScrollView>

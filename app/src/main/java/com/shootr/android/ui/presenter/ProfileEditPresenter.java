@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
@@ -32,6 +34,8 @@ public class ProfileEditPresenter implements Presenter {
     private final JobManager jobManager;
 
     private UserModel currentUserModel;
+    private boolean hasBeenPaused = false;
+    private boolean discardConfirmEmailAlert = false;
 
     @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
@@ -52,6 +56,19 @@ public class ProfileEditPresenter implements Presenter {
     private void fillCurrentUserData() {
         currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         this.profileEditView.renderUserInfo(currentUserModel);
+        if(!currentUserModel.isEmailConfirmed() && !discardConfirmEmailAlert){
+            profileEditView.showEmailNotConfirmedError();
+        }
+    }
+
+    private void showViewError(ShootrException error) {
+        String errorMessage;
+        if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        } else {
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        profileEditView.showError(errorMessage);
     }
 
     public void discard() {
@@ -67,11 +84,11 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     public void done() {
-        UserModel updatedUserModel = this.getUpadtedUserData();
+        UserModel updatedUserModel = this.getUpdatedUserData();
         this.saveUpdatedProfile(updatedUserModel);
     }
 
-    private UserModel getUpadtedUserData() {
+    private UserModel getUpdatedUserData() {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
@@ -80,9 +97,8 @@ public class ProfileEditPresenter implements Presenter {
         return updatedUserModel;
     }
 
-
     private boolean hasChangedData() {
-        UserModel updatedUserData = getUpadtedUserData();
+        UserModel updatedUserData = getUpdatedUserData();
         boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
         boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null : !currentUserModel.getName().equals(updatedUserData.getName());
         boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null : !currentUserModel.getBio().equals(updatedUserData.getBio());
@@ -218,9 +234,21 @@ public class ProfileEditPresenter implements Presenter {
 
     @Override public void resume() {
         bus.register(this);
+        if (hasBeenPaused) {
+            fillCurrentUserData();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        hasBeenPaused = true;
+    }
+
+    public void editEmail() {
+        if (!currentUserModel.isEmailConfirmed()) {
+            profileEditView.hideEmailNotConfirmedError();
+        }
+        discardConfirmEmailAlert = true;
+        profileEditView.navigateToEditEmail();
     }
 }

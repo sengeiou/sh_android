@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,28 +8,34 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.ButterKnife;
+import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.StreamsListAdapter;
+import com.shootr.android.ui.adapters.ListingStreamsAdapter;
+import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
+import com.shootr.android.util.CustomContextMenu;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
+    public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
+    @Bind(R.id.listing_empty_title) View emptyView;
 
     @Inject ListingListPresenter presenter;
 
-    private StreamsListAdapter adapter;
+    private ListingStreamsAdapter adapter;
 
     public static Intent getIntent(Context context, String idUser) {
         Intent intent = new Intent(context, ListingActivity.class);
@@ -42,15 +49,27 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-
-        listingList.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
+        }, new OnFavoriteClickListener() {
+            @Override public void onFavoriteClick(StreamResultModel stream) {
+                presenter.addToFavorite(stream);
+            }
+
+            @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
+                presenter.removeFromFavorites(stream);
+            }
         });
+
         listingList.setAdapter(adapter);
+        listingList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override protected void initializePresenter() {
@@ -73,6 +92,15 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
+            String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+            presenter.streamCreated(streamId);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.resume();
@@ -82,6 +110,16 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+              @Override
+              public void run() {
+                  presenter.addToFavorite(stream);
+              }
+          }).show();
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {
@@ -96,11 +134,39 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         loadingView.setVisibility(View.GONE);
     }
 
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
     }
 
+    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
+        adapter.setFavoriteStreams(favoriteStreams);
+    }
+
+    @Override public void hideContent() {
+        listingList.setVisibility(View.GONE);
+    }
+
+    @Override public void navigateToCreatedStreamDetail(String streamId) {
+        startActivity(StreamDetailActivity.getIntent(this, streamId));
+    }
+
     @Override public void showContent() {
         listingList.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.listing_add_stream) public void onAddStream() {
+        startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
     }
 }

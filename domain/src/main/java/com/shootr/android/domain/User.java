@@ -8,6 +8,7 @@ public class User {
     private String username;
     private String name;
     private String email;
+    private Boolean emailConfirmed;
     private String photo;
     private Long numFollowings;
     private Long numFollowers;
@@ -123,6 +124,14 @@ public class User {
         return email;
     }
 
+    public Boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(Boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,7 +169,8 @@ public class User {
         this.watchingStreamTitle = watchingStreamTitle;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "User{" +
           "idUser=" + idUser +
           ", username='" + username + '\'' +
@@ -178,7 +188,8 @@ public class User {
 
     public static class UsernameComparator implements Comparator<User> {
 
-        @Override public int compare(User o1, User o2) {
+        @Override
+        public int compare(User o1, User o2) {
             return o1.getUsername().compareTo(o2.getUsername());
         }
     }

@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="keyline_1">16dp</dimen>
-    <dimen name="keyline_2">72dp</dimen>
+    <dimen name="keyline_2">76dp</dimen>
     <dimen name="keyline_1_minus_8dp">8dp</dimen>
     <dimen name="keyline_2_minus_icon">32dp</dimen>
 
@@ -44,7 +44,11 @@
     <dimen name="toolbar_title_padding">16dp</dimen>
     <dimen name="tabbar_shadow_height">4dp</dimen>
     <dimen name="reset_password_avatar_size">80dp</dimen>
+
+    <dimen name="email_confirmation_message_text_size">18sp</dimen>
+
     <dimen name="logo_size_104">104dp</dimen>
     <dimen name="nice_button_size">36dp</dimen>
+
 
 </resources>

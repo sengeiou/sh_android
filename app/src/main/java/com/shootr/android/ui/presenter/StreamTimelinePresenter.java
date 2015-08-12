@@ -6,6 +6,8 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ShotModel;
@@ -24,6 +26,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
     private final SelectStreamInteractor selectStreamInteractor;
+    private final MarkNiceShotInteractor markNiceShotInteractor;
+    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -33,12 +37,20 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private String streamId;
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
+    private boolean isRefreshing = false;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
-      SelectStreamInteractor selectStreamInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, Poller poller) {
+      SelectStreamInteractor selectStreamInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      ShotModelMapper shotModelMapper,
+      @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory,
+      Poller poller) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
+        this.markNiceShotInteractor = markNiceShotInteractor;
+        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -71,16 +83,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void selectStream() {
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+            @Override
+            public void onLoaded(StreamSearchResult streamSearchResult) {
                 loadTimeline();
             }
         });
     }
 
     protected void loadTimeline() {
-        streamTimelineView.showLoading();
         timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
+            @Override
+            public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 streamTimelineView.hideLoading();
                 streamTimelineView.setShots(shotModels);
@@ -94,7 +107,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 streamTimelineView.hideLoading();
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
@@ -113,8 +127,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadNewShots() {
+        if (isRefreshing) {
+            return;
+        }
+        isRefreshing = true;
         timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
-            @Override public void onLoaded(Timeline timeline) {
+            @Override
+            public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
                     streamTimelineView.addNewShots(shotModels);
@@ -122,11 +141,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                     streamTimelineView.showShots();
                 }
                 streamTimelineView.hideLoading();
+                isRefreshing = false;
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 streamTimelineView.hideLoading();
+                isRefreshing = false;
             }
         });
     }
@@ -135,26 +157,48 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
         timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
-              @Override public void onLoaded(Timeline timeline) {
-                  isLoadingOlderShots = false;
-                  streamTimelineView.hideLoadingOldShots();
-                  List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                  if (!shotModels.isEmpty()) {
-                      streamTimelineView.addOldShots(shotModels);
-                  } else {
-                      mightHaveMoreShots = false;
-                  }
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  streamTimelineView.hideLoadingOldShots();
-                  streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-              }
-          });
+            @Override
+            public void onLoaded(Timeline timeline) {
+                isLoadingOlderShots = false;
+                streamTimelineView.hideLoadingOldShots();
+                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
+                if (!shotModels.isEmpty()) {
+                    streamTimelineView.addOldShots(shotModels);
+                } else {
+                    mightHaveMoreShots = false;
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                streamTimelineView.hideLoadingOldShots();
+                streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
+        });
+    }
+
+    public void markNiceShot(String idShot) {
+        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                loadTimeline();
+            }
+        });
+    }
+
+    public void unmarkNiceShot(String idShot) {
+        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                loadTimeline();
+            }
+        });
+
     }
 
     @Override public void resume() {
         bus.register(this);
+        loadTimeline();
         startPollingShots();
     }
 

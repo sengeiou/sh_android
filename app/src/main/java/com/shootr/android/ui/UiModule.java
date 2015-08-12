@@ -3,7 +3,9 @@ package com.shootr.android.ui;
 import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.AllShotsActivity;
+import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
+import com.shootr.android.ui.activities.EmailConfirmationActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
@@ -17,6 +19,7 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.StreamMediaActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
+import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
@@ -67,7 +70,10 @@ import javax.inject.Singleton;
     StreamTimelineFragment.class,
     FindStreamsActivity.class,
     WhaleActivity.class,
+    EmailConfirmationActivity.class,
     AllShotsActivity.class,
+    SupportActivity.class,
+    ChangePasswordActivity.class,
   },
   complete = false) public class UiModule {
 

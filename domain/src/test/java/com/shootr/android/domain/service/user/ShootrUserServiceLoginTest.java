@@ -30,7 +30,9 @@ public class ShootrUserServiceLoginTest {
     @Mock CreateAccountGateway createAccountGateway;
     @Mock LoginGateway loginGateway;
     @Mock ResetPasswordGateway resetPasswordGateway;
+    @Mock ConfirmEmailGateway confirmEmailGateway;
     @Mock StreamRepository remoteStreamRepository;
+    @Mock ChangePasswordGateway changePasswordGateway;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
@@ -39,9 +41,18 @@ public class ShootrUserServiceLoginTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway, remoteStreamRepository, remoteUserRepository,
-          resetPasswordEmailGateway, databaseUtils);
+        shootrUserService = new ShootrUserService(localUserRepository,
+          sessionRepository,
+          checkinGateway,
+          createAccountGateway,
+          loginGateway,
+          resetPasswordGateway,
+          changePasswordGateway,
+          confirmEmailGateway,
+          remoteStreamRepository,
+          remoteUserRepository,
+          resetPasswordEmailGateway,
+          databaseUtils);
     }
 
     @Test public void shouldCreateSessionWhenLoginCorrect() throws Exception {

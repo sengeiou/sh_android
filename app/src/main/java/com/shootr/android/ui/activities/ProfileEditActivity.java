@@ -15,13 +15,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
+import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
 import javax.inject.Inject;
 
@@ -29,6 +31,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
+    public static final String EXTRA_USER_EMAIL = "user_email";
 
     @Inject ProfileEditPresenter presenter;
 
@@ -37,6 +40,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Bind(R.id.profile_edit_username) TextView username;
     @Bind(R.id.profile_edit_website) TextView website;
     @Bind(R.id.profile_edit_bio) TextView bio;
+    @Bind(R.id.profile_edit_email) TextView email;
+    @Bind(R.id.profile_edit_email_layout) FloatLabelLayout emailLayout;
     private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +103,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         username.setText(userModel.getUsername());
         website.setText(userModel.getWebsite());
         bio.setText(userModel.getBio());
+        email.setText(userModel.getEmail());
+        email.setKeyListener(null);
     }
 
     @Override public void hideKeyboard() {
@@ -173,6 +180,24 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void showEmailNotConfirmedError() {
+        email.setError(" ");
+    }
+
+    @Override
+    public void hideEmailNotConfirmedError() {
+        email.setError(null);
+    }
+
+    @Override public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void navigateToEditEmail() {
+        startActivity(EmailConfirmationActivity.newIntent(this, email.getText().toString()));
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
         menuItemDone = menu.findItem(R.id.menu_done);
@@ -188,5 +213,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.profile_edit_email_layout)
+    public void onEmailClick() {
+        presenter.editEmail();
     }
 }

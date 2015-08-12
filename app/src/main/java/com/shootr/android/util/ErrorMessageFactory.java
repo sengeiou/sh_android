@@ -8,6 +8,8 @@ import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.service.EmailInUseException;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -59,6 +61,9 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_TOO_LONG, R.string.error_message_registration_password_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_EQUALS_USERNAME, R.string.error_message_registration_password_equals_username);
         codeResourceMap.put(ShootrError.ERROR_CODE_REGISTRATION_PASSWORD_INVALID_CHARACTERS, R.string.error_message_registration_password_invalid);
+        codeResourceMap.put(ShootrError.ERROR_NEW_PASSWORD_EQUALS_CURRENT_PASSWORD, R.string.error_message_change_password_new_password_same_current_password);
+        codeResourceMap.put(ShootrError.ERROR_NEW_PASSWORD_NOT_EQUALS_NEW_PASSWORD_AGAIN, R.string.error_message_change_password_new_password_and_again_must_match);
+        codeResourceMap.put(ShootrError.ERROR_CODE_NEW_PASSWORD_EQUALS_USERNAME, R.string.error_message_registration_password_equals_username);
     }
 
     public String getMessageForError(ShootrError shootrError) {
@@ -99,6 +104,10 @@ public class ErrorMessageFactory {
             return getCommunicationErrorMessage();
         }else if(error instanceof DeleteStreamNotAllowedException) {
             return context.getString(R.string.error_message_event_has_watchers);
+        }else if(error instanceof EmailInUseException) {
+            return context.getString(R.string.email_already_registered);
+        }else if(error instanceof StreamIsAlreadyInFavoritesException) {
+            return getStreamIsAlreadyInFavoritesError();
         } else {
             return getUnknownErrorMessage();
         }
@@ -106,5 +115,13 @@ public class ErrorMessageFactory {
 
     public String getLoginCredentialsError(){
         return context.getString(R.string.error_login_credentials_invalid);
+    }
+
+    public String getChangePasswordError() {
+        return context.getString(R.string.error_message_invalid_change_password);
+    }
+
+    public String getStreamIsAlreadyInFavoritesError(){
+        return context.getString(R.string.error_stream_already_favorites);
     }
 }

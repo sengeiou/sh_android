@@ -3,14 +3,19 @@ package com.shootr.android.data.repository.remote;
 import com.shootr.android.data.bus.Default;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
+import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.CachedUserDataSource;
 import com.shootr.android.data.repository.datasource.user.FollowDataSource;
+import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncTrigger;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
+import com.shootr.android.domain.SuggestedPeople;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.WatchUpdateRequest;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -30,23 +35,31 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
+    private final SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
     private final CachedUserDataSource cachedRemoteUserDataSource;
+    private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
     private final FollowDataSource localFollowDataSource;
     private final UserEntityMapper userEntityMapper;
+    private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SyncTrigger syncTrigger;
     private final Bus bus;
 
     @Inject public SyncUserRepository(@Local UserDataSource localUserDataSource,
       @Remote UserDataSource remoteUserDataSource, SessionRepository sessionRepository,
-      CachedUserDataSource cachedRemoteUserDataSource, @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger, @Default Bus bus) {
+      @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource, CachedUserDataSource cachedRemoteUserDataSource,
+      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
+      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
+      SyncTrigger syncTrigger, @Default Bus bus) {
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
         this.sessionRepository = sessionRepository;
+        this.remoteSuggestedPeopleDataSource = remoteSuggestedPeopleDataSource;
         this.cachedRemoteUserDataSource = cachedRemoteUserDataSource;
+        this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
         this.localFollowDataSource = localFollowDataSource;
         this.userEntityMapper = userEntityMapper;
+        this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
         this.syncTrigger = syncTrigger;
         this.bus = bus;
@@ -100,12 +113,27 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
           isFollowing(remoteUser.getIdUser()));
     }
 
+    private SuggestedPeople suggestedPeopleEntityToDomain(SuggestedPeopleEntity remoteSuggestedPeopleEntity) {
+        if (remoteSuggestedPeopleEntity == null) {
+            return null;
+        }
+        return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
+    }
+
     private List<User> entitiesToDomain(List<UserEntity> userEntities) {
         List<User> users = new ArrayList<>(userEntities.size());
         for (UserEntity userEntity : userEntities) {
             users.add(entityToDomain(userEntity));
         }
         return users;
+    }
+
+    private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
+        List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
+        for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
+            suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
+        }
+        return suggestedPeoples;
     }
 
     @Override public List<User> getUsersByIds(List<String> userIds) {
@@ -133,6 +161,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
             queueUpload(currentOrNewUserEntity, e);
             return userEntityMapper.transform(currentOrNewUserEntity, sessionRepository.getCurrentUserId());
         }
+    }
+
+    @Override public List<SuggestedPeople> getSuggestedPeople() {
+        List<SuggestedPeopleEntity> suggestedPeopleEntities = cachedSuggestedPeopleDataSource.getSuggestedPeople(
+          sessionRepository.getCurrentUserId());
+        return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }
 
     //region Synchronization

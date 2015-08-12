@@ -4,7 +4,10 @@ import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import java.io.IOException;
 import java.util.List;
+import retrofit.client.Response;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -35,4 +38,10 @@ public interface ShotApiService {
     @GET("/shots/user/{idUser}/?includeLinks=false")
     List<ShotApiEntity> getAllShotsFromUserWithMaxDate(@Path("idUser") String userId,
       @Query("maxTimestamp") Long maxDate) throws ApiException, IOException;
+
+    @PUT("/shots/{idShot}/nice")
+    Response markNice(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shots/{idShot}/nice")
+    Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
 }

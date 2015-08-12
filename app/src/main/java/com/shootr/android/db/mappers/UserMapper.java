@@ -53,6 +53,7 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.WEBSITE, u.getWebsite());
             cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
             cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
+            cv.put(UserTable.EMAIL_CONFIRMED,u.getEmailConfirmed());
             cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
             cv.put(UserTable.ID_WATCHING_STREAM, u.getIdWatchingStream());
             cv.put(UserTable.WATCHING_STREAM_TITLE, u.getWatchingStreamTitle());
@@ -69,6 +70,7 @@ public class UserMapper extends GenericMapper {
                 dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String) dto.get(UserTable.USER_NAME) : null);
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
+        user.setEmailConfirmed(dto.containsKey(UserTable.EMAIL_CONFIRMED) ? (Integer) dto.get(UserTable.EMAIL_CONFIRMED) : null);
         user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
         user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
         user.setNumFollowers(
@@ -118,6 +120,8 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
+        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
+        dto.put(UserTable.EMAIL_CONFIRMED, user == null ? null : user.getEmailConfirmed());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
         dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
         dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
@@ -137,6 +141,8 @@ public class UserMapper extends GenericMapper {
         user.setIdUser(c.getString(c.getColumnIndex(UserTable.ID)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
+        user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
+        user.setEmailConfirmed(c.getInt(c.getColumnIndex(UserTable.EMAIL_CONFIRMED)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
         user.setNumFollowers(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
         user.setNumFollowings(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));

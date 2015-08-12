@@ -1,27 +1,36 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
+import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.ui.views.FavoriteStatusView;
+import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class FavoriteStatusPresenter implements Presenter {
 
     private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private FavoriteStatusView favoriteStatusView;
     private String idStream;
 
     @Inject
     public FavoriteStatusPresenter(GetFavoriteStatusInteractor getFavoriteStatusInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor) {
+      AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      ErrorMessageFactory errorMessageFactory) {
         this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(FavoriteStatusView favoriteStatusView) {
@@ -36,8 +45,7 @@ public class FavoriteStatusPresenter implements Presenter {
 
     private void loadFavoriteStatus() {
         getFavoriteStatusInteractor.loadFavoriteStatus(idStream, new Interactor.Callback<Boolean>() {
-            @Override
-            public void onLoaded(Boolean isFavorite) {
+            @Override public void onLoaded(Boolean isFavorite) {
                 if (!isFavorite) {
                     favoriteStatusView.showAddToFavoritesButton();
                 } else {
@@ -49,13 +57,29 @@ public class FavoriteStatusPresenter implements Presenter {
 
     public void addToFavorites() {
         addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 favoriteStatusView.hideAddToFavoritesButton();
                 favoriteStatusView.showRemoveFromFavoritesButton();
                 favoriteStatusView.showAddedToFavorites();
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
         });
+    }
+
+    private void showErrorInView(ShootrException error) {
+        String errorMessage;
+        if(error instanceof StreamIsAlreadyInFavoritesException){
+            errorMessage = errorMessageFactory.getStreamIsAlreadyInFavoritesError();
+        }else if (error instanceof ServerCommunicationException) {
+            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        }else{
+            Timber.e(error, "Unhandled error logging in");
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        favoriteStatusView.showError(errorMessage);
     }
 
     public void removeFromFavorites() {

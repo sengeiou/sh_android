@@ -2,10 +2,12 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.api.entity.FavoriteApiEntity;
 import com.shootr.android.data.api.entity.mapper.FavoriteApiEntityMapper;
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.entity.FavoriteEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.SessionRepository;
 import java.io.IOException;
@@ -31,12 +33,14 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
-    public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity) {
+    public FavoriteEntity putFavorite(FavoriteEntity favoriteEntity) throws StreamAlreadyInFavoritesException {
         try {
             FavoriteApiEntity favoriteFromApi = favoriteApiService.createFavorite(favoriteEntity);
             return favoriteApiEntityMapper.transform(favoriteFromApi);
         } catch (IOException error) {
             throw new ServerCommunicationException(error);
+        } catch (ApiException e) {
+            throw new StreamAlreadyInFavoritesException();
         }
     }
 

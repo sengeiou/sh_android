@@ -6,4 +6,8 @@ import java.io.IOException;
 public interface ShotGateway {
 
     Shot embedVideoInfo(Shot originalShot) throws IOException;
+
+    void markNiceShot(String idShot);
+
+    void unmarkNiceShot(String idShot);
 }
