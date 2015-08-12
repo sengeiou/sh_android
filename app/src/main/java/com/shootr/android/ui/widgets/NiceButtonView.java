@@ -21,6 +21,7 @@ public class NiceButtonView extends CheckableImageView {
 
     @Override
     public boolean performClick() {
+        toggle();
         setEnabled(false);
         return super.performClick();
     }
