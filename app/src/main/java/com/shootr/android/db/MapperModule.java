@@ -5,6 +5,7 @@ import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.SuggestedPeopleMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -40,6 +41,10 @@ public class MapperModule {
 
     @Provides UserMapper provideUserMapper() {
         return new UserMapper();
+    }
+
+    @Provides SuggestedPeopleMapper provideSuggestedPeopleMapper() {
+        return new SuggestedPeopleMapper();
     }
 
     @Provides StreamEntityMapper provideEntityMapper() {

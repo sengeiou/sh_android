@@ -146,9 +146,7 @@
                           android:layout_marginLeft="16dp"
                           android:paddingBottom="9dp"
                           android:paddingTop="15dp"
-                          android:textSize="14dp"
-                          android:textColor="@color/watching"
-                          android:fontFamily="sans-serif-medium"
+                          android:textAppearance="@style/SectionTitleAppearance"
                           tools:text="3 watchers" />
 
                         <com.shootr.android.ui.widgets.WatchersView android:id="@+id/stream_content_detail_watchers_list"

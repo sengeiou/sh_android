@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
@@ -52,4 +53,6 @@ public interface ShootrService {
     Integer getListingCount(String idUser) throws IOException;
 
     void logout(String idUser, String sessionToken) throws IOException;
+
+    List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException;
 }

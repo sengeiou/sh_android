@@ -7,6 +7,7 @@ import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.UserTable;
+import com.shootr.android.domain.SuggestedPeople;
 
 public class SQLiteUtils {
 
@@ -189,4 +190,29 @@ public class SQLiteUtils {
       + SyncColumns.REVISION + " INT NOT NULL,"
       + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
 
+    public static final String CREATE_SUGGESTED_PEOPLE = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.SuggestedPeopleTable.TABLE + " ("
+      + UserTable.ID + " TEXT NOT NULL PRIMARY KEY,"
+      + UserTable.SESSION_TOKEN + " VARCHAR(255),"
+      + UserTable.USER_NAME + " VARCHAR(255),"
+      + UserTable.EMAIL + " VARCHAR(255),"
+      + UserTable.NAME + " VARCHAR(255),"
+      + UserTable.PHOTO + " VARCHAR(1024) NULL,"
+      + UserTable.POINTS+" INT NULL,"
+      + UserTable.NUM_FOLLOWINGS+" INT NOT NULL,"
+      + UserTable.NUM_FOLLOWERS+" INT NOT NULL,"
+      + UserTable.WEBSITE+" VARCHAR(255),"
+      + UserTable.RANK+" INT,"
+      + UserTable.BIO+" VARCHAR(150),"
+      + UserTable.NAME_NORMALIZED+" VARCHAR(255),"
+      + UserTable.USER_NAME_NORMALIZED+" VARCHAR(255),"
+      + UserTable.EMAIL_NORMALIZED+" VARCHAR(255) NULL,"
+      + UserTable.ID_WATCHING_STREAM +" TEXT NULL,"
+      + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
+      + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
+      + DatabaseContract.SuggestedPeopleTable.RELEVANCE+" INT NOT NULL,"
+      + SyncColumns.BIRTH + " DATETIME NOT NULL,"
+      + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
+      + SyncColumns.DELETED + " DATETIME,"
+      + SyncColumns.REVISION + " INT NOT NULL,"
+      + SyncColumns.SYNCHRONIZED + " CHAR(1));";
 }

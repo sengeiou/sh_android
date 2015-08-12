@@ -266,4 +266,41 @@ public class DatabaseContract {
           COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
+
+    public static final class SuggestedPeopleTable implements SyncColumns {
+
+        private SuggestedPeopleTable() {
+
+        }
+
+        public static final String TABLE = "SuggestedPeople";
+
+        public static final String ID = "idUser";
+        public static final String SESSION_TOKEN = "sessionToken";
+        public static final String USER_NAME = "userName";
+        public static final String PASSWORD = "password"; // Only used for Login request, never in Database
+        public static final String EMAIL = "email";
+        public static final String NAME = "name";
+        public static final String PHOTO = "photo";
+        public static final String NUM_FOLLOWERS = "numFollowers";
+        public static final String NUM_FOLLOWINGS = "numFollowings";
+        public static final String POINTS = "points";
+        public static final String WEBSITE = "website";
+        public static final String BIO = "bio";
+        public static final String RANK = "rank";
+        public static final String NAME_NORMALIZED = "nameNormalized";
+        public static final String USER_NAME_NORMALIZED = "userNameNormalized";
+        public static final String EMAIL_NORMALIZED = "emailNormalized";
+        public static final String ID_WATCHING_STREAM = "idWatchingStream";
+        public static final String WATCHING_STREAM_TITLE = "watchingStreamTitle";
+        public static final String JOIN_STREAM_DATE = "joinStreamDate";
+        public static final String RELEVANCE = "relevance";
+
+        public static final String[] PROJECTION = {
+          ID, SESSION_TOKEN, USER_NAME, EMAIL, NAME, PHOTO, NUM_FOLLOWERS,
+          NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
+          BIRTH, RELEVANCE, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        };
+    }
+
 }

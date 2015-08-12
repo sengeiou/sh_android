@@ -47,7 +47,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorStream;
 import com.shootr.android.task.events.ConnectionNotAvailableStream;
-import com.shootr.android.task.events.follows.FollowUnFollowResultStream;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
 import com.shootr.android.task.events.profile.UserInfoResultStream;
 import com.shootr.android.task.events.shots.LatestShotsResultStream;
@@ -66,14 +66,19 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
+import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.ProfileView;
+import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
@@ -88,7 +93,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment implements ProfileView {
+public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -120,6 +125,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
+    @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
+
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
@@ -133,6 +140,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     UserModelMapper userModelMapper;
 
     @Inject ProfilePresenter profilePresenter;
+    @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     //endregion
 
     // Args
@@ -149,6 +157,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
+    private UserListAdapter suggestedPeopleAdapter;
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -255,6 +264,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onResume() {
         super.onResume();
         bus.register(this);
+        suggestedPeoplePresenter.resume();
         if (!uploadingPhoto) {
             retrieveUserInfo();
         }
@@ -263,6 +273,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override
     public void onPause() {
         super.onDetach();
+        suggestedPeoplePresenter.pause();
         bus.unregister(this);
     }
 
@@ -270,12 +281,20 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
+            @Override
+            public void onUserClick(String idUser) {
+                Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
+                startActivity(suggestedUserIntent);
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupPhotoBottomSheet();
+        suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
     }
 
 
@@ -405,6 +424,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
 
     private void initializePresenter() {
         profilePresenter.initialize(this, idUser, isCurrentUser());
+        suggestedPeoplePresenter.initialize(this);
     }
 
     @Subscribe
@@ -443,13 +463,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             initializePresenter();
         }else{
             getUserByUsernameInteractor.searchUserByUsername(username, new Interactor.Callback<User>() {
-                @Override
-                public void onLoaded(User userFromCallback) {
+                @Override public void onLoaded(User userFromCallback) {
                     loadProfileUsingUser(userFromCallback);
                 }
             }, new Interactor.ErrorCallback() {
-                @Override
-                public void onError(ShootrException error) {
+                @Override public void onError(ShootrException error) {
                     userNotFoundNotification();
                 }
             });
@@ -474,6 +492,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
         loadLatestShots();
     }
 
+    private void loadBasicProfileUsingJob(String idUser) {
+        Context context = getActivity();
+        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
+        job.init(idUser);
+        jobManager.addJobInBackground(job);
+    }
+
     public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
@@ -489,18 +514,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void userInfoReceived(UserInfoResultStream event) {
         if (event.getResult() != null) {
             setUserInfo(event.getResult());
-        }
-    }
-
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultStream event) {
-        Pair<String, Boolean> result = event.getResult();
-        if (result != null) {
-            String idUserFromResult = result.first;
-            Boolean following = result.second;
-            if (idUserFromResult.equals(this.idUser)) {
-                followButton.setFollowing(following);
-            }
         }
     }
 
@@ -743,8 +756,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     @Override public void navigateToWelcomeScreen() {
         if(getActivity() != null) {
             new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     hideLogoutInProgress();
                     redirectToWelcome();
                 }
@@ -771,4 +783,56 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
     public void onAllShotsClick() {
         startActivity(AllShotsActivity.newIntent(getActivity(), user.getIdUser()));
     }
+
+    @Override public void renderSuggestedPeopleList(List<UserModel> users) {
+        suggestedPeopleAdapter.setItems(users);
+        suggestedPeopleAdapter.notifyDataSetChanged();
+    }
+
+    private UserListAdapter getSuggestedPeopleAdapter() {
+        if (suggestedPeopleAdapter == null) {
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter.setCallback(this);
+        }
+        return suggestedPeopleAdapter;
+    }
+
+    @Override public void showError(String messageForError) {
+        Toast.makeText(getActivity(), messageForError, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
+        getSuggestedPeopleAdapter().setItems(suggestedPeople);
+        getSuggestedPeopleAdapter().notifyDataSetChanged();
+    }
+
+    @Override public void follow(int position) {
+        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
+    }
+
+    @Override public void unFollow(final int position) {
+        final UserModel userModel = getSuggestedPeopleAdapter().getItem(position);
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  suggestedPeoplePresenter.unfollowUser(userModel, getActivity());
+              }
+          })
+          .setNegativeButton("No", null)
+          .create()
+          .show();
+    }
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+        Pair<String, Boolean> result = event.getResult();
+        if (result != null) {
+            String idUserFromResult = result.first;
+            Boolean following = result.second;
+            if (idUserFromResult.equals(this.idUser)) {
+                followButton.setFollowing(following);
+            }
+        }
+    }
+
 }
