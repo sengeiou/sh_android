@@ -30,7 +30,7 @@ public class SessionUserPresenter implements Presenter {
 
     private void loadReport(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
-        if (userModel.getEmailConfirmed()) {
+        if (userModel.isEmailConfirmed()) {
             sessionUserView.goToReport(sessionRepository.getSessionToken() ,shotModel);
         } else {
             sessionUserView.showConfirmationMessage();
