@@ -91,7 +91,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-        streamTimelineView.showLoading();
         timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
