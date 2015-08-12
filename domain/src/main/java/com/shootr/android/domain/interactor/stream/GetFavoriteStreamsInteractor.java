@@ -28,6 +28,7 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     private final WatchersRepository watchersRepository;
 
     private Callback<List<StreamSearchResult>> callback;
+    private boolean loadLocalOnly = false;
 
     @Inject public GetFavoriteStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
@@ -46,9 +47,16 @@ public class GetFavoriteStreamsInteractor implements Interactor {
         interactorHandler.execute(this);
     }
 
+    public void loadFavoriteStreamsFromLocalOnly(Callback<List<StreamSearchResult>> callback) {
+        loadLocalOnly = true;
+        this.loadFavoriteStreams(callback);
+    }
+
     @Override public void execute() throws Exception {
         loadLocalFavorites();
-        loadRemoteFavorites();
+        if (!loadLocalOnly) {
+            loadRemoteFavorites();
+        }
     }
 
     private void loadLocalFavorites() {

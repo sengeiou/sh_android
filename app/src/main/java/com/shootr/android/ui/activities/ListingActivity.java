@@ -129,8 +129,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams, List<StreamResultModel> listingStreams) {
-        adapter.setStreams(listingStreams);
+    @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
         adapter.setFavoriteStreams(favoriteStreams);
 
     }
