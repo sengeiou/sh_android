@@ -18,6 +18,7 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.StreamMediaActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
+import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
@@ -70,6 +71,7 @@ import javax.inject.Singleton;
     WhaleActivity.class,
     EmailConfirmationActivity.class,
     AllShotsActivity.class,
+    SupportActivity.class,
   },
   complete = false) public class UiModule {
 

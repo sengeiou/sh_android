@@ -15,4 +15,8 @@ public class ResourcesLocaleProvider implements LocaleProvider {
     @Override public String getLocale() {
         return resources.getConfiguration().locale.toString();
     }
+
+    @Override public String getLanguage() {
+        return resources.getConfiguration().locale.getLanguage();
+    }
 }

@@ -48,6 +48,7 @@ public class ProfilePresenter implements Presenter {
     protected void setupLogoutVisibility() {
         if(isCurrentUser){
             profileView.showLogoutButton();
+            profileView.showSupportButton();
         }
     }
 

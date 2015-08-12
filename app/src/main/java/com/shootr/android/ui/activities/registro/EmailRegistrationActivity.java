@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -20,11 +21,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import com.shootr.android.R;
+import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
@@ -45,7 +48,11 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.registration_create_progress) View progress;
     @Bind(R.id.registration_legal_disclaimer) TextView disclaimer;
 
+    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+    @BindString(R.string.privay_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+
     @Inject EmailRegistrationPresenter presenter;
+    @Inject LocaleProvider localeProvider;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -87,7 +94,8 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
         final View.OnClickListener termsClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(EmailRegistrationActivity.this, "Terms of Service", Toast.LENGTH_SHORT).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
+                startActivity(browserIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
@@ -96,7 +104,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
         final View.OnClickListener privacyClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(EmailRegistrationActivity.this, "Privacy Policy", Toast.LENGTH_SHORT).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl
+                  + localeProvider.getLanguage()));
+                startActivity(browserIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);

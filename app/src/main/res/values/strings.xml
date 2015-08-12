@@ -312,4 +312,13 @@
     <string name="title_activity_all_shots">All shots</string>
     <string name="new_stream_description_label">Description</string>
     <string name="suggested_people_section_title">Who to follow</string>
+
+    <string name="profile_support">Support</string>
+    <string name="title_activity_support">Support</string>
+    <string name="support_version">Version</string>
+    <string name="support_terms_service">Terms of Service</string>
+    <string name="support_privacy_policy">Privacy Policy</string>
+    <string name="support_faq">FAQ</string>
+    <string name="terms_of_service_base_url">http://docs.shootr.com/#/terms/%s</string>
+    <string name="privay_policy_service_base_url">http://docs.shootr.com/#/privacy/%s</string>
 </resources>

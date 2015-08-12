@@ -187,6 +187,7 @@
             android:label="@string/activity_find_streams_title"
             android:theme="@style/ShootrTheme.Closable" >
         </activity>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -200,6 +201,11 @@
         <activity
             android:name=".ui.activities.AllShotsActivity"
             android:label="@string/title_activity_all_shots" >
+        </activity>
+
+        <activity
+            android:name=".ui.activities.SupportActivity"
+            android:label="@string/title_activity_support" >
         </activity>
     </application>
 

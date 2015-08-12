@@ -63,6 +63,7 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -159,6 +160,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private TimelineAdapter latestsShotsAdapter;
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
 
     public static ProfileFragment newInstance(String idUser) {
@@ -257,12 +259,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
+        supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_profile_logout) {
             profilePresenter.logoutSelected();
+            return true;
+        }
+        if (id == R.id.menu_profile_support) {
+            startActivity(new Intent(this.getActivity(), SupportActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -791,6 +798,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Override
     public void loadLastShots() {
         loadLatestShots();
+    }
+
+    @Override public void showSupportButton() {
+        supportMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)
