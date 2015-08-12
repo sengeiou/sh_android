@@ -662,7 +662,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView {
             }
             shotsList.setVisibility(View.VISIBLE);
             shotsListEmpty.setVisibility(View.GONE);
-        } else {
+        } else if(shots != null && (latestsShotsAdapter == null || latestsShotsAdapter.getCount() == 0)){
             shotsList.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
