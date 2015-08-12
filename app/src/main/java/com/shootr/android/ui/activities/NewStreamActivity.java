@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 public class NewStreamActivity extends BaseToolbarActivity implements NewStreamView {
 
-    public static final int RESULT_EXIT_STREAM = 1;
+    public static final int RESULT_EXIT_STREAM = 3;
     public static final String KEY_STREAM_ID = "stream_id";
 
     public static final String KEY_STREAM_TITLE = "stream_title";

@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -20,9 +21,16 @@ import static org.mockito.Mockito.verify;
 
 public class NewStreamPresenterTest {
 
+    public static final String SHORT_TITLE = "Short Title";
+    public static final String OLD_TITLE = "old title";
+    public static final String NEW_TITLE = "new title";
+    public static final String TITLE = "title";
+    public static final String TITLE_MORE_20_CHARS = "Title with more than tewnty and some characters";
+    public static final String SHORT_TITLE_20_CHARS = "Title with more than";
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
     @Mock DeleteStreamInteractor deleteStreamInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewStreamView newStreamView;
@@ -33,53 +41,53 @@ public class NewStreamPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new NewStreamPresenter(createStreamInteractor, getStreamInteractor,
-          deleteStreamInteractor, streamModelMapper, errorMessageFactory);
+          deleteStreamInteractor, selectStreamInteractor, streamModelMapper, errorMessageFactory);
     }
 
     @Test
     public void shouldChangeShortTitleWhenEditTitle() {
         presenter.initialize(newStreamView, null);
-        presenter.titleTextChanged("Short Title");
+        presenter.titleTextChanged(SHORT_TITLE);
         verify(newStreamView).showShortTitle(anyString());
     }
 
     @Test
     public void shouldHaveShortTitleWith15charactersMax() {
         presenter.initialize(newStreamView, null);
-        presenter.titleTextChanged("Title with more than tewnty and some characters");
-        verify(newStreamView).showShortTitle("Title with more than");
+        presenter.titleTextChanged(TITLE_MORE_20_CHARS);
+        verify(newStreamView).showShortTitle(SHORT_TITLE_20_CHARS);
     }
 
     @Test
     public void shouldUpdateDoneButtonWhenEditShortTitle() {
         presenter.initialize(newStreamView, null);
-        presenter.shortTitleTextChanged("Short Title");
+        presenter.shortTitleTextChanged(SHORT_TITLE);
         verify(newStreamView, atLeastOnce()).doneButtonEnabled(anyBoolean());
     }
 
     @Test
     public void shouldUpdateDoneButtonStatusWhenEditTitle() {
         presenter.initialize(newStreamView, null);
-        presenter.titleTextChanged("Title with more than 15 characters");
+        presenter.titleTextChanged(TITLE);
         verify(newStreamView).showShortTitle(anyString());
     }
 
     @Test
     public void shouldShortTitleBeSameAsTitleWhenTitleEdited() throws Exception {
         presenter.initialize(newStreamView, null);
-        presenter.titleTextChanged("title");
+        presenter.titleTextChanged(TITLE);
 
-        verify(newStreamView).showShortTitle("title");
+        verify(newStreamView).showShortTitle(TITLE);
     }
 
     @Test
     public void shouldShortTitleNotBeSameAsTitleWhenTitleEditedAfterShortTitleHasBeenEdited() throws Exception {
         presenter.initialize(newStreamView, null);
-        presenter.titleTextChanged("old title");
-        presenter.shortTitleTextChanged("short title");
+        presenter.titleTextChanged(OLD_TITLE);
+        presenter.shortTitleTextChanged(SHORT_TITLE);
         reset(newStreamView);
 
-        presenter.titleTextChanged("new title");
+        presenter.titleTextChanged(NEW_TITLE);
 
         verify(newStreamView, never()).showShortTitle(anyString());
     }

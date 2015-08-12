@@ -44,7 +44,7 @@ public class ListingListPresenter implements Presenter{
         this.errorMessageFactory = errorMessageFactory;
     }
 
-    public void setView(ListingView listingView) {
+    protected void setView(ListingView listingView) {
         this.listingView = listingView;
     }
 
@@ -75,7 +75,7 @@ public class ListingListPresenter implements Presenter{
         getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override
             public void onLoaded(List<StreamSearchResult> favorites) {
-                favoriteStreams =  streamResultModelMapper.transform(favorites);
+                favoriteStreams = streamResultModelMapper.transform(favorites);
                 renderStreams();
             }
         });
@@ -87,14 +87,6 @@ public class ListingListPresenter implements Presenter{
             listingView.renderStreams(listingStreams);
             listingView.setFavoriteStreams(favoriteStreams);
         }
-    }
-
-    public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
-    }
-
-    private void selectStream(final String idStream, String streamTitle) {
-        listingView.navigateToStreamTimeline(idStream, streamTitle);
     }
 
     public void addToFavorite(StreamResultModel streamResultModel) {
@@ -123,6 +115,18 @@ public class ListingListPresenter implements Presenter{
           });
     }
 
+    public void selectStream(StreamResultModel stream) {
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
+    }
+
+    private void selectStream(final String idStream, String streamTitle) {
+        listingView.navigateToStreamTimeline(idStream, streamTitle);
+    }
+
+    public void streamCreated(String streamId) {
+        listingView.navigateToCreatedStreamDetail(streamId);
+    }
+
     private void showErrorInView(ShootrException error) {
         String errorMessage;
         if(error instanceof StreamIsAlreadyInFavoritesException){
@@ -146,4 +150,5 @@ public class ListingListPresenter implements Presenter{
     @Override public void pause() {
         hasBeenPaused = true;
     }
+
 }

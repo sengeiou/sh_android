@@ -60,11 +60,13 @@ import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.ListingActivity;
+import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.SupportActivity;
+import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -100,6 +102,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
+    private static final int REQUEST_NEW_STREAM = 3;
 
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
@@ -115,6 +118,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Bind(R.id.profile_listing_container) View listingContainerView;
     @Bind(R.id.profile_listing) TextView listingText;
     @Bind(R.id.profile_listing_number) TextView listingNumber;
+
+    @Bind(R.id.profile_open_stream_container) View openStreamContainerView;
 
     @Bind(R.id.profile_marks_followers) TextView followersTextView;
     @Bind(R.id.profile_marks_following) TextView followingTextView;
@@ -422,6 +427,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
                 uploadPhoto(changedPhotoFile);
+            } else {
+                String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+                String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
+                profilePresenter.streamCreated(streamId);
             }
         }
     }
@@ -752,6 +761,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showListingCount(Integer listingCount) {
+        openStreamContainerView.setVisibility(View.GONE);
         listingContainerView.setVisibility(View.VISIBLE);
         listingNumber.setText(String.valueOf(listingCount));
     }
@@ -812,6 +822,15 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showChangePasswordButton() {
         changePasswordMenuItem.setVisible(true);
+    }
+
+    @Override public void showOpenStream() {
+        listingContainerView.setVisibility(View.GONE);
+        openStreamContainerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void navigateToCreatedStreamDetail(String streamId) {
+        startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
 
     @OnClick(R.id.profile_listing)
@@ -875,4 +894,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         }
     }
 
+    @OnClick(R.id.profile_open_stream)
+    public void onOpenStreamClick() {
+        startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
+    }
 }

@@ -26,6 +26,10 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void navigateToCreatedStreamDetail(String streamId) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

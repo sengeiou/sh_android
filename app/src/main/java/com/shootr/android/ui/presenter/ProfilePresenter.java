@@ -58,9 +58,17 @@ public class ProfilePresenter implements Presenter {
             @Override public void onLoaded(Integer numberOfListingStreams) {
                 if (numberOfListingStreams > 0) {
                     profileView.showListingCount(numberOfListingStreams);
+                } else {
+                    showCurrentUserOpenStream();
                 }
             }
         });
+    }
+
+    private void showCurrentUserOpenStream() {
+        if(isCurrentUser){
+            profileView.showOpenStream();
+        }
     }
 
     public void clickListing() {
@@ -107,5 +115,9 @@ public class ProfilePresenter implements Presenter {
 
     @Override public void pause() {
         /* no-op */
+    }
+
+    public void streamCreated(String streamId) {
+        profileView.navigateToCreatedStreamDetail(streamId);
     }
 }

@@ -27,4 +27,8 @@ public interface ProfileView {
     void loadLastShots();
 
     void showChangePasswordButton();
+
+    void showOpenStream();
+
+    void navigateToCreatedStreamDetail(String streamId);
 }

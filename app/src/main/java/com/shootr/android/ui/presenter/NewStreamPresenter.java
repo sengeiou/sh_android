@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Stream;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.exception.DomainValidationException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
@@ -8,6 +9,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.domain.validation.StreamValidator;
 import com.shootr.android.ui.model.StreamModel;
@@ -27,6 +29,7 @@ public class NewStreamPresenter implements Presenter {
     private final CreateStreamInteractor createStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
     private final DeleteStreamInteractor deleteStreamInteractor;
+    private final SelectStreamInteractor selectStreamInteractor;
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -44,10 +47,11 @@ public class NewStreamPresenter implements Presenter {
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
       GetStreamInteractor getStreamInteractor, DeleteStreamInteractor deleteStreamInteractor,
-      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
+      SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
         this.deleteStreamInteractor = deleteStreamInteractor;
+        this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -162,6 +166,7 @@ public class NewStreamPresenter implements Presenter {
           new CreateStreamInteractor.Callback() {
               @Override public void onLoaded(Stream stream) {
                   streamCreated(stream);
+                  seletStream(stream);
               }
           },
           new Interactor.ErrorCallback() {
@@ -169,6 +174,14 @@ public class NewStreamPresenter implements Presenter {
                   streamCreationError(error);
               }
           });
+    }
+
+    protected void seletStream(Stream stream) {
+        selectStreamInteractor.selectStream(stream.getId(), new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                /* no-op */
+            }
+        });
     }
 
     private void streamCreated(Stream stream) {

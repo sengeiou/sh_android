@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ListingStreamsAdapter;
@@ -25,9 +27,11 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
+    public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
+    @Bind(R.id.listing_empty_title) View emptyView;
 
     @Inject ListingListPresenter presenter;
 
@@ -88,6 +92,15 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_STREAM && resultCode == Activity.RESULT_OK) {
+            String streamId = data.getStringExtra(NewStreamActivity.KEY_STREAM_ID);
+            presenter.streamCreated(streamId);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.resume();
@@ -121,20 +134,39 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         loadingView.setVisibility(View.GONE);
     }
 
-    @Override public void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
-    }
-
     @Override public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
     @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
         adapter.setFavoriteStreams(favoriteStreams);
+    }
 
+    @Override public void hideContent() {
+        listingList.setVisibility(View.GONE);
+    }
+
+    @Override public void navigateToCreatedStreamDetail(String streamId) {
+        startActivity(StreamDetailActivity.getIntent(this, streamId));
     }
 
     @Override public void showContent() {
         listingList.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.listing_add_stream) public void onAddStream() {
+        startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
     }
 }
