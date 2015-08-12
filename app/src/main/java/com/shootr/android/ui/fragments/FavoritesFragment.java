@@ -30,7 +30,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject FavoritesListPresenter favoritesListPresenter;
     @Inject PicassoWrapper picasso;
 
-    @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
@@ -89,17 +88,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             }
         });
         favoritesList.setAdapter(adapter);
-
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1,
-          R.color.refresh_2,
-          R.color.refresh_3,
-          R.color.refresh_4);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
-                favoritesListPresenter.refresh();
-            }
-        });
-
     }
 
     private void initializePresenter() {
@@ -124,10 +112,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void navigateToStreamTimeline(String idStream, String title) {
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
-    }
-
-    @Override public void hideLoadingSwipe() {
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

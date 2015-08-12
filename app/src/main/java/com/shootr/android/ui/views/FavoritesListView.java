@@ -13,6 +13,4 @@ public interface FavoritesListView extends LoadDataView {
     void hideContent();
 
     void navigateToStreamTimeline(String idStream, String title);
-
-    void hideLoadingSwipe();
 }
