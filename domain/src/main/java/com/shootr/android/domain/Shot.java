@@ -23,6 +23,7 @@ public class Shot {
 
     private String type;
     private Integer niceCount;
+    private Boolean isMarkedAsNice;
 
     private EntityMetadata metadata;
 
@@ -158,6 +159,14 @@ public class Shot {
         this.metadata = metadata;
     }
 
+    public Boolean isMarkedAsNice() {
+        return isMarkedAsNice;
+    }
+
+    public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
+        this.isMarkedAsNice = isMarkedAsNice;
+    }
+
     public static class ShotStreamInfo {
 
         private String idStream;
@@ -282,7 +291,8 @@ public class Shot {
         }
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shot)) return false;
 
@@ -308,7 +318,12 @@ public class Shot {
         if (videoTitle != null ? !videoTitle.equals(shot.videoTitle) : shot.videoTitle != null) return false;
         if (videoDuration != null ? !videoDuration.equals(shot.videoDuration) : shot.videoDuration != null)
             return false;
-        return !(type != null ? !type.equals(shot.type) : shot.type != null);
+        if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
+        if (niceCount != null ? !niceCount.equals(shot.niceCount) : shot.niceCount != null) return false;
+        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shot.isMarkedAsNice) : shot.isMarkedAsNice != null) {
+            return false;
+        }
+        return !(metadata != null ? !metadata.equals(shot.metadata) : shot.metadata != null);
     }
 
     @Override
@@ -327,6 +342,9 @@ public class Shot {
         result = 31 * result + (videoTitle != null ? videoTitle.hashCode() : 0);
         result = 31 * result + (videoDuration != null ? videoDuration.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
+        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         return result;
     }
 
@@ -335,6 +353,7 @@ public class Shot {
           "idShot=" + idShot +
           ", comment='" + comment + '\'' +
           ", image='" + image + '\'' +
+          ", niceCount='" + niceCount + '\'' +
           ", publishDate=" + publishDate +
           '}';
     }

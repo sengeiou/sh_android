@@ -30,6 +30,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_FAVORITE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_ACTIVITY);
         db.execSQL(SQLiteUtils.CREATE_SUGGESTED_PEOPLE);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_NICE_SHOTS);
     }
 
     @Override
@@ -44,6 +45,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.StreamSearchTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ActivityTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.SuggestedPeopleTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.NiceShotTable.TABLE);
         onCreate(db);
     }
 

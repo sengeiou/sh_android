@@ -68,6 +68,7 @@ import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -152,6 +153,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private View.OnClickListener imageClickListener;
     private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
+    private NiceShotListener niceShotListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
@@ -204,6 +206,18 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+            }
+        };
+
+        niceShotListener = new NiceShotListener() {
+            @Override
+            public void markNice(String idShot) {
+                profilePresenter.markNiceShot(idShot);
+            }
+
+            @Override
+            public void unmarkNice(String idShot) {
+                profilePresenter.unmarkNiceShot(idShot);
             }
         };
     }
@@ -643,7 +657,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             shotsList.removeAllViews();
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                      imageClickListener, videoClickListener, usernameClickListener, timeUtils){
+                      imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }
@@ -664,7 +678,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             shotsList.setVisibility(View.VISIBLE);
             allShotContainer.setVisibility(View.VISIBLE);
             shotsListEmpty.setVisibility(View.GONE);
-        } else {
+        } else if(shots != null && (latestsShotsAdapter == null || latestsShotsAdapter.getCount() == 0)){
             shotsList.setVisibility(View.GONE);
             allShotContainer.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
@@ -772,6 +786,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showLogoutButton() {
         logoutMenuItem.setVisible(true);
+    }
+
+    @Override
+    public void loadLastShots() {
+        loadLatestShots();
     }
 
     @OnClick(R.id.profile_listing)

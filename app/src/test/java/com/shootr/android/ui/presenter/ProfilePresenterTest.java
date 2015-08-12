@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
@@ -24,13 +26,17 @@ public class ProfilePresenterTest {
     @Mock GetListingCountInteractor getListingCountInteractor;
     @Mock LogoutInteractor logoutInteractor;
     @Mock ProfileView profileView;
+    @Mock MarkNiceShotInteractor markNiceShotInteractor;
+    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
 
     private ProfilePresenter profilePresenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor);
+        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor,
+          markNiceShotInteractor,
+          unmarkNiceShotInteractor);
         profilePresenter.setView(profileView);
         profilePresenter.setCurrentUser(true);
     }

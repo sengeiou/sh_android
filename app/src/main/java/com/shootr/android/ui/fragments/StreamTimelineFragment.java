@@ -31,6 +31,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -86,6 +87,7 @@ public class StreamTimelineFragment extends BaseFragment
     private View.OnClickListener imageClickListener;
     private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
+    private NiceShotListener niceShotListener;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
@@ -317,6 +319,18 @@ public class StreamTimelineFragment extends BaseFragment
             }
         };
 
+        niceShotListener = new NiceShotListener() {
+            @Override
+            public void markNice(String idShot) {
+                streamTimelinePresenter.markNiceShot(idShot);
+            }
+
+            @Override
+            public void unmarkNice(String idShot) {
+                streamTimelinePresenter.unmarkNiceShot(idShot);
+            }
+        };
+
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -325,7 +339,7 @@ public class StreamTimelineFragment extends BaseFragment
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                imageClickListener, videoClickListener, usernameClickListener, timeUtils);
+                imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils);
         listView.setAdapter(adapter);
     }
 

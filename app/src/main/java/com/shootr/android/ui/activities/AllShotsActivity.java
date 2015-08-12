@@ -148,7 +148,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(this, picasso, avatarClickListener,
-          imageClickListener, videoClickListener, usernameClickListener, timeUtils){
+          imageClickListener, videoClickListener, null, usernameClickListener, timeUtils){
             @Override protected boolean shouldShowTag() {
                 return true;
             }

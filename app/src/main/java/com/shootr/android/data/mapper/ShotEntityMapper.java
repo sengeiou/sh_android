@@ -7,6 +7,7 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.EntityMetadata;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
+import com.shootr.android.domain.repository.NiceShotRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -15,7 +16,10 @@ import javax.inject.Singleton;
 @Singleton
 public class ShotEntityMapper {
 
-    @Inject public ShotEntityMapper() {
+    private final NiceShotRepository niceShotRepository;
+
+    @Inject public ShotEntityMapper(NiceShotRepository niceShotRepository) {
+        this.niceShotRepository = niceShotRepository;
     }
 
     public Shot transform(ShotEntity shotEntity) {
@@ -51,6 +55,7 @@ public class ShotEntityMapper {
 
         shot.setType(shotEntity.getType());
         shot.setNiceCount(shotEntity.getNiceCount());
+        shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
 
         shot.setMetadata(metadataFromEntity(shotEntity));
 

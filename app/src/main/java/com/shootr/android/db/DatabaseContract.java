@@ -303,4 +303,16 @@ public class DatabaseContract {
         };
     }
 
+    public static final class NiceShotTable implements SyncColumns {
+
+        private NiceShotTable() {
+            /* non instanciable */
+        }
+
+        public static final String TABLE = "NiceShot";
+
+        public static final String ID_SHOT = "idShot";
+
+        public static final String[] PROJECTION = { ID_SHOT };
+    }
 }

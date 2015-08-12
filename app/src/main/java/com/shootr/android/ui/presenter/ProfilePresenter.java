@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
 import com.shootr.android.ui.views.ProfileView;
@@ -11,14 +13,20 @@ public class ProfilePresenter implements Presenter {
 
     private final GetListingCountInteractor getListingCountInteractor;
     private final LogoutInteractor logoutInteractor;
+    private final MarkNiceShotInteractor markNiceShotInteractor;
+    private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     private ProfileView profileView;
     private String profileIdUser;
     private Boolean isCurrentUser;
 
     @Inject public ProfilePresenter(GetListingCountInteractor getListingCountInteractor,
-      LogoutInteractor logoutInteractor) {
+      LogoutInteractor logoutInteractor,
+      MarkNiceShotInteractor markNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor) {
         this.getListingCountInteractor = getListingCountInteractor;
         this.logoutInteractor = logoutInteractor;
+        this.markNiceShotInteractor = markNiceShotInteractor;
+        this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
     }
 
     protected void setView(ProfileView profileView){
@@ -60,13 +68,33 @@ public class ProfilePresenter implements Presenter {
     public void logoutSelected() {
         profileView.showLogoutInProgress();
         logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
                 profileView.navigateToWelcomeScreen();
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 profileView.hideLogoutInProgress();
                 profileView.showError();
+            }
+        });
+    }
+
+    public void markNiceShot(String idShot) {
+        markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                profileView.loadLastShots();
+            }
+        });
+    }
+
+    public void unmarkNiceShot(String idShot) {
+        unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                profileView.loadLastShots();
             }
         });
     }

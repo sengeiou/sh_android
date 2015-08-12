@@ -17,6 +17,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.android.ui.model.ShotModel;
@@ -104,36 +105,48 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void setupAdapter() {
         detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
-                new ShotDetailWithRepliesAdapter.AvatarClickListener() {
-                    @Override
-                    public void onClick(String userId) {
-                        onAvatarClick(userId);
-                    }
-                }, //
-                new ShotDetailWithRepliesAdapter.ImageClickListener() {
-                    @Override
-                    public void onClick(ShotModel shot) {
-                        onImageClick(shot);
-                    }
-                }, //
-                new TimelineAdapter.VideoClickListener() {
-                  @Override
-                  public void onClick(String url) {
-                      onVideoClick(url);
-                  }
-                }, //
-                new UsernameClickListener() {
-                    @Override
-                    public void onClick(String username) {
-                        onUsernameClick(username);
-                    }
-                }, new ShotDetailWithRepliesAdapter.OnParentShownListener() {
-            @Override
-            public void onShown() {
-                detailList.scrollToPosition(0);
-            }
-        }, //
-                timeFormatter, getResources(), timeUtils);
+          new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+              @Override
+              public void onClick(String userId) {
+                  onAvatarClick(userId);
+              }
+          }, //
+          new ShotDetailWithRepliesAdapter.ImageClickListener() {
+              @Override
+              public void onClick(ShotModel shot) {
+                  onImageClick(shot);
+              }
+          }, //
+          new TimelineAdapter.VideoClickListener() {
+              @Override
+              public void onClick(String url) {
+                  onVideoClick(url);
+              }
+          }, //
+          new UsernameClickListener() {
+              @Override
+              public void onClick(String username) {
+                  onUsernameClick(username);
+              }
+          }, //
+          new ShotDetailWithRepliesAdapter.OnParentShownListener() {
+              @Override
+              public void onShown() {
+                  detailList.scrollToPosition(0);
+              }
+          }, //
+          new NiceShotListener() {
+              @Override
+              public void markNice(String idShot) {
+                  detailPresenter.markNiceShot(idShot);
+              }
+
+              @Override
+              public void unmarkNice(String idShot) {
+                  detailPresenter.unmarkNiceShot(idShot);
+              }
+          }, //
+          timeFormatter, getResources(), timeUtils);
         detailList.setLayoutManager(new LinearLayoutManager(this));
         detailList.setAdapter(detailAdapter);
     }
