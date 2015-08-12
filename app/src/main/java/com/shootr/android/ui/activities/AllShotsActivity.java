@@ -15,6 +15,7 @@ import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.views.AllShotsView;
@@ -38,10 +39,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(R.id.all_shots_loading) View loadingView;
 
     @Deprecated private TimelineAdapter adapter;
+
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
     private TimelineAdapter.VideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
+    private NiceShotListener niceShotListener;
     private View footerProgress;
 
     public static Intent newIntent(Context context, String userId) {
@@ -77,6 +80,18 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }else{
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.pause();
     }
 
     @OnItemClick(R.id.all_shots_list)
@@ -140,6 +155,18 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
+        niceShotListener = new NiceShotListener() {
+            @Override
+            public void markNice(String idShot) {
+                presenter.markNiceShot(idShot);
+            }
+
+            @Override
+            public void unmarkNice(String idShot) {
+                presenter.unmarkNiceShot(idShot);
+            }
+        };
+
         View footerView = LayoutInflater.from(this).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
 
@@ -148,7 +175,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(this, picasso, avatarClickListener,
-          imageClickListener, videoClickListener, null, usernameClickListener, timeUtils){
+          imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils){
             @Override protected boolean shouldShowTag() {
                 return true;
             }
