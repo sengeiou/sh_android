@@ -21,6 +21,7 @@ import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.Serializable;
 import java.util.List;
@@ -52,14 +53,16 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     private void setupQueryTextListener() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String queryText) {
+            @Override
+            public boolean onQueryTextSubmit(String queryText) {
                 currentSearchQuery = queryText;
                 searchStreams();
                 hideKeyboard();
                 return true;
             }
 
-            @Override public boolean onQueryTextChange(String s) {
+            @Override
+            public boolean onQueryTextChange(String s) {
                 return false;
             }
         });
@@ -80,8 +83,23 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
             public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);
             }
+
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
         });
         streamsList.setAdapter(adapter);
+    }
+
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(this).addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+            @Override
+            public void run() {
+                findStreamsPresenter.addToFavorites(stream);
+            }
+        }).show();
     }
 
     private void searchStreams() {

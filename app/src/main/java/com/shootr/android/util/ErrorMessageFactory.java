@@ -8,6 +8,7 @@ import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -99,6 +100,8 @@ public class ErrorMessageFactory {
             return getCommunicationErrorMessage();
         }else if(error instanceof DeleteStreamNotAllowedException) {
             return context.getString(R.string.error_message_event_has_watchers);
+        }else if(error instanceof StreamIsAlreadyInFavoritesException) {
+            return getStreamIsAlreadyInFavoritesError();
         } else {
             return getUnknownErrorMessage();
         }
