@@ -19,6 +19,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
+import com.shootr.android.util.CustomContextMenu;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -45,9 +46,27 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
+            @Override public void onStreamClick(StreamResultModel stream) {
+                presenter.selectStream(stream);
+            }
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
+        }, new OnFavoriteClickListener() {
+            @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
+                presenter.addToFavorite(streamResultModel);
+            }
+        }, new OnRemoveFavoriteClickListener() {
+            @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
+                presenter.removeFromFavorites(stream);
+            }
+        });
 
+        listingList.setAdapter(adapter);
         listingList.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override protected void initializePresenter() {
@@ -81,13 +100,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         presenter.pause();
     }
 
-    @Override public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle().equals(getString(R.string.add_to_favorites_menu_title))) {
-            StreamResultModel streamResultModel = adapter.getItem(item.getOrder());
-            presenter.addToFavorite(streamResultModel);
-            presenter.resumeFavoriteStreams();
-        }
-        return true;
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+              @Override
+              public void run() {
+                  presenter.addToFavorite(stream);
+              }
+          }).show();
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {
@@ -111,24 +131,9 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void setFavoriteStreams(List<StreamResultModel> favoriteStreams, List<StreamResultModel> listingStreams) {
-        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
-            @Override public void onStreamClick(StreamResultModel stream) {
-                presenter.selectStream(stream);
-            }
-        }, new OnFavoriteClickListener() {
-            @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
-                presenter.addToFavorite(streamResultModel);
-            }
-        }, new OnRemoveFavoriteClickListener() {
-            @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-                presenter.removeFromFavorites(stream);
-            }
-        }, favoriteStreams);
-
         adapter.setStreams(listingStreams);
-        listingList.setAdapter(adapter);
-
         adapter.setFavoriteStreams(favoriteStreams);
+
     }
 
     @Override public void showContent() {

@@ -1,9 +1,7 @@
 package com.shootr.android.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -13,9 +11,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class StreamResultViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
-
-    private static final String[] CONTEXT_MENU_OPTIONS = {"Add to Favorites", "Cancel"};
+public class StreamResultViewHolder extends RecyclerView.ViewHolder{
 
     private final OnStreamClickListener onStreamClickListener;
     private final PicassoWrapper picasso;
@@ -31,7 +27,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder implements V
         this.onStreamClickListener = onStreamClickListener;
         this.picasso = picasso;
         ButterKnife.bind(this, itemView);
-        itemView.setOnCreateContextMenuListener(this);
     }
 
     public void render(StreamResultModel streamResultModel) {
@@ -53,8 +48,15 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder implements V
 
     private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 onStreamClickListener.onStreamClick(streamResult);
+            }
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return onStreamClickListener.onStreamLongClick(streamResult);
             }
         });
     }
@@ -63,10 +65,4 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder implements V
         return String.valueOf(watchers);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-        for (String contextMenuOption : CONTEXT_MENU_OPTIONS) {
-            contextMenu.add(0, 0, position, contextMenuOption);
-        }
-    }
 }
