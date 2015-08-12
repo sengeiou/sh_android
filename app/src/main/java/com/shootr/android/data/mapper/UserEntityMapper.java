@@ -19,6 +19,8 @@ public class UserEntityMapper {
         user.setIdUser(userEntity.getIdUser());
         user.setUsername(userEntity.getUserName());
         user.setName(userEntity.getName());
+        user.setEmail(userEntity.getEmail());
+        user.setEmailConfirmed(userEntity.getEmailConfirmed() != null && userEntity.getEmailConfirmed() == 1);
         user.setPhoto(userEntity.getPhoto());
         user.setNumFollowings(userEntity.getNumFollowings());
         user.setNumFollowers(userEntity.getNumFollowers());
@@ -49,6 +51,7 @@ public class UserEntityMapper {
         userEntity.setUserName(user.getUsername());
         userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
+        userEntity.setEmailConfirmed(user.isEmailConfirmed()? 1 : 0);
         userEntity.setPhoto(user.getPhoto());
         userEntity.setPoints(user.getPoints());
         userEntity.setNumFollowings(user.getNumFollowings());

@@ -4,6 +4,7 @@ import android.os.Handler;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
+import com.shootr.android.ui.activities.EmailConfirmationActivity;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.ListingActivity;
@@ -67,6 +68,7 @@ import javax.inject.Singleton;
     StreamTimelineFragment.class,
     FindStreamsActivity.class,
     WhaleActivity.class,
+    EmailConfirmationActivity.class,
     AllShotsActivity.class,
   },
   complete = false) public class UiModule {

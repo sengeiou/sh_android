@@ -6,6 +6,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -32,15 +33,24 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultStream> {
 
     private String userId;
     private UserEntityModelMapper userVOMapper;
+    private final UserEntityMapper userEntityMapper;
 
-    @Inject public GetUserInfoJob(Application application, @Main Bus bus, ShootrService service, NetworkUtil networkUtil1,
-      UserManager userManager, FollowManager followManager, SessionRepository sessionRepository, UserEntityModelMapper userVOMapper) {
+    @Inject public GetUserInfoJob(Application application,
+      @Main Bus bus,
+      ShootrService service,
+      NetworkUtil networkUtil1,
+      UserManager userManager,
+      FollowManager followManager,
+      SessionRepository sessionRepository,
+      UserEntityModelMapper userVOMapper,
+      UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.sessionRepository = sessionRepository;
         this.userVOMapper = userVOMapper;
+        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(String userId) {
@@ -74,6 +84,9 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultStream> {
             if (userFromLocalDatabase != null) {
                 Timber.d("Obtained user from server found in database. Updating database.");
                 userManager.saveUser(userFromService);
+                if (isMe) {
+                    sessionRepository.setCurrentUser(userEntityMapper.transform(userFromService));
+                }
             }
         }
 

@@ -193,6 +193,11 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
+            android:name=".ui.activities.EmailConfirmationActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_email_confirmation" >
+        </activity>
+        <activity
             android:name=".ui.activities.AllShotsActivity"
             android:label="@string/title_activity_all_shots" >
         </activity>

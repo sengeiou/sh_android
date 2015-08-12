@@ -19,6 +19,24 @@ public class UserModel implements Serializable, Cloneable {
     private String streamWatchingTitle;
     private Long joinStreamDate;
     private String joinStreamDateText;
+    private String email;
+    private Boolean emailConfirmed;
+
+    public Boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(Boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Long getPoints() {
         return points;

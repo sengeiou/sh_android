@@ -3,11 +3,14 @@ package com.shootr.android.domain.service.user;
 import com.shootr.android.domain.ForgotPasswordResult;
 import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.EmailAlreadyConfirmedException;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.UnauthorizedRequestException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.repository.DatabaseUtils;
 import com.shootr.android.domain.repository.StreamRepository;
@@ -26,6 +29,7 @@ public class ShootrUserService {
     private final CreateAccountGateway createAccountGateway;
     private final LoginGateway loginGateway;
     private final ResetPasswordGateway resetPasswordGateway;
+    private final ConfirmEmailGateway confirmEmailGateway;
     private final StreamRepository remoteStreamRepository;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
@@ -33,15 +37,15 @@ public class ShootrUserService {
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, @Remote StreamRepository remoteStreamRepository,
-      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway,
-      DatabaseUtils databaseUtils) {
+      ResetPasswordGateway resetPasswordGateway, ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
+      @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
         this.checkinGateway = checkinGateway;
         this.createAccountGateway = createAccountGateway;
         this.loginGateway = loginGateway;
         this.resetPasswordGateway = resetPasswordGateway;
+        this.confirmEmailGateway = confirmEmailGateway;
         this.remoteStreamRepository = remoteStreamRepository;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
@@ -112,5 +116,21 @@ public class ShootrUserService {
 
     private void removeSession() {
         sessionRepository.destroySession();
+    }
+
+    public void requestEmailConfirmation() throws InvalidEmailConfirmationException {
+        confirmEmailGateway.confirmEmail();
+    }
+
+    public void changeEmail(String email)
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
+        String currentUserId = sessionRepository.getCurrentUserId();
+        User user = localUserRepository.getUserById(currentUserId);
+        user.setEmail(email);
+        user.setEmailConfirmed(false);
+        sessionRepository.setCurrentUser(user);
+        localUserRepository.putUser(user);
+
+        confirmEmailGateway.changeEmail(email);
     }
 }

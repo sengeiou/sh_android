@@ -9,6 +9,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String sessionToken;
     private String userName;
     private String email;
+    private Integer emailConfirmed;
     private String name;
     private String photo;
     private Long points;
@@ -22,6 +23,14 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private Long joinStreamDate;
 
     public UserEntity(){
+    }
+
+    public Integer getEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(Integer emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
     }
 
     public String getIdUser() {

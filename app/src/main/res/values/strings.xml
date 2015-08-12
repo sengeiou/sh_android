@@ -175,6 +175,7 @@
     <string name="drawer_timeline_title">Timeline</string>
     <string name="drawer_friends_title">Friends</string>
     <string name="drawer_favorites_title">Favorites</string>
+    <string name="title_activity_email_confirmation">Email</string>
     <string name="checkin_action">Check In</string>
     <string name="checkin_done">Checked In</string>
     <string name="retry">Retry</string>
@@ -285,6 +286,13 @@
     <string name="sign_out_message">Sign out in progress</string>
     <string name="update_warning_button">Update now</string>
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
+    <string name="activity_edit_profile_email_hint">Email</string>
+    <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
+    <string name="email_confirmation_button_text">Done</string>
+    <string name="email_confirmation_title">Confirm Your Email</string>
+    <string name="email_confirmation_message_content">"Click the link in the email we've just sent to "</string>
+    <string name="email_confirmation_ok">Ok</string>
+    <string name="email_already_registered">Email already registered</string>
     <string name="whale_retry_button_text">OK</string>
     <string name="delete_stream_label">Delete stream</string>
     <string name="delete_stream_confirmation">Delete stream?</string>
