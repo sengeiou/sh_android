@@ -10,15 +10,13 @@
       android:layout_marginLeft="16dp"
       android:src="@drawable/ic_invite_friends_24_gray50" />
 
-    <TextView android:id="@+id/stream_detail_media"
+    <TextView
       android:layout_width="match_parent"
       android:layout_height="56dp"
-      android:background="?selectableItemBackground"
-      android:clickable="true"
       android:gravity="center_vertical"
       android:paddingLeft="@dimen/keyline_2"
-      android:textAppearance="@style/TextAppearance.Switch"
-      android:textColor="?android:attr/textColorPrimary"
+      android:textColor="@color/gray_10"
+      android:textSize="16sp"
       android:text="@string/invite_friends_button" />
 
 </FrameLayout>
