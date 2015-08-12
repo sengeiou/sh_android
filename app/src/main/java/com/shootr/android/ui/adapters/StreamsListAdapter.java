@@ -37,7 +37,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
+        return new WatchingStreamResultViewHolder(view, onStreamClickListener, picasso, onUnwatchClickListener);
     }
 
     @Override
@@ -57,11 +57,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         StreamResultModel stream = getHeader();
-
-        WatchingStreamResultViewHolder watchingStreamResultViewHolder =
-          new WatchingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso, onUnwatchClickListener);
-
-        watchingStreamResultViewHolder.render(stream, position);
+        ((StreamResultViewHolder) viewHolder).render(stream);
     }
 
     @Override
