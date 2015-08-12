@@ -102,7 +102,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
-                  /* no - op*/
+                  loadFavoriteStreams();
               }
           },
           new Interactor.ErrorCallback() {
@@ -118,7 +118,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
-                  /* no - op*/
+                  loadFavoriteStreams();
               }
           });
     }
