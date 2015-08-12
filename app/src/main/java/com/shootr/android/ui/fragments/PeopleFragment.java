@@ -77,6 +77,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
     }
 
@@ -101,14 +102,26 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @OnItemClick(R.id.userlist_list)
     public void onUserClick(int position) {
-        // TODO not going through the presenter? You naughty boy...
-        UserModel user = getPeopleAdapter().getItem(position);
-        openUserProfile(user.getIdUser());
+        if (position == 0) {
+            onInviteFriendClick();
+        } else {
+            // TODO not going through the presenter? You naughty boy...
+            UserModel user = getPeopleAdapter().getItem(position);
+            openUserProfile(user.getIdUser());
+        }
     }
 
     private void openUserProfile(String idUser) {
         startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), idUser),
           REQUEST_CAN_CHANGE_DATA);
+    }
+
+    public void onInviteFriendClick() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, getActivity().getString(R.string.invite_friends_message));
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
     }
 
     @Override

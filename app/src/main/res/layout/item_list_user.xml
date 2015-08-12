@@ -4,19 +4,12 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:orientation="horizontal">
-
-  <View android:layout_width="match_parent"
-    android:layout_below="@+id/item_list_user_info"
-    android:layout_height="0.5dp"
-    android:layout_marginLeft="@dimen/keyline_2"
-    android:layout_marginTop="16dp"
-    android:background="@color/separator" />
+  android:orientation="horizontal" >
 
   <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/user_avatar"
-      android:layout_width="52dp"
-      android:layout_height="52dp"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
       android:src="@drawable/ic_contact_picture_default"
       android:layout_alignParentTop="true"
       android:layout_alignParentLeft="true"
@@ -29,7 +22,7 @@
       android:layout_height="wrap_content"
       android:layout_alignBottom="@+id/user_avatar"
       android:layout_alignTop="@+id/user_avatar"
-      android:layout_marginLeft="8dp"
+      android:layout_marginLeft="16dp"
       android:layout_toRightOf="@+id/user_avatar"
       android:gravity="center_vertical"
       android:orientation="vertical"
@@ -50,8 +43,8 @@
           android:layout_height="wrap_content"
           android:ellipsize="end"
           android:lines="1"
-          android:textColor="@color/gray_50"
-          android:textSize="16sp"
+          android:textColor="@color/gray_60"
+          android:textSize="14sp"
           android:visibility="gone"
           tools:text="rafa"
           tools:visibility="visible" />
