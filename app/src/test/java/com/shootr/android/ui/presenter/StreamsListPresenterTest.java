@@ -4,6 +4,7 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -40,6 +41,7 @@ public class StreamsListPresenterTest {
 
     @Mock Bus bus;
     @Mock StreamsListInteractor streamsListInteractor;
+    @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
@@ -52,7 +54,9 @@ public class StreamsListPresenterTest {
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
           new StreamResultModelMapper(streamModelMapper);
-        presenter = new StreamsListPresenter(streamsListInteractor, unwatchStreamInteractor, streamResultModelMapper,
+        presenter = new StreamsListPresenter(streamsListInteractor,
+          addToFavoritesInteractor,
+          unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }

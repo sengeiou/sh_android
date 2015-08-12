@@ -40,10 +40,11 @@ public class RemoveFromFavoritesInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         Favorite existingFavorite = localFavoriteRepository.getFavoriteByStream(idStream);
-        checkNotNull(existingFavorite);
-        localFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
-        notifyCompleted();
-        remoteFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
+        if (existingFavorite != null) {
+            localFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
+            notifyCompleted();
+            remoteFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
+        }
     }
 
     protected void notifyCompleted() {

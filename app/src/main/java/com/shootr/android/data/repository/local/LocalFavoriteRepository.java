@@ -5,6 +5,7 @@ import com.shootr.android.data.mapper.FavoriteEntityMapper;
 import com.shootr.android.data.repository.datasource.event.FavoriteDataSource;
 import com.shootr.android.data.repository.sync.SyncableFavoriteEntityFactory;
 import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import java.util.List;
@@ -24,7 +25,7 @@ public class LocalFavoriteRepository implements FavoriteRepository {
     }
 
     @Override
-    public void putFavorite(Favorite favorite) {
+    public void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException {
         FavoriteEntity currentOrNewEntity = syncableFavoriteEntityFactory.updatedOrNewEntity(favorite);
         localFavoriteDataSource.putFavorite(currentOrNewEntity);
     }

@@ -3,6 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
-import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
+import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -33,7 +34,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
 
-    private FavoriteStreamsAdapter adapter;
+    private StreamsListAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -80,7 +81,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavoriteStreamsAdapter(picasso, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);

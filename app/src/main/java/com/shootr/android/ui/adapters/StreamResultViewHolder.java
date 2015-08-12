@@ -11,10 +11,11 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class StreamResultViewHolder extends RecyclerView.ViewHolder {
+public class StreamResultViewHolder extends RecyclerView.ViewHolder{
 
     private final OnStreamClickListener onStreamClickListener;
     private final PicassoWrapper picasso;
+
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
@@ -47,8 +48,15 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 onStreamClickListener.onStreamClick(streamResult);
+            }
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return onStreamClickListener.onStreamLongClick(streamResult);
             }
         });
     }
@@ -56,4 +64,5 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private String getWatchersText(int watchers) {
         return String.valueOf(watchers);
     }
+
 }

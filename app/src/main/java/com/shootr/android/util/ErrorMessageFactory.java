@@ -9,6 +9,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.service.EmailInUseException;
+import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -105,6 +106,8 @@ public class ErrorMessageFactory {
             return context.getString(R.string.error_message_event_has_watchers);
         }else if(error instanceof EmailInUseException) {
             return context.getString(R.string.email_already_registered);
+        }else if(error instanceof StreamIsAlreadyInFavoritesException) {
+            return getStreamIsAlreadyInFavoritesError();
         } else {
             return getUnknownErrorMessage();
         }
@@ -114,7 +117,11 @@ public class ErrorMessageFactory {
         return context.getString(R.string.error_login_credentials_invalid);
     }
 
-    public String getChangePasswordError(){
+    public String getChangePasswordError() {
         return context.getString(R.string.error_message_invalid_change_password);
+    }
+
+    public String getStreamIsAlreadyInFavoritesError(){
+        return context.getString(R.string.error_stream_already_favorites);
     }
 }

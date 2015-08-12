@@ -31,6 +31,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -91,9 +92,16 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
+
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
         });
         adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
-            @Override public void onUnwatchClick() {
+            @Override
+            public void onUnwatchClick() {
                 presenter.unwatchStream();
             }
         });
@@ -104,7 +112,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
           R.color.refresh_3,
           R.color.refresh_4);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 presenter.refresh();
             }
         });
@@ -165,6 +174,16 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             String title = data.getStringExtra(NewStreamActivity.KEY_STREAM_TITLE);
             presenter.streamCreated(streamId, title);
         }
+    }
+
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
+              @Override
+              public void run() {
+                  presenter.addToFavorites(stream);
+              }
+          }).show();
     }
 
     //region View methods

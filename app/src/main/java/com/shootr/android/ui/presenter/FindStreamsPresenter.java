@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.StreamSearchInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 public class FindStreamsPresenter implements Presenter {
 
     private final StreamSearchInteractor streamSearchInteractor;
+    private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -25,8 +27,11 @@ public class FindStreamsPresenter implements Presenter {
     private boolean hasBeenPaused = false;
 
     @Inject public FindStreamsPresenter(StreamSearchInteractor streamSearchInteractor,
-      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
+      AddToFavoritesInteractor addToFavoritesInteractor,
+      StreamResultModelMapper streamResultModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.streamSearchInteractor = streamSearchInteractor;
+        this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -45,11 +50,13 @@ public class FindStreamsPresenter implements Presenter {
         findStreamsView.hideKeyboard();
         findStreamsView.showLoading();
         streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
-            @Override public void onLoaded(StreamSearchResultList results) {
+            @Override
+            public void onLoaded(StreamSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 findStreamsView.hideLoading();
                 showViewError(error);
             }
@@ -91,10 +98,8 @@ public class FindStreamsPresenter implements Presenter {
         if (error instanceof ShootrValidationException) {
             String errorCode = ((ShootrValidationException) error).getErrorCode();
             errorMessage = errorMessageFactory.getMessageForCode(errorCode);
-        } else if (error instanceof ServerCommunicationException) {
-            errorMessage = errorMessageFactory.getCommunicationErrorMessage();
         } else {
-            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+            errorMessage = errorMessageFactory.getMessageForError(error);
         }
         findStreamsView.showError(errorMessage);
     }
@@ -113,5 +118,19 @@ public class FindStreamsPresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public void addToFavorites(StreamResultModel stream) {
+        addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+              @Override
+              public void onCompleted() {
+                  /* no-op */
+              }
+          }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
     }
 }

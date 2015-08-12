@@ -1,11 +1,12 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import java.util.List;
 
 public interface FavoriteRepository {
 
-    void putFavorite(Favorite favorite);
+    void putFavorite(Favorite favorite) throws StreamAlreadyInFavoritesException;
 
     List<Favorite> getFavorites();
 
