@@ -65,8 +65,15 @@ public class ListingListPresenter implements Presenter{
             @Override
             public void onLoaded(List<StreamSearchResult> streams) {
                 listingView.hideLoading();
-                listingStreams = streamResultModelMapper.transform(streams);
-                renderStreams();
+                if (!streams.isEmpty()) {
+                    listingStreams = streamResultModelMapper.transform(streams);
+                    renderStreams();
+                    listingView.hideEmpty();
+                    listingView.showContent();
+                } else {
+                    listingView.showEmpty();
+                    listingView.hideContent();
+                }
             }
         }, profileIdUser);
     }
@@ -83,7 +90,6 @@ public class ListingListPresenter implements Presenter{
 
     private void renderStreams() {
         if (listingStreams != null && favoriteStreams != null) {
-            listingView.showContent();
             listingView.renderStreams(listingStreams);
             listingView.setFavoriteStreams(favoriteStreams);
         }

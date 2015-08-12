@@ -104,10 +104,10 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).showShots();
     }
 
-    @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
+    @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 
-        verify(streamTimelineView, times(1)).showLoading();
+        verify(streamTimelineView, never()).showLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
