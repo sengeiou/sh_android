@@ -25,4 +25,6 @@ public interface ProfileView {
      */
     @Deprecated
     void loadLastShots();
+
+    void showChangePasswordButton();
 }

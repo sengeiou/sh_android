@@ -2,14 +2,24 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   tools:context=".ProfileFragment">
-    <item android:id="@+id/menu_profile_support"
-      android:title="@string/profile_support"
+    <item
+      android:id="@+id/menu_profile_change_password"
       android:orderInCategory="100"
+      android:title="@string/menu_profile_chage_password"
       android:visible="false"
       app:showAsAction="never" />
-    <item android:id="@+id/menu_profile_logout"
-      android:title="@string/profile_logout"
+
+    <item
+      android:id="@+id/menu_profile_support"
       android:orderInCategory="100"
+      android:title="@string/profile_support"
+      android:visible="false"
+      app:showAsAction="never" />
+
+    <item
+      android:id="@+id/menu_profile_logout"
+      android:orderInCategory="100"
+      android:title="@string/profile_logout"
       android:visible="false"
       app:showAsAction="never" />
 </menu>

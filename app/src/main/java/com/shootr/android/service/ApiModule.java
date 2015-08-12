@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.StreamApiService;
+import com.shootr.android.data.api.service.ChangePasswordApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -86,6 +87,10 @@ public final class ApiModule {
 
     @Provides ActivityApiService provideActivityApiService(RestAdapter restAdapter) {
         return restAdapter.create(ActivityApiService.class);
+    }
+
+    @Provides ChangePasswordApiService provideChangePasswordApiService(RestAdapter restAdapter) {
+        return restAdapter.create(ChangePasswordApiService.class);
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {

@@ -9,6 +9,7 @@ import com.shootr.android.domain.exception.InvalidCheckinException;
 import com.shootr.android.domain.exception.InvalidEmailConfirmationException;
 import com.shootr.android.domain.exception.InvalidForgotPasswordException;
 import com.shootr.android.domain.exception.InvalidLoginException;
+import com.shootr.android.domain.exception.InvalidPasswordException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UnauthorizedRequestException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
@@ -31,13 +32,14 @@ public class ShootrUserService {
     private final ResetPasswordGateway resetPasswordGateway;
     private final ConfirmEmailGateway confirmEmailGateway;
     private final StreamRepository remoteStreamRepository;
+    private final ChangePasswordGateway changePasswordGateway;
     private final UserRepository remoteUserRepository;
     private final ResetPasswordEmailGateway resetPasswordEmailGateway;
     private final DatabaseUtils databaseUtils;
 
     @Inject public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
       CheckinGateway checkinGateway, CreateAccountGateway createAccountGateway, LoginGateway loginGateway,
-      ResetPasswordGateway resetPasswordGateway, ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
+      ResetPasswordGateway resetPasswordGateway, ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway, @Remote StreamRepository remoteStreamRepository,
       @Remote UserRepository remoteUserRepository, ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils) {
         this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
@@ -47,6 +49,7 @@ public class ShootrUserService {
         this.resetPasswordGateway = resetPasswordGateway;
         this.confirmEmailGateway = confirmEmailGateway;
         this.remoteStreamRepository = remoteStreamRepository;
+        this.changePasswordGateway = changePasswordGateway;
         this.remoteUserRepository = remoteUserRepository;
         this.resetPasswordEmailGateway = resetPasswordEmailGateway;
         this.databaseUtils = databaseUtils;
@@ -132,5 +135,9 @@ public class ShootrUserService {
         localUserRepository.putUser(user);
 
         confirmEmailGateway.changeEmail(email);
+    }
+
+    public void changePassword(String currentPassword, String newPassword) throws InvalidPasswordException {
+        changePasswordGateway.changePassword(currentPassword, newPassword);
     }
 }

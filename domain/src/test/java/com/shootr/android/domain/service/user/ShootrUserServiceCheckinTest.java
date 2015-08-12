@@ -27,6 +27,7 @@ public class ShootrUserServiceCheckinTest {
     @Mock ResetPasswordGateway resetPasswordGateway;
     @Mock ConfirmEmailGateway confirmEmailGateway;
     @Mock StreamRepository remoteStreamRepository;
+    @Mock ChangePasswordGateway changePasswordGateway;
     @Mock UserRepository remoteUserRepository;
     @Mock ResetPasswordEmailGateway resetPasswordEmailGateway;
     @Mock DatabaseUtils databaseUtils;
@@ -35,11 +36,18 @@ public class ShootrUserServiceCheckinTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrUserService = new ShootrUserService(localUserRepository, sessionRepository, checkinGateway,
-          createAccountGateway, loginGateway, resetPasswordGateway,
+        shootrUserService = new ShootrUserService(localUserRepository,
+          sessionRepository,
+          checkinGateway,
+          createAccountGateway,
+          loginGateway,
+          resetPasswordGateway,
+          changePasswordGateway,
           confirmEmailGateway,
-          remoteStreamRepository, remoteUserRepository,
-          resetPasswordEmailGateway, databaseUtils);
+          remoteStreamRepository,
+          remoteUserRepository,
+          resetPasswordEmailGateway,
+          databaseUtils);
     }
 
     @Test public void shouldCallGatewayWithCurrentUserIdAndStream() throws Exception {

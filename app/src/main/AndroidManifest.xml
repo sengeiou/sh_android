@@ -207,6 +207,10 @@
             android:name=".ui.activities.SupportActivity"
             android:label="@string/title_activity_support" >
         </activity>
+        <activity
+            android:name=".ui.activities.ChangePasswordActivity"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

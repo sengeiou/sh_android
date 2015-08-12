@@ -58,6 +58,7 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.AllShotsActivity;
+import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.ListingActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
@@ -161,6 +162,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private ProgressDialog progress;
     private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
 
     public static ProfileFragment newInstance(String idUser) {
@@ -260,12 +262,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         inflater.inflate(R.menu.menu_profile, menu);
         logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
         supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
+        changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_profile_logout) {
             profilePresenter.logoutSelected();
+            return true;
+        } else if (id == R.id.menu_profile_change_password) {
+            startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
             return true;
         }
         if (id == R.id.menu_profile_support) {
@@ -802,6 +808,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void showSupportButton() {
         supportMenuItem.setVisible(true);
+    }
+
+    @Override public void showChangePasswordButton() {
+        changePasswordMenuItem.setVisible(true);
     }
 
     @OnClick(R.id.profile_listing)
