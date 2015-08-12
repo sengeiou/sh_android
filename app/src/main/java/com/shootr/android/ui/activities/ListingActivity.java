@@ -14,7 +14,6 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ListingStreamsAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
-import com.shootr.android.ui.adapters.listeners.OnRemoveFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
@@ -56,10 +55,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                 return true;
             }
         }, new OnFavoriteClickListener() {
-            @Override public void onFavoriteClick(StreamResultModel streamResultModel) {
-                presenter.addToFavorite(streamResultModel);
+            @Override public void onFavoriteClick(StreamResultModel stream) {
+                presenter.addToFavorite(stream);
             }
-        }, new OnRemoveFavoriteClickListener() {
+
             @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
                 presenter.removeFromFavorites(stream);
             }

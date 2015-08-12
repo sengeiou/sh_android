@@ -6,4 +6,5 @@ public interface OnFavoriteClickListener {
 
     void onFavoriteClick(StreamResultModel stream);
 
+    void onRemoveFavoriteClick(StreamResultModel stream);
 }
