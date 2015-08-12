@@ -3,11 +3,15 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.ListingView;
+import com.shootr.android.util.ErrorMessageFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,16 +38,37 @@ public class ListingListPresenterTest {
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     @Mock ListingView listingView;
     @Mock SessionRepository sessionRepository;
-
-    private ListingListPresenter listingListPresenter;
-    private StreamResultModelMapper streamResultModelMapper;
+    @Mock ListingListPresenter listingListPresenter;
+    @Mock StreamResultModelMapper streamResultModelMapper;
+    @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    @Mock GetFavoriteStreamsInteractor getFavoriteStreamInteractor;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
-        listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor, streamResultModelMapper);
+        listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
+          addToFavoritesInteractor,
+          removeFromFavoritesInteractor,
+          getFavoriteStreamInteractor,
+          streamResultModelMapper,
+          errorMessageFactory);
         listingListPresenter.setView(listingView);
+        setupFavoritesInteractorCallbacks();
+    }
+
+    protected void setupFavoritesInteractorCallbacks() {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<StreamSearchResult>> callback = (Interactor.Callback) invocation.getArguments()[0];
+                callback.onLoaded(Collections.<StreamSearchResult>emptyList());
+
+                return null;
+            }
+        }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
     }
 
     @Test
