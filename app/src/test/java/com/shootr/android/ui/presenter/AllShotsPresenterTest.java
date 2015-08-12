@@ -5,6 +5,8 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.android.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
+import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.AllShotsView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -34,6 +36,8 @@ public class AllShotsPresenterTest {
 
     @Mock GetAllShotsByUserInteractor getAllShotsByUserInteractor;
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
+    @Mock MarkNiceShotInteractor markNiceShotInteractor;
+    @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock AllShotsView allShotsView;
 
@@ -44,7 +48,10 @@ public class AllShotsPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shotModelMapper = new ShotModelMapper();
-        allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor, errorMessageFactory, shotModelMapper);
+        allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor,
+          markNiceShotInteractor,
+          unmarkNiceShotInteractor,
+          errorMessageFactory, shotModelMapper);
         allShotsPresenter.setView(allShotsView);
         allShotsPresenter.setUserId(USER_ID);
     }
