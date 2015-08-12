@@ -2,6 +2,7 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.Context;
+import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.shootr.android.util.DatabaseVersionUtils;
@@ -20,8 +21,11 @@ public class ShootrApplication extends Application {
         super.onCreate();
         buildObjectGraphAndInject();
         plantLoggerTrees();
-        if(!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             Crashlytics.start(this);
+        } else {
+            CustomActivityOnCrash.install(this);
+
         }
         Stetho.initialize(Stetho.newInitializerBuilder(this)
             .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
