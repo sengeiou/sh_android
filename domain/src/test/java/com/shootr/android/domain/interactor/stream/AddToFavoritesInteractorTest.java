@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -31,6 +32,7 @@ public class AddToFavoritesInteractorTest {
     @Mock FavoriteRepository localFavoriteRepository;
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock Favorite favorite;
+    @Mock BusPublisher busPublisher;
 
     private com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor addToFavoritesInteractor;
 
@@ -40,7 +42,8 @@ public class AddToFavoritesInteractorTest {
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         addToFavoritesInteractor = new com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor(localFavoriteRepository, remoteFavoriteRepository,
-          interactorHandler, postExecutionThread);
+          interactorHandler, postExecutionThread,
+          busPublisher);
     }
 
     @Test

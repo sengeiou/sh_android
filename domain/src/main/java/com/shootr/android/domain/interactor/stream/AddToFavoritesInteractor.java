@@ -1,6 +1,8 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Favorite;
+import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.bus.FavoriteAdded;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -20,6 +22,7 @@ public class AddToFavoritesInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final FavoriteRepository localFavoriteRepository;
     private final FavoriteRepository remoteFavoriteRepository;
+    private final BusPublisher busPublisher;
 
     private Interactor.CompletedCallback callback;
     private ErrorCallback errorCallback;
@@ -29,11 +32,12 @@ public class AddToFavoritesInteractor implements Interactor {
     @Inject public AddToFavoritesInteractor(@Local FavoriteRepository localFavoriteRepository,
       @Remote FavoriteRepository remoteFavoriteRepository,
       InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread) {
+      PostExecutionThread postExecutionThread, BusPublisher busPublisher) {
         this.localFavoriteRepository = localFavoriteRepository;
         this.interactorHandler = interactorHandler;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
         this.postExecutionThread = postExecutionThread;
+        this.busPublisher = busPublisher;
     }
 
     public void addToFavorites(String idStream, Interactor.CompletedCallback callback, ErrorCallback errorCallback) {
@@ -46,11 +50,8 @@ public class AddToFavoritesInteractor implements Interactor {
     @Override public void execute() throws Exception {
         Favorite favorite = favoriteFromParameters();
         localFavoriteRepository.putFavorite(favorite);
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onCompleted();
-            }
-        });
+        notifyLoaded();
+        notifyAdditionToBus();
         try {
             remoteFavoriteRepository.putFavorite(favorite);
         } catch (StreamAlreadyInFavoritesException error) {
@@ -84,12 +85,25 @@ public class AddToFavoritesInteractor implements Interactor {
         }
     }
 
+    protected void notifyLoaded() {
+        postExecutionThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onCompleted();
+            }
+        });
+    }
+
     private void notifyError(final ShootrException e) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 errorCallback.onError(e);
             }
         });
+    }
+
+    protected void notifyAdditionToBus() {
+        busPublisher.post(new FavoriteAdded.Event());
     }
 
 }
