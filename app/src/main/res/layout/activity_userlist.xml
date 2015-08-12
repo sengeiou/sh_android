@@ -34,17 +34,4 @@
       tools:text="@string/following_list_empty"
       tools:visibility="visible" />
 
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/userlist_invite_friend"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|right"
-      android:layout_margin="16dp"
-      android:src="@drawable/ic_action_fab_invite"
-      fab:fab_colorNormal="@color/primary"
-      fab:fab_colorPressed="@color/primary_dark"
-      fab:fab_colorRipple="@color/primary_disabled"
-      fab:fab_shadow="true"
-      android:visibility="gone"
-      tools:visibility="visible" />
-
 </FrameLayout>

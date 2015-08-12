@@ -17,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -50,7 +48,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     @Bind(R.id.userlist_empty) TextView emptyTextView;
-    @Bind(R.id.userlist_invite_friend) FloatingActionButton inviteFriend;
 
     private FriendsAdapter peopleAdapter;
     private UserListAdapter suggestedPeopleAdapter;
@@ -80,7 +77,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        inviteFriend.setVisibility(View.VISIBLE);
         userlistListView.setAdapter(getPeopleAdapter());
         setEmptyMessageForPeople();
     }
@@ -106,9 +102,13 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @OnItemClick(R.id.userlist_list)
     public void onUserClick(int position) {
-        // TODO not going through the presenter? You naughty boy...
-        UserModel user = getPeopleAdapter().getItem(position);
-        openUserProfile(user.getIdUser());
+        if (position == 0) {
+            onInviteFriendClick();
+        } else {
+            // TODO not going through the presenter? You naughty boy...
+            UserModel user = getPeopleAdapter().getItem(position);
+            openUserProfile(user.getIdUser());
+        }
     }
 
     private void openUserProfile(String idUser) {
@@ -116,7 +116,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
           REQUEST_CAN_CHANGE_DATA);
     }
 
-    @OnClick(R.id.userlist_invite_friend)
     public void onInviteFriendClick() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
