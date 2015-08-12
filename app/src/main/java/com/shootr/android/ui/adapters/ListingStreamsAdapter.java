@@ -14,7 +14,7 @@ import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
+public class ListingStreamsAdapter extends StreamsListAdapter {
 
     private final PicassoWrapper picasso;
 
@@ -24,23 +24,12 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
     private List<StreamResultModel> favoriteStreams;
 
     public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener,
-      OnFavoriteClickListener onFavoriteClickListener, OnRemoveFavoriteClickListener onRemoveFavoriteClickListener,
-      List<StreamResultModel> transform) {
+      OnFavoriteClickListener onFavoriteClickListener, OnRemoveFavoriteClickListener onRemoveFavoriteClickListener) {
+        super(picasso, onStreamClickListener);
         this.picasso = picasso;
         this.onStreamClickListener = onStreamClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
         this.onRemoveFavoriteClickListener = onRemoveFavoriteClickListener;
-        this.favoriteStreams = transform;
-    }
-
-    public void setStreams(List<StreamResultModel> streams) {
-        boolean wasEmpty = getItems().isEmpty();
-        setItems(streams);
-        if (wasEmpty) {
-            notifyItemRangeInserted(0, streams.size());
-        } else {
-            notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -71,7 +60,7 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
           new ListingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso,
             onFavoriteClickListener, onRemoveFavoriteClickListener);
 
-        listingStreamResultViewHolder.render(stream, position);
+        listingStreamResultViewHolder.render(stream);
     }
 
     @Override
@@ -95,10 +84,10 @@ public class ListingStreamsAdapter extends SubheaderRecyclerViewAdapter<Recycler
             ((ListingStreamResultViewHolder) viewHolder).render(stream, position, false);
         }
 
-        ((ListingStreamResultViewHolder) viewHolder).render(stream, position);
+        ((ListingStreamResultViewHolder) viewHolder).render(stream);
     }
 
-    public void setFavoriteStreams(List<StreamResultModel> transform) {
-        //this.favoriteStreams = transform;
+    public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
+        this.favoriteStreams = favoriteStreams;
     }
 }

@@ -21,8 +21,8 @@ public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
         this.unwatchClickListener = unwatchClickListener;
     }
 
-    public void render(StreamResultModel streamResultModel, Integer position) {
-        super.render(streamResultModel, position);
+    public void render(StreamResultModel streamResultModel) {
+        super.render(streamResultModel);
         remove.setVisibility(View.VISIBLE);
         setUnwatchClickListener();
     }

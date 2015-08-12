@@ -20,7 +20,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder implements V
     private final OnStreamClickListener onStreamClickListener;
     private final PicassoWrapper picasso;
 
-    private Integer position;
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
@@ -35,9 +34,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder implements V
         itemView.setOnCreateContextMenuListener(this);
     }
 
-    public void render(StreamResultModel streamResultModel, Integer position) {
+    public void render(StreamResultModel streamResultModel) {
         this.setClickListener(streamResultModel);
-        this.position = position;
         title.setText(streamResultModel.getStreamModel().getTitle());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0) {

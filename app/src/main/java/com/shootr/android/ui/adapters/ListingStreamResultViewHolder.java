@@ -27,7 +27,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     }
 
     public void render(StreamResultModel streamResultModel, Integer position, Boolean favorite) {
-        super.render(streamResultModel, position);
+        super.render(streamResultModel);
         setFavoriteClickListener(streamResultModel);
         if(favorite) {
             favoriteAdded.setVisibility(View.VISIBLE);
