@@ -372,21 +372,19 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(getActivity());
-        builder.addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
+          new Runnable() {
+              @Override public void run() {
+                  ClipboardManager clipboard =
+                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                  clipboard.setPrimaryClip(clip);
+              }
+          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
-        builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
-            @Override
-            public void run() {
                 reportShotPresenter.loadReport(shotModel);
             }
-        });
-        builder.show();
+        }).show();
     }
 
     private void startProfileContainerActivity(String username) {
