@@ -76,5 +76,18 @@
       android:layout_alignStart="@+id/stream_watchers"
       android:visibility="gone"
       tools:visibility="visible"/>
+
+    <ImageView android:id="@+id/favorite_stream_indicator"
+      android:layout_width="26dp"
+      android:layout_height="26dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:src="@drawable/ic_favorite_not_added_28_gray50"
+      android:scaleType="centerCrop"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentBottom="true"
+      android:visibility="gone"
+      tools:visibility="visible"
+      />
   </RelativeLayout>
 </FrameLayout>
