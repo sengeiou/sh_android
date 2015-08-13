@@ -201,24 +201,6 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-    public Long getLastModifiedDateForStream(String streamId) {
-        String streamIdClause = ShotTable.ID_STREAM + " = ?";
-        String commentTypeOnlyClause = ShotTable.TYPE + " = '" + ShotType.COMMENT + "'";
-
-        String whereClause = streamIdClause + " AND " + commentTypeOnlyClause;
-        String[] whereArguments = new String[]{String.valueOf(streamId)};
-        String order = ShotTable.MODIFIED + " desc";
-
-        Cursor queryResult = getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null, order, "1");
-
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            ShotEntity lastShot = shotEntityMapper.fromCursor(queryResult);
-            return lastShot.getModified().getTime();
-        } else {
-            return 0L;
-        }
-    }
 
     public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
