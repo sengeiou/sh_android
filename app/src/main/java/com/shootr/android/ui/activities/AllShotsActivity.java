@@ -36,7 +36,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
-    public static final String CLIPBOARD_LABEL = "clipboard_label";
+    public static final String CLIPBOARD_LABEL = "Shot";
 
     private static final String EXTRA_USER = "user";
 

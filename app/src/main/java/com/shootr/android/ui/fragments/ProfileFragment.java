@@ -115,7 +115,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
-    public static final String CLIPBOARD_LABEL = "clipboard_label";
+    public static final String CLIPBOARD_LABEL = "Shot";
     public static final int LOGOUT_DISMISS_DELAY = 1500;
 
     //region injected

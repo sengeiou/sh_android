@@ -71,7 +71,7 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
-    public static final String CLIPBOARD_LABEL = "clipboard_label";
+    public static final String CLIPBOARD_LABEL = "Shot";
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
