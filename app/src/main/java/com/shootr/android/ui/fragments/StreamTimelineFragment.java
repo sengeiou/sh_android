@@ -591,7 +591,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(browserIntent);
     }
 
-    @Override public void showConfirmationMessage() {
+    @Override public void showEmailNotConfirmedError() {
         AlertDialog.Builder builder =
           new AlertDialog.Builder(getActivity());
 

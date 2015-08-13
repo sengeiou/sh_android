@@ -302,7 +302,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         startActivity(browserIntent);
     }
 
-    @Override public void showConfirmationMessage() {
+    @Override public void showEmailNotConfirmedError() {
         AlertDialog.Builder builder =
           new AlertDialog.Builder(this);
 

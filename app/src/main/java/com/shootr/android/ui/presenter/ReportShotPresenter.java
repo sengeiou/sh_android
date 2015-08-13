@@ -32,7 +32,7 @@ public class ReportShotPresenter implements Presenter {
         if (userModel.isEmailConfirmed()) {
             reportShotView.goToReport(sessionRepository.getSessionToken() ,shotModel);
         } else {
-            reportShotView.showConfirmationMessage();
+            reportShotView.showEmailNotConfirmedError();
         }
     }
 

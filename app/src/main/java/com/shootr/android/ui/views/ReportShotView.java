@@ -6,5 +6,5 @@ public interface ReportShotView {
 
     void goToReport(String sessionToken, ShotModel shotModel);
 
-    void showConfirmationMessage();
+    void showEmailNotConfirmedError();
 }

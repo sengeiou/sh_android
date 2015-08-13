@@ -943,7 +943,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         startActivity(browserIntent);
     }
 
-    @Override public void showConfirmationMessage() {
+    @Override public void showEmailNotConfirmedError() {
         AlertDialog.Builder builder =
           new AlertDialog.Builder(getActivity());
 
