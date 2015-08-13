@@ -65,15 +65,16 @@
       style="@style/WatchersIndicator" />
 
     <ImageView android:id="@+id/stream_remove"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
       android:background="?selectableItemBackgroundBorderless"
-      android:src="@drawable/ic_action_navigation_close"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
       android:layout_alignParentBottom="true"
       android:layout_alignLeft="@+id/stream_watchers"
       android:layout_alignStart="@+id/stream_watchers"
+      android:layout_marginRight="-4dp"
       android:visibility="gone"
       tools:visibility="visible"/>
 
