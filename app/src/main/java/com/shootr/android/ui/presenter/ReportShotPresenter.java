@@ -4,35 +4,35 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
-import com.shootr.android.ui.views.SessionUserView;
+import com.shootr.android.ui.views.ReportShotView;
 import javax.inject.Inject;
 
-public class SessionUserPresenter implements Presenter {
+public class ReportShotPresenter implements Presenter {
 
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
 
-    private SessionUserView sessionUserView;
+    private ReportShotView reportShotView;
 
-    @Inject public SessionUserPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper) {
+    @Inject public ReportShotPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper) {
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
     }
 
-    protected void setView(SessionUserView sessionUserView) {
-        this.sessionUserView = sessionUserView;
+    protected void setView(ReportShotView reportShotView) {
+        this.reportShotView = reportShotView;
     }
 
-    public void initialize(SessionUserView sessionUserView) {
-        setView(sessionUserView);
+    public void initialize(ReportShotView reportShotView) {
+        setView(reportShotView);
     }
 
     public void loadReport(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         if (userModel.isEmailConfirmed()) {
-            sessionUserView.goToReport(sessionRepository.getSessionToken() ,shotModel);
+            reportShotView.goToReport(sessionRepository.getSessionToken() ,shotModel);
         } else {
-            sessionUserView.showConfirmationMessage();
+            reportShotView.showConfirmationMessage();
         }
     }
 

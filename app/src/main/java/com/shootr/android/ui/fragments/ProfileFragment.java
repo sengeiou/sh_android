@@ -82,10 +82,10 @@ import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
-import com.shootr.android.ui.presenter.SessionUserPresenter;
+import com.shootr.android.ui.presenter.ReportShotPresenter;
 import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.ProfileView;
-import com.shootr.android.ui.views.SessionUserView;
+import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
@@ -105,7 +105,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback,
-  SessionUserView {
+  ReportShotView {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -157,7 +157,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
-    @Inject SessionUserPresenter sessionUserPresenter;
+    @Inject ReportShotPresenter reportShotPresenter;
     //endregion
 
     // Args
@@ -469,7 +469,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private void initializePresenter() {
         profilePresenter.initialize(this, idUser, isCurrentUser());
         suggestedPeoplePresenter.initialize(this);
-        sessionUserPresenter.initialize(this);
+        reportShotPresenter.initialize(this);
     }
 
     @Subscribe
@@ -737,7 +737,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override
             public void run() {
-                sessionUserPresenter.loadReport(shotModel);
+                reportShotPresenter.loadReport(shotModel);
             }
         });
         builder.show();

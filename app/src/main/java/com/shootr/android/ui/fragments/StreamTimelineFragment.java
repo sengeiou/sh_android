@@ -40,14 +40,14 @@ import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
-import com.shootr.android.ui.presenter.SessionUserPresenter;
+import com.shootr.android.ui.presenter.ReportShotPresenter;
 import com.shootr.android.ui.presenter.StreamTimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
-import com.shootr.android.ui.views.SessionUserView;
+import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
@@ -65,7 +65,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, SessionUserView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -77,7 +77,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
-    @Inject SessionUserPresenter sessionUserPresenter;
+    @Inject ReportShotPresenter reportShotPresenter;
 
     @Inject PicassoWrapper picasso;
 
@@ -225,7 +225,7 @@ public class StreamTimelineFragment extends BaseFragment
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
-        sessionUserPresenter.initialize(this);
+        reportShotPresenter.initialize(this);
     }
 
     //endregion
@@ -380,7 +380,7 @@ public class StreamTimelineFragment extends BaseFragment
         builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override
             public void run() {
-                sessionUserPresenter.loadReport(shotModel);
+                reportShotPresenter.loadReport(shotModel);
             }
         });
         builder.show();

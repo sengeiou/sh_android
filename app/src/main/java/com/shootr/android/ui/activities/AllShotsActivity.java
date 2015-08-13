@@ -21,9 +21,9 @@ import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
-import com.shootr.android.ui.presenter.SessionUserPresenter;
+import com.shootr.android.ui.presenter.ReportShotPresenter;
 import com.shootr.android.ui.views.AllShotsView;
-import com.shootr.android.ui.views.SessionUserView;
+import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
@@ -33,7 +33,7 @@ import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, SessionUserView {
+public class AllShotsActivity extends BaseToolbarDecoratedActivity implements AllShotsView, ReportShotView {
 
     private static final String[] CONTEXT_MENU_OPTIONS = {"Copy text", "Report"};
     private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
@@ -42,7 +42,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     private static final String EXTRA_USER = "user";
 
     @Inject AllShotsPresenter presenter;
-    @Inject SessionUserPresenter sessionUserPresenter;
+    @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
 
     @Bind(R.id.all_shots_list) ListView listView;
@@ -81,7 +81,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Override protected void initializePresenter() {
         String userId = checkNotNull(getIntent().getStringExtra(EXTRA_USER));
         presenter.initialize(this, userId);
-        sessionUserPresenter.initialize(this);
+        reportShotPresenter.initialize(this);
     }
 
     @Override
@@ -216,7 +216,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         builder.addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
             @Override
             public void run() {
-                sessionUserPresenter.loadReport(shotModel);
+                reportShotPresenter.loadReport(shotModel);
             }
         });
         builder.show();
