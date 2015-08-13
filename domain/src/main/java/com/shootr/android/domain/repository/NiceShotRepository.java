@@ -1,6 +1,7 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
+import com.shootr.android.domain.exception.NiceNotMarkedException;
 
 public interface NiceShotRepository {
 
@@ -8,5 +9,5 @@ public interface NiceShotRepository {
 
     boolean isMarked(String idShot);
 
-    void unmark(String idShot);
+    void unmark(String idShot) throws NiceNotMarkedException;
 }

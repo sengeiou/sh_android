@@ -3,8 +3,10 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.NiceShotTable;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
+import com.shootr.android.domain.exception.NiceNotMarkedException;
 import javax.inject.Inject;
 
 public class NiceManager extends AbstractManager {
@@ -40,9 +42,12 @@ public class NiceManager extends AbstractManager {
         return result;
     }
 
-    public void unmark(String idShot) {
+    public void unmark(String idShot) throws NiceNotMarkedException {
         String where = NiceShotTable.ID_SHOT + " = ?";
         String[] whereArgs = new String[] { idShot };
-        getWritableDatabase().delete(NiceShotTable.TABLE, where, whereArgs);
+        int deletedRows = getWritableDatabase().delete(NiceShotTable.TABLE, where, whereArgs);
+        if (deletedRows <= 0) {
+            throw new NiceNotMarkedException();
+        }
     }
 }

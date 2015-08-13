@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.local;
 
 import com.shootr.android.db.manager.NiceManager;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
+import com.shootr.android.domain.exception.NiceNotMarkedException;
 import com.shootr.android.domain.repository.NiceShotRepository;
 import javax.inject.Inject;
 
@@ -23,7 +24,7 @@ public class LocalNiceShotRepository implements NiceShotRepository {
     }
 
     @Override
-    public void unmark(String idShot) {
+    public void unmark(String idShot) throws NiceNotMarkedException {
         niceManager.unmark(idShot);
     }
 }
