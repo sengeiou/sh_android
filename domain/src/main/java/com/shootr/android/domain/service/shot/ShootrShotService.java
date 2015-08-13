@@ -54,12 +54,4 @@ public class ShootrShotService {
     private File getResizedImage(File newPhotoFile) throws IOException {
         return imageResizer.getResizedImageFile(newPhotoFile);
     }
-
-    public void markNiceShot(String idShot) {
-        shotGateway.markNiceShot(idShot);
-    }
-
-    public void unmarkNiceShot(String idShot) {
-        shotGateway.unmarkNiceShot(idShot);
-    }
 }
