@@ -23,6 +23,8 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
@@ -35,7 +37,6 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
-import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -356,16 +357,6 @@ public class StreamTimelineFragment extends BaseFragment
           imageClickListener,
           videoClickListener,
           niceShotListener,
-          new OnShotClickListener() {
-              @Override public void onShotClick(ShotModel shot) {
-                  openShot(shot);
-              }
-
-              @Override public boolean onShotLongClick(ShotModel shotModel) {
-                  openContextualMenu(shotModel);
-                  return true;
-              }
-          },
           usernameClickListener,
           timeUtils);
         listView.setAdapter(adapter);
@@ -601,5 +592,20 @@ public class StreamTimelineFragment extends BaseFragment
 
         builder.create().show();
     }
+
+    @OnItemClick(R.id.timeline_shot_list)
+    public void openShot(int position) {
+        ShotModel shot = adapter.getItem(position);
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
+    }
+
+    @OnItemLongClick(R.id.timeline_shot_list)
+    public boolean openContextMenu(int position) {
+        ShotModel shot = adapter.getItem(position);
+        openContextualMenu(shot);
+        return true;
+    }
+
     //endregion
 }

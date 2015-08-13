@@ -75,7 +75,6 @@ import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
-import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
@@ -696,16 +695,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 imageClickListener,
                 videoClickListener,
                 niceShotListener,
-                new OnShotClickListener() {
-                    @Override public boolean onShotLongClick(ShotModel shotModel) {
-                        openContextualMenu(shotModel);
-                        return true;
-                    }
-
-                    @Override public void onShotClick(ShotModel shot) {
-                        openShot(shot);
-                    }
-                },
                 usernameClickListener,
                 timeUtils){
                   @Override protected boolean shouldShowTag() {
@@ -716,6 +705,20 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 setShotItemBackgroundRetainPaddings(shotView);
+                final int finalI = i;
+                shotView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
+                        openShot(shot);
+                    }
+                });
+                shotView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override public boolean onLongClick(View view) {
+                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
+                        openContextualMenu(shot);
+                        return true;
+                    }
+                });
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
@@ -953,4 +956,5 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
         builder.create().show();
     }
+
 }

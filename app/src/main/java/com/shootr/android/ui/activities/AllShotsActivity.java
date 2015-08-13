@@ -15,11 +15,12 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
-import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -187,16 +188,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         adapter = new TimelineAdapter(this, picasso, avatarClickListener,
           imageClickListener, videoClickListener, niceShotListener,
-          new OnShotClickListener() {
-              @Override public boolean onShotLongClick(ShotModel shotModel) {
-                  openContextualMenu(shotModel);
-                  return true;
-              }
-
-              @Override public void onShotClick(ShotModel shot) {
-                  openShot(shot);
-              }
-          },
           usernameClickListener, timeUtils){
             @Override protected boolean shouldShowTag() {
                 return true;
@@ -300,6 +291,20 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           sessionToken,
           shotModel.getIdShot())));
         startActivity(browserIntent);
+    }
+
+    @OnItemClick(R.id.all_shots_list)
+    public void openShot(int position) {
+        ShotModel shot = adapter.getItem(position);
+        Intent intent = ShotDetailActivity.getIntentForActivity(this, shot);
+        startActivity(intent);
+    }
+
+    @OnItemLongClick(R.id.all_shots_list)
+    public boolean openContextMenu(int position) {
+        ShotModel shot = adapter.getItem(position);
+        openContextualMenu(shot);
+        return true;
     }
 
     @Override public void showEmailNotConfirmedError() {
