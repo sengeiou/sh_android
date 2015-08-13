@@ -39,12 +39,7 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalSuggestedPeople();
-        try {
-            obtainRemoteSuggestedPeople();
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
+        obtainSuggestedPeople();
     }
 
     private void obtainRemoteSuggestedPeople() {
@@ -54,10 +49,18 @@ public class GetSuggestedPeopleInteractor implements Interactor {
         notifyResult(suggestedPeoples);
     }
 
-    private void obtainLocalSuggestedPeople() {
+    private void obtainSuggestedPeople() {
         List<SuggestedPeople> suggestedPeople = localUserRepository.getSuggestedPeople();
         List<SuggestedPeople> suggestedPeoples = retainAllFollowedUsers(suggestedPeople, localUserRepository.getPeople());
-        notifyResult(suggestedPeoples);
+        if(suggestedPeoples.isEmpty()) {
+            try {
+                obtainRemoteSuggestedPeople();
+            } catch (ServerCommunicationException error) {
+                notifyError(error);
+            }
+        } else {
+            notifyResult(suggestedPeoples);
+        }
     }
 
     private List<SuggestedPeople> retainAllFollowedUsers(List<SuggestedPeople> suggestedPeople, List<User> people) {
