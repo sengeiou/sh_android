@@ -163,12 +163,13 @@ public class StreamTimelinePresenterTest {
     //endregion
 
     //region Refresh main timeline
-    @Test public void shouldAddNewShotsWhenRefreshTimelineRespondsShots() throws Exception {
+    @Test public void shouldSetShotsWhenRefreshTimelineRespondsShots() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
-        verify(streamTimelineView).addNewShots(anyListOf(ShotModel.class));
+        verify(streamTimelineView).setShots(anyListOf(ShotModel.class));
     }
 
     @Test public void shouldNotAddNewShotsWhenRefreshTimelineRespondsEmptyShotList() throws Exception {
@@ -203,6 +204,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 
@@ -211,6 +213,7 @@ public class StreamTimelinePresenterTest {
 
     @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
         setupRefreshTimelineInteractorCallbacks(timelineWithShots());
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.refresh();
 

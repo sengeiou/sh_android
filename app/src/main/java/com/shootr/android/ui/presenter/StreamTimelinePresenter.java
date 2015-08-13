@@ -136,9 +136,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 if (!shotModels.isEmpty()) {
-                    streamTimelineView.addNewShots(shotModels);
-                    streamTimelineView.hideEmpty();
-                    streamTimelineView.showShots();
+                    loadTimeline();
                 }
                 streamTimelineView.hideLoading();
                 isRefreshing = false;
