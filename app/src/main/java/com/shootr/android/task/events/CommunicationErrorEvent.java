@@ -1,10 +1,10 @@
 package com.shootr.android.task.events;
 
-public class CommunicationErrorStream {
+public class CommunicationErrorEvent {
 
     private Exception exception;
 
-    public CommunicationErrorStream(Exception exception) {
+    public CommunicationErrorEvent(Exception exception) {
         this.exception = exception;
     }
 

@@ -1,14 +1,14 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.task.events.CommunicationErrorStream;
-import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.squareup.otto.Subscribe;
 
 public interface CommunicationPresenter {
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorStream event);
+    public void onCommunicationError(CommunicationErrorEvent event);
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream event);
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event);
 }

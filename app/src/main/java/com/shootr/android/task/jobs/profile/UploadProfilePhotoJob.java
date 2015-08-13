@@ -12,7 +12,7 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.profile.UploadProfilePhotoStream;
+import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 import org.json.JSONException;
 
-public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoStream> {
+public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent> {
 
     private static final int PRIORITY = 5;
     private final ShootrService shootrService;
@@ -59,7 +59,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoStrea
         String photoUrl = uploadPhoto(imageFile);
         UserEntity updatedUser = setCurrentUserPhoto(photoUrl);
 
-        postSuccessfulEvent(new UploadProfilePhotoStream(userModelMapper.toUserModel(updatedUser, null, true)));
+        postSuccessfulEvent(new UploadProfilePhotoEvent(userModelMapper.toUserModel(updatedUser, null, true)));
     }
 
     private UserEntity setCurrentUserPhoto(String photoUrl) throws IOException {

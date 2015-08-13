@@ -27,10 +27,10 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.CommunicationErrorStream;
-import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.events.follows.FollowsResultStream;
+import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
@@ -142,7 +142,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Subscribe
-    public void showUserList(FollowsResultStream event) {
+    public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
         List<UserModel> usersFollowing = event.getResult();
         if (usersFollowing.isEmpty()) {
@@ -159,12 +159,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     @Subscribe
-    public void onCommunicationError(CommunicationErrorStream event) {
+    public void onCommunicationError(CommunicationErrorEvent event) {
         Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream event) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
         setLoadingView(false);
     }

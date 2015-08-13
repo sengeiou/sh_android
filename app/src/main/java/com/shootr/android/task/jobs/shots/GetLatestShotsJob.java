@@ -11,7 +11,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.shots.LatestShotsResultStream;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
+public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
 
     private static final int PRIORITY = 5;
     public static final Integer LATEST_SHOTS_NUMBER = 3;
@@ -54,12 +54,12 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
     @Override public void run() throws SQLException, IOException {
         //OfflineMode
         List<ShotModel> latestShotsOffline = getLatestShotsFromDatabase();
-        postSuccessfulEvent(new LatestShotsResultStream(latestShotsOffline));
+        postSuccessfulEvent(new LatestShotsResultEvent(latestShotsOffline));
 
         if(hasInternetConnection()){
             //OnlineMode
             List<ShotModel> latestShots = getLatestsShotsFromService();
-            postSuccessfulEvent(new LatestShotsResultStream(latestShots));
+            postSuccessfulEvent(new LatestShotsResultEvent(latestShots));
         }
     }
 

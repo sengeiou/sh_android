@@ -9,8 +9,8 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamMediaCountInteractor;
 import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
-import com.shootr.android.task.events.CommunicationErrorStream;
-import com.shootr.android.task.events.ConnectionNotAvailableStream;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -252,12 +252,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
     //endregion
 
-    @Subscribe @Override public void onCommunicationError(CommunicationErrorStream stream) {
+    @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         streamDetailView.showError(communicationErrorMessage);
     }
 
-    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
+    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         streamDetailView.showError(connectionNotAvailableMessage);
     }

@@ -11,7 +11,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.follows.FollowsResultStream;
+import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -23,7 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetFollowingsJob extends ShootrBaseJob<FollowsResultStream> {
+public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 10; //TODO Define next values for our queue
 
@@ -68,7 +68,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultStream> {
         userManager.saveUsersAndDeleted(following);
         followManager.saveFollowsFromServer(followsByFollowing);
         List<UserModel> userFollows = getUserVOs(following);
-        postSuccessfulEvent(new FollowsResultStream(userFollows));
+        postSuccessfulEvent(new FollowsResultEvent(userFollows));
     }
 
     public List<UserModel> getUserVOs(List<UserEntity> users){

@@ -1,5 +1,5 @@
 package com.shootr.android.task.events;
 
-public class DatabaseErrorStream {
+public class DatabaseErrorEvent {
 
 }

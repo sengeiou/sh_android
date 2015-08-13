@@ -5,9 +5,9 @@ import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
 import java.util.List;
 
-public class SearchPeopleRemoteResultStream extends ShootrBaseJob.SuccessEvent<PaginatedResult<List<UserModel>>> {
+public class SearchPeopleRemoteResultEvent extends ShootrBaseJob.SuccessEvent<PaginatedResult<List<UserModel>>> {
 
-    public SearchPeopleRemoteResultStream(PaginatedResult<List<UserModel>> result) {
+    public SearchPeopleRemoteResultEvent(PaginatedResult<List<UserModel>> result) {
         super(result);
     }
 }

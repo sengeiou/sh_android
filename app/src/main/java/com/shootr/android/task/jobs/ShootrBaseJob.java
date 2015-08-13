@@ -5,9 +5,9 @@ import android.content.Context;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.task.events.CommunicationErrorStream;
-import com.shootr.android.task.events.ConnectionNotAvailableStream;
-import com.shootr.android.task.events.DatabaseErrorStream;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.DatabaseErrorEvent;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -58,15 +58,15 @@ public abstract class ShootrBaseJob<T> extends Job {
     }
 
     private void postConnectionNotAvailableEvent() {
-        bus.post(new ConnectionNotAvailableStream());
+        bus.post(new ConnectionNotAvailableEvent());
     }
 
     private void postDatabaseErrorEvent() {
-        bus.post(new DatabaseErrorStream());
+        bus.post(new DatabaseErrorEvent());
     }
 
     private void postCommunicationErrorEvent(IOException e) {
-        bus.post(new CommunicationErrorStream(e));
+        bus.post(new CommunicationErrorEvent(e));
     }
 
     protected void postCustomEvent(Object o) {
