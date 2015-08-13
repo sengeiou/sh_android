@@ -16,10 +16,11 @@ import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class ShootrTimelineService {
 
@@ -89,9 +90,7 @@ public class ShootrTimelineService {
     }
 
     private List<Shot> refreshStreamShots(Stream stream) {
-        if (stream == null) {
-            throw new IllegalArgumentException("Can't refresh null stream");
-        }
+        checkNotNull(stream, "Can't refresh null stream");
 
         Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(stream.getId());
 
@@ -133,14 +132,6 @@ public class ShootrTimelineService {
     private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
         Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
         return remoteActivities;
-    }
-
-    private List<String> getPeopleIds() {
-        List<String> ids = new ArrayList<>();
-        for (User user : localUserRepository.getPeople()) {
-            ids.add(user.getIdUser());
-        }
-        return ids;
     }
 
     private Stream getWatchingStream() {
