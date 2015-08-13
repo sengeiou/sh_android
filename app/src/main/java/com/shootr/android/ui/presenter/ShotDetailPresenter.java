@@ -77,20 +77,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         });
     }
 
-    private void loadShotDetailLocally() {
-        getShotDetailInteractor.loadShotDetailLocalOnly(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
-            @Override
-            public void onLoaded(ShotDetail shotDetail) {
-                onShotDetailLoaded(shotDetail);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
-                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
-    }
-
     protected void onShotDetailLoaded(ShotDetail shotDetail) {
         shotModel = shotModelMapper.transform(shotDetail.getShot());
         shotDetailView.renderShot(shotModel);
@@ -116,7 +102,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
-                loadShotDetailLocally();
+                loadShotDetail();
             }
         });
     }
@@ -125,7 +111,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
             @Override
             public void onCompleted() {
-                loadShotDetailLocally();
+                loadShotDetail();
             }
         });
     }

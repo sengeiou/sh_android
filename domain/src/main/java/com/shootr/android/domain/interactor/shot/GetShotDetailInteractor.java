@@ -23,7 +23,6 @@ public class GetShotDetailInteractor implements Interactor{
     private String idShot;
     private Callback<ShotDetail> callback;
     private ErrorCallback errorCallback;
-    private boolean localOnly = false;
 
     @Inject public GetShotDetailInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository) {
@@ -40,14 +39,6 @@ public class GetShotDetailInteractor implements Interactor{
         interactorHandler.execute(this);
     }
 
-    public void loadShotDetailLocalOnly(String idShot, Callback<ShotDetail> callback, ErrorCallback errorCallback) {
-        this.idShot = idShot;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        this.localOnly = true;
-        interactorHandler.execute(this);
-    }
-
     @Override
     public void execute() throws Exception {
         ShotDetail localShotDetail = localShotRepository.getShotDetail(idShot);
@@ -55,16 +46,14 @@ public class GetShotDetailInteractor implements Interactor{
             notifyLoaded(reoderReplies(localShotDetail));
         }
 
-        if (!localOnly) {
-            try {
-                ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
-                notifyLoaded(reoderReplies(remoteShotDetail));
-                if (localShotDetail != null) {
-                    localShotRepository.putShot(remoteShotDetail.getShot());
-                }
-            } catch (ShootrException error) {
-                notifyError(error);
+        try {
+            ShotDetail remoteShotDetail = remoteShotRepository.getShotDetail(idShot);
+            notifyLoaded(reoderReplies(remoteShotDetail));
+            if (localShotDetail != null) {
+                localShotRepository.putShot(remoteShotDetail.getShot());
             }
+        } catch (ShootrException error) {
+            notifyError(error);
         }
     }
 
