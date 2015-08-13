@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -88,6 +89,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.shot_bar_drafts) View draftsButton;
+
+    @BindString(R.string.report_base_url) String reportBaseUrl;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -584,7 +587,10 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://report.shootr.com/#/?token=" + sessionToken + "&idShot=" + shotModel.getIdShot()));
+        Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
+          sessionToken,
+          shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 

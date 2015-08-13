@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -46,6 +47,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.all_shots_loading) View loadingView;
+
+    @BindString(R.string.report_base_url) String reportBaseUrl;
 
     @Deprecated private TimelineAdapter adapter;
 
@@ -295,7 +298,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://report.shootr.com/#/?token=" + sessionToken + "&idShot=" + shotModel.getIdShot()));
+        Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
+          sessionToken,
+          shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 

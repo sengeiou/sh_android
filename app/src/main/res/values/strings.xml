@@ -338,4 +338,5 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="report_context_menu_copy_text">Copy text</string>
     <string name="report_context_menu_report">Report</string>
+    <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
 </resources>

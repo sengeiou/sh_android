@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
@@ -142,6 +143,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Bind(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
     @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
+
+    @BindString(R.string.report_base_url) String reportBaseUrl;
 
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
@@ -936,7 +939,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://report.shootr.com/#/?token=" + sessionToken + "&idShot=" + shotModel.getIdShot()));
+        Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot()));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
+          sessionToken,
+          shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 
