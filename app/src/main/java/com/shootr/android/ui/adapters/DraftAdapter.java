@@ -14,6 +14,7 @@ import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.DraftItemView;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +24,16 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     public static final int NONE_EXPANDED_POSITION = -1;
     public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
     private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final DraftActionListener draftActionListener;
 
     private List<DraftModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
-    public DraftAdapter(PicassoWrapper picasso, DraftActionListener draftActionListener) {
+    public DraftAdapter(PicassoWrapper picasso, ImageLoader imageLoader, DraftActionListener draftActionListener) {
         this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.draftActionListener = draftActionListener;
     }
 
@@ -81,7 +84,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
             picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else if (draftModel.getImageFile() != null) {
-            picasso.load(draftModel.getImageFile()).into(holder.image);
+            imageLoader.load(draftModel.getImageFile(),holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);
