@@ -33,9 +33,7 @@ public class CustomContextMenu {
         new AlertDialog.Builder(context).setItems(titles, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    callbacks[which].run();
-                }
+                callbacks[which].run();
             }
         }).show();
     }
