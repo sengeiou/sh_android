@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 public class WatchersView extends LinearLayout{
 
     @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     private LayoutInflater layoutInflater;
     private WatcherViewHolder currentUserViewHolder;
@@ -115,9 +117,7 @@ public class WatchersView extends LinearLayout{
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
         viewHolder.watchingText.setText(userWatching.getJoinStreamDateText());
-        if (picasso != null) {
-            picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
-        }
+        imageLoader.loadProfilePhoto(userWatching.getPhoto(), viewHolder.avatar);
     }
 
     private WatcherViewHolder createViewHolder() {

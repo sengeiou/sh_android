@@ -21,11 +21,11 @@ import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -187,7 +187,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(this, picasso, timeUtils, avatarClickListener,
+        adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
           imageClickListener, videoClickListener, onNiceShotListener, onUsernameClickListener){
             @Override protected boolean shouldShowTag() {
                 return true;

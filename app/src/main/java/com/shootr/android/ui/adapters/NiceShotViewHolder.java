@@ -6,12 +6,12 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
@@ -26,14 +26,14 @@ public class NiceShotViewHolder extends ActivityViewHolder {
     private ShotViewHolder shotViewHolder;
 
     public NiceShotViewHolder(View view,
-      PicassoWrapper picasso,
+      ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener,
       OnImageClickListener onImageClickListener,
       OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
-        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
+        super(view, imageLoader, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
@@ -43,7 +43,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
           onVideoClickListener,
           null, onUsernameClickListener,
           androidTimeUtils,
-          picasso,
+          imageLoader,
           shotTextSpannableBuilder);
     }
 

@@ -58,7 +58,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         holder.name.setText(shotModel.getUsername());
         holder.text.setText(shotModel.getComment());
         holder.text.addLinks();
-        picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
+        imageLoader.loadProfilePhoto(shotModel.getPhoto(), holder.avatar);
         bindShotImageIfPresent(holder, draftModel);
         if (isExpandedLocked(position)) {
             currentExpandedItemPosition = position;

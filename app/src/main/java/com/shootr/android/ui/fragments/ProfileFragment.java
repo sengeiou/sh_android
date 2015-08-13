@@ -98,6 +98,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
@@ -153,6 +154,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
     @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
@@ -588,7 +590,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
-            picasso.loadProfilePhoto(photo).into(avatarImageView);
+            imageLoader.loadProfilePhoto(photo, avatarImageView);
         } else {
             if (isCurrentUser()) {
                 avatarImageView.setImageResource(R.drawable.profile_photo_add);
@@ -692,7 +694,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             shotsList.removeAllViews();
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(),
-                picasso, timeUtils, avatarClickListener,
+                imageLoader, timeUtils, avatarClickListener,
                 imageClickListener,
                 videoClickListener, onNiceShotListener, onUsernameClickListener){
                   @Override protected boolean shouldShowTag() {
@@ -902,7 +904,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private UserListAdapter getSuggestedPeopleAdapter() {
         if (suggestedPeopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso, imageLoader);
             suggestedPeopleAdapter.setCallback(this);
         }
         return suggestedPeopleAdapter;

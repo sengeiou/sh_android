@@ -5,18 +5,18 @@ import android.view.View;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
-import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.ShotTextSpannableBuilder;
 
 public class StartedShootingViewHolder extends ClickableStreamActivityViewHolder {
 
-    public StartedShootingViewHolder(View view, PicassoWrapper picasso, AndroidTimeUtils androidTimeUtils,
+    public StartedShootingViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
-          picasso,
+          imageLoader,
           androidTimeUtils,
           shotTextSpannableBuilder,
           onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);

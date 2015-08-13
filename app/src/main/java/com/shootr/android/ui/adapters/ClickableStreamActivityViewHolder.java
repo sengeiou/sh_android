@@ -8,12 +8,12 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.widgets.StreamTitleSpan;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,10 +21,10 @@ public abstract class ClickableStreamActivityViewHolder extends ActivityViewHold
 
     private final OnStreamTitleClickListener onStreamTitleClickListener;
 
-    public ClickableStreamActivityViewHolder(View view, PicassoWrapper picasso, AndroidTimeUtils androidTimeUtils,
+    public ClickableStreamActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
+        super(view, imageLoader, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
         this.onStreamTitleClickListener = onStreamTitleClickListener;
     }
 

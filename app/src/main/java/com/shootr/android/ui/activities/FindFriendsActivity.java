@@ -39,6 +39,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -59,6 +60,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
 
     @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
     @Inject @Main Bus bus;
 
@@ -94,7 +96,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     private void setupViews() {
         if (adapter == null) {
-            adapter = new UserListAdapter(this, picasso);
+            adapter = new UserListAdapter(this, picasso, imageLoader);
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);

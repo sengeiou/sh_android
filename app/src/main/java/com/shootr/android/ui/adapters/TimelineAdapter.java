@@ -5,21 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final OnAvatarClickListener avatarClickListener;
     private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
@@ -30,11 +30,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private List<ShotModel> shots;
 
-    public TimelineAdapter(Context context, PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
+    public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
       OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
       OnUsernameClickListener onUsernameClickListener) {
         super(context);
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
@@ -94,7 +94,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                   onNiceShotListener,
                   onUsernameClickListener,
                   timeUtils,
-                  picasso,
+                  imageLoader,
                   shotTextSpannableBuilder));
                 break;
             default:

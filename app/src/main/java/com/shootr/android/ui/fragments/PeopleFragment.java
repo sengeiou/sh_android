@@ -33,6 +33,7 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -41,6 +42,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject SessionRepository sessionRepository;
@@ -154,7 +156,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     private FriendsAdapter getPeopleAdapter() {
         if (peopleAdapter == null) {
             suggestedPeopleAdapter = getSuggestedPeopleAdapter();
-            peopleAdapter = new FriendsAdapter(getActivity(), picasso, suggestedPeopleAdapter, new OnUserClickListener() {
+            peopleAdapter = new FriendsAdapter(getActivity(), picasso, imageLoader, suggestedPeopleAdapter, new OnUserClickListener() {
                 @Override
                 public void onUserClick(String idUser) {
                     openUserProfile(idUser);
@@ -227,7 +229,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     private UserListAdapter getSuggestedPeopleAdapter() {
         if (suggestedPeopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso, imageLoader);
             suggestedPeopleAdapter.setCallback(this);
         }
         return suggestedPeopleAdapter;

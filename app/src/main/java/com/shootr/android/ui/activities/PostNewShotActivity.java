@@ -90,7 +90,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     private void initializeViews() {
-        picasso.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto()).into(avatar);
+        imageLoader.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto(), avatar);
         name.setText(sessionRepository.getCurrentUser().getName());
         username.setText("@" + sessionRepository.getCurrentUser().getUsername());
 

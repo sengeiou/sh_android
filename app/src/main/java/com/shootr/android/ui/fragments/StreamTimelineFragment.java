@@ -36,11 +36,11 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -62,8 +62,8 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.MenuItemValueHolder;
-import com.shootr.android.util.PicassoWrapper;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -84,7 +84,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
 
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     @Inject AndroidTimeUtils timeUtils;
 
@@ -318,7 +318,7 @@ public class StreamTimelineFragment extends BaseFragment
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), //
-          picasso, //
+          imageLoader, //
           timeUtils, //
           new OnAvatarClickListener() {
               @Override

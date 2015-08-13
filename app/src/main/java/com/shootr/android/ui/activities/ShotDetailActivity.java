@@ -105,7 +105,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void setupAdapter() {
         detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
-          new ShotDetailWithRepliesAdapter.AvatarClickListener() {
+          imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
               @Override
               public void onClick(String userId) {
                   onAvatarClick(userId);
