@@ -20,15 +20,14 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class MarkNiceShotInteractorTest {
 
     private static final String SHOT_ID = "shot_id";
 
-    @Mock ShootrShotService shootrShotService;
     @Mock NiceShotRepository niceShotRepository;
     @Mock ShotRepository localShotRepository;
+    @Mock NiceShotRepository remoteNiceShotRepository;
     @Mock Interactor.CompletedCallback callback;
 
     private MarkNiceShotInteractor interactor;
@@ -40,22 +39,22 @@ public class MarkNiceShotInteractorTest {
         TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
         interactor = new MarkNiceShotInteractor(interactorHandler,
           postExecutionThread,
-          shootrShotService,
-          niceShotRepository);
+          niceShotRepository,
+          remoteNiceShotRepository);
     }
 
     @Test
     public void shouldNotifyCallbackAfterSendingToServer() throws Exception {
         interactor.markNiceShot(SHOT_ID, callback);
 
-        InOrder inOrder = inOrder(callback, shootrShotService);
-        inOrder.verify(shootrShotService).markNiceShot(SHOT_ID);
+        InOrder inOrder = inOrder(callback, remoteNiceShotRepository);
+        inOrder.verify(remoteNiceShotRepository).mark(SHOT_ID);
         inOrder.verify(callback).onCompleted();
     }
 
     @Test
     public void shouldNotifyCallbackWhenServiceFails() throws Exception {
-        doThrow(new ServerCommunicationException(null)).when(shootrShotService).markNiceShot(anyString());
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
@@ -64,7 +63,7 @@ public class MarkNiceShotInteractorTest {
 
     @Test
     public void shouldUnmarkNiceWhenServerFails() throws Exception {
-        doThrow(new ServerCommunicationException(null)).when(shootrShotService).markNiceShot(anyString());
+        doThrow(new ServerCommunicationException(null)).when(remoteNiceShotRepository).mark(anyString());
 
         interactor.markNiceShot(SHOT_ID, callback);
 
@@ -77,7 +76,7 @@ public class MarkNiceShotInteractorTest {
 
         interactor.markNiceShot(SHOT_ID, callback);
 
-        verify(shootrShotService, never()).markNiceShot(anyString());
+        verify(remoteNiceShotRepository, never()).mark(anyString());
 
     }
 }

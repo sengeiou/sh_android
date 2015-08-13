@@ -6,7 +6,9 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.NiceShotRepository;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import javax.inject.Inject;
 
@@ -14,20 +16,20 @@ public class MarkNiceShotInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final ShootrShotService shootrShotService;
-    private final NiceShotRepository niceShotRepository;
+    private final NiceShotRepository localNiceShotRepository;
+    private final NiceShotRepository remoteNiceShotRepository;
 
     private String idShot;
     private CompletedCallback completedCallback;
 
     @Inject public MarkNiceShotInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      ShootrShotService shootrShotService,
-      NiceShotRepository niceShotRepository) {
+      @Local NiceShotRepository localNiceShotRepository,
+      @Remote NiceShotRepository remoteNiceShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.shootrShotService = shootrShotService;
-        this.niceShotRepository = niceShotRepository;
+        this.localNiceShotRepository = localNiceShotRepository;
+        this.remoteNiceShotRepository = remoteNiceShotRepository;
     }
 
     public void markNiceShot(String idShot, CompletedCallback completedCallback) {
@@ -48,18 +50,18 @@ public class MarkNiceShotInteractor implements Interactor {
 
     private void sendNiceToServer() throws NiceNotMarkedException {
         try {
-            shootrShotService.markNiceShot(idShot);
-        } catch (ServerCommunicationException e) {
+            remoteNiceShotRepository.mark(idShot);
+        } catch (ServerCommunicationException | NiceAlreadyMarkedException e) {
             undoNiceInLocal();
         }
     }
 
     private void markNiceInLocal() throws NiceAlreadyMarkedException {
-        niceShotRepository.mark(idShot);
+        localNiceShotRepository.mark(idShot);
     }
 
     private void undoNiceInLocal() throws NiceNotMarkedException {
-        niceShotRepository.unmark(idShot);
+        localNiceShotRepository.unmark(idShot);
     }
 
     private void notifyCompleted() {
