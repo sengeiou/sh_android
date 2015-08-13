@@ -105,7 +105,12 @@ public class ShootrTimelineService {
         if (localShots.isEmpty()) {
             streamTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
         }
-        return remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
+        List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
+        if (!newShots.isEmpty()) {
+            long lastShotDate = newShots.get(0).getPublishDate().getTime();
+            timelineSynchronizationRepository.setStreamTimelineRefreshDate(stream.getId(), lastShotDate);
+        }
+        return newShots;
     }
 
     private Timeline buildSortedTimeline(List<Shot> shots) {
