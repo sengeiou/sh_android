@@ -216,7 +216,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
               }
           }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
-                reportShotPresenter.loadReport(shotModel);
+                reportShotPresenter.report(shotModel);
             }
         }).show();
     }

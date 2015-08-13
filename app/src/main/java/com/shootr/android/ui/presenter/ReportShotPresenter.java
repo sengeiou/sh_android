@@ -27,7 +27,7 @@ public class ReportShotPresenter implements Presenter {
         setView(reportShotView);
     }
 
-    public void loadReport(ShotModel shotModel) {
+    public void report(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         if (userModel.isEmailConfirmed()) {
             reportShotView.goToReport(sessionRepository.getSessionToken() ,shotModel);

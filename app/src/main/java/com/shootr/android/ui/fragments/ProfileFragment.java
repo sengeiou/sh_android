@@ -739,7 +739,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
               }
           }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
-                reportShotPresenter.loadReport(shotModel);
+                reportShotPresenter.report(shotModel);
             }
         }).show();
     }
