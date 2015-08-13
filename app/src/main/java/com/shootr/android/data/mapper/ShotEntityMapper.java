@@ -7,6 +7,7 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.EntityMetadata;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.NiceShotRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class ShotEntityMapper {
 
     private final NiceShotRepository niceShotRepository;
 
-    @Inject public ShotEntityMapper(NiceShotRepository niceShotRepository) {
+    @Inject public ShotEntityMapper(@Local NiceShotRepository niceShotRepository) {
         this.niceShotRepository = niceShotRepository;
     }
 

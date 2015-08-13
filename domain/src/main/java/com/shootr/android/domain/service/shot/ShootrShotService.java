@@ -2,8 +2,6 @@ package com.shootr.android.domain.service.shot;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.repository.Local;
-import com.shootr.android.domain.repository.NiceShotRepository;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -18,17 +16,13 @@ public class ShootrShotService {
     private final PhotoService photoService;
     private final ShotGateway shotGateway;
     private final ShotRepository remoteShotRepository;
-    private final ShotRepository localShotRepository;
-    private final NiceShotRepository niceShotRepository;
 
     @Inject public ShootrShotService(ImageResizer imageResizer, PhotoService photoService, ShotGateway shotGateway,
-      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository, NiceShotRepository niceShotRepository) {
+      @Remote ShotRepository remoteShotRepository) {
         this.imageResizer = imageResizer;
         this.photoService = photoService;
         this.shotGateway = shotGateway;
         this.remoteShotRepository = remoteShotRepository;
-        this.localShotRepository = localShotRepository;
-        this.niceShotRepository = niceShotRepository;
     }
 
     public String uploadShotImage(File imageFile) {
@@ -59,13 +53,5 @@ public class ShootrShotService {
 
     private File getResizedImage(File newPhotoFile) throws IOException {
         return imageResizer.getResizedImageFile(newPhotoFile);
-    }
-
-    public void markNiceShot(String idShot) {
-        shotGateway.markNiceShot(idShot);
-    }
-
-    public void unmarkNiceShot(String idShot) {
-        shotGateway.unmarkNiceShot(idShot);
     }
 }
