@@ -23,12 +23,11 @@ public class SessionUserPresenter implements Presenter {
         this.sessionUserView = sessionUserView;
     }
 
-    public void initialize(SessionUserView sessionUserView, ShotModel shotModel) {
+    public void initialize(SessionUserView sessionUserView) {
         setView(sessionUserView);
-        loadReport(shotModel);
     }
 
-    private void loadReport(ShotModel shotModel) {
+    public void loadReport(ShotModel shotModel) {
         UserModel userModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         if (userModel.isEmailConfirmed()) {
             sessionUserView.goToReport(sessionRepository.getSessionToken() ,shotModel);

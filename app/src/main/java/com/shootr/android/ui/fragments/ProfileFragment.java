@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,26 +67,30 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.presenter.ProfilePresenter;
+import com.shootr.android.ui.presenter.SessionUserPresenter;
 import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.ProfileView;
+import com.shootr.android.ui.views.SessionUserView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.MenuItemValueHolder;
@@ -98,7 +104,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class ProfileFragment extends BaseFragment implements ProfileView, SuggestedPeopleView, UserListAdapter.FollowUnfollowAdapterCallback,
+  SessionUserView {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -107,6 +114,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
+    public static final String CLIPBOARD_LABEL = "clipboard_label";
     public static final int LOGOUT_DISMISS_DELAY = 1500;
 
     //region injected
@@ -149,6 +157,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
+    @Inject SessionUserPresenter sessionUserPresenter;
     //endregion
 
     // Args
@@ -314,8 +323,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
-            @Override
-            public void onUserClick(String idUser) {
+            @Override public void onUserClick(String idUser) {
                 Intent suggestedUserIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
                 startActivity(suggestedUserIntent);
             }
@@ -461,6 +469,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private void initializePresenter() {
         profilePresenter.initialize(this, idUser, isCurrentUser());
         suggestedPeoplePresenter.initialize(this);
+        sessionUserPresenter.initialize(this);
     }
 
     @Subscribe
@@ -678,8 +687,24 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             latestsShotsAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                      imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils){
+              new TimelineAdapter(getActivity(),
+                picasso,
+                avatarClickListener,
+                imageClickListener,
+                videoClickListener,
+                niceShotListener,
+                new OnShotClickListener() {
+                    @Override public boolean onShotLongClick(ShotModel shotModel) {
+                        openContextualMenu(shotModel);
+                        return true;
+                    }
+
+                    @Override public void onShotClick(ShotModel shot) {
+                        openShot(shot);
+                    }
+                },
+                usernameClickListener,
+                timeUtils){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }
@@ -688,13 +713,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 setShotItemBackgroundRetainPaddings(shotView);
-                final int finalI = i;
-                shotView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
-                        openShot(shot);
-                    }
-                });
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
@@ -705,6 +723,24 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             allShotContainer.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void openContextualMenu(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(getActivity());
+        builder.addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+            @Override public void run() {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+        builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override
+            public void run() {
+                sessionUserPresenter.loadReport(shotModel);
+            }
+        });
+        builder.show();
     }
 
     private void setShotItemBackgroundRetainPaddings(View shotView) {
@@ -897,5 +933,21 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @OnClick(R.id.profile_open_stream)
     public void onOpenStreamClick() {
         startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
+    }
+
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://report.shootr.com/#/?token=" + sessionToken + "&idShot=" + shotModel.getIdShot()));
+        startActivity(browserIntent);
+    }
+
+    @Override public void showConfirmationMessage() {
+        AlertDialog.Builder builder =
+          new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(getString(R.string.alert_report_confirmed_email_message))
+          .setTitle(getString(R.string.alert_report_confirmed_email_title))
+          .setPositiveButton(getString(R.string.alert_report_confirmed_email_ok), null);
+
+        builder.create().show();
     }
 }

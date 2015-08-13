@@ -11,20 +11,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
@@ -37,6 +34,7 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -57,6 +55,7 @@ import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
@@ -71,8 +70,6 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
-    private static final String[] CONTEXT_MENU_OPTIONS = {"Copy text", "Report"};
-    private static final Integer[] CONTEXT_MENU_OPTIONS_INDEX = {0, 1};
     public static final String CLIPBOARD_LABEL = "clipboard_label";
 
     //region Fields
@@ -228,37 +225,10 @@ public class StreamTimelineFragment extends BaseFragment
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
+        sessionUserPresenter.initialize(this);
     }
 
     //endregion
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-      ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        for(int i = 0; i<CONTEXT_MENU_OPTIONS.length; i++) {
-            menu.add(0, CONTEXT_MENU_OPTIONS_INDEX[i], 0, CONTEXT_MENU_OPTIONS[i]);
-        }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        ContextMenu.ContextMenuInfo menuInfo = item.getMenuInfo();
-        if(menuInfo instanceof AdapterView.AdapterContextMenuInfo) {
-            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            int position = adapterContextMenuInfo.position;
-            ShotModel shotModel = adapter.getItem(position);
-            int itemId = item.getItemId();
-            if(itemId == CONTEXT_MENU_OPTIONS_INDEX[0]) {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                clipboard.setPrimaryClip(clip);
-            } else if (itemId == CONTEXT_MENU_OPTIONS_INDEX[1]) {
-                sessionUserPresenter.initialize(this, shotModel);
-            }
-        }
-        return true;
-    }
 
     private void setupNewShotBarDelegate() {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
@@ -377,11 +347,43 @@ public class StreamTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils);
-        listView.setAdapter(adapter);
+        adapter = new TimelineAdapter(getActivity(),
+          picasso,
+          avatarClickListener,
+          imageClickListener,
+          videoClickListener,
+          niceShotListener,
+          new OnShotClickListener() {
+              @Override public void onShotClick(ShotModel shot) {
+                  openShot(shot);
+              }
 
-        registerForContextMenu(listView);
+              @Override public boolean onShotLongClick(ShotModel shotModel) {
+                  openContextualMenu(shotModel);
+                  return true;
+              }
+          },
+          usernameClickListener,
+          timeUtils);
+        listView.setAdapter(adapter);
+    }
+
+    private void openContextualMenu(final ShotModel shotModel) {
+        CustomContextMenu.Builder builder = new CustomContextMenu.Builder(getActivity());
+        builder.addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+            @Override public void run() {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+        builder.addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override
+            public void run() {
+                sessionUserPresenter.loadReport(shotModel);
+            }
+        });
+        builder.show();
     }
 
     private void startProfileContainerActivity(String username) {
@@ -413,8 +415,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -422,8 +423,7 @@ public class StreamTimelineFragment extends BaseFragment
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -438,10 +438,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
     //endregion
 
-    @OnItemClick(R.id.timeline_shot_list)
-    public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position);
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+    public void openShot(ShotModel shotModel) {
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shotModel);
         startActivity(intent);
     }
 
