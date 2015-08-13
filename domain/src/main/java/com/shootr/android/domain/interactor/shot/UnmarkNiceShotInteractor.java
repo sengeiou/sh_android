@@ -1,6 +1,8 @@
 package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
+import com.shootr.android.domain.exception.NiceNotMarkedException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -38,21 +40,25 @@ public class UnmarkNiceShotInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        unmarkNiceInLocal();
         try {
+            unmarkNiceInLocal();
             sendUndoNiceToRemote();
-        } catch (ShootrException e) {
-            redoNiceInLocal();
+        } catch (NiceNotMarkedException e) {
+            /* Ignore error and notify callback */
         }
         notifyCompleted();
     }
 
-    private void unmarkNiceInLocal() {
+    private void unmarkNiceInLocal() throws NiceNotMarkedException {
         niceShotRepository.unmark(idShot);
     }
 
-    protected void sendUndoNiceToRemote() {
-        shootrShotService.unmarkNiceShot(idShot);
+    protected void sendUndoNiceToRemote() throws NiceAlreadyMarkedException {
+        try {
+            shootrShotService.unmarkNiceShot(idShot);
+        } catch (ServerCommunicationException e) {
+            redoNiceInLocal();
+        }
     }
 
     private void redoNiceInLocal() throws NiceAlreadyMarkedException {
