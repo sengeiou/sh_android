@@ -939,7 +939,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot()));
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
           sessionToken,
           shotModel.getIdShot())));
