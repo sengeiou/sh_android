@@ -67,7 +67,7 @@
     <ImageView android:id="@+id/stream_remove"
       android:layout_width="32dp"
       android:layout_height="32dp"
-      android:background="?selectableItemBackground"
+      android:background="?selectableItemBackgroundBorderless"
       android:src="@drawable/ic_action_navigation_close"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
