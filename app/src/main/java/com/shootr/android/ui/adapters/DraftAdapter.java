@@ -81,7 +81,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
         ShotModel shotModel = draftModel.getShotModel();
         if (shotModel.getImage() != null) {
-            picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
+            imageLoader.loadTimelineImage(shotModel.getImage(), holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else if (draftModel.getImageFile() != null) {
             imageLoader.load(draftModel.getImageFile(),holder.image);
