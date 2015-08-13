@@ -1,6 +1,5 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -17,7 +16,6 @@ public class UnmarkNiceShotInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final ShootrShotService shootrShotService;
     private final NiceShotRepository niceShotRepository;
-    private final ShotRepository localShotRepository;
 
     private String idShot;
     private CompletedCallback completedCallback;
@@ -25,12 +23,11 @@ public class UnmarkNiceShotInteractor implements Interactor {
     @Inject public UnmarkNiceShotInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       ShootrShotService shootrShotService,
-      NiceShotRepository niceShotRepository, @Local ShotRepository localShotRepository) {
+      NiceShotRepository niceShotRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.shootrShotService = shootrShotService;
         this.niceShotRepository = niceShotRepository;
-        this.localShotRepository = localShotRepository;
     }
 
     public void unmarkNiceShot(String idShot, CompletedCallback completedCallback) {
@@ -41,36 +38,16 @@ public class UnmarkNiceShotInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         unmarkNiceInLocal();
-        notifyCompleted();
         try {
             sendUndoNiceToRemote();
         } catch (ShootrException e) {
             redoNiceInLocal();
-            notifyCompleted();
         }
+        notifyCompleted();
     }
 
     private void unmarkNiceInLocal() {
         niceShotRepository.unmark(idShot);
-        decrementLocalCount();
-    }
-
-    private void incrementLocalCount() {
-        Shot shot = localShotRepository.getShot(idShot);
-        if (shot != null) {
-            int niceCount = shot.getNiceCount();
-            shot.setNiceCount(niceCount + 1);
-            localShotRepository.putShot(shot);
-        }
-    }
-
-    private void decrementLocalCount() {
-        Shot shot = localShotRepository.getShot(idShot);
-        if (shot != null) {
-            int niceCount = shot.getNiceCount();
-            shot.setNiceCount(niceCount - 1);
-            localShotRepository.putShot(shot);
-        }
     }
 
     protected void sendUndoNiceToRemote() {
@@ -78,7 +55,6 @@ public class UnmarkNiceShotInteractor implements Interactor {
     }
 
     private void redoNiceInLocal() {
-        incrementLocalCount();
         niceShotRepository.mark(idShot);
     }
 
