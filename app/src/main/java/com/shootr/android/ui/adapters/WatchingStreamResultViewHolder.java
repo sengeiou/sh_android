@@ -7,6 +7,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 
 public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
@@ -16,8 +17,8 @@ public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
     @Bind(R.id.stream_remove) ImageView remove;
 
     public WatchingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      PicassoWrapper picasso, OnUnwatchClickListener unwatchClickListener) {
-        super(itemView, onStreamClickListener, picasso);
+      ImageLoader imageLoader, OnUnwatchClickListener unwatchClickListener) {
+        super(itemView, onStreamClickListener, imageLoader);
         this.unwatchClickListener = unwatchClickListener;
     }
 

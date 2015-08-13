@@ -50,7 +50,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
+        adapter = new ListingStreamsAdapter(imageLoader, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }

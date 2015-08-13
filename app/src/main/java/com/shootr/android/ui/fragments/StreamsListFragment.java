@@ -34,6 +34,7 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -49,6 +50,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Inject StreamsListPresenter presenter;
     @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject ToolbarDecorator toolbarDecorator;
 
     private StreamsListAdapter adapter;
@@ -89,7 +91,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         streamsList.setItemAnimator(new FadeDelayedItemAnimator(50));
 
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);

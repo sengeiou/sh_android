@@ -7,7 +7,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
@@ -22,8 +22,8 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     private Boolean isFavorite;
 
     public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      PicassoWrapper picasso, OnFavoriteClickListener onFavoriteClickListener) {
-        super(itemView, onStreamClickListener, picasso);
+      ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener) {
+        super(itemView, onStreamClickListener, imageLoader);
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
 

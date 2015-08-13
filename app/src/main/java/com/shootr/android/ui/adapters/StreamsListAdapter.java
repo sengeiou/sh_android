@@ -9,18 +9,18 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.List;
 
 public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
     private OnStreamClickListener onStreamClickListener;
     private OnUnwatchClickListener onUnwatchClickListener;
 
-    public StreamsListAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener) {
-        this.picasso = picasso;
+    public StreamsListAdapter(ImageLoader imageLoader, OnStreamClickListener onStreamClickListener) {
+        this.imageLoader = imageLoader;
         this.onStreamClickListener = onStreamClickListener;
     }
 
@@ -37,7 +37,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new WatchingStreamResultViewHolder(view, onStreamClickListener, picasso, onUnwatchClickListener);
+        return new WatchingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onUnwatchClickListener);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, picasso);
+        return new StreamResultViewHolder(view, onStreamClickListener, imageLoader);
     }
 
     @Override

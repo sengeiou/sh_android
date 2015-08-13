@@ -78,7 +78,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void initializeStreamListAdapter() {
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);

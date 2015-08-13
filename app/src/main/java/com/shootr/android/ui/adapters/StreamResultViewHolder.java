@@ -9,12 +9,12 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 
 public class StreamResultViewHolder extends RecyclerView.ViewHolder{
 
     private final OnStreamClickListener onStreamClickListener;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
 
     @Bind(R.id.stream_picture) ImageView picture;
@@ -23,10 +23,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
 
-    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, PicassoWrapper picasso) {
+    public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
+      ImageLoader imageLoader) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         ButterKnife.bind(this, itemView);
     }
 
@@ -44,7 +45,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
 
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
-        picasso.loadStreamPicture(pictureUrl).into(picture);
+        imageLoader.loadStreamPicture(pictureUrl, picture);
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
