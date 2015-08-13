@@ -134,8 +134,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
-                List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                if (!shotModels.isEmpty()) {
+                if (!timeline.getShots().isEmpty()) {
                     loadTimeline();
                 }
                 streamTimelineView.hideLoading();
