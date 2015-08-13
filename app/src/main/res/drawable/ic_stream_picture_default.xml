@@ -4,10 +4,10 @@
       android:drawable="@color/default_photo_background"
       />
     <item
-      android:drawable="@drawable/ic_action_stream_white_24"
-      android:top="8dp"
-      android:bottom="8dp"
-      android:left="8dp"
-      android:right="8dp"
+      android:drawable="@drawable/ic_action_stream_white_24_14padding"
+      android:top="4dp"
+      android:bottom="4dp"
+      android:left="4dp"
+      android:right="4dp"
       />
 </layer-list>
