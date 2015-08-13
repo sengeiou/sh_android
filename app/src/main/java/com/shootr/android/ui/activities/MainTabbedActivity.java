@@ -48,6 +48,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.view_pager_margin));
         viewPager.setPageMarginDrawable(R.drawable.page_margin);
+        viewPager.setOffscreenPageLimit(2);
 
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(1);
