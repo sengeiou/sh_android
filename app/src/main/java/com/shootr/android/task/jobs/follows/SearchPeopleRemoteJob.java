@@ -10,7 +10,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.task.events.follows.SearchPeopleRemoteResultStream;
+import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResultStream> {
+public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResultEvent> {
 
     private static final int PRIORITY = 4;
     public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
@@ -54,7 +54,7 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     @Override protected void run() throws SQLException, IOException {
         PaginatedResult<List<UserEntity>> searchResults = getSearchFromServer();
         if(searchResults!=null){
-            postSuccessfulEvent(new SearchPeopleRemoteResultStream(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
+            postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
         }
     }
 

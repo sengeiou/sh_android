@@ -5,12 +5,12 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.task.events.CommunicationErrorStream;
-import com.shootr.android.task.events.ConnectionNotAvailableStream;
-import com.shootr.android.task.events.profile.UpdateUserProfileStream;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
-import com.shootr.android.task.validation.FieldValidationErrorStream;
+import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileEditView;
@@ -159,15 +159,15 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onUserProfileUpdated(UpdateUserProfileStream stream) {
+    public void onUserProfileUpdated(UpdateUserProfileEvent event) {
         profileEditView.showUpdatedSuccessfulAlert();
         profileEditView.closeScreen();
     }
 
     @Subscribe
-    public void onValidationErrors(FieldValidationErrorStream stream) {
+    public void onValidationErrors(FieldValidationErrorEvent event) {
         this.hideLoading();
-        List<FieldValidationError> fieldValidationErrors = stream.getFieldValidationErrors();
+        List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
         for (FieldValidationError validationError : fieldValidationErrors) {
             this.showValidationError(validationError);
         }
@@ -221,13 +221,13 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.hideLoadingIndicator();
     }
     @Subscribe
-    public void onCommunicationError(CommunicationErrorStream stream) {
+    public void onCommunicationError(CommunicationErrorEvent event) {
         this.hideLoading();
         this.profileEditView.alertComunicationError();
     }
 
     @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableStream stream) {
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         this.hideLoading();
         this.profileEditView.alertConnectionNotAvailable();
     }

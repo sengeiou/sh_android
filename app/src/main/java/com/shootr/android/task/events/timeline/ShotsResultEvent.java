@@ -4,10 +4,9 @@ import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.ShotModel;
 import java.util.List;
 
-public class OldShotsReceivedStream extends ShootrBaseJob.SuccessEvent<List<ShotModel>> {
+public class ShotsResultEvent extends ShootrBaseJob.SuccessEvent<List<ShotModel>> {
 
-    public OldShotsReceivedStream(List<ShotModel> result) {
+    public ShotsResultEvent(List<ShotModel> result) {
         super(result);
     }
-
 }
