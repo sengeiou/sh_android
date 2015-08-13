@@ -8,6 +8,7 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.service.ShootrService;
@@ -26,8 +27,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
     private static final int PRIORITY = 5;
     public static final Integer LATEST_SHOTS_NUMBER = 3;
 
-    private final ShootrService service;
-    private final UserManager userManager;
+    private final SessionRepository sessionRepository;
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
     private final UserRepository userRepository;
@@ -35,12 +35,17 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
 
     private String idUser;
 
-    @Inject public GetLatestShotsJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
-      ShootrService service, UserManager userManager, @Local ShotRepository localShotRepository,
-      @Remote ShotRepository remoteShotRepository, @Remote UserRepository userRepository, ShotModelMapper shotModelMapper) {
+    @Inject
+    public GetLatestShotsJob(Application application,
+      @Main Bus bus,
+      NetworkUtil networkUtil,
+      SessionRepository sessionRepository,
+      @Local ShotRepository localShotRepository,
+      @Remote ShotRepository remoteShotRepository,
+      @Remote UserRepository userRepository,
+      ShotModelMapper shotModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
-        this.service = service;
-        this.userManager = userManager;
+        this.sessionRepository = sessionRepository;
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.userRepository = userRepository;
@@ -66,7 +71,7 @@ public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultStream> {
     public List<ShotModel> getLatestsShotsFromService() throws IOException {
         List<Shot> shotsFromUser = remoteShotRepository.getShotsFromUser(idUser, LATEST_SHOTS_NUMBER);
 
-        if (userRepository.isFollowing(idUser)) {
+        if (sessionRepository.getCurrentUserId().equals(idUser) || userRepository.isFollowing(idUser)) {
             localShotRepository.putShots(shotsFromUser);
         }
 
