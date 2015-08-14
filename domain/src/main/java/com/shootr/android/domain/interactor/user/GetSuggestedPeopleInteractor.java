@@ -24,49 +24,59 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private Callback<List<SuggestedPeople>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
         this.localUserRepository = localUserRepository;
     }
 
-    public void obtainSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback){
+    public void loadSuggestedPeople(Callback<List<SuggestedPeople>> callback, ErrorCallback errorCallback){
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalSuggestedPeople();
         try {
-            obtainRemoteSuggestedPeople();
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
+            if(currentUserIsFollowingSomeone()) {
+                loadSuggestedPeople();
+            }
+        } catch (ServerCommunicationException e) {
+            notifyError(e);
         }
     }
 
-    private void obtainRemoteSuggestedPeople() {
-        List<SuggestedPeople> suggestedPeople = remoteUserRepository.getSuggestedPeople();
-        List<SuggestedPeople> suggestedPeoples = retainAllFollowedUsers(suggestedPeople,
-          remoteUserRepository.getPeople());
-        notifyResult(suggestedPeoples);
+    private boolean currentUserIsFollowingSomeone() {
+        return !localUserRepository.getPeople().isEmpty();
     }
 
-    private void obtainLocalSuggestedPeople() {
-        List<SuggestedPeople> suggestedPeople = localUserRepository.getSuggestedPeople();
-        List<SuggestedPeople> suggestedPeoples = retainAllFollowedUsers(suggestedPeople, localUserRepository.getPeople());
-        notifyResult(suggestedPeoples);
-    }
-
-    private List<SuggestedPeople> retainAllFollowedUsers(List<SuggestedPeople> suggestedPeople, List<User> people) {
-        List<SuggestedPeople> suggestedPeoples = new ArrayList<>();
-        for (SuggestedPeople suggested : suggestedPeople) {
-            if(!people.contains(suggested.getUser()) && !suggestedPeoples.contains(suggested))
-                suggestedPeoples.add(suggested);
+    private void loadSuggestedPeople() {
+        List<SuggestedPeople> localSuggestions = localUserRepository.getSuggestedPeople();
+        if (localSuggestions.isEmpty()) {
+            List<SuggestedPeople> remoteSuggestions = remoteUserRepository.getSuggestedPeople();
+            filterAndCallback(remoteSuggestions);
+        } else {
+            filterAndCallback(localSuggestions);
         }
-        return suggestedPeoples;
+    }
+
+    private void filterAndCallback(List<SuggestedPeople> suggestions) {
+        List<SuggestedPeople> usersNotFollowed = filterUsersNotFollowed(suggestions);
+        notifyResult(usersNotFollowed);
+    }
+
+    private List<SuggestedPeople> filterUsersNotFollowed(List<SuggestedPeople> suggestions) {
+        List<User> people = localUserRepository.getPeople();
+        List<SuggestedPeople> notFollowed = new ArrayList<>();
+        for (SuggestedPeople suggestion : suggestions) {
+            if(!people.contains(suggestion.getUser()) && !notFollowed.contains(suggestion))
+                notFollowed.add(suggestion);
+        }
+        return notFollowed;
     }
 
     private void notifyResult(final List<SuggestedPeople> suggestedPeople) {
