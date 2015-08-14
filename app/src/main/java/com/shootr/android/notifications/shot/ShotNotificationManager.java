@@ -6,7 +6,7 @@ import com.shootr.android.notifications.AndroidNotificationManager;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,14 +22,14 @@ public class ShotNotificationManager {
     private final List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
     private final AndroidNotificationManager androidNotificationManager;
     private final NotificationBuilderFactory notificationBuilderFactory;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
     @Inject public ShotNotificationManager(Application context, AndroidNotificationManager androidNotificationManager,
-      NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
+      NotificationBuilderFactory notificationBuilderFactory, ImageLoader imageLoader) {
         this.context = context;
         this.androidNotificationManager = androidNotificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
     }
 
     public void sendNewShotNotification(ShotModel shot) {
@@ -46,7 +46,7 @@ public class ShotNotificationManager {
 
 
     protected SingleShotNotification buildSingleShotNotification(ShotModel shot) {
-        return new SingleShotNotification(context, notificationBuilderFactory, picasso, shot);
+        return new SingleShotNotification(context, notificationBuilderFactory, imageLoader, shot);
     }
 
     protected MultipleShotNotification buildMultipleShotNotification(List<ShotModel> shots) {

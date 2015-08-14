@@ -1,7 +1,9 @@
 package com.shootr.android.util;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 import java.io.File;
+import java.io.IOException;
 import javax.inject.Inject;
 
 public class PicassoImageLoader implements ImageLoader {
@@ -34,5 +36,13 @@ public class PicassoImageLoader implements ImageLoader {
 
     @Override public void loadPreviewImage(File file, ImageView view, Integer maxScreenWidth) {
         picasso.load(file).resize(maxScreenWidth, maxScreenWidth).centerInside().skipMemoryCache().into(view);
+    }
+
+    @Override public Bitmap loadProfilePhoto(String url) throws IOException {
+        return picasso.loadProfilePhoto(url).get();
+    }
+
+    @Override public Bitmap loadTimelineImage(String url) throws IOException {
+        return picasso.loadTimelineImage(url).get();
     }
 }

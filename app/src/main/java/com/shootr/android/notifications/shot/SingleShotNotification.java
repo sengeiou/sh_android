@@ -7,7 +7,7 @@ import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.io.IOException;
 import timber.log.Timber;
 
@@ -16,14 +16,14 @@ public class SingleShotNotification extends AbstractShotNotification {
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
 
     private ShotModel shot;
-    private PicassoWrapper picasso;
+    private ImageLoader imageLoader;
     private Bitmap largeIcon;
 
-    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, PicassoWrapper picasso,
+    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, ImageLoader imageLoader,
       ShotModel shot) {
         super(context, builderFactory);
         this.shot = shot;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SingleShotNotification extends AbstractShotNotification {
 
     private Bitmap getImageBitmap() {
         try {
-            return picasso.loadTimelineImage(shot.getImage()).get();
+            return imageLoader.loadTimelineImage(shot.getImage());
         } catch (IOException e) {
             Timber.e(e, "Error obteniendo imagen del shot con id %d y url %s", shot.getIdShot(), shot.getImage());
             return null;
@@ -77,7 +77,7 @@ public class SingleShotNotification extends AbstractShotNotification {
     protected Bitmap getUserPhoto(String url) {
         if (largeIcon == null) {
             try {
-                largeIcon = picasso.loadProfilePhoto(url).get();
+                largeIcon = imageLoader.loadProfilePhoto(url);
             } catch (IOException | IllegalArgumentException e) {
                 Timber.e(e, "Error downloading user photo for a shot notification.");
                 largeIcon = getDefaultPhoto();

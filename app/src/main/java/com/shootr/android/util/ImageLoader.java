@@ -1,7 +1,9 @@
 package com.shootr.android.util;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 import java.io.File;
+import java.io.IOException;
 
 public interface ImageLoader {
 
@@ -16,4 +18,8 @@ public interface ImageLoader {
     void load(File file, ImageView view);
 
     void loadPreviewImage(File file, ImageView view, Integer maxScreenWidth);
+
+    Bitmap loadProfilePhoto(String url) throws IOException;
+
+    Bitmap loadTimelineImage(String url) throws IOException;
 }
