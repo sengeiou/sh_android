@@ -17,7 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
     @Bind(R.id.photo) ImageView image;
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
 
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
@@ -109,7 +109,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
                 /* no-op */
             }
         };
-        picasso.load(preview).tag(PREVIEW_TAG).into(previewTargetStrongReference);
+        imageLoader.loadWithTag(preview, previewTargetStrongReference, PREVIEW_TAG);
     }
 
     private void loadBigImage(String imageUrl) {
@@ -129,11 +129,11 @@ public class PhotoViewActivity extends BaseToolbarActivity {
                 /* no-op */
             }
         };
-        picasso.load(imageUrl).into(finalTargetStrongReference);
+        imageLoader.loadIntoTarget(imageUrl, finalTargetStrongReference);
     }
 
     private void cancelPreviewLoading() {
-        picasso.getPicasso().cancelTag(PREVIEW_TAG);
+        imageLoader.cancelTag(PREVIEW_TAG);
     }
 
     public void onPhotoClick() {

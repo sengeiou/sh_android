@@ -2,6 +2,7 @@ package com.shootr.android.util;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -44,5 +45,17 @@ public class PicassoImageLoader implements ImageLoader {
 
     @Override public Bitmap loadTimelineImage(String url) throws IOException {
         return picasso.loadTimelineImage(url).get();
+    }
+
+    @Override public void loadWithTag(String preview, Target previewTargetStrongReference, Object previewTag) {
+        picasso.load(preview).tag(previewTag).into(previewTargetStrongReference);
+    }
+
+    @Override public void loadIntoTarget(String imageUrl, Target finalTargetStrongReference) {
+        picasso.load(imageUrl).into(finalTargetStrongReference);
+    }
+
+    @Override public void cancelTag(Object previewTag) {
+        picasso.getPicasso().cancelTag(previewTag);
     }
 }
