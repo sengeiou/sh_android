@@ -24,8 +24,10 @@ public class GetSuggestedPeopleInteractor implements Interactor {
     private Callback<List<SuggestedPeople>> callback;
     private ErrorCallback errorCallback;
 
-    @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository) {
+    @Inject public GetSuggestedPeopleInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      @Remote UserRepository remoteUserRepository,
+      @Local UserRepository localUserRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteUserRepository = remoteUserRepository;
@@ -40,10 +42,16 @@ public class GetSuggestedPeopleInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            loadSuggestedPeople();
+            if(currentUserIsFollowingSomeone()) {
+                loadSuggestedPeople();
+            }
         } catch (ServerCommunicationException e) {
             notifyError(e);
         }
+    }
+
+    private boolean currentUserIsFollowingSomeone() {
+        return !localUserRepository.getPeople().isEmpty();
     }
 
     private void loadSuggestedPeople() {

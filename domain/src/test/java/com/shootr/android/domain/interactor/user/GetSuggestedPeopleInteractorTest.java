@@ -19,6 +19,7 @@ import org.mockito.Spy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class GetSuggestedPeopleInteractorTest {
@@ -42,6 +43,7 @@ public class GetSuggestedPeopleInteractorTest {
 
     @Test
     public void shouldNotAskForRemoteSuggestionsWhenLocalRepositoryReturnsData() throws Exception {
+        setupDoesFollowSomeone();
         when(localUserRepository.getSuggestedPeople()).thenReturn(stubSuggestions());
 
         interactor.loadSuggestedPeople(callback, errorCallback);
@@ -51,6 +53,7 @@ public class GetSuggestedPeopleInteractorTest {
 
     @Test
     public void shouldAskForRemoteSuggestionsWhenLocalRepositoryReturnsEmpty() throws Exception {
+        setupDoesFollowSomeone();
         when(localUserRepository.getSuggestedPeople()).thenReturn(Collections.<SuggestedPeople>emptyList());
 
         interactor.loadSuggestedPeople(callback, errorCallback);
@@ -60,7 +63,7 @@ public class GetSuggestedPeopleInteractorTest {
 
     @Test
     public void shouldCallbackOneUserWhenRepositoryReturnsTwoUsersAndOneIsFollowed() throws Exception {
-        when(localUserRepository.getPeople()).thenReturn(Collections.singletonList(followedUser()));
+        setupDoesFollowSomeone();
         when(localUserRepository.getSuggestedPeople()).thenReturn(Arrays.asList(followedSuggestion(),
           notFollowedSuggestion()));
 
@@ -72,7 +75,7 @@ public class GetSuggestedPeopleInteractorTest {
 
     @Test
     public void shouldCallbackEmptyWhenRepositoryReturnsFollowedUsersOnly() throws Exception {
-        when(localUserRepository.getPeople()).thenReturn(Collections.singletonList(followedUser()));
+        setupDoesFollowSomeone();
         when(localUserRepository.getSuggestedPeople()).thenReturn(Arrays.asList(followedSuggestion(),
           followedSuggestion()));
 
@@ -80,6 +83,19 @@ public class GetSuggestedPeopleInteractorTest {
 
         List<SuggestedPeople> result = callback.firstResult();
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void shouldNotCallbackWhenNoPeopleFound() throws Exception {
+        when(localUserRepository.getPeople()).thenReturn(Collections.<User>emptyList());
+
+        interactor.loadSuggestedPeople(callback, errorCallback);
+
+        verifyZeroInteractions(callback);
+    }
+
+    protected void setupDoesFollowSomeone() {
+        when(localUserRepository.getPeople()).thenReturn(Collections.singletonList(followedUser()));
     }
 
     private SuggestedPeople followedSuggestion() {
