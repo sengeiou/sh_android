@@ -108,11 +108,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         presenter.pause();
     }
 
-    public void openShot(ShotModel shotModel) {
-        Intent intent = ShotDetailActivity.getIntentForActivity(this, shotModel);
-        startActivity(intent);
-    }
-
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {

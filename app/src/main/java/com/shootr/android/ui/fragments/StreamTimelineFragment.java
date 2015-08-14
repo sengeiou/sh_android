@@ -430,11 +430,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
     //endregion
 
-    public void openShot(ShotModel shotModel) {
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shotModel);
-        startActivity(intent);
-    }
-
     public void openProfile(int position) {
         ShotModel shotVO = adapter.getItem(position);
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
