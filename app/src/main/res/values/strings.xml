@@ -336,4 +336,10 @@
     <string name="add_to_favorites_menu_title">Add to Favorites</string>
     <string name="profile_open_stream">Open stream…</string>
     <string name="include_listing_empty">No streams.</string>
+    <string name="alert_report_confirmed_email_message"><![CDATA[Go to Account > Edit Profile and confirm your email.]]></string>
+    <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
+    <string name="alert_report_confirmed_email_ok">OK</string>
+    <string name="report_context_menu_copy_text">Copy text</string>
+    <string name="report_context_menu_report">Report</string>
+    <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
 </resources>

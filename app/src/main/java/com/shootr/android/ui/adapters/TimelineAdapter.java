@@ -16,7 +16,6 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -40,12 +39,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private int tagColor;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public TimelineAdapter(Context context,
-      PicassoWrapper picasso,
-      View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener,
-      VideoClickListener videoClickListener, NiceShotListener niceShotListener, UsernameClickListener clickListener,
-      AndroidTimeUtils timeUtils) {
+    public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
+      View.OnClickListener imageClickListener, VideoClickListener videoClickListener, NiceShotListener niceShotListener,
+      UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
@@ -55,7 +51,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.clickListener = clickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
-        tagColor = context.getResources().getColor(R.color.tag_color);
+        this.tagColor = context.getResources().getColor(R.color.tag_color);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -274,10 +270,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @Bind(R.id.shot_video_duration) public TextView videoDuration;
         @Bind(R.id.shot_nice_button) public NiceButtonView niceButton;
         public int position;
+        private View view;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
             ButterKnife.bind(this, view);
-
+            this.view = view;
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
         }

@@ -1,5 +1,8 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -17,9 +20,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
@@ -37,12 +42,14 @@ import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.FavoriteStatusPresenter;
 import com.shootr.android.ui.presenter.NewShotBarPresenter;
+import com.shootr.android.ui.presenter.ReportShotPresenter;
 import com.shootr.android.ui.presenter.StreamTimelinePresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.NullNewShotBarView;
 import com.shootr.android.ui.views.NullWatchNumberView;
+import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.views.StreamTimelineView;
 import com.shootr.android.ui.views.WatchNumberView;
 import com.shootr.android.ui.views.nullview.NullFavoriteStatusView;
@@ -50,6 +57,7 @@ import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
@@ -59,17 +67,19 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
-  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView {
+  implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
+    public static final String CLIPBOARD_LABEL = "Shot";
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
+    @Inject ReportShotPresenter reportShotPresenter;
 
     @Inject PicassoWrapper picasso;
 
@@ -80,6 +90,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.shot_bar_drafts) View draftsButton;
+
+    @BindString(R.string.report_base_url) String reportBaseUrl;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -217,6 +229,7 @@ public class StreamTimelineFragment extends BaseFragment
         newShotBarPresenter.initialize(this);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
+        reportShotPresenter.initialize(this);
     }
 
     //endregion
@@ -338,9 +351,31 @@ public class StreamTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener,
-                imageClickListener, videoClickListener, niceShotListener, usernameClickListener, timeUtils);
+        adapter = new TimelineAdapter(getActivity(),
+          picasso,
+          avatarClickListener,
+          imageClickListener,
+          videoClickListener,
+          niceShotListener,
+          usernameClickListener,
+          timeUtils);
         listView.setAdapter(adapter);
+    }
+
+    private void openContextualMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
+          new Runnable() {
+              @Override public void run() {
+                  ClipboardManager clipboard =
+                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                  clipboard.setPrimaryClip(clip);
+              }
+          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).show();
     }
 
     private void startProfileContainerActivity(String username) {
@@ -372,8 +407,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -381,8 +415,7 @@ public class StreamTimelineFragment extends BaseFragment
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -396,13 +429,6 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
     //endregion
-
-    @OnItemClick(R.id.timeline_shot_list)
-    public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position);
-        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
-        startActivity(intent);
-    }
 
     public void openProfile(int position) {
         ShotModel shotVO = adapter.getItem(position);
@@ -543,5 +569,38 @@ public class StreamTimelineFragment extends BaseFragment
     public void showAddedToFavorites() {
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
+
+    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
+          sessionToken,
+          shotModel.getIdShot())));
+        startActivity(browserIntent);
+    }
+
+    @Override public void showEmailNotConfirmedError() {
+        AlertDialog.Builder builder =
+          new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
+          .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))
+          .setPositiveButton(getActivity().getString(R.string.alert_report_confirmed_email_ok), null);
+
+        builder.create().show();
+    }
+
+    @OnItemClick(R.id.timeline_shot_list)
+    public void openShot(int position) {
+        ShotModel shot = adapter.getItem(position);
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
+    }
+
+    @OnItemLongClick(R.id.timeline_shot_list)
+    public boolean openContextMenu(int position) {
+        ShotModel shot = adapter.getItem(position);
+        openContextualMenu(shot);
+        return true;
+    }
+
     //endregion
 }
