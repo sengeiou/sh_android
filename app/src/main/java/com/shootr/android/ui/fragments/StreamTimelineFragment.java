@@ -370,6 +370,7 @@ public class StreamTimelineFragment extends BaseFragment
                     (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                   ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
                   clipboard.setPrimaryClip(clip);
+                  Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
               }
           }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {

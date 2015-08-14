@@ -211,6 +211,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
 
+    @Override
+    public void showAddedToFavorites() {
+        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
