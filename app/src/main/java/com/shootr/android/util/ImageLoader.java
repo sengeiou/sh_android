@@ -2,6 +2,7 @@ package com.shootr.android.util;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
@@ -29,4 +30,6 @@ public interface ImageLoader {
     void loadIntoTarget(String imageUrl, Target finalTargetStrongReference);
 
     void cancelTag(Object previewTag);
+
+    void load(String url, ImageView view, Callback callback);
 }

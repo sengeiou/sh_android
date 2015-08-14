@@ -2,6 +2,7 @@ package com.shootr.android.util;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
@@ -57,5 +58,9 @@ public class PicassoImageLoader implements ImageLoader {
 
     @Override public void cancelTag(Object previewTag) {
         picasso.getPicasso().cancelTag(previewTag);
+    }
+
+    @Override public void load(String url, ImageView view, Callback callback) {
+        picasso.load(url).into(view, callback);
     }
 }

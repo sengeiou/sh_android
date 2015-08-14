@@ -37,7 +37,7 @@ import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.squareup.picasso.Callback;
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @Inject StreamDetailPresenter streamDetailPresenter;
     @Inject CheckinPresenter checkinPresenter;
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     private boolean hasPicture;
     private int lastPictureHeightPixels;
@@ -362,7 +362,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Override public void setStreamPicture(String picture) {
         if (picture != null) {
             hasPicture = true;
-            picasso.load(picture).into(photo, new Callback() {
+            imageLoader.load(picture, photo, new Callback() {
                 @Override public void onSuccess() {
                     //Trigger image transition
                     recomputePhotoAndScrollingMetrics();
