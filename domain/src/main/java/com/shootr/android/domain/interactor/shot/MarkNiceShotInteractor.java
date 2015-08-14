@@ -9,7 +9,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.NiceShotRepository;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.service.shot.ShootrShotService;
 import javax.inject.Inject;
 
 public class MarkNiceShotInteractor implements Interactor {

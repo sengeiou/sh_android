@@ -7,7 +7,6 @@ import com.shootr.android.domain.repository.NiceShotRepository;
 import com.shootr.android.domain.repository.Remote;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   injects = {

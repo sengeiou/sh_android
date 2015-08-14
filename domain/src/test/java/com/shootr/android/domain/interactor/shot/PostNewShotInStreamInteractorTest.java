@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.shot;
 
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;

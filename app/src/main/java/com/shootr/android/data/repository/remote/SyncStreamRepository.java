@@ -1,16 +1,16 @@
 package com.shootr.android.data.repository.remote;
 
-import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
+import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.mapper.StreamEntityMapper;
 import com.shootr.android.data.repository.datasource.event.StreamDataSource;
-import com.shootr.android.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.android.data.repository.sync.SyncableRepository;
+import com.shootr.android.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.StreamRepository;
 import java.util.List;
 import javax.inject.Inject;
 

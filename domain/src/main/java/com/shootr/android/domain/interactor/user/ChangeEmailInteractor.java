@@ -1,7 +1,7 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.EmailAlreadyConfirmedException;
+import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.UnauthorizedRequestException;

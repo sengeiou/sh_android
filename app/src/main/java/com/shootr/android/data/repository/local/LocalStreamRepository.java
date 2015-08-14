@@ -6,8 +6,8 @@ import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.Local;
+import com.shootr.android.domain.repository.StreamRepository;
 import java.util.List;
 import javax.inject.Inject;
 

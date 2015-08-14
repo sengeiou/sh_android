@@ -3,7 +3,6 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.NiceShotTable;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.android.domain.exception.NiceNotMarkedException;

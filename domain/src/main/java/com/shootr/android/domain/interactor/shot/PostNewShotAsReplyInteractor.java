@@ -12,7 +12,6 @@ import com.shootr.android.domain.service.dagger.Background;
 import java.io.File;
 import javax.inject.Inject;
 
-import static com.shootr.android.domain.utils.Preconditions.checkArgument;
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {

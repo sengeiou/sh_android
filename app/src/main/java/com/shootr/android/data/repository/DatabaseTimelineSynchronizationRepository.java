@@ -1,7 +1,6 @@
 package com.shootr.android.data.repository;
 
 import com.shootr.android.db.manager.ActivityManager;
-import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.StreamManager;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import javax.inject.Inject;

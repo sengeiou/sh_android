@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.data.prefs.BooleanPreference;
-import com.shootr.android.data.prefs.StringPreference;
 import javax.inject.Inject;
 
 

@@ -9,8 +9,6 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import javax.inject.Inject;
 
-import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
-
 public class RemoveFromFavoritesInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;

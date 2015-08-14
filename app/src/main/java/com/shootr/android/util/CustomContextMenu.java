@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import com.shootr.android.domain.utils.Preconditions;
-import com.shootr.android.ui.model.StreamResultModel;
 import java.util.ArrayList;
 import java.util.List;
 

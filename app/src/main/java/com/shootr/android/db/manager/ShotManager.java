@@ -8,7 +8,6 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.StreamTimelineParameters;
 import java.sql.SQLException;
 import java.util.ArrayList;

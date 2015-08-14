@@ -11,7 +11,6 @@ import com.shootr.android.domain.LoginResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.EmailAlreadyExistsException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.android.domain.service.user.CreateAccountGateway;
 import java.io.IOException;

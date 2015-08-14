@@ -6,8 +6,8 @@ import com.shootr.android.db.DatabaseContract.ShotQueueTable;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
-import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
+import com.shootr.android.db.DatabaseContract.UserTable;
 
 public class SQLiteUtils {
 

@@ -7,7 +7,6 @@ import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
-import com.shootr.android.domain.service.user.LoginException;
 import com.shootr.android.ui.views.FavoriteStatusView;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
