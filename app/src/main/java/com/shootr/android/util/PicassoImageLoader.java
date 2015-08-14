@@ -25,14 +25,7 @@ public class PicassoImageLoader implements ImageLoader {
     }
 
     @Override public void loadProfilePhoto(String url, ImageView view) {
-        boolean isValidPhoto = url != null && !url.isEmpty();
-        RequestCreator loadResult;
-        if (isValidPhoto) {
-            loadResult = picasso.load(url);
-        } else {
-            loadResult = loadDefaultImage();
-        }
-        loadResult.placeholder(defaultImageRes).error(defaultImageRes);
+        RequestCreator loadResult = loadProfileRequestCreator(url);
         loadResult.into(view);
     }
 
@@ -65,6 +58,11 @@ public class PicassoImageLoader implements ImageLoader {
     }
 
     @Override public Bitmap loadProfilePhoto(String url) throws IOException {
+        RequestCreator loadResult = loadProfileRequestCreator(url);
+        return loadResult.get();
+    }
+
+    private RequestCreator loadProfileRequestCreator(String url) {
         boolean isValidPhoto = url != null && !url.isEmpty();
         RequestCreator loadResult;
         if (isValidPhoto) {
@@ -73,7 +71,7 @@ public class PicassoImageLoader implements ImageLoader {
             loadResult = loadDefaultImage();
         }
         loadResult.placeholder(defaultImageRes).error(defaultImageRes);
-        return loadResult.get();
+        return loadResult;
     }
 
     @Override public Bitmap loadTimelineImage(String url) throws IOException {
