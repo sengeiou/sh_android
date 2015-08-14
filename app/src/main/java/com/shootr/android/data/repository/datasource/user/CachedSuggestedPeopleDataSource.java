@@ -6,7 +6,9 @@ import com.shootr.android.domain.repository.Local;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSource, CachedDataSource {
 
     private static final long EXPIRATION_TIME_MILLIS = 12 * 60 * 60 * 1000;
