@@ -61,8 +61,9 @@ public class SuggestedPeoplePresenter implements Presenter {
 
     private void obtainSuggestedPeople() {
         if(sessionRepository.getCurrentUser().getNumFollowings() != 0) {
-            getSuggestedPeopleInteractor.obtainSuggestedPeople(new Interactor.Callback<List<SuggestedPeople>>() {
-                @Override public void onLoaded(List<SuggestedPeople> suggestedPeoples) {
+            getSuggestedPeopleInteractor.loadSuggestedPeople(new Interactor.Callback<List<SuggestedPeople>>() {
+                @Override
+                public void onLoaded(List<SuggestedPeople> suggestedPeoples) {
                     List<UserModel> users = new ArrayList<>();
                     for (SuggestedPeople suggestedPeople : suggestedPeoples) {
                         users.add(userModelMapper.transform(suggestedPeople.getUser()));
@@ -71,7 +72,8 @@ public class SuggestedPeoplePresenter implements Presenter {
                     suggestedPeople = users;
                 }
             }, new Interactor.ErrorCallback() {
-                @Override public void onError(ShootrException error) {
+                @Override
+                public void onError(ShootrException error) {
                     suggestedPeopleView.showError(errorMessageFactory.getMessageForError(error));
                 }
             });

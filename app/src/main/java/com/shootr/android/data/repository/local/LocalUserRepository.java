@@ -5,7 +5,6 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
-import com.shootr.android.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.android.domain.SuggestedPeople;
@@ -21,19 +20,19 @@ public class LocalUserRepository implements UserRepository {
 
     private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
-    private final SuggestedPeopleDataSource localSuggestedPeopleDataSource;
     private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
     private final UserEntityMapper userEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
 
-    @Inject public LocalUserRepository(SessionRepository sessionRepository, @Local UserDataSource userDataSource,
-      @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource,
-      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource, UserEntityMapper userEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
+    @Inject public LocalUserRepository(SessionRepository sessionRepository,
+      @Local UserDataSource userDataSource,
+      CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
+      UserEntityMapper userEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory,
+      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
         this.sessionRepository = sessionRepository;
         localUserDataSource = userDataSource;
-        this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
         this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
         this.userEntityMapper = userEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
@@ -96,17 +95,10 @@ public class LocalUserRepository implements UserRepository {
         return userList;
     }
 
-    private SuggestedPeople suggestedPeopleEntityToDomain(SuggestedPeopleEntity remoteSuggestedPeopleEntity) {
-        if (remoteSuggestedPeopleEntity == null) {
-            return null;
-        }
-        return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
-    }
-
     private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
         List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
         for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
-            suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
+            suggestedPeoples.add(suggestedPeopleEntityMapper.transform(suggestedPeople));
         }
         return suggestedPeoples;
     }
