@@ -152,7 +152,7 @@ public class StreamsListPresenter implements Presenter {
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                /* no-op */
+                streamsListView.showAddedToFavorites();
               }
           }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {

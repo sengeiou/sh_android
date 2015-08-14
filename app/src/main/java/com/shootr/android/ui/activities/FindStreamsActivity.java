@@ -225,6 +225,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle));
     }
 
+    @Override
+    public void showAddedToFavorites() {
+        Toast.makeText(this, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+    }
+
     //endregion
 
 }

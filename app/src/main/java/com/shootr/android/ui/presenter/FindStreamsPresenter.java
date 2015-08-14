@@ -124,7 +124,7 @@ public class FindStreamsPresenter implements Presenter {
         addToFavoritesInteractor.addToFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
-                  /* no-op */
+                  findStreamsView.showAddedToFavorites();
               }
           }, new Interactor.ErrorCallback() {
             @Override
