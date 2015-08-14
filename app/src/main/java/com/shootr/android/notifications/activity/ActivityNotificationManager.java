@@ -6,7 +6,7 @@ import com.shootr.android.notifications.AndroidNotificationManager;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.PushNotification;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,18 +21,18 @@ public class ActivityNotificationManager {
     private final Context context;
     private final AndroidNotificationManager androidNotificationManager;
     private final NotificationBuilderFactory notificationBuilderFactory;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final List<SingleActivityNotification> activeNotifications = new ArrayList<>();
 
     @Inject
     public ActivityNotificationManager(Application context,
       AndroidNotificationManager androidNotificationManager,
       NotificationBuilderFactory notificationBuilderFactory,
-      PicassoWrapper picasso) {
+      ImageLoader imageLoader) {
         this.context = context;
         this.androidNotificationManager = androidNotificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
     }
 
     private void showNotification(SingleActivityNotification singleActivityNotification) {
@@ -48,13 +48,13 @@ public class ActivityNotificationManager {
 
     public void sendGenericActivityNotification(PushNotification.NotificationValues values) {
         SingleActivityNotification notification =
-          new SingleActivityNotification(context, notificationBuilderFactory, picasso, values);
+          new SingleActivityNotification(context, notificationBuilderFactory, imageLoader, values);
         showNotification(notification);
     }
 
     public void sendFollowNotification(PushNotification.NotificationValues values, String idUser) {
         FollowActivityNotification notification =
-          new FollowActivityNotification(context, notificationBuilderFactory, picasso, values, idUser);
+          new FollowActivityNotification(context, notificationBuilderFactory, imageLoader, values, idUser);
         showNotification(notification);
     }
 

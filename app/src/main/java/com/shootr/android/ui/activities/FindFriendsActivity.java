@@ -40,7 +40,6 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;

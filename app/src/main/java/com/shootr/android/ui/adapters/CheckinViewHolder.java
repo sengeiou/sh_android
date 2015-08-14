@@ -7,7 +7,6 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 

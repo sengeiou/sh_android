@@ -8,7 +8,6 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 
 public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
 

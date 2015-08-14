@@ -6,7 +6,6 @@ import com.shootr.android.ui.ViewContainerDecorator;
 import com.shootr.android.ui.base.BaseDecoratedActivity;
 import com.shootr.android.ui.dagger.ToolbarDecoratedModule;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import dagger.ObjectGraph;
 import java.util.Collections;
 import java.util.List;

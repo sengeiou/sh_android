@@ -63,7 +63,6 @@ import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
 import com.shootr.android.util.PicassoImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.TimeFormatter;
@@ -171,11 +170,7 @@ public class DataModule {
           .build();
     }
 
-    @Provides @Singleton PicassoWrapper providePicassoWrapper(Picasso picasso) {
-        return new PicassoWrapper(picasso);
-    }
-
-    @Provides @Singleton ImageLoader provideImageLoader(PicassoWrapper picasso) {
+    @Provides @Singleton ImageLoader provideImageLoader(Picasso picasso) {
         return new PicassoImageLoader(picasso);
     }
 

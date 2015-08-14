@@ -22,7 +22,6 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.PicassoWrapper;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
