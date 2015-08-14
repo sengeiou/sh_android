@@ -105,10 +105,8 @@ public class LocalUserRepository implements UserRepository {
 
     private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
         List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
-        if(!suggestedPeoples.isEmpty()) {
-            for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
-                suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
-            }
+        for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
+            suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
         }
         return suggestedPeoples;
     }
