@@ -14,7 +14,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.StreamMediaPresenter;
 import com.shootr.android.ui.views.StreamMediaView;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.stream_media_loading) View loadingView;
 
     @Inject StreamMediaPresenter presenter;
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_stream_media;
@@ -39,7 +39,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns)));
-        mediaAdapter = new MediaAdapter(this, picasso);
+        mediaAdapter = new MediaAdapter(this, imageLoader);
         mediaView.setAdapter(mediaAdapter);
     }
 

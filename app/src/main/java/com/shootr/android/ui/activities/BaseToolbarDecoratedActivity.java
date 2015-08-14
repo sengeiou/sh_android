@@ -15,7 +15,6 @@ import javax.inject.Inject;
 public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity {
 
     private ToolbarDecorator toolbarDecorator;
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
 
     @Override protected void setContent(@LayoutRes int layoutResource) {
@@ -25,7 +24,7 @@ public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity
     }
 
     @Override protected List<ViewContainerDecorator> getDecorators() {
-        toolbarDecorator = new ToolbarDecorator(this, picasso, imageLoader);
+        toolbarDecorator = new ToolbarDecorator(this, imageLoader);
         return Collections.singletonList((ViewContainerDecorator) toolbarDecorator);
     }
 

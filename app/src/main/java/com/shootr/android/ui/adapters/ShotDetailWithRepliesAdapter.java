@@ -21,7 +21,6 @@ import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.TimeFormatter;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso, ImageLoader imageLoader, AvatarClickListener avatarClickListener,
+    public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener,

@@ -21,14 +21,12 @@ import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesListView {
 
     @Inject FavoritesListPresenter favoritesListPresenter;
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;

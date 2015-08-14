@@ -10,7 +10,6 @@ import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 
 public class FriendsAdapter extends UserListAdapter {
 
@@ -23,8 +22,8 @@ public class FriendsAdapter extends UserListAdapter {
     private SuggestedPeopleListView suggestedPeopleListView;
     private OnUserClickListener onUserClickListener;
 
-    public FriendsAdapter(Context context, PicassoWrapper picasso, ImageLoader imageLoader, UserListAdapter suggestedPeopleAdapter, OnUserClickListener onUserClickListener) {
-        super(context, picasso, imageLoader);
+    public FriendsAdapter(Context context, ImageLoader imageLoader, UserListAdapter suggestedPeopleAdapter, OnUserClickListener onUserClickListener) {
+        super(context, imageLoader);
         this.suggestedPeopleAdapter = suggestedPeopleAdapter;
         this.onUserClickListener = onUserClickListener;
     }

@@ -26,6 +26,7 @@ import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
@@ -43,7 +44,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
     @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
 
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShotDetailPresenter detailPresenter;
@@ -104,7 +105,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupAdapter() {
-        detailAdapter = new ShotDetailWithRepliesAdapter(picasso, //
+        detailAdapter = new ShotDetailWithRepliesAdapter(
           imageLoader, new ShotDetailWithRepliesAdapter.AvatarClickListener() {
               @Override
               public void onClick(String userId) {

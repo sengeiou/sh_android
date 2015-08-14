@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,11 +22,11 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     private Context context;
     private List<ShotModel> shotsWithMedia = Collections.emptyList();
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
-    public MediaAdapter(Context context, PicassoWrapper picasso) {
+    public MediaAdapter(Context context, ImageLoader imageLoader) {
         this.context = context;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         final ShotModel shotModel = shotsWithMedia.get(position);
         ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
         mediaItemHolder.shotModel = shotModel;
-        picasso.load(shotModel.getImage()).into(mediaItemHolder.mediaImage);
+        imageLoader.load(shotModel.getImage(), mediaItemHolder.mediaImage);
         mediaItemHolder.bindMedia(shotModel);
     }
 

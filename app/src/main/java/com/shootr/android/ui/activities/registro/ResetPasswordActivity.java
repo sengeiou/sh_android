@@ -22,7 +22,6 @@ import com.shootr.android.ui.presenter.ResetPasswordRequestPresenter;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
 import com.shootr.android.ui.views.ResetPasswordRequestView;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import javax.inject.Inject;
 
 public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
@@ -30,7 +29,6 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     @Bind(R.id.reset_password_request_view) View resetPasswordRequestLayout;
     @Bind(R.id.reset_password_confirmation_view) View resetPasswordConfirmationLayout;
 
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
     @Inject ResetPasswordRequestPresenter resetPasswordRequestPresenter;
     @Inject ResetPasswordConfirmationPresenter resetPasswordConfirmationPresenter;

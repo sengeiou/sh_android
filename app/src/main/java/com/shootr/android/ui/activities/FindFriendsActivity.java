@@ -59,7 +59,6 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
 
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
     @Inject @Main Bus bus;
@@ -96,7 +95,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     private void setupViews() {
         if (adapter == null) {
-            adapter = new UserListAdapter(this, picasso, imageLoader);
+            adapter = new UserListAdapter(this, imageLoader);
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);

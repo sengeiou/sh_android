@@ -41,8 +41,6 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.find_streams_loading) View loadingView;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
-    @Inject PicassoWrapper picasso;
-
 
     private void setupQuery() {
         if (currentSearchQuery != null) {

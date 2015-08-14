@@ -12,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
     private final Context context;
-    private final PicassoWrapper picasso;
     private final ImageLoader imageLoader;
 
     private Toolbar toolbar;
@@ -28,9 +26,8 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     private CircleImageView avatar;
 
-    public ToolbarDecorator(Context context, PicassoWrapper picasso, ImageLoader imageLoader) {
+    public ToolbarDecorator(Context context, ImageLoader imageLoader) {
         this.context = context;
-        this.picasso = picasso;
         this.imageLoader = imageLoader;
     }
 

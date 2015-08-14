@@ -17,14 +17,12 @@ import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.views.DraftsView;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
 public class DraftsActivity extends BaseSignedInActivity implements DraftsView, DraftAdapter.DraftActionListener {
 
     @Inject DraftsPresenter presenter;
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
 
     @Bind(R.id.drafts_list) RecyclerView listView;
@@ -52,7 +50,7 @@ public class DraftsActivity extends BaseSignedInActivity implements DraftsView, 
 
     private void initializeViews() {
         ButterKnife.bind(this);
-        timelineAdapter = new DraftAdapter(picasso, imageLoader, this);
+        timelineAdapter = new DraftAdapter(imageLoader, this);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(timelineAdapter);
         listView.setItemAnimator(new DefaultItemAnimator());

@@ -35,7 +35,6 @@ import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -49,7 +48,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Bind(R.id.streams_loading) View loadingView;
 
     @Inject StreamsListPresenter presenter;
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
     @Inject ToolbarDecorator toolbarDecorator;
 

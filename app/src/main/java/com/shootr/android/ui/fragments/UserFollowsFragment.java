@@ -39,7 +39,6 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
@@ -55,7 +54,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
 
-    @Inject PicassoWrapper picasso;
     @Inject ImageLoader imageLoader;
     @Inject @Main Bus bus;
     @Inject JobManager jobManager;
@@ -225,7 +223,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public UserListAdapter getAdapter() {
         if (userListAdapter == null) {
-            userListAdapter = new UserListAdapter(getActivity(), picasso, imageLoader);
+            userListAdapter = new UserListAdapter(getActivity(), imageLoader);
             userListAdapter.setCallback(this);
         }
         return userListAdapter;
