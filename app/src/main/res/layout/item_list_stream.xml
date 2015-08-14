@@ -5,21 +5,29 @@
   android:layout_height="wrap_content"
   android:clickable="true"
   android:foreground="?selectableItemBackground"
-  android:paddingBottom="8dp"
-  android:paddingLeft="16dp"
-  android:paddingRight="16dp"
-  android:paddingTop="8dp">
+>
+  <View android:id="@+id/separator"
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:layout_marginLeft="84dp"
+    android:layout_gravity="top"
+    android:background="@color/separator" />
 
   <RelativeLayout android:layout_width="match_parent"
+    android:paddingBottom="12dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="12dp"
     android:layout_height="wrap_content">
 
-    <ImageView android:id="@+id/stream_picture"
+    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/stream_picture"
       android:layout_width="@dimen/stream_result_picture_width"
       android:layout_height="@dimen/stream_result_picture_height"
-      android:layout_marginRight="16dp"
-      android:scaleType="centerCrop"
       android:src="@drawable/ic_stream_picture_default"
-      tools:background="#660000cc" />
+      android:layout_marginRight="16dp"
+      tools:background="#660000cc"
+      android:scaleType="centerCrop"
+   />
 
     <LinearLayout android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -34,15 +42,17 @@
         android:drawablePadding="8dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
-        android:maxLines="2"
-        android:textColor="@color/primary_text_dark_color"
-        android:textSize="14sp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="17sp"
         tools:text="Titulo Dos líneas" />
 
       <TextView android:id="@+id/stream_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray_60"
+        android:textColor="@color/gray_45"
+        android:textSize="15sp"
         tools:text="Romanesco" />
     </LinearLayout>
 
@@ -55,16 +65,30 @@
       style="@style/WatchersIndicator" />
 
     <ImageView android:id="@+id/stream_remove"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
-      android:background="?selectableItemBackground"
-      android:src="@drawable/ic_action_navigation_close"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
       android:layout_alignParentBottom="true"
       android:layout_alignLeft="@+id/stream_watchers"
       android:layout_alignStart="@+id/stream_watchers"
+      android:layout_marginRight="-4dp"
       android:visibility="gone"
       tools:visibility="visible"/>
+
+    <ImageView android:id="@+id/favorite_stream_indicator"
+      android:layout_width="26dp"
+      android:layout_height="26dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:src="@drawable/ic_favorite_not_added_28_gray50"
+      android:scaleType="centerCrop"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentBottom="true"
+      android:visibility="gone"
+      tools:visibility="visible"
+      />
   </RelativeLayout>
 </FrameLayout>

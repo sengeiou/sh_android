@@ -174,4 +174,8 @@ public abstract class SubheaderRecyclerViewAdapter<VH extends RecyclerView.ViewH
       throw new IllegalArgumentException("You can't use a null List<Item> instance.");
     }
   }
+
+  protected int getFirstItemPosition() {
+      return hasHeader() ? 2 : 0;
+  }
 }

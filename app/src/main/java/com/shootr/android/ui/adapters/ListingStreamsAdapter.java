@@ -9,8 +9,9 @@ import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ListingStreamsAdapter extends StreamsListAdapter {
 
@@ -18,9 +19,10 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
 
     private OnStreamClickListener onStreamClickListener;
     private OnFavoriteClickListener onFavoriteClickListener;
-    private List<StreamResultModel> favoriteStreams;
+    private Set<String> favoriteStreamsIds;
 
-    public ListingStreamsAdapter(PicassoWrapper picasso, OnStreamClickListener onStreamClickListener,
+    public ListingStreamsAdapter(PicassoWrapper picasso,
+      OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener) {
         super(picasso, onStreamClickListener);
         this.picasso = picasso;
@@ -29,59 +31,26 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
     }
 
     @Override
-    protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
-        return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
-    }
-
-    @Override
-    protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_card_separator, parent, false);
-        return new SubheaderViewHolder(view);
-    }
-
-    @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
         return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
-    }
-
-    @Override
-    protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel stream = getHeader();
-
-        ListingStreamResultViewHolder listingStreamResultViewHolder =
-          new ListingStreamResultViewHolder(viewHolder.itemView, onStreamClickListener, picasso,
-            onFavoriteClickListener);
-
-        listingStreamResultViewHolder.render(stream);
-    }
-
-    @Override
-    protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-        /* no-op */
     }
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel stream = getItems().get(position);
+        ((ListingStreamResultViewHolder) viewHolder).setFavorite(isFavorite(position));
+        super.onBindItemViewHolder(viewHolder, position);
+    }
 
-        List<String> favoriteIds = new ArrayList<>();
-
-        for (StreamResultModel favoriteStream : favoriteStreams) {
-            favoriteIds.add(favoriteStream.getStreamModel().getIdStream());
-        }
-
-        if(favoriteIds.contains(stream.getStreamModel().getIdStream())) {
-            ((ListingStreamResultViewHolder) viewHolder).render(stream, true);
-        } else {
-            ((ListingStreamResultViewHolder) viewHolder).render(stream, false);
-        }
-
-        ((ListingStreamResultViewHolder) viewHolder).render(stream);
+    private boolean isFavorite(int position) {
+        String streamId = getItem(position).getStreamModel().getIdStream();
+        return favoriteStreamsIds != null && favoriteStreamsIds.contains(streamId);
     }
 
     public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
-        this.favoriteStreams = favoriteStreams;
+        favoriteStreamsIds = new HashSet<>(favoriteStreams.size());
+        for (StreamResultModel stream : favoriteStreams) {
+            favoriteStreamsIds.add(stream.getStreamModel().getIdStream());
+        }
     }
 }

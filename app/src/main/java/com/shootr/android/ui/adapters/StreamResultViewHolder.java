@@ -21,6 +21,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_author) TextView author;
     @Bind(R.id.stream_watchers) TextView watchers;
+    @Bind(R.id.separator) View separator;
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, PicassoWrapper picasso) {
         super(itemView);
@@ -29,7 +30,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
         ButterKnife.bind(this, itemView);
     }
 
-    public void render(StreamResultModel streamResultModel) {
+    public void render(StreamResultModel streamResultModel, boolean showSeparator) {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
         int watchersCount = streamResultModel.getWatchers();
@@ -44,6 +45,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         picasso.loadStreamPicture(pictureUrl).into(picture);
+        separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
     }
 
     private void setClickListener(final StreamResultModel streamResult) {
