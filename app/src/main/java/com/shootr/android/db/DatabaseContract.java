@@ -316,4 +316,21 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = { ID_SHOT };
     }
+
+    public static final class TimelineSyncTable {
+
+        private TimelineSyncTable() {
+            /* non instanciable */
+        }
+
+        public static final String TABLE = "TimelineSync";
+
+        public static final String STREAM_ID = "idStream";
+        public static final String DATE = "date";
+
+        public static final String[] PROJECTION = new String[] {
+          STREAM_ID, DATE
+        };
+
+    }
 }

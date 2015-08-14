@@ -7,7 +7,7 @@ import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.UserTable;
-import com.shootr.android.domain.SuggestedPeople;
+import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 
 public class SQLiteUtils {
 
@@ -219,4 +219,8 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_NICE_SHOTS = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.NiceShotTable.TABLE +" ("
       + DatabaseContract.NiceShotTable.ID_SHOT + " TEXT NOT NULL PRIMARY KEY)";
+
+    public static final String CREATE_TABLE_TIMELINE_SYNC = "CREATE TABLE IF NOT EXISTS " + TimelineSyncTable.TABLE + " ("
+      + TimelineSyncTable.STREAM_ID + " TEXT NOT NULL PRIMARY KEY,"
+      + TimelineSyncTable.DATE + " DATETIME NOT NULL);";
 }

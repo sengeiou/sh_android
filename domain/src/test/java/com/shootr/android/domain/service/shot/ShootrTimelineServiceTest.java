@@ -29,6 +29,7 @@ import org.mockito.MockitoAnnotations;
 import static com.shootr.android.domain.asserts.StreamTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -177,6 +178,28 @@ public class ShootrTimelineServiceTest {
         shootrTimelineService.refreshTimelinesForWatchingStream();
 
         assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_STREAM_REFRESH_DATE);
+    }
+
+    @Test
+    public void shouldSetTimelineRefreshDateWhenRemoteShotsReturned() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Arrays.asList(
+          shotWithDate(2L),
+          shotWithDate(1L)));
+
+        shootrTimelineService.refreshTimelinesForWatchingStream();
+
+        verify(timelineSynchronizationRepository).setStreamTimelineRefreshDate(WATCHING_STREAM_ID, 2L);
+    }
+
+    @Test
+    public void shouldNotSetTimelineRefreshDateWhenEmptyRemoteShotsReturned() throws Exception {
+        setupWatchingStream();
+        when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
+
+        shootrTimelineService.refreshTimelinesForWatchingStream();
+
+        verify(timelineSynchronizationRepository, never()).setStreamTimelineRefreshDate(anyString(), anyLong());
     }
 
     @Test

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
 import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
@@ -84,7 +85,10 @@ public class StreamManager extends AbstractManager{
             deleteStream(streamEntity);
         } else {
             ContentValues contentValues = streamEntityMapper.toContentValues(streamEntity);
-            getWritableDatabase().insertWithOnConflict(DatabaseContract.StreamTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(DatabaseContract.StreamTable.TABLE,
+              null,
+              contentValues,
+              SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
@@ -210,5 +214,31 @@ public class StreamManager extends AbstractManager{
 
         queryResult.close();
         return resultEvents;
+    }
+
+    public Long getLastModifiedDateForStream(String streamId) {
+        String whereClause = TimelineSyncTable.STREAM_ID + " = ?";
+
+        String[] whereArguments = new String[]{String.valueOf(streamId)};
+
+        Cursor queryResult = getReadableDatabase().query(TimelineSyncTable.TABLE, TimelineSyncTable.PROJECTION, whereClause, whereArguments, null, null, null, "1");
+
+        Long resultDate;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            int dateColumnIndex = queryResult.getColumnIndex(TimelineSyncTable.DATE);
+            resultDate = queryResult.getLong(dateColumnIndex);
+        } else {
+            resultDate = 0L;
+        }
+        queryResult.close();
+        return resultDate;
+    }
+
+    public void setLastModifiedDateForStream(String streamId, Long refreshDate) {
+        ContentValues values = new ContentValues(2);
+        values.put(TimelineSyncTable.STREAM_ID, streamId);
+        values.put(TimelineSyncTable.DATE, refreshDate);
+        getWritableDatabase().insertWithOnConflict(TimelineSyncTable.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 }
