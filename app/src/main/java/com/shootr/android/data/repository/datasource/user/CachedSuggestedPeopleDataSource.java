@@ -26,9 +26,6 @@ public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSourc
         if (isValid()) {
             suggestedPeople = localSuggestedPeopleDataSource.getSuggestedPeople(currentUserId);
         }
-        if (suggestedPeople.isEmpty()) {
-            this.resetCachedUpdateTime();
-        }
         return suggestedPeople;
     }
 
