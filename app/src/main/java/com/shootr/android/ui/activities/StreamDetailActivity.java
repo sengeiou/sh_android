@@ -38,7 +38,7 @@ import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
-import com.squareup.picasso.Callback;
+import com.shootr.android.util.ImageLoaderCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -362,7 +362,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Override public void setStreamPicture(String picture) {
         if (picture != null) {
             hasPicture = true;
-            imageLoader.load(picture, photo, new Callback() {
+            imageLoader.load(picture, photo, new ImageLoaderCallback() {
                 @Override public void onSuccess() {
                     //Trigger image transition
                     recomputePhotoAndScrollingMetrics();

@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 import com.shootr.android.R;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
@@ -90,7 +89,7 @@ public class PicassoImageLoader implements ImageLoader {
         picasso.cancelTag(previewTag);
     }
 
-    @Override public void load(String url, ImageView view, Callback callback) {
+    @Override public void load(String url, ImageView view, ImageLoaderCallback callback) {
         picasso.load(url).into(view, callback);
     }
 

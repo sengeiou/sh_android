@@ -31,5 +31,5 @@ public interface ImageLoader {
 
     void cancelTag(Object previewTag);
 
-    void load(String url, ImageView view, Callback callback);
+    void load(String url, ImageView view, ImageLoaderCallback callback);
 }
