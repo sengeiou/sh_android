@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class ShotApiEntityMapper {
 
     @Inject
@@ -25,6 +27,7 @@ public class ShotApiEntityMapper {
         shotEntity.setType(shotApiEntity.getType());
 
         EmbedUserApiEntity userApiEntity = shotApiEntity.getUser();
+        checkNotNull(userApiEntity, "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping.");
         shotEntity.setIdUser(userApiEntity.getIdUser());
         shotEntity.setUsername(userApiEntity.getUserName());
         shotEntity.setUserPhoto(userApiEntity.getPhoto());
