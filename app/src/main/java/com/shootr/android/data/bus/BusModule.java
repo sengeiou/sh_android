@@ -2,7 +2,6 @@ package com.shootr.android.data.bus;
 
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.notifications.gcm.GCMIntentService;
-import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -24,7 +23,6 @@ import javax.inject.Singleton;
 
                 GetUsersFollowsJob.class,
                 GetUserInfoJob.class,
-                GetFollowingsJob.class,
 
                 ProfileFragment.class,
                 ProfileContainerActivity.class,
