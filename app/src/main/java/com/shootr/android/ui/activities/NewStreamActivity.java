@@ -43,7 +43,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     @Bind(R.id.new_stream_description) EditText descriptionView;
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
-    private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
 
@@ -125,7 +125,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_stream, menu);
         doneMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_done));
-        deleteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_delete));
+        removeMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_remove));
         restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_restore));
         return true;
     }
@@ -137,8 +137,8 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         } else if (item.getItemId() == R.id.menu_done) {
             presenter.done();
             return true;
-        }else if (item.getItemId() == R.id.menu_delete) {
-            presenter.delete();
+        }else if (item.getItemId() == R.id.menu_remove) {
+            presenter.remove();
             return true;
         }else if (item.getItemId() == R.id.menu_restore) {
             presenter.restore();
@@ -207,16 +207,16 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     }
 
     @Override
-    public void showDeleteStreamButton() {
-        deleteMenuItem.setVisible(true);
+    public void showRemoveStreamButton() {
+        removeMenuItem.setVisible(true);
     }
 
     @Override
-    public void askDeleteStreamConfirmation() {
-        new AlertDialog.Builder(this).setMessage(R.string.delete_stream_confirmation)
+    public void askRemoveStreamConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.remove_stream_confirmation)
           .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmDeleteStream();
+                  presenter.confirmRemoveStream();
               }
           })
           .setNegativeButton(R.string.cancel, null)

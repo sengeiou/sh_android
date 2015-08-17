@@ -40,7 +40,7 @@ public class RemoveStreamInteractor implements Interactor {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void deleteStream(String idStream, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void removeStream(String idStream, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idStream = checkNotNull(idStream);
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;

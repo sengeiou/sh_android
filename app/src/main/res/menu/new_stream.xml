@@ -4,8 +4,8 @@
   xmlns:tools="http://schemas.android.com/tools">
 
     <item
-      android:id="@+id/menu_delete"
-      android:icon="@drawable/ic_action_delete"
+      android:id="@+id/menu_remove"
+      android:icon="@drawable/ic_action_remove"
       android:title="@string/delete_stream_label"
       android:visible="false"
       app:showAsAction="always"

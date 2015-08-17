@@ -87,7 +87,7 @@ public class NewStreamPresenter implements Presenter {
         if (streamModel.getRemoved()) {
             newStreamView.showRestoreStreamButton();
         } else {
-            newStreamView.showDeleteStreamButton();
+            newStreamView.showRemoveStreamButton();
         }
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
@@ -136,8 +136,8 @@ public class NewStreamPresenter implements Presenter {
         createStream();
     }
 
-    public void delete() {
-        newStreamView.askDeleteStreamConfirmation();
+    public void remove() {
+        newStreamView.askRemoveStreamConfirmation();
     }
 
     public void restore() {
@@ -153,8 +153,8 @@ public class NewStreamPresenter implements Presenter {
         });
     }
 
-    public void confirmDeleteStream() {
-        removeStreamInteractor.deleteStream(preloadedStreamId, new Interactor.CompletedCallback() {
+    public void confirmRemoveStream() {
+        removeStreamInteractor.removeStream(preloadedStreamId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 newStreamView.closeScreenWithExitStream();
             }
