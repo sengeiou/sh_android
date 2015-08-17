@@ -23,4 +23,8 @@ public class NullNewShotBarView implements NewShotBarView {
     @Override public void hideDraftsButton() {
         /* no-op */
     }
+
+    @Override public void showStreamIsRemoved() {
+        /* no-op */
+    }
 }

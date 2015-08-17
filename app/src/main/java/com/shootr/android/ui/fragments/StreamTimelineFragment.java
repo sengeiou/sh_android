@@ -71,6 +71,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
+    public static final String EXTRA_STREAM_REMOVED = "streamRemoved";
     private static final int REQUEST_STREAM_DETAIL = 1;
     public static final String CLIPBOARD_LABEL = "Shot";
 
@@ -249,6 +250,10 @@ public class StreamTimelineFragment extends BaseFragment
                   .withImage(image) //
                   .build();
                 startActivity(newShotIntent);
+            }
+
+            @Override public void showStreamIsRemoved() {
+                /* no - op */
             }
         };
     }
@@ -448,7 +453,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
-        newShotBarPresenter.newShotFromTextBox();
+        newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
     }
 
     @OnClick(R.id.shot_bar_photo)
@@ -534,6 +539,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
+    }
+
+    @Override public void showStreamIsRemoved() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showWatchingPeopleCount(Integer count) {

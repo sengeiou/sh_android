@@ -32,6 +32,14 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         this.updateDraftsButtonVisibility();
     }
 
+    public void newShotFromTextBox(Boolean removed) {
+        if(removed){
+            newShotBarView.showStreamIsRemoved();
+        } else {
+            newShotBarView.openNewShotView();
+        }
+    }
+
     public void newShotFromTextBox() {
         newShotBarView.openNewShotView();
     }
@@ -55,7 +63,6 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
             }
         });
     }
-
 
     @Override public void resume() {
         bus.register(this);
