@@ -7,7 +7,6 @@ import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.sync.SyncableRepository;
 import com.shootr.android.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.StreamRepository;
@@ -67,8 +66,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override
-    public void deleteStream(String idEvent) throws DeleteStreamNotAllowedException {
-        remoteStreamDataSource.deleteStream(idEvent);
+    public void deleteStream(Stream stream) {
+        putStream(stream, false);
     }
 
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {

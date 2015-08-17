@@ -1,5 +1,6 @@
 package com.shootr.android.domain.interactor.stream;
 
+import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -53,8 +54,10 @@ public class DeleteStreamInteractor implements Interactor {
     @Override
     public void execute() throws Exception {
         try {
-            remoteStreamRepository.deleteStream(idStream);
-            localStreamRepository.deleteStream(idStream);
+            Stream stream = remoteStreamRepository.getStreamById(idStream);
+            stream.setRemoved(true);
+
+            remoteStreamRepository.deleteStream(stream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingStream(null);
