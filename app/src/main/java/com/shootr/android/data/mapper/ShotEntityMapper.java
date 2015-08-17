@@ -3,8 +3,6 @@ package com.shootr.android.data.mapper;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.ShotDetailEntity;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.entity.Synchronized;
-import com.shootr.android.domain.EntityMetadata;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.repository.Local;
@@ -18,9 +16,11 @@ import javax.inject.Singleton;
 public class ShotEntityMapper {
 
     private final NiceShotRepository niceShotRepository;
+    private final MetadataMapper metadataMapper;
 
-    @Inject public ShotEntityMapper(@Local NiceShotRepository niceShotRepository) {
+    @Inject public ShotEntityMapper(@Local NiceShotRepository niceShotRepository, MetadataMapper metadataMapper) {
         this.niceShotRepository = niceShotRepository;
+        this.metadataMapper = metadataMapper;
     }
 
     public Shot transform(ShotEntity shotEntity) {
@@ -58,20 +58,9 @@ public class ShotEntityMapper {
         shot.setNiceCount(shotEntity.getNiceCount());
         shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
 
-        shot.setMetadata(metadataFromEntity(shotEntity));
+        shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
 
         return shot;
-    }
-
-    private EntityMetadata metadataFromEntity(Synchronized entity) {
-        EntityMetadata metadata = new EntityMetadata();
-        metadata.setBirth(entity.getBirth());
-        metadata.setModified(entity.getModified());
-        metadata.setDeleted(entity.getDeleted());
-        metadata.setRevision(entity.getRevision());
-        metadata.setSynchronizedStatus(entity.getSynchronizedStatus());
-        return metadata;
-
     }
 
     public List<Shot> transform(List<ShotEntity> shotEntities) {
@@ -123,18 +112,8 @@ public class ShotEntityMapper {
 
         shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
 
-        metadataToEntity(shotEntity, shot.getMetadata());
+        metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
         return shotEntity;
-    }
-
-    private void metadataToEntity(Synchronized entity, EntityMetadata metadata) {
-        if (metadata != null) {
-            entity.setBirth(metadata.getBirth());
-            entity.setModified(metadata.getModified());
-            entity.setDeleted(metadata.getDeleted());
-            entity.setRevision(metadata.getRevision());
-            entity.setSynchronizedStatus(metadata.getSynchronizedStatus());
-        }
     }
 
     public ShotDetail transform(ShotDetailEntity shotDetailEntity) {
