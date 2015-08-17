@@ -15,6 +15,7 @@
 package com.shootr.android.domain.utils;
 
 import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Static convenience methods that help a method or constructor check whether it was invoked
@@ -225,6 +226,19 @@ public final class Preconditions {
             throw new NullPointerException(String.valueOf(errorMessage));
         }
         return reference;
+    }
+
+    public static <T> T checkNotNull(T reference, @Nonnull LazyErrorMessage errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage.getMessage()));
+        }
+        return reference;
+    }
+
+    public interface LazyErrorMessage {
+
+        Object getMessage();
+
     }
 
     /**

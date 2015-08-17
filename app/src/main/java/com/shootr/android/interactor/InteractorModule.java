@@ -13,7 +13,7 @@ import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamSearchInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
-import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
+import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.user.SendPasswordResetEmailInteractor;
 import dagger.Module;
@@ -23,7 +23,7 @@ import javax.inject.Singleton;
 @Module(
   includes = { ServiceModule.class },
   injects = {
-    GetPeopleInteractor.class, VisibleStreamInfoInteractor.class,
+    GetPeopleInteractor.class, GetStreamInfoInteractor.class,
     StreamsListInteractor.class, SelectStreamInteractor.class,
     StreamSearchInteractor.class, CreateStreamInteractor.class, GetStreamInteractor.class,
     ChangeStreamPhotoInteractor.class, PostNewShotInteractor.class, GetDraftsInteractor.class, SendDraftInteractor.class,

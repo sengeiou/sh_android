@@ -3,7 +3,7 @@ package com.shootr.android.ui.presenter;
 import android.content.SharedPreferences;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamMediaCountInteractor;
-import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
+import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -20,7 +20,7 @@ public class StreamDetailPresenterTest {
     private StreamDetailPresenter presenter;
 
     @Mock Bus bus;
-    @Mock VisibleStreamInfoInteractor streamInfoInteractor;
+    @Mock GetStreamInfoInteractor streamInfoInteractor;
     @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     @Mock ErrorMessageFactory errorMessageFactory;

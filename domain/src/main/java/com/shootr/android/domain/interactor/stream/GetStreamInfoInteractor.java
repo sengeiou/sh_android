@@ -13,22 +13,21 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
+import com.shootr.android.domain.utils.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class VisibleStreamInfoInteractor implements Interactor {
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-    private static final String VISIBLE_STREAM = null;
-    private static final StreamInfo NO_STREAM_VISIBLE_INFO = null;
+public class GetStreamInfoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
-    private final UserRepository localWatchRepository;
     private final StreamRepository remoteStreamRepository;
     private final StreamRepository localStreamRepository;
     private final SessionRepository sessionRepository;
@@ -37,31 +36,27 @@ public class VisibleStreamInfoInteractor implements Interactor {
     private String idStreamWanted;
     private Callback callback;
 
-    @Inject public VisibleStreamInfoInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localWatchRepository,
-      @Remote StreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository,
+    @Inject public GetStreamInfoInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      @Local UserRepository localUserRepository,
+      @Remote UserRepository remoteUserRepository,
+      @Remote StreamRepository remoteStreamRepository,
+      @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
-        this.localWatchRepository = localWatchRepository;
         this.remoteStreamRepository = remoteStreamRepository;
         this.localStreamRepository = localStreamRepository;
         this.sessionRepository = sessionRepository;
     }
 
-    //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
     public void obtainStreamInfo(String idStreamWanted, Callback callback, ErrorCallback errorCallback) {
-        this.idStreamWanted = idStreamWanted;
+        this.idStreamWanted = checkNotNull(idStreamWanted);;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
-    }
-
-    public void obtainVisibleStreamInfo(Callback callback, ErrorCallback errorCallback) {
-        obtainStreamInfo(VISIBLE_STREAM, callback, errorCallback);
     }
 
     @Override public void execute() throws Exception {
@@ -74,10 +69,8 @@ public class VisibleStreamInfoInteractor implements Interactor {
     }
 
     protected void obtainLocalStreamInfo() {
-        StreamInfo streamInfo = getStreamInfo(localWatchRepository, localStreamRepository);
-        if (streamInfo != NO_STREAM_VISIBLE_INFO) {
-            notifyLoaded(streamInfo);
-        }
+        StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository);
+        notifyLoaded(streamInfo);
     }
 
     protected void obtainRemoteStreamInfo() {
@@ -89,24 +82,20 @@ public class VisibleStreamInfoInteractor implements Interactor {
         }
     }
 
-    protected StreamInfo getStreamInfo(UserRepository userRepository, StreamRepository streamRepository) {
+    protected StreamInfo getStreamInfo(UserRepository userRepository, final StreamRepository streamRepository) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
-
-        String wantedStreamId = getWantedStreamId(currentUser);
-
-        if (wantedStreamId != null) {
-            Stream visibleStream = streamRepository.getStreamById(wantedStreamId);
-            if (visibleStream == null) {
-                //TODO should not happen, but can't assert that right now
-                return NO_STREAM_VISIBLE_INFO;
+        Stream stream = streamRepository.getStreamById(idStreamWanted);
+        checkNotNull(stream, new Preconditions.LazyErrorMessage() {
+            @Override
+            public Object getMessage() {
+                return "Stream not found in "+streamRepository.getClass().getSimpleName();
             }
+        });
 
-            List<User> people = userRepository.getPeople();
-            List<User> watchesFromPeople = filterUsersWatchingStream(people, wantedStreamId);
-            watchesFromPeople = sortWatchersListByJoinStreamDate(watchesFromPeople);
-            return buildStreamInfo(visibleStream, watchesFromPeople, currentUser);
-        }
-        return NO_STREAM_VISIBLE_INFO;
+        List<User> people = userRepository.getPeople();
+        List<User> watchesFromPeople = filterUsersWatchingStream(people, idStreamWanted);
+        watchesFromPeople = sortWatchersListByJoinStreamDate(watchesFromPeople);
+        return buildStreamInfo(stream, watchesFromPeople, currentUser);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
@@ -119,14 +108,6 @@ public class VisibleStreamInfoInteractor implements Interactor {
         return watchesFromPeople;
     }
 
-    private String getWantedStreamId(User currentUser) {
-        if (idStreamWanted != null && !idStreamWanted.equals(VISIBLE_STREAM)) {
-            return idStreamWanted;
-        } else {
-            return currentUser.getIdWatchingStream();
-        }
-    }
-
     protected List<User> filterUsersWatchingStream(List<User> people, String idStream) {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
@@ -137,10 +118,10 @@ public class VisibleStreamInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private StreamInfo buildStreamInfo(Stream currentVisibleStream, List<User> streamWatchers, User currentUser) {
-        boolean isCurrentUserWatching = currentVisibleStream.getId().equals(currentUser.getIdWatchingStream());
+    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser) {
+        boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
-          .stream(currentVisibleStream)
+          .stream(stream)
           .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .build();

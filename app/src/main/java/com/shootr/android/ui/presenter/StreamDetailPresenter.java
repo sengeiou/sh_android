@@ -8,7 +8,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamMediaCountInteractor;
-import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
+import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.StreamModel;
@@ -29,7 +29,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     //region Dependencies
     private final Bus bus;
-    private final VisibleStreamInfoInteractor streamInfoInteractor;
+    private final GetStreamInfoInteractor streamInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
 
     private final StreamModelMapper streamModelMapper;
@@ -47,7 +47,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private Integer streamMediaCount;
 
     @Inject
-    public StreamDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor streamInfoInteractor,
+    public StreamDetailPresenter(@Main Bus bus, GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
       WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor streamMediaCountInteractor) {
@@ -123,7 +123,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     public void getStreamInfo() {
-        streamInfoInteractor.obtainStreamInfo(idStream, new VisibleStreamInfoInteractor.Callback() {
+        streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
             @Override public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
