@@ -52,16 +52,11 @@ public class VisibleStreamInfoInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    //TODO this interactor is WRONG. Should NOT have two different opperations. Separate them!
     public void obtainStreamInfo(String idStreamWanted, Callback callback, ErrorCallback errorCallback) {
         this.idStreamWanted = idStreamWanted;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
-    }
-
-    public void obtainVisibleStreamInfo(Callback callback, ErrorCallback errorCallback) {
-        obtainStreamInfo(VISIBLE_STREAM, callback, errorCallback);
     }
 
     @Override public void execute() throws Exception {
