@@ -16,6 +16,7 @@ import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.notifications.checkin.CheckinNotificationManager;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
+import com.shootr.android.notifications.nice.NicedShotNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
 import com.shootr.android.notifications.startedshooting.StartedShootingNotificationManager;
 import com.shootr.android.service.ShootrService;
@@ -31,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class GCMIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
@@ -41,6 +44,7 @@ public class GCMIntentService extends IntentService {
     @Inject FollowNotificationManager followNotificationManager;
     @Inject CheckinNotificationManager checkinNotificationManager;
     @Inject StartedShootingNotificationManager startedShootingNotificationManager;
+    @Inject NicedShotNotificationManager nicedShotNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject @Local UserRepository localUserRepository;
@@ -113,12 +117,19 @@ public class GCMIntentService extends IntentService {
     private void receivedActivity(JSONObject parameters) throws JSONException {
         String idActivity = parameters.getString(ID_ACTIVITY);
         Activity activity = remoteActivityRepository.getActivity(idActivity);
-        if (ActivityType.CHECKIN.equals(activity.getType())) {
-            checkinNotificationManager.sendNewCheckinNotification(activityModelMapper.transform(activity));
-        } else if (ActivityType.STARTED_SHOOTING.equals(activity.getType())) {
-            startedShootingNotificationManager.sendNewStartedShootingNotification(activityModelMapper.transform(activity));
-        } else {
-            Timber.w("Received unknown activity type: %s", activity.getType());
+
+        switch (checkNotNull(activity.getType())) {
+            case ActivityType.CHECKIN:
+                checkinNotificationManager.sendNewCheckinNotification(activityModelMapper.transform(activity));
+                break;
+            case ActivityType.STARTED_SHOOTING:
+                startedShootingNotificationManager.sendNewStartedShootingNotification(activityModelMapper.transform(activity));
+                break;
+            case ActivityType.NICE_SHOT:
+                nicedShotNotificationManager.sendNewNicedShotNotification(activityModelMapper.transform(activity));
+                break;
+            default:
+                Timber.w("Received unknown activity type: %s", activity.getType());
         }
     }
 

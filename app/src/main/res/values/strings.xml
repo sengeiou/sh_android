@@ -343,4 +343,6 @@
     <string name="report_context_menu_report">Report</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
+    <string name="notification_nice_content_text">Niced your shot</string>
+    <string name="notification_nice_text_pattern">%s niced your shot</string>
 </resources>
