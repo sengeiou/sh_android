@@ -4,14 +4,14 @@ public interface StreamChanged {
 
     interface Receiver {
 
-        void onStreamChanged(Stream stream);
+        void onStreamChanged(Event event);
     }
 
-    class Stream {
+    class Event {
 
         private String newStreamId;
 
-        public Stream(String newStreamId) {
+        public Event(String newStreamId) {
             this.newStreamId = newStreamId;
         }
 

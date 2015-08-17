@@ -205,7 +205,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Subscribe
-    @Override public void onShotSent(ShotSent.Stream stream) {
+    @Override public void onShotSent(ShotSent.Event event) {
         refresh();
     }
 }

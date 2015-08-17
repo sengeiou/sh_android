@@ -124,7 +124,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         startProfileContainerActivity(username);
     }
 
-    @Subscribe @Override public void onShotSent(ShotSent.Stream stream) {
+    @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         justSentReply = true;
         this.loadShotDetail();
     }

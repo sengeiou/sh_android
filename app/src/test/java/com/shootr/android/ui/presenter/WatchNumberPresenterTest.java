@@ -27,7 +27,7 @@ public class WatchNumberPresenterTest {
     private static final Integer COUNT_1_PERSON = 1;
     private static final Integer COUNT_2_PEOPLE = 2;
     private static final Integer COUNT_NOBODY = 0;
-    private static final WatchUpdateRequest.Stream WATCH_UPDATE_STREAM = null;
+    private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
     public static final String STREAM_ID_STUB = "stream_id";
 
     @Mock WatchNumberInteractor watchNumberInteractor;
@@ -92,7 +92,7 @@ public class WatchNumberPresenterTest {
 
     @Test
     public void shouldLoadWatchNumberWhenWatchUpdateRequestReceived() throws Exception {
-        watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_STREAM);
+        watchUpdateReceiver.onWatchUpdateRequest(WATCH_UPDATE_EVENT);
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
@@ -124,7 +124,7 @@ public class WatchNumberPresenterTest {
     public void shouldWatchUpdateReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = WatchUpdateRequest.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Stream.class);
+        Method receiverDeclaredMethod = watchUpdateReceiver.getClass().getMethod(receiverMethodName, WatchUpdateRequest.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
@@ -133,17 +133,17 @@ public class WatchNumberPresenterTest {
     public void shouldStreamChangedReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = StreamChanged.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = streamChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Stream.class);
+        Method receiverDeclaredMethod = streamChangedReceiver.getClass().getMethod(receiverMethodName, StreamChanged.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }
 
-    private StreamChanged.Stream streamChangedStream() {
-        return new StreamChanged.Stream(STREAM_ID_STUB);
+    private StreamChanged.Event streamChangedStream() {
+        return new StreamChanged.Event(STREAM_ID_STUB);
     }
 
-    private StreamChanged.Stream exitStream() {
-        return new StreamChanged.Stream(null);
+    private StreamChanged.Event exitStream() {
+        return new StreamChanged.Event(null);
     }
 
     private void setupWatchNumberInteractorCallbacks(final Integer count) {

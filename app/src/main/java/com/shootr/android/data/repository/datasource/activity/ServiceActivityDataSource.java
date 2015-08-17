@@ -97,7 +97,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
             if (isSyncTriggerActivity(newActivity)
               && isNewerThanLastTrigger(newActivity)
               && !newActivity.getIdUser().equals(currentUserId)) {
-                busPublisher.post(new WatchUpdateRequest.Stream());
+                busPublisher.post(new WatchUpdateRequest.Event());
                 lastTriggerDate = newActivity.getBirth().getTime();
                 break;
             }

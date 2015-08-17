@@ -61,9 +61,9 @@ public class ServiceActivityDataSourceTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
     }
 
     @Test
@@ -73,9 +73,9 @@ public class ServiceActivityDataSourceTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER_STUB);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
     }
 
     @Test
@@ -87,9 +87,9 @@ public class ServiceActivityDataSourceTest {
         datasource.getActivityTimeline(activityTimelineParameters);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher, times(1)).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
     }
 
     @Test
@@ -101,9 +101,9 @@ public class ServiceActivityDataSourceTest {
         datasource.getActivityTimeline(activityTimelineParameters);
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        ArgumentCaptor<WatchUpdateRequest.Stream> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Stream.class);
+        ArgumentCaptor<WatchUpdateRequest.Event> captor = ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);
         verify(busPublisher).post(captor.capture());
-        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Stream.class);
+        assertThat(captor.getValue()).isInstanceOf(WatchUpdateRequest.Event.class);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ServiceActivityDataSourceTest {
 
         datasource.getActivityTimeline(activityTimelineParameters);
 
-        verify(busPublisher, never()).post(any(WatchUpdateRequest.Stream.class));
+        verify(busPublisher, never()).post(any(WatchUpdateRequest.Event.class));
     }
 
     private List<ActivityEntity> oneTriggerActivity() {
