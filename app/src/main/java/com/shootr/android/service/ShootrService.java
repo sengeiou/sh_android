@@ -11,10 +11,6 @@ import java.util.List;
 
 public interface ShootrService {
 
-    List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
-
-    List<UserEntity> getUsersById(List<String> userIds) throws IOException;
-
     UserEntity getUserByIdUser(String idUser) throws IOException;
 
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;

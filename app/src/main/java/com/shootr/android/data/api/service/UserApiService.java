@@ -12,4 +12,7 @@ public interface UserApiService {
     @GET("/user/{idUser}/following")
     List<UserEntity> getFollowing(@Path("idUser") String idUser) throws IOException, ApiException;
 
+    @GET("/user/{idUser}/followers")
+    List<UserEntity> getFollowers(@Path("idUser") String idUser) throws IOException, ApiException;
+
 }

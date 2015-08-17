@@ -10,7 +10,6 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -22,14 +21,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 5;
 
     private final UserApiService userApiService;
-    ShootrService service;
     private String idUserToRetrieveFollowsFrom;
     FollowManager followManager;
     private Integer followType;
@@ -37,15 +34,12 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     private SessionRepository sessionRepository;
 
     @Inject public GetUsersFollowsJob(Application application,
-      @Main Bus bus,
-      ShootrService service,
-      NetworkUtil networkUtil,
+      @Main Bus bus, NetworkUtil networkUtil,
       UserApiService userApiService,
       FollowManager followManager,
       UserEntityModelMapper userModelMapper,
       SessionRepository sessionRepository) {
         super(new Params(PRIORITY), application, bus, networkUtil);
-        this.service = service;
         this.userApiService = userApiService;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
@@ -82,10 +76,12 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
             throw new IOException(e);
         }
     }
-    private List<UserEntity> getFollowerUsersFromService() throws  IOException{
-
-        Timber.i("Hace la llamada de getFollowers");
-        return service.getFollowers(idUserToRetrieveFollowsFrom,0L);
+    private List<UserEntity> getFollowerUsersFromService() throws IOException {
+        try {
+            return userApiService.getFollowers(idUserToRetrieveFollowsFrom);
+        } catch (ApiException e) {
+            throw new IOException(e);
+        }
     }
 
 

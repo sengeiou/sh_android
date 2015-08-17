@@ -39,12 +39,10 @@ public class UserDtoFactory {
     private static final String ENTITY_SUGGESTED_PEOPLE = "SuggestedPeopleMongo";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
-    private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
-    private static final String ALIAS_GETUSERS = "GET_USERS";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
     public static final String CHECK_IN_ID_USER = "idUser";
@@ -132,27 +130,6 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
     }
 
-    public GenericDto getFollowersOperationDto(String fromUserId, Long offset,Long date, boolean includeDeleted) {
-        FilterDto filter = and(FollowTable.ID_FOLLOWED_USER).isEqualTo(fromUserId) //
-          .and(FollowTable.ID_USER).isNotEqualTo(null) //
-          .build();
-
-        MetadataDto metadata = new MetadataDto.Builder() //
-          .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(FollowTable.TABLE) //
-          .includeDeleted(false) //
-          .filter(filter) //
-          .items(MAX_FOLLOWS_ITEMS) //
-          .build();
-
-        OperationDto operation = new OperationDto.Builder() //
-          .metadata(metadata) //
-          .putData(followMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWERS, operation);
-    }
-
     public GenericDto getUserByUsername(String username){
         FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
                 .and(UserTable.DELETED).isEqualTo(null) //
@@ -183,26 +160,6 @@ public class UserDtoFactory {
         array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
-    }
-
-    public GenericDto getUsersOperationDto(List<String> userIds) {
-        FilterDto filter = and( //
-          orModifiedOrDeletedAfter(0L), //
-          or(UserTable.ID).isIn(userIds) //
-        ).build();
-
-        MetadataDto metadata = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(UserTable.TABLE)
-          .filter(filter)
-          .items(100)
-          .totalItems(100)
-          .includeDeleted(false)
-          .build();
-
-        OperationDto operationDto =
-          new OperationDto.Builder().metadata(metadata).putData(userMapper.reqRestUsersToDto(null)).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERS, operationDto);
     }
 
     public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {
