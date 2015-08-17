@@ -8,7 +8,10 @@ import javax.inject.Inject;
 
 public class UserEntityMapper {
 
-    @Inject public UserEntityMapper() {
+    private final MetadataMapper metadataMapper;
+
+    @Inject public UserEntityMapper(MetadataMapper metadataMapper) {
+        this.metadataMapper = metadataMapper;
     }
 
     public User transform(UserEntity userEntity, String currentUserId, boolean isFollower, boolean isFollowing) {
@@ -39,6 +42,8 @@ public class UserEntityMapper {
             user.setJoinStreamDate(userEntity.getJoinStreamDate());
         }
 
+        user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
+
         return user;
     }
 
@@ -65,7 +70,7 @@ public class UserEntityMapper {
 
         userEntity.setJoinStreamDate(user.getJoinStreamDate());
 
-        //TODO synchronized fields
+        metadataMapper.fillEntityWithMetadata(userEntity, user.getMetadata());
         return userEntity;
     }
 

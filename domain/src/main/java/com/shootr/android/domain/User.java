@@ -24,6 +24,8 @@ public class User {
     private boolean isFollower;
     private boolean isMe;
 
+    private EntityMetadata metadata;
+
     public String getIdUser() {
         return idUser;
     }
@@ -184,6 +186,14 @@ public class User {
 
     public void setJoinStreamDate(Long joinStreamDate) {
         this.joinStreamDate = joinStreamDate;
+    }
+
+    public EntityMetadata getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(EntityMetadata metadata) {
+        this.metadata = metadata;
     }
 
     public static class UsernameComparator implements Comparator<User> {
