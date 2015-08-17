@@ -120,25 +120,12 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return suggestedPeopleEntityMapper.transform(remoteSuggestedPeopleEntity);
     }
 
-    private List<User> entitiesToDomain(List<UserEntity> userEntities) {
-        List<User> users = new ArrayList<>(userEntities.size());
-        for (UserEntity userEntity : userEntities) {
-            users.add(entityToDomain(userEntity));
-        }
-        return users;
-    }
-
     private List<SuggestedPeople> suggestedPeopleEntitiesToDomain(List<SuggestedPeopleEntity> suggestedPeopleEntities) {
         List<SuggestedPeople> suggestedPeoples = new ArrayList<>(suggestedPeopleEntities.size());
         for (SuggestedPeopleEntity suggestedPeople : suggestedPeopleEntities) {
             suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
         }
         return suggestedPeoples;
-    }
-
-    @Override public List<User> getUsersByIds(List<String> userIds) {
-        List<UserEntity> userEntities = cachedRemoteUserDataSource.getUsers(userIds);
-        return entitiesToDomain(userEntities);
     }
 
     @Override public boolean isFollower(String userId) {

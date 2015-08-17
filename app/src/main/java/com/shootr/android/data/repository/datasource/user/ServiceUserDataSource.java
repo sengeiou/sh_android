@@ -43,14 +43,6 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getUsers(List<String> userIds) {
-        try {
-            return service.getUsersById(userIds);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public boolean isFollower(String from, String who) {
         throw new RuntimeException("Method not implemented for service.");
     }

@@ -12,8 +12,6 @@ public interface UserRepository {
 
     User getUserByUsername(String username);
 
-    List<User> getUsersByIds(List<String> ids);
-
     boolean isFollower(String userId);
 
     boolean isFollowing(String userId);

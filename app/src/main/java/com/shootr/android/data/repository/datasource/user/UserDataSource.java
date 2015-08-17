@@ -14,8 +14,6 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
     UserEntity getUser(String id);
 
-    List<UserEntity> getUsers(List<String> userIds);
-
     boolean isFollower(String from, String who);
 
     boolean isFollowing(String who, String to);

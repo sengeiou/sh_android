@@ -69,21 +69,6 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         }
     }
 
-    @Override public List<UserEntity> getUsers(List<String> userIds) {
-        List<UserEntity> cachedUsers = null;
-        if (isValid()) {
-            cachedUsers = localUserDataSource.getUsers(userIds);
-        }
-        if (cachedUsers != null) {
-            return cachedUsers;
-        } else {
-            List<UserEntity> remoteUsers = remoteUserDataSource.getUsers(userIds);
-            localUserDataSource.putUsers(remoteUsers);
-            this.resetCachedUpdateTime();
-            return remoteUsers;
-        }
-    }
-
     @Override public boolean isFollower(String from, String who) {
         throw new IllegalStateException("Can't use cache for follow status check");
     }
