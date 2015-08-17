@@ -209,8 +209,10 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         }
 
         streamMediaCount = streamModel.getMediaCount();
-        streamDetailView.setMediaCount(streamMediaCount);
-        streamDetailView.showMediaCount();
+        if (streamMediaCount > 0) {
+            streamDetailView.setMediaCount(streamMediaCount);
+            streamDetailView.showMediaCount();
+        }
     }
 
     private void renderWatchersCount(int watchersCount) {

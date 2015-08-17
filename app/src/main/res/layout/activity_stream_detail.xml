@@ -111,7 +111,6 @@
                             android:paddingRight="16dp"
                             android:layout_gravity="end|center_vertical"
                             android:textAppearance="@style/TextAppearance.Switch"
-                            android:text="@string/stream_detail_media_number"
                             android:textColor="@color/gray_60"
                             android:visibility="visible"
                             tools:text="7" />
