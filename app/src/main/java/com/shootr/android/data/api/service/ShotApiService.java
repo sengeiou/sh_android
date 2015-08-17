@@ -45,6 +45,6 @@ public interface ShotApiService {
     @DELETE("/shots/{idShot}/nice")
     Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
 
-    @GET("/streams/{idStream}/media")
+    @GET("/streams/{idStream}/media?includeLinks=false")
     List<ShotApiEntity> getMediaShots(@Path("idStream") String idStream) throws ApiException, IOException;
 }
