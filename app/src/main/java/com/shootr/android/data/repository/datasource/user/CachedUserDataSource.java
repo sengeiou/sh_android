@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.repository.datasource.CachedDataSource;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -11,12 +12,18 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
 
     private static final long EXPIRATION_TIME_MILLIS = 20 * 1000;
 
+    private final SessionRepository sessionRepository;
     private final UserDataSource localUserDataSource;
     private final UserDataSource remoteUserDataSource;
     boolean wasValidLastCheck = false;
+    private boolean wasValidLastCheckPeople = false;
     long lastCacheUpdateTime;
+    private long lastCacheUpdateTimePeople;
 
-    @Inject public CachedUserDataSource(@Local UserDataSource localUserDataSource, @Remote UserDataSource remoteUserDataSource) {
+    @Inject public CachedUserDataSource(SessionRepository sessionRepository,
+      @Local UserDataSource localUserDataSource,
+      @Remote UserDataSource remoteUserDataSource) {
+        this.sessionRepository = sessionRepository;
         this.localUserDataSource = localUserDataSource;
         this.remoteUserDataSource = remoteUserDataSource;
     }
@@ -29,12 +36,25 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         return isValidNow;
     }
 
+    private boolean isValidPeopleCache() {
+        boolean isValidNow = wasValidLastCheckPeople && !hasExpiredPeopleCache();
+        if (!isValidNow) {
+            wasValidLastCheckPeople = false;
+        }
+        return isValidNow;
+    }
+
     @Override public void invalidate() {
         wasValidLastCheck = false;
+        wasValidLastCheckPeople = false;
     }
 
     protected boolean hasExpired() {
         return System.currentTimeMillis() > lastCacheUpdateTime + EXPIRATION_TIME_MILLIS;
+    }
+
+    private boolean hasExpiredPeopleCache() {
+        return System.currentTimeMillis() > lastCacheUpdateTimePeople + EXPIRATION_TIME_MILLIS;
     }
 
     public void resetCachedUpdateTime() {
@@ -42,8 +62,26 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         wasValidLastCheck = true;
     }
 
+    public void resetCachedUpdateTimePeople() {
+        lastCacheUpdateTimePeople = System.currentTimeMillis();
+        wasValidLastCheckPeople = true;
+    }
+
     @Override public List<UserEntity> getFollowing(String userId) {
-        throw new IllegalStateException("getFollowing not cacheable");
+        if (userId.equals(sessionRepository.getCurrentUserId())) {
+            if (isValidPeopleCache()) {
+                List<UserEntity> cachedFollowing = localUserDataSource.getFollowing(userId);
+                if (cachedFollowing != null && !cachedFollowing.isEmpty()) {
+                    return cachedFollowing;
+                }
+            }
+            List<UserEntity> remoteFollowing = remoteUserDataSource.getFollowing(userId);
+            localUserDataSource.putUsers(remoteFollowing);
+            this.resetCachedUpdateTimePeople();
+            return remoteFollowing;
+        } else {
+            return remoteUserDataSource.getFollowing(userId);
+        }
     }
 
     @Override public UserEntity putUser(UserEntity userEntity) {

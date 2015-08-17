@@ -67,10 +67,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Override public List<User> getPeople() {
-        List<UserEntity> remotePeopleEntities =
-          remoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
+        List<UserEntity> remotePeopleEntities = cachedRemoteUserDataSource.getFollowing(sessionRepository.getCurrentUserId());
         markSynchronized(remotePeopleEntities);
-        localUserDataSource.putUsers(remotePeopleEntities);
         localFollowDataSource.putFollows(createFollowsFromUsers(remotePeopleEntities));
         return transformUserEntitiesForPeople(remotePeopleEntities);
     }
