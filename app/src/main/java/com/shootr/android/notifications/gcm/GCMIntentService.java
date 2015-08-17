@@ -14,11 +14,9 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import com.shootr.android.notifications.checkin.CheckinNotificationManager;
+import com.shootr.android.notifications.activity.ActivityNotificationManager;
 import com.shootr.android.notifications.follow.FollowNotificationManager;
-import com.shootr.android.notifications.nice.NicedShotNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
-import com.shootr.android.notifications.startedshooting.StartedShootingNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -42,9 +40,7 @@ public class GCMIntentService extends IntentService {
     @Inject ShotNotificationManager shotNotificationManager;
 
     @Inject FollowNotificationManager followNotificationManager;
-    @Inject CheckinNotificationManager checkinNotificationManager;
-    @Inject StartedShootingNotificationManager startedShootingNotificationManager;
-    @Inject NicedShotNotificationManager nicedShotNotificationManager;
+    @Inject ActivityNotificationManager activityNotificationManager;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject @Local UserRepository localUserRepository;
@@ -120,13 +116,13 @@ public class GCMIntentService extends IntentService {
 
         switch (checkNotNull(activity.getType())) {
             case ActivityType.CHECKIN:
-                checkinNotificationManager.sendNewCheckinNotification(activityModelMapper.transform(activity));
+                activityNotificationManager.sendNewCheckinNotification(activityModelMapper.transform(activity));
                 break;
             case ActivityType.STARTED_SHOOTING:
-                startedShootingNotificationManager.sendNewStartedShootingNotification(activityModelMapper.transform(activity));
+                activityNotificationManager.sendNewStartedShootingNotification(activityModelMapper.transform(activity));
                 break;
             case ActivityType.NICE_SHOT:
-                nicedShotNotificationManager.sendNewNicedShotNotification(activityModelMapper.transform(activity));
+                activityNotificationManager.sendNewNicedShotNotification(activityModelMapper.transform(activity));
                 break;
             default:
                 Timber.w("Received unknown activity type: %s", activity.getType());

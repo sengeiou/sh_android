@@ -1,4 +1,4 @@
-package com.shootr.android.notifications.nice;
+package com.shootr.android.notifications.activity.nice;
 
 import android.app.PendingIntent;
 import android.content.Context;
