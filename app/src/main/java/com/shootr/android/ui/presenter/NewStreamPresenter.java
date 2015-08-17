@@ -80,7 +80,12 @@ public class NewStreamPresenter implements Presenter {
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showShortTitle(streamModel.getTag());
         newStreamView.showDescription(streamModel.getDescription());
-        newStreamView.showDeleteStreamButton();
+
+        if (streamModel.getRemoved()) {
+            newStreamView.showRestoreStreamButton();
+        } else {
+            newStreamView.showDeleteStreamButton();
+        }
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
             preloadedShortTitle = streamModel.getTag();
@@ -130,6 +135,10 @@ public class NewStreamPresenter implements Presenter {
 
     public void delete() {
         newStreamView.askDeleteStreamConfirmation();
+    }
+
+    public void restore() {
+        //TODO interactor
     }
 
     public void confirmDeleteStream() {
@@ -202,10 +211,10 @@ public class NewStreamPresenter implements Presenter {
             showViewError(errorMessageFactory.getUnknownErrorMessage());
         }
     }
-
     private void onCommunicationError() {
         showViewError(errorMessageFactory.getCommunicationErrorMessage());
     }
+
     //endregion
 
     //region Errors
@@ -225,10 +234,10 @@ public class NewStreamPresenter implements Presenter {
     private void showViewTitleError(String errorMessage) {
         newStreamView.showTitleError(errorMessage);
     }
-
     private void showViewError(String errorMessage) {
         newStreamView.showError(errorMessage);
     }
+
     //endregion
 
     //region Utils
@@ -264,12 +273,12 @@ public class NewStreamPresenter implements Presenter {
         return currentShortTitle != null && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
           && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
     }
-
     private void bindShortTitleToTitleIfMatches() {
         if (currentTitle != null && currentShortTitle != null) {
             shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
         }
     }
+
     //endregion
 
     @Override public void resume() {

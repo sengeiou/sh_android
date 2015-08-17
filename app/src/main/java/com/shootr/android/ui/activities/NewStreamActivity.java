@@ -44,6 +44,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder deleteMenuItem = new MenuItemValueHolder();
+    private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
 
     //region Initialization
@@ -125,6 +126,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         getMenuInflater().inflate(R.menu.new_stream, menu);
         doneMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_done));
         deleteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_delete));
+        restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_restore));
         return true;
     }
 
@@ -137,6 +139,9 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
             return true;
         }else if (item.getItemId() == R.id.menu_delete) {
             presenter.delete();
+            return true;
+        }else if (item.getItemId() == R.id.menu_restore) {
+            presenter.restore();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -232,6 +237,10 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
 
     @Override public void showDescription(String description) {
         descriptionView.setText(description);
+    }
+
+    @Override public void showRestoreStreamButton() {
+        restoreMenuItem.setVisible(true);
     }
 
     @Override public void showLoading() {

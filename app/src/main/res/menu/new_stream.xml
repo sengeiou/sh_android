@@ -12,6 +12,14 @@
       tools:visible="true" />
 
     <item
+      android:id="@+id/menu_restore"
+      android:icon="@drawable/ic_action_restore"
+      android:title="@string/restore_stream_label"
+      android:visible="false"
+      app:showAsAction="always"
+      tools:visible="true" />
+
+    <item
       android:id="@+id/menu_done"
       android:enabled="false"
       android:icon="@drawable/ic_action_done"

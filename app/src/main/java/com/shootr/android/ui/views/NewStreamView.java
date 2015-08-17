@@ -31,4 +31,6 @@ public interface NewStreamView extends DataTransferView{
     String getStreamDescription();
 
     void showDescription(String description);
+
+    void showRestoreStreamButton();
 }
