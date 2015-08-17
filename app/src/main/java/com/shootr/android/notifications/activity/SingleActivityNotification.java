@@ -11,7 +11,7 @@ import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
 
-public abstract class SingleActivityNotification extends CommonNotification {
+public abstract class SingleActivityNotification extends AbstractActivityNotification {
 
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
