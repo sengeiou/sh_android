@@ -15,8 +15,17 @@ public class Stream {
     private String tag;
     private String description;
     private String locale;
+    private Boolean removed;
 
     public Stream() {
+    }
+
+    public Boolean getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Boolean removed) {
+        this.removed = removed;
     }
 
     public String getDescription() {

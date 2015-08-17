@@ -12,6 +12,15 @@ public class StreamModel implements Serializable {
     private String tag;
     private String description;
     private boolean amIAuthor;
+    private Boolean removed;
+
+    public Boolean getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Boolean removed) {
+        this.removed = removed;
+    }
 
     public String getIdStream() {
         return idStream;
