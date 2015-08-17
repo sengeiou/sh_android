@@ -67,7 +67,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         wasValidLastCheckPeople = true;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId) {
+    @Override public synchronized List<UserEntity> getFollowing(String userId) {
         if (userId.equals(sessionRepository.getCurrentUserId())) {
             if (isValidPeopleCache()) {
                 List<UserEntity> cachedFollowing = localUserDataSource.getFollowing(userId);
