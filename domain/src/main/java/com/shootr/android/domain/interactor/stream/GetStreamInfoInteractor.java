@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class VisibleStreamInfoInteractor implements Interactor {
+public class GetStreamInfoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -36,7 +36,7 @@ public class VisibleStreamInfoInteractor implements Interactor {
     private String idStreamWanted;
     private Callback callback;
 
-    @Inject public VisibleStreamInfoInteractor(InteractorHandler interactorHandler,
+    @Inject public GetStreamInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository,
