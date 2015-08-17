@@ -6,15 +6,15 @@ public interface ShotSent {
 
     interface Receiver {
 
-        void onShotSent(Stream stream);
+        void onShotSent(Event event);
 
     }
 
-    class Stream {
+    class Event {
 
         private Shot shot;
 
-        public Stream(Shot shot) {
+        public Event(Shot shot) {
             this.shot = shot;
         }
 
@@ -23,7 +23,7 @@ public interface ShotSent {
         }
 
         @Override public String toString() {
-            return "Stream{" +
+            return "Event{" +
               "shot=" + shot.toString() +
               '}';
         }

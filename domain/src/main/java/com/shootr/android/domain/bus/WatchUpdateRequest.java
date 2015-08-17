@@ -4,10 +4,10 @@ public interface WatchUpdateRequest {
 
     interface Receiver {
 
-        void onWatchUpdateRequest(Stream stream);
+        void onWatchUpdateRequest(Event event);
     }
 
-    class Stream {
+    class Event {
 
     }
 }

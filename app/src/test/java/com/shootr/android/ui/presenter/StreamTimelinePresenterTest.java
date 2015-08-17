@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
 public class StreamTimelinePresenterTest {
 
     private static final Date LAST_SHOT_DATE = new Date();
-    private static final ShotSent.Stream SHOT_SENT_STREAM = null;
+    private static final ShotSent.Event SHOT_SENT_EVENT = null;
     private static final String SELECTED_STREAM_ID = "stream";
 
     @Mock StreamTimelineView streamTimelineView;
@@ -254,7 +254,7 @@ public class StreamTimelinePresenterTest {
 
     //region Bus streams
     @Test public void shouldRefreshTimelineWhenShotSent() throws Exception {
-        shotSentReceiver.onShotSent(SHOT_SENT_STREAM);
+        shotSentReceiver.onShotSent(SHOT_SENT_EVENT);
 
         verify(timelineInteractorWrapper).refreshTimeline(anyCallback(), anyErrorCallback());
     }
@@ -262,7 +262,7 @@ public class StreamTimelinePresenterTest {
     @Test public void shouldShotSentReceiverHaveSubscribeAnnotation() throws Exception {
         String receiverMethodName = ShotSent.Receiver.class.getDeclaredMethods()[0].getName();
 
-        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Stream.class);
+        Method receiverDeclaredMethod = shotSentReceiver.getClass().getMethod(receiverMethodName, ShotSent.Event.class);
         boolean annotationPresent = receiverDeclaredMethod.isAnnotationPresent(Subscribe.class);
         assertThat(annotationPresent).isTrue();
     }

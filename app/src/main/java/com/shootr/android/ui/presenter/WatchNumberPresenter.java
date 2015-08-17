@@ -64,13 +64,13 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     }
 
     @Subscribe
-    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Stream stream) {
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         retrieveData();
     }
 
     @Subscribe
-    @Override public void onStreamChanged(StreamChanged.Stream stream) {
-        if (stream.getNewStreamId() != null) {
+    @Override public void onStreamChanged(StreamChanged.Event event) {
+        if (event.getNewStreamId() != null) {
             retrieveData();
         } else {
             watchNumberView.hideWatchingPeopleCount();

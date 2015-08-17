@@ -236,7 +236,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     }
 
     @Subscribe
-    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Stream stream) {
+    @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
         forceUpdatePeopleAndMe();
     }
 }
