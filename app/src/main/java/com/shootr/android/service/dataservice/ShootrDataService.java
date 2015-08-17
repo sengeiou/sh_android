@@ -91,27 +91,6 @@ public class ShootrDataService implements ShootrService {
         this.versionUpdater = versionUpdater;
     }
 
-    @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
-        List<FollowEntity> follows = new ArrayList<>();
-        List<String> userIds = new ArrayList<>();
-        boolean includeDeleted = lastModifiedDate > 0L;
-        GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        Map<String, Object>[] data = ops[0].getData();
-        for (Map<String, Object> d : data) {
-            FollowEntity followEntity = followMapper.fromDto(d);
-            follows.add(followEntity);
-            userIds.add(followEntity.getFollowedUser());
-        }
-        List<UserEntity> usersById = new ArrayList<>();
-        if(!userIds.isEmpty()){
-            usersById = getUsersById(userIds);
-        }
-        //TODO order
-        return usersById;
-    }
-
     @Override public List<UserEntity> getUsersById(List<String> userIds) throws IOException{
         List<UserEntity> users = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getUsersOperationDto(userIds);

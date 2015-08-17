@@ -39,7 +39,6 @@ public class UserDtoFactory {
     private static final String ENTITY_SUGGESTED_PEOPLE = "SuggestedPeopleMongo";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
-    private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
@@ -131,27 +130,6 @@ public class UserDtoFactory {
         data[0] = followMapper.toDto(null);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
-    }
-
-    public GenericDto getFollowingsOperationDto(String fromUserId, Long offset,Long date, boolean includeDeleted) {
-        FilterDto filter = and(FollowTable.ID_USER).isEqualTo(fromUserId) //
-          .and(FollowTable.ID_FOLLOWED_USER).isNotEqualTo(null) //
-          .build();
-
-        MetadataDto metadata = new MetadataDto.Builder() //
-          .operation(Constants.OPERATION_RETRIEVE) //
-          .entity(FollowTable.TABLE) //
-          .includeDeleted(false) //
-          .filter(filter) //
-          .items(MAX_FOLLOWS_ITEMS) //
-          .build();
-
-        OperationDto operation = new OperationDto.Builder() //
-          .metadata(metadata) //
-          .putData(followMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWING, operation);
     }
 
     public GenericDto getFollowersOperationDto(String fromUserId, Long offset,Long date, boolean includeDeleted) {

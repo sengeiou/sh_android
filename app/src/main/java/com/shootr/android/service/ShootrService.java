@@ -13,8 +13,6 @@ public interface ShootrService {
 
     List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
 
-    List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException;
-
     List<UserEntity> getUsersById(List<String> userIds) throws IOException;
 
     UserEntity getUserByIdUser(String idUser) throws IOException;
