@@ -55,8 +55,7 @@ public class SyncShotRepository implements ShotRepository {
 
     @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userId) {
         List<ShotEntity> shotEntitiesWithMedia = remoteShotDataSource.getStreamMediaShots(idEvent, userId);
-        List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
-        return shotsWithMedia;
+        return shotEntityMapper.transform(shotEntitiesWithMedia);
     }
 
     @Override

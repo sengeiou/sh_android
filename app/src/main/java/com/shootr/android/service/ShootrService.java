@@ -42,8 +42,6 @@ public interface ShootrService {
 
     Integer getStreamMediaShotsCount(String idStream, List<String> idUser) throws IOException;
 
-    List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId) throws IOException;
-
     Integer getListingCount(String idUser) throws IOException;
 
     void logout(String idUser, String sessionToken) throws IOException;

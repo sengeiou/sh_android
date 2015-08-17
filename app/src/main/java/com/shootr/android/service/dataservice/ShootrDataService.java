@@ -307,24 +307,6 @@ public class ShootrDataService implements ShootrService {
         return numberOfMedia;
     }
 
-    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) throws IOException {
-        List<ShotEntity> shotsByUserInStream = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idStream, userIds);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else {
-            MetadataDto md = ops[0].getMetadata();
-            Long items = md.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                shotsByUserInStream.add(shotEntityMapper.fromDto(dataItem));
-            }
-        }
-        return shotsByUserInStream;
-    }
-
     @Override public Integer getListingCount(String idUser) throws IOException {
         Integer numberOfStreams = 0;
         GenericDto requestDto = streamDtoFactory.getListingCount(idUser);

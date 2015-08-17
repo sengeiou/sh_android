@@ -66,26 +66,4 @@ public class ShotDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
-
-    public GenericDto getMediaShotsByStream(String idStream, List<String> idUsers) {
-        FilterDto streamFilter = and(or(ShotTable.ID_USER).isIn(idUsers)) //
-          .and(ShotTable.ID_STREAM).isEqualTo(idStream) //
-          .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.DELETED).isEqualTo(null) //
-          .build();
-
-        MetadataDto md = new MetadataDto.Builder() //
-          .operation(ServiceConstants.OPERATION_RETRIEVE)
-          .entity(ShotTable.TABLE)
-          .items(100)
-          .filter(streamFilter)
-          .build();
-
-        OperationDto op = new OperationDto.Builder() //
-          .metadata(md) //
-          .putData(shotEntityMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
-    }
 }
