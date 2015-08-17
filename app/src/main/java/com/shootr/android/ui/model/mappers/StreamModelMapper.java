@@ -25,6 +25,7 @@ public class StreamModelMapper {
         streamModel.setAuthorId(stream.getAuthorId());
         streamModel.setAuthorUsername(stream.getAuthorUsername());
         streamModel.setDescription(stream.getDescription());
+        streamModel.setRemoved(stream.getRemoved());
         return streamModel;
     }
 

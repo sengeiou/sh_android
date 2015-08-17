@@ -171,10 +171,11 @@ public class DatabaseContract {
         public static final String NOTIFY_CREATION = "notifyCreation";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
         public static final String LOCALE = "locale";
+        public static final String REMOVED = "removed";
 
         public static final String[] PROJECTION = {
           ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE,
-                PHOTO, TAG, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, DELETED, REVISION, SYNCHRONIZED
+                PHOTO, TAG, DESCRIPTION, BIRTH, MODIFIED, LAST_UPDATED_USER, LOCALE, REMOVED, DELETED, REVISION, SYNCHRONIZED
         };
     }
 
@@ -185,7 +186,7 @@ public class DatabaseContract {
         public static final String WATCHERS = "watchers";
 
         public static final String[] PROJECTION = {
-          WATCHERS, LOCALE, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, TAG, DESCRIPTION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          WATCHERS, LOCALE, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, TAG, DESCRIPTION, REMOVED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
 
     }

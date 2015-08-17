@@ -25,6 +25,7 @@ public class StreamEntityMapper {
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setLocale(streamEntity.getLocale());
         stream.setDescription(streamEntity.getDescription());
+        stream.setRemoved(streamEntity.getRemoved() == 1);
         return stream;
     }
 
@@ -51,7 +52,11 @@ public class StreamEntityMapper {
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setLocale(stream.getLocale());
         entityTemplate.setDescription(stream.getDescription());
-
+        if (stream.getRemoved() == null) {
+            entityTemplate.setRemoved(0);
+        } else {
+            entityTemplate.setRemoved(stream.getRemoved().equals(true) ? 1 : 0);
+        }
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }
 }
