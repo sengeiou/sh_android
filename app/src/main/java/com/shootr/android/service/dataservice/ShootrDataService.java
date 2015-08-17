@@ -293,20 +293,6 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) throws IOException {
-        Integer numberOfMedia = 0;
-        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idStream, idUsers);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            MetadataDto metadata = ops[0].getMetadata();
-            numberOfMedia = metadata.getTotalItems().intValue();
-        }
-        return numberOfMedia;
-    }
-
     @Override public Integer getListingCount(String idUser) throws IOException {
         Integer numberOfStreams = 0;
         GenericDto requestDto = streamDtoFactory.getListingCount(idUser);

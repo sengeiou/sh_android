@@ -17,8 +17,6 @@ public interface ShotDataSource {
 
     List<ShotEntity> getReplies(String shotId);
 
-    Integer getStreamMediaShotsCount(String idStream, List<String> idUser);
-
     List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId);
 
     List<ShotEntity> getShotsFromUser(String idUser, Integer limit);

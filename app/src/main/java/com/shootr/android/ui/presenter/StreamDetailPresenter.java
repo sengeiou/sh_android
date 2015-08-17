@@ -7,7 +7,6 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
-import com.shootr.android.domain.interactor.stream.GetStreamMediaCountInteractor;
 import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -36,7 +35,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final WatchersTimeFormatter watchersTimeFormatter;
-    private final GetStreamMediaCountInteractor streamMediaCountInteractor;
 
     private StreamDetailView streamDetailView;
     private String idStream;
@@ -50,7 +48,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     public StreamDetailPresenter(@Main Bus bus, VisibleStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
-      WatchersTimeFormatter watchersTimeFormatter, GetStreamMediaCountInteractor streamMediaCountInteractor) {
+      WatchersTimeFormatter watchersTimeFormatter) {
         this.bus = bus;
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
@@ -58,7 +56,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.watchersTimeFormatter = watchersTimeFormatter;
-        this.streamMediaCountInteractor = streamMediaCountInteractor;
     }
     //endregion
 
@@ -144,24 +141,9 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
             this.renderWatchersList(streamInfo.getWatchers());
             this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
             this.renderWatchersCount(streamInfo.getWatchersCount());
-            this.loadMediaCount();
             this.showViewDetail();
         }
         this.hideViewLoading();
-    }
-
-    private void loadMediaCount() {
-        streamMediaCountInteractor.getStreamMediaCount(idStream, new Interactor.Callback<Integer>() {
-            @Override public void onLoaded(Integer count) {
-                streamMediaCount = count;
-                streamDetailView.showMediaCount();
-                streamDetailView.setMediaCount(count);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
-            }
-        });
     }
 
     private void showViewDetail() {
@@ -225,6 +207,10 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
             streamDetailView.hideEditStreamButton();
             streamDetailView.hideEditPicture();
         }
+
+        streamMediaCount = streamModel.getMediaCount();
+        streamDetailView.setMediaCount(streamMediaCount);
+        streamDetailView.showMediaCount();
     }
 
     private void renderWatchersCount(int watchersCount) {

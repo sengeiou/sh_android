@@ -2,7 +2,6 @@ package com.shootr.android.ui.presenter;
 
 import android.content.SharedPreferences;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
-import com.shootr.android.domain.interactor.stream.GetStreamMediaCountInteractor;
 import com.shootr.android.domain.interactor.stream.VisibleStreamInfoInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -33,7 +32,6 @@ public class StreamDetailPresenterTest {
 
     @Mock SharedPreferences sharedPreferences;
     @Mock WatchersTimeFormatter watchersTimeFormatter;
-    @Mock GetStreamMediaCountInteractor streamMediaCountInteractor;
 
     @Before public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -43,7 +41,7 @@ public class StreamDetailPresenterTest {
         presenter = new StreamDetailPresenter(bus, streamInfoInteractor, changeStreamPhotoInteractor, streamModelMapper,
           userModelMapper,
           errorMessageFactory,
-          watchersTimeFormatter, streamMediaCountInteractor);
+          watchersTimeFormatter);
 
         presenter.setView(streamDetailView);
     }

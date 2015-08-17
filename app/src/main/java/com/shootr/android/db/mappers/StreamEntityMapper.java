@@ -25,6 +25,7 @@ public class StreamEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.StreamTable.TAG, streamEntity.getTag());
         contentValues.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity.getDescription());
         contentValues.put(DatabaseContract.StreamTable.LOCALE, streamEntity.getLocale());
+        contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT, streamEntity.getMediaCountByRelatedUsers());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -85,6 +86,7 @@ public class StreamEntityMapper extends GenericMapper{
         streamEntity.setTag(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.TAG)));
         streamEntity.setDescription(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.DESCRIPTION)));
         streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.LOCALE)));
+        streamEntity.setMediaCountByRelatedUsers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

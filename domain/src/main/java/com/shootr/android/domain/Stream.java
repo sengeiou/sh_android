@@ -15,6 +15,7 @@ public class Stream {
     private String tag;
     private String description;
     private String locale;
+    private Integer mediaCount;
 
     public Stream() {
     }
@@ -119,6 +120,14 @@ public class Stream {
           "id=" + id +
           ", title='" + title + '\'' +
           '}';
+    }
+
+    public Integer getMediaCount() {
+        return mediaCount;
+    }
+
+    public void setMediaCount(Integer mediaCount) {
+        this.mediaCount = mediaCount;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {

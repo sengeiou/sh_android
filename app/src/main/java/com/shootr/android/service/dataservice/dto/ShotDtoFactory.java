@@ -18,7 +18,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
 public class ShotDtoFactory {
 
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
-    private static final String ALIAS_GET_MEDIA = "GET_MEDIA_SHOTS_FOR_STREAM";
 
     private UtilityDtoFactory utilityDtoFactory;
     ShotEntityMapper shotEntityMapper;
@@ -42,28 +41,5 @@ public class ShotDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_NEW_SHOT, op);
 
-    }
-
-    public GenericDto getMediaShotsCountByStream(String idStream, List<String> idUsers) {
-        FilterDto streamsFilter = and(
-          or(ShotTable.ID_USER).isIn(idUsers)) //
-          .and(ShotTable.ID_STREAM).isEqualTo(idStream) //
-          .and(ShotTable.IMAGE).isNotEqualTo(null) //
-          .and(ShotTable.DELETED).isEqualTo(null) //
-          .build();
-
-        MetadataDto md = new MetadataDto.Builder() //
-          .operation(ServiceConstants.OPERATION_RETRIEVE)
-          .entity(ShotTable.TABLE)
-          .filter(streamsFilter)
-          .items(0)
-          .build();
-
-        OperationDto op = new OperationDto.Builder() //
-          .metadata(md) //
-          .putData(shotEntityMapper.toDto(null)) //
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MEDIA, op);
     }
 }

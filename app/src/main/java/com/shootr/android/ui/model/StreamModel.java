@@ -12,6 +12,7 @@ public class StreamModel implements Serializable {
     private String tag;
     private String description;
     private boolean amIAuthor;
+    private Integer mediaCount;
 
     public String getIdStream() {
         return idStream;
@@ -99,5 +100,13 @@ public class StreamModel implements Serializable {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    public Integer getMediaCount() {
+        return mediaCount;
+    }
+
+    public void setMediaCount(Integer mediaCount) {
+        this.mediaCount = mediaCount;
     }
 }

@@ -200,40 +200,6 @@ public class ShotManager extends  AbstractManager{
         return resultShots;
     }
 
-
-    public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
-        String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
-        String streamSelection = ShotTable.ID_STREAM + " = ?";
-        String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
-
-        String[] whereArguments = new String[idUsers.size()+1];
-
-        for (int i = 0; i < idUsers.size(); i++) {
-            whereArguments[i] = String.valueOf(idUsers.get(i));
-        }
-
-        whereArguments[idUsers.size()] = idStream;
-
-        String whereClause = usersSelection + " AND " + streamSelection + " AND " + imageSelection;
-
-        Cursor queryResult =
-          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause, whereArguments, null, null,
-            ShotTable.BIRTH +" DESC");
-
-        List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
-        ShotEntity shotEntity;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                shotEntity = shotEntityMapper.fromCursor(queryResult);
-                resultShots.add(shotEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-
-        return resultShots.size();
-    }
-
     public List<ShotEntity> getStreamMediaShots(String idStream, List<String> idUsers) {
         String usersSelection = ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
         String streamSelection = ShotTable.ID_STREAM + " = ?";
