@@ -296,7 +296,7 @@
     <string name="whale_retry_button_text">OK</string>
     <string name="delete_stream_label">Delete stream</string>
     <string name="restore_stream_label">Restore stream</string>
-    <string name="delete_stream_confirmation">Delete stream?</string>
+    <string name="delete_stream_confirmation">Remove stream?</string>
 
     <plurals name="nice_count_pattern">
         <item quantity="one">

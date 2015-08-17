@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class RemoveStreamInteractor implements Interactor {
+public class RestoreStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -29,7 +29,7 @@ public class RemoveStreamInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public RemoveStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    public RestoreStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote StreamRepository remoteStreamRepository,SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
         this.interactorHandler = interactorHandler;
@@ -40,7 +40,7 @@ public class RemoveStreamInteractor implements Interactor {
         this.remoteUserRepository = remoteUserRepository;
     }
 
-    public void deleteStream(String idStream, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void restoreStream(String idStream, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idStream = checkNotNull(idStream);
         this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
@@ -51,7 +51,7 @@ public class RemoveStreamInteractor implements Interactor {
     public void execute() throws Exception {
         try {
             Stream stream = remoteStreamRepository.getStreamById(idStream);
-            stream.setRemoved(true);
+            stream.setRemoved(false);
 
             remoteStreamRepository.removeStream(stream);
 
