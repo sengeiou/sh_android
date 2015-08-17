@@ -10,8 +10,10 @@ public interface ActivityType {
     String EXIT_STREAM = "EXITSTREAM";
     String UPDATE_STREAM = "UPDATESTREAM";
     String STARTED_SHOOTING = "STARTEDSHOOTING";
+    String NICE_SHOT = "NICESHOT";
 
     String[] TYPES_ACTIVITY = { CHECKIN,
+      NICE_SHOT,
       EXIT_STREAM,
       JOIN_STREAM,
       LISTED_STREAM,
@@ -21,6 +23,7 @@ public interface ActivityType {
       STARTED_SHOOTING};
 
     String[] TYPES_ACTIVITY_SHOWN = { CHECKIN,
+      NICE_SHOT,
       LISTED_STREAM,
       PROFILE_UPDATED,
       START_FOLLOW,
