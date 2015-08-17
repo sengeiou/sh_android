@@ -97,7 +97,7 @@ public class StreamDtoFactory {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(DatabaseContract.StreamTable.TABLE)
           .filter(streamsListingFilter)
-          .items(0)
+          .items(1000)
           .build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LISTING_STREAMS, op);

@@ -8,6 +8,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.StreamSearchRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -55,7 +56,18 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
     private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
-        notifyLoaded(listingStreams);
+        List<StreamSearchResult> listing = retainStreamsNotRemoved(listingStreams);
+        notifyLoaded(listing);
+    }
+
+    private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {
+        List<StreamSearchResult> listing = new ArrayList<>();
+        for (StreamSearchResult listingStream : listingStreams) {
+            if (!listingStream.getStream().getRemoved()) {
+                listing.add(listingStream);
+            }
+        }
+        return listing;
     }
 
     private void notifyLoaded(final List<StreamSearchResult> listingStreams) {

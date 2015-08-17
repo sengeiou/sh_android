@@ -391,8 +391,12 @@ public class ShootrDataService implements ShootrService {
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
         }else {
-            MetadataDto metadata = ops[0].getMetadata();
-            numberOfStreams = metadata.getTotalItems().intValue();
+            Map<String, Object>[] data = ops[0].getData();
+            for (Map<String, Object> stringObjectMap : data) {
+                if (stringObjectMap.get("removed").equals(0)) {
+                    numberOfStreams++;
+                }
+            }
         }
         return numberOfStreams;
     }
