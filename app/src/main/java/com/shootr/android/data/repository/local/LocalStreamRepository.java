@@ -59,7 +59,7 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override
-    public void deleteStream(Stream stream) {
+    public void removeStream(Stream stream) {
         throw new IllegalStateException("Remove not allowed in local repository.");
     }
 }

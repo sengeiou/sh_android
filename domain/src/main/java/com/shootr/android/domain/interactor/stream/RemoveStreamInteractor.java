@@ -2,7 +2,6 @@ package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -17,7 +16,7 @@ import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class DeleteStreamInteractor implements Interactor {
+public class RemoveStreamInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
@@ -31,7 +30,7 @@ public class DeleteStreamInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject
-    public DeleteStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
+    public RemoveStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       @Remote StreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository) {
@@ -57,7 +56,7 @@ public class DeleteStreamInteractor implements Interactor {
             Stream stream = remoteStreamRepository.getStreamById(idStream);
             stream.setRemoved(true);
 
-            remoteStreamRepository.deleteStream(stream);
+            remoteStreamRepository.removeStream(stream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingStream(null);
@@ -68,8 +67,6 @@ public class DeleteStreamInteractor implements Interactor {
             remoteUserRepository.putUser(currentUser);
             sessionRepository.setCurrentUser(currentUser);
             notifyCompleted();
-        } catch (DeleteStreamNotAllowedException deleteNotAllowedError) {
-            notifyError(deleteNotAllowedError);
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
         }

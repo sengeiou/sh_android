@@ -16,5 +16,5 @@ public interface StreamRepository {
 
     Integer getListingCount(String idUser);
 
-    void deleteStream(String idEvent) throws DeleteStreamNotAllowedException;
+    void removeStream(Stream stream);
 }

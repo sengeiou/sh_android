@@ -7,7 +7,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
-import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.validation.FieldValidationError;
@@ -28,7 +28,7 @@ public class NewStreamPresenter implements Presenter {
 
     private final CreateStreamInteractor createStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
-    private final DeleteStreamInteractor deleteStreamInteractor;
+    private final RemoveStreamInteractor removeStreamInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -46,11 +46,11 @@ public class NewStreamPresenter implements Presenter {
 
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
-      GetStreamInteractor getStreamInteractor, DeleteStreamInteractor deleteStreamInteractor,
+      GetStreamInteractor getStreamInteractor, RemoveStreamInteractor removeStreamInteractor,
       SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
-        this.deleteStreamInteractor = deleteStreamInteractor;
+        this.removeStreamInteractor = removeStreamInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -133,7 +133,7 @@ public class NewStreamPresenter implements Presenter {
     }
 
     public void confirmDeleteStream() {
-        deleteStreamInteractor.deleteStream(preloadedStreamId, new Interactor.CompletedCallback() {
+        removeStreamInteractor.deleteStream(preloadedStreamId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 newStreamView.closeScreenWithExitStream();
             }

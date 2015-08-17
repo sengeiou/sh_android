@@ -66,7 +66,7 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override
-    public void deleteStream(Stream stream) {
+    public void removeStream(Stream stream) {
         putStream(stream, false);
     }
 
