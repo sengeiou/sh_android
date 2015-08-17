@@ -2,11 +2,11 @@ package com.shootr.android.notifications.activity.startedshooting;
 
 import android.content.Context;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.notifications.activity.ActivityNotification;
+import com.shootr.android.notifications.activity.SingleActivityNotification;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class StartedShootingNotification extends ActivityNotification {
+public class StartedShootingNotification extends SingleActivityNotification {
 
     public StartedShootingNotification(Context context,
       NotificationBuilderFactory builderFactory,

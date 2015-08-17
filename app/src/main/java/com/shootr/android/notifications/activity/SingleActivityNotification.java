@@ -1,27 +1,22 @@
 package com.shootr.android.notifications.activity;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
 
-public abstract class ActivityNotification extends CommonNotification {
-
-    private static final int REQUEST_OPEN = 1;
+public abstract class SingleActivityNotification extends CommonNotification {
 
     private final PicassoWrapper picasso;
     private final ActivityModel activity;
 
-    public ActivityNotification(Context context,
+    public SingleActivityNotification(Context context,
       NotificationBuilderFactory builderFactory,
       PicassoWrapper picasso,
       ActivityModel activityModel) {
@@ -32,7 +27,7 @@ public abstract class ActivityNotification extends CommonNotification {
 
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentIntent(getOpenActivityNotificationPendingIntent());
+        super.setNotificationValues(builder);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContentText());
     }
@@ -45,12 +40,6 @@ public abstract class ActivityNotification extends CommonNotification {
 
     public abstract String getContentText();
 
-    protected PendingIntent getOpenActivityNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(),
-          REQUEST_OPEN,
-          new Intent(NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION),
-          PendingIntent.FLAG_CANCEL_CURRENT);
-    }
 
     @Override
     public Bitmap getLargeIcon() {

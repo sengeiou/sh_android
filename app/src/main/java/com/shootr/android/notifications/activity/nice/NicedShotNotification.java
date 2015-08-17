@@ -3,12 +3,12 @@ package com.shootr.android.notifications.activity.nice;
 import android.content.Context;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.notifications.activity.ActivityNotification;
+import com.shootr.android.notifications.activity.SingleActivityNotification;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.PicassoWrapper;
 import javax.inject.Inject;
 
-public class NicedShotNotification extends ActivityNotification {
+public class NicedShotNotification extends SingleActivityNotification {
 
     private final String notificationContentText;
     private final String notificationTextPattern;
