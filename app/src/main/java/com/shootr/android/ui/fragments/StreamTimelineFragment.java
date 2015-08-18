@@ -374,17 +374,21 @@ public class StreamTimelineFragment extends BaseFragment
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
             @Override public void run() {
-                ClipboardManager clipboard =
-                  (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+                copyText(shotModel);
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void copyText(ShotModel shotModel) {
+        ClipboardManager clipboard =
+          (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
     private void shareShot(final ShotModel shotModel) {
