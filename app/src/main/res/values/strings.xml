@@ -345,4 +345,5 @@
     <string name="share_shot_message">Shot by %1$s on %2$s: https://shootr.com/s/%3$s</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="share_shot_chooser_title">Share</string>
+    <string name="report_context_menu_share_shot">Share</string>
 </resources>

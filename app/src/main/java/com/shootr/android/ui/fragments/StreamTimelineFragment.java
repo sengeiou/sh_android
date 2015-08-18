@@ -368,9 +368,13 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction("Share", new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
             @Override public void run() {
-                shareShot(shotModel);
+                if(shotModel.getImage() != null) {
+                    shareShotWithImage(shotModel);
+                } else {
+                    shareShot(shotModel);
+                }
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
             @Override public void run() {
@@ -391,7 +395,15 @@ public class StreamTimelineFragment extends BaseFragment
         Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
-    private void shareShot(final ShotModel shotModel) {
+    private void shareShot(ShotModel shotModel) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT,String.format(shareShotMessage,
+          shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()));
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.share_shot_chooser_title)));
+    }
+
+    private void shareShotWithImage(final ShotModel shotModel) {
         picasso.load(shotModel.getImage()).into(new Target() {
             @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
