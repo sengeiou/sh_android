@@ -410,7 +410,7 @@ public class StreamTimelineFragment extends BaseFragment
             }
 
             @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-        /* no-op */
+                /* no-op */
             }
         });
     }
