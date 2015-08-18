@@ -10,6 +10,7 @@ import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
 import com.shootr.android.data.api.service.StreamApiService;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.StringPreference;
@@ -69,6 +70,12 @@ public class DebugApiModule {
     @Provides StreamApiService provideStreamApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
     BooleanPreference debugMode) {
       return mockOrRealService(StreamApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides UserApiService provideUserApiService(RestAdapter restAdapter,
+      MockRestAdapter mockRestAdapter,
+      @DebugMode BooleanPreference debugMode) {
+        return mockOrRealService(UserApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
     @Provides

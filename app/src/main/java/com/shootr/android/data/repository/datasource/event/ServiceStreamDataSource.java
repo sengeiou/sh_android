@@ -24,8 +24,8 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public StreamEntity getStreamById(String idStream) {
         try {
-            return service.getStreamById(idStream);
-        } catch (IOException e) {
+            return streamApiService.getStream(idStream);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

@@ -12,6 +12,9 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
+    @GET("/streams/{idStream}?includeLinks=false&includeMediaCountByRelatedUsers=true")
+    StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
+
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamList(@Query("locale") String locale) throws IOException;
 

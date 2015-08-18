@@ -91,64 +91,6 @@ public class ShootrDataService implements ShootrService {
         this.versionUpdater = versionUpdater;
     }
 
-    @Override public List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException {
-        List<FollowEntity> follows = new ArrayList<>();
-        List<String> userIds = new ArrayList<>();
-        boolean includeDeleted = lastModifiedDate > 0L;
-        GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, includeDeleted);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        Map<String, Object>[] data = ops[0].getData();
-        for (Map<String, Object> d : data) {
-            FollowEntity followEntity = followMapper.fromDto(d);
-            follows.add(followEntity);
-            userIds.add(followEntity.getFollowedUser());
-        }
-        List<UserEntity> usersById = new ArrayList<>();
-        if(!userIds.isEmpty()){
-            usersById = getUsersById(userIds);
-        }
-        //TODO order
-        return usersById;
-    }
-
-    @Override public List<UserEntity> getUsersById(List<String> userIds) throws IOException{
-        List<UserEntity> users = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.getUsersOperationDto(userIds);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata() != null) {
-            Map<String, Object>[] data = ops[0].getData();
-            for(Map<String,Object> d:data){
-                UserEntity user = userMapper.fromDto(d);
-                users.add(user);
-            }
-        }
-        return users;
-    }
-
-    @Override public List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws IOException {
-        List<FollowEntity> follows = new ArrayList<>();
-        List<String> userIds = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.getFollowersOperationDto(idUserFollowed, 0L, lastModifiedDate, false);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        Map<String, Object>[] data = ops[0].getData();
-        for(Map<String,Object> d:data){
-            FollowEntity followEntity = followMapper.fromDto(d);
-            follows.add(followEntity);
-            userIds.add(followEntity.getIdUser());
-        }
-        List<UserEntity> usersById = new ArrayList<>();
-        if(!userIds.isEmpty()){
-            usersById = getUsersById(userIds);
-        }
-        //TODO order
-        return usersById;
-    }
-
     @Override public ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException {
         GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(shotTemplate);
         GenericDto responseDto = postRequest(requestDto);
@@ -349,38 +291,6 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return null;
-    }
-
-    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) throws IOException {
-        Integer numberOfMedia = 0;
-        GenericDto requestDto = shotDtoFactory.getMediaShotsCountByStream(idStream, idUsers);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            MetadataDto metadata = ops[0].getMetadata();
-            numberOfMedia = metadata.getTotalItems().intValue();
-        }
-        return numberOfMedia;
-    }
-
-    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) throws IOException {
-        List<ShotEntity> shotsByUserInStream = new ArrayList<>();
-        GenericDto requestDto = shotDtoFactory.getMediaShotsByStream(idStream, userIds);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else {
-            MetadataDto md = ops[0].getMetadata();
-            Long items = md.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                shotsByUserInStream.add(shotEntityMapper.fromDto(dataItem));
-            }
-        }
-        return shotsByUserInStream;
     }
 
     @Override public Integer getListingCount(String idUser) throws IOException {

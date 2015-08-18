@@ -11,12 +11,6 @@ import java.util.List;
 
 public interface ShootrService {
 
-    List<UserEntity> getFollowers(String idUserFollowed, Long lastModifiedDate) throws  IOException;
-
-    List<UserEntity> getFollowing(String idUser, Long lastModifiedDate) throws IOException;
-
-    List<UserEntity> getUsersById(List<String> userIds) throws IOException;
-
     UserEntity getUserByIdUser(String idUser) throws IOException;
 
     ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
@@ -45,10 +39,6 @@ public interface ShootrService {
     void performCheckin(String idUser, String idStream) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
-
-    Integer getStreamMediaShotsCount(String idStream, List<String> idUser) throws IOException;
-
-    List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId) throws IOException;
 
     Integer getListingCount(String idUser) throws IOException;
 

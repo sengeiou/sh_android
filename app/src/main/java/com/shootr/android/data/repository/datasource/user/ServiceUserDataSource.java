@@ -1,5 +1,7 @@
 package com.shootr.android.data.repository.datasource.user;
 
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
@@ -10,15 +12,17 @@ import javax.inject.Inject;
 public class ServiceUserDataSource implements UserDataSource {
 
     private final ShootrService service;
+    private final UserApiService userApiService;
 
-    @Inject public ServiceUserDataSource(ShootrService service) {
+    @Inject public ServiceUserDataSource(ShootrService service, UserApiService userApiService) {
         this.service = service;
+        this.userApiService = userApiService;
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
         try {
-            return service.getFollowing(userId, 0L);
-        } catch (IOException e) {
+            return userApiService.getFollowing(userId);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -38,14 +42,6 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override public UserEntity getUser(String id) {
         try {
             return service.getUserByIdUser(id);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
-    @Override public List<UserEntity> getUsers(List<String> userIds) {
-        try {
-            return service.getUsersById(userIds);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
         }

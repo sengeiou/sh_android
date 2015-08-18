@@ -25,6 +25,7 @@ public class StreamEntityMapper {
         stream.setAuthorUsername(streamEntity.getUserName());
         stream.setLocale(streamEntity.getLocale());
         stream.setDescription(streamEntity.getDescription());
+        stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
         return stream;
     }
 
@@ -51,6 +52,7 @@ public class StreamEntityMapper {
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setLocale(stream.getLocale());
         entityTemplate.setDescription(stream.getDescription());
+        entityTemplate.setMediaCountByRelatedUsers(stream.getMediaCount());
 
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }

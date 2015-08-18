@@ -74,18 +74,11 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public Integer getStreamMediaShotsCount(String idStream, List<String> idUsers) {
-        try {
-            return shootrService.getStreamMediaShotsCount(idStream, idUsers);
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
         try {
-            return shootrService.getStreamMediaShots(idStream, userIds);
-        } catch (IOException e) {
+            List<ShotApiEntity> mediaApiShots = shotApiService.getMediaShots(idStream);
+            return shotApiEntityMapper.transform(mediaApiShots);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

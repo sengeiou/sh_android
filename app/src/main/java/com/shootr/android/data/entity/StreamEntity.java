@@ -11,6 +11,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String photo;
     private Integer notifyCreation;
     private String locale;
+    private Integer mediaCountByRelatedUsers;
 
     public String getIdStream() {
         return idStream;
@@ -112,5 +113,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setNotifyCreation(Integer notifyCreation) {
         this.notifyCreation = notifyCreation;
+    }
+
+    public Integer getMediaCountByRelatedUsers() {
+        return mediaCountByRelatedUsers;
+    }
+
+    public void setMediaCountByRelatedUsers(Integer mediaCountByRelatedUsers) {
+        this.mediaCountByRelatedUsers = mediaCountByRelatedUsers;
     }
 }
