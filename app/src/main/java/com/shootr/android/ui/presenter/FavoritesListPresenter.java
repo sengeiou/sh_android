@@ -57,11 +57,11 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(), stream.getStreamModel().getRemoved());
     }
 
-    private void selectStream(final String idStream, String streamTitle) {
-        favoritesListView.navigateToStreamTimeline(idStream, streamTitle);
+    private void selectStream(final String idStream, String streamTitle, Boolean removed) {
+        favoritesListView.navigateToStreamTimeline(idStream, streamTitle, removed);
     }
 
     @Override

@@ -60,11 +60,11 @@ public class StreamsListPresenter implements Presenter {
 
     public void selectStream(StreamResultModel stream) {
         streamsListView.setCurrentWatchingStreamId(stream);
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag(), stream.getStreamModel().getRemoved());
     }
 
-    private void selectStream(final String idStream, String streamTitle) {
-        streamsListView.navigateToStreamTimeline(idStream, streamTitle);
+    private void selectStream(final String idStream, String streamTitle, Boolean removed) {
+        streamsListView.navigateToStreamTimeline(idStream, streamTitle, removed);
     }
 
     public void unwatchStream() {

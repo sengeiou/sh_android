@@ -71,6 +71,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
+    public static final String EXTRA_STREAM_REMOVED = "streamRemoved";
     private static final int REQUEST_STREAM_DETAIL = 1;
     public static final String CLIPBOARD_LABEL = "Shot";
 
@@ -112,10 +113,11 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
 
-    public static StreamTimelineFragment newInstance(String streamId, String streamTitle) {
+    public static StreamTimelineFragment newInstance(String streamId, String streamTitle, Boolean streamRemoved) {
         Bundle fragmentArguments = new Bundle();
         fragmentArguments.putString(EXTRA_STREAM_ID, streamId);
         fragmentArguments.putString(EXTRA_STREAM_TITLE, streamTitle);
+        fragmentArguments.putBoolean(EXTRA_STREAM_REMOVED, streamRemoved);
         return newInstance(fragmentArguments);
     }
 
@@ -456,17 +458,32 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
-        newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
+        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
+        if (removed != null) {
+            newShotBarPresenter.newShotFromTextBox(removed);
+        } else {
+            newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
+        }
     }
 
     @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
-        newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
+        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
+        if (removed != null) {
+            newShotBarPresenter.newShotFromTextBox(removed);
+        } else {
+            newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
+        }
     }
 
     @OnClick(R.id.shot_bar_drafts)
     public void openDraftsClicked() {
-        newShotBarPresenter.openDrafts(streamTimelinePresenter.getRemoved());
+        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
+        if (removed != null) {
+            newShotBarPresenter.newShotFromTextBox(removed);
+        } else {
+            newShotBarPresenter.openDrafts(streamTimelinePresenter.getRemoved());
+        }
     }
 
     //region View methods

@@ -221,8 +221,8 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String streamTitle) {
-        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle));
+    @Override public void navigateToStreamTimeline(String idStream, String streamTitle, Boolean removed) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, streamTitle, removed));
     }
 
     @Override

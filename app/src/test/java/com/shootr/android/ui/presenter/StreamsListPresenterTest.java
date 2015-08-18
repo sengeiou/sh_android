@@ -39,6 +39,7 @@ public class StreamsListPresenterTest {
 
     private static final String SELECTED_STREAM_ID = "selected_stream";
     private static final String SELECTED_STREAM_TITLE = "title";
+    private static final Boolean SELECTED_STREAM_REMOVED = false;
     private static final String STREAM_AUTHOR_ID = "author";
 
     @Mock Bus bus;
@@ -75,7 +76,7 @@ public class StreamsListPresenterTest {
     @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
         presenter.selectStream(selectedStreamModel());
 
-        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
+        verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE, SELECTED_STREAM_REMOVED);
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {
@@ -173,6 +174,7 @@ public class StreamsListPresenterTest {
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setTitle(SELECTED_STREAM_TITLE);
         streamModel.setTag(SELECTED_STREAM_TITLE);
+        streamModel.setRemoved(SELECTED_STREAM_REMOVED);
         StreamResultModel streamResultModel = new StreamResultModel();
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
