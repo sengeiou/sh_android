@@ -459,7 +459,7 @@ public class StreamTimelineFragment extends BaseFragment
     @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed != null) {
+        if (removed.equals(true)) {
             newShotBarPresenter.newShotFromTextBox(removed);
         } else {
             newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
@@ -469,7 +469,7 @@ public class StreamTimelineFragment extends BaseFragment
     @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed != null) {
+        if (removed.equals(true)) {
             newShotBarPresenter.newShotFromTextBox(removed);
         } else {
             newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
@@ -479,7 +479,7 @@ public class StreamTimelineFragment extends BaseFragment
     @OnClick(R.id.shot_bar_drafts)
     public void openDraftsClicked() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed != null) {
+        if (removed.equals(true)) {
             newShotBarPresenter.newShotFromTextBox(removed);
         } else {
             newShotBarPresenter.openDrafts(streamTimelinePresenter.getRemoved());
