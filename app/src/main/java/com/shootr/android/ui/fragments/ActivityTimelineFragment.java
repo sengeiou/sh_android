@@ -1,6 +1,7 @@
 package com.shootr.android.ui.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,12 +16,15 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
@@ -119,7 +123,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         layoutManager = new LinearLayoutManager(getActivity());
         activityList.setLayoutManager(layoutManager);
 
-        adapter = new ActivityTimelineAdapter(picasso, timeUtils, new OnAvatarClickListener() {
+        adapter = new ActivityTimelineAdapter(picasso, timeUtils,
+          new OnAvatarClickListener() {
             @Override
             public void onClick(String userId, View avatarView) {
                 openProfile(userId);
@@ -127,25 +132,42 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         }, new UsernameClickListener() {
             @Override
             public void onClick(String username) {
-                goToUserProfile(username);
+                openProfileFromUsername(username);
             }
         }, new OnStreamTitleClickListener() {
             @Override
             public void onClick(String streamId, String streamTitle) {
                 openStream(streamId, streamTitle);
             }
+        }, new OnImageClickListener() {
+            @Override
+            public void onClick(String url) {
+                openImage(url);
+            }
+        }, new OnVideoClickListener() {
+            @Override
+            public void onClick(String url) {
+                openVideo(url);
+            }
         });
 
         activityList.setAdapter(adapter);
     }
 
-    private void startProfileContainerActivity(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
+    private void openVideo(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
-    private void goToUserProfile(String username) {
-        startProfileContainerActivity(username);
+    private void openImage(String url) {
+        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url);
+        startActivity(imageIntent);
+    }
+
+    private void openProfileFromUsername(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
     }
 
     private void setupSwipeRefreshLayout() {

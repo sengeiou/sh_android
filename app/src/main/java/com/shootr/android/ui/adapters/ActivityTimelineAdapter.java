@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -31,18 +33,27 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnAvatarClickListener avatarClickListener;
     private final UsernameClickListener usernameClickListener;
     private final OnStreamTitleClickListener streamTitleClickListener;
+    private final OnImageClickListener onImageClickListener;
+    private final OnVideoClickListener onVideoClickListener;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
     private boolean showFooter = false;
 
-    public ActivityTimelineAdapter(PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
-      UsernameClickListener usernameClickListener, OnStreamTitleClickListener streamTitleClickListener) {
+    public ActivityTimelineAdapter(PicassoWrapper picasso,
+      AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener,
+      UsernameClickListener usernameClickListener,
+      OnStreamTitleClickListener streamTitleClickListener,
+      OnImageClickListener onImageClickListener,
+      OnVideoClickListener onVideoClickListener) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.usernameClickListener = usernameClickListener;
         this.timeUtils = timeUtils;
         this.streamTitleClickListener = streamTitleClickListener;
+        this.onImageClickListener = onImageClickListener;
+        this.onVideoClickListener = onVideoClickListener;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -138,7 +149,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          usernameClickListener);
+          usernameClickListener,
+          onImageClickListener,
+          onVideoClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
