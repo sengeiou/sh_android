@@ -137,7 +137,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
             + DatabaseContract.StreamTable.LAST_UPDATED_USER +" TEXT NULL,"
             + DatabaseContract.StreamTable.LOCALE +" TEXT NULL,"
-            + DatabaseContract.StreamTable.REMOVED +" INT NULL,"
+            + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
             + SyncColumns.BIRTH +" DATETIME NOT NULL,"
             + SyncColumns.MODIFIED +" DATETIME NOT NULL,"
             + SyncColumns.DELETED +" DATETIME NULL,"
@@ -154,7 +154,7 @@ public class SQLiteUtils {
             + DatabaseContract.StreamTable.LOCALE +" TEXT NULL,"
             + DatabaseContract.StreamTable.TAG +" TEXT NULL,"
             + DatabaseContract.StreamTable.DESCRIPTION +" TEXT NULL,"
-            + DatabaseContract.StreamTable.REMOVED +" INT NULL,"
+            + DatabaseContract.StreamTable.REMOVED +" INT NOT NULL,"
             + SyncColumns.BIRTH
       +" DATETIME NOT NULL,"
             + SyncColumns.MODIFIED
