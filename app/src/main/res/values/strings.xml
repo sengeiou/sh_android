@@ -346,4 +346,5 @@
     <string name="notification_nice_content_text">Niced your shot</string>
     <string name="notification_nice_text_pattern">%s niced your shot</string>
     <string name="notification_activity_multiple_title">%d new activities</string>
+    <string name="activity_nice_shot_text_base">Niced by @%s</string>
 </resources>

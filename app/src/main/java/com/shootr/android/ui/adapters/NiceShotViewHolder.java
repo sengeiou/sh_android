@@ -1,6 +1,8 @@
 package com.shootr.android.ui.adapters;
 
 import android.view.View;
+import butterknife.BindString;
+import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -15,6 +17,10 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class NiceShotViewHolder extends ActivityViewHolder {
 
+    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private final UsernameClickListener usernameClickListener;
+
+    @BindString(R.string.activity_nice_shot_text_base) String niceShotTextBase;
     private ShotViewHolder shotViewHolder;
 
     public NiceShotViewHolder(View view,
@@ -26,6 +32,8 @@ public class NiceShotViewHolder extends ActivityViewHolder {
       OnImageClickListener onImageClickListener,
       OnVideoClickListener onVideoClickListener) {
         super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
+        this.shotTextSpannableBuilder = shotTextSpannableBuilder;
+        this.usernameClickListener = usernameClickListener;
         shotViewHolder = new ShotViewHolder(view,
           onAvatarClickListener,
           onImageClickListener,
@@ -39,9 +47,16 @@ public class NiceShotViewHolder extends ActivityViewHolder {
 
     @Override
     public void render(ActivityModel activityModel) {
-        shotViewHolder.niceButton.setVisibility(View.GONE);
-        text.setText(activityModel.getComment());
         ShotModel shotModel = checkNotNull(activityModel.getShot());
+        shotViewHolder.niceButton.setVisibility(View.GONE);
         shotViewHolder.render(shotModel, false);
+        renderNiceShot(activityModel);
+    }
+
+    private void renderNiceShot(ActivityModel activity) {
+        String niceShotText = String.format(niceShotTextBase, activity.getUsername());
+        CharSequence niceShotTextFormatted =
+          shotTextSpannableBuilder.formatWithUsernameSpans(niceShotText, usernameClickListener);
+        text.setText(niceShotTextFormatted);
     }
 }
