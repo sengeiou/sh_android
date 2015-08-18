@@ -28,7 +28,7 @@ import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;

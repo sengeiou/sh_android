@@ -4,12 +4,12 @@ import android.view.View;
 import android.widget.Toast;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 

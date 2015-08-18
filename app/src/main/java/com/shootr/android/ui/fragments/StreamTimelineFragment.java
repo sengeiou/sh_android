@@ -38,6 +38,8 @@ import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
@@ -62,7 +64,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -97,8 +99,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Deprecated
     private TimelineAdapter adapter;
-    private View.OnClickListener avatarClickListener;
-    private View.OnClickListener imageClickListener;
+    private OnAvatarClickListener avatarClickListener;
+    private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
@@ -305,18 +307,17 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-        avatarClickListener = new View.OnClickListener() {
+        avatarClickListener = new OnAvatarClickListener() {
             @Override
-            public void onClick(View v) {
-                int position = ((ShotViewHolder) v.getTag()).position;
-                openProfile(position);
+            public void onClick(String userId, View avatarView) {
+                openProfile(userId);
             }
         };
 
-        imageClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                int position = ((ShotViewHolder) v.getTag()).position;
-                openImage(position);
+        imageClickListener = new OnImageClickListener() {
+            @Override
+            public void onClick(String url) {
+                openImage(url);
             }
         };
 
@@ -433,19 +434,14 @@ public class StreamTimelineFragment extends BaseFragment
     }
     //endregion
 
-    public void openProfile(int position) {
-        ShotModel shotVO = adapter.getItem(position);
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
+    protected void openProfile(String idUser) {
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
         startActivity(profileIntent);
     }
 
-    public void openImage(int position) {
-        ShotModel shotVO = adapter.getItem(position);
-        String imageUrl = shotVO.getImage();
-        if (imageUrl != null) {
-            Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
-            startActivity(intentForImage);
-        }
+    protected void openImage(String imageUrl) {
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+        startActivity(intentForImage);
     }
 
     @OnClick(R.id.shot_bar_text)

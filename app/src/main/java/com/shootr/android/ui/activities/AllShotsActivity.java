@@ -19,10 +19,12 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -31,7 +33,6 @@ import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.UsernameClickListener;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -55,8 +56,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Deprecated private TimelineAdapter adapter;
 
-    private View.OnClickListener avatarClickListener;
-    private View.OnClickListener imageClickListener;
+    private OnAvatarClickListener avatarClickListener;
+    private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
@@ -135,18 +136,17 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void setupListAdapter() {
-        avatarClickListener = new View.OnClickListener() {
+        avatarClickListener = new OnAvatarClickListener() {
             @Override
-            public void onClick(View v) {
-                int position = ((ShotViewHolder) v.getTag()).position;
-                openProfile(position);
+            public void onClick(String userId, View avatarView) {
+                openProfile(userId);
             }
         };
 
-        imageClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                int position = ((ShotViewHolder) v.getTag()).position;
-                openImage(position);
+        imageClickListener = new OnImageClickListener() {
+            @Override
+            public void onClick(String url) {
+                openImage(url);
             }
         };
 
@@ -209,19 +209,14 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         }).show();
     }
 
-    public void openProfile(int position) {
-        ShotModel shotVO = adapter.getItem(position);
-        Intent profileIntent = ProfileContainerActivity.getIntent(this, shotVO.getIdUser());
+    protected void openProfile(String idUser) {
+        Intent profileIntent = ProfileContainerActivity.getIntent(this, idUser);
         startActivity(profileIntent);
     }
 
-    public void openImage(int position) {
-        ShotModel shotVO = adapter.getItem(position);
-        String imageUrl = shotVO.getImage();
-        if (imageUrl != null) {
-            Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
-            startActivity(intentForImage);
-        }
+    protected void openImage(String imageUrl) {
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
+        startActivity(intentForImage);
     }
 
     private void startProfileContainerActivity(String username) {

@@ -72,12 +72,14 @@ import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
-import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -97,7 +99,6 @@ import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.UsernameClickListener;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
@@ -169,8 +170,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     String username;
 
     UserModel user;
-    private View.OnClickListener avatarClickListener;
-    private View.OnClickListener imageClickListener;
+    private OnAvatarClickListener avatarClickListener;
+    private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
@@ -204,17 +205,19 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         super.onCreate(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
-        avatarClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onShotAvatarClick(v);
+        avatarClickListener = new OnAvatarClickListener() {
+            @Override
+            public void onClick(String userId, View avatarView) {
+                onShotAvatarClick(avatarView);
             }
         };
-        imageClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                int position = ((ShotViewHolder) v.getTag()).position;
-                openShotImage(position);
+        imageClickListener = new OnImageClickListener() {
+            @Override
+            public void onClick(String url) {
+                openShotImage(url);
             }
         };
+
         usernameClickListener =  new UsernameClickListener() {
             @Override
             public void onClick(String username) {
@@ -257,15 +260,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
     }
 
-    private void openShotImage(int position) {
-        if (latestsShotsAdapter != null) {
-            ShotModel shot = latestsShotsAdapter.getItem(position);
-            String imageUrl = shot.getImage();
-            if (imageUrl != null) {
-                Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
-                startActivity(intentForImage);
-            }
-        }
+    private void openShotImage(String imageUrl) {
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+        startActivity(intentForImage);
     }
 
     private void injectArguments() {

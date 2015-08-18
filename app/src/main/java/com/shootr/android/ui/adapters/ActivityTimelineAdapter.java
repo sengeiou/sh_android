@@ -12,7 +12,7 @@ import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

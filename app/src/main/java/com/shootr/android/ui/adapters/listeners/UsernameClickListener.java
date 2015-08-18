@@ -1,4 +1,4 @@
-package com.shootr.android.util;
+package com.shootr.android.ui.adapters.listeners;
 
 public interface UsernameClickListener {
 

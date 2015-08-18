@@ -13,7 +13,7 @@ import com.shootr.android.ui.widgets.StreamTitleSpan;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

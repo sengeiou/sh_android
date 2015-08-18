@@ -8,7 +8,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 
 public class CheckinViewHolder extends ClickableStreamActivityViewHolder {
 

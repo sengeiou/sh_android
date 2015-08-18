@@ -6,20 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private final PicassoWrapper picasso;
-    private final View.OnClickListener avatarClickListener;
-    private final View.OnClickListener imageClickListener;
+    private final OnAvatarClickListener avatarClickListener;
+    private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
     private final NiceShotListener niceShotListener;
     private final UsernameClickListener usernameClickListener;
@@ -28,8 +30,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private List<ShotModel> shots;
 
-    public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener, OnVideoClickListener videoClickListener, NiceShotListener niceShotListener,
+    public TimelineAdapter(Context context, PicassoWrapper picasso, OnAvatarClickListener avatarClickListener,
+      OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, NiceShotListener niceShotListener,
       UsernameClickListener usernameClickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;

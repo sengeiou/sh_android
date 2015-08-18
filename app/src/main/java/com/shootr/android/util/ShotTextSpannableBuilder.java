@@ -2,6 +2,7 @@ package com.shootr.android.util;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.widgets.UsernameSpan;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

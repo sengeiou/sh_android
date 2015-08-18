@@ -13,17 +13,21 @@ import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
 
 public class ShotViewHolder {
 
+    private final OnAvatarClickListener avatarClickListener;
+    private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
     private final NiceShotListener niceShotListener;
     private final UsernameClickListener usernameClickListener;
@@ -45,14 +49,16 @@ public class ShotViewHolder {
     private View view;
 
     public ShotViewHolder(View view,
-      View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener,
+      OnAvatarClickListener avatarClickListener,
+      OnImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
       NiceShotListener niceShotListener,
       UsernameClickListener usernameClickListener,
       AndroidTimeUtils timeUtils,
       PicassoWrapper picasso,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
+        this.avatarClickListener = avatarClickListener;
+        this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.niceShotListener = niceShotListener;
         this.usernameClickListener = usernameClickListener;
@@ -61,18 +67,16 @@ public class ShotViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         ButterKnife.bind(this, view);
         this.view = view;
-        avatar.setOnClickListener(avatarClickListener);
-        image.setOnClickListener(imageClickListener);
     }
 
-    protected void render(ShotModel item, boolean shouldShowTag) {
-        bindUsername(item);
-        bindComment(item, shouldShowTag);
-        bindElapsedTime(item);
-        bindPhoto(item);
-        bindImageInfo(item);
-        bindVideoInfo(item);
-        bindNiceInfo(item);
+    protected void render(ShotModel shot, boolean shouldShowTag) {
+        bindUsername(shot);
+        bindComment(shot, shouldShowTag);
+        bindElapsedTime(shot);
+        bindUserPhoto(shot);
+        bindImageInfo(shot);
+        bindVideoInfo(shot);
+        bindNiceInfo(shot);
     }
 
     protected void bindComment(ShotModel item, boolean shouldShowTag) {
@@ -124,49 +128,61 @@ public class ShotViewHolder {
         vh.text.addLinks();
     }
 
-    protected void bindUsername(ShotModel item) {
-        String usernameTitle = item.getUsername();
-        if (item.isReply()) {
-            name.setText(getReplyName(item));
+    private void bindUsername(ShotModel shot) {
+        String usernameTitle = shot.getUsername();
+        if (shot.isReply()) {
+            name.setText(getReplyName(shot));
         } else {
             name.setText(usernameTitle);
         }
     }
 
-    private String getReplyName(ShotModel item) {
-        return view.getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
+    private String getReplyName(ShotModel shot) {
+        return view.getContext().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
     }
 
-    protected void bindElapsedTime(ShotModel item) {
-        long timestamp = item.getBirth().getTime();
+    private void bindElapsedTime(ShotModel shot) {
+        long timestamp = shot.getBirth().getTime();
         this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), timestamp));
     }
 
-    protected void bindPhoto(ShotModel item) {
-        String photo = item.getPhoto();
+    private void bindUserPhoto(final ShotModel shot) {
+        String photo = shot.getPhoto();
         picasso.loadProfilePhoto(photo).into(avatar);
         avatar.setTag(this);
         image.setTag(this);
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avatarClickListener.onClick(shot.getIdUser(), v);
+            }
+        });
     }
 
-    protected void bindImageInfo(ShotModel item) {
-        String imageUrl = item.getImage();
+    private void bindImageInfo(final ShotModel shot) {
+        String imageUrl = shot.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             image.setVisibility(View.VISIBLE);
             picasso.loadTimelineImage(imageUrl).into(image);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageClickListener.onClick(shot.getImage());
+                }
+            });
         } else {
             image.setVisibility(View.GONE);
         }
     }
 
-    protected void bindVideoInfo(final ShotModel item) {
-        if (item.hasVideo()) {
+    private void bindVideoInfo(final ShotModel shot) {
+        if (shot.hasVideo()) {
             videoFrame.setVisibility(View.VISIBLE);
-            videoDuration.setText(item.getVideoDuration());
+            videoDuration.setText(shot.getVideoDuration());
             videoFrame.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    videoClickListener.onClick(item.getVideoUrl());
+                    videoClickListener.onClick(shot.getVideoUrl());
                 }
             });
         } else {
@@ -175,15 +191,15 @@ public class ShotViewHolder {
         }
     }
 
-    private void bindNiceInfo(final ShotModel item) {
-        niceButton.setChecked(item.isMarkedAsNice());
+    private void bindNiceInfo(final ShotModel shot) {
+        niceButton.setChecked(shot.isMarkedAsNice());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (item.isMarkedAsNice()) {
-                    niceShotListener.unmarkNice(item.getIdShot());
+                if (shot.isMarkedAsNice()) {
+                    niceShotListener.unmarkNice(shot.getIdShot());
                 } else {
-                    niceShotListener.markNice(item.getIdShot());
+                    niceShotListener.markNice(shot.getIdShot());
                 }
             }
         });
