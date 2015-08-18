@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+    <View android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_gravity="bottom"
+      android:layout_marginLeft="@dimen/keyline_2"
+      android:layout_marginTop="16dp"
+      android:background="@color/separator" />
+
+    <RelativeLayout android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:descendantFocusability="blocksDescendants"
+      android:orientation="vertical"
+      android:paddingBottom="24dp"
+      android:paddingTop="16dp">
+
+        <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/activity_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:drawableLeft="@drawable/ic_thumb_up_16_gray50_nopadding"
+          android:drawablePadding="8dp"
+          tools:text="Niced by juanito" />
+
+        <FrameLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/activity_text"
+          >
+
+            <include layout="@layout/item_list_shot"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+        </FrameLayout>
+
+    </RelativeLayout>
+</FrameLayout>

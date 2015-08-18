@@ -24,6 +24,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_CHECKIN = 1;
     public static final int TYPE_LISTED = 2;
     public static final int TYPE_STARTED_SHOOTING = 3;
+    public static final int TYPE_NICE_SHOT = 4;
 
     private final PicassoWrapper picasso;
     private final AndroidTimeUtils timeUtils;
@@ -51,14 +52,17 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             return TYPE_FOOTER;
         } else {
             String activityType = activities.get(position).getType();
-            if (ActivityType.CHECKIN.equals(activityType)) {
-                return TYPE_CHECKIN;
-            } else if (ActivityType.LISTED_STREAM.equals(activityType)) {
-                return TYPE_LISTED;
-            } else if (ActivityType.STARTED_SHOOTING.equals(activityType)) {
-                return TYPE_STARTED_SHOOTING;
-            } else {
-                return TYPE_GENERIC_ACTIVITY;
+            switch (activityType) {
+                case ActivityType.CHECKIN:
+                    return TYPE_CHECKIN;
+                case ActivityType.LISTED_STREAM:
+                    return TYPE_LISTED;
+                case ActivityType.STARTED_SHOOTING:
+                    return TYPE_STARTED_SHOOTING;
+                case ActivityType.NICE_SHOT:
+                    return TYPE_NICE_SHOT;
+                default:
+                    return TYPE_GENERIC_ACTIVITY;
             }
         }
     }
@@ -79,6 +83,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateListedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
                 return onCreateStartedShootingViewHolder(parent, viewType);
+            case TYPE_NICE_SHOT:
+                return onCreateNiceShotViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
@@ -123,6 +129,16 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           shotTextSpannableBuilder,
           avatarClickListener,
           usernameClickListener, streamTitleClickListener);
+    }
+
+    private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_nice_shot, parent, false);
+        return new NiceShotViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener,
+          usernameClickListener);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {

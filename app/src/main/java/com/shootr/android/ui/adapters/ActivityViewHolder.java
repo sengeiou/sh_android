@@ -1,6 +1,7 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.UsernameClickListener;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class ActivityViewHolder extends RecyclerView.ViewHolder {
 
     private final PicassoWrapper picasso;
@@ -24,10 +27,10 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     private final OnAvatarClickListener onAvatarClickListener;
     private final UsernameClickListener usernameClickListener;
 
-    @Bind(R.id.activity_avatar) public ImageView avatar;
-    @Bind(R.id.ativity_user_name) public TextView name;
-    @Bind(R.id.activity_timestamp) public TextView elapsedTime;
-    @Bind(R.id.activity_text) public ClickableTextView text;
+    @Nullable @Bind(R.id.activity_avatar) ImageView avatar;
+    @Nullable @Bind(R.id.ativity_user_name) TextView name;
+    @Nullable @Bind(R.id.activity_timestamp) TextView elapsedTime;
+    @Bind(R.id.activity_text) ClickableTextView text;
 
     public ActivityViewHolder(View view,
       PicassoWrapper picasso,
@@ -45,6 +48,10 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void render(final ActivityModel activity) {
+        checkNotNull(name);
+        checkNotNull(avatar);
+        checkNotNull(elapsedTime);
+
         name.setText(activity.getUsername());
         text.setText(formatActivityComment(activity));
         elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
