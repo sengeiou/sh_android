@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
@@ -27,32 +28,30 @@ import java.util.List;
 
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
-    public static final String NO_COMMENT_BUT_SHOULD_SHOW_TAG = "";
-    List<ShotModel> shots;
-    private PicassoWrapper picasso;
+    private final PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
     private final VideoClickListener videoClickListener;
     private final NiceShotListener niceShotListener;
-    private UsernameClickListener clickListener;
-    private AndroidTimeUtils timeUtils;
-    private int tagColor;
-    private ShotTextSpannableBuilder shotTextSpannableBuilder;
+    private final UsernameClickListener usernameClickListener;
+    private final AndroidTimeUtils timeUtils;
+    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+
+    private List<ShotModel> shots;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
       View.OnClickListener imageClickListener, VideoClickListener videoClickListener, NiceShotListener niceShotListener,
-      UsernameClickListener clickListener, AndroidTimeUtils timeUtils) {
+      UsernameClickListener usernameClickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.niceShotListener = niceShotListener;
-        this.clickListener = clickListener;
+        this.usernameClickListener = usernameClickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
-        this.tagColor = context.getResources().getColor(R.color.tag_color);
-        this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
+        shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
     @Override
@@ -100,7 +99,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         switch (getItemViewType(position)) {
             case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
-                view.setTag(new ViewHolder(view, avatarClickListener, imageClickListener));
+                view.setTag(new ViewHolder(view, avatarClickListener, imageClickListener, videoClickListener, niceShotListener,
+                  usernameClickListener,
+                  timeUtils,
+                  picasso,
+                  shotTextSpannableBuilder));
                 break;
             default:
                 break;
@@ -112,131 +115,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     public void bindView(final ShotModel item, int position, View view) {
         ViewHolder vh = (ViewHolder) view.getTag();
         vh.position = position;
-
-        bindUsername(item, vh);
-        bindComment(item, vh);
-        bindElapsedTime(item, vh);
-        bindPhoto(item, vh);
-        bindImageInfo(item, vh);
-        bindVideoInfo(item, vh);
-        bindNiceInfo(item, vh);
+        vh.render(item, this.shouldShowTag());
     }
-
-    protected void bindPhoto(ShotModel item, ViewHolder vh) {
-        String photo = item.getPhoto();
-        picasso.loadProfilePhoto(photo).into(vh.avatar);
-        vh.avatar.setTag(vh);
-        vh.image.setTag(vh);
-    }
-
-    protected void bindUsername(ShotModel item, ViewHolder vh) {
-        String usernameTitle = item.getUsername();
-        if (item.isReply()) {
-            vh.name.setText(getReplyName(item));
-        } else {
-            vh.name.setText(usernameTitle);
-        }
-    }
-
-    protected void bindElapsedTime(ShotModel item, ViewHolder vh) {
-        long timestamp = item.getBirth().getTime();
-        vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
-    }
-
-    protected void bindComment(ShotModel item, ViewHolder vh) {
-        String comment = item.getComment();
-        String tag = null;
-        if (shouldShowTag() && item.getStreamTag() != null) {
-            tag = item.getStreamTag();
-        }
-
-        SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
-        if (commentWithTag != null) {
-            addShotComment(vh, commentWithTag);
-            vh.text.setVisibility(View.VISIBLE);
-        } else {
-            vh.text.setVisibility(View.GONE);
-        }
-    }
-
-    protected void bindImageInfo(ShotModel item, ViewHolder vh) {
-        String imageUrl = item.getImage();
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            vh.image.setVisibility(View.VISIBLE);
-            picasso.loadTimelineImage(imageUrl).into(vh.image);
-        } else {
-            vh.image.setVisibility(View.GONE);
-        }
-    }
-
-    protected void bindVideoInfo(final ShotModel item, ViewHolder vh) {
-        if (item.hasVideo()) {
-            vh.videoFrame.setVisibility(View.VISIBLE);
-            vh.videoDuration.setText(item.getVideoDuration());
-            vh.videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    videoClickListener.onClick(item.getVideoUrl());
-                }
-            });
-        } else {
-            vh.videoFrame.setVisibility(View.GONE);
-            vh.videoFrame.setOnClickListener(null);
-        }
-    }
-
-    private void bindNiceInfo(final ShotModel item, ViewHolder vh) {
-        vh.niceButton.setChecked(item.isMarkedAsNice());
-        vh.niceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (item.isMarkedAsNice()) {
-                    niceShotListener.unmarkNice(item.getIdShot());
-                } else {
-                    niceShotListener.markNice(item.getIdShot());
-                }
-            }
-        });
-    }
-
-    private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        if (comment == null && tag == null) {
-            return null;
-        }
-        if (comment != null) {
-            builder.append(comment);
-        }
-        if (comment != null && tag != null) {
-            builder.append(" ");
-        }
-        if (tag != null) {
-            builder.append(formatTag(tag));
-        }
-        return builder;
-    }
-
 
     protected boolean shouldShowTag() {
         return false;
-    }
-
-    private SpannableString formatTag(String tag) {
-        ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
-
-        SpannableString tagSpan = new SpannableString(tag);
-        tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return tagSpan;
-    }
-
-    private void addShotComment(ViewHolder vh, CharSequence comment) {
-        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, clickListener);
-        vh.text.setText(spannedComment);
-        vh.text.addLinks();
-    }
-
-    private String getReplyName(ShotModel item) {
-        return getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
     }
 
     public void addShotsBelow(List<ShotModel> newShots) {
@@ -261,26 +144,168 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.shot_avatar) public ImageView avatar;
-        @Bind(R.id.shot_user_name) public TextView name;
-        @Bind(R.id.shot_timestamp) public TextView timestamp;
-        @Bind(R.id.shot_text) public ClickableTextView text;
-        @Bind(R.id.shot_image) public ImageView image;
-        @Bind(R.id.shot_video_frame) public View videoFrame;
-        @Bind(R.id.shot_video_duration) public TextView videoDuration;
-        @Bind(R.id.shot_nice_button) public NiceButtonView niceButton;
+
+        private final VideoClickListener videoClickListener;
+        private final NiceShotListener niceShotListener;
+        private final UsernameClickListener usernameClickListener;
+        private final AndroidTimeUtils timeUtils;
+        private final PicassoWrapper picasso;
+        private final ShotTextSpannableBuilder shotTextSpannableBuilder;
+
+        @Bind(R.id.shot_avatar) ImageView avatar;
+        @Bind(R.id.shot_user_name) TextView name;
+        @Bind(R.id.shot_timestamp) TextView timestamp;
+        @Bind(R.id.shot_text) ClickableTextView text;
+        @Bind(R.id.shot_image)  ImageView image;
+        @Bind(R.id.shot_video_frame) View videoFrame;
+        @Bind(R.id.shot_video_duration) TextView videoDuration;
+        @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
+
+        @BindColor(R.color.tag_color) int tagColor;
         public int position;
         private View view;
 
-        public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
+        public ViewHolder(View view,
+          View.OnClickListener avatarClickListener,
+          View.OnClickListener imageClickListener,
+          VideoClickListener videoClickListener,
+          NiceShotListener niceShotListener,
+          UsernameClickListener usernameClickListener,
+          AndroidTimeUtils timeUtils,
+          PicassoWrapper picasso, ShotTextSpannableBuilder shotTextSpannableBuilder) {
+            this.videoClickListener = videoClickListener;
+            this.niceShotListener = niceShotListener;
+            this.usernameClickListener = usernameClickListener;
+            this.timeUtils = timeUtils;
+            this.picasso = picasso;
+            this.shotTextSpannableBuilder = shotTextSpannableBuilder;
             ButterKnife.bind(this, view);
             this.view = view;
             avatar.setOnClickListener(avatarClickListener);
             image.setOnClickListener(imageClickListener);
         }
 
-        public void setVideoClickListener(View.OnClickListener videoClickListener) {
-            videoFrame.setOnClickListener(videoClickListener);
+        protected void render(ShotModel item, boolean shouldShowTag) {
+            bindUsername(item);
+            bindComment(item, shouldShowTag);
+            bindElapsedTime(item);
+            bindPhoto(item);
+            bindImageInfo(item);
+            bindVideoInfo(item);
+            bindNiceInfo(item);
+        }
+
+        protected void bindComment(ShotModel item, boolean shouldShowTag) {
+            String comment = item.getComment();
+            String tag = null;
+            if (shouldShowTag && item.getStreamTag() != null) {
+                tag = item.getStreamTag();
+            }
+
+            SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
+            if (commentWithTag != null) {
+                addShotComment(this, commentWithTag);
+                text.setVisibility(View.VISIBLE);
+            } else {
+                text.setVisibility(View.GONE);
+            }
+        }
+
+        private @Nullable SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+            if (comment == null && tag == null) {
+                return null;
+            }
+            if (comment != null) {
+                builder.append(comment);
+            }
+            if (comment != null && tag != null) {
+                builder.append(" ");
+            }
+            if (tag != null) {
+                builder.append(formatTag(tag));
+            }
+            return builder;
+        }
+
+        private SpannableString formatTag(String tag) {
+            ForegroundColorSpan span = new ForegroundColorSpan(tagColor);
+
+            SpannableString tagSpan = new SpannableString(tag);
+            tagSpan.setSpan(span, 0, tagSpan.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return tagSpan;
+        }
+
+        private void addShotComment(ViewHolder vh, CharSequence comment) {
+            CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
+              usernameClickListener);
+            vh.text.setText(spannedComment);
+            vh.text.addLinks();
+        }
+
+        protected void bindUsername(ShotModel item) {
+            String usernameTitle = item.getUsername();
+            if (item.isReply()) {
+                name.setText(getReplyName(item));
+            } else {
+                name.setText(usernameTitle);
+            }
+        }
+
+        private String getReplyName(ShotModel item) {
+            return view.getContext().getString(R.string.reply_name_pattern, item.getUsername(), item.getReplyUsername());
+        }
+
+        protected void bindElapsedTime(ShotModel item) {
+            long timestamp = item.getBirth().getTime();
+            this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), timestamp));
+        }
+
+        protected void bindPhoto(ShotModel item) {
+            String photo = item.getPhoto();
+            picasso.loadProfilePhoto(photo).into(avatar);
+            avatar.setTag(this);
+            image.setTag(this);
+        }
+
+        protected void bindImageInfo(ShotModel item) {
+            String imageUrl = item.getImage();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                image.setVisibility(View.VISIBLE);
+                picasso.loadTimelineImage(imageUrl).into(image);
+            } else {
+                image.setVisibility(View.GONE);
+            }
+        }
+
+        protected void bindVideoInfo(final ShotModel item) {
+            if (item.hasVideo()) {
+                videoFrame.setVisibility(View.VISIBLE);
+                videoDuration.setText(item.getVideoDuration());
+                videoFrame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoClickListener.onClick(item.getVideoUrl());
+                    }
+                });
+            } else {
+                videoFrame.setVisibility(View.GONE);
+                videoFrame.setOnClickListener(null);
+            }
+        }
+
+        private void bindNiceInfo(final ShotModel item) {
+            niceButton.setChecked(item.isMarkedAsNice());
+            niceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (item.isMarkedAsNice()) {
+                        niceShotListener.unmarkNice(item.getIdShot());
+                    } else {
+                        niceShotListener.markNice(item.getIdShot());
+                    }
+                }
+            });
         }
     }
 
