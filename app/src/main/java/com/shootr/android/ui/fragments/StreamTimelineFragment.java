@@ -402,7 +402,7 @@ public class StreamTimelineFragment extends BaseFragment
                 Uri screenshotUri = Uri.parse(path);
                 intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
                 intent.setType("image/*");
-                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
+                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.share_shot_chooser_title)));
             }
 
             @Override public void onBitmapFailed(Drawable errorDrawable) {
