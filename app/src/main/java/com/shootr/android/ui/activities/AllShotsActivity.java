@@ -19,8 +19,10 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -55,7 +57,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
-    private TimelineAdapter.VideoClickListener videoClickListener;
+    private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
     private View footerProgress;
@@ -136,14 +138,14 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         avatarClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ShotViewHolder) v.getTag()).position;
                 openProfile(position);
             }
         };
 
         imageClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ShotViewHolder) v.getTag()).position;
                 openImage(position);
             }
         };
@@ -155,7 +157,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
-        videoClickListener = new TimelineAdapter.VideoClickListener() {
+        videoClickListener = new OnVideoClickListener() {
             @Override
             public void onClick(String url) {
                 onVideoClick(url);

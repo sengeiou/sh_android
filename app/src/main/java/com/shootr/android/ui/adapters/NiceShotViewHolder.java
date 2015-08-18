@@ -3,6 +3,7 @@ package com.shootr.android.ui.adapters;
 import android.view.View;
 import android.widget.Toast;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -14,7 +15,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class NiceShotViewHolder extends ActivityViewHolder {
 
-    private TimelineAdapter.ViewHolder shotViewHolder;
+    private ShotViewHolder shotViewHolder;
 
     public NiceShotViewHolder(final View view,
       PicassoWrapper picasso,
@@ -23,7 +24,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
       OnAvatarClickListener onAvatarClickListener,
       UsernameClickListener usernameClickListener) {
         super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
-        shotViewHolder = new TimelineAdapter.ViewHolder(view, new View.OnClickListener() {
+        shotViewHolder = new ShotViewHolder(view, new View.OnClickListener() {
             //TODO
             @Override
             public void onClick(View v) {
@@ -35,7 +36,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
                 //TODO
                 Toast.makeText(v.getContext(), "Image", Toast.LENGTH_SHORT).show();
             }
-        }, new TimelineAdapter.VideoClickListener() {
+        }, new OnVideoClickListener() {
             @Override
             public void onClick(String url) {
                 //TODO

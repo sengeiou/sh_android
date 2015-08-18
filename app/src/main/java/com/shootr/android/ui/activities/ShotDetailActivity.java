@@ -16,8 +16,8 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.android.ui.model.ShotModel;
@@ -117,7 +117,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   onImageClick(shot);
               }
           }, //
-          new TimelineAdapter.VideoClickListener() {
+          new OnVideoClickListener() {
               @Override
               public void onClick(String url) {
                   onVideoClick(url);

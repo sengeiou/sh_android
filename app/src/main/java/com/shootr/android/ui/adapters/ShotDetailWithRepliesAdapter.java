@@ -13,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
@@ -37,7 +38,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final PicassoWrapper picasso;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
-    private TimelineAdapter.VideoClickListener videoClickListener;
+    private OnVideoClickListener videoClickListener;
     private final UsernameClickListener usernameClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
@@ -55,7 +56,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     public ShotDetailWithRepliesAdapter(PicassoWrapper picasso,
       AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener,
-      TimelineAdapter.VideoClickListener videoClickListener,
+      OnVideoClickListener videoClickListener,
       UsernameClickListener usernameClickListener,
       OnParentShownListener onParentShownListener, NiceShotListener niceShotListener, TimeFormatter timeFormatter,
       Resources resources,

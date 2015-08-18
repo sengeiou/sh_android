@@ -35,8 +35,10 @@ import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -97,7 +99,7 @@ public class StreamTimelineFragment extends BaseFragment
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
-    private TimelineAdapter.VideoClickListener videoClickListener;
+    private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
 
@@ -306,14 +308,14 @@ public class StreamTimelineFragment extends BaseFragment
         avatarClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ShotViewHolder) v.getTag()).position;
                 openProfile(position);
             }
         };
 
         imageClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ShotViewHolder) v.getTag()).position;
                 openImage(position);
             }
         };
@@ -325,7 +327,7 @@ public class StreamTimelineFragment extends BaseFragment
             }
         };
 
-        videoClickListener = new TimelineAdapter.VideoClickListener() {
+        videoClickListener = new OnVideoClickListener() {
             @Override
             public void onClick(String url) {
                 onVideoClick(url);

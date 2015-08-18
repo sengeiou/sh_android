@@ -72,10 +72,12 @@ import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -169,7 +171,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
-    private TimelineAdapter.VideoClickListener videoClickListener;
+    private OnVideoClickListener videoClickListener;
     private UsernameClickListener usernameClickListener;
     private NiceShotListener niceShotListener;
     private BottomSheet.Builder editPhotoBottomSheet;
@@ -209,7 +211,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         };
         imageClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                int position = ((ShotViewHolder) v.getTag()).position;
                 openShotImage(position);
             }
         };
@@ -220,7 +222,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             }
         };
 
-        videoClickListener = new TimelineAdapter.VideoClickListener() {
+        videoClickListener = new OnVideoClickListener() {
             @Override
             public void onClick(String url) {
                 Uri uri = Uri.parse(url);
