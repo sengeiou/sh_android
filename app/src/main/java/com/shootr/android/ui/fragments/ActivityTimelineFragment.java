@@ -59,25 +59,30 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     //region Lifecycle methods
-    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+      @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeViews();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
         timelinePresenter.setView(new NullActivityTimelineView());
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializePresenter();
     }
@@ -92,12 +97,14 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         }
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
         timelinePresenter.resume();
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
         timelinePresenter.pause();
     }
@@ -123,56 +130,45 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         layoutManager = new LinearLayoutManager(getActivity());
         activityList.setLayoutManager(layoutManager);
 
-        adapter = new ActivityTimelineAdapter(picasso, timeUtils,
+        adapter = new ActivityTimelineAdapter(picasso, timeUtils, //
           new OnAvatarClickListener() {
-            @Override
-            public void onClick(String userId, View avatarView) {
-                openProfile(userId);
-            }
-        }, new UsernameClickListener() {
-            @Override
-            public void onClick(String username) {
-                openProfileFromUsername(username);
-            }
-        }, new OnStreamTitleClickListener() {
-            @Override
-            public void onClick(String streamId, String streamTitle) {
-                openStream(streamId, streamTitle);
-            }
-        }, new OnImageClickListener() {
-            @Override
-            public void onClick(String url) {
-                openImage(url);
-            }
-        }, new OnVideoClickListener() {
-            @Override
-            public void onClick(String url) {
-                openVideo(url);
-            }
-        });
+              @Override
+              public void onClick(String userId, View avatarView) {
+                  openProfile(userId);
+              }
+          }, //
+          new UsernameClickListener() {
+              @Override
+              public void onClick(String username) {
+                  openProfileFromUsername(username);
+              }
+          }, //
+          new OnStreamTitleClickListener() {
+              @Override
+              public void onClick(String streamId, String streamTitle) {
+                  openStream(streamId, streamTitle);
+              }
+          }, //
+          new OnImageClickListener() {
+              @Override
+              public void onClick(String url) {
+                  openImage(url);
+              }
+          }, //
+          new OnVideoClickListener() {
+              @Override
+              public void onClick(String url) {
+                  openVideo(url);
+              }
+          });
 
         activityList.setAdapter(adapter);
     }
 
-    private void openVideo(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-
-    private void openImage(String url) {
-        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url);
-        startActivity(imageIntent);
-    }
-
-    private void openProfileFromUsername(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
-    }
-
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 timelinePresenter.refresh();
             }
         });
@@ -194,7 +190,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void checkIfEndOfListVisible() {
-        int lastItemPosition = activityList.getAdapter().getItemCount()-1;
+        int lastItemPosition = activityList.getAdapter().getItemCount() - 1;
         int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
         if (lastItemPosition == lastVisiblePosition) {
             timelinePresenter.showingLastActivity(adapter.getLastActivity());
@@ -212,54 +208,81 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         startActivity(streamIntent);
     }
 
-    //region View methods
+    private void openVideo(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
 
-    @Override public void showEmpty() {
+    private void openImage(String url) {
+        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url);
+        startActivity(imageIntent);
+    }
+
+    private void openProfileFromUsername(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
+    }
+
+    //region View methods
+    @Override
+    public void showEmpty() {
         emptyViewTitle.setText(R.string.activity_empty);
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideEmpty() {
+    @Override
+    public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override public void showLoading() {
+    @Override
+    public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override public void showError(String message) {
+    @Override
+    public void showError(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void setActivities(List<ActivityModel> activities) {
+    @Override
+    public void setActivities(List<ActivityModel> activities) {
         adapter.setActivities(activities);
     }
 
-    @Override public void hideActivities() {
+    @Override
+    public void hideActivities() {
         activityList.setVisibility(View.GONE);
     }
 
-    @Override public void showActivities() {
+    @Override
+    public void showActivities() {
         activityList.setVisibility(View.VISIBLE);
     }
 
-    @Override public void addNewActivities(List<ActivityModel> newActivities) {
+    @Override
+    public void addNewActivities(List<ActivityModel> newActivities) {
         adapter.addActivitiesAbove(newActivities);
     }
 
-    @Override public void addOldActivities(List<ActivityModel> oldActivities) {
+    @Override
+    public void addOldActivities(List<ActivityModel> oldActivities) {
         adapter.addActivitiesBelow(oldActivities);
     }
 
-    @Override public void showLoadingOldActivities() {
+    @Override
+    public void showLoadingOldActivities() {
         adapter.setFooterVisible(true);
     }
 
-    @Override public void hideLoadingOldActivities() {
+    @Override
+    public void hideLoadingOldActivities() {
         adapter.setFooterVisible(false);
     }
     //endregion

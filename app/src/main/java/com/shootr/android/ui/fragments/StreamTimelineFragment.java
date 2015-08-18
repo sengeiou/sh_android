@@ -26,8 +26,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
@@ -35,12 +33,12 @@ import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
-import com.shootr.android.ui.adapters.ShotViewHolder;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.NiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -64,7 +62,6 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -97,17 +94,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
-    @Deprecated
     private TimelineAdapter adapter;
-    private OnAvatarClickListener avatarClickListener;
-    private OnImageClickListener imageClickListener;
-    private OnVideoClickListener videoClickListener;
-    private UsernameClickListener usernameClickListener;
-    private NiceShotListener niceShotListener;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
-    private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
@@ -130,19 +120,23 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     //region Lifecycle methods
-    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+      @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
         ButterKnife.bind(this, fragmentView);
         return fragmentView;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeViews();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
         streamTimelinePresenter.setView(new NullStreamTimelineView());
@@ -151,7 +145,8 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.setView(new NullFavoriteStatusView());
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
@@ -159,7 +154,8 @@ public class StreamTimelineFragment extends BaseFragment
         initializePresenters(idStream);
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_STREAM_DETAIL && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             if (getActivity() != null) {
                 getActivity().finish();
@@ -191,6 +187,7 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
@@ -207,7 +204,8 @@ public class StreamTimelineFragment extends BaseFragment
         }
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
         streamTimelinePresenter.resume();
         newShotBarPresenter.resume();
@@ -215,7 +213,8 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.resume();
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
         streamTimelinePresenter.pause();
         newShotBarPresenter.pause();
@@ -224,8 +223,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void initializeToolbar() {
-        //FIXME So coupling. Much bad. Such ugly.
-        toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
+        /* no-op */
     }
 
     private void initializePresenters(String idStream) {
@@ -235,19 +233,20 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
     }
-
     //endregion
 
     private void setupNewShotBarDelegate() {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
-            @Override public void openNewShotView() {
+            @Override
+            public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
                   .build();
                 startActivity(newShotIntent);
             }
 
-            @Override public void openNewShotViewWithImage(File image) {
+            @Override
+            public void openNewShotViewWithImage(File image) {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
                   .withImage(image) //
@@ -290,16 +289,19 @@ public class StreamTimelineFragment extends BaseFragment
     private void setupPhotoPicker() {
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
           .withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+              @Override
+              public void onSelected(File imageFile) {
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   //TODO mostrar algo
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           })
@@ -307,45 +309,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupListAdapter() {
-        avatarClickListener = new OnAvatarClickListener() {
-            @Override
-            public void onClick(String userId, View avatarView) {
-                openProfile(userId);
-            }
-        };
-
-        imageClickListener = new OnImageClickListener() {
-            @Override
-            public void onClick(String url) {
-                openImage(url);
-            }
-        };
-
-        usernameClickListener = new UsernameClickListener() {
-            @Override
-            public void onClick(String username) {
-                goToUserProfile(username);
-            }
-        };
-
-        videoClickListener = new OnVideoClickListener() {
-            @Override
-            public void onClick(String url) {
-                onVideoClick(url);
-            }
-        };
-
-        niceShotListener = new NiceShotListener() {
-            @Override
-            public void markNice(String idShot) {
-                streamTimelinePresenter.markNiceShot(idShot);
-            }
-
-            @Override
-            public void unmarkNice(String idShot) {
-                streamTimelinePresenter.unmarkNiceShot(idShot);
-            }
-        };
 
         View footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
@@ -354,52 +317,52 @@ public class StreamTimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(),
-          picasso,
-          avatarClickListener,
-          imageClickListener,
-          videoClickListener,
-          niceShotListener,
-          usernameClickListener,
-          timeUtils);
-        listView.setAdapter(adapter);
-    }
-
-    private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
-              @Override public void run() {
-                  ClipboardManager clipboard =
-                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                  clipboard.setPrimaryClip(clip);
-                  Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+        adapter = new TimelineAdapter(getActivity(), //
+          picasso, //
+          timeUtils, //
+          new OnAvatarClickListener() {
+              @Override
+              public void onClick(String userId, View avatarView) {
+                  openProfile(userId);
               }
-          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
-    }
+          }, //
+          new OnImageClickListener() {
+              @Override
+              public void onClick(String url) {
+                  openImage(url);
+              }
+          }, //
+          new OnVideoClickListener() {
+              @Override
+              public void onClick(String url) {
+                  onVideoClick(url);
+              }
+          }, //
+          new NiceShotListener() {
+              @Override
+              public void markNice(String idShot) {
+                  streamTimelinePresenter.markNiceShot(idShot);
+              }
 
-    private void startProfileContainerActivity(String username) {
-        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
-        startActivity(intentForUser);
-    }
+              @Override
+              public void unmarkNice(String idShot) {
+                  streamTimelinePresenter.unmarkNiceShot(idShot);
+              }
+          }, //
+          new UsernameClickListener() {
+              @Override
+              public void onClick(String username) {
+                  openProfileFromUsername(username);
+              }
+          });
 
-    private void goToUserProfile(String username) {
-        startProfileContainerActivity(username);
-    }
-
-    private void onVideoClick(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        listView.setAdapter(adapter);
     }
 
     private void setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 streamTimelinePresenter.refresh();
             }
         });
@@ -411,7 +374,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override
+            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -419,7 +383,8 @@ public class StreamTimelineFragment extends BaseFragment
                 }
             }
 
-            @Override public void onScrollIdle() {
+            @Override
+            public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -434,14 +399,47 @@ public class StreamTimelineFragment extends BaseFragment
     }
     //endregion
 
-    protected void openProfile(String idUser) {
+    private void openProfile(String idUser) {
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), idUser);
         startActivity(profileIntent);
     }
 
-    protected void openImage(String imageUrl) {
+    private void openProfileFromUsername(String username) {
+        Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
+        startActivity(intentForUser);
+    }
+
+    private void openImage(String imageUrl) {
         Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
         startActivity(intentForImage);
+    }
+
+    private void onVideoClick(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    private void openContextualMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
+          new Runnable() {
+              @Override
+              public void run() {
+                  copyShotCommentToClipboard(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override
+            public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
+    private void copyShotCommentToClipboard(ShotModel shotModel) {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.shot_bar_text)
@@ -460,86 +458,106 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     //region View methods
-    @Override public void setShots(List<ShotModel> shots) {
+    @Override
+    public void setShots(List<ShotModel> shots) {
         adapter.setShots(shots);
     }
 
-    @Override public void hideShots() {
+    @Override
+    public void hideShots() {
         listView.setVisibility(View.GONE);
     }
 
-    @Override public void showShots() {
+    @Override
+    public void showShots() {
         listView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void addNewShots(List<ShotModel> newShots) {
+    @Override
+    public void addNewShots(List<ShotModel> newShots) {
         adapter.addShotsAbove(newShots);
     }
 
-    @Override public void addOldShots(List<ShotModel> oldShots) {
+    @Override
+    public void addOldShots(List<ShotModel> oldShots) {
         adapter.addShotsBelow(oldShots);
     }
 
-    @Override public void showLoadingOldShots() {
+    @Override
+    public void showLoadingOldShots() {
         footerProgress.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideLoadingOldShots() {
+    @Override
+    public void hideLoadingOldShots() {
         footerProgress.setVisibility(View.GONE);
     }
 
-    @Override public void navigateToStreamDetail(String idStream) {
+    @Override
+    public void navigateToStreamDetail(String idStream) {
         Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
         intent.putExtra(EXTRA_STREAM_ID, idStream);
         startActivityForResult(intent, REQUEST_STREAM_DETAIL);
     }
 
-    @Override public void showEmpty() {
+    @Override
+    public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideEmpty() {
+    @Override
+    public void hideEmpty() {
         emptyView.setVisibility(View.GONE);
     }
 
-    @Override public void showLoading() {
+    @Override
+    public void showLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override public void showError(String message) {
+    @Override
+    public void showError(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void openNewShotView() {
+    @Override
+    public void openNewShotView() {
         newShotBarViewDelegate.openNewShotView();
     }
 
-    @Override public void pickImage() {
+    @Override
+    public void pickImage() {
         newShotBarViewDelegate.pickImage();
     }
 
-    @Override public void openNewShotViewWithImage(File image) {
+    @Override
+    public void openNewShotViewWithImage(File image) {
         newShotBarViewDelegate.openNewShotViewWithImage(image);
     }
 
-    @Override public void showDraftsButton() {
+    @Override
+    public void showDraftsButton() {
         newShotBarViewDelegate.showDraftsButton();
     }
 
-    @Override public void hideDraftsButton() {
+    @Override
+    public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
     }
 
-    @Override public void showWatchingPeopleCount(Integer count) {
+    @Override
+    public void showWatchingPeopleCount(Integer count) {
         watchNumberCount = count;
         updateWatchNumberIcon();
     }
 
-    @Override public void hideWatchingPeopleCount() {
+    @Override
+    public void hideWatchingPeopleCount() {
         watchNumberCount = null;
         updateWatchNumberIcon();
     }
@@ -569,16 +587,16 @@ public class StreamTimelineFragment extends BaseFragment
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void goToReport(String sessionToken, ShotModel shotModel) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl,
-          sessionToken,
-          shotModel.getIdShot())));
+    @Override
+    public void goToReport(String sessionToken, ShotModel shotModel) {
+        Intent browserIntent =
+          new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reportBaseUrl, sessionToken, shotModel.getIdShot())));
         startActivity(browserIntent);
     }
 
-    @Override public void showEmailNotConfirmedError() {
-        AlertDialog.Builder builder =
-          new AlertDialog.Builder(getActivity());
+    @Override
+    public void showEmailNotConfirmedError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(getActivity().getString(R.string.alert_report_confirmed_email_message))
           .setTitle(getActivity().getString(R.string.alert_report_confirmed_email_title))

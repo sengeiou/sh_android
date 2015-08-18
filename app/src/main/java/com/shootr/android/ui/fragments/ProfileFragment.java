@@ -689,13 +689,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             shotsList.removeAllViews();
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(),
-                picasso,
-                avatarClickListener,
+                picasso, timeUtils, avatarClickListener,
                 imageClickListener,
                 videoClickListener,
                 niceShotListener,
-                usernameClickListener,
-                timeUtils){
+                usernameClickListener){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }

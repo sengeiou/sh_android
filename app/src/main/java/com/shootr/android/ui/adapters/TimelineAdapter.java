@@ -30,9 +30,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private List<ShotModel> shots;
 
-    public TimelineAdapter(Context context, PicassoWrapper picasso, OnAvatarClickListener avatarClickListener,
+    public TimelineAdapter(Context context, PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
       OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, NiceShotListener niceShotListener,
-      UsernameClickListener usernameClickListener, AndroidTimeUtils timeUtils) {
+      UsernameClickListener usernameClickListener) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
