@@ -5,10 +5,12 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -61,6 +63,8 @@ import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.UsernameClickListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -92,6 +96,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Deprecated
     private TimelineAdapter adapter;
@@ -363,20 +368,47 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
-              @Override public void run() {
-                  ClipboardManager clipboard =
-                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                  clipboard.setPrimaryClip(clip);
-                  Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
-              }
-          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction("Share", new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+            @Override public void run() {
+                ClipboardManager clipboard =
+                  (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void shareShot(final ShotModel shotModel) {
+        picasso.load(shotModel.getImage()).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT,String.format(shareShotMessage,
+                  shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()));
+                String path =
+                  MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "", null);
+                Uri screenshotUri = Uri.parse(path);
+                intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                intent.setType("image/*");
+                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.invite_friends_title)));
+            }
+
+            @Override public void onBitmapFailed(Drawable errorDrawable) {
+                //TODO handle error
+            }
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+        /* no-op */
+            }
+        });
     }
 
     private void startProfileContainerActivity(String username) {
