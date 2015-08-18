@@ -14,6 +14,7 @@ public class ActivityModel {
     private String comment;
     private String type;
     private Date publishDate;
+    private ShotModel shot;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -93,5 +94,13 @@ public class ActivityModel {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public ShotModel getShot() {
+        return shot;
+    }
+
+    public void setShot(ShotModel shot) {
+        this.shot = shot;
     }
 }

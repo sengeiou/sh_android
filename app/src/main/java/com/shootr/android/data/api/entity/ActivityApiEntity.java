@@ -16,6 +16,8 @@ public class ActivityApiEntity {
     private String comment;
     private String type;
 
+    private String idShot;
+
     private Long birth;
 
     private Long modified;
@@ -126,5 +128,13 @@ public class ActivityApiEntity {
 
     public void setStream(StreamEntity stream) {
         this.stream = stream;
+    }
+
+    public String getIdShot() {
+        return idShot;
+    }
+
+    public void setIdShot(String idShot) {
+        this.idShot = idShot;
     }
 }

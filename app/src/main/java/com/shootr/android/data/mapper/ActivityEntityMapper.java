@@ -3,10 +3,13 @@ package com.shootr.android.data.mapper;
 import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.domain.Activity;
+import com.shootr.android.domain.Shot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 @Singleton
 public class ActivityEntityMapper {
@@ -38,6 +41,12 @@ public class ActivityEntityMapper {
         userInfo.setUsername(activityEntity.getUsername());
         userInfo.setAvatar(activityEntity.getUserPhoto());
         activity.setUserInfo(userInfo);
+
+        if (activityEntity.getIdShot() != null) {
+            Shot shot = activityEntity.getShotForMapping();
+            checkNotNull(shot, "ActivityEntity has idShot but no ShotForMapping");
+            activity.setShot(shot);
+        }
 
         return activity;
     }

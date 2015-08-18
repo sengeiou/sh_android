@@ -1,5 +1,8 @@
 package com.shootr.android.data.entity;
 
+import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.utils.Preconditions;
+
 public class ActivityEntity extends Synchronized {
 
     private String idActivity;
@@ -11,6 +14,8 @@ public class ActivityEntity extends Synchronized {
     private String comment;
     private String type;
     private String userPhoto;
+    private String idShot;
+    private Shot shotForMapping;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -82,5 +87,22 @@ public class ActivityEntity extends Synchronized {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIdShot() {
+        return idShot;
+    }
+
+    public void setIdShot(String idShot) {
+        this.idShot = idShot;
+    }
+
+    public Shot getShotForMapping() {
+        return shotForMapping;
+    }
+
+    public void setShotForMapping(Shot shotForMapping) {
+        Preconditions.checkState(idShot != null, "Can't set ShotForMapping to an activity without idShot. Activity id: "+idActivity);
+        this.shotForMapping = shotForMapping;
     }
 }
