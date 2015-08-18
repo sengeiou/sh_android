@@ -191,6 +191,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             @Override public void showStreamIsRemoved() {
                 /* no-op */
             }
+
+            @Override public void openDrafts() {
+                /* no-op */
+            }
         };
     }
 

@@ -38,7 +38,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
     private boolean isRefreshing = false;
-    private Boolean removed = false;
+    private Boolean removed;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -86,8 +86,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
             @Override
             public void onLoaded(StreamSearchResult streamSearchResult) {
-                loadTimeline();
                 removed = streamSearchResult.getStream().getRemoved();
+                loadTimeline();
             }
         });
     }
@@ -200,6 +200,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Override public void resume() {
+        removed = false;
         bus.register(this);
         loadTimeline();
         startPollingShots();

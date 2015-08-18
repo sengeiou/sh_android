@@ -44,6 +44,22 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         newShotBarView.openNewShotView();
     }
 
+    public void openDrafts(Boolean removed) {
+        if(removed){
+            newShotBarView.showStreamIsRemoved();
+        } else {
+            newShotBarView.openDrafts();
+        }
+    }
+
+    public void newShotFromImage(Boolean removed) {
+        if(removed){
+            newShotBarView.showStreamIsRemoved();
+        } else {
+            newShotBarView.pickImage();
+        }
+    }
+
     public void newShotFromImage() {
         newShotBarView.pickImage();
     }
