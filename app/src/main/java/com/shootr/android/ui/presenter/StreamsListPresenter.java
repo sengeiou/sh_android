@@ -138,9 +138,10 @@ public class StreamsListPresenter implements Presenter {
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                streamsListView.showAddedToFavorites();
+                  streamsListView.showAddedToFavorites();
               }
-          }, new Interactor.ErrorCallback() {
+          },
+          new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                   showViewError(error);
               }
@@ -156,6 +157,10 @@ public class StreamsListPresenter implements Presenter {
 
     @Override public void pause() {
         hasBeenPaused = true;
+    }
+
+    public void recommendStream(StreamResultModel stream) {
+        //TODO create interactor and call
     }
 
     //endregion

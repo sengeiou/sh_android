@@ -191,7 +191,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         })
           .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
               @Override public void run() {
-                  // TODO call the presenter
+                  presenter.recommendStream(stream);
               }
           })
           .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
