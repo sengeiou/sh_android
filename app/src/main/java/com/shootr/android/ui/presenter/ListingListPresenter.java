@@ -33,7 +33,7 @@ public class ListingListPresenter implements Presenter{
     private boolean hasBeenPaused = false;
     private List<StreamResultModel> listingStreams;
     private List<StreamResultModel> favoriteStreams;
-    private String currentIdUser;
+    private boolean isCurrentUser;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor, AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
@@ -55,9 +55,13 @@ public class ListingListPresenter implements Presenter{
     public void initialize(ListingView listingView, String profileIdUser, String currentIdUser) {
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
-        this.currentIdUser = currentIdUser;
+        this.isCurrentUser(profileIdUser, currentIdUser);
         this.loadFavoriteStreams();
         this.startLoadingListing();
+    }
+
+    private void isCurrentUser(String profileIdUser, String currentIdUser) {
+        this.isCurrentUser = currentIdUser.equals(profileIdUser);
     }
 
     private void startLoadingListing() {
@@ -66,20 +70,27 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadListing() {
-        if (currentIdUser.equals(profileIdUser)) {
-            getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-                @Override public void onLoaded(List<StreamSearchResult> streams) {
-                    handleStreamsInView(streams);
-                }
-            }, profileIdUser);
+        if (isCurrentUser) {
+            loadCurrentUserListingStreams();
         } else {
-            getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-                @Override
-                public void onLoaded(List<StreamSearchResult> streams) {
-                    handleStreamsInView(streams);
-                }
-            }, profileIdUser);
+            loadUserListingStreams();
         }
+    }
+
+    private void loadUserListingStreams() {
+        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
+                handleStreamsInView(streams);
+            }
+        }, profileIdUser);
+    }
+
+    private void loadCurrentUserListingStreams() {
+        getCurrentUserListingStreamsInteractor.loadCurrentUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
+                handleStreamsInView(streams);
+            }
+        });
     }
 
     private void handleStreamsInView(List<StreamSearchResult> streams) {
@@ -116,7 +127,9 @@ public class ListingListPresenter implements Presenter{
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  loadListing();
+                  if (isCurrentUser) {
+                      loadCurrentUserListingStreams();
+                  }
                   loadFavoriteStreams();
               }
           },
@@ -132,7 +145,9 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
-                  loadListing();
+                  if (isCurrentUser) {
+                      loadCurrentUserListingStreams();
+                  }
                   loadFavoriteStreams();
               }
           });

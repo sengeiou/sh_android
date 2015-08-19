@@ -117,8 +117,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, CURRENT_ID_USER, CURRENT_ID_USER);
 
-        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class),
-          anyString());
+        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class));
     }
 
     @Test

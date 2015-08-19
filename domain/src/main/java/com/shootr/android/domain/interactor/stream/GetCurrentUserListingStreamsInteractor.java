@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -17,22 +18,24 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final StreamSearchRepository localStreamSearchRepository;
     private final StreamSearchRepository remoteStreamSearchRepository;
+    private final SessionRepository sessionRepository;
 
     private String idUser;
     private Callback<List<StreamSearchResult>> callback;
 
     @Inject public GetCurrentUserListingStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamRepositoty,
-      @Remote StreamSearchRepository remoteStreamRepositoty) {
+      @Remote StreamSearchRepository remoteStreamRepositoty, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localStreamSearchRepository = localStreamRepositoty;
         this.remoteStreamSearchRepository = remoteStreamRepositoty;
+        this.sessionRepository = sessionRepository;
     }
 
-    public void loadCurrentUserListingStreams(Callback<List<StreamSearchResult>> callback, String idUser){
+    public void loadCurrentUserListingStreams(Callback<List<StreamSearchResult>> callback){
         this.callback = callback;
-        this.idUser = idUser;
+        this.idUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 
