@@ -2,7 +2,11 @@ package com.shootr.android.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +38,8 @@ import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.PicassoWrapper;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -113,8 +119,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
           R.color.refresh_3,
           R.color.refresh_4);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            @Override public void onRefresh() {
                 presenter.refresh();
             }
         });
@@ -179,11 +184,58 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     private void openContextualMenu(final StreamResultModel stream) {
         new CustomContextMenu.Builder(getActivity())
           .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
-              @Override
-              public void run() {
-                  presenter.addToFavorites(stream);
+            @Override
+            public void run() {
+                presenter.addToFavorites(stream);
+            }
+        })
+          .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  // TODO call the presenter
+              }
+          })
+          .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
+              @Override public void run() {
+                  if (stream.getStreamModel().getPicture() != null) {
+                    shareStreamWithImage(stream);
+                  } else {
+                      shareStream(stream);
+                  }
               }
           }).show();
+    }
+
+    private void shareStream(StreamResultModel stream) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT,String.format(getActivity().getString(R.string.recommend_stream_message),
+          stream.getStreamModel().getTitle(),
+          stream.getStreamModel().getIdStream()));
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.recommend_via)));
+    }
+
+    private void shareStreamWithImage(final StreamResultModel stream) {
+        picasso.load(stream.getStreamModel().getPicture()).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT,String.format(getActivity().getString(R.string.recommend_stream_message),
+                  stream.getStreamModel().getTitle(),
+                  stream.getStreamModel().getIdStream()));
+                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "", null);
+                Uri streamImageUri = Uri.parse(path);
+                intent.putExtra(Intent.EXTRA_STREAM, streamImageUri);
+                intent.setType("image/*");
+                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.recommend_via)));
+            }
+
+            @Override public void onBitmapFailed(Drawable errorDrawable) {
+                //TODO handle error
+            }
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                /* no-op */
+            }
+        });
     }
 
     //region View methods
