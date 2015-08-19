@@ -268,6 +268,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
 
+    @Override public void showStreamRecommended() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
+    }
+
     @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
     }

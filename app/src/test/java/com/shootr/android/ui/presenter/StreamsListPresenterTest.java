@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
@@ -40,6 +41,7 @@ public class StreamsListPresenterTest {
     private static final String SELECTED_STREAM_ID = "selected_stream";
     private static final String SELECTED_STREAM_TITLE = "title";
     private static final String STREAM_AUTHOR_ID = "author";
+    public static final String ID_STREAM = "idStream";
 
     @Mock Bus bus;
     @Mock StreamsListInteractor streamsListInteractor;
@@ -137,6 +139,45 @@ public class StreamsListPresenterTest {
         presenter.resume();
 
         verify(streamsListInteractor, times(2)).loadStreams(anyStreamsCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldShowRecommendedStreamWhenRecommendStreamsCompletedCallback() throws Exception {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(recommendStreamInteractor).getStreamMedia(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
+
+        presenter.recommendStream(streamModel());
+
+        verify(streamsListView).showStreamRecommended();
+    }
+
+    @Test public void shouldShowErrorStreamWhenRecommendStreamsErrorCallback() throws Exception {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                errorCallback.onError(any(ShootrException.class));
+                return null;
+            }
+        }).when(recommendStreamInteractor).getStreamMedia(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+
+        presenter.recommendStream(streamModel());
+
+        verify(streamsListView).showError(anyString());
+    }
+
+    private StreamResultModel streamModel() {
+        StreamResultModel streamResultModel = new StreamResultModel();
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(ID_STREAM);
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {

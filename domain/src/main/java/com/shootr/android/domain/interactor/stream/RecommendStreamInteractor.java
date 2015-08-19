@@ -25,7 +25,7 @@ public class RecommendStreamInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void getStreamMedia(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void recommendStream(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.completedCallback = callback;
         this.errorCallback = errorCallback;

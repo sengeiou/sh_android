@@ -35,6 +35,10 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void showStreamRecommended() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

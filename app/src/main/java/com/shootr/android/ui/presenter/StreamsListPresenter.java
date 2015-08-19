@@ -169,15 +169,17 @@ public class StreamsListPresenter implements Presenter {
     }
 
     public void recommendStream(StreamResultModel stream) {
-        recommendStreamInteractor.getStreamMedia(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+        recommendStreamInteractor.recommendStream(stream.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                    //TODO show feedback in view
+                  streamsListView.showStreamRecommended();
               }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                //TODO show error in view
-            }
-        });
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showViewError(error);
+              }
+          });
     }
 
     //endregion
