@@ -6,8 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract.NiceShotTable;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.android.domain.exception.NiceNotMarkedException;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 
 public class NiceManager extends AbstractManager {
@@ -37,7 +38,7 @@ public class NiceManager extends AbstractManager {
           null,
           null);
 
-        Set<String> result = new HashSet<>();
+        Set<String> result = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
         if (query.getCount() > 0) {
             query.moveToFirst();
             int columnIndex = query.getColumnIndex(NiceShotTable.ID_SHOT);

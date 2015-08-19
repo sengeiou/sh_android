@@ -7,7 +7,9 @@ import com.shootr.android.domain.repository.NiceShotRepository;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class LocalNiceShotRepository implements NiceShotRepository {
 
     private final NiceManager niceManager;
