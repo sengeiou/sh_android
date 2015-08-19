@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
+import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -23,6 +24,7 @@ public class ListingListPresenter implements Presenter{
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
+    private final RecommendStreamInteractor recommendStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -34,12 +36,13 @@ public class ListingListPresenter implements Presenter{
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor, RecommendStreamInteractor recommendStreamInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getUserListingStreamsInteractor = getUserListingStreamsInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
+        this.recommendStreamInteractor = recommendStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -62,8 +65,7 @@ public class ListingListPresenter implements Presenter{
 
     private void loadListing() {
         getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override
-            public void onLoaded(List<StreamSearchResult> streams) {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
                 listingView.hideLoading();
                 if (!streams.isEmpty()) {
                     listingStreams = streamResultModelMapper.transform(streams);
@@ -80,8 +82,7 @@ public class ListingListPresenter implements Presenter{
 
     public void loadFavoriteStreams() {
         getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override
-            public void onLoaded(List<StreamSearchResult> favorites) {
+            @Override public void onLoaded(List<StreamSearchResult> favorites) {
                 favoriteStreams = streamResultModelMapper.transform(favorites);
                 renderStreams();
             }
@@ -114,8 +115,7 @@ public class ListingListPresenter implements Presenter{
     public void removeFromFavorites(StreamResultModel stream) {
         removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+              @Override public void onCompleted() {
                   loadFavoriteStreams();
               }
           });
@@ -157,4 +157,17 @@ public class ListingListPresenter implements Presenter{
         hasBeenPaused = true;
     }
 
+    public void recommendStream(StreamResultModel stream) {
+        recommendStreamInteractor.recommendStream(stream.getStreamModel().getIdStream(),
+          new Interactor.CompletedCallback() {
+              @Override public void onCompleted() {
+                  listingView.showStreamRecommended();
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  showErrorInView(error);
+              }
+          });
+    }
 }

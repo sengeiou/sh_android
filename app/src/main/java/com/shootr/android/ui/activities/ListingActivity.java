@@ -128,7 +128,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
           })
           .addAction((getString(R.string.recomment_via_shootr)), new Runnable() {
               @Override public void run() {
-                  // TODO call the presenter
+                  presenter.recommendStream(stream);
               }
           })
           .addAction((getString(R.string.recommend_via)), new Runnable() {
@@ -206,6 +206,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
         startActivity(StreamDetailActivity.getIntent(this, streamId));
+    }
+
+    @Override public void showStreamRecommended() {
+        Toast.makeText(this, getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showContent() {
