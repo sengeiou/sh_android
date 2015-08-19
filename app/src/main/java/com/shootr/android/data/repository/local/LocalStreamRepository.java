@@ -60,7 +60,11 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override
-    public void deleteStream(String idEvent) throws DeleteStreamNotAllowedException {
-        localStreamDataSource.deleteStream(idEvent);
+    public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
+        localStreamDataSource.deleteStream(idStream);
+    }
+
+    @Override public void recommendStream(String idStream) {
+        throw new IllegalStateException("Not allowed in local repository.");
     }
 }

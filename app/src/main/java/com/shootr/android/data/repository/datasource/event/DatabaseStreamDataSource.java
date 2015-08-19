@@ -44,4 +44,8 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
         streamManager.deleteStream(idStream);
     }
+
+    @Override public void recommendStream(String idStream) {
+        throw new IllegalStateException("Not allowed in local");
+    }
 }

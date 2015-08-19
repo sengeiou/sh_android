@@ -80,4 +80,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
             throw new ServerCommunicationException(networkError);
         }
     }
+
+    @Override public void recommendStream(String idStream) {
+        try {
+            streamApiService.recommendStream(idStream);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }

@@ -67,8 +67,12 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override
-    public void deleteStream(String idEvent) throws DeleteStreamNotAllowedException {
-        remoteStreamDataSource.deleteStream(idEvent);
+    public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
+        remoteStreamDataSource.deleteStream(idStream);
+    }
+
+    @Override public void recommendStream(String idStream) {
+        remoteStreamDataSource.recommendStream(idStream);
     }
 
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {

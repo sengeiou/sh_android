@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit.client.Response;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -28,4 +29,7 @@ public interface StreamApiService {
 
     @DELETE("/streams/{idStream}")
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
+
+    @POST("/streams/{idStream}/recommend")
+    Response recommendStream(@Path("idStream") String idStream) throws IOException;
 }
