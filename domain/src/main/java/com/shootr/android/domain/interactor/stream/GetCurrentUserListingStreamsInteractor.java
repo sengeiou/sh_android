@@ -61,8 +61,8 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
 
     private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
         for (StreamSearchResult listingStream : listingStreams) {
-            // TODO Integer streamWatchers = remoteStreamSearchRepository.getWatchersForStream(listingStream.getStream().getId());
-            //listingStream.setWatchersNumber(streamWatchers);
+            Integer streamWatchers = remoteStreamSearchRepository.getWatchersForStream(listingStream.getStream().getId());
+            listingStream.setWatchersNumber(streamWatchers);
         }
     }
 
