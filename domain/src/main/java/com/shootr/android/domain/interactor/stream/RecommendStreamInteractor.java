@@ -34,7 +34,7 @@ public class RecommendStreamInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            // TODO remoteStreamRepository.recommendStream(idStream);
+            remoteStreamRepository.recommendStream(idStream);
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);

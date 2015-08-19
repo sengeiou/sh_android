@@ -5,6 +5,7 @@ import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
@@ -29,7 +30,6 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -45,6 +45,8 @@ public class StreamsListPresenterTest {
     @Mock StreamsListInteractor streamsListInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
+    @Mock RecommendStreamInteractor recommendStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
@@ -58,7 +60,10 @@ public class StreamsListPresenterTest {
           new StreamResultModelMapper(streamModelMapper);
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
-          unwatchStreamInteractor, streamResultModelMapper,
+          unwatchStreamInteractor,
+          selectStreamInteractor,
+          recommendStreamInteractor,
+          streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }
