@@ -49,7 +49,7 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
             ((CurrentUserListingStreamViewHolder) viewHolder).setFavorite(isFavorite(position));
             StreamResultModel stream = getItem(position);
             boolean showSeparator = position != getFirstItemPosition();
-            ((CurrentUserStreamViewHolder) viewHolder).render(stream, showSeparator);
+            ((GenericUserStreamViewHolder) viewHolder).render(stream, showSeparator);
         } else {
             ((ListingStreamResultViewHolder) viewHolder).setFavorite(isFavorite(position));
             StreamResultModel stream = getItem(position);

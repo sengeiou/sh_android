@@ -11,7 +11,7 @@ import com.shootr.android.util.PicassoWrapper;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class CurrentUserListingStreamViewHolder extends CurrentUserStreamViewHolder {
+public class CurrentUserListingStreamViewHolder extends GenericUserStreamViewHolder {
 
     public static final int FAVORITE_ADDED_IMAGE = R.drawable.ic_favorite_added_28_gray50;
     public static final int FAVORITE_NOT_ADDED_IMAGE = R.drawable.ic_favorite_not_added_28_gray50;

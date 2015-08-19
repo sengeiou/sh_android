@@ -8,7 +8,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.util.PicassoWrapper;
 
-public class StreamResultViewHolder extends CurrentUserStreamViewHolder{
+public class StreamResultViewHolder extends GenericUserStreamViewHolder {
 
     @Bind(R.id.stream_author) TextView author;
 

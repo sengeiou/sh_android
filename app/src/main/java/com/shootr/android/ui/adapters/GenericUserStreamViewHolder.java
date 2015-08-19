@@ -11,7 +11,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.PicassoWrapper;
 
-public class CurrentUserStreamViewHolder extends RecyclerView.ViewHolder{
+public class GenericUserStreamViewHolder extends RecyclerView.ViewHolder{
 
     private final OnStreamClickListener onStreamClickListener;
     private final PicassoWrapper picasso;
@@ -21,7 +21,8 @@ public class CurrentUserStreamViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
 
-    public CurrentUserStreamViewHolder(View itemView, OnStreamClickListener onStreamClickListener, PicassoWrapper picasso) {
+    public GenericUserStreamViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
+      PicassoWrapper picasso) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.picasso = picasso;
