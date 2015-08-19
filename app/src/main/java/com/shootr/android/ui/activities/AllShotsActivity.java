@@ -20,11 +20,11 @@ import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -59,8 +59,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     private OnAvatarClickListener avatarClickListener;
     private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
-    private UsernameClickListener usernameClickListener;
-    private NiceShotListener niceShotListener;
+    private OnUsernameClickListener onUsernameClickListener;
+    private OnNiceShotListener onNiceShotListener;
     private View footerProgress;
 
     public static Intent newIntent(Context context, String userId) {
@@ -138,33 +138,33 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     private void setupListAdapter() {
         avatarClickListener = new OnAvatarClickListener() {
             @Override
-            public void onClick(String userId, View avatarView) {
+            public void onAvatarClick(String userId, View avatarView) {
                 openProfile(userId);
             }
         };
 
         imageClickListener = new OnImageClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onImageClick(String url) {
                 openImage(url);
             }
         };
 
-        usernameClickListener = new UsernameClickListener() {
+        onUsernameClickListener = new OnUsernameClickListener() {
             @Override
-            public void onClick(String username) {
+            public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
         videoClickListener = new OnVideoClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onVideoClick(String url) {
                 onVideoClick(url);
             }
         };
 
-        niceShotListener = new NiceShotListener() {
+        onNiceShotListener = new OnNiceShotListener() {
             @Override
             public void markNice(String idShot) {
                 presenter.markNiceShot(idShot);
@@ -184,8 +184,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(this, picasso, timeUtils, avatarClickListener,
-          imageClickListener, videoClickListener, niceShotListener,
-          usernameClickListener){
+          imageClickListener, videoClickListener, onNiceShotListener, onUsernameClickListener){
             @Override protected boolean shouldShowTag() {
                 return true;
             }

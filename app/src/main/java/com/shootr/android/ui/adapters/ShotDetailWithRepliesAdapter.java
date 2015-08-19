@@ -12,7 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.CheckableImageView;
@@ -22,7 +22,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,12 +39,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
-    private final UsernameClickListener usernameClickListener;
+    private final OnUsernameClickListener onUsernameClickListener;
     private final TimeFormatter timeFormatter;
     private final Resources resources;
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
-    private final NiceShotListener niceShotListener;
+    private final OnNiceShotListener onNiceShotListener;
 
     private ShotModel mainShot;
     private List<ShotModel> replies;
@@ -57,20 +57,20 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
       AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
-      UsernameClickListener usernameClickListener,
-      OnParentShownListener onParentShownListener, NiceShotListener niceShotListener, TimeFormatter timeFormatter,
+      OnUsernameClickListener onUsernameClickListener,
+      OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
       Resources resources,
       AndroidTimeUtils timeUtils) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
-        this.usernameClickListener = usernameClickListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         this.onParentShownListener = onParentShownListener;
         this.timeFormatter = timeFormatter;
         this.resources = resources;
         this.timeUtils = timeUtils;
-        this.niceShotListener = niceShotListener;
+        this.onNiceShotListener = onNiceShotListener;
         this.replies = new ArrayList<>();
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -256,7 +256,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = shotModel.getComment();
             if (comment != null) {
                 CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                  usernameClickListener);
+                  onUsernameClickListener);
                 shotText.setText(spannedComment);
                 shotText.addLinks();
             } else {
@@ -290,7 +290,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        videoClickListener.onClick(shotModel.getVideoUrl());
+                        videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
             } else {
@@ -329,9 +329,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
-                        niceShotListener.unmarkNice(shotModel.getIdShot());
+                        onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
-                        niceShotListener.markNice(shotModel.getIdShot());
+                        onNiceShotListener.markNice(shotModel.getIdShot());
                     }
                 }
             });
@@ -397,7 +397,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String comment = shotModel.getComment();
            if (comment != null) {
                CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                       usernameClickListener);
+                 onUsernameClickListener);
                this.text.setText(spannedComment);
                this.text.addLinks();
             } else {
@@ -434,7 +434,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        videoClickListener.onClick(shotModel.getVideoUrl());
+                        videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
             } else {
@@ -447,9 +447,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     if (shotModel.isMarkedAsNice()) {
-                        niceShotListener.unmarkNice(shotModel.getIdShot());
+                        onNiceShotListener.unmarkNice(shotModel.getIdShot());
                     } else {
-                        niceShotListener.markNice(shotModel.getIdShot());
+                        onNiceShotListener.markNice(shotModel.getIdShot());
                     }
                 }
             });
@@ -496,7 +496,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             if (comment != null) {
                 this.text.setVisibility(View.VISIBLE);
                 CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-                        usernameClickListener);
+                  onUsernameClickListener);
                 this.text.setText(spannedComment);
                 this.text.addLinks();
             } else {
@@ -533,7 +533,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        videoClickListener.onClick(reply.getVideoUrl());
+                        videoClickListener.onVideoClick(reply.getVideoUrl());
                     }
                 });
             } else {
@@ -546,9 +546,9 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     if (reply.isMarkedAsNice()) {
-                        niceShotListener.unmarkNice(reply.getIdShot());
+                        onNiceShotListener.unmarkNice(reply.getIdShot());
                     } else {
-                        niceShotListener.markNice(reply.getIdShot());
+                        onNiceShotListener.markNice(reply.getIdShot());
                     }
                 }
             });

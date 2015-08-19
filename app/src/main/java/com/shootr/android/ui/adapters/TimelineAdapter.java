@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
@@ -23,23 +23,23 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final OnAvatarClickListener avatarClickListener;
     private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
-    private final NiceShotListener niceShotListener;
-    private final UsernameClickListener usernameClickListener;
+    private final OnNiceShotListener onNiceShotListener;
+    private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     private List<ShotModel> shots;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
-      OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, NiceShotListener niceShotListener,
-      UsernameClickListener usernameClickListener) {
+      OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnUsernameClickListener onUsernameClickListener) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
-        this.niceShotListener = niceShotListener;
-        this.usernameClickListener = usernameClickListener;
+        this.onNiceShotListener = onNiceShotListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
         shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -90,8 +90,9 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         switch (getItemViewType(position)) {
             case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
-                view.setTag(new ShotViewHolder(view, avatarClickListener, imageClickListener, videoClickListener, niceShotListener,
-                  usernameClickListener,
+                view.setTag(new ShotViewHolder(view, avatarClickListener, imageClickListener, videoClickListener,
+                  onNiceShotListener,
+                  onUsernameClickListener,
                   timeUtils,
                   picasso,
                   shotTextSpannableBuilder));

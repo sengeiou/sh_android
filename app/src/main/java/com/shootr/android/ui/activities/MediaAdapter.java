@@ -36,7 +36,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
           .inflate(R.layout.stream_media_layout, viewGroup, false);
         return new ViewHolder(layoutView, new OnVideoClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onVideoClick(String url) {
                 onVideoClick(url);
             }
         });
@@ -92,7 +92,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        videoClickListener.onClick(shotModel.getVideoUrl());
+                        videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
             }else{

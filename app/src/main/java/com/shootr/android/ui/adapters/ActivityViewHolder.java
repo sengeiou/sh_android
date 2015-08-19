@@ -15,7 +15,7 @@ import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
@@ -25,7 +25,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     private final AndroidTimeUtils androidTimeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnAvatarClickListener onAvatarClickListener;
-    private final UsernameClickListener usernameClickListener;
+    private final OnUsernameClickListener onUsernameClickListener;
 
     @Nullable @Bind(R.id.activity_avatar) ImageView avatar;
     @Nullable @Bind(R.id.ativity_user_name) TextView name;
@@ -37,13 +37,13 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener) {
+      OnUsernameClickListener onUsernameClickListener) {
         super(view);
         this.androidTimeUtils = androidTimeUtils;
         this.picasso = picasso;
         this.onAvatarClickListener = onAvatarClickListener;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-        this.usernameClickListener = usernameClickListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         ButterKnife.bind(this, view);
     }
 
@@ -60,13 +60,13 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onAvatarClickListener.onClick(activity.getIdUser(), avatar);
+                onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
             }
         });
     }
 
     protected CharSequence formatActivityComment(final ActivityModel activity) {
-        return shotTextSpannableBuilder.formatWithUsernameSpans(activity.getComment(), usernameClickListener);
+        return shotTextSpannableBuilder.formatWithUsernameSpans(activity.getComment(), onUsernameClickListener);
     }
 
 

@@ -4,5 +4,5 @@ import com.shootr.android.ui.model.ShotModel;
 
 public interface OnShotClick {
 
-    void onClick(ShotModel shot);
+    void onShotClick(ShotModel shot);
 }

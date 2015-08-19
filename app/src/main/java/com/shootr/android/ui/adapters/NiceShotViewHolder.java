@@ -7,7 +7,7 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -19,7 +19,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 public class NiceShotViewHolder extends ActivityViewHolder {
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-    private final UsernameClickListener usernameClickListener;
+    private final OnUsernameClickListener onUsernameClickListener;
     private final OnShotClick onShotClick;
 
     @BindString(R.string.activity_nice_shot_text_base) String niceShotTextBase;
@@ -30,19 +30,18 @@ public class NiceShotViewHolder extends ActivityViewHolder {
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener,
+      OnUsernameClickListener onUsernameClickListener,
       OnImageClickListener onImageClickListener,
       OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
-        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
+        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-        this.usernameClickListener = usernameClickListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
         shotViewHolder = new ShotViewHolder(view,
           onAvatarClickListener,
           onImageClickListener,
           onVideoClickListener,
-          null,
-          usernameClickListener,
+          null, onUsernameClickListener,
           androidTimeUtils,
           picasso,
           shotTextSpannableBuilder);
@@ -61,7 +60,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onShotClick.onClick(shotModel);
+                onShotClick.onShotClick(shotModel);
             }
         });
     }
@@ -69,7 +68,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
     private void renderNiceShot(ActivityModel activity) {
         String niceShotText = String.format(niceShotTextBase, activity.getUsername());
         CharSequence niceShotTextFormatted =
-          shotTextSpannableBuilder.formatWithUsernameSpans(niceShotText, usernameClickListener);
+          shotTextSpannableBuilder.formatWithUsernameSpans(niceShotText, onUsernameClickListener);
         text.setText(niceShotTextFormatted);
     }
 }

@@ -15,7 +15,7 @@ import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final PicassoWrapper picasso;
     private final AndroidTimeUtils timeUtils;
     private final OnAvatarClickListener avatarClickListener;
-    private final UsernameClickListener usernameClickListener;
+    private final OnUsernameClickListener onUsernameClickListener;
     private final OnStreamTitleClickListener streamTitleClickListener;
     private final OnImageClickListener onImageClickListener;
     private final OnVideoClickListener onVideoClickListener;
@@ -45,13 +45,13 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public ActivityTimelineAdapter(PicassoWrapper picasso,
       AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener,
-      UsernameClickListener usernameClickListener,
+      OnUsernameClickListener onUsernameClickListener,
       OnStreamTitleClickListener streamTitleClickListener,
       OnImageClickListener onImageClickListener,
       OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
-        this.usernameClickListener = usernameClickListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.streamTitleClickListener = streamTitleClickListener;
         this.onImageClickListener = onImageClickListener;
@@ -111,8 +111,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener,
-          usernameClickListener);
+          avatarClickListener, onUsernameClickListener);
     }
 
     private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent, int viewType) {
@@ -121,8 +120,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener,
-          usernameClickListener, streamTitleClickListener);
+          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
     }
 
     private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
@@ -131,8 +129,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener,
-          usernameClickListener, streamTitleClickListener);
+          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
     }
 
     private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent, int viewType) {
@@ -141,8 +138,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener,
-          usernameClickListener, streamTitleClickListener);
+          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
     }
 
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
@@ -151,8 +147,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener,
-          usernameClickListener,
+          avatarClickListener, onUsernameClickListener,
           onImageClickListener,
           onVideoClickListener,
           onShotClick);

@@ -16,7 +16,7 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
@@ -28,7 +28,7 @@ import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -119,13 +119,13 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
           }, //
           new OnVideoClickListener() {
               @Override
-              public void onClick(String url) {
+              public void onVideoClick(String url) {
                   onVideoClick(url);
               }
           }, //
-          new UsernameClickListener() {
+          new OnUsernameClickListener() {
               @Override
-              public void onClick(String username) {
+              public void onUsernameClick(String username) {
                   onUsernameClick(username);
               }
           }, //
@@ -135,7 +135,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   detailList.scrollToPosition(0);
               }
           }, //
-          new NiceShotListener() {
+          new OnNiceShotListener() {
               @Override
               public void markNice(String idShot) {
                   detailPresenter.markNiceShot(idShot);

@@ -4,5 +4,5 @@ import android.view.View;
 
 public interface OnAvatarClickListener {
 
-    void onClick(String userId, View avatarView);
+    void onAvatarClick(String userId, View avatarView);
 }

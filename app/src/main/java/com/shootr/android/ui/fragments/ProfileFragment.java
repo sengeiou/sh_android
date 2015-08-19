@@ -74,12 +74,12 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -173,8 +173,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private OnAvatarClickListener avatarClickListener;
     private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
-    private UsernameClickListener usernameClickListener;
-    private NiceShotListener niceShotListener;
+    private OnUsernameClickListener onUsernameClickListener;
+    private OnNiceShotListener onNiceShotListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
     private TimelineAdapter latestsShotsAdapter;
@@ -207,34 +207,34 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         setHasOptionsMenu(true);
         avatarClickListener = new OnAvatarClickListener() {
             @Override
-            public void onClick(String userId, View avatarView) {
+            public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
             }
         };
         imageClickListener = new OnImageClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onImageClick(String url) {
                 openShotImage(url);
             }
         };
 
-        usernameClickListener =  new UsernameClickListener() {
+        onUsernameClickListener =  new OnUsernameClickListener() {
             @Override
-            public void onClick(String username) {
+            public void onUsernameClick(String username) {
                 goToUserProfile(username);
             }
         };
 
         videoClickListener = new OnVideoClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onVideoClick(String url) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
         };
 
-        niceShotListener = new NiceShotListener() {
+        onNiceShotListener = new OnNiceShotListener() {
             @Override
             public void markNice(String idShot) {
                 profilePresenter.markNiceShot(idShot);
@@ -691,9 +691,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
               new TimelineAdapter(getActivity(),
                 picasso, timeUtils, avatarClickListener,
                 imageClickListener,
-                videoClickListener,
-                niceShotListener,
-                usernameClickListener){
+                videoClickListener, onNiceShotListener, onUsernameClickListener){
                   @Override protected boolean shouldShowTag() {
                       return true;
                   }

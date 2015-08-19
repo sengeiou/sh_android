@@ -35,7 +35,7 @@ import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
@@ -136,37 +136,37 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         adapter = new ActivityTimelineAdapter(picasso, timeUtils, //
           new OnAvatarClickListener() {
               @Override
-              public void onClick(String userId, View avatarView) {
+              public void onAvatarClick(String userId, View avatarView) {
                   openProfile(userId);
               }
           }, //
-          new UsernameClickListener() {
+          new OnUsernameClickListener() {
               @Override
-              public void onClick(String username) {
+              public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
           }, //
           new OnStreamTitleClickListener() {
               @Override
-              public void onClick(String streamId, String streamTitle) {
+              public void onStreamTitleClick(String streamId, String streamTitle) {
                   openStream(streamId, streamTitle);
               }
           }, //
           new OnImageClickListener() {
               @Override
-              public void onClick(String url) {
+              public void onImageClick(String url) {
                   openImage(url);
               }
           }, //
           new OnVideoClickListener() {
               @Override
-              public void onClick(String url) {
+              public void onVideoClick(String url) {
                   openVideo(url);
               }
           }, //
           new OnShotClick() {
               @Override
-              public void onClick(ShotModel shot) {
+              public void onShotClick(ShotModel shot) {
                   openShotDetail(shot);
               }
           });

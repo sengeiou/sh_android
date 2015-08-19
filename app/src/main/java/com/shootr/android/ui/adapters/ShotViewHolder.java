@@ -12,11 +12,11 @@ import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
@@ -29,8 +29,8 @@ public class ShotViewHolder {
     private final OnAvatarClickListener avatarClickListener;
     private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
-    private final NiceShotListener niceShotListener;
-    private final UsernameClickListener usernameClickListener;
+    private final OnNiceShotListener onNiceShotListener;
+    private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final PicassoWrapper picasso;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -52,16 +52,16 @@ public class ShotViewHolder {
       OnAvatarClickListener avatarClickListener,
       OnImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
-      NiceShotListener niceShotListener,
-      UsernameClickListener usernameClickListener,
+      OnNiceShotListener onNiceShotListener,
+      OnUsernameClickListener onUsernameClickListener,
       AndroidTimeUtils timeUtils,
       PicassoWrapper picasso,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
-        this.niceShotListener = niceShotListener;
-        this.usernameClickListener = usernameClickListener;
+        this.onNiceShotListener = onNiceShotListener;
+        this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.picasso = picasso;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
@@ -122,8 +122,7 @@ public class ShotViewHolder {
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment) {
-        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment,
-          usernameClickListener);
+        CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         vh.text.setText(spannedComment);
         vh.text.addLinks();
     }
@@ -154,7 +153,7 @@ public class ShotViewHolder {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                avatarClickListener.onClick(shot.getIdUser(), v);
+                avatarClickListener.onAvatarClick(shot.getIdUser(), v);
             }
         });
     }
@@ -167,7 +166,7 @@ public class ShotViewHolder {
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    imageClickListener.onClick(shot.getImage());
+                    imageClickListener.onImageClick(shot.getImage());
                 }
             });
         } else {
@@ -182,7 +181,7 @@ public class ShotViewHolder {
             videoFrame.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    videoClickListener.onClick(shot.getVideoUrl());
+                    videoClickListener.onVideoClick(shot.getVideoUrl());
                 }
             });
         } else {
@@ -197,9 +196,9 @@ public class ShotViewHolder {
             @Override
             public void onClick(View v) {
                 if (shot.isMarkedAsNice()) {
-                    niceShotListener.unmarkNice(shot.getIdShot());
+                    onNiceShotListener.unmarkNice(shot.getIdShot());
                 } else {
-                    niceShotListener.markNice(shot.getIdShot());
+                    onNiceShotListener.markNice(shot.getIdShot());
                 }
             }
         });

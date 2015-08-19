@@ -34,11 +34,11 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.NiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -322,23 +322,23 @@ public class StreamTimelineFragment extends BaseFragment
           timeUtils, //
           new OnAvatarClickListener() {
               @Override
-              public void onClick(String userId, View avatarView) {
+              public void onAvatarClick(String userId, View avatarView) {
                   openProfile(userId);
               }
           }, //
           new OnImageClickListener() {
               @Override
-              public void onClick(String url) {
+              public void onImageClick(String url) {
                   openImage(url);
               }
           }, //
           new OnVideoClickListener() {
               @Override
-              public void onClick(String url) {
+              public void onVideoClick(String url) {
                   onVideoClick(url);
               }
           }, //
-          new NiceShotListener() {
+          new OnNiceShotListener() {
               @Override
               public void markNice(String idShot) {
                   streamTimelinePresenter.markNiceShot(idShot);
@@ -349,9 +349,9 @@ public class StreamTimelineFragment extends BaseFragment
                   streamTimelinePresenter.unmarkNiceShot(idShot);
               }
           }, //
-          new UsernameClickListener() {
+          new OnUsernameClickListener() {
               @Override
-              public void onClick(String username) {
+              public void onUsernameClick(String username) {
                   openProfileFromUsername(username);
               }
           });
