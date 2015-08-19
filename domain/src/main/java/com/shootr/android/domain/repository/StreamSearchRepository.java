@@ -14,4 +14,6 @@ public interface StreamSearchRepository {
     void deleteDefaultStreams();
 
     List<StreamSearchResult> getStreamsListing(String listingIdUser);
+
+    Integer getWatchersForStream(String idStream);
 }

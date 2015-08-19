@@ -28,4 +28,7 @@ public interface StreamApiService {
 
     @DELETE("/streams/{idStream}")
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
+
+    @GET("/streams/{idStream}/watchers/")
+    Integer getWatchersForStream(@Path("idStream") String idStream) throws IOException;
 }

@@ -80,4 +80,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
             throw new ServerCommunicationException(networkError);
         }
     }
+
+    @Override public Integer getWatchersForStream(String idStream) {
+        try {
+            return streamApiService.getWatchersForStream(idStream);
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }

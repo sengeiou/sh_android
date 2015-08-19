@@ -19,4 +19,6 @@ public interface StreamDataSource {
     List<StreamEntity> getStreamsListing(String idUser);
 
     void deleteStream(String idStream) throws DeleteStreamNotAllowedException;
+
+    Integer getWatchersForStream(String idStream);
 }

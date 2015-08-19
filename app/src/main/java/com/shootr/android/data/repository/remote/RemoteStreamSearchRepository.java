@@ -114,4 +114,8 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
     }
+
+    @Override public Integer getWatchersForStream(String idStream) {
+        return remoteStreamDataSource.getWatchersForStream(idStream);
+    }
 }
