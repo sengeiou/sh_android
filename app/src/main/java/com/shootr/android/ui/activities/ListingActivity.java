@@ -27,6 +27,7 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
+    private static final String EXTRA_CURRENT_ID_USER = "current_idUser";
     public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
@@ -37,9 +38,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private ListingStreamsAdapter adapter;
 
-    public static Intent getIntent(Context context, String idUser) {
+    public static Intent getIntent(Context context, String idUser, String currentUserId) {
         Intent intent = new Intent(context, ListingActivity.class);
         intent.putExtra(EXTRA_ID_USER, idUser);
+        intent.putExtra(EXTRA_CURRENT_ID_USER, currentUserId);
         return intent;
     }
 
@@ -49,7 +51,13 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        adapter = new ListingStreamsAdapter(picasso, new OnStreamClickListener() {
+
+        String idUser = getIntent().getStringExtra(EXTRA_ID_USER);
+        String currentIdUser = getIntent().getStringExtra(EXTRA_CURRENT_ID_USER);
+
+        boolean isCurrentUser = idUser.equals(currentIdUser);
+
+        adapter = new ListingStreamsAdapter(picasso, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
