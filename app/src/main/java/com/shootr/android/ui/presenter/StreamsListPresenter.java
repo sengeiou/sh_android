@@ -7,7 +7,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
@@ -23,7 +22,6 @@ public class StreamsListPresenter implements Presenter {
     private final StreamsListInteractor streamsListInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
-    private final SelectStreamInteractor selectStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -32,14 +30,11 @@ public class StreamsListPresenter implements Presenter {
 
     @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor,
-      SelectStreamInteractor selectStreamInteractor,
-      StreamResultModelMapper streamResultModelMapper,
+      UnwatchStreamInteractor unwatchStreamInteractor, StreamResultModelMapper streamResultModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
-        this.selectStreamInteractor = selectStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -107,16 +102,7 @@ public class StreamsListPresenter implements Presenter {
     }
 
     public void streamCreated(String streamId) {
-        selectStreamCreated(streamId);
-    }
-
-    public void selectStreamCreated(String streamId) {
         streamsListView.navigateToCreatedStreamDetail(streamId);
-        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-                /* no-op */
-            }
-        });
     }
 
     private void setViewCurrentVisibleWatchingStream(StreamResultModel currentVisibleStream) {
