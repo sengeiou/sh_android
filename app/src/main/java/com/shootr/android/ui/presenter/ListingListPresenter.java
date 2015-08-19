@@ -115,14 +115,13 @@ public class ListingListPresenter implements Presenter{
     public void addToFavorite(StreamResultModel streamResultModel) {
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
           new Interactor.CompletedCallback() {
-              @Override
-              public void onCompleted() {
+              @Override public void onCompleted() {
+                  loadListing();
                   loadFavoriteStreams();
               }
           },
           new Interactor.ErrorCallback() {
-              @Override
-              public void onError(ShootrException error) {
+              @Override public void onError(ShootrException error) {
                   showErrorInView(error);
               }
           });
@@ -133,6 +132,7 @@ public class ListingListPresenter implements Presenter{
           new Interactor.CompletedCallback() {
               @Override
               public void onCompleted() {
+                  loadListing();
                   loadFavoriteStreams();
               }
           });
