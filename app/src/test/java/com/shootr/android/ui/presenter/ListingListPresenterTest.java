@@ -4,6 +4,7 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -37,6 +38,7 @@ public class ListingListPresenterTest {
     public static final String STREAM_TITLE = "stream_title";
 
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
+    @Mock GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor;
     @Mock ListingView listingView;
     @Mock SessionRepository sessionRepository;
     @Mock ListingListPresenter listingListPresenter;
@@ -51,6 +53,7 @@ public class ListingListPresenterTest {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
         listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
+          getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
           getFavoriteStreamInteractor,
@@ -106,6 +109,25 @@ public class ListingListPresenterTest {
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
 
         verify(listingView).showEmpty();
+    }
+
+    @Test
+    public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
+        setupUserWithoutListingCallback();
+
+        listingListPresenter.initialize(listingView, CURRENT_ID_USER, CURRENT_ID_USER);
+
+        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class),
+          anyString());
+    }
+
+    @Test
+    public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
+        setupUserWithoutListingCallback();
+
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+
+        verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
 
     private List<StreamSearchResult> emptyStreamsList() {
