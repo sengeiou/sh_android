@@ -85,6 +85,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Inject AndroidTimeUtils timeUtils;
 
+    @Inject ToolbarDecorator toolbarDecorator;
+
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
@@ -103,7 +105,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     private PhotoPickerController photoPickerController;
     private NewShotBarView newShotBarViewDelegate;
-    private ToolbarDecorator toolbarDecorator;
     private MenuItem watchersMenuItem;
     private BadgeDrawable watchersBadgeDrawable;
     private Integer watchNumberCount;
@@ -151,7 +152,7 @@ public class StreamTimelineFragment extends BaseFragment
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
-        initializeToolbar();
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
         initializePresenters(idStream);
     }
 
@@ -160,6 +161,9 @@ public class StreamTimelineFragment extends BaseFragment
             if (getActivity() != null) {
                 getActivity().finish();
             }
+        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == StreamDetailActivity.RESULT_OK){
+            String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
+            setStreamTitle(updatedShortTitle);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
         }
@@ -219,11 +223,6 @@ public class StreamTimelineFragment extends BaseFragment
         favoriteStatusPresenter.pause();
     }
 
-    private void initializeToolbar() {
-        //FIXME So coupling. Much bad. Such ugly.
-        toolbarDecorator = ((BaseToolbarDecoratedActivity) getActivity()).getToolbarDecorator();
-    }
-
     private void initializePresenters(String idStream) {
         streamTimelinePresenter.initialize(this, idStream);
         newShotBarPresenter.initialize(this);
@@ -233,6 +232,10 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     //endregion
+
+    private void setStreamTitle(String streamShortTitle) {
+        toolbarDecorator.setTitle(streamShortTitle);
+    }
 
     private void setupNewShotBarDelegate() {
         newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
