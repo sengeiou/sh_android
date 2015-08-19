@@ -105,7 +105,8 @@ public class WatchNumberPresenterTest {
     }
 
     @Test
-    public void shouldLoadWatchNumberWhenPresenterResumed() throws Exception {
+    public void shouldLoadWatchNumberWhenPresenterResumedAfterPause() throws Exception {
+        presenter.pause();
         presenter.resume();
 
         verify(watchNumberInteractor).loadWatchNumber(any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
