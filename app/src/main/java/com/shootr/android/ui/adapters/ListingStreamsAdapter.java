@@ -55,6 +55,7 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
             StreamResultModel stream = getItem(position);
             boolean showSeparator = position != getFirstItemPosition();
             ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
+            ((StreamResultViewHolder) viewHolder).renderAuthor(stream.getStreamModel().getAuthorUsername());
         }
     }
 
