@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 public class ListingListPresenterTest {
 
     public static final String PROFILE_ID_USER = "profile_id_user";
+    public static final String CURRENT_ID_USER = "current_id_user";
     public static final String STREAM_ID = "stream_id";
     public static final String STREAM_AUTHOR_ID = "stream_author_id";
     public static final String STREAM_TITLE = "stream_title";
@@ -75,7 +76,7 @@ public class ListingListPresenterTest {
     public void shouldShowContentIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
 
         verify(listingView).showContent();
     }
@@ -84,7 +85,7 @@ public class ListingListPresenterTest {
     public void shouldShowStreamsIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
 
         verify(listingView).renderStreams(anyList());
     }
@@ -93,7 +94,7 @@ public class ListingListPresenterTest {
     public void shouldHideContentIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
 
         verify(listingView).hideContent();
     }
@@ -102,7 +103,7 @@ public class ListingListPresenterTest {
     public void shouldShowNoStreamsIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
 
         verify(listingView).showEmpty();
     }

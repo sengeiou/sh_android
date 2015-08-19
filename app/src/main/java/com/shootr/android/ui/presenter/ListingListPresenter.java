@@ -31,6 +31,7 @@ public class ListingListPresenter implements Presenter{
     private boolean hasBeenPaused = false;
     private List<StreamResultModel> listingStreams;
     private List<StreamResultModel> favoriteStreams;
+    private String currentIdUser;
 
     @Inject public ListingListPresenter(GetUserListingStreamsInteractor getUserListingStreamsInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
@@ -48,9 +49,10 @@ public class ListingListPresenter implements Presenter{
         this.listingView = listingView;
     }
 
-    public void initialize(ListingView listingView, String profileIdUser) {
+    public void initialize(ListingView listingView, String profileIdUser, String currentIdUser) {
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
+        this.currentIdUser = currentIdUser;
         this.loadFavoriteStreams();
         this.startLoadingListing();
     }
@@ -61,21 +63,25 @@ public class ListingListPresenter implements Presenter{
     }
 
     private void loadListing() {
-        getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override
-            public void onLoaded(List<StreamSearchResult> streams) {
-                listingView.hideLoading();
-                if (!streams.isEmpty()) {
-                    listingStreams = streamResultModelMapper.transform(streams);
-                    renderStreams();
-                    listingView.hideEmpty();
-                    listingView.showContent();
-                } else {
-                    listingView.showEmpty();
-                    listingView.hideContent();
+        if (currentIdUser.equals(profileIdUser)) {
+            //TODO nuevo interactor (obtiene listing con nueva llamada watchers)
+        } else {
+            getUserListingStreamsInteractor.loadUserListingStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+                @Override
+                public void onLoaded(List<StreamSearchResult> streams) {
+                    listingView.hideLoading();
+                    if (!streams.isEmpty()) {
+                        listingStreams = streamResultModelMapper.transform(streams);
+                        renderStreams();
+                        listingView.hideEmpty();
+                        listingView.showContent();
+                    } else {
+                        listingView.showEmpty();
+                        listingView.hideContent();
+                    }
                 }
-            }
-        }, profileIdUser);
+            }, profileIdUser);
+        }
     }
 
     public void loadFavoriteStreams() {

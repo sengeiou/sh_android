@@ -83,7 +83,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
         String idUser = intent.getStringExtra(EXTRA_ID_USER);
-        presenter.initialize(this, idUser);
+        String currentIdUser = intent.getStringExtra(EXTRA_CURRENT_ID_USER);
+        presenter.initialize(this, idUser, currentIdUser);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
