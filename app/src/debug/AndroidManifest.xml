@@ -8,6 +8,15 @@
 
         <activity android:name="com.github.pedrovgs.lynx.LynxActivity"/>
 
+        <activity
+          android:name=".ui.ExternalIntentActivity"
+          >
+            <intent-filter>
+                <action android:name="com.shootr.android.intent.EXTERNAL_INTENT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".data.SyncBroadcastReceiver">
             <intent-filter >
                 <action android:name="com.shootr.android.ACTION_SYNC" />
