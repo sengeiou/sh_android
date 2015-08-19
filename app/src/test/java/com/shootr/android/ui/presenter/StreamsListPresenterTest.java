@@ -142,16 +142,7 @@ public class StreamsListPresenterTest {
     }
 
     @Test public void shouldShowRecommendedStreamWhenRecommendStreamsCompletedCallback() throws Exception {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback completedCallback =
-                  (Interactor.CompletedCallback) invocation.getArguments()[1];
-                completedCallback.onCompleted();
-                return null;
-            }
-        }).when(recommendStreamInteractor).getStreamMedia(anyString(),
-          any(Interactor.CompletedCallback.class),
-          anyErrorCallback());
+        setupRecommendStreamCompletedCallback();
 
         presenter.recommendStream(streamModel());
 
@@ -159,17 +150,36 @@ public class StreamsListPresenterTest {
     }
 
     @Test public void shouldShowErrorStreamWhenRecommendStreamsErrorCallback() throws Exception {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
-                errorCallback.onError(any(ShootrException.class));
-                return null;
-            }
-        }).when(recommendStreamInteractor).getStreamMedia(anyString(), any(Interactor.CompletedCallback.class), anyErrorCallback());
+        setupRecommendStreamErrorCallback();
 
         presenter.recommendStream(streamModel());
 
         verify(streamsListView).showError(anyString());
+    }
+
+    private void setupRecommendStreamErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                errorCallback.onError(new ShootrException() {});
+                return null;
+            }
+        }).when(recommendStreamInteractor).recommendStream(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
+    }
+
+    private void setupRecommendStreamCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(recommendStreamInteractor).recommendStream(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
     }
 
     private StreamResultModel streamModel() {
