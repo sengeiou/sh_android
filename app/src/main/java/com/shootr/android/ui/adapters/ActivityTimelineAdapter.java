@@ -8,6 +8,7 @@ import com.shootr.android.R;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
@@ -35,6 +36,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnStreamTitleClickListener streamTitleClickListener;
     private final OnImageClickListener onImageClickListener;
     private final OnVideoClickListener onVideoClickListener;
+    private final OnShotClick onShotClick;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
@@ -46,7 +48,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
       UsernameClickListener usernameClickListener,
       OnStreamTitleClickListener streamTitleClickListener,
       OnImageClickListener onImageClickListener,
-      OnVideoClickListener onVideoClickListener) {
+      OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
         this.usernameClickListener = usernameClickListener;
@@ -54,6 +56,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.streamTitleClickListener = streamTitleClickListener;
         this.onImageClickListener = onImageClickListener;
         this.onVideoClickListener = onVideoClickListener;
+        this.onShotClick = onShotClick;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
 
@@ -151,7 +154,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           avatarClickListener,
           usernameClickListener,
           onImageClickListener,
-          onVideoClickListener);
+          onVideoClickListener,
+          onShotClick);
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {

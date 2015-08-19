@@ -5,6 +5,7 @@ import butterknife.BindString;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.adapters.listeners.UsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
@@ -19,6 +20,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final UsernameClickListener usernameClickListener;
+    private final OnShotClick onShotClick;
 
     @BindString(R.string.activity_nice_shot_text_base) String niceShotTextBase;
     private ShotViewHolder shotViewHolder;
@@ -30,10 +32,11 @@ public class NiceShotViewHolder extends ActivityViewHolder {
       OnAvatarClickListener onAvatarClickListener,
       UsernameClickListener usernameClickListener,
       OnImageClickListener onImageClickListener,
-      OnVideoClickListener onVideoClickListener) {
+      OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
         super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.usernameClickListener = usernameClickListener;
+        this.onShotClick = onShotClick;
         shotViewHolder = new ShotViewHolder(view,
           onAvatarClickListener,
           onImageClickListener,
@@ -50,7 +53,17 @@ public class NiceShotViewHolder extends ActivityViewHolder {
         ShotModel shotModel = checkNotNull(activityModel.getShot());
         shotViewHolder.niceButton.setVisibility(View.GONE);
         shotViewHolder.render(shotModel, false);
+        setShotClickListener(shotModel);
         renderNiceShot(activityModel);
+    }
+
+    private void setShotClickListener(final ShotModel shotModel) {
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShotClick.onClick(shotModel);
+            }
+        });
     }
 
     private void renderNiceShot(ActivityModel activity) {

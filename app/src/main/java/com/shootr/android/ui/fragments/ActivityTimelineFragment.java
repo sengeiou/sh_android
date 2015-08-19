@@ -18,15 +18,18 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
@@ -160,6 +163,12 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
               public void onClick(String url) {
                   openVideo(url);
               }
+          }, //
+          new OnShotClick() {
+              @Override
+              public void onClick(ShotModel shot) {
+                  openShotDetail(shot);
+              }
           });
 
         activityList.setAdapter(adapter);
@@ -222,6 +231,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     private void openProfileFromUsername(String username) {
         Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
         startActivity(intentForUser);
+    }
+
+    private void openShotDetail(ShotModel shot) {
+        Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(shotIntent);
     }
 
     //region View methods
