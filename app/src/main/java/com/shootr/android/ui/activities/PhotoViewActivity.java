@@ -23,6 +23,8 @@ import com.squareup.picasso.Target;
 import javax.inject.Inject;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class PhotoViewActivity extends BaseToolbarActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
@@ -48,7 +50,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
 
     public static Intent getIntentForActivity(Context context, String imageUrl, String previewUrl) {
         Intent intent = new Intent(context, PhotoViewActivity.class);
-        intent.putExtra(EXTRA_IMAGE_URL, imageUrl);
+        intent.putExtra(EXTRA_IMAGE_URL, checkNotNull(imageUrl));
         intent.putExtra(EXTRA_IMAGE_PREVIEW_URL, previewUrl);
         return intent;
     }

@@ -2,6 +2,7 @@ package com.shootr.android.util;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.widgets.UsernameSpan;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +17,7 @@ public class ShotTextSpannableBuilder {
         this.pattern = Pattern.compile(USERNAME_REGEX);
     }
 
-    public CharSequence formatWithUsernameSpans(final CharSequence comment, final UsernameClickListener clickListener) {
+    public CharSequence formatWithUsernameSpans(final CharSequence comment, final OnUsernameClickListener clickListener) {
         SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
         Matcher matcher = pattern.matcher(comment);
         while (matcher.find()) {
@@ -26,7 +27,7 @@ public class ShotTextSpannableBuilder {
 
             UsernameSpan usernameClickSpan = new UsernameSpan(username) {
                 @Override public void onUsernameClick(String username) {
-                    clickListener.onClick(username);
+                    clickListener.onUsernameClick(username);
                 }
             };
             spannableBuilder.setSpan(usernameClickSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

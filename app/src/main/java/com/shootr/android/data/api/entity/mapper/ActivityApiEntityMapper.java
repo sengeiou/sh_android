@@ -29,6 +29,8 @@ public class ActivityApiEntityMapper {
         activityEntity.setStreamTag(activityApiEntity.getStreamTag());
         activityEntity.setStreamTitle(activityApiEntity.getStreamTitle());
 
+        activityEntity.setIdShot(activityApiEntity.getIdShot());
+
         activityEntity.setBirth(new Date(activityApiEntity.getBirth()));
         activityEntity.setModified(new Date(activityApiEntity.getModified()));
         activityEntity.setRevision(activityApiEntity.getRevision());

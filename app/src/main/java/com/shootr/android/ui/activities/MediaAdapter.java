@@ -12,7 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.Collections;
@@ -34,9 +34,9 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         View layoutView = LayoutInflater
           .from(viewGroup.getContext())
           .inflate(R.layout.stream_media_layout, viewGroup, false);
-        return new ViewHolder(layoutView, new TimelineAdapter.VideoClickListener() {
+        return new ViewHolder(layoutView, new OnVideoClickListener() {
             @Override
-            public void onClick(String url) {
+            public void onVideoClick(String url) {
                 onVideoClick(url);
             }
         });
@@ -76,9 +76,9 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         @Bind(R.id.shot_video_duration) TextView videoDuration;
         @Bind(R.id.stream_media_item) ImageView mediaImage;
 
-        private TimelineAdapter.VideoClickListener videoClickListener;
+        private OnVideoClickListener videoClickListener;
 
-        public ViewHolder(View itemView, final TimelineAdapter.VideoClickListener videoClickListener) {
+        public ViewHolder(View itemView, final OnVideoClickListener videoClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.videoClickListener = videoClickListener;
@@ -92,7 +92,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                 this.videoFrame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        videoClickListener.onClick(shotModel.getVideoUrl());
+                        videoClickListener.onVideoClick(shotModel.getVideoUrl());
                     }
                 });
             }else{

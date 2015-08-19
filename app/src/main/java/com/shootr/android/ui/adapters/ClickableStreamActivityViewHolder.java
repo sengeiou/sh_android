@@ -13,7 +13,7 @@ import com.shootr.android.ui.widgets.StreamTitleSpan;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,8 +23,8 @@ public abstract class ClickableStreamActivityViewHolder extends ActivityViewHold
 
     public ClickableStreamActivityViewHolder(View view, PicassoWrapper picasso, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, usernameClickListener);
+      OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
+        super(view, picasso, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
         this.onStreamTitleClickListener = onStreamTitleClickListener;
     }
 
@@ -49,7 +49,7 @@ public abstract class ClickableStreamActivityViewHolder extends ActivityViewHold
           streamTitle,
           new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle()) {
               @Override public void onStreamClick(String streamId, String streamTitle) {
-                  onStreamTitleClickListener.onClick(streamId, streamTitle);
+                  onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle);
               }
           });
 

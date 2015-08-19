@@ -2,6 +2,7 @@ package com.shootr.android.domain;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class Activity {
 
@@ -14,6 +15,7 @@ public class Activity {
     private String comment;
     private String type;
     private Date publishDate;
+    private Shot shot;
 
     private ActivityUserInfo userInfo;
 
@@ -156,6 +158,14 @@ public class Activity {
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
         result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
         return result;
+    }
+
+    public Shot getShot() {
+        return shot;
+    }
+
+    public void setShot(Shot shot) {
+        this.shot = shot;
     }
 
     public static class ActivityUserInfo {

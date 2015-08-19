@@ -1,6 +1,6 @@
 package com.shootr.android.ui.adapters.listeners;
 
-public interface NiceShotListener {
+public interface OnNiceShotListener {
 
     void markNice(String idShot);
 

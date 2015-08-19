@@ -8,19 +8,18 @@ import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 
 public class StartedShootingViewHolder extends ClickableStreamActivityViewHolder {
 
     public StartedShootingViewHolder(View view, PicassoWrapper picasso, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
+      OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           picasso,
           androidTimeUtils,
           shotTextSpannableBuilder,
-          onAvatarClickListener,
-          usernameClickListener, onStreamTitleClickListener);
+          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
     }
 
     @NonNull protected String getPatternText() {

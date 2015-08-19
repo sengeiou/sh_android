@@ -8,7 +8,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.util.UsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 
 public class CheckinViewHolder extends ClickableStreamActivityViewHolder {
 
@@ -17,14 +17,13 @@ public class CheckinViewHolder extends ClickableStreamActivityViewHolder {
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      UsernameClickListener usernameClickListener,
+      OnUsernameClickListener onUsernameClickListener,
       OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           picasso,
           androidTimeUtils,
           shotTextSpannableBuilder,
-          onAvatarClickListener,
-          usernameClickListener, onStreamTitleClickListener);
+          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
     }
 
     @NonNull

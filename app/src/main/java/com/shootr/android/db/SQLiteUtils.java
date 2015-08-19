@@ -187,6 +187,7 @@ public class SQLiteUtils {
       + " VARCHAR(255) NULL,"
       + DatabaseContract.ActivityTable.COMMENT+ " VARCHAR(255) NULL,"
       + DatabaseContract.ActivityTable.TYPE+ " TEXT NULL,"
+      + DatabaseContract.ActivityTable.ID_SHOT+ " TEXT NULL,"
       + SyncColumns.BIRTH + " DATETIME NOT NULL,"
       + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
       + SyncColumns.DELETED + " DATETIME NULL,"

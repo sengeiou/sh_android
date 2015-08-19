@@ -23,6 +23,7 @@ public class ActivityEntityMapper extends GenericMapper {
         activity.setStreamTag(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_TAG)));
         activity.setComment(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.COMMENT)));
         activity.setType(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TYPE)));
+        activity.setIdShot(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_SHOT)));
         setSynchronizedfromCursor(c, activity);
         return activity;
     }
@@ -38,6 +39,7 @@ public class ActivityEntityMapper extends GenericMapper {
         cv.put(DatabaseContract.ActivityTable.STREAM_TAG, activity.getStreamTag());
         cv.put(DatabaseContract.ActivityTable.COMMENT, activity.getComment());
         cv.put(DatabaseContract.ActivityTable.TYPE, activity.getType());
+        cv.put(DatabaseContract.ActivityTable.ID_SHOT, activity.getIdShot());
         setSynchronizedtoContentValues(activity,cv);
         return cv;
     }

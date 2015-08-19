@@ -8,7 +8,10 @@ import javax.inject.Inject;
 
 public class ActivityModelMapper {
 
-    @Inject public ActivityModelMapper() {
+    private final ShotModelMapper shotModelMapper;
+
+    @Inject public ActivityModelMapper(ShotModelMapper shotModelMapper) {
+        this.shotModelMapper = shotModelMapper;
     }
 
     public ActivityModel transform(Activity activity) {
@@ -29,6 +32,8 @@ public class ActivityModelMapper {
             activityModel.setStreamTag(streamInfo.getStreamTag());
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
         }
+
+        activityModel.setShot(shotModelMapper.transform(activity.getShot()));
 
         return activityModel;
     }
