@@ -41,6 +41,7 @@ public class GetStreamTimelineInteractorTest {
     private static final String STREAM_AUTHOR_ID = "stream_author";
     private static final String ID_SHOT_FROM_AUTHOR = "shot_from_author";
     private static final String ID_CURRENT_USER = "current_user";
+    private static final String STREAM_ID = "stream";
 
     private static final Long DATE_OLDER = 1000L;
     private static final Long DATE_MIDDLE = 2000L;
@@ -66,20 +67,7 @@ public class GetStreamTimelineInteractorTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
         interactor = new GetStreamTimelineInteractor(interactorHandler,
-          postExecutionThread,
-          sessionRepository,
-          localShotRepository, streamRepository,
-          localUserRepository
-        );
-    }
-
-    @Test
-    public void shouldNotRetrieveTimelineWhenNoStreamWatching() throws Exception {
-        when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUserNotWatching());
-
-        interactor.loadStreamTimeline(spyCallback, errorCallback);
-
-        verify(localShotRepository, never()).getShotsForStreamTimeline(any(StreamTimelineParameters.class));
+          postExecutionThread, localShotRepository);
     }
 
     @Test
@@ -87,17 +75,10 @@ public class GetStreamTimelineInteractorTest {
         setupWatchingStream();
         when(localShotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(unorderedShots());
 
-        interactor.loadStreamTimeline(spyCallback, errorCallback);
+        interactor.loadStreamTimeline(STREAM_ID, spyCallback, errorCallback);
         List<Shot> localShotsReturned = spyCallback.timelinesReturned.get(0).getShots();
 
         assertThat(localShotsReturned).isSortedAccordingTo(new Shot.NewerAboveComparator());
-    }
-
-    private User currentUserNotWatching() {
-        User user = new User();
-        user.setIdUser(ID_CURRENT_USER);
-        user.setIdWatchingStream(null);
-        return user;
     }
 
     private User currentUserWatching() {

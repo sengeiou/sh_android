@@ -21,8 +21,8 @@ public class StreamTimelineInteractorsWrapper {
         this.getOlderStreamTimelineInteractor = getOlderStreamTimelineInteractor;
     }
 
-    public void loadTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
-        getStreamTimelineInteractor.loadStreamTimeline(callback, errorCallback);
+    public void loadTimeline(String idStream, Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {
+        getStreamTimelineInteractor.loadStreamTimeline(idStream, callback, errorCallback);
     }
 
     public void refreshTimeline(Interactor.Callback<Timeline> callback, Interactor.ErrorCallback errorCallback) {

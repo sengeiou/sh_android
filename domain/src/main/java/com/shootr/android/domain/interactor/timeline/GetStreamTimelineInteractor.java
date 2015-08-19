@@ -1,12 +1,9 @@
 package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Timeline;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.TimelineException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -15,7 +12,6 @@ import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,27 +21,22 @@ public class GetStreamTimelineInteractor implements Interactor {
     //region Dependencies
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final SessionRepository sessionRepository;
     private final ShotRepository localShotRepository;
-    private final StreamRepository localStreamRepository;
-    private final UserRepository localUserRepository;
+    private String idStream;
     private Callback callback;
     private ErrorCallback errorCallback;
 
     @Inject public GetStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      @Local ShotRepository localShotRepository, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository) {
-        this.sessionRepository = sessionRepository;
+      PostExecutionThread postExecutionThread,
+      @Local ShotRepository localShotRepository) {
         this.localShotRepository = localShotRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.localStreamRepository = localStreamRepository;
-        this.localUserRepository = localUserRepository;
     }
     //endregion
 
-    public void loadStreamTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void loadStreamTimeline(String idStream, Callback<Timeline> callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -56,45 +47,24 @@ public class GetStreamTimelineInteractor implements Interactor {
     }
 
     private void loadLocalShots() {
-        Stream visibleStream = getVisibleStream();
-        if (visibleStream != null) {
-            List<Shot> shots = loadLocalShots(buildParameters(visibleStream));
-            shots = sortShotsByPublishDate(shots);
-            notifyTimelineFromShots(shots);
-        } else {
-            notifyError(new TimelineException("Can't load stream timeline without visible stream"));
-        }
+        List<Shot> shots = loadLocalShots(buildParameters());
+        shots = sortShotsByPublishDate(shots);
+        notifyTimelineFromShots(shots);
     }
 
     private List<Shot> loadLocalShots(StreamTimelineParameters timelineParameters) {
         return localShotRepository.getShotsForStreamTimeline(timelineParameters);
     }
 
-    private StreamTimelineParameters buildParameters(Stream stream) {
+    private StreamTimelineParameters buildParameters() {
         return StreamTimelineParameters.builder()
-          .forStream(stream)
+          .forStream(idStream)
           .build();
     }
 
     private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
         Collections.sort(remoteShots, new Shot.NewerAboveComparator());
         return remoteShots;
-    }
-
-    private List<String> getPeopleIds() {
-        List<String> ids = new ArrayList<>();
-        for (User user : localUserRepository.getPeople()) {
-            ids.add(user.getIdUser());
-        }
-        return ids;
-    }
-
-    private Stream getVisibleStream() {
-        String idWatchingStream = localUserRepository.getUserById(sessionRepository.getCurrentUserId()).getIdWatchingStream();
-        if (idWatchingStream != null) {
-            return localStreamRepository.getStreamById(idWatchingStream);
-        }
-        return null;
     }
 
     //region Result

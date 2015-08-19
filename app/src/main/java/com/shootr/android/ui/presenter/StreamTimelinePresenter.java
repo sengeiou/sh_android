@@ -91,7 +91,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-        timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.loadTimeline(streamId, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
