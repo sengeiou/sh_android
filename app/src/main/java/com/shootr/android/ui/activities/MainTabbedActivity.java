@@ -1,6 +1,8 @@
 package com.shootr.android.ui.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.path.android.jobqueue.JobManager;
@@ -27,9 +28,13 @@ import com.shootr.android.ui.fragments.StreamsListFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.MainScreenPresenter;
 import com.shootr.android.ui.views.MainScreenView;
+import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.util.MenuItemValueHolder;
 import com.squareup.otto.Bus;
 import java.util.Locale;
 import javax.inject.Inject;
+
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
@@ -41,6 +46,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Inject @Main Bus bus;
 
     private ToolbarDecorator toolbarDecorator;
+    private BadgeDrawable activityBadgeIcon;
+    private MenuItemValueHolder activityMenu = new MenuItemValueHolder();
 
     @Override
     protected int getLayoutResource() {
@@ -91,7 +98,35 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        activityMenu.bindRealMenuItem(menu.findItem(R.id.menu_activity));
+
+        LayerDrawable activityIcon = (LayerDrawable) getResources().getDrawable(R.drawable.activity_badge_circle);
+        checkNotNull(activityIcon);
+        setupActivityBadgeIcon(activityIcon);
+        activityMenu.setIcon(activityIcon);
+        activityMenu.getIcon();
+
         return true;
+    }
+
+    public void setupActivityBadgeIcon(LayerDrawable icon) {
+        // Reuse drawable if possible
+        if (activityBadgeIcon == null) {
+            Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+            if (reuse != null && reuse instanceof BadgeDrawable) {
+                activityBadgeIcon = (BadgeDrawable) reuse;
+            } else {
+                activityBadgeIcon = new BadgeDrawable(this);
+            }
+        }
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, activityBadgeIcon);
+    }
+
+    private void updateWatchNumberIcon(int count) {
+        if (activityBadgeIcon != null ) {
+            activityBadgeIcon.setCount(count);
+        }
     }
 
     @Override
@@ -123,8 +158,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showActivityBadge(int count) {
-        // TODO update badge
-        Toast.makeText(this, "New badge: " + badgeCount.get(), Toast.LENGTH_SHORT).show();
+       updateWatchNumberIcon(count);
     }
 
     private void setToolbarClickListener(final UserModel userModel) {

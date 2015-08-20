@@ -20,5 +20,5 @@
       android:textSize="16dp"
       android:textColor="@color/primary"
       android:textStyle="bold"
-      android:background="@drawable/badge_circle"/>
+      android:background="@drawable/watchers_badge_circle"/>
   </RelativeLayout>
