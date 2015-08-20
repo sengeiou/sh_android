@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ShareCompat;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -754,11 +755,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT,String.format(shareShotMessage,
-          shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()));
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.share_shot_chooser_title)));
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setText(String.format(shareShotMessage,
+            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
+          .setChooserTitle(getString(R.string.share_shot_chooser_title))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     private void setShotItemBackgroundRetainPaddings(View shotView) {
