@@ -470,12 +470,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.shot_bar_drafts)
     public void openDraftsClicked() {
-        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed) {
-            showStreamIsRemoved();
-        } else {
-            newShotBarPresenter.openDrafts(streamTimelinePresenter.getRemoved());
-        }
+        startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
     //region View methods
@@ -555,10 +550,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     public void showStreamIsRemoved() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override public void openDrafts() {
-        startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 
     @Override public void showWatchingPeopleCount(Integer count) {

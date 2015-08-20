@@ -92,7 +92,4 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
         set.start();
     }
 
-    @Override public void openDrafts() {
-        /* no - op */
-    }
 }
