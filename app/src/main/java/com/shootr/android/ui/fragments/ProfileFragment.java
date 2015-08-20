@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ShareCompat;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -147,6 +148,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Bind(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+
+    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
@@ -727,8 +730,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
+              @Override public void run() {
+                  shareShot(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
               @Override public void run() {
                   ClipboardManager clipboard =
                     (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -740,6 +747,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void shareShot(ShotModel shotModel) {
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setText(String.format(shareShotMessage,
+            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
+          .setChooserTitle(getString(R.string.share_shot_chooser_title))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     private void setShotItemBackgroundRetainPaddings(View shotView) {

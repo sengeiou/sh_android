@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Bind(R.id.all_shots_loading) View loadingView;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Deprecated private TimelineAdapter adapter;
 
@@ -113,7 +115,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override
+            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -121,7 +124,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
                 }
             }
 
-            @Override public void onScrollIdle() {
+            @Override
+            public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -193,19 +197,33 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this).addAction(getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.report_context_menu_share_shot), new Runnable() {
               @Override public void run() {
-                  ClipboardManager clipboard =
-                    (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                  clipboard.setPrimaryClip(clip);
+                  shareShot(shotModel);
               }
-          }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
+          })
+          .addAction(getString(R.string.report_context_menu_copy_text), new Runnable() {
+                @Override public void run() {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                    clipboard.setPrimaryClip(clip);
+                }
+            }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void shareShot(ShotModel shotModel) {
+        Intent intent = ShareCompat.IntentBuilder.from(this)
+          .setType("text/plain")
+          .setText(String.format(shareShotMessage,
+            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
+          .setChooserTitle(getString(R.string.share_shot_chooser_title))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     protected void openProfile(String idUser) {

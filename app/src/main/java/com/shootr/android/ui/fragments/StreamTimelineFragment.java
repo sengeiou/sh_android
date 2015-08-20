@@ -10,6 +10,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -96,6 +97,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     private TimelineAdapter adapter;
 
@@ -427,18 +429,30 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
-              @Override
-              public void run() {
-                  copyShotCommentToClipboard(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
+            @Override public void run() {
+                shareShot(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
             @Override
             public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void shareShot(ShotModel shotModel) {
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setText(String.format(shareShotMessage,
+            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
+          .setChooserTitle(getString(R.string.share_shot_chooser_title))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     private void copyShotCommentToClipboard(ShotModel shotModel) {
