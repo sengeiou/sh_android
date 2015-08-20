@@ -2,11 +2,7 @@ package com.shootr.android.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -39,8 +35,6 @@ import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -197,11 +191,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
           })
           .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
               @Override public void run() {
-                  if (stream.getStreamModel().getPicture() != null) {
-                    shareStreamWithImage(stream);
-                  } else {
-                      shareStream(stream);
-                  }
+                  shareStream(stream);
               }
           }).show();
     }
@@ -216,31 +206,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
           .createChooserIntent();
         startActivity(intent);
     }
-
-    private void shareStreamWithImage(final StreamResultModel stream) {
-        picasso.load(stream.getStreamModel().getPicture()).into(new Target() {
-            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT,String.format(getActivity().getString(R.string.recommend_stream_message),
-                  stream.getStreamModel().getTitle(),
-                  stream.getStreamModel().getIdStream()));
-                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "", null);
-                Uri streamImageUri = Uri.parse(path);
-                intent.putExtra(Intent.EXTRA_STREAM, streamImageUri);
-                intent.setType("image/*");
-                startActivity(Intent.createChooser(intent, getActivity().getString(R.string.recommend_via)));
-            }
-
-            @Override public void onBitmapFailed(Drawable errorDrawable) {
-                //TODO handle error
-            }
-
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-                /* no-op */
-            }
-        });
-    }
-
+    
     //region View methods
     @Override public void renderStream(List<StreamResultModel> streams) {
         adapter.setStreams(streams);
