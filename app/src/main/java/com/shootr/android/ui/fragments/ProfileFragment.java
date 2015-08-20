@@ -145,6 +145,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
+    @BindString(R.string.share_shot_message) String shareShotMessage;
+
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
@@ -732,8 +734,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_copy_text),
-          new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
+              @Override public void run() {
+                  shareShot(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
               @Override public void run() {
                   ClipboardManager clipboard =
                     (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -745,6 +751,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                 reportShotPresenter.report(shotModel);
             }
         }).show();
+    }
+
+    private void shareShot(ShotModel shotModel) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT,String.format(shareShotMessage,
+          shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()));
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.share_shot_chooser_title)));
     }
 
     private void setShotItemBackgroundRetainPaddings(View shotView) {
