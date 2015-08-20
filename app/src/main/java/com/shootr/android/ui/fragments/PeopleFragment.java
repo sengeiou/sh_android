@@ -32,6 +32,7 @@ import com.shootr.android.ui.presenter.SuggestedPeoplePresenter;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
+import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.List;
 import javax.inject.Inject;
@@ -86,6 +87,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         super.onDestroyView();
         ButterKnife.unbind(this);
         presenter.setView(new NullPeopleView());
+        suggestedPeoplePresenter.setView(new NullSuggestedPeopleView());
     }
 
     @Override public void onResume() {
