@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
@@ -54,12 +53,7 @@ public class RestoreStreamInteractor implements Interactor {
             stream.setRemoved(false);
 
             remoteStreamRepository.putStream(stream);
-
-            User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-
-            localUserRepository.putUser(currentUser);
-            remoteUserRepository.putUser(currentUser);
-            sessionRepository.setCurrentUser(currentUser);
+            
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
