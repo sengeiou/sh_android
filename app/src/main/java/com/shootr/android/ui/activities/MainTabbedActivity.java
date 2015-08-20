@@ -21,16 +21,16 @@ import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.StreamsListFragment;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.presenter.CurrentUserPresenter;
-import com.shootr.android.ui.views.MainTabbedView;
+import com.shootr.android.ui.presenter.MainScreenPresenter;
+import com.shootr.android.ui.views.MainScreenView;
 import java.util.Locale;
 import javax.inject.Inject;
 
-public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainTabbedView{
+public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
-    @Inject CurrentUserPresenter currentUserPresenter;
+    @Inject MainScreenPresenter mainScreenPresenter;
     @Inject JobManager jobManager;
 
     private ToolbarDecorator toolbarDecorator;
@@ -56,7 +56,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     protected void initializePresenter() {
-        currentUserPresenter.initialize(this);
+        mainScreenPresenter.initialize(this);
         startGCMRegistration();
     }
 
@@ -70,13 +70,13 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     protected void onResume() {
         super.onResume();
-        currentUserPresenter.resume();
+        mainScreenPresenter.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        currentUserPresenter.pause();
+        mainScreenPresenter.pause();
     }
 
     @Override
