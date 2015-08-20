@@ -5,24 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
-import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.ui.model.ActivityModel;
+import com.shootr.android.notifications.gcm.PushNotification;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
 
-public abstract class SingleActivityNotification extends AbstractActivityNotification {
+public class SingleActivityNotification extends AbstractActivityNotification {
 
     private final PicassoWrapper picasso;
-    private final ActivityModel activity;
+    private final PushNotification.NotificationValues values;
 
     public SingleActivityNotification(Context context,
       NotificationBuilderFactory builderFactory,
-      PicassoWrapper picasso,
-      ActivityModel activityModel) {
+      PicassoWrapper picasso, PushNotification.NotificationValues values) {
         super(context, builderFactory);
         this.picasso = picasso;
-        this.activity = activityModel;
+        this.values = values;
     }
 
     @Override
@@ -32,19 +30,23 @@ public abstract class SingleActivityNotification extends AbstractActivityNotific
         builder.setContentText(getContentText());
     }
 
-    protected ActivityModel getActivity() {
-        return activity;
+    public String getTitle() {
+        return values.getTitle();
     }
 
-    public abstract String getTitle();
+    public String getContentText() {
+        return values.getContentText();
+    }
 
-    public abstract String getContentText();
-
+    @Override
+    public CharSequence getTickerText() {
+        return values.getTickerText();
+    }
 
     @Override
     public Bitmap getLargeIcon() {
         try {
-            return picasso.loadTimelineImage(activity.getUserPhoto()).get();
+            return picasso.loadTimelineImage(values.getIcon()).get();
         } catch (IOException e) {
             return null;
         }
