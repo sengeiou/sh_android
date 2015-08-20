@@ -55,7 +55,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
             List<FavoriteApiEntity> favorites = favoriteApiService.getFavorites();
             storeEmbedStreams(favorites);
             return favoriteApiEntityMapper.transform(favorites);
-        } catch (IOException error) {
+        } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
 
@@ -65,7 +65,7 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     public void removeFavoriteByIdStream(String streamId) {
         try {
             favoriteApiService.deleteFavorite(streamId);
-        } catch (IOException error) {
+        } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
     }

@@ -16,15 +16,15 @@ public interface StreamApiService {
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")
-    List<StreamEntity> getStreamList(@Query("locale") String locale) throws IOException;
+    List<StreamEntity> getStreamList(@Query("locale") String locale) throws ApiException, IOException;
 
     @GET("/user/{idUser}/streams?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamListing(@Path("idUser") String idUserStream,
-      @Query("count") Integer maxNumberOfListingStreams) throws IOException;
+      @Query("count") Integer maxNumberOfListingStreams) throws ApiException, IOException;
 
     @GET("/streams/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
       @Query("query") String query, @Query("locale") String locale) throws
-      IOException;
+      ApiException, IOException;
 
     @DELETE("/streams/{idStream}")
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;

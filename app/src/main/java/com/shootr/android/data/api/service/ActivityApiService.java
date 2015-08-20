@@ -1,6 +1,7 @@
 package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.entity.ActivityApiEntity;
+import com.shootr.android.data.api.exception.ApiException;
 import java.io.IOException;
 import java.util.List;
 import retrofit.http.GET;
@@ -14,8 +15,8 @@ public interface ActivityApiService {
       @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp,
       @Query("maxTimestamp") Long maxTimestamp)
-    throws IOException;
+    throws ApiException, IOException;
 
     @GET("/activity/{id}")
-    ActivityApiEntity getActivity(@Path("id") String id) throws IOException;
+    ActivityApiEntity getActivity(@Path("id") String id) throws ApiException, IOException;
 }

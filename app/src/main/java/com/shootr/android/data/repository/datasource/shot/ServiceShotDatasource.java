@@ -51,7 +51,7 @@ public class ServiceShotDatasource implements ShotDataSource {
               parameters.getIncludeNiceShots(),
               parameters.getMaxNiceShotsIncluded());
             return shotApiEntityMapper.transform(shots);
-        } catch (IOException e) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }

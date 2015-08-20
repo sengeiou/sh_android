@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -19,7 +20,7 @@ public class ServiceStreamListDataSource implements StreamListDataSource {
     public List<StreamEntity> getStreamList(String locale) {
         try {
             return streamApiService.getStreamList(locale);
-        } catch (IOException e) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -27,7 +28,7 @@ public class ServiceStreamListDataSource implements StreamListDataSource {
     @Override public List<StreamEntity> getStreams(String query, String locale) {
         try {
             return streamApiService.getStreams(query, locale);
-        } catch (IOException e) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
