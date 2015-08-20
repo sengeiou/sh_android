@@ -10,11 +10,15 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.prefs.ActivityBadgeCount;
+import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.FavoritesFragment;
@@ -23,6 +27,7 @@ import com.shootr.android.ui.fragments.StreamsListFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.MainScreenPresenter;
 import com.shootr.android.ui.views.MainScreenView;
+import com.squareup.otto.Bus;
 import java.util.Locale;
 import javax.inject.Inject;
 
@@ -32,6 +37,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @Inject MainScreenPresenter mainScreenPresenter;
     @Inject JobManager jobManager;
+    @Inject @ActivityBadgeCount IntPreference badgeCount;
+    @Inject @Main Bus bus;
 
     private ToolbarDecorator toolbarDecorator;
 
@@ -71,12 +78,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     protected void onResume() {
         super.onResume();
         mainScreenPresenter.resume();
+        bus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mainScreenPresenter.pause();
+        bus.unregister(this);
     }
 
     @Override
@@ -112,9 +121,16 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         setToolbarClickListener(userModel);
     }
 
+    @Override
+    public void showActivityBadge(int count) {
+        // TODO update badge
+        Toast.makeText(this, "New badge: " + badgeCount.get(), Toast.LENGTH_SHORT).show();
+    }
+
     private void setToolbarClickListener(final UserModel userModel) {
         toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Intent intent = ProfileContainerActivity.getIntent(view.getContext(), userModel.getIdUser());
                 startActivity(intent);
             }

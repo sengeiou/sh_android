@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.prefs.ActivityBadgeCount;
+import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.bus.BadgeChanged;
+import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.notifications.activity.ActivityNotificationManager;
@@ -33,6 +37,8 @@ public class GCMIntentService extends IntentService {
     @Inject @Remote ShotRepository remoteShotRepository;
     @Inject ShotModelMapper shotModelMapper;
     @Inject ObjectMapper objectMapper;
+    @Inject @ActivityBadgeCount IntPreference badgeCount;
+    @Inject BusPublisher busPublisher;
 
     public GCMIntentService() {
         super("GCM Service");
@@ -51,6 +57,11 @@ public class GCMIntentService extends IntentService {
 
         try {
             PushNotification push = buildPushNotificationFromExtras(extras);
+
+            if (push.getBadgeIncrement() > 0) {
+                badgeCount.set(badgeCount.get() + push.getBadgeIncrement());
+                busPublisher.post(new BadgeChanged.Event());
+            }
 
             if (push.isSilent()) {
                 return;

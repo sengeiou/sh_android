@@ -45,4 +45,9 @@ public class PreferenceModule {
       SharedPreferences preferences) {
         return new IntPreference(preferences, "preferences_database_version", 0);
     }
+
+    @Provides @Singleton @ActivityBadgeCount IntPreference provideActivityBadgeCount(
+      SharedPreferences preferences) {
+        return new IntPreference(preferences, "activity_badge_count", 0);
+    }
 }

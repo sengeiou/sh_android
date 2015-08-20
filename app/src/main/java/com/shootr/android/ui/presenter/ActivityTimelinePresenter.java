@@ -1,6 +1,8 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.prefs.ActivityBadgeCount;
+import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -23,18 +25,24 @@ public class ActivityTimelinePresenter implements Presenter {
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final Poller poller;
+    private final IntPreference badgeCount;
 
     private ActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
     private boolean mightHaveMoreActivities = true;
 
     @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller) {
+      ActivityModelMapper activityModelMapper,
+      @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory,
+      Poller poller,
+      @ActivityBadgeCount IntPreference badgeCount) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.poller = poller;
+        this.badgeCount = badgeCount;
     }
 
     public void setView(ActivityTimelineView timelineView) {
@@ -44,12 +52,17 @@ public class ActivityTimelinePresenter implements Presenter {
     public void initialize(ActivityTimelineView timelineView) {
         this.setView(timelineView);
         this.loadTimeline();
+        this.clearActivityBadge();
         poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override
             public void run() {
                 loadNewActivities();
             }
         });
+    }
+
+    private void clearActivityBadge() {
+        badgeCount.delete();
     }
 
     private void startPollingActivities() {
