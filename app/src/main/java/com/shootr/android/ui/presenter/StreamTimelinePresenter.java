@@ -38,7 +38,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
     private boolean isRefreshing = false;
-    private Boolean removed;
+    private Boolean removed = false;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -199,7 +199,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     @Override public void resume() {
-        removed = false;
         bus.register(this);
         loadTimeline();
         startPollingShots();
