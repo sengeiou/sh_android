@@ -6,7 +6,7 @@
     <item
       android:id="@+id/menu_remove"
       android:icon="@drawable/ic_action_remove"
-      android:title="@string/delete_stream_label"
+      android:title="@string/remove_stream_label"
       android:visible="false"
       app:showAsAction="always"
       tools:visible="true" />
