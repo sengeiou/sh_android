@@ -195,7 +195,7 @@ public class StreamManager extends AbstractManager{
         return listingCount;
     }
 
-    public List<StreamEntity> getStreamsListing(String idUser) {
+    public List<StreamEntity> getStreamsListingNotRemoved(String idUser) {
         String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ? AND " + DatabaseContract.StreamTable.REMOVED + " = ?";
         String[] whereArguments = new String[] { idUser, "0" };
 

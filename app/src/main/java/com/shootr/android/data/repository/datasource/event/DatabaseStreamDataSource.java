@@ -36,6 +36,6 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     }
 
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
-        return streamManager.getStreamsListing(idUser);
+        return streamManager.getStreamsListingNotRemoved(idUser);
     }
 }
