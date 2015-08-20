@@ -31,7 +31,6 @@ import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.fragments.ActivityTimelineFragment;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
-import com.shootr.android.ui.fragments.StreamTimelineFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
 import dagger.Module;
@@ -67,7 +66,6 @@ import javax.inject.Singleton;
     FavoritesFragment.class,
     ActivityTimelineContainerActivity.class,
     ActivityTimelineFragment.class,
-    StreamTimelineFragment.class,
     FindStreamsActivity.class,
     WhaleActivity.class,
     EmailConfirmationActivity.class,

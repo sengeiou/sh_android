@@ -6,18 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.android.R;
-import com.shootr.android.domain.StreamSearchResult;
-import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.ProfileFragment;
 import com.shootr.android.ui.fragments.StreamTimelineFragment;
 import dagger.ObjectGraph;
-import javax.inject.Inject;
+
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
-
-    @Inject SelectStreamInteractor selectStreamInteractor;
 
     public static Intent newIntent(Context context, String streamId, String streamTitle) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
@@ -31,32 +27,12 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
-        if (getIntent().getExtras() == null) {
-            throw new RuntimeException("No intent extras, no party");
-        }
-
-        String streamId = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_ID);
-
-        setStreamTitleFromIntent();
-
-        getStream(streamId);
-
+        checkNotNull(getIntent().getExtras());
         setupAndAddFragment(savedInstanceState);
-    }
-
-    //FIXME Esto es una ñapa como un castillo
-    private void getStream(String streamId) {
-        selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-                setStreamTitle(streamSearchResult.getStream().getTag());
-            }
-        });
     }
 
     @Override public void onResume() {
         super.onResume();
-        String streamId = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_ID);
-        getStream(streamId);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -79,15 +55,6 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
             transaction.add(R.id.container, streamTimelineFragment, ProfileFragment.TAG);
             transaction.commit();
         }
-    }
-
-    private void setStreamTitleFromIntent() {
-        String streamTitle = getIntent().getStringExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE);
-        getToolbarDecorator().setTitle(streamTitle);
-    }
-
-    private void setStreamTitle(String title) {
-        getToolbarDecorator().setTitle(title);
     }
 
     @Override protected void initializePresenter() {

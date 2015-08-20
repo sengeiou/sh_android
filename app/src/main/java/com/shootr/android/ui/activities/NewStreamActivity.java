@@ -142,10 +142,6 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
             return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
     //endregion
 
     //region View Methods

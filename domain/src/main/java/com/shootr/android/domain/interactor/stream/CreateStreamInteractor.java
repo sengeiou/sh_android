@@ -8,6 +8,7 @@ import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
@@ -23,6 +24,7 @@ public class CreateStreamInteractor implements Interactor {
     private final PostExecutionThread postExecutionThread;
     private final SessionRepository sessionRepository;
     private final StreamRepository remoteStreamRepository;
+    private final StreamRepository localStreamRepository;
     private final LocaleProvider localeProvider;
 
     private String idStream;
@@ -33,13 +35,17 @@ public class CreateStreamInteractor implements Interactor {
     private Callback callback;
     private ErrorCallback errorCallback;
 
-    @Inject public CreateStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      SessionRepository sessionRepository, @Remote StreamRepository remoteStreamRepository,
+    @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      SessionRepository sessionRepository,
+      @Remote StreamRepository remoteStreamRepository,
+      @Local StreamRepository localStreamRepository,
       LocaleProvider localeProvider) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.remoteStreamRepository = remoteStreamRepository;
+        this.localStreamRepository = localStreamRepository;
         this.localeProvider = localeProvider;
     }
 
@@ -73,7 +79,7 @@ public class CreateStreamInteractor implements Interactor {
             stream = new Stream();
             stream.setLocale(localeProvider.getLocale());
         } else {
-            stream = remoteStreamRepository.getStreamById(idStream);
+            stream = localStreamRepository.getStreamById(idStream);
         }
         stream.setTitle(title);
         stream.setTag(shortTitle);

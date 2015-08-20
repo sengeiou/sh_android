@@ -85,7 +85,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.selectStream();
 
-        verify(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
+        verify(timelineInteractorWrapper).loadTimeline(anyString(), anyCallback(), anyErrorCallback());
     }
 
     @Test public void shouldRenderTimelineShotsInViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -337,10 +337,10 @@ public class StreamTimelinePresenterTest {
     private void setupLoadTimelineInteractorCallbacks(final Timeline timeline) {
         doAnswer(new Answer<Void>() {
             @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.Callback<Timeline>) invocation.getArguments()[0]).onLoaded(timeline);
+                ((Interactor.Callback<Timeline>) invocation.getArguments()[1]).onLoaded(timeline);
                 return null;
             }
-        }).when(timelineInteractorWrapper).loadTimeline(anyCallback(), anyErrorCallback());
+        }).when(timelineInteractorWrapper).loadTimeline(anyString(), anyCallback(), anyErrorCallback());
     }
 
     private void setupRefreshTimelineInteractorCallbacks(final Timeline timeline) {

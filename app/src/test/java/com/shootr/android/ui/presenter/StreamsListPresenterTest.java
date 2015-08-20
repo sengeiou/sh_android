@@ -45,7 +45,6 @@ public class StreamsListPresenterTest {
     @Mock StreamsListInteractor streamsListInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
-    @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
@@ -59,9 +58,7 @@ public class StreamsListPresenterTest {
           new StreamResultModelMapper(streamModelMapper);
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
-          unwatchStreamInteractor,
-          selectStreamInteractor,
-          streamResultModelMapper,
+          unwatchStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }
@@ -82,12 +79,6 @@ public class StreamsListPresenterTest {
         presenter.streamCreated(SELECTED_STREAM_ID);
 
         verify(streamsListView).navigateToCreatedStreamDetail(SELECTED_STREAM_ID);
-    }
-
-    @Test public void shouldSelectStreamWhenNewStreamCreated() throws Exception {
-        presenter.streamCreated(SELECTED_STREAM_ID);
-
-        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
     }
 
     @Test public void shouldNavigateToStreamDetailWhenNewStreamCreatedIfSelectStreamInteractorCallbacksStreamId() throws Exception {

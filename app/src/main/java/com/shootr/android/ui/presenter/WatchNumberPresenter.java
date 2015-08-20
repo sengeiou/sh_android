@@ -18,6 +18,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
 
     private WatchNumberView watchNumberView;
     private String idStream;
+    private boolean hasBeenPaused = false;
 
     @Inject public WatchNumberPresenter(@Main Bus bus, WatchNumberInteractor watchNumberInteractor) {
         this.bus = bus;
@@ -56,11 +57,14 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
 
     @Override public void resume() {
         bus.register(this);
-        this.retrieveData();
+        if (hasBeenPaused) {
+            this.retrieveData();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        hasBeenPaused = true;
     }
 
     @Subscribe

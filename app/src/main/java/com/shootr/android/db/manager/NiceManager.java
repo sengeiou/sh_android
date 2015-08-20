@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract.NiceShotTable;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.android.domain.exception.NiceNotMarkedException;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 
 public class NiceManager extends AbstractManager {
@@ -23,6 +26,30 @@ public class NiceManager extends AbstractManager {
         if (operationResult == RESULT_ERROR_OCCURRED) {
             throw new NiceAlreadyMarkedException();
         }
+    }
+
+    public Set<String> getAllMarked() {
+        Cursor query = getReadableDatabase().query(NiceShotTable.TABLE,
+          NiceShotTable.PROJECTION,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null);
+
+        Set<String> result = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+        if (query.getCount() > 0) {
+            query.moveToFirst();
+            int columnIndex = query.getColumnIndex(NiceShotTable.ID_SHOT);
+            String id;
+            do {
+                id = query.getString(columnIndex);
+                result.add(id);
+            } while (query.moveToNext());
+        }
+        query.close();
+        return result;
     }
 
     public boolean isMarked(String idShot) {

@@ -8,6 +8,8 @@ public interface StreamDetailView extends LoadDataView {
 
     void setStreamTitle(String title);
 
+    void setStreamShortTitle(String shortTitle);
+
     void setStreamAuthor(String author);
 
     void setStreamPicture(String picture);

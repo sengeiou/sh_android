@@ -38,6 +38,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isLoadingOlderShots;
     private boolean mightHaveMoreShots = true;
     private boolean isRefreshing = false;
+    private boolean hasBeenPaused = false;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -82,16 +83,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void selectStream() {
+        loadTimeline();
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
             @Override
             public void onLoaded(StreamSearchResult streamSearchResult) {
-                loadTimeline();
             }
         });
+
     }
 
     protected void loadTimeline() {
-        timelineInteractorWrapper.loadTimeline(new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.loadTimeline(streamId, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -195,13 +197,16 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     @Override public void resume() {
         bus.register(this);
-        loadTimeline();
         startPollingShots();
+        if (hasBeenPaused) {
+            loadTimeline();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
         stopPollingShots();
+        hasBeenPaused = true;
     }
 
     @Subscribe

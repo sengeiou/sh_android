@@ -61,6 +61,11 @@ public class StreamTimelineParameters extends TimelineParameters {
             return this;
         }
 
+        public Builder forStream(String idStream) {
+            parameters.streamId = idStream;
+            return this;
+        }
+
         public Builder since(Long sinceDate) {
             parameters.sinceDate = sinceDate;
             return this;

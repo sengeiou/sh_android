@@ -55,6 +55,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     private static final String EXTRA_STREAM_ID = "streamId";
     private static final String EXTRA_STREAM_MEDIA_COUNT = "streamMediaCount";
+    public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
 
     @Bind(R.id.scroll) ObservableScrollView scrollView;
     @Bind(R.id.scroll_child) View scrollChild;
@@ -156,6 +157,10 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     private void updateEditIcon() {
         editMenuItem.setVisible(showEditButton);
+    }
+
+    private void setShortTitleResultForPreviousActivity(String shortTitle) {
+        setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_SHORT_TITLE, shortTitle));
     }
 
     @OnClick(R.id.stream_author)
@@ -343,6 +348,11 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     //region View methods
     @Override public void setStreamTitle(String title) {
         titleText.setText(title);
+    }
+
+    @Override
+    public void setStreamShortTitle(String shortTitle) {
+        setShortTitleResultForPreviousActivity(shortTitle);
     }
 
     @Override public void setStreamAuthor(String author) {
