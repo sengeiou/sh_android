@@ -53,7 +53,7 @@ public class RemoveStreamInteractor implements Interactor {
             Stream stream = remoteStreamRepository.getStreamById(idStream);
             stream.setRemoved(true);
 
-            remoteStreamRepository.removeStream(stream);
+            remoteStreamRepository.putStream(stream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingStream(null);

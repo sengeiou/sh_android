@@ -15,5 +15,4 @@ public interface StreamRepository {
 
     Integer getListingCount(String idUser);
 
-    void removeStream(Stream stream);
 }

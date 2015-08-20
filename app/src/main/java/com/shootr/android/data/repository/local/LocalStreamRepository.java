@@ -58,8 +58,4 @@ public class LocalStreamRepository implements StreamRepository {
         return localStreamDataSource.getListingCount(idUser);
     }
 
-    @Override
-    public void removeStream(Stream stream) {
-        throw new IllegalStateException("Remove not allowed in local repository.");
-    }
 }

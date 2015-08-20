@@ -53,7 +53,7 @@ public class RestoreStreamInteractor implements Interactor {
             Stream stream = remoteStreamRepository.getStreamById(idStream);
             stream.setRemoved(false);
 
-            remoteStreamRepository.removeStream(stream);
+            remoteStreamRepository.putStream(stream);
 
             User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
             currentUser.setIdWatchingStream(null);
