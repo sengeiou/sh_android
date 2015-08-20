@@ -52,16 +52,12 @@ public class ListingListPresenter implements Presenter{
         this.listingView = listingView;
     }
 
-    public void initialize(ListingView listingView, String profileIdUser, String currentIdUser) {
+    public void initialize(ListingView listingView, String profileIdUser, Boolean isCurrentUser) {
         this.setView(listingView);
         this.profileIdUser = profileIdUser;
-        this.isCurrentUser(profileIdUser, currentIdUser);
+        this.isCurrentUser = isCurrentUser;
         this.loadFavoriteStreams();
         this.startLoadingListing();
-    }
-
-    private void isCurrentUser(String profileIdUser, String currentIdUser) {
-        this.isCurrentUser = currentIdUser.equals(profileIdUser);
     }
 
     private void startLoadingListing() {

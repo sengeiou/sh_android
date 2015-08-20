@@ -27,7 +27,7 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
-    private static final String EXTRA_CURRENT_ID_USER = "current_idUser";
+    private static final String EXTRA_IS_CURRENT_USER = "is_current_user";
     public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
@@ -38,10 +38,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private ListingStreamsAdapter adapter;
 
-    public static Intent getIntent(Context context, String idUser, String currentUserId) {
+    public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser) {
         Intent intent = new Intent(context, ListingActivity.class);
         intent.putExtra(EXTRA_ID_USER, idUser);
-        intent.putExtra(EXTRA_CURRENT_ID_USER, currentUserId);
+        intent.putExtra(EXTRA_IS_CURRENT_USER, isCurrentUser);
         return intent;
     }
 
@@ -53,7 +53,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         ButterKnife.bind(this);
 
         String idUser = getIntent().getStringExtra(EXTRA_ID_USER);
-        String currentIdUser = getIntent().getStringExtra(EXTRA_CURRENT_ID_USER);
+        Boolean currentIdUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
 
         boolean isCurrentUser = idUser.equals(currentIdUser);
 
@@ -83,8 +83,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
         String idUser = intent.getStringExtra(EXTRA_ID_USER);
-        String currentIdUser = intent.getStringExtra(EXTRA_CURRENT_ID_USER);
-        presenter.initialize(this, idUser, currentIdUser);
+        Boolean isCurrentUser = intent.getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
+        presenter.initialize(this, idUser, isCurrentUser);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
