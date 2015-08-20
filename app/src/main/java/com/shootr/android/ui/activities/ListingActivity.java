@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -143,12 +144,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT,String.format(getString(R.string.recommend_stream_message),
-          stream.getStreamModel().getTitle(),
-          stream.getStreamModel().getIdStream()));
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getString(R.string.recommend_via)));
+        Intent intent = ShareCompat.IntentBuilder.from(this)
+          .setType("text/plain")
+          .setText(String.format(this.getString(R.string.recommend_stream_message),
+            stream.getStreamModel().getTitle(),
+            stream.getStreamModel().getIdStream()))
+          .setChooserTitle(getString(R.string.recommend_via))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     private void shareStreamWithImage(final StreamResultModel stream) {

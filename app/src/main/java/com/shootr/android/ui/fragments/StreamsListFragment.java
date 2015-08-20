@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -206,12 +207,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT,String.format(getActivity().getString(R.string.recommend_stream_message),
-          stream.getStreamModel().getTitle(),
-          stream.getStreamModel().getIdStream()));
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent, getActivity().getString(R.string.recommend_via)));
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
+            stream.getStreamModel().getTitle(),
+            stream.getStreamModel().getIdStream()))
+          .setChooserTitle(getString(R.string.recommend_via))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     private void shareStreamWithImage(final StreamResultModel stream) {
