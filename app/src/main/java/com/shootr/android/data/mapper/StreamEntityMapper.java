@@ -52,11 +52,7 @@ public class StreamEntityMapper {
         entityTemplate.setUserName(stream.getAuthorUsername());
         entityTemplate.setLocale(stream.getLocale());
         entityTemplate.setDescription(stream.getDescription());
-        if (stream.getRemoved() == null) {
-            entityTemplate.setRemoved(0);
-        } else {
-            entityTemplate.setRemoved(stream.getRemoved().equals(true) ? 1 : 0);
-        }
+        entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }
 }

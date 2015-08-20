@@ -63,7 +63,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {
         List<StreamSearchResult> listing = new ArrayList<>();
         for (StreamSearchResult listingStream : listingStreams) {
-            if (!listingStream.getStream().getRemoved()) {
+            if (!listingStream.getStream().isRemoved()) {
                 listing.add(listingStream);
             }
         }

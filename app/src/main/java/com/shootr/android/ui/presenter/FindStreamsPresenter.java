@@ -63,7 +63,7 @@ public class FindStreamsPresenter implements Presenter {
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(), stream.getStreamModel().getRemoved());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(), stream.getStreamModel().isRemoved());
     }
 
     private void selectStream(final String idStream, String streamTitle, Boolean removed) {

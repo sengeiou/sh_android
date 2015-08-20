@@ -84,7 +84,7 @@ public class NewStreamPresenter implements Presenter {
         newStreamView.showShortTitle(streamModel.getTag());
         newStreamView.showDescription(streamModel.getDescription());
 
-        if (streamModel.getRemoved()) {
+        if (streamModel.isRemoved()) {
             newStreamView.showRestoreStreamButton();
         } else {
             newStreamView.showRemoveStreamButton();

@@ -14,7 +14,7 @@ public class StreamModel implements Serializable {
     private boolean amIAuthor;
     private Boolean removed;
 
-    public Boolean getRemoved() {
+    public Boolean isRemoved() {
         return removed;
     }
 

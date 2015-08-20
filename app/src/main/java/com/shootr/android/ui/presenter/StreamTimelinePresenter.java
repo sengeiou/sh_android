@@ -84,9 +84,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void selectStream() {
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override
-            public void onLoaded(StreamSearchResult streamSearchResult) {
-                removed = streamSearchResult.getStream().getRemoved();
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                removed = streamSearchResult.getStream().isRemoved();
                 loadTimeline();
             }
         });

@@ -20,7 +20,7 @@ public class Stream {
     public Stream() {
     }
 
-    public Boolean getRemoved() {
+    public Boolean isRemoved() {
         return removed;
     }
 
