@@ -49,7 +49,7 @@ public class SuggestedPeoplePresenter implements Presenter {
         this.bus = bus;
     }
 
-    protected void setView(SuggestedPeopleView suggestedPeopleView) {
+    public void setView(SuggestedPeopleView suggestedPeopleView) {
         this.suggestedPeopleView = suggestedPeopleView;
     }
 
