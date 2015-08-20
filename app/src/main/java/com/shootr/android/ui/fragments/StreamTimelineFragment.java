@@ -252,14 +252,6 @@ public class StreamTimelineFragment extends BaseFragment
                   .build();
                 startActivity(newShotIntent);
             }
-
-            @Override public void showStreamIsRemoved() {
-                /* no - op */
-            }
-
-            @Override public void openDrafts() {
-                /* no - op */
-            }
         };
     }
 
@@ -460,7 +452,7 @@ public class StreamTimelineFragment extends BaseFragment
     public void startNewShot() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
         if (removed) {
-            newShotBarPresenter.newShotFromTextBox(removed);
+            showStreamIsRemoved();
         } else {
             newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
         }
@@ -470,7 +462,7 @@ public class StreamTimelineFragment extends BaseFragment
     public void startNewShotWithPhoto() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
         if (removed) {
-            newShotBarPresenter.newShotFromTextBox(removed);
+            showStreamIsRemoved();
         } else {
             newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
         }
@@ -480,7 +472,7 @@ public class StreamTimelineFragment extends BaseFragment
     public void openDraftsClicked() {
         Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
         if (removed) {
-            newShotBarPresenter.newShotFromTextBox(removed);
+            showStreamIsRemoved();
         } else {
             newShotBarPresenter.openDrafts(streamTimelinePresenter.getRemoved());
         }
@@ -561,7 +553,7 @@ public class StreamTimelineFragment extends BaseFragment
         newShotBarViewDelegate.hideDraftsButton();
     }
 
-    @Override public void showStreamIsRemoved() {
+    public void showStreamIsRemoved() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
     }
 

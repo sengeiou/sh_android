@@ -24,10 +24,6 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
-    @Override public void showStreamIsRemoved() {
-        /* no-op */
-    }
-
     @Override public void openDrafts() {
         /* no-op */
     }

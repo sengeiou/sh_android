@@ -187,14 +187,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
                   .build();
                 startActivity(newShotIntent);
             }
-
-            @Override public void showStreamIsRemoved() {
-                /* no-op */
-            }
-
-            @Override public void openDrafts() {
-                /* no-op */
-            }
         };
     }
 
@@ -313,8 +305,5 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarViewDelegate.hideDraftsButton();
     }
 
-    @Override public void showStreamIsRemoved() {
-        Toast.makeText(this, getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
-    }
     //endregion
 }

@@ -33,9 +33,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     }
 
     public void newShotFromTextBox(Boolean removed) {
-        if(removed){
-            newShotBarView.showStreamIsRemoved();
-        } else {
+        if(!removed){
             newShotBarView.openNewShotView();
         }
     }
@@ -45,17 +43,13 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     }
 
     public void openDrafts(Boolean removed) {
-        if(removed){
-            newShotBarView.showStreamIsRemoved();
-        } else {
-            newShotBarView.openDrafts();
+        if(!removed){
+            newShotBarView.pickImage();
         }
     }
 
     public void newShotFromImage(Boolean removed) {
-        if(removed){
-            newShotBarView.showStreamIsRemoved();
-        } else {
+        if(!removed){
             newShotBarView.pickImage();
         }
     }

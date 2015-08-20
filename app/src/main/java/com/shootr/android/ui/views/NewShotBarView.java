@@ -14,7 +14,5 @@ public interface NewShotBarView {
 
     void hideDraftsButton();
 
-    void showStreamIsRemoved();
-
     void openDrafts();
 }
