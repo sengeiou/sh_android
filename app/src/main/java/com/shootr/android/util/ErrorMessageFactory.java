@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
-import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrException;
@@ -102,11 +101,9 @@ public class ErrorMessageFactory {
     public String getMessageForError(ShootrException error) {
         if (error instanceof ServerCommunicationException || error.getCause() instanceof  ServerCommunicationException) {
             return getCommunicationErrorMessage();
-        }else if(error instanceof DeleteStreamNotAllowedException) {
-            return context.getString(R.string.error_message_event_has_watchers);
-        }else if(error instanceof EmailInUseException) {
+        } else if(error instanceof EmailInUseException) {
             return context.getString(R.string.email_already_registered);
-        }else if(error instanceof StreamIsAlreadyInFavoritesException) {
+        } else if(error instanceof StreamIsAlreadyInFavoritesException) {
             return getStreamIsAlreadyInFavoritesError();
         } else {
             return getUnknownErrorMessage();
