@@ -335,7 +335,7 @@ public class StreamTimelineFragment extends BaseFragment
           new OnVideoClickListener() {
               @Override
               public void onVideoClick(String url) {
-                  onVideoClick(url);
+                  openVideo(url);
               }
           }, //
           new OnNiceShotListener() {
@@ -414,7 +414,7 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(intentForImage);
     }
 
-    private void onVideoClick(String url) {
+    private void openVideo(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);

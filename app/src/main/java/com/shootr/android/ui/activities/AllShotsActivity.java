@@ -160,7 +160,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         videoClickListener = new OnVideoClickListener() {
             @Override
             public void onVideoClick(String url) {
-                onVideoClick(url);
+                onShotVideoClick(url);
             }
         };
 
@@ -227,7 +227,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         startProfileContainerActivity(username);
     }
 
-    private void onVideoClick(String url) {
+    private void onShotVideoClick(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
