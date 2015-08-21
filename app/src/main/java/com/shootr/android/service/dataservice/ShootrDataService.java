@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
@@ -15,7 +14,6 @@ import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.SuggestedPeopleMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -387,16 +385,6 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return shotsByUserInStream;
-    }
-
-    @Override public Integer getListingCount(String idUser) {
-        Integer listing;
-        try {
-            listing = streamApiService.getListingCount(idUser);
-        } catch (ApiException | IOException e) {
-            throw new ServerCommunicationException(e);
-        }
-        return listing;
     }
 
     @Override public void logout(String idUser, String idDevice) throws IOException {

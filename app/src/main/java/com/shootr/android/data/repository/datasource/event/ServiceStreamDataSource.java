@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
@@ -49,8 +50,8 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public Integer getListingCount(String idUser) {
         try {
-            return service.getListingCount(idUser);
-        } catch (IOException e) {
+            return streamApiService.getListingCount(idUser);
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
