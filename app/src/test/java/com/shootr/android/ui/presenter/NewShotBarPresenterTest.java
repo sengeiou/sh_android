@@ -5,6 +5,7 @@ import com.shootr.android.domain.bus.ShotFailed;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
 import com.shootr.android.ui.views.NewShotBarView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.lang.reflect.Method;
@@ -32,6 +33,7 @@ public class NewShotBarPresenterTest {
     @Mock GetDraftsInteractor getDraftsInteractor;
     @Mock NewShotBarView newShotBarView;
     @Mock Bus bus;
+    @Mock ErrorMessageFactory errorMessageFactory;
 
     private NewShotBarPresenter presenter;
     private ShotFailed.Receiver shotFailedReceiver;
@@ -39,7 +41,7 @@ public class NewShotBarPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new NewShotBarPresenter(getStreamIsRemovedInteractor, getDraftsInteractor, bus);
+        presenter = new NewShotBarPresenter(getStreamIsRemovedInteractor, getDraftsInteractor, errorMessageFactory, bus);
         presenter.setView(newShotBarView);
         shotFailedReceiver = presenter;
     }

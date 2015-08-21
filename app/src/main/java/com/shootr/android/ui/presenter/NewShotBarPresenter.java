@@ -7,6 +7,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetDraftsInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
 import com.shootr.android.ui.views.NewShotBarView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
@@ -17,6 +18,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
     private final GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor;
     private final GetDraftsInteractor getDraftsInteractor;
+    private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
 
     private NewShotBarView newShotBarView;
@@ -24,10 +26,10 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
     private boolean isStreamReadOnly = false;
 
     @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
-      GetDraftsInteractor getDraftsInteractor,
-      @Main Bus bus) {
+      GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.getStreamIsReadOnlyInteractor = getStreamIsReadOnlyInteractor;
         this.getDraftsInteractor = getDraftsInteractor;
+        this.errorMessageFactory = errorMessageFactory;
         this.bus = bus;
     }
 
@@ -55,7 +57,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         if (!isStreamReadOnly) {
             newShotBarView.openNewShotView();
         } else {
-            //TODO show error
+            this.showReadOnlyError();
         }
     }
 
@@ -63,7 +65,7 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
         if (!isStreamReadOnly) {
             newShotBarView.pickImage();
         } else {
-            //TODO show error
+            this.showReadOnlyError();
         }
     }
 
@@ -81,6 +83,10 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
                 }
             }
         });
+    }
+
+    private void showReadOnlyError() {
+        newShotBarView.showError(errorMessageFactory.getStreamReadOnlyError());
     }
 
     @Override public void resume() {

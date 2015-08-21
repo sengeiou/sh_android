@@ -170,7 +170,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupNewShotBarDelegate(final ShotModel shotModel) {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, replyDraftsButton) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //

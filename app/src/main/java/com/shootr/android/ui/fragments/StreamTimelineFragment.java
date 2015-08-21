@@ -228,7 +228,7 @@ public class StreamTimelineFragment extends BaseFragment
     //endregion
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
