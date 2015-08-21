@@ -18,7 +18,7 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title, Boolean removed) {
+    @Override public void navigateToStreamTimeline(String idStream, String title) {
         /* no-op */
     }
 

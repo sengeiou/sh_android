@@ -19,14 +19,6 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject SelectStreamInteractor selectStreamInteractor;
 
-    public static Intent newIntent(Context context, String streamId, String streamTitle, Boolean removed) {
-        Intent intent = new Intent(context, StreamTimelineActivity.class);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_REMOVED, removed);
-        return intent;
-    }
-
     public static Intent newIntent(Context context, String streamId, String streamTitle) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
         intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);

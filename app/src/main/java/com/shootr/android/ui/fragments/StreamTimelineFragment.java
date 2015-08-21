@@ -71,7 +71,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
-    public static final String EXTRA_STREAM_REMOVED = "streamRemoved";
     private static final int REQUEST_STREAM_DETAIL = 1;
     public static final String CLIPBOARD_LABEL = "Shot";
 
@@ -112,14 +111,6 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
-
-    public static StreamTimelineFragment newInstance(String streamId, String streamTitle, Boolean streamRemoved) {
-        Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putString(EXTRA_STREAM_ID, streamId);
-        fragmentArguments.putString(EXTRA_STREAM_TITLE, streamTitle);
-        fragmentArguments.putBoolean(EXTRA_STREAM_REMOVED, streamRemoved);
-        return newInstance(fragmentArguments);
-    }
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
         StreamTimelineFragment fragment = new StreamTimelineFragment();
@@ -536,10 +527,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
-    }
-
-    public void showStreamIsRemoved() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showWatchingPeopleCount(Integer count) {

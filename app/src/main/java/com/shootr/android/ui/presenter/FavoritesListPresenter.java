@@ -61,7 +61,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     }
 
     private void selectStream(final String idStream, String streamTitle, Boolean removed) {
-        favoritesListView.navigateToStreamTimeline(idStream, streamTitle, removed);
+        favoritesListView.navigateToStreamTimeline(idStream, streamTitle);
     }
 
     @Override
