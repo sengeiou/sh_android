@@ -9,7 +9,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import com.shootr.android.R;
-import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import java.util.List;
 import java.util.Set;
@@ -51,15 +50,15 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
     }
 
     private CharSequence getCollapsedContent() {
-        Set<String> userNames = getUserNamesFromActivities();
-        return TextUtils.join(", ", userNames);
+        Set<String> titles = getTitlesFromActivities();
+        return TextUtils.join(", ", titles);
     }
 
-    private Set<String> getUserNamesFromActivities() {
+    private Set<String> getTitlesFromActivities() {
         Set<String> names = new TreeSet<>();
         for (SingleActivityNotification notification : individualNotifications) {
-            String userName = notification.getActivity().getUsername();
-            names.add(userName);
+            String title = notification.getTitle();
+            names.add(title);
         }
         return names;
     }

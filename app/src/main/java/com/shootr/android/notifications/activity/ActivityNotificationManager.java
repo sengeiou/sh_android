@@ -5,10 +5,7 @@ import android.content.Context;
 import com.shootr.android.notifications.AndroidNotificationManager;
 import com.shootr.android.notifications.CommonNotification;
 import com.shootr.android.notifications.NotificationBuilderFactory;
-import com.shootr.android.notifications.activity.checkin.CheckinNotification;
-import com.shootr.android.notifications.activity.nice.NicedShotNotification;
-import com.shootr.android.notifications.activity.startedshooting.StartedShootingNotification;
-import com.shootr.android.ui.model.ActivityModel;
+import com.shootr.android.notifications.gcm.PushNotification;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +46,15 @@ public class ActivityNotificationManager {
         androidNotificationManager.notify(finalNotification, NOTIFICATION_TAG, ACTIVITY_NOTIFICATION_ID);
     }
 
-    public void sendNewCheckinNotification(ActivityModel activityModel) {
-        CheckinNotification notification =
-          new CheckinNotification(context, notificationBuilderFactory, picasso, activityModel);
+    public void sendGenericActivityNotification(PushNotification.NotificationValues values) {
+        SingleActivityNotification notification =
+          new SingleActivityNotification(context, notificationBuilderFactory, picasso, values);
         showNotification(notification);
     }
 
-    public void sendNewStartedShootingNotification(ActivityModel activityModel) {
-        StartedShootingNotification notification =
-          new StartedShootingNotification(context, notificationBuilderFactory, picasso, activityModel);
-        showNotification(notification);
-    }
-
-    public void sendNewNicedShotNotification(ActivityModel activityModel) {
-        NicedShotNotification notification =
-          new NicedShotNotification(context, notificationBuilderFactory, picasso, activityModel);
+    public void sendFollowNotification(PushNotification.NotificationValues values, String idUser) {
+        FollowActivityNotification notification =
+          new FollowActivityNotification(context, notificationBuilderFactory, picasso, values, idUser);
         showNotification(notification);
     }
 

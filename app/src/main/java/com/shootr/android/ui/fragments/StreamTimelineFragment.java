@@ -186,7 +186,7 @@ public class StreamTimelineFragment extends BaseFragment
         removeFromFavoritesMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         if (isAdded()) {
-            LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
+            LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.watchers_badge_circle);
             icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
             setupWatchNumberBadgeIcon(getActivity(), icon);
             watchersMenuItem.setIcon(icon);

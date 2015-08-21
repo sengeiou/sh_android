@@ -47,6 +47,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
                 String idUser = intent.getExtras().getString(ProfileContainerActivity.EXTRA_USER);
                 context.startActivity(ProfileContainerActivity.getIntent(context, idUser)
                   .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                activityNotificationManager.clearActivityNotifications();
                 break;
             default:
                 throw new IllegalStateException("Action \"" + action + "\" not handled in " + this.getClass()
