@@ -49,6 +49,9 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
             @Override
             public void onLoaded(Boolean isReadOnly) {
                 isStreamReadOnly = isReadOnly;
+                if (isStreamReadOnly) {
+                    showReadOnlyError();
+                }
             }
         });
     }
