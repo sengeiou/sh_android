@@ -1,7 +1,6 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import java.util.List;
 
 public interface StreamRepository {
@@ -16,5 +15,4 @@ public interface StreamRepository {
 
     Integer getListingCount(String idUser);
 
-    void deleteStream(String idEvent) throws DeleteStreamNotAllowedException;
 }

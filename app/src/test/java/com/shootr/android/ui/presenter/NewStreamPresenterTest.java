@@ -1,8 +1,9 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
-import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.android.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.views.NewStreamView;
@@ -29,7 +30,8 @@ public class NewStreamPresenterTest {
     public static final String SHORT_TITLE_20_CHARS = "Title with more than";
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
-    @Mock DeleteStreamInteractor deleteStreamInteractor;
+    @Mock RemoveStreamInteractor removeStreamInteractor;
+    @Mock RestoreStreamInteractor restoreStreamInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -41,7 +43,9 @@ public class NewStreamPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new NewStreamPresenter(createStreamInteractor, getStreamInteractor,
-          deleteStreamInteractor, selectStreamInteractor, streamModelMapper, errorMessageFactory);
+          removeStreamInteractor,
+          restoreStreamInteractor,
+          selectStreamInteractor, streamModelMapper, errorMessageFactory);
     }
 
     @Test

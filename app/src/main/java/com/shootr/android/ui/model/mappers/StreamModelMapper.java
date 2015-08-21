@@ -26,6 +26,7 @@ public class StreamModelMapper {
         streamModel.setAuthorUsername(stream.getAuthorUsername());
         streamModel.setDescription(stream.getDescription());
         streamModel.setMediaCount(stream.getMediaCount() != null ? stream.getMediaCount() : 0);
+        streamModel.setRemoved(stream.isRemoved());
         return streamModel;
     }
 

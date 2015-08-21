@@ -28,6 +28,7 @@ public class ShotModelMapper {
 
         Shot.ShotStreamInfo streamInfo = shot.getStreamInfo();
         if (streamInfo != null) {
+            shotModel.setStreamId(streamInfo.getIdStream());
             shotModel.setStreamTag(streamInfo.getStreamTag());
             shotModel.setStreamTitle(streamInfo.getStreamTitle());
         }
@@ -39,7 +40,6 @@ public class ShotModelMapper {
         shotModel.setVideoTitle(shot.getVideoTitle());
         shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
 
-        shotModel.setType(shot.getType());
         shotModel.setNiceCount(shot.getNiceCount());
         shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
 

@@ -4,9 +4,17 @@
   xmlns:tools="http://schemas.android.com/tools">
 
     <item
-      android:id="@+id/menu_delete"
-      android:icon="@drawable/ic_action_delete"
-      android:title="@string/delete_stream_label"
+      android:id="@+id/menu_remove"
+      android:icon="@drawable/ic_action_remove"
+      android:title="@string/remove_stream_label"
+      android:visible="false"
+      app:showAsAction="always"
+      tools:visible="true" />
+
+    <item
+      android:id="@+id/menu_restore"
+      android:icon="@drawable/ic_action_restore"
+      android:title="@string/restore_stream_label"
       android:visible="false"
       app:showAsAction="always"
       tools:visible="true" />

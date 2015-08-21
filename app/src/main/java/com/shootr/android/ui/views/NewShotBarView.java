@@ -13,4 +13,6 @@ public interface NewShotBarView {
     void showDraftsButton();
 
     void hideDraftsButton();
+
+    void showError(String errorMessage);
 }

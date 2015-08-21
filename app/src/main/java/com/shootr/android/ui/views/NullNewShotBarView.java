@@ -23,4 +23,9 @@ public class NullNewShotBarView implements NewShotBarView {
     @Override public void hideDraftsButton() {
         /* no-op */
     }
+
+    @Override
+    public void showError(String errorMessage) {
+        /* no-op */
+    }
 }

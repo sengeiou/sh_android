@@ -90,16 +90,4 @@ public class StreamDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_STREAM, op);
     }
 
-    public GenericDto getListingCount(String idUser) {
-        FilterDto streamsListingFilter = and(
-          or(DatabaseContract.StreamTable.ID_USER).isEqualTo(idUser))
-          .build();
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.StreamTable.TABLE)
-          .filter(streamsListingFilter)
-          .items(0)
-          .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LISTING_STREAMS, op);
-    }
 }

@@ -182,8 +182,8 @@ public class StreamManager extends AbstractManager{
         getWritableDatabase().delete(DatabaseContract.StreamSearchTable.TABLE, null, null);
     }
 
-    public Integer getListingCount(String idUser) {
-        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ?";
+    public Integer getListingNotRemoved(String idUser) {
+        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ? AND " + DatabaseContract.StreamTable.REMOVED + " = 0";
         String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =
@@ -195,8 +195,8 @@ public class StreamManager extends AbstractManager{
         return listingCount;
     }
 
-    public List<StreamEntity> getStreamsListing(String idUser) {
-        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ?";
+    public List<StreamEntity> getStreamsListingNotRemoved(String idUser) {
+        String whereSelection = DatabaseContract.StreamTable.ID_USER + " = ? AND " + DatabaseContract.StreamTable.REMOVED + " = 0";
         String[] whereArguments = new String[] { idUser };
 
         Cursor queryResult =

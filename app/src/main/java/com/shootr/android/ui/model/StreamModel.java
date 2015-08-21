@@ -13,6 +13,15 @@ public class StreamModel implements Serializable {
     private String description;
     private boolean amIAuthor;
     private Integer mediaCount;
+    private Boolean removed;
+
+    public Boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Boolean removed) {
+        this.removed = removed;
+    }
 
     public String getIdStream() {
         return idStream;

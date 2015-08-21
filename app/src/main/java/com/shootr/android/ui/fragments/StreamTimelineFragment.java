@@ -111,13 +111,6 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
 
-    public static StreamTimelineFragment newInstance(String streamId, String streamTitle) {
-        Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putString(EXTRA_STREAM_ID, streamId);
-        fragmentArguments.putString(EXTRA_STREAM_TITLE, streamTitle);
-        return newInstance(fragmentArguments);
-    }
-
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
         StreamTimelineFragment fragment = new StreamTimelineFragment();
         fragment.setArguments(fragmentArguments);
@@ -232,7 +225,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this);
+        newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
@@ -244,9 +237,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
-            @Override
-            public void openNewShotView() {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton) {
+            @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
                   .build();
@@ -473,7 +465,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @OnClick(R.id.shot_bar_drafts)
-    public void openDrafts() {
+    public void openDraftsClicked() {
         startActivity(new Intent(getActivity(), DraftsActivity.class));
     }
 

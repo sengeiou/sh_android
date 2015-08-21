@@ -5,21 +5,25 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.views.NewShotBarView;
 
 public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
-    private PhotoPickerController photoPickerController;
-    private View draftsButton;
+    private final Context context;
+    private final PhotoPickerController photoPickerController;
+    private final View draftsButton;
 
-    public NewShotBarViewDelegate(PhotoPickerController photoPickerController, View draftsButton) {
+    public NewShotBarViewDelegate(Context context, PhotoPickerController photoPickerController, View draftsButton) {
+        this.context = context;
         this.photoPickerController = photoPickerController;
         this.draftsButton = draftsButton;
         this.setupDraftButtonTransition();
@@ -90,5 +94,10 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
             }
         });
         set.start();
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
     }
 }

@@ -20,9 +20,9 @@ public interface NewStreamView extends DataTransferView{
 
     void showNotificationConfirmation();
 
-    void showDeleteStreamButton();
+    void showRemoveStreamButton();
 
-    void askDeleteStreamConfirmation();
+    void askRemoveStreamConfirmation();
 
     void showShortTitle(String currentShortTitle);
 
@@ -31,4 +31,6 @@ public interface NewStreamView extends DataTransferView{
     String getStreamDescription();
 
     void showDescription(String description);
+
+    void showRestoreStreamButton();
 }

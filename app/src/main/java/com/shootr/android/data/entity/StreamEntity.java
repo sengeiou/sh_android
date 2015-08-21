@@ -12,6 +12,15 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Integer notifyCreation;
     private String locale;
     private Integer mediaCountByRelatedUsers;
+    private Integer removed;
+
+    public Integer getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Integer removed) {
+        this.removed = removed;
+    }
 
     public String getIdStream() {
         return idStream;

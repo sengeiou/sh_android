@@ -1,10 +1,8 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.api.exception.ApiException;
-import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
@@ -52,8 +50,8 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public Integer getListingCount(String idUser) {
         try {
-            return service.getListingCount(idUser);
-        } catch (IOException e) {
+            return streamApiService.getListingCount(idUser);
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -63,21 +61,6 @@ public class ServiceStreamDataSource implements StreamDataSource {
             return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
-        }
-    }
-
-    @Override
-    public void deleteStream(String idStream) throws DeleteStreamNotAllowedException {
-        try {
-            streamApiService.deleteStream(idStream);
-        } catch (ApiException apiError) {
-            if (apiError.getErrorInfo() == ErrorInfo.StreamHasWatchersException) {
-                throw new DeleteStreamNotAllowedException();
-            } else {
-                throw new ServerCommunicationException(apiError);
-            }
-        } catch (IOException networkError) {
-            throw new ServerCommunicationException(networkError);
         }
     }
 }

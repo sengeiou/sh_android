@@ -26,6 +26,7 @@ public class StreamEntityMapper {
         stream.setLocale(streamEntity.getLocale());
         stream.setDescription(streamEntity.getDescription());
         stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
+        stream.setRemoved(streamEntity.getRemoved() == 1);
         return stream;
     }
 
@@ -54,6 +55,7 @@ public class StreamEntityMapper {
         entityTemplate.setDescription(stream.getDescription());
         entityTemplate.setMediaCountByRelatedUsers(stream.getMediaCount());
 
+        entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
         entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     }
 }

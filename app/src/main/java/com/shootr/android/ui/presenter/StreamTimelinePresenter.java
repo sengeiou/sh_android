@@ -39,6 +39,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean mightHaveMoreShots = true;
     private boolean isRefreshing = false;
     private boolean hasBeenPaused = false;
+    private Boolean removed = false;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -85,8 +86,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     protected void selectStream() {
         loadTimeline();
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override
-            public void onLoaded(StreamSearchResult streamSearchResult) {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                removed = streamSearchResult.getStream().isRemoved();
+                loadTimeline();
             }
         });
 

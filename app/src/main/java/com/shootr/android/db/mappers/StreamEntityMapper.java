@@ -26,6 +26,7 @@ public class StreamEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.StreamTable.DESCRIPTION, streamEntity.getDescription());
         contentValues.put(DatabaseContract.StreamTable.LOCALE, streamEntity.getLocale());
         contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT, streamEntity.getMediaCountByRelatedUsers());
+        contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
         setSynchronizedtoContentValues(streamEntity,contentValues);
     }
 
@@ -52,6 +53,8 @@ public class StreamEntityMapper extends GenericMapper{
           : (String) dto.get(DatabaseContract.StreamTable.DESCRIPTION));
         streamEntity.setLocale(dto.get(DatabaseContract.StreamTable.LOCALE) == null ? null
                 : (String) dto.get(DatabaseContract.StreamTable.LOCALE));
+        streamEntity.setRemoved(dto.get(DatabaseContract.StreamTable.REMOVED) == null ? 0
+                : (Integer) dto.get(DatabaseContract.StreamTable.REMOVED));
         setSynchronizedfromDto(dto, streamEntity);
     }
 
@@ -67,6 +70,7 @@ public class StreamEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.StreamTable.LOCALE, streamEntity == null ? null : streamEntity.getLocale());
         dto.put(DatabaseContract.StreamTable.NOTIFY_CREATION,
           streamEntity == null ? null : streamEntity.getNotifyCreation());
+        dto.put(DatabaseContract.StreamTable.REMOVED, streamEntity == null ? 0 : streamEntity.getRemoved());
         setSynchronizedtoDto(streamEntity, dto);
         return dto;
     }
@@ -87,6 +91,7 @@ public class StreamEntityMapper extends GenericMapper{
         streamEntity.setDescription(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.DESCRIPTION)));
         streamEntity.setLocale(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.LOCALE)));
         streamEntity.setMediaCountByRelatedUsers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
+        streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

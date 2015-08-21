@@ -7,8 +7,9 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.CreateStreamInteractor;
-import com.shootr.android.domain.interactor.stream.DeleteStreamInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveStreamInteractor;
+import com.shootr.android.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.validation.FieldValidationError;
 import com.shootr.android.domain.validation.StreamValidator;
@@ -28,7 +29,8 @@ public class NewStreamPresenter implements Presenter {
 
     private final CreateStreamInteractor createStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
-    private final DeleteStreamInteractor deleteStreamInteractor;
+    private final RemoveStreamInteractor removeStreamInteractor;
+    private final RestoreStreamInteractor restoreStreamInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -46,11 +48,12 @@ public class NewStreamPresenter implements Presenter {
 
     //region Initialization
     @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
-      GetStreamInteractor getStreamInteractor, DeleteStreamInteractor deleteStreamInteractor,
-      SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetStreamInteractor getStreamInteractor, RemoveStreamInteractor removeStreamInteractor,
+      RestoreStreamInteractor restoreStreamInteractor, SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
-        this.deleteStreamInteractor = deleteStreamInteractor;
+        this.removeStreamInteractor = removeStreamInteractor;
+        this.restoreStreamInteractor = restoreStreamInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -80,7 +83,12 @@ public class NewStreamPresenter implements Presenter {
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showShortTitle(streamModel.getTag());
         newStreamView.showDescription(streamModel.getDescription());
-        newStreamView.showDeleteStreamButton();
+
+        if (streamModel.isRemoved()) {
+            newStreamView.showRestoreStreamButton();
+        } else {
+            newStreamView.showRemoveStreamButton();
+        }
         if (currentTitle == null && currentShortTitle == null) {
             preloadedTitle = streamModel.getTitle();
             preloadedShortTitle = streamModel.getTag();
@@ -128,12 +136,25 @@ public class NewStreamPresenter implements Presenter {
         createStream();
     }
 
-    public void delete() {
-        newStreamView.askDeleteStreamConfirmation();
+    public void remove() {
+        newStreamView.askRemoveStreamConfirmation();
     }
 
-    public void confirmDeleteStream() {
-        deleteStreamInteractor.deleteStream(preloadedStreamId, new Interactor.CompletedCallback() {
+    public void restore() {
+        restoreStreamInteractor.restoreStream(preloadedStreamId, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                newStreamView.closeScreenWithExitStream();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                newStreamView.showError(errorMessage);
+            }
+        });
+    }
+
+    public void confirmRemoveStream() {
+        removeStreamInteractor.removeStream(preloadedStreamId, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 newStreamView.closeScreenWithExitStream();
             }
@@ -202,10 +223,10 @@ public class NewStreamPresenter implements Presenter {
             showViewError(errorMessageFactory.getUnknownErrorMessage());
         }
     }
-
     private void onCommunicationError() {
         showViewError(errorMessageFactory.getCommunicationErrorMessage());
     }
+
     //endregion
 
     //region Errors
@@ -225,10 +246,10 @@ public class NewStreamPresenter implements Presenter {
     private void showViewTitleError(String errorMessage) {
         newStreamView.showTitleError(errorMessage);
     }
-
     private void showViewError(String errorMessage) {
         newStreamView.showError(errorMessage);
     }
+
     //endregion
 
     //region Utils
@@ -264,12 +285,12 @@ public class NewStreamPresenter implements Presenter {
         return currentShortTitle != null && currentShortTitle.length() >= MINIMUM_SHORT_TITLE_LENGTH
           && currentShortTitle.length() <= MAX_SHORT_TITLE_LENGTH;
     }
-
     private void bindShortTitleToTitleIfMatches() {
         if (currentTitle != null && currentShortTitle != null) {
             shortTitleEditedManually = !filterShortTitle(currentTitle).equals(currentShortTitle);
         }
     }
+
     //endregion
 
     @Override public void resume() {

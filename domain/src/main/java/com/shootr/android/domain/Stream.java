@@ -16,8 +16,17 @@ public class Stream {
     private String description;
     private String locale;
     private Integer mediaCount;
+    private Boolean removed;
 
     public Stream() {
+    }
+
+    public Boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Boolean removed) {
+        this.removed = removed;
     }
 
     public String getDescription() {
