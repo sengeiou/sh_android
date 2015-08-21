@@ -3,8 +3,10 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
+import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
@@ -40,11 +42,14 @@ public class StreamsListPresenterTest {
     private static final String SELECTED_STREAM_ID = "selected_stream";
     private static final String SELECTED_STREAM_TITLE = "title";
     private static final String STREAM_AUTHOR_ID = "author";
+    public static final String ID_STREAM = "idStream";
 
     @Mock Bus bus;
     @Mock StreamsListInteractor streamsListInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+    @Mock SelectStreamInteractor selectStreamInteractor;
+    @Mock RecommendStreamInteractor recommendStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
@@ -58,7 +63,10 @@ public class StreamsListPresenterTest {
           new StreamResultModelMapper(streamModelMapper);
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
-          unwatchStreamInteractor, streamResultModelMapper,
+          unwatchStreamInteractor,
+          selectStreamInteractor,
+          recommendStreamInteractor,
+          streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
     }
@@ -132,6 +140,55 @@ public class StreamsListPresenterTest {
         presenter.resume();
 
         verify(streamsListInteractor, times(2)).loadStreams(anyStreamsCallback(), anyErrorCallback());
+    }
+
+    @Test public void shouldShowRecommendedStreamWhenRecommendStreamsCompletedCallback() throws Exception {
+        setupRecommendStreamCompletedCallback();
+
+        presenter.recommendStream(streamModel());
+
+        verify(streamsListView).showStreamRecommended();
+    }
+
+    @Test public void shouldShowErrorStreamWhenRecommendStreamsErrorCallback() throws Exception {
+        setupRecommendStreamErrorCallback();
+
+        presenter.recommendStream(streamModel());
+
+        verify(streamsListView).showError(anyString());
+    }
+
+    private void setupRecommendStreamErrorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
+                errorCallback.onError(new ShootrException() {});
+                return null;
+            }
+        }).when(recommendStreamInteractor).recommendStream(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
+    }
+
+    private void setupRecommendStreamCompletedCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.CompletedCallback completedCallback =
+                  (Interactor.CompletedCallback) invocation.getArguments()[1];
+                completedCallback.onCompleted();
+                return null;
+            }
+        }).when(recommendStreamInteractor).recommendStream(anyString(),
+          any(Interactor.CompletedCallback.class),
+          anyErrorCallback());
+    }
+
+    private StreamResultModel streamModel() {
+        StreamResultModel streamResultModel = new StreamResultModel();
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(ID_STREAM);
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {

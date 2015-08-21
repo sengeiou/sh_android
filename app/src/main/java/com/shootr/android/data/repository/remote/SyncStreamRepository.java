@@ -65,6 +65,10 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         return remoteStreamDataSource.getListingCount(idUser);
     }
 
+    @Override public void recommendStream(String idStream) {
+        remoteStreamDataSource.recommendStream(idStream);
+    }
+
     private void markEntitiesAsSynchronized(List<StreamEntity> remoteEvents) {
         for (StreamEntity event : remoteEvents) {
             markEntityAsSynchronized(event);

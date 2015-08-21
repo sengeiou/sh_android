@@ -16,4 +16,6 @@ public interface StreamDataSource {
     Integer getListingCount(String idUser);
 
     List<StreamEntity> getStreamsListing(String idUser);
+
+    void recommendStream(String idStream);
 }

@@ -38,4 +38,8 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         return streamManager.getStreamsListingNotRemoved(idUser);
     }
+
+    @Override public void recommendStream(String idStream) {
+        throw new IllegalStateException("Not allowed in local");
+    }
 }

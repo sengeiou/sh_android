@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -119,7 +120,28 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
               public void run() {
                   presenter.addToFavorite(stream);
               }
+          })
+          .addAction((getString(R.string.recomment_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  presenter.recommendStream(stream);
+              }
+          })
+          .addAction((getString(R.string.recommend_via)), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
           }).show();
+    }
+
+    private void shareStream(StreamResultModel stream) {
+        Intent intent = ShareCompat.IntentBuilder.from(this)
+          .setType("text/plain")
+          .setText(String.format(this.getString(R.string.recommend_stream_message),
+            stream.getStreamModel().getTitle(),
+            stream.getStreamModel().getIdStream()))
+          .setChooserTitle(getString(R.string.recommend_via))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {
@@ -152,6 +174,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
         startActivity(StreamDetailActivity.getIntent(this, streamId));
+    }
+
+    @Override public void showStreamRecommended() {
+        Toast.makeText(this, getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showContent() {

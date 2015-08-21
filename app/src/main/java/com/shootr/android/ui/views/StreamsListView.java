@@ -19,4 +19,6 @@ public interface StreamsListView extends LoadDataView {
     void navigateToCreatedStreamDetail(String streamId);
 
     void showAddedToFavorites();
+
+    void showStreamRecommended();
 }

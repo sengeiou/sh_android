@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -113,8 +114,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
           R.color.refresh_3,
           R.color.refresh_4);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            @Override public void onRefresh() {
                 presenter.refresh();
             }
         });
@@ -179,13 +179,34 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     private void openContextualMenu(final StreamResultModel stream) {
         new CustomContextMenu.Builder(getActivity())
           .addAction(getString(R.string.add_to_favorites_menu_title), new Runnable() {
-              @Override
-              public void run() {
-                  presenter.addToFavorites(stream);
+            @Override
+            public void run() {
+                presenter.addToFavorites(stream);
+            }
+        })
+          .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  presenter.recommendStream(stream);
+              }
+          })
+          .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
               }
           }).show();
     }
 
+    private void shareStream(StreamResultModel stream) {
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
+            stream.getStreamModel().getTitle(),
+            stream.getStreamModel().getIdStream()))
+          .setChooserTitle(getString(R.string.recommend_via))
+          .createChooserIntent();
+        startActivity(intent);
+    }
+    
     //region View methods
     @Override public void renderStream(List<StreamResultModel> streams) {
         adapter.setStreams(streams);
@@ -214,6 +235,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Override
     public void showAddedToFavorites() {
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void showStreamRecommended() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showEmpty() {
