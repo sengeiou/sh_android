@@ -32,10 +32,11 @@ import static org.mockito.Mockito.verify;
 public class ListingListPresenterTest {
 
     public static final String PROFILE_ID_USER = "profile_id_user";
-    public static final String CURRENT_ID_USER = "current_id_user";
+    public static final Boolean IS_NOT_CURRENT_USER = false;
     public static final String STREAM_ID = "stream_id";
     public static final String STREAM_AUTHOR_ID = "stream_author_id";
     public static final String STREAM_TITLE = "stream_title";
+    public static final boolean IS_CURRENT_USER = true;
 
     @Mock GetUserListingStreamsInteractor getUserListingStreamsInteractor;
     @Mock GetCurrentUserListingStreamsInteractor getCurrentUserListingStreamsInteractor;
@@ -79,7 +80,7 @@ public class ListingListPresenterTest {
     public void shouldShowContentIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
         verify(listingView).showContent();
     }
@@ -88,7 +89,7 @@ public class ListingListPresenterTest {
     public void shouldShowStreamsIfUserHasCreatedStreams() throws Exception {
         setupGetUserListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
         verify(listingView).renderStreams(anyList());
     }
@@ -97,7 +98,7 @@ public class ListingListPresenterTest {
     public void shouldHideContentIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
         verify(listingView).hideContent();
     }
@@ -106,7 +107,7 @@ public class ListingListPresenterTest {
     public void shouldShowNoStreamsIfUserHasNoCreatedStreams() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
         verify(listingView).showEmpty();
     }
@@ -115,7 +116,7 @@ public class ListingListPresenterTest {
     public void shouldCallGetCurrentUserListingStreamsInteractorIfCurrentUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, CURRENT_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
         verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class));
     }
@@ -124,7 +125,7 @@ public class ListingListPresenterTest {
     public void shouldCallGetUserListingStreamsInteractorIfAnotherUserProfile() throws Exception {
         setupUserWithoutListingCallback();
 
-        listingListPresenter.initialize(listingView, PROFILE_ID_USER, CURRENT_ID_USER);
+        listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
 
         verify(getUserListingStreamsInteractor).loadUserListingStreams(any(Interactor.Callback.class), anyString());
     }
