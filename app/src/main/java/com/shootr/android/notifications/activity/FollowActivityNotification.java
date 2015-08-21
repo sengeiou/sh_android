@@ -33,7 +33,6 @@ public class FollowActivityNotification extends SingleActivityNotification {
     protected PendingIntent getOpenProfileNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PROFILE);
         intent.putExtra(ProfileContainerActivity.EXTRA_USER, idUser);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        return pendingIntent;
+        return PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }
