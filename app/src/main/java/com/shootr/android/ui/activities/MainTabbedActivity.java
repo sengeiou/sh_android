@@ -18,8 +18,6 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
-import com.shootr.android.data.prefs.ActivityBadgeCount;
-import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.FavoritesFragment;
@@ -42,7 +40,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @Inject MainScreenPresenter mainScreenPresenter;
     @Inject JobManager jobManager;
-    @Inject @ActivityBadgeCount IntPreference badgeCount;
     @Inject @Main Bus bus;
 
     private ToolbarDecorator toolbarDecorator;
