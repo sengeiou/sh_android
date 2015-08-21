@@ -228,7 +228,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this);
+        newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
@@ -450,22 +450,12 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
-        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed) {
-            showStreamIsRemoved();
-        } else {
-            newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
-        }
+        newShotBarPresenter.newShotFromTextBox();
     }
 
     @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
-        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed) {
-            showStreamIsRemoved();
-        } else {
-            newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
-        }
+        newShotBarPresenter.newShotFromImage();
     }
 
     @OnClick(R.id.shot_bar_drafts)

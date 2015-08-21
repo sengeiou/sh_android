@@ -196,7 +196,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void initializePresenter(ShotModel shotModel) {
         detailPresenter.initialize(this, shotModel);
-        newShotBarPresenter.initialize(this);
+        newShotBarPresenter.initialize(this, shotModel.getStreamId());
     }
 
     //region Listeners
