@@ -97,8 +97,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             case TYPE_CHECKIN:
                 return onCreateCheckinViewHolder(parent, viewType);
             case TYPE_RECOMMEND_STREAM:
-                //TODO REAL HOLDER
-                return onCreateActivityViewHolder(parent, viewType);
+                return onCreateRecommendedStreamViewHolder(parent, viewType);
             case TYPE_LISTED:
                 return onCreateListedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
@@ -132,6 +131,15 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
         return new ListedViewHolder(view,
+          picasso,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+    }
+
+    private RecommendedStreamViewHolder onCreateRecommendedStreamViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new RecommendedStreamViewHolder(view,
           picasso,
           timeUtils,
           shotTextSpannableBuilder,
