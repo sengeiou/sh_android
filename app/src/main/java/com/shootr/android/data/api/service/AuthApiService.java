@@ -14,7 +14,7 @@ import retrofit.http.POST;
 public interface AuthApiService {
 
     @POST("/auth/authenticate")
-    UserEntity authenticate(@Body LoginApiEntity loginApiEntity) throws ApiException,  IOException;
+    UserEntity authenticate(@Body LoginApiEntity loginApiEntity) throws ApiException, IOException;
 
     @POST("/auth/register")
     UserEntity createAccount(@Body CreateAccountApiEntity createAccountApiEntity) throws ApiException, IOException;

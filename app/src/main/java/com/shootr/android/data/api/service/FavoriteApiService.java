@@ -15,11 +15,11 @@ import retrofit.http.Path;
 public interface FavoriteApiService {
 
     @GET("/user/favorites/")
-    List<FavoriteApiEntity> getFavorites() throws IOException;
+    List<FavoriteApiEntity> getFavorites() throws ApiException, IOException;
 
     @POST("/user/favorites/")
     FavoriteApiEntity createFavorite(@Body FavoriteEntity favorite) throws IOException, ApiException;
 
     @DELETE("/user/favorites/stream/{idStream}")
-    Response deleteFavorite(@Path("idStream") String idStream) throws IOException;
+    Response deleteFavorite(@Path("idStream") String idStream) throws ApiException, IOException;
 }

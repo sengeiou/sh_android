@@ -61,7 +61,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
     @Override public List<StreamEntity> getStreamsListing(String idUser) {
         try {
             return streamApiService.getStreamListing(idUser, MAX_NUMBER_OF_LISTING_STREAMS);
-        } catch (IOException e) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }

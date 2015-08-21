@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.activity;
 
 import com.shootr.android.data.api.entity.ActivityApiEntity;
 import com.shootr.android.data.api.entity.mapper.ActivityApiEntityMapper;
+import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.entity.ActivityEntity;
 import com.shootr.android.data.entity.StreamEntity;
@@ -46,7 +47,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
             List<ActivityApiEntity> activities = activityApiService.getActivityTimeline(parameters.getIncludedTypes(), parameters.getLimit(), parameters.getSinceDate(), parameters.getMaxDate());
             storeEmbedStreams(activities);
             return filterSyncActivities(activityApiEntityMapper.transform(activities));
-        } catch (IOException e) {
+        } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -56,7 +57,7 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         try {
             ActivityApiEntity activityApiEntity = activityApiService.getActivity(activityId);
             return activityApiEntityMapper.transform(activityApiEntity);
-        } catch (IOException error) {
+        } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }
     }
