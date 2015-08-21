@@ -31,5 +31,5 @@ public interface StreamApiService {
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @POST("/streams/{idStream}/recommend")
-    Response recommendStream(@Path("idStream") String idStream) throws IOException;
+    Response recommendStream(@Path("idStream") String idStream) throws ApiException, IOException;
 }
