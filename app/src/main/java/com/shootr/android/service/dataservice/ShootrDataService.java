@@ -1,6 +1,8 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
@@ -13,6 +15,7 @@ import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
 import com.shootr.android.db.mappers.SuggestedPeopleMapper;
 import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.utils.TimeUtils;
@@ -66,6 +69,8 @@ public class ShootrDataService implements ShootrService {
 
     private final TimeUtils timeUtils;
 
+    private final StreamApiService streamApiService;
+
     private final VersionUpdater versionUpdater;
 
     @Inject
@@ -73,7 +78,7 @@ public class ShootrDataService implements ShootrService {
       ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory, UserMapper userMapper,
       SuggestedPeopleMapper suggestedPeopleMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
       StreamDtoFactory streamDtoFactory, DeviceMapper deviceMapper, StreamEntityMapper streamEntityMapper,
-      TimeUtils timeUtils, VersionUpdater versionUpdater) {
+      TimeUtils timeUtils, StreamApiService streamApiService, VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -88,6 +93,7 @@ public class ShootrDataService implements ShootrService {
         this.deviceMapper = deviceMapper;
         this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
+        this.streamApiService = streamApiService;
         this.versionUpdater = versionUpdater;
     }
 
@@ -383,22 +389,14 @@ public class ShootrDataService implements ShootrService {
         return shotsByUserInStream;
     }
 
-    @Override public Integer getListingCount(String idUser) throws IOException {
-        Integer numberOfStreams = 0;
-        GenericDto requestDto = streamDtoFactory.getListingCount(idUser);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            Map<String, Object>[] data = ops[0].getData();
-            for (Map<String, Object> stringObjectMap : data) {
-                if (stringObjectMap.get("removed").equals(0)) {
-                    numberOfStreams++;
-                }
-            }
+    @Override public Integer getListingCount(String idUser) {
+        Integer listing;
+        try {
+            listing = streamApiService.getListingCount(idUser);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
         }
-        return numberOfStreams;
+        return listing;
     }
 
     @Override public void logout(String idUser, String idDevice) throws IOException {
