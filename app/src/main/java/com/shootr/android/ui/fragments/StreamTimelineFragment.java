@@ -71,7 +71,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
-    public static final String EXTRA_STREAM_REMOVED = "streamRemoved";
     private static final int REQUEST_STREAM_DETAIL = 1;
     public static final String CLIPBOARD_LABEL = "Shot";
 
@@ -112,14 +111,6 @@ public class StreamTimelineFragment extends BaseFragment
     private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
     //endregion
-
-    public static StreamTimelineFragment newInstance(String streamId, String streamTitle, Boolean streamRemoved) {
-        Bundle fragmentArguments = new Bundle();
-        fragmentArguments.putString(EXTRA_STREAM_ID, streamId);
-        fragmentArguments.putString(EXTRA_STREAM_TITLE, streamTitle);
-        fragmentArguments.putBoolean(EXTRA_STREAM_REMOVED, streamRemoved);
-        return newInstance(fragmentArguments);
-    }
 
     public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
         StreamTimelineFragment fragment = new StreamTimelineFragment();
@@ -228,7 +219,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void initializePresenters(String idStream) {
         streamTimelinePresenter.initialize(this, idStream);
-        newShotBarPresenter.initialize(this);
+        newShotBarPresenter.initialize(this, idStream);
         watchNumberPresenter.initialize(this, idStream);
         favoriteStatusPresenter.initialize(this, idStream);
         reportShotPresenter.initialize(this);
@@ -237,7 +228,7 @@ public class StreamTimelineFragment extends BaseFragment
     //endregion
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(photoPickerController, draftsButton) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
@@ -450,22 +441,12 @@ public class StreamTimelineFragment extends BaseFragment
 
     @OnClick(R.id.shot_bar_text)
     public void startNewShot() {
-        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed) {
-            showStreamIsRemoved();
-        } else {
-            newShotBarPresenter.newShotFromTextBox(streamTimelinePresenter.getRemoved());
-        }
+        newShotBarPresenter.newShotFromTextBox();
     }
 
     @OnClick(R.id.shot_bar_photo)
     public void startNewShotWithPhoto() {
-        Boolean removed = getActivity().getIntent().getBooleanExtra(EXTRA_STREAM_REMOVED, false);
-        if (removed) {
-            showStreamIsRemoved();
-        } else {
-            newShotBarPresenter.newShotFromImage(streamTimelinePresenter.getRemoved());
-        }
+        newShotBarPresenter.newShotFromImage();
     }
 
     @OnClick(R.id.shot_bar_drafts)
@@ -546,10 +527,6 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideDraftsButton() {
         newShotBarViewDelegate.hideDraftsButton();
-    }
-
-    public void showStreamIsRemoved() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.error_stream_read_only), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showWatchingPeopleCount(Integer count) {

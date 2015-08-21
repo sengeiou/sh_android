@@ -1,6 +1,5 @@
 package com.shootr.android.ui.model;
 
-import com.shootr.android.domain.ShotType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +14,9 @@ public class ShotModel implements Serializable{
     private String idUser;
     private String userName;
     private String photo;
+    private String streamId;
     private String streamTag;
     private String streamTitle;
-    private String type;
 
     private String replyUsername;
     private String parentShotId;
@@ -28,10 +27,6 @@ public class ShotModel implements Serializable{
 
     private Integer niceCount;
     private Boolean isMarkedAsNice;
-
-    public Boolean isActivity() {
-        return !getType().equals(ShotType.COMMENT);
-    }
 
     public String getIdShot() {
         return idShot;
@@ -87,14 +82,6 @@ public class ShotModel implements Serializable{
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getStreamTag() {
@@ -175,5 +162,13 @@ public class ShotModel implements Serializable{
 
     public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
         this.isMarkedAsNice = isMarkedAsNice;
+    }
+
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 }

@@ -121,4 +121,8 @@ public class ErrorMessageFactory {
     public String getStreamIsAlreadyInFavoritesError(){
         return context.getString(R.string.error_stream_already_favorites);
     }
+
+    public String getStreamReadOnlyError() {
+        return context.getString(R.string.error_stream_read_only);
+    }
 }
