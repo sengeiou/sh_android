@@ -10,12 +10,12 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +28,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_LISTED = 2;
     public static final int TYPE_STARTED_SHOOTING = 3;
     public static final int TYPE_NICE_SHOT = 4;
+    public static final int TYPE_RECOMMEND_STREAM = 5;
 
     private final PicassoWrapper picasso;
     private final AndroidTimeUtils timeUtils;
@@ -75,6 +76,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_STARTED_SHOOTING;
                 case ActivityType.NICE_SHOT:
                     return TYPE_NICE_SHOT;
+                case ActivityType.RECOMMEND_STREAM:
+                    return TYPE_RECOMMEND_STREAM;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -93,6 +96,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateActivityViewHolder(parent, viewType);
             case TYPE_CHECKIN:
                 return onCreateCheckinViewHolder(parent, viewType);
+            case TYPE_RECOMMEND_STREAM:
+                //TODO REAL HOLDER
+                return onCreateActivityViewHolder(parent, viewType);
             case TYPE_LISTED:
                 return onCreateListedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
