@@ -30,5 +30,5 @@ public interface StreamApiService {
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @GET("/streams/{idStream}/watchers/")
-    Integer getWatchersForStream(@Path("idStream") String idStream) throws IOException;
+    Integer getWatchersForStream(@Path("idStream") String idStream) throws IOException, ApiException;
 }
