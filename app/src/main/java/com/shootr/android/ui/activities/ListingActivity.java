@@ -52,10 +52,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
-        String idUser = getIntent().getStringExtra(EXTRA_ID_USER);
-        Boolean currentIdUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
-
-        boolean isCurrentUser = idUser.equals(currentIdUser);
+        Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
 
         adapter = new ListingStreamsAdapter(picasso, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {

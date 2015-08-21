@@ -36,24 +36,20 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
         View view;
         if (isCurrentUser) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
-            return new CurrentUserListingStreamViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-            return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
         }
+        return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
     }
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        ((ListingStreamResultViewHolder) viewHolder).setFavorite(isFavorite(position));
+        StreamResultModel stream = getItem(position);
+        boolean showSeparator = position != getFirstItemPosition();
         if (isCurrentUser) {
-            ((CurrentUserListingStreamViewHolder) viewHolder).setFavorite(isFavorite(position));
-            StreamResultModel stream = getItem(position);
-            boolean showSeparator = position != getFirstItemPosition();
-            ((GenericUserStreamViewHolder) viewHolder).render(stream, showSeparator);
+            ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
         } else {
-            ((ListingStreamResultViewHolder) viewHolder).setFavorite(isFavorite(position));
-            StreamResultModel stream = getItem(position);
-            boolean showSeparator = position != getFirstItemPosition();
             ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
             ((StreamResultViewHolder) viewHolder).renderAuthor(stream.getStreamModel().getAuthorUsername());
         }
