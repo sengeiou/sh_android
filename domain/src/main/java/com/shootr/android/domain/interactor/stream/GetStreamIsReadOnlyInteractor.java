@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.executor.PostExecutionThread;
+import com.shootr.android.domain.interactor.Fast;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Local;
@@ -19,7 +20,8 @@ public class GetStreamIsReadOnlyInteractor implements Interactor {
     private String streamId;
     private Callback<Boolean> callback;
 
-    @Inject public GetStreamIsReadOnlyInteractor(InteractorHandler interactorHandler,
+    @Inject
+    public GetStreamIsReadOnlyInteractor(@Fast InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       @Local StreamRepository localStreamRepository) {
         this.interactorHandler = interactorHandler;
@@ -38,7 +40,6 @@ public class GetStreamIsReadOnlyInteractor implements Interactor {
         Stream stream = localStreamRepository.getStreamById(streamId);
         checkNotNull(stream);
         notifyLoaded(stream.isRemoved());
-
     }
 
     private void notifyLoaded(final Boolean isRemoved) {
