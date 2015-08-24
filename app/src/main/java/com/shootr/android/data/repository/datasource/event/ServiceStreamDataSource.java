@@ -4,6 +4,7 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.data.entity.WatchersEntity;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
@@ -84,6 +85,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
     @Override public Integer getWatchersForStream(String idStream) {
         try {
             return streamApiService.getWatchersForStream(idStream);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public List<WatchersEntity> getWatchers() {
+        try {
+            return streamApiService.getWatchers();
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

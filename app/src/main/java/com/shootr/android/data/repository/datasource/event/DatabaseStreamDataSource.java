@@ -1,6 +1,7 @@
 package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.StreamEntity;
+import com.shootr.android.data.entity.WatchersEntity;
 import com.shootr.android.db.manager.StreamManager;
 import com.shootr.android.domain.exception.DeleteStreamNotAllowedException;
 import java.util.List;
@@ -46,6 +47,10 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     }
 
     @Override public Integer getWatchersForStream(String idStream) {
+        throw new IllegalArgumentException("method not implemented in local datasource");
+    }
+
+    @Override public List<WatchersEntity> getWatchers() {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

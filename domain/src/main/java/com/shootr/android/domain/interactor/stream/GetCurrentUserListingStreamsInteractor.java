@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.Watchers;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -63,9 +64,13 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
     }
 
     private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
-        for (StreamSearchResult listingStream : listingStreams) {
-            Integer streamWatchers = remoteStreamSearchRepository.getWatchersForStream(listingStream.getStream().getId());
-            listingStream.setWatchersNumber(streamWatchers);
+        List<Watchers> watchersList = remoteStreamSearchRepository.getWatchers();
+        for (Watchers watchers : watchersList) {
+            for (StreamSearchResult listingStream : listingStreams) {
+                if (listingStream.getStream().getId().equals(watchers.getIdStream())) {
+                    listingStream.setWatchersNumber(watchers.getWatchers());
+                }
+            }
         }
     }
 

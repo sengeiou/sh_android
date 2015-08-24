@@ -8,6 +8,7 @@ import com.shootr.android.data.repository.datasource.event.StreamDataSource;
 import com.shootr.android.data.repository.datasource.event.StreamSearchDataSource;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.Watchers;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
@@ -58,6 +59,10 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
     }
 
     @Override public Integer getWatchersForStream(String idStream) {
+        throw new IllegalArgumentException("method not implemented in local repository");
+    }
+
+    @Override public List<Watchers> getWatchers() {
         throw new IllegalArgumentException("method not implemented in local repository");
     }
 
