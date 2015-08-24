@@ -35,10 +35,6 @@ public class MapperModule {
         return new UserEntityModelMapper();
     }
 
-    @Provides @Singleton UserModelMapper provideUserModelMapper() {
-        return new UserModelMapper();
-    }
-
     @Provides UserMapper provideUserMapper() {
         return new UserMapper();
     }

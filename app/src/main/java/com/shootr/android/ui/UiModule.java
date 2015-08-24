@@ -1,6 +1,7 @@
 package com.shootr.android.ui;
 
 import android.os.Handler;
+import com.shootr.android.domain.utils.DateRangeTextProvider;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
@@ -33,6 +34,7 @@ import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
+import com.shootr.android.util.ResourcesDateRangeTextProvider;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -85,4 +87,9 @@ import javax.inject.Singleton;
     Poller providePoller() {
         return new Poller(new Handler());
     }
+
+  @Provides
+  DateRangeTextProvider provideDateRangeTextProvider(ResourcesDateRangeTextProvider resourcesDateRangeTextProvider) {
+    return resourcesDateRangeTextProvider;
+  }
 }

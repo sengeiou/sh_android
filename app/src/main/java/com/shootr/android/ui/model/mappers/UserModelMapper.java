@@ -2,11 +2,19 @@ package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.ui.model.UserModel;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
 public class UserModelMapper {
+
+    private final StreamJoinDateFormatter streamJoinDateFormatter;
+
+    @Inject public UserModelMapper(StreamJoinDateFormatter streamJoinDateFormatter) {
+        this.streamJoinDateFormatter = streamJoinDateFormatter;
+    }
 
     public UserModel transform(User user) {
         UserModel userModel = new UserModel();
@@ -24,7 +32,10 @@ public class UserModelMapper {
         userModel.setEmailConfirmed(user.isEmailConfirmed());
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
-        userModel.setJoinStreamDate(user.getJoinStreamDate());
+        Long joinStreamDate = user.getJoinStreamDate();
+        if (joinStreamDate != null) {
+            userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));
+        }
         return userModel;
     }
 
