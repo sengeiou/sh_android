@@ -26,7 +26,6 @@ public class PhotoViewActivity extends BaseToolbarActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
     private static final String EXTRA_IMAGE_URL = "image";
-    private static final Object PREVIEW_TAG = new Object();
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
