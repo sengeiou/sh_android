@@ -4,7 +4,6 @@ import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -18,8 +17,6 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.util.ImageLoader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import javax.inject.Inject;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -40,9 +37,6 @@ public class PhotoViewActivity extends BaseToolbarActivity {
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
-    private boolean loadedFinalImage = false;
-    private Target previewTargetStrongReference;
-    private Target finalTargetStrongReference;
 
     public static Intent getIntentForActivity(Context context, String imageUrl) {
         return getIntentForActivity(context, imageUrl, null);
@@ -88,49 +82,20 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
 
         if (previewUrl != null) {
-            loadPreview(previewUrl);
-        }
-        loadBigImage(imageUrl);
-    }
-
-    private void loadPreview(String preview) {
-        previewTargetStrongReference = new Target() {
-            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                if (!loadedFinalImage) {
-                    image.setImageBitmap(bitmap);
+            imageLoader.loadWithPreview(imageUrl, previewUrl, image, new ImageLoader.Callback() {
+                @Override public void onLoaded(Bitmap bitmap) {
+                    attacher.update();
                 }
-            }
-
-            @Override public void onBitmapFailed(Drawable errorDrawable) {
-                //TODO handle error
-            }
-
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-                /* no-op */
-            }
-        };
-        imageLoader.loadWithTag(preview, previewTargetStrongReference, PREVIEW_TAG);
+            });
+        } else {
+            imageLoader.load(imageUrl, image, new ImageLoader.Callback() {
+                @Override public void onLoaded(Bitmap bitmap) {
+                    attacher.update();
+                }
+            });
+        }
     }
 
-    private void loadBigImage(String imageUrl) {
-        finalTargetStrongReference = new Target() {
-            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                loadedFinalImage = true;
-                image.setImageBitmap(bitmap);
-                cancelPreviewLoading();
-                attacher.update();
-            }
-
-            @Override public void onBitmapFailed(Drawable errorDrawable) {
-                //TODO handle error
-            }
-
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-                /* no-op */
-            }
-        };
-        imageLoader.loadIntoTarget(imageUrl, finalTargetStrongReference);
-    }
 
     private void cancelPreviewLoading() {
         imageLoader.cancelTag(PREVIEW_TAG);

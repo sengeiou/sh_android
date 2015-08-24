@@ -1,6 +1,7 @@
 package com.shootr.android.util;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 import com.shootr.android.R;
@@ -48,6 +49,12 @@ public class PicassoImageLoader implements ImageLoader {
         picasso.load(path).into(view);
     }
 
+    @Override public void loadWithPreview(String path, String previewPath, ImageView view, Callback callback) {
+        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(previewPath, path, view, picasso);
+        picassoPreviewHelper.loadImageWithPreview(callback);
+        view.setTag(picassoPreviewHelper);
+    }
+
     @Override public void load(File file, ImageView view) {
         picasso.load(file).into(view);
     }
@@ -77,20 +84,18 @@ public class PicassoImageLoader implements ImageLoader {
         return picasso.load(url).placeholder(R.color.transparent).get();
     }
 
-    @Override public void loadWithTag(String preview, Target previewTargetStrongReference, Object previewTag) {
-        picasso.load(preview).tag(previewTag).into(previewTargetStrongReference);
-    }
-
-    @Override public void loadIntoTarget(String imageUrl, Target finalTargetStrongReference) {
-        picasso.load(imageUrl).into(finalTargetStrongReference);
-    }
-
     @Override public void cancelTag(Object previewTag) {
         picasso.cancelTag(previewTag);
     }
 
     @Override public void load(String url, ImageView view, ImageLoaderCallback callback) {
         picasso.load(url).into(view, callback);
+    }
+
+    @Override public void load(String imageUrl, ImageView image, Callback callback) {
+        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(null, imageUrl, image, picasso);
+        picassoPreviewHelper.loadImage(callback);
+        image.setTag(picassoPreviewHelper);
     }
 
     private RequestCreator loadDefaultImage() {
@@ -101,4 +106,83 @@ public class PicassoImageLoader implements ImageLoader {
         return picasso.load(resource);
     }
 
+    public static class PicassoPreviewHelper {
+
+        private final String previewUrl;
+        private final String finalUrl;
+        private final ImageView imageView;
+        private final Picasso picasso;
+        private boolean loadedFinalImage = false;
+        private Target previewTarget;
+        private Target finalTarget;
+
+        public PicassoPreviewHelper(String previewUrl, String finalUrl, ImageView imageView, Picasso picasso) {
+            this.previewUrl = previewUrl;
+            this.finalUrl = finalUrl;
+            this.imageView = imageView;
+            this.picasso = picasso;
+        }
+
+        public void loadImageWithPreview(final Callback callback) {
+            previewTarget = new Target() {
+                @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    if (!loadedFinalImage) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                }
+
+                @Override public void onBitmapFailed(Drawable errorDrawable) {
+                    /* no-op */
+                }
+
+                @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    /* no-op */
+                }
+            };
+
+            finalTarget = new Target() {
+                @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    loadedFinalImage = true;
+                    imageView.setImageBitmap(bitmap);
+                    cancelPreview();
+                    callback.onLoaded(bitmap);
+                }
+
+                @Override public void onBitmapFailed(Drawable errorDrawable) {
+                    /* no-op */
+                }
+
+                @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    /* no-op */
+                }
+            };
+
+            picasso.load(previewUrl).into(previewTarget);
+            picasso.load(finalUrl).into(finalTarget);
+        }
+
+        public void loadImage(final Callback callback) {
+            finalTarget = new Target() {
+                @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    loadedFinalImage = true;
+                    imageView.setImageBitmap(bitmap);
+                    cancelPreview();
+                    callback.onLoaded(bitmap);
+                }
+
+                @Override public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+            picasso.load(finalUrl).into(finalTarget);
+        }
+
+        private void cancelPreview() {
+            picasso.cancelRequest(previewTarget);
+        }
+    }
 }

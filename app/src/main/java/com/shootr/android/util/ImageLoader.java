@@ -2,8 +2,6 @@ package com.shootr.android.util;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,6 +15,8 @@ public interface ImageLoader {
 
     void load(String path, ImageView view);
 
+    void loadWithPreview(String path, String previewPath, ImageView view, Callback callback);
+
     void load(File file, ImageView view);
 
     void loadPreviewImage(File file, ImageView view, Integer maxScreenWidth);
@@ -25,11 +25,15 @@ public interface ImageLoader {
 
     Bitmap loadTimelineImage(String url) throws IOException;
 
-    void loadWithTag(String preview, Target previewTargetStrongReference, Object previewTag);
-
-    void loadIntoTarget(String imageUrl, Target finalTargetStrongReference);
-
     void cancelTag(Object previewTag);
 
     void load(String url, ImageView view, ImageLoaderCallback callback);
+
+    void load(String imageUrl, ImageView image, Callback callback);
+
+    interface Callback {
+
+        void onLoaded(Bitmap bitmap);
+
+    }
 }
