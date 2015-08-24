@@ -82,14 +82,6 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public Integer getWatchersForStream(String idStream) {
-        try {
-            return streamApiService.getWatchersForStream(idStream);
-        } catch (IOException | ApiException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public List<WatchersEntity> getWatchers() {
         try {
             return streamApiService.getWatchers();

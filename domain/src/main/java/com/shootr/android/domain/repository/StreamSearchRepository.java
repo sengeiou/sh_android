@@ -16,7 +16,5 @@ public interface StreamSearchRepository {
 
     List<StreamSearchResult> getStreamsListing(String listingIdUser);
 
-    Integer getWatchersForStream(String idStream);
-
     List<Watchers> getWatchers();
 }

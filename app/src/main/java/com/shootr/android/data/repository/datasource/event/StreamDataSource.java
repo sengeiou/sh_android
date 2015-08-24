@@ -21,7 +21,5 @@ public interface StreamDataSource {
 
     void deleteStream(String idStream) throws DeleteStreamNotAllowedException;
 
-    Integer getWatchersForStream(String idStream);
-
     List<WatchersEntity> getWatchers();
 }

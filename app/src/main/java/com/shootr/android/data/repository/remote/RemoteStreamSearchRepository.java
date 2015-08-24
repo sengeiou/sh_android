@@ -115,10 +115,6 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
     }
 
-    @Override public Integer getWatchersForStream(String idStream) {
-        return remoteStreamDataSource.getWatchersForStream(idStream);
-    }
-
     @Override public List<Watchers> getWatchers() {
         return watchersEntityMapper.transform(remoteStreamDataSource.getWatchers());
     }
