@@ -86,11 +86,19 @@ public class PhotoViewActivity extends BaseToolbarActivity {
                 @Override public void onLoaded(Bitmap bitmap) {
                     attacher.update();
                 }
+
+                @Override public void onError() {
+                    /* no-op */
+                }
             });
         } else {
             imageLoader.load(imageUrl, image, new ImageLoader.Callback() {
                 @Override public void onLoaded(Bitmap bitmap) {
                     attacher.update();
+                }
+
+                @Override public void onError() {
+                    /* no-op */
                 }
             });
         }

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,7 +39,6 @@ import com.shootr.android.ui.widgets.ObservableScrollView;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.ImageLoaderCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -362,9 +362,8 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Override public void setStreamPicture(String picture) {
         if (picture != null) {
             hasPicture = true;
-            imageLoader.load(picture, photo, new ImageLoaderCallback() {
-                @Override public void onSuccess() {
-                    //Trigger image transition
+            imageLoader.load(picture, photo, new ImageLoader.Callback() {
+                @Override public void onLoaded(Bitmap bitmap) {
                     recomputePhotoAndScrollingMetrics();
                 }
 

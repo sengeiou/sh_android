@@ -27,13 +27,13 @@ public interface ImageLoader {
 
     void cancelTag(Object previewTag);
 
-    void load(String url, ImageView view, ImageLoaderCallback callback);
-
     void load(String imageUrl, ImageView image, Callback callback);
 
     interface Callback {
 
         void onLoaded(Bitmap bitmap);
+
+        void onError();
 
     }
 }
