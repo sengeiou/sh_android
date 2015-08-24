@@ -104,11 +104,6 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         }
     }
 
-
-    private void cancelPreviewLoading() {
-        imageLoader.cancelTag(PREVIEW_TAG);
-    }
-
     public void onPhotoClick() {
         if (isUiShown) {
             hideUi();
