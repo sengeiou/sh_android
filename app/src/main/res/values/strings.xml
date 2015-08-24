@@ -345,6 +345,7 @@
     <string name="report_context_menu_report">Report</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="share_shot_message">Shot by %1$s on %2$s: https://shootr.com/s/%3$s</string>
+    <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="notification_nice_content_text">Niced your shot</string>
     <string name="notification_nice_text_pattern">%s niced your shot</string>
@@ -355,6 +356,7 @@
     <string name="recomment_via_shootr">Recommend via Shootr</string>
     <string name="recommend_via">Recommend via...</string>
     <string name="recommend_stream_message">Check out %1$s on Shootr: https://shootr.com/st/%2$s</string>
+    <string name="recommend_stream_subject">Check out %s on Shootr</string>
     <string name="stream_recommended_notification">Stream recommended</string>
     <string name="new_activity_notification">New activity</string>
 </resources>

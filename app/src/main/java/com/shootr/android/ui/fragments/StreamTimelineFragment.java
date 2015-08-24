@@ -36,11 +36,11 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -98,6 +98,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
     @BindString(R.string.share_shot_message) String shareShotMessage;
+    @BindString(R.string.share_shot_subject) String shareShotSubject;
 
     private TimelineAdapter adapter;
 
@@ -440,8 +441,12 @@ public class StreamTimelineFragment extends BaseFragment
     private void shareShot(ShotModel shotModel) {
         Intent intent = ShareCompat.IntentBuilder.from(getActivity())
           .setType("text/plain")
+          .setSubject(String.format(shareShotSubject,
+            shotModel.getUsername(), shotModel.getStreamTitle()))
           .setText(String.format(shareShotMessage,
-            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
+            shotModel.getUsername(),
+            shotModel.getStreamTitle(),
+            shotModel.getIdShot()))
           .setChooserTitle(getString(R.string.share_shot_chooser_title))
           .createChooserIntent();
         startActivity(intent);

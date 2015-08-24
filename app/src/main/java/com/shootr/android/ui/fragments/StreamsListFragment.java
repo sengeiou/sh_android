@@ -199,11 +199,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     private void shareStream(StreamResultModel stream) {
         Intent intent = ShareCompat.IntentBuilder.from(getActivity())
           .setType("text/plain")
-          .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
-            stream.getStreamModel().getTitle(),
-            stream.getStreamModel().getIdStream()))
-          .setChooserTitle(getString(R.string.recommend_via))
-          .createChooserIntent();
+          .setSubject(String.format(getActivity().getString(R.string.recommend_stream_subject),
+            stream.getStreamModel().getTitle()))
+            .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
+              stream.getStreamModel().getTitle(),
+              stream.getStreamModel().getIdStream()))
+            .setChooserTitle(getString(R.string.recommend_via))
+            .createChooserIntent();
         startActivity(intent);
     }
     
