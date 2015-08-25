@@ -1,8 +1,8 @@
 package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.StreamSearchResult;
-import com.shootr.android.domain.Watchers;
 import java.util.List;
+import java.util.Map;
 
 public interface StreamSearchRepository {
 
@@ -16,5 +16,5 @@ public interface StreamSearchRepository {
 
     List<StreamSearchResult> getStreamsListing(String listingIdUser);
 
-    List<Watchers> getWatchers();
+    Map<String, Integer> getWatchers();
 }

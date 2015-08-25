@@ -1,6 +1,6 @@
-package com.shootr.android.data.entity;
+package com.shootr.android.data.api.entity;
 
-public class WatchersEntity extends Synchronized {
+public class WatchersApiEntity {
 
     private String idStream;
     private Integer watchers;

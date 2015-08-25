@@ -1,8 +1,8 @@
 package com.shootr.android.data.api.service;
 
+import com.shootr.android.data.api.entity.WatchersApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.data.entity.WatchersEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
@@ -30,8 +30,5 @@ public interface StreamApiService {
     @DELETE("/streams/{idStream}")
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
-    @GET("/streams/{idStream}/watchers/")
-    Integer getWatchersForStream(@Path("idStream") String idStream) throws IOException, ApiException;
-
-    @GET("/streams/watchers/") List<WatchersEntity> getWatchers() throws IOException, ApiException;
+    @GET("/streams/watchers/") List<WatchersApiEntity> getWatchers() throws IOException, ApiException;
 }

@@ -1,7 +1,6 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.StreamSearchResult;
-import com.shootr.android.domain.Watchers;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -11,6 +10,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class GetCurrentUserListingStreamsInteractor implements Interactor {
@@ -64,13 +64,9 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
     }
 
     private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
-        List<Watchers> watchersList = remoteStreamSearchRepository.getWatchers();
-        for (Watchers watchers : watchersList) {
-            for (StreamSearchResult listingStream : listingStreams) {
-                if (listingStream.getStream().getId().equals(watchers.getIdStream())) {
-                    listingStream.setWatchersNumber(watchers.getWatchers());
-                }
-            }
+        Map<String, Integer> watchers = remoteStreamSearchRepository.getWatchers();
+        for (StreamSearchResult listingStream : listingStreams) {
+            listingStream.setWatchersNumber(watchers.get(listingStream.getStream().getId()));
         }
     }
 
