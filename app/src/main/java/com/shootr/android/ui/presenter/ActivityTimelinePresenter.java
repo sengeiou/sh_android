@@ -30,6 +30,7 @@ public class ActivityTimelinePresenter implements Presenter {
     private ActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
     private boolean mightHaveMoreActivities = true;
+    private boolean isEmpty;
 
     @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
       ActivityModelMapper activityModelMapper,
@@ -74,19 +75,20 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     protected void loadTimeline() {
-        timelineView.showLoading();
         activityTimelineInteractorWrapper.loadTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
                 timelineView.hideLoading();
                 timelineView.setActivities(activityModels);
-                if (!activityModels.isEmpty()) {
-                    timelineView.hideEmpty();
-                    timelineView.showActivities();
-                } else {
+                isEmpty = activityModels.isEmpty();
+                if (isEmpty) {
                     timelineView.showEmpty();
                     timelineView.hideActivities();
+                } else {
+                    timelineView.hideEmpty();
+                    timelineView.showActivities();
                 }
+                loadNewActivities();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -108,14 +110,22 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     private void loadNewActivities() {
-        timelineView.showLoadingActivity();
+        if (isEmpty) {
+            timelineView.hideEmpty();
+            timelineView.showLoadingActivity();
+        }
         activityTimelineInteractorWrapper.refreshTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
-                List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
-                if (!activityModels.isEmpty()) {
-                    timelineView.addNewActivities(activityModels);
+                List<ActivityModel> newActivity = activityModelMapper.transform(timeline.getActivities());
+                boolean hasNewActivity = !newActivity.isEmpty();
+                if (isEmpty && hasNewActivity) {
+                    isEmpty = false;
+                }
+                if (hasNewActivity) {
+                    timelineView.addNewActivities(newActivity);
                     timelineView.hideEmpty();
                     timelineView.showActivities();
+                    timelineView.hideLoadingActivity();
                 }
                 timelineView.hideLoading();
                 timelineView.hideLoadingActivity();
