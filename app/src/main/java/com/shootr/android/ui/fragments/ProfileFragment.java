@@ -5,8 +5,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.ShareCompat;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,12 +72,12 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -95,6 +92,7 @@ import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.ui.widgets.SuggestedPeopleListView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
@@ -120,7 +118,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     public static final String ARGUMENT_USER = "user";
     public static final String ARGUMENT_USERNAME = "username";
     public static final String TAG = "profile";
-    public static final String CLIPBOARD_LABEL = "Shot";
     public static final int LOGOUT_DISMISS_DELAY = 1500;
 
     //region injected
@@ -737,12 +734,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
               @Override public void run() {
                   shareShot(shotModel);
               }
-          }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
               @Override public void run() {
-                  ClipboardManager clipboard =
-                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                  clipboard.setPrimaryClip(clip);
+                  Clipboard.copyShotComment(getActivity(), shotModel);
               }
           }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {

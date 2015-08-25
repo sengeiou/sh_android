@@ -1,13 +1,10 @@
 package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +18,11 @@ import butterknife.OnItemLongClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.AllShotsPresenter;
 import com.shootr.android.ui.presenter.ReportShotPresenter;
@@ -33,6 +30,7 @@ import com.shootr.android.ui.views.AllShotsView;
 import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -205,11 +203,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
                   shareShot(shotModel);
               }
           })
-          .addAction(getString(R.string.report_context_menu_copy_text), new Runnable() {
+          .addAction(getString(R.string.menu_copy_text), new Runnable() {
                 @Override public void run() {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                    clipboard.setPrimaryClip(clip);
+                    Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
                 }
             }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {

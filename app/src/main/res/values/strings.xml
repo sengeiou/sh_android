@@ -342,7 +342,7 @@
     <string name="alert_report_confirmed_email_message"><![CDATA[Go to Account > Edit Profile and confirm your email.]]></string>
     <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
     <string name="alert_report_confirmed_email_ok">OK</string>
-    <string name="report_context_menu_copy_text">Copy text</string>
+    <string name="menu_copy_text">Copy text</string>
     <string name="report_context_menu_report">Report</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="share_shot_message">Shot by %1$s on %2$s: https://shootr.com/s/%3$s</string>
