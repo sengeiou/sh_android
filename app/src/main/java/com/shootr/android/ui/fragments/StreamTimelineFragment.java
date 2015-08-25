@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -91,6 +92,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject ToolbarDecorator toolbarDecorator;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
+    @Bind(R.id.timeline_subtitle) TextView emptyTextView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.timeline_empty) View emptyView;
@@ -515,6 +517,14 @@ public class StreamTimelineFragment extends BaseFragment
         Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
         intent.putExtra(EXTRA_STREAM_ID, idStream);
         startActivityForResult(intent, REQUEST_STREAM_DETAIL);
+    }
+
+    @Override public void showLoadingText() {
+        emptyTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoadingText() {
+        emptyTextView.setVisibility(View.GONE);
     }
 
     @Override

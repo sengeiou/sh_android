@@ -49,6 +49,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject AndroidTimeUtils timeUtils;
 
     @Bind(R.id.timeline_activity_list) RecyclerView activityList;
+    @Bind(R.id.timeline_subtitle) TextView emptyTextView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.timeline_empty_title) TextView emptyViewTitle;
@@ -298,6 +299,14 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void hideLoadingOldActivities() {
         adapter.setFooterVisible(false);
+    }
+
+    @Override public void showLoadingText() {
+        emptyTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoadingText() {
+        emptyTextView.setVisibility(View.GONE);
     }
     //endregion
 }

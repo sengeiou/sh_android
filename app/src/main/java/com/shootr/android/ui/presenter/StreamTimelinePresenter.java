@@ -67,8 +67,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.setView(streamTimelineView);
         this.selectStream();
         this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 loadNewShots();
             }
         });
@@ -85,8 +84,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     protected void selectStream() {
         loadTimeline();
         selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
-            @Override
-            public void onLoaded(StreamSearchResult streamSearchResult) {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
                 /* no-op */
             }
         });
@@ -94,11 +92,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
+
+        streamTimelineView.showLoading();
+        streamTimelineView.showEmpty();
+        streamTimelineView.showLoadingText();
         timelineInteractorWrapper.loadTimeline(streamId, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 streamTimelineView.hideLoading();
+                streamTimelineView.hideLoadingText();
+                streamTimelineView.hideEmpty();
                 streamTimelineView.setShots(shotModels);
                 if (!shotModels.isEmpty()) {
                     streamTimelineView.hideEmpty();

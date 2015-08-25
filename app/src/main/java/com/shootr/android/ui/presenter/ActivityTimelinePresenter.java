@@ -74,10 +74,14 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     protected void loadTimeline() {
+        timelineView.showEmpty();
         timelineView.showLoading();
+        timelineView.showLoadingText();
         activityTimelineInteractorWrapper.loadTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
+                timelineView.hideEmpty();
+                timelineView.hideLoadingText();
                 timelineView.hideLoading();
                 timelineView.setActivities(activityModels);
                 if (!activityModels.isEmpty()) {

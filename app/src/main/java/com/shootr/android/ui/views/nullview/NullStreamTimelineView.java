@@ -34,6 +34,14 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void showLoadingText() {
+        /* no-op */
+    }
+
+    @Override public void hideLoadingText() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }
