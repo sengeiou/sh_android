@@ -105,10 +105,10 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView).showShots();
     }
 
-    @Test public void shouldShowLoadingViewWhenLoadTimeline() throws Exception {
+    @Test public void shouldNotShowLoadingViewWhenLoadTimeline() throws Exception {
         presenter.loadTimeline();
 
-        verify(streamTimelineView).showLoading();
+        verify(streamTimelineView, never()).showLoading();
     }
 
     @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -132,7 +132,7 @@ public class StreamTimelinePresenterTest {
 
         presenter.loadTimeline();
 
-        verify(streamTimelineView, atLeastOnce()).showEmpty();
+        verify(streamTimelineView).showEmpty();
     }
 
     @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
