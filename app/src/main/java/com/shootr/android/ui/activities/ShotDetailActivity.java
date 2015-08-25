@@ -108,25 +108,25 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
           new ShotDetailWithRepliesAdapter.AvatarClickListener() {
               @Override
               public void onClick(String userId) {
-                  onAvatarClick(userId);
+                  onShotAvatarClick(userId);
               }
           }, //
           new ShotDetailWithRepliesAdapter.ImageClickListener() {
               @Override
               public void onClick(ShotModel shot) {
-                  onImageClick(shot);
+                  onShotImageClick(shot);
               }
           }, //
           new OnVideoClickListener() {
               @Override
               public void onVideoClick(String url) {
-                  onVideoClick(url);
+                  onShotVideoClick(url);
               }
           }, //
           new OnUsernameClickListener() {
               @Override
               public void onUsernameClick(String username) {
-                  onUsernameClick(username);
+                  onShotUsernameClick(username);
               }
           }, //
           new ShotDetailWithRepliesAdapter.OnParentShownListener() {
@@ -200,20 +200,20 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     //region Listeners
-    public void onImageClick(ShotModel shot) {
+    public void onShotImageClick(ShotModel shot) {
         detailPresenter.imageClick(shot);
     }
 
-    public void onAvatarClick(String userId) {
+    public void onShotAvatarClick(String userId) {
         detailPresenter.avatarClick(userId);
     }
 
-    public void onUsernameClick(String username){
+    public void onShotUsernameClick(String username){
         detailPresenter.usernameClick(username);
     }
 
 
-    private void onVideoClick(String url) {
+    private void onShotVideoClick(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
