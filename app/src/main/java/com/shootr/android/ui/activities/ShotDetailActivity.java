@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -42,6 +45,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
     @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
+
+    @BindString(R.string.share_shot_message) String shareShotMessage;
+    @BindString(R.string.share_shot_subject) String shareShotSubject;
 
     @Inject PicassoWrapper picasso;
     @Inject TimeFormatter timeFormatter;
@@ -95,10 +101,29 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarPresenter.resume();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_shot_detail, menu);
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        }else if (item.getItemId() == R.id.menu_share) {
+            ShotModel shotModel = extractShotFromIntent();
+            Intent intent = ShareCompat.IntentBuilder.from(this)
+              .setType("text/plain")
+              .setSubject(String.format(shareShotSubject,
+                shotModel.getUsername(), shotModel.getStreamTitle()))
+              .setText(String.format(shareShotMessage,
+                shotModel.getUsername(),
+                shotModel.getStreamTitle(),
+                shotModel.getIdShot()))
+              .setChooserTitle(getString(R.string.share_shot_chooser_title))
+              .createChooserIntent();
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

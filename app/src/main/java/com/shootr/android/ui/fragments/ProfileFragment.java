@@ -731,7 +731,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
+          .addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
