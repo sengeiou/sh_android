@@ -76,6 +76,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setTitle(streamEntity.getTitle());
         streamSearchEntity.setPhoto(streamEntity.getPhoto());
         streamSearchEntity.setNotifyCreation(streamEntity.getNotifyCreation());
+        streamSearchEntity.setRemoved(streamEntity.getRemoved());
         streamSearchEntity.setLocale(streamEntity.getLocale());
         streamSearchEntity.setBirth(streamEntity.getBirth());
         streamSearchEntity.setDeleted(streamEntity.getDeleted());
