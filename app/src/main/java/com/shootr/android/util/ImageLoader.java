@@ -25,7 +25,7 @@ public interface ImageLoader {
 
     Bitmap loadProfilePhoto(String url) throws IOException;
 
-    Bitmap loadTimelineImage(String url) throws IOException;
+    Bitmap load(String url) throws IOException;
 
     abstract class Callback {
 

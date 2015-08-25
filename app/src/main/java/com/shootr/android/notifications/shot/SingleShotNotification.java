@@ -13,8 +13,6 @@ import timber.log.Timber;
 
 public class SingleShotNotification extends AbstractShotNotification {
 
-    private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
-
     private ShotModel shot;
     private ImageLoader imageLoader;
     private Bitmap largeIcon;
@@ -40,7 +38,7 @@ public class SingleShotNotification extends AbstractShotNotification {
 
     private Bitmap getImageBitmap() {
         try {
-            return imageLoader.loadTimelineImage(shot.getImage());
+            return imageLoader.load(shot.getImage());
         } catch (IOException e) {
             Timber.e(e, "Error obteniendo imagen del shot con id %d y url %s", shot.getIdShot(), shot.getImage());
             return null;
@@ -80,13 +78,8 @@ public class SingleShotNotification extends AbstractShotNotification {
                 largeIcon = imageLoader.loadProfilePhoto(url);
             } catch (IOException | IllegalArgumentException e) {
                 Timber.e(e, "Error downloading user photo for a shot notification.");
-                largeIcon = getDefaultPhoto();
             }
         }
         return largeIcon;
-    }
-
-    private Bitmap getDefaultPhoto() {
-        return BitmapFactory.decodeResource(getResources(), DEFAULT_USER_PHOTO_RES);
     }
 }

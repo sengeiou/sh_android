@@ -70,6 +70,7 @@ import com.shootr.android.util.Version;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
@@ -164,14 +165,14 @@ public class DataModule {
         return app.getSharedPreferences("shootr", MODE_PRIVATE);
     }
 
-    @Provides @Singleton Picasso providePicasso(Application app) {
+    @Provides @Singleton Picasso providePicasso(Application app, OkHttpClient okHttpClient) {
         return new Picasso.Builder(app)
-          //                .downloader(new OkHttpDownloader(client))
+          .downloader(new OkHttpDownloader(okHttpClient))
           .build();
     }
 
-    @Provides @Singleton ImageLoader provideImageLoader(Picasso picasso) {
-        return new PicassoImageLoader(picasso);
+    @Provides ImageLoader provideImageLoader(PicassoImageLoader picassoImageLoader) {
+        return picassoImageLoader;
     }
 
     @Provides

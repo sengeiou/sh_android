@@ -1,12 +1,13 @@
 package com.shootr.android.util;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 import com.shootr.android.R;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.IOException;
@@ -14,35 +15,40 @@ import javax.inject.Inject;
 
 public class PicassoImageLoader implements ImageLoader {
 
-    private final Picasso picasso;
-    private final int defaultImageRes;
-    private int defaultStreamPictureRes;
+    private static final int DEFAULT_STREAM_PICTURE_RES = R.drawable.ic_stream_picture_default;
+    private static final int DEFAULT_PROFILE_PHOTO_RES = R.drawable.ic_contact_picture_default;
 
-    @Inject public PicassoImageLoader(Picasso picasso) {
+    private final Picasso picasso;
+    private final Resources resources;
+
+    @Inject public PicassoImageLoader(Picasso picasso, Resources resources) {
         this.picasso = picasso;
-        defaultImageRes = R.drawable.ic_contact_picture_default;
-        defaultStreamPictureRes = R.drawable.ic_stream_picture_default;
+        this.resources = resources;
     }
 
     @Override public void loadProfilePhoto(String url, ImageView view) {
-        RequestCreator loadResult = loadProfileRequestCreator(url);
-        loadResult.into(view);
+        boolean isValidPhoto = url != null && !url.isEmpty();
+        if (isValidPhoto) {
+            picasso.load(url).into(view);
+        } else {
+            view.setImageResource(DEFAULT_PROFILE_PHOTO_RES);
+        }
     }
 
     @Override public void loadStreamPicture(String url, ImageView view) {
         boolean isValidPicture = url != null && !url.isEmpty();
-        RequestCreator loadResult;
         if (isValidPicture) {
-            loadResult = picasso.load(url);
+            picasso.load(url).into(view);
         } else {
-            loadResult = load(defaultStreamPictureRes);
+            view.setImageResource(DEFAULT_STREAM_PICTURE_RES);
         }
-        loadResult.placeholder(defaultStreamPictureRes);
-        loadResult.into(view);
     }
 
     @Override public void loadTimelineImage(String url, ImageView view) {
-        picasso.load(url).placeholder(R.color.transparent).into(view);
+        boolean isValidPicture = url != null && !url.isEmpty();
+        if (isValidPicture) {
+            picasso.load(url).placeholder(R.color.transparent).into(view);
+        }
     }
 
     @Override public void load(String url, ImageView view) {
@@ -64,38 +70,29 @@ public class PicassoImageLoader implements ImageLoader {
     }
 
     @Override public Bitmap loadProfilePhoto(String url) throws IOException {
-        RequestCreator loadResult = loadProfileRequestCreator(url);
-        return loadResult.get();
-    }
-
-    private RequestCreator loadProfileRequestCreator(String url) {
         boolean isValidPhoto = url != null && !url.isEmpty();
-        RequestCreator loadResult;
         if (isValidPhoto) {
-            loadResult = picasso.load(url);
+            return picasso.load(url).get();
         } else {
-            loadResult = loadDefaultImage();
+            Drawable defaultPhotoDrawable = resources.getDrawable(DEFAULT_PROFILE_PHOTO_RES);
+            return drawableToBitmap(defaultPhotoDrawable);
         }
-        loadResult.placeholder(defaultImageRes).error(defaultImageRes);
-        return loadResult;
     }
 
-    @Override public Bitmap loadTimelineImage(String url) throws IOException {
-        return picasso.load(url).placeholder(R.color.transparent).get();
+    @Override
+    public Bitmap load(String url) throws IOException {
+        boolean isValidPhoto = url != null && !url.isEmpty();
+        if (isValidPhoto) {
+            return picasso.load(url).get();
+        } else {
+            return null;
+        }
     }
 
     @Override public void load(String url, ImageView image, Callback callback) {
         PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(null, url, image, picasso);
         picassoPreviewHelper.loadImage(callback);
         image.setTag(picassoPreviewHelper);
-    }
-
-    private RequestCreator loadDefaultImage() {
-        return load(defaultImageRes);
-    }
-
-    private RequestCreator load(@DrawableRes int resource) {
-        return picasso.load(resource);
     }
 
     public static class PicassoPreviewHelper {
@@ -176,5 +173,27 @@ public class PicassoImageLoader implements ImageLoader {
         private void cancelPreview() {
             picasso.cancelRequest(previewTarget);
         }
+    }
+
+    private static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

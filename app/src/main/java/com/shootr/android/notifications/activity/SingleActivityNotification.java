@@ -46,7 +46,7 @@ public class SingleActivityNotification extends AbstractActivityNotification {
     @Override
     public Bitmap getLargeIcon() {
         try {
-            return imageLoader.loadTimelineImage(values.getIcon());
+            return imageLoader.loadProfilePhoto(values.getIcon());
         } catch (IOException e) {
             return null;
         }
