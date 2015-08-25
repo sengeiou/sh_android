@@ -33,21 +33,14 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
 
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        ListingStreamResultViewHolder listingStreamResultViewHolder;
+        int layoutRes = isCurrentUser ? R.layout.item_list_listing_stream : R.layout.item_list_stream;
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
+
+        ListingStreamResultViewHolder listingStreamResultViewHolder =
+          new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
+
         if (isCurrentUser) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
-            listingStreamResultViewHolder = new ListingStreamResultViewHolder(view,
-              onStreamClickListener,
-              imageLoader,
-              onFavoriteClickListener);
             listingStreamResultViewHolder.setShowsWatchersText(isCurrentUser);
-        } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-            listingStreamResultViewHolder = new ListingStreamResultViewHolder(view,
-              onStreamClickListener,
-              imageLoader,
-              onFavoriteClickListener);
         }
         return listingStreamResultViewHolder;
     }
