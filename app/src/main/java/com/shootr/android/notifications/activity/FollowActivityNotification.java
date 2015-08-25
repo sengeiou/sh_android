@@ -8,7 +8,7 @@ import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.android.notifications.gcm.PushNotification;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 
 public class FollowActivityNotification extends SingleActivityNotification {
 
@@ -18,9 +18,9 @@ public class FollowActivityNotification extends SingleActivityNotification {
 
     public FollowActivityNotification(Context context,
       NotificationBuilderFactory builderFactory,
-      PicassoWrapper picasso,
+      ImageLoader imageLoader,
       PushNotification.NotificationValues values, String idUser) {
-        super(context, builderFactory, picasso, values);
+        super(context, builderFactory, imageLoader, values);
         this.idUser = idUser;
     }
 

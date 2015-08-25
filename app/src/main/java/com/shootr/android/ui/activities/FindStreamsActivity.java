@@ -22,7 +22,6 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.PicassoWrapper;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
@@ -41,8 +40,6 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.find_streams_loading) View loadingView;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
-    @Inject PicassoWrapper picasso;
-
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -78,7 +75,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void initializeStreamListAdapter() {
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 findStreamsPresenter.selectStream(stream);

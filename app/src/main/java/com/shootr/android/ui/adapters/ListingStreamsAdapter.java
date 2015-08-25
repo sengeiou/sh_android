@@ -8,24 +8,24 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ListingStreamsAdapter extends StreamsListAdapter {
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
     private OnStreamClickListener onStreamClickListener;
     private OnFavoriteClickListener onFavoriteClickListener;
     private Set<String> favoriteStreamsIds;
 
-    public ListingStreamsAdapter(PicassoWrapper picasso,
+    public ListingStreamsAdapter(ImageLoader imageLoader,
       OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener) {
-        super(picasso, onStreamClickListener);
-        this.picasso = picasso;
+        super(imageLoader, onStreamClickListener);
+        this.imageLoader = imageLoader;
         this.onStreamClickListener = onStreamClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
@@ -33,7 +33,7 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new ListingStreamResultViewHolder(view, onStreamClickListener, picasso, onFavoriteClickListener);
+        return new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
     }
 
     @Override

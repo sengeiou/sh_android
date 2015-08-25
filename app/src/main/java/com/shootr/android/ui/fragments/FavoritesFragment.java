@@ -20,14 +20,14 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FavoritesFragment extends BaseFragment implements FavoritesListView {
 
     @Inject FavoritesListPresenter favoritesListPresenter;
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -80,7 +80,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new StreamsListAdapter(picasso, new OnStreamClickListener() {
+        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);

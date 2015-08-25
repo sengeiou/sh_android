@@ -12,20 +12,20 @@ import com.shootr.android.R;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserListAdapter extends BindableAdapter<UserModel> {
 
     private List<UserModel> users;
-    private PicassoWrapper picasso;
+    private ImageLoader imageLoader;
 
     private FollowUnfollowAdapterCallback callback;
 
-    public UserListAdapter(Context context, PicassoWrapper picasso) {
+    public UserListAdapter(Context context, ImageLoader imageLoader) {
         super(context);
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.users = new ArrayList<>(0);
     }
 
@@ -75,7 +75,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }
 
         String photo = item.getPhoto();
-        picasso.loadProfilePhoto(photo).into(viewHolder.avatar);
+        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
         if(isFollowButtonVisible()){
             if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){

@@ -14,7 +14,7 @@ import com.shootr.android.ui.model.DraftModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.DraftItemView;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +22,15 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
     public static final int NONE_EXPANDED_POSITION = -1;
     public static final DraftViewHolder NONE_EXPANDED_ITEM = null;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final DraftActionListener draftActionListener;
 
     private List<DraftModel> drafts = new ArrayList<>();
     private DraftViewHolder currentExpandedItem;
     private int currentExpandedItemPosition = -1;
 
-    public DraftAdapter(PicassoWrapper picasso, DraftActionListener draftActionListener) {
-        this.picasso = picasso;
+    public DraftAdapter(ImageLoader imageLoader, DraftActionListener draftActionListener) {
+        this.imageLoader = imageLoader;
         this.draftActionListener = draftActionListener;
     }
 
@@ -55,7 +55,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
         holder.name.setText(shotModel.getUsername());
         holder.text.setText(shotModel.getComment());
         holder.text.addLinks();
-        picasso.loadProfilePhoto(shotModel.getPhoto()).into(holder.avatar);
+        imageLoader.loadProfilePhoto(shotModel.getPhoto(), holder.avatar);
         bindShotImageIfPresent(holder, draftModel);
         if (isExpandedLocked(position)) {
             currentExpandedItemPosition = position;
@@ -78,10 +78,10 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     private void bindShotImageIfPresent(DraftViewHolder holder, DraftModel draftModel) {
         ShotModel shotModel = draftModel.getShotModel();
         if (shotModel.getImage() != null) {
-            picasso.loadTimelineImage(shotModel.getImage()).into(holder.image);
+            imageLoader.loadTimelineImage(shotModel.getImage(), holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else if (draftModel.getImageFile() != null) {
-            picasso.load(draftModel.getImageFile()).into(holder.image);
+            imageLoader.load(draftModel.getImageFile(),holder.image);
             holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);

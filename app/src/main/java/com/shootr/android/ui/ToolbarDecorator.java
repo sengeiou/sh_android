@@ -11,13 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
     private final Context context;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
 
     private Toolbar toolbar;
     private ActionBar supportActionBar;
@@ -26,9 +26,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     private CircleImageView avatar;
 
-    public ToolbarDecorator(Context context, PicassoWrapper picasso) {
+    public ToolbarDecorator(Context context, ImageLoader imageLoader) {
         this.context = context;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
     }
 
     @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
@@ -70,7 +70,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
 
     public void setAvatarImage(String imageURL) {
         avatar.setVisibility(View.VISIBLE);
-        picasso.loadProfilePhoto(imageURL).into(avatar);
+        imageLoader.loadProfilePhoto(imageURL,avatar);
     }
 
     public Toolbar getToolbar() {

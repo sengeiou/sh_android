@@ -26,6 +26,7 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
@@ -34,8 +35,7 @@ import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.util.ImageLoader;
 import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
@@ -45,7 +45,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     //region Fields
     @Inject ActivityTimelinePresenter timelinePresenter;
 
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
 
     @Bind(R.id.timeline_activity_list) RecyclerView activityList;
@@ -133,7 +133,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         layoutManager = new LinearLayoutManager(getActivity());
         activityList.setLayoutManager(layoutManager);
 
-        adapter = new ActivityTimelineAdapter(picasso, timeUtils, //
+        adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
           new OnAvatarClickListener() {
               @Override
               public void onAvatarClick(String userId, View avatarView) {
@@ -170,7 +170,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
                   openShotDetail(shot);
               }
           });
-
         activityList.setAdapter(adapter);
     }
 

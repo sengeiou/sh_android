@@ -26,7 +26,7 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -50,7 +50,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @Bind(R.id.new_shot_image_container) ViewGroup imageContainer;
     @Bind(R.id.new_shot_image) ImageView image;
 
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
     @Inject PostNewShotPresenter presenter;
 
@@ -88,7 +88,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     private void initializeViews() {
-        picasso.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto()).into(avatar);
+        imageLoader.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto(), avatar);
         name.setText(sessionRepository.getCurrentUser().getName());
         username.setText("@" + sessionRepository.getCurrentUser().getUsername());
 
@@ -236,13 +236,13 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showImagePreviewFromUrl(String imageUrl) {
-        picasso.load(imageUrl).into(image);
+        imageLoader.load(imageUrl, image);
         imageContainer.setVisibility(View.VISIBLE);
     }
 
     @Override public void showImagePreview(File imageFile) {
         int maxScreenDimension = getScreenWidth();
-        picasso.load(imageFile).resize(maxScreenDimension, maxScreenDimension).centerInside().skipMemoryCache().into(image);
+        imageLoader.load(imageFile, image, maxScreenDimension);
         imageContainer.setVisibility(View.VISIBLE);
     }
 

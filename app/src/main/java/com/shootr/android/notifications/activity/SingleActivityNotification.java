@@ -7,19 +7,19 @@ import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.PushNotification;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import java.io.IOException;
 
 public class SingleActivityNotification extends AbstractActivityNotification {
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final PushNotification.NotificationValues values;
 
     public SingleActivityNotification(Context context,
       NotificationBuilderFactory builderFactory,
-      PicassoWrapper picasso, PushNotification.NotificationValues values) {
+      ImageLoader imageLoader, PushNotification.NotificationValues values) {
         super(context, builderFactory);
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.values = values;
     }
 
@@ -46,7 +46,7 @@ public class SingleActivityNotification extends AbstractActivityNotification {
     @Override
     public Bitmap getLargeIcon() {
         try {
-            return picasso.loadTimelineImage(values.getIcon()).get();
+            return imageLoader.loadProfilePhoto(values.getIcon());
         } catch (IOException e) {
             return null;
         }

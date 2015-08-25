@@ -59,9 +59,10 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.BitmapImageResizer;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.PicassoImageLoader;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.TimeFormatter;
@@ -69,6 +70,7 @@ import com.shootr.android.util.Version;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
@@ -163,14 +165,14 @@ public class DataModule {
         return app.getSharedPreferences("shootr", MODE_PRIVATE);
     }
 
-    @Provides @Singleton Picasso providePicasso(Application app) {
+    @Provides @Singleton Picasso providePicasso(Application app, OkHttpClient okHttpClient) {
         return new Picasso.Builder(app)
-          //                .downloader(new OkHttpDownloader(client))
+          .downloader(new OkHttpDownloader(okHttpClient))
           .build();
     }
 
-    @Provides @Singleton PicassoWrapper providePicassoWrapper(Picasso picasso) {
-        return new PicassoWrapper(picasso);
+    @Provides ImageLoader provideImageLoader(PicassoImageLoader picassoImageLoader) {
+        return picassoImageLoader;
     }
 
     @Provides

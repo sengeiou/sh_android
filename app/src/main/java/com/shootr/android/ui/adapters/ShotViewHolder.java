@@ -12,16 +12,16 @@ import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
 public class ShotViewHolder {
@@ -32,7 +32,7 @@ public class ShotViewHolder {
     private final OnNiceShotListener onNiceShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
 
     @Bind(R.id.shot_avatar) ImageView avatar;
@@ -55,7 +55,7 @@ public class ShotViewHolder {
       OnNiceShotListener onNiceShotListener,
       OnUsernameClickListener onUsernameClickListener,
       AndroidTimeUtils timeUtils,
-      PicassoWrapper picasso,
+      ImageLoader imageLoader,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
@@ -63,7 +63,7 @@ public class ShotViewHolder {
         this.onNiceShotListener = onNiceShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         ButterKnife.bind(this, view);
         this.view = view;
@@ -146,8 +146,7 @@ public class ShotViewHolder {
     }
 
     private void bindUserPhoto(final ShotModel shot) {
-        String photo = shot.getPhoto();
-        picasso.loadProfilePhoto(photo).into(avatar);
+        imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
         avatar.setTag(this);
         image.setTag(this);
         avatar.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +161,7 @@ public class ShotViewHolder {
         String imageUrl = shot.getImage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             image.setVisibility(View.VISIBLE);
-            picasso.loadTimelineImage(imageUrl).into(image);
+            imageLoader.loadTimelineImage(imageUrl, image);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

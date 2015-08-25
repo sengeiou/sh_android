@@ -10,18 +10,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class ActivityViewHolder extends RecyclerView.ViewHolder {
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final AndroidTimeUtils androidTimeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnAvatarClickListener onAvatarClickListener;
@@ -32,15 +32,13 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     @Nullable @Bind(R.id.activity_timestamp) TextView elapsedTime;
     @Bind(R.id.activity_text) ClickableTextView text;
 
-    public ActivityViewHolder(View view,
-      PicassoWrapper picasso,
-      AndroidTimeUtils androidTimeUtils,
+    public ActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener) {
         super(view);
+        this.imageLoader = imageLoader;
         this.androidTimeUtils = androidTimeUtils;
-        this.picasso = picasso;
         this.onAvatarClickListener = onAvatarClickListener;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -55,7 +53,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         name.setText(activity.getUsername());
         text.setText(formatActivityComment(activity));
         elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
-        picasso.loadProfilePhoto(activity.getUserPhoto()).into(avatar);
+        imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
 
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override

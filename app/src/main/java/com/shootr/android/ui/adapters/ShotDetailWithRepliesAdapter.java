@@ -13,16 +13,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.CheckableImageView;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private static final int TYPE_REPLIES_HEADER = 2;
     private static final int TYPE_REPLY = 3;
 
-    private final PicassoWrapper picasso;
+    private final ImageLoader imageLoader;
     private final AvatarClickListener avatarClickListener;
     private final ImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
@@ -53,15 +53,14 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isShowingParent = false;
     private ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-    public ShotDetailWithRepliesAdapter(PicassoWrapper picasso,
-      AvatarClickListener avatarClickListener,
+    public ShotDetailWithRepliesAdapter(ImageLoader imageLoader, AvatarClickListener avatarClickListener,
       ImageClickListener imageClickListener,
       OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener,
       OnParentShownListener onParentShownListener, OnNiceShotListener onNiceShotListener, TimeFormatter timeFormatter,
       Resources resources,
       AndroidTimeUtils timeUtils) {
-        this.picasso = picasso;
+        this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
@@ -264,7 +263,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             }
             showStreamTitle(shotModel);
 
-            picasso.loadProfilePhoto(shotModel.getPhoto()).into(avatar);
+            imageLoader.loadProfilePhoto(shotModel.getPhoto(), avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -274,7 +273,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
             String imageUrl = shotModel.getImage();
             if (imageUrl != null) {
-                picasso.loadTimelineImage(imageUrl).into(shotImage);
+                imageLoader.loadTimelineImage(imageUrl, shotImage);
                 shotImage.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
                         imageClickListener.onClick(shotModel);
@@ -408,7 +407,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
 
             String photo = shotModel.getPhoto();
-            picasso.loadProfilePhoto(photo).into(this.avatar);
+            imageLoader.loadProfilePhoto(photo, this.avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     avatarClickListener.onClick(shotModel.getIdUser());
@@ -418,7 +417,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String imageUrl = shotModel.getImage();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 this.image.setVisibility(View.VISIBLE);
-                picasso.loadTimelineImage(imageUrl).into(this.image);
+                imageLoader.loadTimelineImage(imageUrl, this.image);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
                         imageClickListener.onClick(shotModel);
@@ -507,7 +506,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             this.timestamp.setText(timeUtils.getElapsedTime(itemView.getContext(), creationDate));
 
             String photo = reply.getPhoto();
-            picasso.loadProfilePhoto(photo).into(this.avatar);
+            imageLoader.loadProfilePhoto(photo, this.avatar);
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     avatarClickListener.onClick(reply.getIdUser());
@@ -517,7 +516,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
             String imageUrl = reply.getImage();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 this.image.setVisibility(View.VISIBLE);
-                picasso.loadTimelineImage(imageUrl).into(this.image);
+                imageLoader.loadTimelineImage(imageUrl, this.image);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
                         imageClickListener.onClick(reply);

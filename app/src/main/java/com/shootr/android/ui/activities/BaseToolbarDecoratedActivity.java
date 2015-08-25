@@ -5,7 +5,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.ViewContainerDecorator;
 import com.shootr.android.ui.base.BaseDecoratedActivity;
 import com.shootr.android.ui.dagger.ToolbarDecoratedModule;
-import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.ImageLoader;
 import dagger.ObjectGraph;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity {
 
     private ToolbarDecorator toolbarDecorator;
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
 
     @Override protected void setContent(@LayoutRes int layoutResource) {
         super.setContent(layoutResource);
@@ -23,7 +23,7 @@ public abstract class BaseToolbarDecoratedActivity extends BaseDecoratedActivity
     }
 
     @Override protected List<ViewContainerDecorator> getDecorators() {
-        toolbarDecorator = new ToolbarDecorator(this, picasso);
+        toolbarDecorator = new ToolbarDecorator(this, imageLoader);
         return Collections.singletonList((ViewContainerDecorator) toolbarDecorator);
     }
 

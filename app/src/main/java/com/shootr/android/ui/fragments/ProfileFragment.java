@@ -75,12 +75,12 @@ import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
+import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
+import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -98,8 +98,8 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.MenuItemValueHolder;
-import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
@@ -152,7 +152,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Inject @Main Bus bus;
-    @Inject PicassoWrapper picasso;
+    @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
     @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
@@ -588,7 +588,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
-            picasso.loadProfilePhoto(photo).into(avatarImageView);
+            imageLoader.loadProfilePhoto(photo, avatarImageView);
         } else {
             if (isCurrentUser()) {
                 avatarImageView.setImageResource(R.drawable.profile_photo_add);
@@ -692,7 +692,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             shotsList.removeAllViews();
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(),
-                picasso, timeUtils, avatarClickListener,
+                imageLoader, timeUtils, avatarClickListener,
                 imageClickListener,
                 videoClickListener, onNiceShotListener, onUsernameClickListener){
                   @Override protected boolean shouldShowTag() {
@@ -736,13 +736,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
                   shareShot(shotModel);
               }
           }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
-              @Override public void run() {
-                  ClipboardManager clipboard =
-                    (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                  ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                  clipboard.setPrimaryClip(clip);
-              }
-          }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
+                ClipboardManager clipboard =
+                  (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
+                clipboard.setPrimaryClip(clip);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
                 reportShotPresenter.report(shotModel);
             }
@@ -902,7 +902,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private UserListAdapter getSuggestedPeopleAdapter() {
         if (suggestedPeopleAdapter == null) {
-            suggestedPeopleAdapter = new UserListAdapter(getActivity(), picasso);
+            suggestedPeopleAdapter = new UserListAdapter(getActivity(), imageLoader);
             suggestedPeopleAdapter.setCallback(this);
         }
         return suggestedPeopleAdapter;
