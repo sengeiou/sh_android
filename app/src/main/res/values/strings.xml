@@ -45,7 +45,8 @@
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
     <string name="activity_login_email_forgot">Forgot Password?</string>
     <string name="new_shot_placeholder">Shoot something…</string>
-    <string name="activity_timeline_empty_message"></string>
+    <string name="stream_timeline_empty_message">Checking for shots</string>
+    <string name="activity_timeline_empty_message">Loading activities</string>
     <string name="shot_timeline_empty_title">No Shots</string>
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
@@ -286,7 +287,7 @@
     <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
     <string name="whale_title_default">We\'ll be back</string>
     <string name="profile_logout">Logout</string>
-    <string name="sign_out_message">Sign out in progress</string>
+    <string name="sign_out_message">Signing out…</string>
     <string name="update_warning_button">Update now</string>
     <string name="update_shootr_version_url">http://bit.ly/shootrandroid</string>
     <string name="activity_edit_profile_email_hint">Email</string>
@@ -343,20 +344,23 @@
     <string name="alert_report_confirmed_email_message"><![CDATA[Go to Account > Edit Profile and confirm your email.]]></string>
     <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
     <string name="alert_report_confirmed_email_ok">OK</string>
-    <string name="report_context_menu_copy_text">Copy text</string>
+    <string name="menu_copy_text">Copy text</string>
     <string name="report_context_menu_report">Report</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="share_shot_message">Shot by %1$s on %2$s: https://shootr.com/s/%3$s</string>
+    <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="notification_nice_content_text">Niced your shot</string>
     <string name="notification_nice_text_pattern">%s niced your shot</string>
-    <string name="notification_activity_multiple_title">%d new activities</string>
     <string name="activity_nice_shot_text_base">Niced by @%s</string>
     <string name="share_shot_chooser_title">Share</string>
-    <string name="report_context_menu_share_shot">Share</string>
+    <string name="menu_share_shot">Share</string>
     <string name="error_stream_read_only">This stream was removed and is read-only</string>
     <string name="recomment_via_shootr">Recommend via Shootr</string>
     <string name="recommend_via">Recommend via...</string>
     <string name="recommend_stream_message">Check out %1$s on Shootr: https://shootr.com/st/%2$s</string>
+    <string name="recommend_stream_subject">Check out %s on Shootr</string>
     <string name="stream_recommended_notification">Stream recommended</string>
+    <string name="new_activity_notification">New activity</string>
+    <string name="no_intent_handler">There are no applications available to handle this action.</string>
 </resources>

@@ -106,6 +106,7 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference picassoDebugging;
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
+    private final BooleanPreference captureIntentsEnabled;
     private final BooleanPreference notificationsEnabled;
     private final BooleanPreference pollerEnabled;
     private StringPreference customEndpoint;
@@ -130,6 +131,7 @@ public class DebugAppContainer implements AppContainer {
       @PicassoDebugging BooleanPreference picassoDebugging,
       @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
+      @CaptureIntents BooleanPreference captureIntentsEnabled,
       @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled,
       @PollerEnabled BooleanPreference pollerEnabled,
@@ -147,6 +149,7 @@ public class DebugAppContainer implements AppContainer {
         this.scalpelWireframeEnabled = scalpelWireframeEnabled;
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
+        this.captureIntentsEnabled = captureIntentsEnabled;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
         this.pollerEnabled = pollerEnabled;
@@ -180,6 +183,7 @@ public class DebugAppContainer implements AppContainer {
     @Bind(R.id.debug_ui_pixel_ratio) Switch uiPixelRatioView;
     @Bind(R.id.debug_ui_scalpel) Switch uiScalpelView;
     @Bind(R.id.debug_ui_scalpel_wireframe) Switch uiScalpelWireframeView;
+    @Bind(R.id.debug_capture_intents) Switch uiCaptureIntents;
 
     @Bind(R.id.debug_build_name) TextView buildNameView;
     @Bind(R.id.debug_build_code) TextView buildCodeView;
@@ -554,6 +558,15 @@ public class DebugAppContainer implements AppContainer {
                 scalpelFrameLayout.setDrawViews(!isChecked);
             }
         });*/
+
+        boolean captureIntents  = captureIntentsEnabled.get();
+        uiCaptureIntents.setChecked(captureIntents);
+        uiCaptureIntents.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Timber.d("Setting capture intents to " + isChecked);
+                captureIntentsEnabled.set(isChecked);
+            }
+        });
     }
 
     private void setupBuildSection() {

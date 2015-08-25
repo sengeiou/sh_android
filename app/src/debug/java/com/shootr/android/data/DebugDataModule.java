@@ -11,6 +11,7 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.TrackingCursorFactory;
 import com.shootr.android.service.ApiModule;
 import com.shootr.android.service.DebugApiModule;
+import com.shootr.android.ui.debug.CaptureIntents;
 import com.shootr.android.ui.debug.NetworkProxy;
 import com.shootr.android.util.Version;
 import dagger.Module;
@@ -39,6 +40,7 @@ public class DebugDataModule {
     private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
     public static final boolean DEFAULT_DEBUG_MODE = false;
     private static final boolean DEFAULT_POLLER_ACTIVE = true;
+    private static final boolean DEFAULT_CAPTURE_INTENTS = true;
 
     @Provides @Singleton @ApiEndpoint StringPreference provideEndpointPreference(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_endpoint", ApiEndpoints.TEST.url);
@@ -80,6 +82,11 @@ public class DebugDataModule {
     @Provides @Singleton @PollerEnabled
     BooleanPreference providePollerActive(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_poller_active", DEFAULT_POLLER_ACTIVE);
+    }
+
+    @Provides @Singleton @CaptureIntents
+    BooleanPreference provideCaptureIntentsPreference(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "debug_capture_intents", DEFAULT_CAPTURE_INTENTS);
     }
 
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {

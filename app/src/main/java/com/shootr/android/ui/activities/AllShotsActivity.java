@@ -1,13 +1,10 @@
 package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +30,10 @@ import com.shootr.android.ui.views.AllShotsView;
 import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,13 +48,13 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.all_shots_loading) View loadingView;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
-    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Deprecated private TimelineAdapter adapter;
 
@@ -198,16 +198,14 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.report_context_menu_share_shot), new Runnable() {
+          .addAction(getString(R.string.menu_share_shot), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
           })
-          .addAction(getString(R.string.report_context_menu_copy_text), new Runnable() {
+          .addAction(getString(R.string.menu_copy_text), new Runnable() {
                 @Override public void run() {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-                    clipboard.setPrimaryClip(clip);
+                    Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
                 }
             }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
             @Override public void run() {
@@ -217,13 +215,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = ShareCompat.IntentBuilder.from(this)
-          .setType("text/plain")
-          .setText(String.format(shareShotMessage,
-            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
-          .setChooserTitle(getString(R.string.share_shot_chooser_title))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     protected void openProfile(String idUser) {

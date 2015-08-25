@@ -35,6 +35,7 @@ import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
 import com.shootr.android.util.ResourcesDateRangeTextProvider;
+import com.shootr.android.util.IntentFactory;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -77,19 +78,25 @@ import javax.inject.Singleton;
   },
   complete = false) public class UiModule {
 
-    @Provides
-    @Singleton
-    AppContainer provideAppContainer() {
-        return AppContainer.DEFAULT;
-    }
+  @Provides
+  @Singleton
+  AppContainer provideAppContainer() {
+    return AppContainer.DEFAULT;
+  }
 
-    @Provides
-    Poller providePoller() {
-        return new Poller(new Handler());
-    }
+  @Provides
+  Poller providePoller() {
+    return new Poller(new Handler());
+  }
 
   @Provides
   DateRangeTextProvider provideDateRangeTextProvider(ResourcesDateRangeTextProvider resourcesDateRangeTextProvider) {
     return resourcesDateRangeTextProvider;
+  }
+
+  @Provides
+  @Singleton
+  IntentFactory provideIntentFactory() {
+    return IntentFactory.REAL;
   }
 }

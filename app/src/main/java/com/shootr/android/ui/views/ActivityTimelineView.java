@@ -20,4 +20,7 @@ public interface ActivityTimelineView extends LoadDataView {
 
     void hideLoadingOldActivities();
 
+    void showLoadingActivity();
+
+    void hideLoadingActivity();
 }

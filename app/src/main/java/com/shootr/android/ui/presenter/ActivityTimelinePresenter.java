@@ -108,6 +108,7 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     private void loadNewActivities() {
+        timelineView.showLoadingActivity();
         activityTimelineInteractorWrapper.refreshTimeline(new Interactor.Callback<ActivityTimeline>() {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
@@ -117,11 +118,13 @@ public class ActivityTimelinePresenter implements Presenter {
                     timelineView.showActivities();
                 }
                 timelineView.hideLoading();
+                timelineView.hideLoadingActivity();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 timelineView.hideLoading();
+                timelineView.hideLoadingActivity();
             }
         });
     }

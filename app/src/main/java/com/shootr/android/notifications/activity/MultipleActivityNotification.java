@@ -64,7 +64,7 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
     }
 
     private CharSequence getTitle() {
-        return getResources().getString(R.string.notification_activity_multiple_title, individualNotifications.size());
+        return getResources().getString(R.string.new_activity_notification);
     }
 
     @Override
