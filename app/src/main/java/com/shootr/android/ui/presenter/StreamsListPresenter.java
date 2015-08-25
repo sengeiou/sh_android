@@ -76,7 +76,6 @@ public class StreamsListPresenter implements Presenter {
             @Override public void onCompleted() {
                 loadDefaultStreamList();
                 removeCurrentWatchingStream();
-                streamsListView.showNotificationsOff();
             }
         });
     }

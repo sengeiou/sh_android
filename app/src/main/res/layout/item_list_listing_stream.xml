@@ -51,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        tools:text="2"
-        style="@style/WatchersIndicator" />
+        tools:text="2 watchers" />
+
     </LinearLayout>
 
     <ImageView android:id="@+id/favorite_stream_indicator"
