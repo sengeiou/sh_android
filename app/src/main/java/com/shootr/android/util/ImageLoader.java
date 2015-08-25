@@ -13,27 +13,26 @@ public interface ImageLoader {
 
     void loadTimelineImage(String url, ImageView view);
 
-    void load(String path, ImageView view);
+    void load(String url, ImageView image, Callback callback);
 
-    void loadWithPreview(String path, String previewPath, ImageView view, Callback callback);
+    void load(String url, ImageView view);
 
     void load(File file, ImageView view);
 
-    void loadPreviewImage(File file, ImageView view, Integer maxScreenWidth);
+    void load(File file, ImageView view, int maxSize);
+
+    void loadWithPreview(String url, String previewUrl, ImageView view, Callback callback);
 
     Bitmap loadProfilePhoto(String url) throws IOException;
 
     Bitmap loadTimelineImage(String url) throws IOException;
 
-    void cancelTag(Object previewTag);
+    abstract class Callback {
 
-    void load(String imageUrl, ImageView image, Callback callback);
+        public abstract void onLoaded(Bitmap bitmap);
 
-    interface Callback {
-
-        void onLoaded(Bitmap bitmap);
-
-        void onError();
-
+        public void onError() {
+            /* default: no-op */
+        }
     }
 }

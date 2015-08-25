@@ -242,7 +242,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override public void showImagePreview(File imageFile) {
         int maxScreenDimension = getScreenWidth();
-        imageLoader.loadPreviewImage(imageFile, image, maxScreenDimension);
+        imageLoader.load(imageFile, image, maxScreenDimension);
         imageContainer.setVisibility(View.VISIBLE);
     }
 

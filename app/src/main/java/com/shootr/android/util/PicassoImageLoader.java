@@ -45,12 +45,12 @@ public class PicassoImageLoader implements ImageLoader {
         picasso.load(url).placeholder(R.color.transparent).into(view);
     }
 
-    @Override public void load(String path, ImageView view) {
-        picasso.load(path).into(view);
+    @Override public void load(String url, ImageView view) {
+        picasso.load(url).into(view);
     }
 
-    @Override public void loadWithPreview(String path, String previewPath, ImageView view, Callback callback) {
-        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(previewPath, path, view, picasso);
+    @Override public void loadWithPreview(String url, String previewUrl, ImageView view, Callback callback) {
+        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(previewUrl, url, view, picasso);
         picassoPreviewHelper.loadImageWithPreview(callback);
         view.setTag(picassoPreviewHelper);
     }
@@ -59,8 +59,8 @@ public class PicassoImageLoader implements ImageLoader {
         picasso.load(file).into(view);
     }
 
-    @Override public void loadPreviewImage(File file, ImageView view, Integer maxScreenWidth) {
-        picasso.load(file).resize(maxScreenWidth, maxScreenWidth).centerInside().skipMemoryCache().into(view);
+    @Override public void load(File file, ImageView view, int maxSize) {
+        picasso.load(file).resize(maxSize, maxSize).centerInside().skipMemoryCache().into(view);
     }
 
     @Override public Bitmap loadProfilePhoto(String url) throws IOException {
@@ -84,12 +84,8 @@ public class PicassoImageLoader implements ImageLoader {
         return picasso.load(url).placeholder(R.color.transparent).get();
     }
 
-    @Override public void cancelTag(Object previewTag) {
-        picasso.cancelTag(previewTag);
-    }
-
-    @Override public void load(String imageUrl, ImageView image, Callback callback) {
-        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(null, imageUrl, image, picasso);
+    @Override public void load(String url, ImageView image, Callback callback) {
+        PicassoPreviewHelper picassoPreviewHelper = new PicassoPreviewHelper(null, url, image, picasso);
         picassoPreviewHelper.loadImage(callback);
         image.setTag(picassoPreviewHelper);
     }
