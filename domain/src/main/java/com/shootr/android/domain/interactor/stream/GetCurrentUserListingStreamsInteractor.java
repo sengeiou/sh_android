@@ -9,6 +9,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -60,7 +61,18 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
     private void loadUserListingStreamsFromRepository(StreamSearchRepository streamSearchRepository){
         List<StreamSearchResult> listingStreams = streamSearchRepository.getStreamsListing(idUser);
         setWatchNumberInStreams(listingStreams);
-        notifyLoaded(listingStreams);
+        List<StreamSearchResult> listingWithoutRemoved = retainStreamsNotRemoved(listingStreams);
+        notifyLoaded(listingWithoutRemoved);
+    }
+
+    private List<StreamSearchResult> retainStreamsNotRemoved(List<StreamSearchResult> listingStreams) {
+        List<StreamSearchResult> listing = new ArrayList<>();
+        for (StreamSearchResult listingStream : listingStreams) {
+            if (!listingStream.getStream().isRemoved()) {
+                listing.add(listingStream);
+            }
+        }
+        return listing;
     }
 
     private void setWatchNumberInStreams(List<StreamSearchResult> listingStreams) {
