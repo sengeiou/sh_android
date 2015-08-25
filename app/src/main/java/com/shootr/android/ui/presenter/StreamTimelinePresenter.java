@@ -39,6 +39,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean mightHaveMoreShots = true;
     private boolean isRefreshing = false;
     private boolean hasBeenPaused = false;
+    private boolean isEmpty = true;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor,
@@ -97,20 +98,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 streamTimelineView.setShots(shotModels);
-                streamTimelineView.hideLoading();
-                if (!shotModels.isEmpty()) {
-                    streamTimelineView.hideEmpty();
-                    streamTimelineView.showShots();
-                } else {
+                isEmpty = shotModels.isEmpty();
+                if (isEmpty) {
                     streamTimelineView.showEmpty();
                     streamTimelineView.hideShots();
+                } else {
+                    streamTimelineView.hideEmpty();
+                    streamTimelineView.showShots();
                 }
                 loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
-                streamTimelineView.hideLoading();
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
         });
@@ -132,12 +132,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             return;
         }
         isRefreshing = true;
-        streamTimelineView.showCheckingForShots();
+        if (isEmpty) {
+            streamTimelineView.hideEmpty();
+            streamTimelineView.showCheckingForShots();
+        }
         timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
-                if (!timeline.getShots().isEmpty()) {
+                boolean hasNewShots = !timeline.getShots().isEmpty();
+                if (hasNewShots) {
                     loadTimeline();
+                }else if (isEmpty) {
+                    streamTimelineView.showEmpty();
                 }
                 streamTimelineView.hideLoading();
                 streamTimelineView.hideCheckingForShots();

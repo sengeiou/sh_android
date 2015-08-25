@@ -111,20 +111,20 @@ public class StreamTimelinePresenterTest {
         verify(streamTimelineView, never()).showLoading();
     }
 
-    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
+    @Test public void shouldNotHideLoadingViewWhenLoadTimelineRespondsShots() throws Exception {
         setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
         presenter.loadTimeline();
 
-        verify(streamTimelineView, times(1)).hideLoading();
+        verify(streamTimelineView, never()).hideLoading();
     }
 
-    @Test public void shouldHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
+    @Test public void shouldNotHideLoadingViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
         setupLoadTimelineInteractorCallbacks(emptyTimeline());
 
         presenter.loadTimeline();
 
-        verify(streamTimelineView, times(1)).hideLoading();
+        verify(streamTimelineView, never()).hideLoading();
     }
 
     @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotList() throws Exception {
@@ -133,6 +133,14 @@ public class StreamTimelinePresenterTest {
         presenter.loadTimeline();
 
         verify(streamTimelineView).showEmpty();
+    }
+
+    @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShots() throws Exception {
+        setupLoadTimelineInteractorCallbacks(timelineWithShots());
+
+        presenter.loadTimeline();
+
+        verify(streamTimelineView).hideEmpty();
     }
 
     @Test public void shouldHideEmtpyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -201,15 +209,6 @@ public class StreamTimelinePresenterTest {
         presenter.refresh();
 
         verify(streamTimelineView).hideLoading();
-    }
-
-    @Test public void shouldHideEmptyIfReceivedShotsWhenRefreshTimeline() throws Exception {
-        setupRefreshTimelineInteractorCallbacks(timelineWithShots());
-        setupLoadTimelineInteractorCallbacks(timelineWithShots());
-
-        presenter.refresh();
-
-        verify(streamTimelineView).hideEmpty();
     }
 
     @Test public void shouldShowShotsIfReceivedShotsWhenRefresTimeline() throws Exception {
