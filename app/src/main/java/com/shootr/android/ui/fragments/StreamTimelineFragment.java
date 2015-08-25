@@ -63,6 +63,8 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.File;
@@ -84,12 +86,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
-
     @Inject PicassoWrapper picasso;
-
     @Inject AndroidTimeUtils timeUtils;
-
     @Inject ToolbarDecorator toolbarDecorator;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_subtitle) TextView emptyTextView;
@@ -99,8 +99,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
-    @BindString(R.string.share_shot_message) String shareShotMessage;
-    @BindString(R.string.share_shot_subject) String shareShotSubject;
 
     private TimelineAdapter adapter;
 
@@ -441,17 +439,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
-          .setType("text/plain")
-          .setSubject(String.format(shareShotSubject,
-            shotModel.getUsername(), shotModel.getStreamTitle()))
-          .setText(String.format(shareShotMessage,
-            shotModel.getUsername(),
-            shotModel.getStreamTitle(),
-            shotModel.getIdShot()))
-          .setChooserTitle(getString(R.string.share_shot_chooser_title))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
     private void copyShotCommentToClipboard(ShotModel shotModel) {

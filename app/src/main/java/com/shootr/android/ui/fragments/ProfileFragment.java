@@ -98,6 +98,8 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
@@ -149,14 +151,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
-    @BindString(R.string.share_shot_message) String shareShotMessage;
-
     @Inject @Main Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
+    @Inject IntentFactory intentFactory;
 
     @Inject
     GetUserByUsernameInteractor getUserByUsernameInteractor;
@@ -166,6 +167,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Inject ProfilePresenter profilePresenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
     @Inject ReportShotPresenter reportShotPresenter;
+
     //endregion
 
     // Args
@@ -750,13 +752,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
-          .setType("text/plain")
-          .setText(String.format(shareShotMessage,
-            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
-          .setChooserTitle(getString(R.string.share_shot_chooser_title))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
     private void setShotItemBackgroundRetainPaddings(View shotView) {

@@ -29,6 +29,8 @@ import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
@@ -46,14 +48,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
     @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
 
-    @BindString(R.string.share_shot_message) String shareShotMessage;
-    @BindString(R.string.share_shot_subject) String shareShotSubject;
-
     @Inject PicassoWrapper picasso;
     @Inject TimeFormatter timeFormatter;
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
+    @Inject IntentFactory intentFactory;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -113,17 +113,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             return true;
         }else if (item.getItemId() == R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
-            Intent intent = ShareCompat.IntentBuilder.from(this)
-              .setType("text/plain")
-              .setSubject(String.format(shareShotSubject,
-                shotModel.getUsername(), shotModel.getStreamTitle()))
-              .setText(String.format(shareShotMessage,
-                shotModel.getUsername(),
-                shotModel.getStreamTitle(),
-                shotModel.getIdShot()))
-              .setChooserTitle(getString(R.string.share_shot_chooser_title))
-              .createChooserIntent();
-            startActivity(intent);
+            Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+            Intents.maybeStartActivity(this, shareIntent);
         }
         return super.onOptionsItemSelected(item);
     }
