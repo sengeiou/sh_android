@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.ChangeEmailInteractor;
 import com.shootr.android.domain.interactor.user.ConfirmEmailInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.EmailConfirmationView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -38,13 +39,14 @@ public class EmailConfirmationPresenterTest {
     @Mock Interactor.CompletedCallback completedCallback;
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock SessionRepository sessionRepository;
+    @Mock StreamJoinDateFormatter streamJoinDateFormatter;
 
     private EmailConfirmationPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        UserModelMapper userModelMapper = new UserModelMapper();
+        UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new EmailConfirmationPresenter(errorMessageFactory, confirmEmailInteractor, changeEmailInteractor,
           sessionRepository, userModelMapper);
         presenter.setView(emailConfirmationView);

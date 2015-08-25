@@ -196,13 +196,15 @@
     <string name="drawer_activity_title">Activity</string>
     <string name="activity_empty">No Activity</string>
 
-    <string name="entered">Entered&#160;</string>
-    <string name="long_time_ago">a long time ago</string>
-    <string name="just_now">just now</string>
-    <string name="day_ago">1 day ago</string>
-    <string name="hour_ago">1 hour ago</string>
-    <string name="minute_ago">1 minute ago</string>
-    <string name="minutes_ago">&#160;minutes ago</string>
+    <string name="entered_just_now">Entered just now</string>
+    <string name="entered_a_minute_ago">Entered 1 minute ago</string>
+    <string name="entered_minutes_ago">Entered %d minutes ago</string>
+    <string name="entered_an_hour_ago">Entered 1 hour ago</string>
+    <string name="entered_hours_ago">Entered %d hours ago</string>
+    <string name="entered_a_day_ago">Entered 1 day ago</string>
+    <string name="entered_days_ago">Entered %d days ago</string>
+    <string name="entered_long_time_ago">Entered long time ago</string>
+
     <string name="user_not_found">User not found</string>
     <string name="dont_show_again">Ok, don\'t show again</string>
     <string name="problem_while_checkin">There was a problem while checking in</string>

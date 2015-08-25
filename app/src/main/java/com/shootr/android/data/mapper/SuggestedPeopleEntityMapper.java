@@ -32,9 +32,7 @@ public class SuggestedPeopleEntityMapper {
         user.setIdWatchingStream(suggestedPeopleEntity.getIdWatchingStream());
         user.setWatchingStreamTitle(suggestedPeopleEntity.getWatchingStreamTitle());
 
-        if(suggestedPeopleEntity.getJoinStreamDate() != null){
-            user.setJoinStreamDate(suggestedPeopleEntity.getJoinStreamDate());
-        }
+        user.setJoinStreamDate(suggestedPeopleEntity.getJoinStreamDate());
 
         suggestedPeople.setRelevance(suggestedPeopleEntity.getRelevance());
         suggestedPeople.setUser(user);

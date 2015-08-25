@@ -38,9 +38,7 @@ public class UserEntityMapper {
         user.setFollower(isFollower);
         user.setFollowing(isFollowing);
 
-        if(userEntity.getJoinStreamDate() != null){
-            user.setJoinStreamDate(userEntity.getJoinStreamDate());
-        }
+        user.setJoinStreamDate(userEntity.getJoinStreamDate());
 
         user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 

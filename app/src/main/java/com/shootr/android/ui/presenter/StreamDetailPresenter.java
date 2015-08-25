@@ -16,7 +16,6 @@ import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.shootr.android.util.WatchersTimeFormatter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.io.File;
@@ -34,7 +33,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
-    private final WatchersTimeFormatter watchersTimeFormatter;
 
     private StreamDetailView streamDetailView;
     private String idStream;
@@ -47,15 +45,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     @Inject
     public StreamDetailPresenter(@Main Bus bus, GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper,
-      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory,
-      WatchersTimeFormatter watchersTimeFormatter) {
+      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
-        this.watchersTimeFormatter = watchersTimeFormatter;
     }
     //endregion
 
@@ -172,20 +168,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
-        obtainJoinDatesInText(watcherModels);
         streamDetailView.setWatchers(watcherModels);
-    }
-
-    private void obtainJoinDatesInText(List<UserModel> watcherModels) {
-        for (UserModel watcherModel : watcherModels) {
-            watcherModel.setJoinStreamDateText(watchersTimeFormatter.jointDateText(watcherModel.getJoinStreamDate()));
-        }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
         if(currentUserWatch != null){
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
-            currentUserWatchingModel.setJoinStreamDateText(watchersTimeFormatter.jointDateText(currentUserWatchingModel.getJoinStreamDate()));
             streamDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
     }

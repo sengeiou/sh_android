@@ -114,7 +114,7 @@ public class WatchersView extends LinearLayout{
     private void bindWatcherData(WatcherViewHolder viewHolder, UserModel userWatching) {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
-        viewHolder.watchingText.setText(userWatching.getJoinStreamDateText());
+        viewHolder.watchingText.setText(userWatching.getJoinStreamDate());
         if (picasso != null) {
             picasso.loadProfilePhoto(userWatching.getPhoto()).into(viewHolder.avatar);
         }

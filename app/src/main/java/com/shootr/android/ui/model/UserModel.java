@@ -17,8 +17,7 @@ public class UserModel implements Serializable, Cloneable {
     private Long points;
     private String streamWatchingId;
     private String streamWatchingTitle;
-    private Long joinStreamDate;
-    private String joinStreamDateText;
+    private String joinStreamDate;
     private String email;
     private Boolean emailConfirmed;
 
@@ -151,19 +150,11 @@ public class UserModel implements Serializable, Cloneable {
         this.streamWatchingTitle = streamWatchingTitle;
     }
 
-    public Long getJoinStreamDate() {
+    public String getJoinStreamDate() {
         return joinStreamDate;
     }
 
-    public void setJoinStreamDate(Long joinStreamDate) {
+    public void setJoinStreamDate(String joinStreamDate) {
         this.joinStreamDate = joinStreamDate;
-    }
-
-    public String getJoinStreamDateText() {
-        return joinStreamDateText;
-    }
-
-    public void setJoinStreamDateText(String joinStreamDateText) {
-        this.joinStreamDateText = joinStreamDateText;
     }
 }
