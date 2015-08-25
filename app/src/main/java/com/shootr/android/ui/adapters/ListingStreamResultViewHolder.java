@@ -58,8 +58,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
     private void setupFavoriteClickListener(final StreamResultModel streamResult) {
         favoriteIndicator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (isFavorite) {
                     onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
                 } else {
@@ -71,4 +70,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         });
     }
 
+    public void setShowWatchersText(boolean showWatchersText) {
+        super.setShowsWatchersText(showWatchersText);
+    }
 }

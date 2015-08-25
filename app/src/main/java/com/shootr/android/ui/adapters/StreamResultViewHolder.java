@@ -17,6 +17,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
 
+    private boolean showsWatchersText = false;
+
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_watchers) TextView watchers;
@@ -50,24 +52,30 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private void setClickListener(final StreamResultModel streamResult) {
         itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 onStreamClickListener.onStreamClick(streamResult);
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+            @Override public boolean onLongClick(View v) {
                 return onStreamClickListener.onStreamLongClick(streamResult);
             }
         });
     }
 
     private String getWatchersText(int watchers) {
-        return String.valueOf(watchers);
+        if (showsWatchersText) {
+            return itemView.getContext().getResources().getQuantityString(R.plurals.listing_watchers, watchers, watchers);
+        } else {
+            return String.valueOf(watchers);
+        }
     }
 
     public void renderAuthor(String authorUsername) {
         author.setText(authorUsername);
+    }
+
+    public void setShowsWatchersText(Boolean showWatchersText) {
+        this.showsWatchersText = showWatchersText;
     }
 }

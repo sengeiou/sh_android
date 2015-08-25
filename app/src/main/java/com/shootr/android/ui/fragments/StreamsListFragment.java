@@ -226,10 +226,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
     }
 
-    @Override public void showNotificationsOff() {
-        Toast.makeText(getActivity(),getResources().getString(R.string.notifications_off_alert), Toast.LENGTH_SHORT).show();
-    }
-
     @Override public void navigateToCreatedStreamDetail(String streamId) {
         startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
