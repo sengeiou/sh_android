@@ -22,9 +22,8 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     private Boolean isFavorite;
 
     public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener, boolean isCurrentUser) {
+      ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener) {
         super(itemView, onStreamClickListener, imageLoader);
-        super.setCurrentUser(isCurrentUser);
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
@@ -59,8 +58,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
     private void setupFavoriteClickListener(final StreamResultModel streamResult) {
         favoriteIndicator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (isFavorite) {
                     onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
                 } else {
@@ -72,4 +70,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
         });
     }
 
+    public void setShowWatchersText(boolean showWatchersText) {
+        super.setShowsWatchersText(showWatchersText);
+    }
 }
