@@ -120,12 +120,13 @@ public class ActivityTimelinePresenter implements Presenter {
                 boolean hasNewActivity = !newActivity.isEmpty();
                 if (isEmpty && hasNewActivity) {
                     isEmpty = false;
+                }else if (isEmpty && !hasNewActivity) {
+                    timelineView.showEmpty();
                 }
                 if (hasNewActivity) {
                     timelineView.addNewActivities(newActivity);
                     timelineView.hideEmpty();
                     timelineView.showActivities();
-                    timelineView.hideLoadingActivity();
                 }
                 timelineView.hideLoading();
                 timelineView.hideLoadingActivity();
