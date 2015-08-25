@@ -34,6 +34,8 @@ import com.shootr.android.ui.views.ReportShotView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,13 +50,13 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject AllShotsPresenter presenter;
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.all_shots_loading) View loadingView;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
-    @BindString(R.string.share_shot_message) String shareShotMessage;
 
     @Deprecated private TimelineAdapter adapter;
 
@@ -217,13 +219,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = ShareCompat.IntentBuilder.from(this)
-          .setType("text/plain")
-          .setText(String.format(shareShotMessage,
-            shotModel.getUsername(), shotModel.getStreamTitle(), shotModel.getIdShot()))
-          .setChooserTitle(getString(R.string.share_shot_chooser_title))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     protected void openProfile(String idUser) {
