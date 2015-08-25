@@ -92,7 +92,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-
         streamTimelineView.showLoading();
         streamTimelineView.showEmpty();
         streamTimelineView.showLoadingText();
@@ -102,7 +101,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 streamTimelineView.hideLoading();
                 streamTimelineView.hideLoadingText();
-                streamTimelineView.hideEmpty();
                 streamTimelineView.setShots(shotModels);
                 if (!shotModels.isEmpty()) {
                     streamTimelineView.hideEmpty();
