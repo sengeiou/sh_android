@@ -30,5 +30,5 @@ public interface StreamApiService {
     @DELETE("/streams/{idStream}")
     Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
-    @GET("/streams/watchers/") List<WatchersApiEntity> getWatchers() throws IOException, ApiException;
+    @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
 }

@@ -46,7 +46,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         streamManager.deleteStream(idStream);
     }
 
-    @Override public Map<String, Integer> getWatchers() {
+    @Override public Map<String, Integer> getHolderWatchers() {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

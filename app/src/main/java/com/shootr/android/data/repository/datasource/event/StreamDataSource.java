@@ -21,5 +21,5 @@ public interface StreamDataSource {
 
     void deleteStream(String idStream) throws DeleteStreamNotAllowedException;
 
-    Map<String, Integer> getWatchers();
+    Map<String, Integer> getHolderWatchers();
 }
