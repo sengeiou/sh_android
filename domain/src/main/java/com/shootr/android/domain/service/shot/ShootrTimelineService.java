@@ -86,7 +86,7 @@ public class ShootrTimelineService {
         if (watchingStream != null) {
             return refreshStreamShots(watchingStream);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private List<Shot> refreshStreamShots(Stream stream) {
