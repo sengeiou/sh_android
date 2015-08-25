@@ -17,29 +17,42 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
 
     private final ImageLoader imageLoader;
 
+    private boolean isCurrentUser;
     private OnStreamClickListener onStreamClickListener;
     private OnFavoriteClickListener onFavoriteClickListener;
     private Set<String> favoriteStreamsIds;
 
-    public ListingStreamsAdapter(ImageLoader imageLoader,
-      OnStreamClickListener onStreamClickListener,
+    public ListingStreamsAdapter(ImageLoader imageLoader, boolean isCurrentUser, OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener) {
         super(imageLoader, onStreamClickListener);
         this.imageLoader = imageLoader;
+        this.isCurrentUser = isCurrentUser;
         this.onStreamClickListener = onStreamClickListener;
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        View view;
+        if (isCurrentUser) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_listing_stream, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        }
         return new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
     }
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         ((ListingStreamResultViewHolder) viewHolder).setFavorite(isFavorite(position));
-        super.onBindItemViewHolder(viewHolder, position);
+        StreamResultModel stream = getItem(position);
+        boolean showSeparator = position != getFirstItemPosition();
+        if (isCurrentUser) {
+            ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
+        } else {
+            ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
+            ((StreamResultViewHolder) viewHolder).renderAuthor(stream.getStreamModel().getAuthorUsername());
+        }
     }
 
     private boolean isFavorite(int position) {

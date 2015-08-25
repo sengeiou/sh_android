@@ -28,6 +28,7 @@ import javax.inject.Inject;
 public class ListingActivity extends BaseToolbarDecoratedActivity implements ListingView {
 
     private static final String EXTRA_ID_USER = "idUser";
+    private static final String EXTRA_IS_CURRENT_USER = "is_current_user";
     public static final int REQUEST_NEW_STREAM = 3;
 
     @Bind(R.id.listing_list) RecyclerView listingList;
@@ -38,9 +39,10 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     private ListingStreamsAdapter adapter;
 
-    public static Intent getIntent(Context context, String idUser) {
+    public static Intent getIntent(Context context, String idUser, Boolean isCurrentUser) {
         Intent intent = new Intent(context, ListingActivity.class);
         intent.putExtra(EXTRA_ID_USER, idUser);
+        intent.putExtra(EXTRA_IS_CURRENT_USER, isCurrentUser);
         return intent;
     }
 
@@ -50,7 +52,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        adapter = new ListingStreamsAdapter(imageLoader, new OnStreamClickListener() {
+        Boolean isCurrentUser = getIntent().getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
+        adapter = new ListingStreamsAdapter(imageLoader, isCurrentUser, new OnStreamClickListener() {
             @Override public void onStreamClick(StreamResultModel stream) {
                 presenter.selectStream(stream);
             }
@@ -76,7 +79,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Override protected void initializePresenter() {
         Intent intent = getIntent();
         String idUser = intent.getStringExtra(EXTRA_ID_USER);
-        presenter.initialize(this, idUser);
+        Boolean isCurrentUser = intent.getBooleanExtra(EXTRA_IS_CURRENT_USER, false);
+        presenter.initialize(this, idUser, isCurrentUser);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {

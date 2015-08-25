@@ -57,6 +57,9 @@ public class LocalStreamSearchRepository implements StreamSearchRepository {
         return transformStreamEntitiesWithWatchers(eventEntitiesListing, watchers);
     }
 
+    @Override public Map<String,Integer> getWatchers() {
+        throw new IllegalArgumentException("method not implemented in local repository");
+    }
 
     private List<StreamSearchResult> transformStreamEntitiesWithWatchers(List<StreamEntity> eventEntities,
       Map<String, Integer> watchers) {

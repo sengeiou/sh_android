@@ -3,6 +3,7 @@ package com.shootr.android.data.repository.datasource.event;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.db.manager.StreamManager;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class DatabaseStreamDataSource implements StreamDataSource {
@@ -41,5 +42,9 @@ public class DatabaseStreamDataSource implements StreamDataSource {
 
     @Override public void recommendStream(String idStream) {
         throw new IllegalStateException("Not allowed in local");
+    }
+
+    @Override public Map<String, Integer> getWatchers() {
+        throw new IllegalArgumentException("method not implemented in local datasource");
     }
 }

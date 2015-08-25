@@ -10,7 +10,6 @@ import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
@@ -24,19 +23,16 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
     private final StreamListDataSource remoteStreamListDataSource;
     private final WatchersRepository localWatchersRepository;
     private final StreamEntityMapper streamEntityMapper;
-    private final SessionRepository sessionRepository;
     private final StreamDataSource localStreamDataSource;
     private final StreamDataSource remoteStreamDataSource;
 
     @Inject public RemoteStreamSearchRepository(DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource,
       @Remote StreamListDataSource remoteStreamListDataSource, @Local WatchersRepository localWatchersRepository,
-      StreamEntityMapper streamEntityMapper, SessionRepository sessionRepository,
-      @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource) {
+      StreamEntityMapper streamEntityMapper, @Local StreamDataSource localStreamDataSource, @Remote StreamDataSource remoteStreamDataSource) {
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.remoteStreamListDataSource = remoteStreamListDataSource;
         this.localWatchersRepository = localWatchersRepository;
         this.streamEntityMapper = streamEntityMapper;
-        this.sessionRepository = sessionRepository;
         this.localStreamDataSource = localStreamDataSource;
         this.remoteStreamDataSource = remoteStreamDataSource;
     }
@@ -113,5 +109,9 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         localStreamDataSource.putStreams(streamEntitiesListing);
         Map<String, Integer> watchers = localWatchersRepository.getWatchers();
         return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
+    }
+
+    @Override public Map<String, Integer> getWatchers() {
+        return remoteStreamDataSource.getWatchers();
     }
 }

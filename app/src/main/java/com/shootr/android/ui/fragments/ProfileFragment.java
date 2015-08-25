@@ -810,7 +810,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void navigateToListing(String idUser) {
-        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser);
+        Intent intent = ListingActivity.getIntent(this.getActivity(), idUser, isCurrentUser());
         this.startActivity(intent);
     }
 

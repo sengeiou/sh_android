@@ -70,6 +70,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
         StreamResultModel stream = getItem(position);
         boolean showSeparator = position != getFirstItemPosition();
         ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
+        ((StreamResultViewHolder) viewHolder).renderAuthor(stream.getStreamModel().getAuthorUsername());
     }
 
     public void setCurrentWatchingStream(StreamResultModel streamResultModel) {

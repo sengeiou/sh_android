@@ -1,5 +1,6 @@
 package com.shootr.android.data.api.service;
 
+import com.shootr.android.data.api.entity.WatchersApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.StreamEntity;
 import java.io.IOException;
@@ -35,4 +36,6 @@ public interface StreamApiService {
 
     @POST("/streams/{idStream}/recommend")
     Response recommendStream(@Path("idStream") String idStream) throws ApiException, IOException;
+
+    @GET("/streams/watchers/") List<WatchersApiEntity> getWatchers() throws IOException, ApiException;
 }

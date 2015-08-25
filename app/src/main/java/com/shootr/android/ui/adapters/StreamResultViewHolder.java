@@ -1,5 +1,6 @@
 package com.shootr.android.ui.adapters;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,17 +12,16 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
 
-public class StreamResultViewHolder extends RecyclerView.ViewHolder{
+public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
 
-
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
-    @Bind(R.id.stream_author) TextView author;
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
+    @Nullable @Bind(R.id.stream_author) TextView author;
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
       ImageLoader imageLoader) {
@@ -41,7 +41,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
         } else {
             watchers.setVisibility(View.GONE);
         }
-        author.setText(streamResultModel.getStreamModel().getAuthorUsername());
 
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
@@ -68,4 +67,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder{
         return String.valueOf(watchers);
     }
 
+    public void renderAuthor(String authorUsername) {
+        author.setText(authorUsername);
+    }
 }

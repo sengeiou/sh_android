@@ -1,12 +1,15 @@
 package com.shootr.android.data.repository.datasource.event;
 
+import com.shootr.android.data.api.entity.WatchersApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.service.ShootrService;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class ServiceStreamDataSource implements StreamDataSource {
@@ -68,6 +71,18 @@ public class ServiceStreamDataSource implements StreamDataSource {
         try {
             streamApiService.recommendStream(idStream);
         } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public Map<String, Integer> getWatchers() {
+        try {
+            Map<String, Integer> watchers = new HashMap<>();
+            for (WatchersApiEntity watchersApiEntity : streamApiService.getWatchers()) {
+                watchers.put(watchersApiEntity.getIdStream(), watchersApiEntity.getWatchers());
+            }
+            return watchers;
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

@@ -2,6 +2,7 @@ package com.shootr.android.data.repository.datasource.event;
 
 import com.shootr.android.data.entity.StreamEntity;
 import java.util.List;
+import java.util.Map;
 
 public interface StreamDataSource {
 
@@ -18,4 +19,6 @@ public interface StreamDataSource {
     List<StreamEntity> getStreamsListing(String idUser);
 
     void recommendStream(String idStream);
+
+    Map<String, Integer> getWatchers();
 }
