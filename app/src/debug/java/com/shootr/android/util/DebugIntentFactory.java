@@ -21,8 +21,8 @@ public final class DebugIntentFactory implements IntentFactory {
     }
 
     @Override
-    public Intent createUrlIntent(String url) {
-        Intent baseIntent = realIntentFactory.createUrlIntent(url);
+    public Intent openUrlIntent(String url) {
+        Intent baseIntent = realIntentFactory.openUrlIntent(url);
         return createCaptureIntent(baseIntent);
     }
 

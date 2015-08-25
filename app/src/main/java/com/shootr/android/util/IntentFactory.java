@@ -9,12 +9,12 @@ import com.shootr.android.ui.model.ShotModel;
 
 /** Creates {@link Intent}s for launching into external applications. */
 public interface IntentFactory {
-  Intent createUrlIntent(String url);
+  Intent openUrlIntent(String url);
 
   Intent shareShotIntent(Activity launchActivity, ShotModel shotModel);
 
   IntentFactory REAL = new IntentFactory() {
-    @Override public Intent createUrlIntent(String url) {
+    @Override public Intent openUrlIntent(String url) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setData(Uri.parse(url));
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

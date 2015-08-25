@@ -12,12 +12,15 @@ import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.VersionUtils;
 import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @Inject LocaleProvider localeProvider;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.support_version_number) TextView versionNumber;
 
@@ -53,14 +56,16 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
 
     @OnClick(R.id.support_terms_service_text)
     public void onTermsAndServiceClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(termsOfServiceBaseUrl, localeProvider.getLanguage())));
-        startActivity(browserIntent);
+        String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+        Intent termsIntent = intentFactory.openUrlIntent(termsUrl);
+        Intents.maybeStartActivity(this, termsIntent);
     }
 
     @OnClick(R.id.privacy_policy_text)
     public void onPrivacyPolicyClick() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage())));
-        startActivity(browserIntent);
+        String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+        Intent privacyIntent = intentFactory.openUrlIntent(privacyUrl);
+        Intents.maybeStartActivity(this, privacyIntent);
     }
 
 }
