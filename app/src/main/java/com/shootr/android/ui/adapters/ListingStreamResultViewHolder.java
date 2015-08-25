@@ -22,8 +22,9 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     private Boolean isFavorite;
 
     public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener) {
+      ImageLoader imageLoader, OnFavoriteClickListener onFavoriteClickListener, boolean isCurrentUser) {
         super(itemView, onStreamClickListener, imageLoader);
+        super.setCurrentUser(isCurrentUser);
         this.onFavoriteClickListener = onFavoriteClickListener;
     }
 

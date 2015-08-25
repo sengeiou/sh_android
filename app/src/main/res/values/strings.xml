@@ -231,6 +231,15 @@
     <string name="reset_password_button">Enter your username or email</string>
     <string name="title_activity_reset_password">Reset Password</string>
 
+    <plurals name="listing_watchers">
+        <item quantity="one">
+            %d watcher
+        </item>
+        <item quantity="other">
+            %d watchers
+        </item>
+    </plurals>
+
     <plurals name="replies_header_count_pattern">
         <item quantity="one">
             %d reply

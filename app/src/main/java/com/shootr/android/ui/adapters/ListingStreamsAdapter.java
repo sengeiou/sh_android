@@ -39,7 +39,7 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
         }
-        return new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener);
+        return new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onFavoriteClickListener, isCurrentUser);
     }
 
     @Override
