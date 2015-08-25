@@ -534,7 +534,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
