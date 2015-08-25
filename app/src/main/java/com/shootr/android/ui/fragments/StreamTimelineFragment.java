@@ -1,8 +1,6 @@
 package com.shootr.android.ui.fragments;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -10,7 +8,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +59,10 @@ import com.shootr.android.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.File;
@@ -76,7 +76,7 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
-    public static final String CLIPBOARD_LABEL = "Shot";
+
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -84,12 +84,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject WatchNumberPresenter watchNumberPresenter;
     @Inject FavoriteStatusPresenter favoriteStatusPresenter;
     @Inject ReportShotPresenter reportShotPresenter;
-
     @Inject PicassoWrapper picasso;
-
     @Inject AndroidTimeUtils timeUtils;
-
     @Inject ToolbarDecorator toolbarDecorator;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_subtitle) TextView checkingForShotsView;
@@ -99,8 +97,6 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
-    @BindString(R.string.share_shot_message) String shareShotMessage;
-    @BindString(R.string.share_shot_subject) String shareShotSubject;
 
     private TimelineAdapter adapter;
 
@@ -424,11 +420,11 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.report_context_menu_share_shot), new Runnable() {
+        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
             @Override public void run() {
                 shareShot(shotModel);
             }
-        }).addAction(getActivity().getString(R.string.report_context_menu_copy_text), new Runnable() {
+        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
             @Override
             public void run() {
                 copyShotCommentToClipboard(shotModel);
@@ -441,24 +437,12 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void shareShot(ShotModel shotModel) {
-        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
-          .setType("text/plain")
-          .setSubject(String.format(shareShotSubject,
-            shotModel.getUsername(), shotModel.getStreamTitle()))
-          .setText(String.format(shareShotMessage,
-            shotModel.getUsername(),
-            shotModel.getStreamTitle(),
-            shotModel.getIdShot()))
-          .setChooserTitle(getString(R.string.share_shot_chooser_title))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
     private void copyShotCommentToClipboard(ShotModel shotModel) {
-        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(CLIPBOARD_LABEL, shotModel.getComment());
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+        Clipboard.copyShotComment(getActivity(), shotModel);
     }
 
     @OnClick(R.id.shot_bar_text)

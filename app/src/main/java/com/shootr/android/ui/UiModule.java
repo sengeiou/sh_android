@@ -33,6 +33,7 @@ import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.DraftsPresenter;
 import com.shootr.android.ui.widgets.WatchersView;
+import com.shootr.android.util.IntentFactory;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -84,5 +85,11 @@ import javax.inject.Singleton;
     @Provides
     Poller providePoller() {
         return new Poller(new Handler());
+    }
+
+    @Provides
+    @Singleton
+    IntentFactory provideIntentFactory() {
+        return IntentFactory.REAL;
     }
 }

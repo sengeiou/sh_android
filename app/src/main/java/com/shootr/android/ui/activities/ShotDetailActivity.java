@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.fragments.NewShotBarViewDelegate;
@@ -26,9 +28,11 @@ import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.Clipboard;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -48,6 +52,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject AndroidTimeUtils timeUtils;
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
+    @Inject IntentFactory intentFactory;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -95,10 +100,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
         newShotBarPresenter.resume();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_shot_detail, menu);
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        }else if (item.getItemId() == R.id.menu_share) {
+            ShotModel shotModel = extractShotFromIntent();
+            Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+            Intents.maybeStartActivity(this, shareIntent);
+        }else if (item.getItemId() == R.id.menu_copy_text) {
+            Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
     }
