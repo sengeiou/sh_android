@@ -92,16 +92,12 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     protected void loadTimeline() {
-        streamTimelineView.showLoading();
-        streamTimelineView.showEmpty();
-        streamTimelineView.showLoadingText();
         timelineInteractorWrapper.loadTimeline(streamId, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
-                streamTimelineView.hideLoading();
-                streamTimelineView.hideLoadingText();
                 streamTimelineView.setShots(shotModels);
+                streamTimelineView.hideLoading();
                 if (!shotModels.isEmpty()) {
                     streamTimelineView.hideEmpty();
                     streamTimelineView.showShots();
@@ -136,6 +132,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             return;
         }
         isRefreshing = true;
+        streamTimelineView.showCheckingForShots();
         timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
@@ -143,6 +140,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                     loadTimeline();
                 }
                 streamTimelineView.hideLoading();
+                streamTimelineView.hideCheckingForShots();
                 isRefreshing = false;
             }
         }, new Interactor.ErrorCallback() {
@@ -150,6 +148,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             public void onError(ShootrException error) {
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
                 streamTimelineView.hideLoading();
+                streamTimelineView.hideCheckingForShots();
                 isRefreshing = false;
             }
         });

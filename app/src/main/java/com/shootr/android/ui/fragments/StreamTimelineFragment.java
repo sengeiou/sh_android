@@ -92,7 +92,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject ToolbarDecorator toolbarDecorator;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
-    @Bind(R.id.timeline_subtitle) TextView emptyTextView;
+    @Bind(R.id.timeline_subtitle) TextView checkingForShotsView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.timeline_empty) View emptyView;
@@ -519,12 +519,12 @@ public class StreamTimelineFragment extends BaseFragment
         startActivityForResult(intent, REQUEST_STREAM_DETAIL);
     }
 
-    @Override public void showLoadingText() {
-        emptyTextView.setVisibility(View.VISIBLE);
+    @Override public void showCheckingForShots() {
+        checkingForShotsView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideLoadingText() {
-        emptyTextView.setVisibility(View.GONE);
+    @Override public void hideCheckingForShots() {
+        checkingForShotsView.setVisibility(View.GONE);
     }
 
     @Override

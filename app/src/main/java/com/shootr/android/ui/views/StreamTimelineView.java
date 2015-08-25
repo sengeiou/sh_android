@@ -20,7 +20,7 @@ public interface StreamTimelineView extends LoadDataView{
 
     void hideLoadingOldShots();
 
-    void showLoadingText();
+    void showCheckingForShots();
 
-    void hideLoadingText();
+    void hideCheckingForShots();
 }

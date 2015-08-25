@@ -34,11 +34,11 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showLoadingText() {
+    @Override public void showCheckingForShots() {
         /* no-op */
     }
 
-    @Override public void hideLoadingText() {
+    @Override public void hideCheckingForShots() {
         /* no-op */
     }
 
