@@ -75,10 +75,10 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public Map<String, Integer> getWatchers() {
+    @Override public Map<String, Integer> getHolderWatchers() {
         try {
             Map<String, Integer> watchers = new HashMap<>();
-            for (WatchersApiEntity watchersApiEntity : streamApiService.getWatchers()) {
+            for (WatchersApiEntity watchersApiEntity : streamApiService.getHolderWatchers()) {
                 watchers.put(watchersApiEntity.getIdStream(), watchersApiEntity.getWatchers());
             }
             return watchers;

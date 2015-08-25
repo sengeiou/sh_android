@@ -20,5 +20,5 @@ public interface StreamDataSource {
 
     void recommendStream(String idStream);
 
-    Map<String, Integer> getWatchers();
+    Map<String, Integer> getHolderWatchers();
 }

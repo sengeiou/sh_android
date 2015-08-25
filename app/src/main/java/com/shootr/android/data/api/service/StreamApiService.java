@@ -28,14 +28,11 @@ public interface StreamApiService {
       @Query("query") String query, @Query("locale") String locale) throws
       ApiException, IOException;
 
-    @DELETE("/streams/{idStream}")
-    Response deleteStream(@Path("idStream") String idStream) throws ApiException, IOException;
-
     @GET("/user/{idUser}/listedCount")
     Integer getListingCount(@Path("idUser")String idUser) throws ApiException, IOException;
 
     @POST("/streams/{idStream}/recommend")
     Response recommendStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
-    @GET("/streams/watchers/") List<WatchersApiEntity> getWatchers() throws IOException, ApiException;
+    @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
 }
