@@ -40,6 +40,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         if (watchersCount > 0) {
             watchers.setVisibility(View.VISIBLE);
             watchers.setText(getWatchersText(watchersCount));
+        } else if (watchersCount == 0 && showsWatchersText) {
+            watchers.setVisibility(View.VISIBLE);
+            watchers.setText(getWatchersText(watchersCount));
         } else {
             watchers.setVisibility(View.GONE);
         }
@@ -65,7 +68,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private String getWatchersText(int watchers) {
         if (showsWatchersText) {
-            return itemView.getContext().getResources().getQuantityString(R.plurals.listing_watchers, watchers, watchers);
+            if(watchers == 0) {
+                return itemView.getContext().getString(R.string.zero_watchers_listing);
+            } else {
+                return itemView.getContext().getResources().getQuantityString(R.plurals.listing_watchers, watchers, watchers);
+            }
         } else {
             return String.valueOf(watchers);
         }
