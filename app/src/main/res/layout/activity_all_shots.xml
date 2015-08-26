@@ -19,7 +19,14 @@
     android:layout_height="match_parent"
     tools:listitem="@layout/item_list_shot" />
 
-  <include layout="@layout/include_timeline_empty" />
+    <TextView
+      android:id="@+id/timeline_empty"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/shot_timeline_empty_title"
+      android:textColor="@color/gray_50"
+      android:layout_gravity="center"
+      android:textSize="20sp" />
 
   <include layout="@layout/include_shadow_above_shot_bar" />
 

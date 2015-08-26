@@ -49,10 +49,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Inject AndroidTimeUtils timeUtils;
 
     @Bind(R.id.timeline_activity_list) RecyclerView activityList;
-    @Bind(R.id.timeline_subtitle) TextView loadingActivityView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.timeline_empty) View emptyView;
-    @Bind(R.id.timeline_empty_title) TextView emptyViewTitle;
+    @Bind(R.id.timeline_loading_activity) TextView loadingActivityView;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -241,7 +240,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     //region View methods
     @Override
     public void showEmpty() {
-        emptyViewTitle.setText(R.string.activity_empty);
         emptyView.setVisibility(View.VISIBLE);
     }
 

@@ -45,8 +45,8 @@
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
     <string name="activity_login_email_forgot">Forgot Password?</string>
     <string name="new_shot_placeholder">Shoot something…</string>
-    <string name="stream_timeline_empty_message">Checking for shots</string>
-    <string name="activity_timeline_empty_message">Loading activities</string>
+    <string name="stream_timeline_empty_message">Checking for shots…</string>
+    <string name="loading_activity_message">Loading activity…</string>
     <string name="shot_timeline_empty_title">No Shots</string>
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
@@ -195,7 +195,6 @@
     <string name="error_login_credentials_invalid">ID OR PASSWORD ARE NOT VALID</string>
     <string name="drawer_streams_title">Streams</string>
     <string name="drawer_activity_title">Activity</string>
-    <string name="activity_empty">No Activity</string>
 
     <string name="entered_just_now">Entered just now</string>
     <string name="entered_a_minute_ago">Entered 1 minute ago</string>
@@ -280,7 +279,7 @@
     <string name="profile_listing_number">0</string>
     <string name="profile_listing">Streams</string>
     <string name="title_activity_listing">Streams</string>
-    <string name="activity_timeline_empty_title">No Activities</string>
+    <string name="activity_timeline_empty_title">No Activity</string>
     <string name="favorites_emtpy">No Favorites</string>
     <string name="menu_add_favorite">Add to Favorites</string>
     <string name="menu_remove_favorite">Remove from Favorites</string>

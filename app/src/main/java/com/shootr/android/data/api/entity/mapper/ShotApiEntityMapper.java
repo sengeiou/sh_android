@@ -27,7 +27,7 @@ public class ShotApiEntityMapper {
         shotEntity.setType(shotApiEntity.getType());
 
         EmbedUserApiEntity userApiEntity = shotApiEntity.getUser();
-        checkNotNull(userApiEntity, "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping.");
+        checkNotNull(userApiEntity, "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping. idShot=%s", shotApiEntity.getIdShot());
         shotEntity.setIdUser(userApiEntity.getIdUser());
         shotEntity.setUsername(userApiEntity.getUserName());
         shotEntity.setUserPhoto(userApiEntity.getPhoto());

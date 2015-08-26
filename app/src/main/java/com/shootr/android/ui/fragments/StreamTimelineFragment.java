@@ -91,10 +91,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject IntentFactory intentFactory;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
-    @Bind(R.id.timeline_subtitle) TextView checkingForShotsView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.timeline_empty) View emptyView;
+    @Bind(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
