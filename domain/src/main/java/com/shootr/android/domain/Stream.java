@@ -16,7 +16,7 @@ public class Stream {
     private String description;
     private String locale;
     private Integer mediaCount;
-    private Boolean removed;
+    private boolean removed;
 
     public Stream() {
     }
