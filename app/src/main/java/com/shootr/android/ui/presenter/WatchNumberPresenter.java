@@ -25,18 +25,22 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         this.watchNumberInteractor = watchNumberInteractor;
     }
 
+    protected void setIdStream(String idStream) {
+        this.idStream = idStream;
+    }
+
     public void setView(WatchNumberView watchNumberView) {
         this.watchNumberView = watchNumberView;
     }
 
     public void initialize(WatchNumberView watchNumberView, String idStream) {
         this.setView(watchNumberView);
-        this.idStream = idStream;
+        this.setIdStream(idStream);
         this.retrieveData();
     }
 
     protected void retrieveData() {
-        watchNumberInteractor.loadWatchNumber(new WatchNumberInteractor.Callback() {
+        watchNumberInteractor.loadWatchNumber(idStream, new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer count) {
                 setViewWathingCount(count);
             }

@@ -19,6 +19,7 @@ import javax.inject.Inject;
 public class WatchNumberInteractor implements Interactor{
 
     public static final int NO_STREAM = -1;
+    private String idStream;
     private Callback callback;
     private ErrorCallback errorCallback;
 
@@ -40,20 +41,16 @@ public class WatchNumberInteractor implements Interactor{
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadWatchNumber(Callback callback, ErrorCallback errorCallback) {
+    public void loadWatchNumber(String idStream, Callback callback, ErrorCallback errorCallback) {
+        this.idStream = idStream;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        String currentVisibleStreamId = getCurrentVisibleStreamId();
-        if (currentVisibleStreamId == null) {
-            notifyLoaded(NO_STREAM);
-            return;
-        }
         List<User> peopleAndMe = getPeopleAndMe();
-        List<User> watchers = filterUsersWatchingStream(peopleAndMe, currentVisibleStreamId);
+        List<User> watchers = filterUsersWatchingStream(peopleAndMe, idStream);
         notifyLoaded(watchers.size());
     }
 
