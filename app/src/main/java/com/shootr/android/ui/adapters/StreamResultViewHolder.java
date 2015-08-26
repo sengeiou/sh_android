@@ -37,10 +37,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
         int watchersCount = streamResultModel.getWatchers();
-        if (watchersCount > 0) {
-            watchers.setVisibility(View.VISIBLE);
-            watchers.setText(getWatchersText(watchersCount));
-        } else if (watchersCount == 0 && showsWatchersText) {
+        if (watchersCount > 0 || showsWatchersText) {
             watchers.setVisibility(View.VISIBLE);
             watchers.setText(getWatchersText(watchersCount));
         } else {
