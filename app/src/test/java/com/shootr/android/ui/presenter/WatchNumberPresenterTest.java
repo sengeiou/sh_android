@@ -43,6 +43,7 @@ public class WatchNumberPresenterTest {
         MockitoAnnotations.initMocks(this);
         presenter = new WatchNumberPresenter(bus, watchNumberInteractor);
         presenter.setView(watchNumberView);
+        presenter.setIdStream(STREAM_ID_STUB);
         watchUpdateReceiver = presenter;
         streamChangedReceiver = presenter;
     }
@@ -51,7 +52,7 @@ public class WatchNumberPresenterTest {
     public void shouldLoadWatchNumberWhenInitialized() throws Exception {
         presenter.initialize(watchNumberView, STREAM_ID_STUB);
 
-        verify(watchNumberInteractor).loadWatchNumber(STREAM_ID_STUB,
+        verify(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB),
           any(WatchNumberInteractor.Callback.class), any(Interactor.ErrorCallback.class));
     }
 
@@ -155,7 +156,7 @@ public class WatchNumberPresenterTest {
     private void setupWatchNumberInteractorCallbacks(final Integer count) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((WatchNumberInteractor.Callback) invocation.getArguments()[0]).onLoaded(count);
+                ((WatchNumberInteractor.Callback) invocation.getArguments()[1]).onLoaded(count);
                 return null;
             }
         }).when(watchNumberInteractor).loadWatchNumber(eq(STREAM_ID_STUB), any(WatchNumberInteractor.Callback.class),
