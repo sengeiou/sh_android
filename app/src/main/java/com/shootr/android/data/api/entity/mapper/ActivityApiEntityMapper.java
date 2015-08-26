@@ -25,6 +25,11 @@ public class ActivityApiEntityMapper {
         activityEntity.setIdUser(userApiEntity.getIdUser());
         activityEntity.setUserPhoto(userApiEntity.getPhoto());
 
+        EmbedUserApiEntity targetUser = activityApiEntity.getTargetUser();
+        if (targetUser != null) {
+            activityEntity.setIdTargetUser(targetUser.getIdUser());
+        }
+
         activityEntity.setIdStream(activityApiEntity.getIdStream());
         activityEntity.setStreamTag(activityApiEntity.getStreamTag());
         activityEntity.setStreamTitle(activityApiEntity.getStreamTitle());

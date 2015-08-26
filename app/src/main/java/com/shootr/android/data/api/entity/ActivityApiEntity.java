@@ -24,6 +24,7 @@ public class ActivityApiEntity {
     private Integer revision;
 
     private EmbedUserApiEntity user;
+    private EmbedUserApiEntity targetUser;
     private StreamEntity stream;
 
     public String getIdActivity() {
@@ -136,5 +137,13 @@ public class ActivityApiEntity {
 
     public void setIdShot(String idShot) {
         this.idShot = idShot;
+    }
+
+    public EmbedUserApiEntity getTargetUser() {
+        return targetUser;
+    }
+
+    public void setTargetUser(EmbedUserApiEntity targetUser) {
+        this.targetUser = targetUser;
     }
 }

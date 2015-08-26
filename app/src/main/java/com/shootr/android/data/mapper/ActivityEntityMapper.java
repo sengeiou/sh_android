@@ -42,6 +42,8 @@ public class ActivityEntityMapper {
         userInfo.setAvatar(activityEntity.getUserPhoto());
         activity.setUserInfo(userInfo);
 
+        activity.setIdTargetUser(activityEntity.getIdTargetUser());
+
         if (activityEntity.getIdShot() != null) {
             Shot shot = activityEntity.getShotForMapping();
             checkNotNull(shot, "ActivityEntity has idShot but no ShotForMapping");
@@ -85,6 +87,8 @@ public class ActivityEntityMapper {
             activityEntity.setIdUser(userInfo.getIdUser());
             activityEntity.setUserPhoto(userInfo.getAvatar());
         }
+
+        activityEntity.setIdTargetUser(activity.getIdTargetUser());
 
         activityEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
         return activityEntity;

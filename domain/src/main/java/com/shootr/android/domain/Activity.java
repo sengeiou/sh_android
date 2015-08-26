@@ -2,12 +2,12 @@ package com.shootr.android.domain;
 
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 public class Activity {
 
     private String idActivity;
     private String idUser;
+    private String idTargetUser;
     private String username;
     private String idStream;
     private String streamTitle;
@@ -35,6 +35,14 @@ public class Activity {
 
     public void setUserInfo(ActivityUserInfo userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public String getIdTargetUser() {
+        return idTargetUser;
+    }
+
+    public void setIdTargetUser(String idTargetUser) {
+        this.idTargetUser = idTargetUser;
     }
 
     public ActivityStreamInfo getStreamInfo() {
