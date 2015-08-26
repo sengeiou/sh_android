@@ -24,9 +24,9 @@ import static org.mockito.Mockito.when;
 public class WatchNumberInteractorTest {
 
     public static final long ID_USER_ME = 666L;
-    public static final long ID_STREAM = 1L;
     public static final long ID_USER_1 = 1L;
     public static final long ID_USER_2 = 2L;
+    public static final String STREAM_ID = "id";
 
     private com.shootr.android.domain.interactor.stream.WatchNumberInteractor interactor;
 
@@ -64,7 +64,7 @@ public class WatchNumberInteractorTest {
         when(remoteUserRepository.getPeople()).thenReturn(Arrays.asList(newUserWatching(ID_USER_1)));
         when(sessionRepository.getCurrentUser()).thenReturn(me());
 
-        interactor.loadWatchNumber(spyCallback, dummyErrorCallback);
+        interactor.loadWatchNumber(STREAM_ID, spyCallback, dummyErrorCallback);
 
         assertThat(spyCallback.count).isEqualTo(2);
     }
@@ -74,8 +74,7 @@ public class WatchNumberInteractorTest {
         List<User> oneUserWatchingAndOneNotWatching =
           Arrays.asList(newUserWatching(ID_USER_1), newUserNotWatching(ID_USER_2));
 
-        List<User> filteredUsers = interactor.filterUsersWatchingStream(oneUserWatchingAndOneNotWatching,
-          String.valueOf(ID_STREAM));
+        List<User> filteredUsers = interactor.filterUsersWatchingStream(oneUserWatchingAndOneNotWatching, STREAM_ID);
 
         assertThat(filteredUsers).doesNotContain(newUserNotWatching(ID_USER_2));
         assertThat(filteredUsers).contains(newUserWatching(ID_USER_1));
@@ -86,7 +85,7 @@ public class WatchNumberInteractorTest {
         when(sessionRepository.getCurrentUser()).thenReturn(me());
         when(remoteUserRepository.getPeople()).thenThrow(new ServerCommunicationException(null));
 
-        interactor.loadWatchNumber(spyCallback, dummyErrorCallback);
+        interactor.loadWatchNumber(STREAM_ID, spyCallback, dummyErrorCallback);
 
         verify(localUserRepository).getPeople();
     }
@@ -94,7 +93,7 @@ public class WatchNumberInteractorTest {
     private User me() {
         User user = newUserWatching(ID_USER_ME);
         user.setMe(true);
-        user.setIdWatchingStream(String.valueOf(ID_STREAM));
+        user.setIdWatchingStream(STREAM_ID);
         return user;
     }
 
@@ -106,7 +105,7 @@ public class WatchNumberInteractorTest {
 
     private User newUserWatching(Long id) {
         User user = newUserNotWatching(id);
-        user.setIdWatchingStream(String.valueOf(ID_STREAM));
+        user.setIdWatchingStream(STREAM_ID);
         return user;
     }
 

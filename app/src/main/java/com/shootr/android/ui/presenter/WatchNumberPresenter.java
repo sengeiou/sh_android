@@ -36,7 +36,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     }
 
     protected void retrieveData() {
-        watchNumberInteractor.loadWatchNumber(new WatchNumberInteractor.Callback() {
+        watchNumberInteractor.loadWatchNumber(idStream, new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer count) {
                 setViewWathingCount(count);
             }
