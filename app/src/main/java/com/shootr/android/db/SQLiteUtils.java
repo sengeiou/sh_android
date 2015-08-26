@@ -179,6 +179,7 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS " + DatabaseContract.ActivityTable.TABLE + " ("
       + DatabaseContract.ActivityTable.ID_ACTIVITY + " TEXT NOT NULL PRIMARY KEY,"
       + DatabaseContract.ActivityTable.ID_USER + " TEXT NOT NULL,"
+      + DatabaseContract.ActivityTable.ID_TARGET_USER + " TEXT NULL,"
       + DatabaseContract.ActivityTable.USERNAME + " TEXT NOT NULL,"
       + DatabaseContract.ActivityTable.ID_STREAM
       + " TEXT NULL,"

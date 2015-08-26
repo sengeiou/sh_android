@@ -256,6 +256,7 @@ public class DatabaseContract {
 
         public static final String ID_ACTIVITY = "idActivity";
         public static final String ID_USER = "idUser";
+        public static final String ID_TARGET_USER = "idTargetUser";
         public static final String USERNAME = "userName";
         public static final String ID_STREAM = "idStream";
         public static final String USER_PHOTO = "userPhoto";
@@ -266,7 +267,7 @@ public class DatabaseContract {
         public static final String ID_SHOT = "idShot";
 
         public static final String[] PROJECTION = {
-          ID_ACTIVITY, ID_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TAG, STREAM_TITLE, ID_SHOT,
+          ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TAG, STREAM_TITLE, ID_SHOT,
           COMMENT,TYPE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
         };
     }
