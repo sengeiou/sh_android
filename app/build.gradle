@@ -34,9 +34,9 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 0
 def versionMinor = 1
-def versionRevision = 17
+def versionRevision = 19
 def databaseVersion = 8
-def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
+def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: false
 
 android {
     compileSdkVersion 22
