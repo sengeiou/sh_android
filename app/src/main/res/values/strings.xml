@@ -372,5 +372,4 @@
     <string name="stream_recommended_notification">Stream recommended</string>
     <string name="new_activity_notification">New activity</string>
     <string name="no_intent_handler">There are no applications available to handle this action.</string>
-    <string name="zero_watchers_listing">0 watchers</string>
 </resources>
