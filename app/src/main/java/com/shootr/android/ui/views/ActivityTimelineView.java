@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ActivityTimelineView extends LoadDataView {
 
-    void setActivities(List<ActivityModel> activities);
+    void setActivities(List<ActivityModel> activities, String currentUserId);
 
     void hideActivities();
 
