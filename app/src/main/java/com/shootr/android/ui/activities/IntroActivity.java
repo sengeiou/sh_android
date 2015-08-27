@@ -16,7 +16,7 @@ public class IntroActivity extends AppIntro {
         addSlide(IntroSlideFragment.newInstance(R.layout.intro_friends));
         addSlide(IntroSlideFragment.newInstance(R.layout.intro_create));
 
-        setSeparatorColor(Color.parseColor(getString(R.string.intro_white_color_string)));
+        setSeparatorColor(Color.TRANSPARENT);
         setSkipText(getString(R.string.intro_start_shooting_button));
         setDoneText(getString(R.string.intro_start_shooting_button));
     }
