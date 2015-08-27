@@ -6,7 +6,6 @@ import com.shootr.android.data.entity.StreamEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
-import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;

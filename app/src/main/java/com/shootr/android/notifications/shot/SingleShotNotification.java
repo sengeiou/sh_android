@@ -2,7 +2,6 @@ package com.shootr.android.notifications.shot;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
