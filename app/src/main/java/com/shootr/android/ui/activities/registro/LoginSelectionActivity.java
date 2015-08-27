@@ -15,9 +15,12 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.shootr.android.R;
+import com.shootr.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.prefs.ShouldShowIntro;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.PerformFacebookLoginInteractor;
+import com.shootr.android.ui.activities.IntroActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.base.BaseActivity;
 import java.util.Arrays;
@@ -32,6 +35,7 @@ public class LoginSelectionActivity extends BaseActivity {
     @Bind(R.id.login_buttons) View buttonsContainer;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
+    @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
 
     private CallbackManager callbackManager;
     private LoginManager loginManager;
@@ -48,6 +52,11 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @Override
     protected void initializePresenter() {
+        if (shouldShowIntro.get()) {
+            shouldShowIntro.set(false);
+            startActivity(new Intent(this, IntroActivity.class));
+            finish();
+        }
         setupFacebook();
     }
 

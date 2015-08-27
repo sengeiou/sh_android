@@ -205,7 +205,6 @@
         </activity>
         <activity
             android:name=".ui.activities.IntroActivity"
-            android:label="@string/title_activity_intro"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>

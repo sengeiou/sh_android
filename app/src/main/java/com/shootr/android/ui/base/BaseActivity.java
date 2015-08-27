@@ -1,8 +1,6 @@
 package com.shootr.android.ui.base;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBarActivity;
@@ -15,7 +13,6 @@ import com.shootr.android.data.bus.Unauthorized;
 import com.shootr.android.data.bus.VersionOutdatedError;
 import com.shootr.android.domain.service.SessionHandler;
 import com.shootr.android.ui.AppContainer;
-import com.shootr.android.ui.activities.IntroActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
@@ -27,9 +24,6 @@ import javax.inject.Inject;
 
 public abstract class BaseActivity extends ActionBarActivity {
 
-    public static final String BASE_ACTIVITY_PREFERENCES = "BaseActivityPreferences";
-    public static final String SHOOTR_EXECUTED = "shootr_executed";
-
     @Inject AppContainer appContainer;
     @Inject @Main Bus bus;
     @Inject VersionUpdater versionUpdater;
@@ -39,11 +33,9 @@ public abstract class BaseActivity extends ActionBarActivity {
     private VersionOutdatedError.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
-    private SharedPreferences preferences;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = getSharedPreferences(BASE_ACTIVITY_PREFERENCES, Context.MODE_PRIVATE);
         injectDependencies();
         setupWhalePage();
         setupUpdateWarningPage();
@@ -161,17 +153,8 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     private void redirectToLogin() {
-        if (preferences.getBoolean(SHOOTR_EXECUTED, false)) {
-            startActivity(new Intent(this, LoginSelectionActivity.class));
-            finish();
-        } else {
-            redirectToIntro();
-        }
-    }
-
-    private void redirectToIntro() {
-        preferences.edit().putBoolean(SHOOTR_EXECUTED, true).apply();
-        startActivity(new Intent(this, IntroActivity.class));
+        startActivity(new Intent(this, LoginSelectionActivity.class));
         finish();
     }
+
 }

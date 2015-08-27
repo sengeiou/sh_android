@@ -50,4 +50,9 @@ public class PreferenceModule {
       SharedPreferences preferences) {
         return new IntPreference(preferences, "activity_badge_count", 0);
     }
+
+    @Provides @Singleton @ShouldShowIntro BooleanPreference provideShouldShowIntro(
+      SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "should_show_intro", true);
+    }
 }
