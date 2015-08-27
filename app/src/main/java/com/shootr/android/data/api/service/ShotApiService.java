@@ -13,7 +13,7 @@ import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shots/streamTimeline?includeLinks=false")
+    @GET("/shots/streamTimeline?includeLinks=false&includeAll=true")
     List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream, @Query("count") Integer count,
       @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
