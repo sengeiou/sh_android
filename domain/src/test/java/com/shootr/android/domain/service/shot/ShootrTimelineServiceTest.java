@@ -56,7 +56,6 @@ public class ShootrTimelineServiceTest {
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-    @Mock ShotRepository localShotRepository;
     @Mock ActivityTimelineParameters activityTimelineParameters;
 
     private ShootrTimelineService shootrTimelineService;
@@ -64,9 +63,12 @@ public class ShootrTimelineServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrTimelineService = new ShootrTimelineService(sessionRepository, localStreamRepository,
+        shootrTimelineService = new ShootrTimelineService(sessionRepository,
+          localStreamRepository,
           localUserRepository,
-          remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
+          remoteShotRepository,
+          localActivityRepository,
+          remoteActivityRepository,
           timelineSynchronizationRepository);
     }
 
@@ -237,10 +239,6 @@ public class ShootrTimelineServiceTest {
         User user = new User();
         user.setIdWatchingStream(WATCHING_STREAM_ID);
         return user;
-    }
-
-    private User currentUserNotWatching() {
-        return new User();
     }
 
     private Stream watchingStream() {

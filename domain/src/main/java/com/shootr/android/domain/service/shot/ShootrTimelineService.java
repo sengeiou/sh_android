@@ -24,30 +24,25 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class ShootrTimelineService {
 
-    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY = 2;
-    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
-
     private final SessionRepository sessionRepository;
     private final StreamRepository localStreamRepository;
     private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
     private final ActivityRepository remoteActivityRepository;
-    private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
     public ShootrTimelineService(SessionRepository sessionRepository, @Local StreamRepository localStreamRepository,
       @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
-      @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
+      TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.localStreamRepository = localStreamRepository;
         this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
         this.remoteActivityRepository = remoteActivityRepository;
-        this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
@@ -99,7 +94,6 @@ public class ShootrTimelineService {
           .since(streamRefreshDateSince) //
           .build();
 
-        List<Shot> localShots = localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
         List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
         if (!newShots.isEmpty()) {
             long lastShotDate = newShots.get(0).getPublishDate().getTime();
