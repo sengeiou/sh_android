@@ -46,7 +46,7 @@
     <string name="activity_login_email_forgot">Forgot Password?</string>
     <string name="new_shot_placeholder">Shoot something…</string>
     <string name="stream_timeline_empty_message">Checking for shots…</string>
-    <string name="loading_activity_message">Loading activity…</string>
+    <string name="loading_activity_message">Loading…</string>
     <string name="shot_timeline_empty_title">No Shots</string>
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
