@@ -13,7 +13,7 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
-    @GET("/streams/{idStream}?includeLinks=false&includeMediaCountByRelatedUsers=true")
+    @GET("/streams/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")

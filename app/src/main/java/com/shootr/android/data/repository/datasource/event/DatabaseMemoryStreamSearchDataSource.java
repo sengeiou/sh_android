@@ -51,7 +51,7 @@ public class DatabaseMemoryStreamSearchDataSource implements StreamSearchDataSou
         for (StreamSearchEntity streamSearchEntity : defaultStreamSearch) {
             Integer streamWatchers = watchersCountByStreams.get(streamSearchEntity.getIdStream());
             if (streamWatchers != null) {
-                streamSearchEntity.setWatchers(streamWatchers);
+                streamSearchEntity.setTotalWatchers(streamWatchers);
             }
         }
         return defaultStreamSearch;
