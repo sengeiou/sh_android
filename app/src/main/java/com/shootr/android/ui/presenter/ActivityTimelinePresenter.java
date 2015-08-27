@@ -6,6 +6,7 @@ import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.Poller;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.mappers.ActivityModelMapper;
@@ -26,6 +27,7 @@ public class ActivityTimelinePresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final Poller poller;
     private final IntPreference badgeCount;
+    private final SessionRepository sessionRepository;
 
     private ActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
@@ -33,17 +35,15 @@ public class ActivityTimelinePresenter implements Presenter {
     private boolean isEmpty;
 
     @Inject public ActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper,
-      @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory,
-      Poller poller,
-      @ActivityBadgeCount IntPreference badgeCount) {
+      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
+      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.poller = poller;
         this.badgeCount = badgeCount;
+        this.sessionRepository = sessionRepository;
     }
 
     public void setView(ActivityTimelineView timelineView) {
@@ -79,7 +79,7 @@ public class ActivityTimelinePresenter implements Presenter {
             @Override public void onLoaded(ActivityTimeline timeline) {
                 List<ActivityModel> activityModels = activityModelMapper.transform(timeline.getActivities());
                 timelineView.hideLoading();
-                timelineView.setActivities(activityModels);
+                timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                 isEmpty = activityModels.isEmpty();
                 if (isEmpty) {
                     timelineView.showEmpty();

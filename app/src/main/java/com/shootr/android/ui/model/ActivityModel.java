@@ -6,6 +6,7 @@ public class ActivityModel {
 
     private String idActivity;
     private String idUser;
+    private String idTargetUser;
     private String username;
     private String userPhoto;
     private String idStream;
@@ -15,7 +16,6 @@ public class ActivityModel {
     private String type;
     private Date publishDate;
     private ShotModel shot;
-
     public String getUserPhoto() {
         return userPhoto;
     }
@@ -30,6 +30,14 @@ public class ActivityModel {
 
     public void setIdActivity(String idActivity) {
         this.idActivity = idActivity;
+    }
+
+    public String getIdTargetUser() {
+        return idTargetUser;
+    }
+
+    public void setIdTargetUser(String idTargetUser) {
+        this.idTargetUser = idTargetUser;
     }
 
     public String getIdUser() {

@@ -264,8 +264,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     @Override
-    public void setActivities(List<ActivityModel> activities) {
-        adapter.setActivities(activities);
+    public void setActivities(List<ActivityModel> activities, String currentUserId) {
+        adapter.setActivities(activities, currentUserId);
     }
 
     @Override

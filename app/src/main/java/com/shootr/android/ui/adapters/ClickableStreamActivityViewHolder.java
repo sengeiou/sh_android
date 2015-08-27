@@ -28,16 +28,16 @@ public abstract class ClickableStreamActivityViewHolder extends ActivityViewHold
         this.onStreamTitleClickListener = onStreamTitleClickListener;
     }
 
-    public void render(final ActivityModel activity) {
-        super.render(activity);
+    public void render(final ActivityModel activity, String currentUserId) {
+        super.render(activity, currentUserId);
         text.setMovementMethod(new LinkMovementMethod());
         text.addLinks();
     }
 
     @Override
-    protected CharSequence formatActivityComment(final ActivityModel activity) {
+    protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {
         if (activity.getIdStream() == null) {
-            return super.formatActivityComment(activity);
+            return super.formatActivityComment(activity, currentUserId);
         }
         String commentPattern = getPatternText();
         String streamPlaceholder = "\\(stream\\)";

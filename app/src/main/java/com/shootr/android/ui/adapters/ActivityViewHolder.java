@@ -33,8 +33,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.activity_text) ClickableTextView text;
 
     public ActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener,
+      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
       OnUsernameClickListener onUsernameClickListener) {
         super(view);
         this.imageLoader = imageLoader;
@@ -45,13 +44,13 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void render(final ActivityModel activity) {
+    public void render(final ActivityModel activity, String currentUserId) {
         checkNotNull(name);
         checkNotNull(avatar);
         checkNotNull(elapsedTime);
 
         name.setText(activity.getUsername());
-        text.setText(formatActivityComment(activity));
+        text.setText(formatActivityComment(activity, currentUserId));
         elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
         imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
 
@@ -63,7 +62,10 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    protected CharSequence formatActivityComment(final ActivityModel activity) {
+    protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {
+        if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+            activity.setComment(itemView.getContext().getString(R.string.activity_started_following_you));
+        }
         return shotTextSpannableBuilder.formatWithUsernameSpans(activity.getComment(), onUsernameClickListener);
     }
 

@@ -41,6 +41,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
+    private String currentUserId;
     private boolean showFooter = false;
 
     public ActivityTimelineAdapter(ImageLoader imageLoader,
@@ -176,7 +177,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!isFooter(position)) {
-            ((ActivityViewHolder) holder).render(activities.get(position));
+            ((ActivityViewHolder) holder).render(activities.get(position), currentUserId);
         }
     }
 
@@ -189,8 +190,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         notifyDataSetChanged();
     }
 
-    public void setActivities(List<ActivityModel> activities) {
+    public void setActivities(List<ActivityModel> activities, String currentUserId) {
         this.activities = activities;
+        this.currentUserId = currentUserId;
         notifyDataSetChanged();
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class NullActivityTimelineView implements ActivityTimelineView {
 
-    @Override public void setActivities(List<ActivityModel> activities) {
+    @Override public void setActivities(List<ActivityModel> activities, String currentUserId) {
         /* no-op */
     }
 

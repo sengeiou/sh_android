@@ -16,6 +16,7 @@ public class ActivityEntityMapper extends GenericMapper {
         ActivityEntity activity = new ActivityEntity();
         activity.setIdActivity(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_ACTIVITY)));
         activity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_USER)));
+        activity.setIdTargetUser(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_TARGET_USER)));
         activity.setUsername(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.USERNAME)));
         activity.setUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.USER_PHOTO)));
         activity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_STREAM)));
@@ -32,6 +33,7 @@ public class ActivityEntityMapper extends GenericMapper {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ActivityTable.ID_ACTIVITY, activity.getIdActivity());
         cv.put(DatabaseContract.ActivityTable.ID_USER, activity.getIdUser());
+        cv.put(DatabaseContract.ActivityTable.ID_TARGET_USER, activity.getIdTargetUser());
         cv.put(DatabaseContract.ActivityTable.USERNAME, activity.getUsername());
         cv.put(DatabaseContract.ActivityTable.USER_PHOTO, activity.getUserPhoto());
         cv.put(DatabaseContract.ActivityTable.ID_STREAM, activity.getIdStream());
