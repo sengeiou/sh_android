@@ -1,7 +1,6 @@
 package com.shootr.android.ui;
 
 import android.os.Handler;
-import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.PollerEnabled;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.ui.debug.CaptureIntents;

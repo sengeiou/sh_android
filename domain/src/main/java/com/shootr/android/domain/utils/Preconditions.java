@@ -14,8 +14,8 @@
 
 package com.shootr.android.domain.utils;
 
-import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Static convenience methods that help a method or constructor check whether it was invoked

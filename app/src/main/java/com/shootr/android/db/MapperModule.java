@@ -9,10 +9,8 @@ import com.shootr.android.db.mappers.SuggestedPeopleMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module(
   complete = false,
