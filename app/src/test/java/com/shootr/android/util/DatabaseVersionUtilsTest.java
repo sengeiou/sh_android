@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import com.path.android.jobqueue.persistentQueue.sqlite.DbOpenHelper;
 import com.shootr.android.FacebookController;
+import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import org.junit.Before;
@@ -29,6 +30,7 @@ public class DatabaseVersionUtilsTest {
     @Mock Version version;
     @Mock DbOpenHelper dbOpenHelper;
     @Mock FacebookController facebookController;
+    @Mock BooleanPreference shouldShowIntro;
 
     private DatabaseVersionUtils databaseVersionUtils;
 
@@ -38,7 +40,7 @@ public class DatabaseVersionUtilsTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         databaseVersionUtils = new DatabaseVersionUtils(context, sharedPreferences, preferencesDatabaseVersion, version,
-          dbOpenHelper, facebookController);
+          dbOpenHelper, facebookController, shouldShowIntro);
     }
 
     @Test

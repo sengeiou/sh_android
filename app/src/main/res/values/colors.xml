@@ -68,4 +68,7 @@
     <color name="tag_color">#C7C7C7</color>
 
     <color name="checkin_bar_background_action_checkin">@color/primary_dark</color>
+    <color name="intro_create_background">#4CAF50</color>
+    <color name="intro_friends_background">#EF6C00</color>
+    <color name="intro_streams_background">#F06292</color>
 </resources>

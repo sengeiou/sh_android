@@ -156,4 +156,5 @@ public abstract class BaseActivity extends ActionBarActivity {
         startActivity(new Intent(this, LoginSelectionActivity.class));
         finish();
     }
+
 }
