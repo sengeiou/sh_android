@@ -138,28 +138,6 @@ public class ShootrTimelineServiceTest {
     }
 
     @Test
-    public void shouldRequestFewerNiceShotsWhenWatchingStreamHasShotsInLocalRepository() throws Exception {
-        setupWatchingStream();
-        when(localShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
-
-        shootrTimelineService.refreshTimelinesForWatchingStream();
-
-        StreamTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY);
-    }
-
-    @Test
-    public void shouldRequestFullNiceShotsWhenWatchingStreamDoesntHaveShotsInLocalRepository() throws Exception {
-        setupWatchingStream();
-        when(localShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
-
-        shootrTimelineService.refreshTimelinesForWatchingStream();
-
-        StreamTimelineParameters parameters = captureTimelineParameters();
-        assertThat(parameters.getMaxNiceShotsIncluded()).isEqualTo(ShootrTimelineService.MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
-    }
-
-    @Test
     public void shouldRequestTimelineWithStreamIdWhenWatchingStream() throws Exception {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
