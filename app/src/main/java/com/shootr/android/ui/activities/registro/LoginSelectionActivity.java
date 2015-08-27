@@ -56,8 +56,9 @@ public class LoginSelectionActivity extends BaseActivity {
             shouldShowIntro.set(false);
             startActivity(new Intent(this, IntroActivity.class));
             finish();
+        } else {
+            setupFacebook();
         }
-        setupFacebook();
     }
 
     @Override
