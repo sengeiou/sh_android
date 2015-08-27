@@ -96,14 +96,10 @@ public class ShootrTimelineService {
 
         StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
           .forStream(stream) //
-          .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
           .since(streamRefreshDateSince) //
           .build();
 
         List<Shot> localShots = localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
-        if (localShots.isEmpty()) {
-            streamTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
-        }
         List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
         if (!newShots.isEmpty()) {
             long lastShotDate = newShots.get(0).getPublishDate().getTime();

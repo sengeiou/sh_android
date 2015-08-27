@@ -6,10 +6,6 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     private String shotType;
 
-    private Integer maxNiceShotsIncluded;
-
-    private Boolean includeNiceShots;
-
     private StreamTimelineParameters() {
         /* private constructor, use builder */
     }
@@ -20,22 +16,6 @@ public class StreamTimelineParameters extends TimelineParameters {
 
     public String getShotType() {
         return shotType;
-    }
-
-    public Integer getMaxNiceShotsIncluded() {
-        return maxNiceShotsIncluded;
-    }
-
-    public void setMaxNiceShotsIncluded(Integer maxNiceShotsIncluded) {
-        this.maxNiceShotsIncluded = maxNiceShotsIncluded;
-    }
-
-    public Boolean getIncludeNiceShots() {
-        return includeNiceShots;
-    }
-
-    public void setIncludeNiceShots(Boolean includeNiceShots) {
-        this.includeNiceShots = includeNiceShots;
     }
 
     public static Builder builder() {
@@ -73,12 +53,6 @@ public class StreamTimelineParameters extends TimelineParameters {
 
         public Builder maxDate(Long maxDate) {
             parameters.maxDate = maxDate;
-            return this;
-        }
-
-        public Builder niceShots(Integer maxNice) {
-            parameters.setIncludeNiceShots(maxNice > 0);
-            parameters.setMaxNiceShotsIncluded(maxNice);
             return this;
         }
 
