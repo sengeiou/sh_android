@@ -98,7 +98,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     private float headerMaxElevation;
 
     public static Intent getIntent(Context context, String streamId) {
-        Intent intent = new Intent(context, StreamDetailActivity.class);
+        Intent intent = new Intent(context, StreamDetailActivityDraft.class);
         intent.putExtra(EXTRA_STREAM_ID, streamId);
         return intent;
     }

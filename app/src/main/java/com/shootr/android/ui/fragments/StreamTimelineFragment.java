@@ -499,9 +499,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void navigateToStreamDetail(String idStream) {
-        Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
-        intent.putExtra(EXTRA_STREAM_ID, idStream);
-        startActivityForResult(intent, REQUEST_STREAM_DETAIL);
+        startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
     }
 
     @Override public void showCheckingForShots() {

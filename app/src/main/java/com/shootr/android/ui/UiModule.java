@@ -18,6 +18,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.StreamDetailActivityDraft;
 import com.shootr.android.ui.activities.StreamMediaActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.activities.SupportActivity;
@@ -52,6 +53,7 @@ import javax.inject.Singleton;
     UserFollowsContainerActivity.class,
     FindFriendsActivity.class,
     StreamDetailActivity.class,
+    StreamDetailActivityDraft.class,
     ProfileEditActivity.class,
     ShotDetailActivity.class,
     PhotoViewActivity.class,

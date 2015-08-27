@@ -17,6 +17,7 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.ImageLoaderEditMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +56,14 @@ public class WatchersView extends LinearLayout{
     private void init(Context context) {
         if (!isInEditMode()) {
             ShootrApplication.get(context).inject(this);
+        } else {
+            imageLoader = new ImageLoaderEditMode();
         }
         setOrientation(VERTICAL);
         layoutInflater = LayoutInflater.from(context);
         watchersHoldersMap = new ArrayMap<>();
 
-        if (isInEditMode()) {
+        if (true || isInEditMode()) {
             addMockData();
         }
     }
@@ -125,17 +128,20 @@ public class WatchersView extends LinearLayout{
 
     private void addMockData() {
         List<UserModel> userWatchingMocks = new ArrayList<>();
-        UserModel watch1 = new UserModel();
-        watch1.setIdUser("id");
-        watch1.setUsername("Username");
-
-        userWatchingMocks.add(watch1);
-        userWatchingMocks.add(watch1);
-        userWatchingMocks.add(watch1);
-        userWatchingMocks.add(watch1);
-
+        for (int i = 1; i <= 10; i++) {
+            UserModel watch1 = new UserModel();
+            watch1.setIdUser("id"+i);
+            watch1.setUsername("Username " + i);
+            watch1.setJoinStreamDate("Entered a long time ago");
+            userWatchingMocks.add(watch1);
+        }
         setWatchers(userWatchingMocks);
-        setCurrentUserWatching(watch1);
+
+        UserModel me = new UserModel();
+        me.setIdUser("me");
+        me.setUsername("rafa");
+        me.setJoinStreamDate("Entered just now");
+        setCurrentUserWatching(me);
     }
     //endregion
 
