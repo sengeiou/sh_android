@@ -44,13 +44,14 @@ public class DatabaseVersionUtils implements DatabaseUtils{
     @Override
     public void clearDataOnLogout() {
         resetAppData();
-        shouldShowIntro.set(false);
     }
 
     protected void resetAppData() {
+        boolean previousShouldShowIntro = shouldShowIntro.get();
         clearSharedPreferences();
         clearDatabase();
         updateStoredDatabaseVersion();
+        shouldShowIntro.set(previousShouldShowIntro);
     }
 
     private void clearSharedPreferences() {
