@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
@@ -39,6 +40,7 @@ import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -65,6 +67,7 @@ import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
+import dagger.ObjectGraph;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -76,7 +79,6 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_ID = "streamId";
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
-
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -233,7 +235,20 @@ public class StreamTimelineFragment extends BaseFragment
     //endregion
 
     private void setStreamTitle(String streamShortTitle) {
+        if (toolbarDecorator == null) {
+            this.getObjectGraph().inject(this);
+        }
         toolbarDecorator.setTitle(streamShortTitle);
+
+    }
+
+    protected ObjectGraph getObjectGraph() {
+        if (getActivity() instanceof BaseActivity) {
+            return ((BaseActivity) getActivity()).getObjectGraph();
+        } else {
+            //TODO delete this case when all activities have been migrated to BaseActivity
+            return ShootrApplication.get(getActivity()).getObjectGraph();
+        }
     }
 
     private void setupNewShotBarDelegate() {
