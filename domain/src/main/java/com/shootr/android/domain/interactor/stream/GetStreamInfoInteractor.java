@@ -93,9 +93,17 @@ public class GetStreamInfoInteractor implements Interactor {
         });
 
         List<User> people = userRepository.getPeople();
-        List<User> watchesFromPeople = filterUsersWatchingStream(people, idStreamWanted);
-        watchesFromPeople = sortWatchersListByJoinStreamDate(watchesFromPeople);
-        return buildStreamInfo(stream, watchesFromPeople, currentUser);
+        List<User> watchesFromSession = filterUsersWatchingStream(people, idStreamWanted);
+        watchesFromSession = sortWatchersListByJoinStreamDate(watchesFromSession);
+
+        List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
+        watchesFromStream.removeAll(watchesFromSession);
+        watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
+
+        List<User> watchers = watchesFromSession;
+        watchers.addAll(watchesFromStream);
+
+        return buildStreamInfo(stream, watchers, currentUser);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
@@ -112,6 +120,16 @@ public class GetStreamInfoInteractor implements Interactor {
         List<User> watchers = new ArrayList<>();
         for (User user : people) {
             if (idStream.equals(user.getIdWatchingStream())) {
+                watchers.add(user);
+            }
+        }
+        return watchers;
+    }
+
+    protected List<User> removeCurrentUserFromWatchers(List<User> people) {
+        List<User> watchers = new ArrayList<>();
+        for (User user : people) {
+            if (!user.getIdUser().equals(sessionRepository.getCurrentUserId())) {
                 watchers.add(user);
             }
         }
