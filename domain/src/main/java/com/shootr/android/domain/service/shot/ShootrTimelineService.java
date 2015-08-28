@@ -73,12 +73,20 @@ public class ShootrTimelineService {
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
     }
 
-    public Timeline refreshTimelinesForWatchingStream() {
-        List<Shot> shotsForStream = refreshWatchingStreamShots();
+    public Timeline refreshTimelinesForWatchingStream(String idStream) {
+        List<Shot> shotsForStream = refreshWatchingStreamShots(idStream);
 
         refreshActivityShots();
 
         return buildSortedTimeline(shotsForStream);
+    }
+
+    private List<Shot> refreshWatchingStreamShots(String idStream) {
+        Stream watchingStream = getCurrentStream(idStream);
+        if (watchingStream != null) {
+            return refreshStreamShots(watchingStream);
+        }
+        return Collections.emptyList();
     }
 
     private List<Shot> refreshWatchingStreamShots() {
@@ -132,6 +140,13 @@ public class ShootrTimelineService {
     private List<Activity> sortActivitiesByPublishDate(List<Activity> remoteActivities) {
         Collections.sort(remoteActivities, new Activity.NewerAboveComparator());
         return remoteActivities;
+    }
+
+    private Stream getCurrentStream(String idStream) {
+        if (idStream != null) {
+            return localStreamRepository.getStreamById(idStream);
+        }
+        return null;
     }
 
     private Stream getWatchingStream() {
