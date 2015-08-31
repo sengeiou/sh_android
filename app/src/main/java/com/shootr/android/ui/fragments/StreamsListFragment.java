@@ -186,12 +186,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
                 presenter.addToFavorites(stream);
             }
         })
-          .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
+          .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
                   presenter.recommendStream(stream);
               }
           })
-          .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
+          .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
@@ -230,7 +230,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void showStreamRecommended() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showEmpty() {

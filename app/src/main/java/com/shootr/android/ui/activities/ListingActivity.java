@@ -127,12 +127,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                   presenter.addToFavorite(stream);
               }
           })
-          .addAction((getString(R.string.recomment_via_shootr)), new Runnable() {
+          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
                   presenter.recommendStream(stream);
               }
           })
-          .addAction((getString(R.string.recommend_via)), new Runnable() {
+          .addAction((getString(R.string.share_via)), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
@@ -177,7 +177,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showStreamRecommended() {
-        Toast.makeText(this, getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showContent() {

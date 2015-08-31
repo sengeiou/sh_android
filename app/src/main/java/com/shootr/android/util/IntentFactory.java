@@ -44,8 +44,8 @@ public interface IntentFactory {
 
     @Override
     public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
-      String subjectPattern = launchActivity.getString(R.string.recommend_stream_subject);
-      String messagePattern = launchActivity.getString(R.string.recommend_stream_message);
+      String subjectPattern = launchActivity.getString(R.string.share_stream_subject);
+      String messagePattern = launchActivity.getString(R.string.share_stream_message);
 
       String subject = String.format(subjectPattern, streamModel.getTitle());
       String sharedText =
@@ -55,7 +55,7 @@ public interface IntentFactory {
         .setType("text/plain")
         .setSubject(subject)
         .setText(sharedText)
-        .setChooserTitle(R.string.recommend_via)
+        .setChooserTitle(R.string.share_via)
         .createChooserIntent();
     }
 

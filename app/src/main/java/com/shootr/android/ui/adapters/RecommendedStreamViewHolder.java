@@ -28,7 +28,7 @@ public class RecommendedStreamViewHolder extends ClickableStreamActivityViewHold
 
     @NonNull
     protected String getPatternText() {
-        return getContext().getString(R.string.recommended_stream_activity_text_pattern);
+        return getContext().getString(R.string.share_stream_activity_text_pattern);
     }
 
 }
