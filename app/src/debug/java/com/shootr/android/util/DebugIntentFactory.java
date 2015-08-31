@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.ui.ExternalIntentActivity;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.StreamModel;
 
 /**
  * An {@link IntentFactory} implementation that wraps all {@code Intent}s with a debug action, which
@@ -29,6 +30,12 @@ public final class DebugIntentFactory implements IntentFactory {
     @Override
     public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
         Intent baseIntent = realIntentFactory.shareShotIntent(launchActivity, shotModel);
+        return createCaptureIntent(baseIntent);
+    }
+
+    @Override
+    public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
+        Intent baseIntent = realIntentFactory.shareStreamIntent(launchActivity, streamModel);
         return createCaptureIntent(baseIntent);
     }
 
