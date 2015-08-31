@@ -1,8 +1,10 @@
 package com.shootr.android.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -85,12 +88,45 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
             }
+
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
         });
         favoritesList.setAdapter(adapter);
     }
 
     private void initializePresenter() {
         favoritesListPresenter.initialize(this);
+    }
+
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  favoritesListPresenter.recommendStream(stream);
+              }
+          })
+          .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          }).show();
+    }
+
+    private void shareStream(StreamResultModel stream) {
+        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+          .setType("text/plain")
+          .setSubject(String.format(getActivity().getString(R.string.recommend_stream_subject),
+            stream.getStreamModel().getTitle()))
+          .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
+            stream.getStreamModel().getTitle(),
+            stream.getStreamModel().getIdStream()))
+          .setChooserTitle(getString(R.string.recommend_via))
+          .createChooserIntent();
+        startActivity(intent);
     }
 
     @Override
@@ -111,6 +147,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void navigateToStreamTimeline(String idStream, String title) {
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
+    }
+
+    @Override public void showStreamRecommended() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override
