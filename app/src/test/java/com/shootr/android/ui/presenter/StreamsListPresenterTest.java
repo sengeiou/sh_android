@@ -6,7 +6,7 @@ import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
@@ -49,7 +49,7 @@ public class StreamsListPresenterTest {
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
-    @Mock RecommendStreamInteractor recommendStreamInteractor;
+    @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock StreamsListView streamsListView;
@@ -64,8 +64,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor,
           addToFavoritesInteractor,
           unwatchStreamInteractor,
-          selectStreamInteractor,
-          recommendStreamInteractor,
+          selectStreamInteractor, shareStreamInteractor,
           streamResultModelMapper,
           errorMessageFactory);
         presenter.setView(streamsListView);
@@ -165,7 +164,7 @@ public class StreamsListPresenterTest {
                 errorCallback.onError(new ShootrException() {});
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }
@@ -178,7 +177,7 @@ public class StreamsListPresenterTest {
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }

@@ -8,7 +8,7 @@ import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.StreamModel;
@@ -51,7 +51,7 @@ public class ListingListPresenterTest {
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamInteractor;
-    @Mock RecommendStreamInteractor recommendStreamInteractor;
+    @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
     @Before
@@ -62,7 +62,7 @@ public class ListingListPresenterTest {
           getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
-          getFavoriteStreamInteractor, recommendStreamInteractor, streamResultModelMapper,
+          getFavoriteStreamInteractor, shareStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
@@ -139,7 +139,7 @@ public class ListingListPresenterTest {
                 errorCallback.onError(new ShootrException() {});
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }
@@ -152,7 +152,7 @@ public class ListingListPresenterTest {
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }

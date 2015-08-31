@@ -7,7 +7,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.FavoritesListView;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
 public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver{
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
-    private final RecommendStreamInteractor recommendStreamInteractor;
+    private final ShareStreamInteractor shareStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -29,10 +29,10 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     private boolean hasBeenPaused = false;
 
     @Inject public FavoritesListPresenter(GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
-      RecommendStreamInteractor recommendStreamInteractor, StreamResultModelMapper streamResultModelMapper,
+      ShareStreamInteractor shareStreamInteractor, StreamResultModelMapper streamResultModelMapper,
       ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
-        this.recommendStreamInteractor = recommendStreamInteractor;
+        this.shareStreamInteractor = shareStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.bus = bus;
@@ -96,13 +96,11 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     }
 
     public void recommendStream(StreamResultModel stream) {
-        recommendStreamInteractor.recommendStream(stream.getStreamModel().getIdStream(),
-          new Interactor.CompletedCallback() {
+        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
                   favoritesListView.showStreamRecommended();
               }
-          },
-          new Interactor.ErrorCallback() {
+          }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                   showViewError(error);
               }
