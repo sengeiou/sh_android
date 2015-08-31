@@ -18,5 +18,5 @@ public interface StreamsListView extends LoadDataView {
 
     void showAddedToFavorites();
 
-    void showStreamRecommended();
+    void showStreamShared();
 }

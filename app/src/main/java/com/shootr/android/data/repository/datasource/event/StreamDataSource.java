@@ -18,7 +18,7 @@ public interface StreamDataSource {
 
     List<StreamEntity> getStreamsListing(String idUser);
 
-    void recommendStream(String idStream);
+    void shareStream(String idStream);
 
     Map<String, Integer> getHolderWatchers();
 }

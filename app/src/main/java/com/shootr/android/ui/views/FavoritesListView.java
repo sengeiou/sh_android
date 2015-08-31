@@ -14,5 +14,5 @@ public interface FavoritesListView extends LoadDataView {
 
     void navigateToStreamTimeline(String idStream, String title);
 
-    void showStreamRecommended();
+    void showStreamShared();
 }

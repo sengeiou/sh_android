@@ -40,7 +40,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
         return streamManager.getStreamsListingNotRemoved(idUser);
     }
 
-    @Override public void recommendStream(String idStream) {
+    @Override public void shareStream(String idStream) {
         throw new IllegalStateException("Not allowed in local");
     }
 

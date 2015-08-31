@@ -30,8 +30,8 @@ public interface StreamApiService {
     @GET("/user/{idUser}/listedCount")
     Integer getListingCount(@Path("idUser")String idUser) throws ApiException, IOException;
 
-    @POST("/streams/{idStream}/recommend")
-    Response recommendStream(@Path("idStream") String idStream) throws ApiException, IOException;
+    @POST("/streams/{idStream}/share")
+    Response shareStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
 }

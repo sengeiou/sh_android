@@ -67,9 +67,9 @@ public class ServiceStreamDataSource implements StreamDataSource {
         }
     }
 
-    @Override public void recommendStream(String idStream) {
+    @Override public void shareStream(String idStream) {
         try {
-            streamApiService.recommendStream(idStream);
+            streamApiService.shareStream(idStream);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
