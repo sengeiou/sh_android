@@ -57,4 +57,6 @@ public interface StreamDetailView extends LoadDataView {
     void setStreamDescription(String description);
 
     void hideStreamDescription();
+
+    void showAllParticipantsButton();
 }

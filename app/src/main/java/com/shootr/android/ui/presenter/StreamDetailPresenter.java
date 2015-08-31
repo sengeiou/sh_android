@@ -168,7 +168,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
-        streamDetailView.setWatchers(watcherModels);
+        //TODO: > 50, está puesto 5 para hacer pruebas
+        if(watcherModels.size() > 5) {
+            streamDetailView.setWatchers(watcherModels.subList(0, 4));
+            streamDetailView.showAllParticipantsButton();
+        } else {
+            streamDetailView.setWatchers(watcherModels);
+        }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
