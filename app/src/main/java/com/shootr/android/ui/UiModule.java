@@ -3,6 +3,7 @@ package com.shootr.android.ui;
 import android.os.Handler;
 import com.shootr.android.domain.utils.DateRangeTextProvider;
 import com.shootr.android.ui.activities.ActivityTimelineContainerActivity;
+import com.shootr.android.ui.activities.AllParticipantsActivity;
 import com.shootr.android.ui.activities.AllShotsActivity;
 import com.shootr.android.ui.activities.ChangePasswordActivity;
 import com.shootr.android.ui.activities.DraftsActivity;
@@ -75,6 +76,7 @@ import javax.inject.Singleton;
     AllShotsActivity.class,
     SupportActivity.class,
     ChangePasswordActivity.class,
+    AllParticipantsActivity.class
   },
   complete = false) public class UiModule {
 
