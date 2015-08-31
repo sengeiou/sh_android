@@ -10,15 +10,11 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
-public class RecommendedStreamViewHolder extends ClickableStreamActivityViewHolder {
+public class OpenedViewHolder extends ClickableStreamActivityViewHolder {
 
-    public RecommendedStreamViewHolder(View view,
-      ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener onStreamTitleClickListener) {
+    public OpenedViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
+      OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           imageLoader,
           androidTimeUtils,
@@ -28,7 +24,6 @@ public class RecommendedStreamViewHolder extends ClickableStreamActivityViewHold
 
     @NonNull
     protected String getPatternText() {
-        return getContext().getString(R.string.share_stream_activity_text_pattern);
+        return getContext().getString(R.string.opened_activity_text_pattern);
     }
-
 }

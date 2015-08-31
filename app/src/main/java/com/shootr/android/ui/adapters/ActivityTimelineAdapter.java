@@ -25,10 +25,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_FOOTER = -1;
     public static final int TYPE_GENERIC_ACTIVITY = 0;
     public static final int TYPE_CHECKIN = 1;
-    public static final int TYPE_LISTED = 2;
+    public static final int TYPE_OPENED = 2;
     public static final int TYPE_STARTED_SHOOTING = 3;
     public static final int TYPE_NICE_SHOT = 4;
-    public static final int TYPE_RECOMMEND_STREAM = 5;
+    public static final int TYPE_SHARE_STREAM = 5;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -71,14 +71,14 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             switch (activityType) {
                 case ActivityType.CHECKIN:
                     return TYPE_CHECKIN;
-                case ActivityType.LISTED_STREAM:
-                    return TYPE_LISTED;
+                case ActivityType.OPENED_STREAM:
+                    return TYPE_OPENED;
                 case ActivityType.STARTED_SHOOTING:
                     return TYPE_STARTED_SHOOTING;
                 case ActivityType.NICE_SHOT:
                     return TYPE_NICE_SHOT;
-                case ActivityType.RECOMMEND_STREAM:
-                    return TYPE_RECOMMEND_STREAM;
+                case ActivityType.SHARE_STREAM:
+                    return TYPE_SHARE_STREAM;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -97,10 +97,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateActivityViewHolder(parent, viewType);
             case TYPE_CHECKIN:
                 return onCreateCheckinViewHolder(parent, viewType);
-            case TYPE_RECOMMEND_STREAM:
-                return onCreateRecommendedStreamViewHolder(parent, viewType);
-            case TYPE_LISTED:
-                return onCreateListedViewHolder(parent, viewType);
+            case TYPE_SHARE_STREAM:
+                return onCreateSharedStreamViewHolder(parent, viewType);
+            case TYPE_OPENED:
+                return onCreateOpenedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
                 return onCreateStartedShootingViewHolder(parent, viewType);
             case TYPE_NICE_SHOT:
@@ -128,18 +128,18 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           avatarClickListener, onUsernameClickListener, streamTitleClickListener);
     }
 
-    private ListedViewHolder onCreateListedViewHolder(ViewGroup parent, int viewType) {
+    private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new ListedViewHolder(view,
+        return new OpenedViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener, onUsernameClickListener, streamTitleClickListener);
     }
 
-    private RecommendedStreamViewHolder onCreateRecommendedStreamViewHolder(ViewGroup parent, int viewType) {
+    private SharedStreamViewHolder onCreateSharedStreamViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new RecommendedStreamViewHolder(view,
+        return new SharedStreamViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
