@@ -27,6 +27,11 @@ public class NullFavoritesListView implements FavoritesListView {
     }
 
     @Override
+    public void showStreamRecommended() {
+        /* no-op */
+    }
+
+    @Override
     public void showEmpty() {
         /* no-op */
     }
