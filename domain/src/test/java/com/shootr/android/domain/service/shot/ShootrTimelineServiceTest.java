@@ -29,7 +29,6 @@ import org.mockito.MockitoAnnotations;
 import static com.shootr.android.domain.asserts.StreamTimelineParametersAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -98,7 +97,7 @@ public class ShootrTimelineServiceTest {
         setupWatchingStream();
         List<Activity> activities = activitiesList();
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
-
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithWatchingStreamId());
         ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
         assertThat(resultTimeline.getActivities()).isEqualTo(activities);
@@ -111,6 +110,7 @@ public class ShootrTimelineServiceTest {
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithoutWatchingStreamId());
 
         ActivityTimeline resultTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
@@ -121,6 +121,7 @@ public class ShootrTimelineServiceTest {
     public void shouldRefreshStreamShotsWhenRefreshActivityTimeline() throws Exception {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithWatchingStreamId());
 
         shootrTimelineService.refreshTimelinesForActivity();
 
@@ -133,6 +134,7 @@ public class ShootrTimelineServiceTest {
         when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingStream());
         when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithoutWatchingStreamId());
 
         shootrTimelineService.refreshTimelinesForActivity();
 
@@ -196,6 +198,7 @@ public class ShootrTimelineServiceTest {
     public void shouldReturnAllActivityTypesIfIsThereWasLocalActivity(){
         setupWatchingStream();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activitiesList());
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithoutWatchingStreamId());
 
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
@@ -208,12 +211,22 @@ public class ShootrTimelineServiceTest {
     public void shouldReturnVisibleActivityTypesIfThereWasNoLocalActivity(){
         setupWatchingStream();
         when(localActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(emptyActivityList());
-
+        when(sessionRepository.getCurrentUser()).thenReturn(userWithWatchingStreamId());
         ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
 
         ArgumentCaptor<ActivityTimelineParameters> argumentCaptor = ArgumentCaptor.forClass(ActivityTimelineParameters.class);
         verify(remoteActivityRepository).getActivityTimeline(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getIncludedTypes()).containsExactly(visibleActivityTypes());
+    }
+
+    private User userWithWatchingStreamId() {
+        User user = new User();
+        user.setIdWatchingStream("idStream");
+        return user;
+    }
+
+    private User userWithoutWatchingStreamId() {
+        return new User();
     }
 
     private String[] visibleActivityTypes() {
