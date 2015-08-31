@@ -170,11 +170,11 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @OnClick(R.id.stream_detail_media)
     public void onMediaClick() {
-        streamDetailPresenter.clickMedia();
+        Intent intent = AllParticipantsActivity.newIntent(this, getIntent().getStringExtra(EXTRA_STREAM_ID));
+        this.startActivity(intent);
     }
 
-    @OnClick(R.id.stream_checkin)
-    public void onCheckinClick() {
+    @OnClick(R.id.stream_checkin) public void onCheckinClick() {
         checkinPresenter.checkIn();
     }
 
@@ -461,7 +461,8 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToEditStream(String idStream) {
-        Intent editIntent = new Intent(this, NewStreamActivity.class).putExtra(NewStreamActivity.KEY_STREAM_ID, idStream);
+        Intent editIntent = new Intent(this, NewStreamActivity.class).putExtra(NewStreamActivity.KEY_STREAM_ID,
+          idStream);
         startActivityForResult(editIntent, REQUEST_EDIT_STREAM);
     }
 

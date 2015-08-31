@@ -58,6 +58,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userManager.getUserByUsername(username);
     }
 
+    @Override public List<UserEntity> getAllParticipants(String idStream) {
+        throw new IllegalArgumentException("getAllParticipants has no local implementation");
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }

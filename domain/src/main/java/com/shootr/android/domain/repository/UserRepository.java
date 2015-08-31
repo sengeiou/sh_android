@@ -19,4 +19,6 @@ public interface UserRepository {
     User putUser(User user);
 
     List<SuggestedPeople> getSuggestedPeople();
+
+    List<User> getAllParticipants(String idStream);
 }

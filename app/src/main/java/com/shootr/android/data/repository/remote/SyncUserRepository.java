@@ -155,6 +155,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }
 
+    @Override public List<User> getAllParticipants(String idStream) {
+        List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream);
+        return userEntityMapper.transformEntities(allParticipants);
+    }
+
     //region Synchronization
     private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
         Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());
