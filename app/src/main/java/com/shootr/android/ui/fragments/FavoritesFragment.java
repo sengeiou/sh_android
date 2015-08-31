@@ -108,7 +108,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         new CustomContextMenu.Builder(getActivity())
           .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
-                  favoritesListPresenter.recommendStream(stream);
+                  favoritesListPresenter.shareStream(stream);
               }
           })
           .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
@@ -143,7 +143,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
     }
 
-    @Override public void showStreamRecommended() {
+    @Override public void showStreamShared() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 

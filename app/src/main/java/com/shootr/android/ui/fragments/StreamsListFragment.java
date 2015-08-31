@@ -188,7 +188,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         })
           .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
-                  presenter.recommendStream(stream);
+                  presenter.shareStream(stream);
               }
           })
           .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
@@ -229,7 +229,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void showStreamRecommended() {
+    @Override public void showStreamShared() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 

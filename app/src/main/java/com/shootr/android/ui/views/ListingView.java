@@ -19,5 +19,5 @@ public interface ListingView extends LoadDataView {
 
     void navigateToCreatedStreamDetail(String streamId);
 
-    void showStreamRecommended();
+    void showStreamShared();
 }

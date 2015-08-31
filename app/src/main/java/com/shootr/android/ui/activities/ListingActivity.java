@@ -129,7 +129,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
           })
           .addAction((getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
-                  presenter.recommendStream(stream);
+                  presenter.shareStream(stream);
               }
           })
           .addAction((getString(R.string.share_via)), new Runnable() {
@@ -176,7 +176,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         startActivity(StreamDetailActivity.getIntent(this, streamId));
     }
 
-    @Override public void showStreamRecommended() {
+    @Override public void showStreamShared() {
         Toast.makeText(this, getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 

@@ -116,23 +116,23 @@ public class ListingListPresenterTest {
         verify(listingView).showEmpty();
     }
 
-    @Test public void shouldShowRecommendedStreamWhenRecommendStreamsCompletedCallback() throws Exception {
-        setupRecommendStreamCompletedCallback();
+    @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {
+        setupShareStreamCompletedCallback();
 
-        listingListPresenter.recommendStream(streamModel());
+        listingListPresenter.shareStream(streamModel());
 
-        verify(listingView).showStreamRecommended();
+        verify(listingView).showStreamShared();
     }
 
-    @Test public void shouldShowErrorStreamWhenRecommendStreamsErrorCallback() throws Exception {
-        setupRecommendStreamErrorCallback();
+    @Test public void shouldShowErrorStreamWhenShareStreamsErrorCallback() throws Exception {
+        setupShareStreamErrorCallback();
 
-        listingListPresenter.recommendStream(streamModel());
+        listingListPresenter.shareStream(streamModel());
 
         verify(listingView).showError(anyString());
     }
 
-    private void setupRecommendStreamErrorCallback() {
+    private void setupShareStreamErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
@@ -144,7 +144,7 @@ public class ListingListPresenterTest {
           anyErrorCallback());
     }
 
-    private void setupRecommendStreamCompletedCallback() {
+    private void setupShareStreamCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.CompletedCallback completedCallback =

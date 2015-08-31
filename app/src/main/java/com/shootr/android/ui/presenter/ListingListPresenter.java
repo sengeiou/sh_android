@@ -191,10 +191,10 @@ public class ListingListPresenter implements Presenter{
         hasBeenPaused = true;
     }
 
-    public void recommendStream(StreamResultModel stream) {
+    public void shareStream(StreamResultModel stream) {
         shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  listingView.showStreamRecommended();
+                  listingView.showStreamShared();
               }
           }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
