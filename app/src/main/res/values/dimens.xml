@@ -52,4 +52,6 @@
 
     <dimen name="tab_indicator_height">3dp</dimen>
 
+    <dimen name="stream_detail_expanded_toolbar_height">144dp</dimen>
+
 </resources>

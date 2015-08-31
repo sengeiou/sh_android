@@ -1,19 +1,24 @@
 package com.shootr.android.ui.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.views.StreamDetailView;
+import java.util.List;
 
-public class StreamDetailActivityDraft extends BaseToolbarDecoratedActivity {
+public class StreamDetailActivityDraft extends BaseActivity {
 
-    @Override
-    protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op */
-    }
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.cat_avatar) ImageView streamPhoto;
+    @Bind(R.id.cat_title) TextView streamTitle;
+    @Bind(R.id.stream_detail_subtitle) TextView streamSubtitle;
 
     @Override
     protected int getLayoutResource() {
@@ -22,6 +27,9 @@ public class StreamDetailActivityDraft extends BaseToolbarDecoratedActivity {
 
     @Override
     protected void initializeViews(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
