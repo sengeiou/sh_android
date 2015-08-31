@@ -527,6 +527,10 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         // TODO implementation
     }
 
+    @Override public void setFollowingNumber(Integer numberOfFollowing) {
+        // TODO implementation
+    }
+
     @Override public void showEmpty() {
         contentEmpty.setVisibility(View.VISIBLE);
         contentDetail.setVisibility(View.INVISIBLE);

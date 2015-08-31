@@ -59,4 +59,6 @@ public interface StreamDetailView extends LoadDataView {
     void hideStreamDescription();
 
     void showAllParticipantsButton();
+
+    void setFollowingNumber(Integer numberOfFollowing);
 }

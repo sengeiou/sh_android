@@ -103,7 +103,7 @@ public class GetStreamInfoInteractor implements Interactor {
         List<User> watchers = watchesFromSession;
         watchers.addAll(watchesFromStream);
 
-        return buildStreamInfo(stream, watchers, currentUser);
+        return buildStreamInfo(stream, watchers, currentUser, watchesFromSession.size());
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
@@ -136,13 +136,13 @@ public class GetStreamInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser) {
+    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser, Integer numberOfFollowing) {
         boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
           .stream(stream)
           .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
-          .build();
+          .numberOfFollowing(numberOfFollowing).build();
     }
 
     private StreamInfo noStream() {

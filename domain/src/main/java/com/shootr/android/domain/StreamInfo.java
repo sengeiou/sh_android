@@ -10,6 +10,16 @@ public class StreamInfo {
 
     private Stream stream;
 
+    private Integer numberOfFollowing;
+
+    public Integer getNumberOfFollowing() {
+        return numberOfFollowing;
+    }
+
+    public void setNumberOfFollowing(Integer numberOfFollowing) {
+        this.numberOfFollowing = numberOfFollowing;
+    }
+
     public int getWatchersCount() {
         return currentUserWatching != null ? watchers.size() + 1 : watchers.size();
     }
@@ -62,6 +72,11 @@ public class StreamInfo {
 
         public Builder stream(Stream stream) {
             streamInfo.setStream(stream);
+            return this;
+        }
+
+        public Builder numberOfFollowing(Integer numberOfFollowing) {
+            streamInfo.setNumberOfFollowing(numberOfFollowing);
             return this;
         }
 

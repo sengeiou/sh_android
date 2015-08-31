@@ -25,6 +25,7 @@ import timber.log.Timber;
 
 public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
 
+    public static final int WATCHERS_LIMIT_TO_SHOW = 50;
     //region Dependencies
     private final Bus bus;
     private final GetStreamInfoInteractor streamInfoInteractor;
@@ -134,6 +135,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         } else {
             this.hideViewEmpty();
             this.renderStreamInfo(streamInfo.getStream());
+            this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
             this.renderWatchersList(streamInfo.getWatchers());
             this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
             this.renderWatchersCount(streamInfo.getWatchersCount());
@@ -168,9 +170,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     //region renders
     private void renderWatchersList(List<User> watchers) {
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
-        //TODO: > 50, está puesto 5 para hacer pruebas
-        if(watcherModels.size() > 5) {
-            streamDetailView.setWatchers(watcherModels.subList(0, 4));
+        if(watcherModels.size() > WATCHERS_LIMIT_TO_SHOW) {
+            streamDetailView.setWatchers(watcherModels.subList(0, 24));
             streamDetailView.showAllParticipantsButton();
         } else {
             streamDetailView.setWatchers(watcherModels);
@@ -207,6 +208,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         if (streamMediaCount > 0) {
             streamDetailView.setMediaCount(streamMediaCount);
             streamDetailView.showMediaCount();
+        }
+    }
+
+    private void renderFollowingNumber(Integer numberOfFollowing) {
+        if (numberOfFollowing > 0) {
+            streamDetailView.setFollowingNumber(numberOfFollowing);
         }
     }
 
