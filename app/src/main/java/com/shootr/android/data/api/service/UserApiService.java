@@ -18,4 +18,7 @@ public interface UserApiService {
 
     @GET("/streams/{idStream}/participants")
     List<UserEntity> getAllParticipants(@Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
+
+    @GET("/streams/{idStream}/participants/search")
+    List<UserEntity> findParticipants(@Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
 }

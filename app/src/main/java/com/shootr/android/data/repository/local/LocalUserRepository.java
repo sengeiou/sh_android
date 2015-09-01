@@ -80,6 +80,10 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("getAllParticipants has no local implementation");
     }
 
+    @Override public List<User> findParticipants(String idStream, String query) {
+        throw new IllegalArgumentException("Find Participants has no local implementation");
+    }
+
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();

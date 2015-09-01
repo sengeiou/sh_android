@@ -168,6 +168,19 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return participants;
     }
 
+    @Override public List<User> findParticipants(String idStream, String query) {
+        List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
+        List<User> participants = new ArrayList<>();
+        for (UserEntity participantEntity : allParticipants) {
+            User participant = userEntityMapper.transform(participantEntity,
+              sessionRepository.getCurrentUserId(),
+              isFollower(participantEntity.getIdUser()),
+              isFollowing(participantEntity.getIdUser()));
+            participants.add(participant);
+        }
+        return participants;
+    }
+
     //region Synchronization
     private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
         Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());

@@ -21,4 +21,6 @@ public interface UserRepository {
     List<SuggestedPeople> getSuggestedPeople();
 
     List<User> getAllParticipants(String idStream, Long maxJoinDate);
+
+    List<User> findParticipants(String idStream, String query);
 }
