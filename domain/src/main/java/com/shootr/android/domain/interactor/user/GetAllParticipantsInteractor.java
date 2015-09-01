@@ -53,14 +53,27 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private List<User> obtainAllParticipantsList() {
         List<User> following = remoteUserRepository.getPeople();
+        List<User> followingInStream = retainFollowingInThisStream(following);
+
         List<User> participants = remoteUserRepository.getAllParticipants(idStream, new Date().getTime());
 
-        participants.removeAll(following);
+        participants.removeAll(followingInStream);
 
         List<User> allParticipants = new ArrayList<>();
-        allParticipants.addAll(sortUserListByJoinStreamDate(following));
+        allParticipants.addAll(sortUserListByJoinStreamDate(followingInStream));
         allParticipants.addAll(sortUserListByJoinStreamDate(participants));
         return allParticipants;
+    }
+
+    private List<User> retainFollowingInThisStream(List<User> following) {
+        List<User> followingInStream = new ArrayList<>();
+
+        for (User user : following) {
+            if (user.getIdWatchingStream() != null && user.getIdWatchingStream().equals(idStream)) {
+                followingInStream.add(user);
+            }
+        }
+        return followingInStream;
     }
 
     private List<User> sortUserListByJoinStreamDate(List<User> watchesFromPeople) {
