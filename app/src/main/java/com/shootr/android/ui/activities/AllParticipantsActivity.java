@@ -29,7 +29,6 @@ import javax.inject.Inject;
 public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implements AllParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
-    public static final int REQUEST_CAN_CHANGE_DATA = 1;
 
     private UserListAdapter adapter;
 
@@ -47,7 +46,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        //TODO
+        /* no-op */
     }
 
     @Override protected int getLayoutResource() {
@@ -102,11 +101,11 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override public void showEmpty() {
-
+        emptyTextView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideEmpty() {
-
+        emptyTextView.setVisibility(View.GONE);
     }
 
     @Override public void showLoading() {
