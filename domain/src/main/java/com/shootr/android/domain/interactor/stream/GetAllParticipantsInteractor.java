@@ -12,6 +12,7 @@ import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -44,7 +45,6 @@ public class GetAllParticipantsInteractor implements Interactor {
     @Override public void execute() throws Exception {
         try {
             List<User> allParticipants = obtainAllParticipantsList();
-
             notifyLoaded(allParticipants);
         } catch (ServerCommunicationException error) {
             notifyError(error);
@@ -53,7 +53,7 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private List<User> obtainAllParticipantsList() {
         List<User> following = remoteUserRepository.getPeople();
-        List<User> participants = remoteUserRepository.getAllParticipants(idStream);
+        List<User> participants = remoteUserRepository.getAllParticipants(idStream, new Date().getTime());
 
         participants.removeAll(following);
 

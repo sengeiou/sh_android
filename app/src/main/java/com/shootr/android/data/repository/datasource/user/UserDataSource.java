@@ -20,5 +20,5 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
 
     UserEntity getUserByUsername(String username);
 
-    List<UserEntity> getAllParticipants(String idStream);
+    List<UserEntity> getAllParticipants(String idStream, Long maxJoinDate);
 }

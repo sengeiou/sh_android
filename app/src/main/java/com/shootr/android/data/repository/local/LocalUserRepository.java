@@ -76,7 +76,7 @@ public class LocalUserRepository implements UserRepository {
         return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 
-    @Override public List<User> getAllParticipants(String idStream) {
+    @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
         throw new IllegalArgumentException("getAllParticipants has no local implementation");
     }
 

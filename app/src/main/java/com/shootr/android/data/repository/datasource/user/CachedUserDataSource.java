@@ -124,7 +124,7 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
         throw new IllegalStateException("Username filtering is not cached");
     }
 
-    @Override public List<UserEntity> getAllParticipants(String idStream) {
+    @Override public List<UserEntity> getAllParticipants(String idStream, Long maxJoinDate) {
         throw new IllegalStateException("getAllParticipants is not cached");
     }
 }

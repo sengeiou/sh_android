@@ -64,9 +64,9 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> getAllParticipants(String idStream) {
+    @Override public List<UserEntity> getAllParticipants(String idStream, Long maxJoinDate) {
         try {
-            return userApiService.getAllParticipants(idStream);
+            return userApiService.getAllParticipants(idStream, maxJoinDate);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

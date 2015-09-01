@@ -155,8 +155,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }
 
-    @Override public List<User> getAllParticipants(String idStream) {
-        List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream);
+    @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
+        List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
         List<User> participants = new ArrayList<>();
         for (UserEntity participantEntity : allParticipants) {
             User participant = userEntityMapper.transform(participantEntity,
