@@ -136,7 +136,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override public void goToSearchParticipants() {
-        startActivityForResult(new Intent(this, FindParticipantsActivity.class), REQUEST_CAN_CHANGE_DATA);
+        String idStream = getIntent().getStringExtra(EXTRA_STREAM);
+        startActivity(FindParticipantsActivity.newIntent(this, idStream));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
