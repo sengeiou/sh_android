@@ -81,8 +81,8 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
             if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
                 viewHolder.followButton.setFollowing(true);
             }else if(item.getRelationship() == FollowEntity.RELATIONSHIP_OWN){
-                viewHolder.followButton.setEditProfile();
-            }else{
+                viewHolder.followButton.setVisibility(View.GONE);
+            }else {
                 viewHolder.followButton.setFollowing(false);
             }
             viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
