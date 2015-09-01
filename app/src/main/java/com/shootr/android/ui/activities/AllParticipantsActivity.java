@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
@@ -67,7 +68,10 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
         if(item.getItemId() == android.R.id.home){
             finish();
             return true;
-        }else{
+        }else if (item.getItemId() == R.id.menu_search) {
+            allParticipantsPresenter.searchClicked();
+            return true;
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
@@ -80,6 +84,12 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Override public void onPause() {
         super.onPause();
         allParticipantsPresenter.pause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.all_participants, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private ListAdapter getParticipantsAdapter() {
@@ -122,6 +132,10 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Override public void refreshParticipants(List<UserModel> participants) {
         adapter.setItems(participants);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override public void goToSearchParticipants() {
+        //TODO go to search participants activity
     }
 
     @Override public void follow(int position) {

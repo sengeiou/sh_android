@@ -374,4 +374,5 @@
     <string name="activity_started_following_you">Started following you!</string>
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="title_activity_all_participants">All Participants</string>
+    <string name="menu_search_participants">Find participants</string>
 </resources>

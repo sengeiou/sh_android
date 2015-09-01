@@ -114,4 +114,8 @@ public class AllParticipantsPresenter implements Presenter {
     @Override public void pause() {
         bus.unregister(this);
     }
+
+    public void searchClicked() {
+     allParticipantsView.goToSearchParticipants();
+    }
 }
