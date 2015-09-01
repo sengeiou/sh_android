@@ -1,4 +1,4 @@
-package com.shootr.android.domain.interactor.stream;
+package com.shootr.android.domain.interactor.user;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;

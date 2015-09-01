@@ -9,7 +9,7 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.stream.GetAllParticipantsInteractor;
+import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
