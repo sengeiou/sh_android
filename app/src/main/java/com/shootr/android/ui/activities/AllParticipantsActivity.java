@@ -29,6 +29,7 @@ import javax.inject.Inject;
 public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implements AllParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
+    public static final int REQUEST_CAN_CHANGE_DATA = 1;
 
     private UserListAdapter adapter;
 
@@ -135,7 +136,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override public void goToSearchParticipants() {
-        //TODO go to search participants activity
+        startActivityForResult(new Intent(this, FindParticipantsActivity.class), REQUEST_CAN_CHANGE_DATA);
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
     @Override public void follow(int position) {

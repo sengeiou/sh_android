@@ -93,6 +93,7 @@
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
     <string name="activity_find_friends_hint">Find friends</string>
+    <string name="activity_find_participants_hint">Find participants</string>
     <string name="activity_find_friends_empty_message">No Results.</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
@@ -375,4 +376,6 @@
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="title_activity_all_participants">All Participants</string>
     <string name="menu_search_participants">Find participants</string>
+    <string name="title_activity_find_participants">FindParticipantsActivity</string>
+    <string name="activity_find_participants_empty_message">No results.</string>
 </resources>
