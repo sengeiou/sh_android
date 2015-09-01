@@ -157,7 +157,15 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public List<User> getAllParticipants(String idStream) {
         List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream);
-        return userEntityMapper.transformEntities(allParticipants);
+        List<User> participants = new ArrayList<>();
+        for (UserEntity participantEntity : allParticipants) {
+            User participant = userEntityMapper.transform(participantEntity,
+              sessionRepository.getCurrentUserId(),
+              isFollower(participantEntity.getIdUser()),
+              isFollowing(participantEntity.getIdUser()));
+            participants.add(participant);
+        }
+        return participants;
     }
 
     //region Synchronization
@@ -196,8 +204,8 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         for (UserEntity localUserEntity : localUserEntities) {
             User user = userEntityMapper.transform(localUserEntity,
               currentUserId,
-              isFollower(currentUserId),
-              isFollowing(currentUserId));
+              isFollower(localUserEntity.getIdUser()),
+              isFollowing(localUserEntity.getIdUser()));
             userList.add(user);
         }
         return userList;
