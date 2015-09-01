@@ -10,6 +10,8 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -56,9 +58,18 @@ public class GetAllParticipantsInteractor implements Interactor {
         participants.removeAll(following);
 
         List<User> allParticipants = new ArrayList<>();
-        allParticipants.addAll(following);
-        allParticipants.addAll(participants);
+        allParticipants.addAll(sortUserListByJoinStreamDate(following));
+        allParticipants.addAll(sortUserListByJoinStreamDate(participants));
         return allParticipants;
+    }
+
+    private List<User> sortUserListByJoinStreamDate(List<User> watchesFromPeople) {
+        Collections.sort(watchesFromPeople, new Comparator<User>() {
+            @Override public int compare(User userModel, User t1) {
+                return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate());
+            }
+        });
+        return watchesFromPeople;
     }
 
     private void notifyLoaded(final List<User> results) {
