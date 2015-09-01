@@ -3,7 +3,6 @@
 <android.support.design.widget.CoordinatorLayout android:id="@+id/main_content"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -24,7 +23,8 @@
               app:layout_collapseMode="pin"
               app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar android:layout_width="wrap_content"
+            <com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar android:id="@+id/stuff_container"
+              android:layout_width="wrap_content"
               android:layout_height="?attr/actionBarSize">
 
                 <de.hdodenhof.circleimageview.CircleImageView android:id="@id/cat_avatar"
@@ -47,7 +47,7 @@
                       android:textColor="@android:color/white"
                       android:textSize="18dp" />
 
-                    <TextView android:id="@+id/stream_detail_subtitle"
+                    <TextView android:id="@+id/subtitle"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="Subtitle"
@@ -60,96 +60,21 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView android:id="@+id/list"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+      android:layout_height="wrap_content"
+      android:background="@android:color/white"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <LinearLayout android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@color/background_dark"
-          android:orientation="vertical">
+    <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:clickable="true"
+      android:src="@drawable/ic_action_edit_gray45"
+      app:backgroundTint="@color/white"
+      app:layout_anchor="@id/appbar"
+      app:layout_anchorGravity="bottom|right|end" />
 
-            <FrameLayout android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/white"
-              android:elevation="2dp"
-              android:paddingTop="16dp">
-
-                <ImageView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center_vertical"
-                  android:layout_marginLeft="16dp"
-                  android:src="@drawable/ic_stream_author_24_gray50" />
-
-                <TextView android:id="@+id/stream_author"
-                  android:layout_width="match_parent"
-                  android:layout_height="56dp"
-                  android:background="?selectableItemBackground"
-                  android:clickable="true"
-                  android:gravity="center_vertical"
-                  android:paddingLeft="@dimen/keyline_2"
-                  android:text="rafa"
-                  android:textAppearance="@style/TextAppearance.Switch"
-                  android:textColor="?android:attr/textColorPrimary" />
-            </FrameLayout>
-
-            <FrameLayout android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="12dp"
-              android:background="@color/white"
-              android:elevation="2dp">
-
-                <TextView android:id="@+id/stream_detail_media_number"
-                  android:layout_width="wrap_content"
-                  android:layout_height="56dp"
-                  android:layout_gravity="end|center_vertical"
-                  android:gravity="center_vertical"
-                  android:paddingRight="16dp"
-                  android:textAppearance="@style/TextAppearance.Switch"
-                  android:textColor="@color/gray_60"
-                  android:visibility="visible"
-                  tools:text="7" />
-
-                <ImageView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center_vertical"
-                  android:layout_marginLeft="16dp"
-                  android:src="@drawable/ic_action_stream_gallery_gray_24" />
-
-                <TextView android:id="@+id/stream_detail_media"
-                  android:layout_width="match_parent"
-                  android:layout_height="56dp"
-                  android:background="?selectableItemBackground"
-                  android:clickable="true"
-                  android:gravity="center_vertical"
-                  android:paddingLeft="@dimen/keyline_2"
-                  android:text="Media"
-                  android:textAppearance="@style/TextAppearance.Switch"
-                  android:textColor="?android:attr/textColorPrimary" />
-                <!--android:text="@string/stream_detail_media"-->
-            </FrameLayout>
-
-            <TextView android:id="@+id/stream_content_detail_watchers_number"
-              android:layout_width="wrap_content"
-              android:layout_height="32dp"
-              android:layout_marginLeft="16dp"
-              android:gravity="center_vertical"
-              android:paddingTop="8dp"
-              android:text="Participants"
-              android:textAppearance="@style/SectionTitleAppearance" />
-
-            <ScrollView android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:elevation="2dp">
-
-                <com.shootr.android.ui.widgets.WatchersView android:id="@+id/stream_content_detail_watchers_list"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent" />
-            </ScrollView>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
