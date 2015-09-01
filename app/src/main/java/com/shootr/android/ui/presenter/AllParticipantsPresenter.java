@@ -6,9 +6,11 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
 public class AllParticipantsPresenter implements Presenter {
 
     private final GetAllParticipantsInteractor getAllParticipantsInteractor;
+    private final SelectStreamInteractor selectStreamInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final JobManager jobManager;
@@ -34,10 +37,13 @@ public class AllParticipantsPresenter implements Presenter {
 
     private AllParticipantsView allParticipantsView;
     private List<UserModel> participants;
+    private Boolean hasBeenPaused = false;
+    private String idStream;
 
     @Inject public AllParticipantsPresenter(GetAllParticipantsInteractor getAllParticipantsInteractor,
-      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, JobManager jobManager, @Main Bus bus) {
+      SelectStreamInteractor selectStreamInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, JobManager jobManager, @Main Bus bus) {
         this.getAllParticipantsInteractor = getAllParticipantsInteractor;
+        this.selectStreamInteractor = selectStreamInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
         this.jobManager = jobManager;
@@ -50,11 +56,12 @@ public class AllParticipantsPresenter implements Presenter {
 
     public void initialize(AllParticipantsView allParticipantsView, String idStream) {
         this.setView(allParticipantsView);
-        this.loadAllParticipants(idStream);
+        this.idStream = idStream;
+        this.loadAllParticipants();
         this.participants = new ArrayList<>();
     }
 
-    private void loadAllParticipants(String idStream) {
+    private void loadAllParticipants() {
         allParticipantsView.showLoading();
         getAllParticipantsInteractor.obtainAllParticipants(idStream, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
@@ -107,11 +114,23 @@ public class AllParticipantsPresenter implements Presenter {
         }
     }
 
+    private void selectStream() {
+        selectStreamInteractor.selectStream(idStream, new Interactor.Callback<StreamSearchResult>() {
+            @Override public void onLoaded(StreamSearchResult streamSearchResult) {
+                /* no-op */
+            }
+        });
+    }
+
     @Override public void resume() {
+        if (hasBeenPaused.equals(true)) {
+            selectStream();
+        }
         bus.register(this);
     }
 
     @Override public void pause() {
+        this.hasBeenPaused = true;
         bus.unregister(this);
     }
 
