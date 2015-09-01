@@ -6,8 +6,10 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -15,6 +17,7 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final UserRepository remoteUserRepository;
+    private final UserRepository localUserRepository;
     private final PostExecutionThread postExecutionThread;
 
     private Callback<List<User>> callback;
@@ -22,9 +25,10 @@ public class GetAllParticipantsInteractor implements Interactor {
     private String idStream;
 
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread) {
+      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
         this.remoteUserRepository = remoteUserRepository;
+        this.localUserRepository = localUserRepository;
         this.postExecutionThread = postExecutionThread;
     }
 
@@ -37,10 +41,24 @@ public class GetAllParticipantsInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            notifyLoaded(remoteUserRepository.getAllParticipants(idStream));
+            List<User> allParticipants = obtainAllParticipantsList();
+
+            notifyLoaded(allParticipants);
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
+    }
+
+    private List<User> obtainAllParticipantsList() {
+        List<User> following = remoteUserRepository.getPeople();
+        List<User> participants = remoteUserRepository.getAllParticipants(idStream);
+
+        participants.removeAll(following);
+
+        List<User> allParticipants = new ArrayList<>();
+        allParticipants.addAll(following);
+        allParticipants.addAll(participants);
+        return allParticipants;
     }
 
     private void notifyLoaded(final List<User> results) {
