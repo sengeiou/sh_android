@@ -499,10 +499,6 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         this.startActivity(intent);
     }
 
-    @Override public void showMediaCount() {
-        streamMediaNumber.setVisibility(View.VISIBLE);
-    }
-
     @Override public void setStreamDescription(String description) {
         descriptionText.setVisibility(View.VISIBLE);
         descriptionText.setText(description);

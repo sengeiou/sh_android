@@ -284,11 +284,6 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     }
 
     @Override
-    public void showMediaCount() {
-        //TODO
-    }
-
-    @Override
     public void setStreamDescription(String description) {
         adapter.setDescription(description);
     }
