@@ -198,7 +198,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.menu_share_shot), new Runnable() {
+          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
