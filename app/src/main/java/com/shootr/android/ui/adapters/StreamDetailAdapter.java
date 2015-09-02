@@ -178,7 +178,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public void setText(String text) {
             this.text.setText(text);
-            itemView.setVisibility(text != null ? View.VISIBLE : View.GONE);
+            this.text.setVisibility(text != null ? View.VISIBLE : View.GONE);
         }
     }
 
