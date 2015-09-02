@@ -72,8 +72,9 @@
       android:layout_height="wrap_content"
       android:layout_margin="16dp"
       android:clickable="true"
-      android:src="@drawable/ic_action_edit_gray45"
+      android:src="@drawable/ic_action_share_gray45"
       app:backgroundTint="@color/white"
+      app:borderWidth="0dp"
       app:layout_anchor="@id/appbar"
       app:layout_anchorGravity="bottom|right|end" />
 
