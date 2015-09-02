@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
-import com.shootr.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ui.adapters.ParticipantsListAdapter;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.AllParticipantsPresenter;
 import com.shootr.android.ui.views.AllParticipantsView;
@@ -26,11 +26,11 @@ import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implements AllParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implements AllParticipantsView, ParticipantsListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
 
-    private UserListAdapter adapter;
+    private ParticipantsListAdapter adapter;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -94,7 +94,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
 
     private ListAdapter getParticipantsAdapter() {
         if (adapter == null) {
-            adapter = new UserListAdapter(this, imageLoader);
+            adapter = new ParticipantsListAdapter(this, imageLoader);
             adapter.setCallback(this);
         }
         return adapter;
