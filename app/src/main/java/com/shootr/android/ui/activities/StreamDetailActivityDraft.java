@@ -78,7 +78,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_shot_detail, menu);
+        getMenuInflater().inflate(R.menu.stream, menu);
         return true;
     }
 
@@ -288,13 +288,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setStreamDescription(String description) {
-        streamSubtitle.setVisibility(View.VISIBLE);
-        streamSubtitle.setText(description);
+        //TODO
     }
 
     @Override
     public void hideStreamDescription() {
-        streamSubtitle.setVisibility(View.GONE);
+        //TODO
     }
 
     @Override

@@ -45,14 +45,14 @@
                       android:fontFamily="sans-serif-medium"
                       android:text="Title"
                       android:textColor="@android:color/white"
-                      android:textSize="18dp" />
+                      android:textSize="18sp" />
 
                     <TextView android:id="@+id/subtitle"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="Subtitle"
+                      android:text="following 3"
                       android:textColor="#80ffffff"
-                      android:textSize="15dp" />
+                      android:textSize="15sp" />
                 </LinearLayout>
             </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>
 

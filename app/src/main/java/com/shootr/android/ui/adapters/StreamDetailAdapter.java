@@ -25,8 +25,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_MEDIA = 2;
     private static final int TYPE_PARTICIPANTS_TITLE = 3;
     private static final int TYPE_PARTICIPANT = 4;
+    private static final int TYPE_DESCRIPTION = 5;
 
-    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 3;
+    private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 4;
 
     private final OnUserClickListener onUserClickListener;
     private final ImageLoader imageLoader;
@@ -34,6 +35,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ActionViewHolder mediaViewHolder;
 
     private List<UserModel> participants = Collections.emptyList();
+    private TextViewHolder descriptionViewHolder;
 
     public StreamDetailAdapter(OnUserClickListener onUserClickListener, ImageLoader imageLoader) {
         this.onUserClickListener = onUserClickListener;
@@ -44,10 +46,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemViewType(int position) {
         switch (position) {
             case 0:
-                return TYPE_AUTHOR;
+                return TYPE_DESCRIPTION;
             case 1:
-                return TYPE_MEDIA;
+                return TYPE_AUTHOR;
             case 2:
+                return TYPE_MEDIA;
+            case 3:
                 return TYPE_PARTICIPANTS_TITLE;
             default:
                 return TYPE_PARTICIPANT;
@@ -59,6 +63,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         View v;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
+            case TYPE_DESCRIPTION:
+                if (descriptionViewHolder == null) {
+                    v = inflater.inflate(R.layout.item_menu_text, parent, false);
+                    descriptionViewHolder = new TextViewHolder(v);
+                }
+                return descriptionViewHolder;
             case TYPE_AUTHOR:
                 if (authorViewHolder == null) {
                     v = inflater.inflate(R.layout.item_menu_action, parent, false);
@@ -85,6 +95,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         switch (getItemViewType(position)) {
+            case TYPE_DESCRIPTION:
+                descriptionViewHolder.setText("Cronica del partido en tiempo real cronica del partido en tiempo real");
+                break;
             case TYPE_AUTHOR:
                 checkArgument(viewHolder == authorViewHolder,
                   "Wuut? Tried to bind an authorViewholder different from which we have setted as field");
@@ -125,6 +138,20 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setParticipants(List<UserModel> watchers) {
         this.participants = watchers;
+    }
+
+    public static class TextViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.text) TextView text;
+
+        public TextViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void setText(String text) {
+            this.text.setText(text);
+        }
     }
 
     public static class ActionViewHolder extends RecyclerView.ViewHolder {
