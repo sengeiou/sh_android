@@ -11,9 +11,7 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
-import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +23,6 @@ public class ShootrTimelineService {
     public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
 
     private final SessionRepository sessionRepository;
-    private final StreamRepository localStreamRepository;
-    private final UserRepository localUserRepository;
     private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
     private final ActivityRepository remoteActivityRepository;
@@ -34,13 +30,10 @@ public class ShootrTimelineService {
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
-    public ShootrTimelineService(SessionRepository sessionRepository, @Local StreamRepository localStreamRepository,
-      @Local UserRepository localUserRepository, @Remote ShotRepository remoteShotRepository,
+    public ShootrTimelineService(SessionRepository sessionRepository, @Remote ShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
       @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
-        this.localStreamRepository = localStreamRepository;
-        this.localUserRepository = localUserRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
         this.remoteActivityRepository = remoteActivityRepository;

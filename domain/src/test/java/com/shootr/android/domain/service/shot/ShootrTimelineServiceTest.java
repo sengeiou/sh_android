@@ -5,16 +5,13 @@ import com.shootr.android.domain.ActivityTimeline;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
-import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,8 +48,6 @@ public class ShootrTimelineServiceTest {
     public static final String ID_STREAM = "idStream";
 
     @Mock SessionRepository sessionRepository;
-    @Mock StreamRepository localStreamRepository;
-    @Mock UserRepository localUserRepository;
     @Mock ShotRepository remoteShotRepository;
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
@@ -65,8 +60,7 @@ public class ShootrTimelineServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shootrTimelineService = new ShootrTimelineService(sessionRepository, localStreamRepository,
-          localUserRepository,
+        shootrTimelineService = new ShootrTimelineService(sessionRepository,
           remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
           timelineSynchronizationRepository);
     }
@@ -106,8 +100,6 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldReturnActivityTimelineWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         List<Activity> activities = activitiesList();
-        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingStream());
-        when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(remoteActivityRepository.getActivityTimeline(anyActivityParameters())).thenReturn(activities);
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutWatchingStreamId());
@@ -131,8 +123,6 @@ public class ShootrTimelineServiceTest {
     @Test
     public void shouldNotRefreshStreamShotsWhenRefreshActivityTimelineAndNotWatchingAnyStream() throws Exception {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(streamShotList());
-        when(localStreamRepository.getStreamById(anyString())).thenReturn(watchingStream());
-        when(localUserRepository.getUserById(anyString())).thenReturn(new User());
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         when(sessionRepository.getCurrentUser()).thenReturn(userWithoutWatchingStreamId());
 
@@ -244,26 +234,8 @@ public class ShootrTimelineServiceTest {
     //region Setups and stubs
     private void setupWatchingStream() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
-        when(localUserRepository.getUserById(CURRENT_USER_ID)).thenReturn(currentUserWatching());
-        when(localStreamRepository.getStreamById(WATCHING_STREAM_ID)).thenReturn(watchingStream());
     }
-
-    private User currentUserWatching() {
-        User user = new User();
-        user.setIdWatchingStream(WATCHING_STREAM_ID);
-        return user;
-    }
-
-    private User currentUserNotWatching() {
-        return new User();
-    }
-
-    private Stream watchingStream() {
-        Stream stream = new Stream();
-        stream.setId(WATCHING_STREAM_ID);
-        return stream;
-    }
-
+    
     private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
