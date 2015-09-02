@@ -508,15 +508,6 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         descriptionText.setVisibility(View.GONE);
     }
 
-    @Override public void showEmpty() {
-        contentEmpty.setVisibility(View.VISIBLE);
-        contentDetail.setVisibility(View.INVISIBLE);
-    }
-
-    @Override public void hideEmpty() {
-        contentEmpty.setVisibility(View.GONE);
-    }
-
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(true);

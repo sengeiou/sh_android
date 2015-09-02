@@ -23,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
@@ -129,16 +131,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     public void onStreamInfoLoaded(StreamInfo streamInfo) {
-        if (streamInfo.getStream() == null) {
-            this.showViewEmpty();
-        } else {
-            this.hideViewEmpty();
-            this.renderStreamInfo(streamInfo.getStream());
-            this.renderWatchersList(streamInfo.getWatchers());
-            this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
-            this.renderWatchersCount(streamInfo.getWatchersCount());
-            this.showViewDetail();
-        }
+        checkNotNull(streamInfo.getStream(), "Received null stream from StreamInfoInteractor. That should never happen >_<");
+        this.renderStreamInfo(streamInfo.getStream());
+        this.renderWatchersList(streamInfo.getWatchers());
+        this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
+        this.renderWatchersCount(streamInfo.getWatchersCount());
+        this.showViewDetail();
         this.hideViewLoading();
     }
 
@@ -214,14 +212,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     private void hideViewLoading() {
         streamDetailView.hideLoading();
-    }
-
-    private void showViewEmpty() {
-        streamDetailView.showEmpty();
-    }
-
-    private void hideViewEmpty() {
-        streamDetailView.hideEmpty();
     }
     //endregion
 

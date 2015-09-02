@@ -294,16 +294,6 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     }
 
     @Override
-    public void showEmpty() {
-        //TODO wut??
-    }
-
-    @Override
-    public void hideEmpty() {
-        //TODO wut??
-    }
-
-    @Override
     public void showLoading() {
         progressView.setVisibility(View.VISIBLE);
     }

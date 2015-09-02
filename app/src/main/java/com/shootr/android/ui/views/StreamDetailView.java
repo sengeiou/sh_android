@@ -1,10 +1,10 @@
 package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.views.base.LoadDataView;
+import com.shootr.android.ui.views.base.DataTransferView;
 import java.util.List;
 
-public interface StreamDetailView extends LoadDataView {
+public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
 
