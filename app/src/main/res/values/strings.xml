@@ -361,6 +361,7 @@
     <string name="notification_nice_content_text">Niced your shot</string>
     <string name="notification_nice_text_pattern">%s niced your shot</string>
     <string name="activity_nice_shot_text_base">Niced by @%s</string>
+    <string name="activity_share_shot_text_base">Shared by @%s</string>
     <string name="share_shot_chooser_title">Share</string>
     <string name="menu_share_shot_via">Share via…</string>
     <string name="error_stream_read_only">This stream was removed and is read-only</string>

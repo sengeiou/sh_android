@@ -29,6 +29,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_STARTED_SHOOTING = 3;
     public static final int TYPE_NICE_SHOT = 4;
     public static final int TYPE_SHARE_STREAM = 5;
+    public static final int TYPE_SHARE_SHOT = 6;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -79,6 +80,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_NICE_SHOT;
                 case ActivityType.SHARE_STREAM:
                     return TYPE_SHARE_STREAM;
+                case ActivityType.SHARE_SHOT:
+                    return TYPE_SHARE_SHOT;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -99,6 +102,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateCheckinViewHolder(parent, viewType);
             case TYPE_SHARE_STREAM:
                 return onCreateSharedStreamViewHolder(parent, viewType);
+            case TYPE_SHARE_SHOT:
+                return onCreateShareShotViewHolder(parent, viewType);
             case TYPE_OPENED:
                 return onCreateOpenedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
@@ -158,6 +163,18 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_nice_shot, parent, false);
         return new NiceShotViewHolder(view,
+          imageLoader,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener, onUsernameClickListener,
+          onImageClickListener,
+          onVideoClickListener,
+          onShotClick);
+    }
+
+    private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_share_shot, parent, false);
+        return new ShareShotViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
