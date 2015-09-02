@@ -93,17 +93,22 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
               @Override public void onLoaded(Stream stream) {
                   renderStreamInfo(stream);
                   streamDetailView.hideLoadingPictureUpload();
-                  streamDetailView.showEditPicture(stream.getPicture());
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  streamDetailView.showEditPicture(streamModel.getPicture());
+                  showEditPicturePlaceholderIfEmpty();
                   streamDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
                   Timber.e(error, "Error changing stream photo");
               }
           });
+    }
+
+    private void showEditPicturePlaceholderIfEmpty() {
+        if (streamModel.getPicture() == null) {
+            streamDetailView.showEditPicturePlaceholder();
+        }
     }
     //endregion
 
@@ -131,7 +136,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     public void onStreamInfoLoaded(StreamInfo streamInfo) {
-        checkNotNull(streamInfo.getStream(), "Received null stream from StreamInfoInteractor. That should never happen >_<");
+        checkNotNull(streamInfo.getStream(),
+          "Received null stream from StreamInfoInteractor. That should never happen >_<");
         this.renderStreamInfo(streamInfo.getStream());
         this.renderWatchersList(streamInfo.getWatchers());
         this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
@@ -188,10 +194,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         }
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
-            streamDetailView.showEditPicture(streamModel.getPicture());
-        } else {
-            streamDetailView.hideEditStreamButton();
-            streamDetailView.hideEditPicture();
+            showEditPicturePlaceholderIfEmpty();
         }
 
         streamMediaCount = streamModel.getMediaCount();

@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,11 +8,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
+import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.MenuItemValueHolder;
 import java.io.File;
@@ -45,12 +47,13 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
 
     @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.cat_avatar) ImageView streamPicture;
+    @Bind(R.id.cat_avatar) View streamPictureContainer;
+    @Bind(R.id.stream_avatar) ImageView streamPicture;
+    @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
     @Bind(R.id.cat_title) TextView streamTitle;
     @Bind(R.id.subtitle) TextView streamSubtitle;
 
     @Bind(R.id.list) RecyclerView recyclerView;
-    @Bind(R.id.main_content) View contentView;
     @Bind(R.id.loading_progress) View progressView;
 
     @Inject ImageLoader imageLoader;
@@ -87,6 +90,37 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
         getMenuInflater().inflate(R.menu.stream, menu);
         editMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_edit));
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_edit:
+                streamDetailPresenter.editStreamClick();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
+            streamDetailPresenter.resultFromEditStreamInfo();
+        }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
+            setResult(NewStreamActivity.RESULT_EXIT_STREAM);
+            finish();
+        } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            File photoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+            streamDetailPresenter.photoSelected(photoFile);
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            File photoFile = getCameraPhotoFile();
+            streamDetailPresenter.photoSelected(photoFile);
+        }
     }
 
     private void setShortTitleResultForPreviousActivity(String shortTitle) {
@@ -190,32 +224,29 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     }
 
     @Override
-    public void showEditPicture(String picture) {
-        //TODO ...
-    }
-
-    @Override
-    public void hideEditPicture() {
-        //TODO ...
+    public void showEditPicturePlaceholder() {
+        streamPicture.setImageResource(R.drawable.ic_stream_picture_edit);
     }
 
     @Override
     public void showLoadingPictureUpload() {
-        //TODO ...
+        streamPicture.setVisibility(View.GONE);
+        streamPictureLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoadingPictureUpload() {
-        //TODO ...
+        streamPicture.setVisibility(View.VISIBLE);
+        streamPictureLoading.setVisibility(View.GONE);
     }
 
     @Override
     public void zoomPhoto(String picture) {
-        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(streamPicture,
-          streamPicture.getLeft(),
+        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(streamPictureContainer,
+          streamPictureContainer.getLeft(),
           0,
-          streamPicture.getWidth(),
-          streamPicture.getBottom()).toBundle();
+          streamPictureContainer.getWidth(),
+          streamPictureContainer.getBottom()).toBundle();
         Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
         ActivityCompat.startActivity(this, photoIntent, animationBundle);
     }

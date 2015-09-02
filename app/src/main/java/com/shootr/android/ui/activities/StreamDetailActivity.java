@@ -413,18 +413,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
           .show();
     }
 
-    @Override public void showEditPicture(String picture) {
-        hasPicture = true;
-        if (picture == null) {
-            photo.setImageDrawable(null);
-            photoEditIndicator.setVisibility(View.VISIBLE);
-        } else {
-            photoEditIndicator.setVisibility(View.GONE);
-        }
-        recomputePhotoAndScrollingMetrics();
-    }
-
-    @Override public void hideEditPicture() {
+    @Override public void showEditPicturePlaceholder() {
         photoEditIndicator.setVisibility(View.GONE);
         recomputePhotoAndScrollingMetrics();
     }

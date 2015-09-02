@@ -18,9 +18,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void showPhotoPicker();
 
-    void showEditPicture(String picture);
-
-    void hideEditPicture();
+    void showEditPicturePlaceholder();
 
     void showLoadingPictureUpload();
 
