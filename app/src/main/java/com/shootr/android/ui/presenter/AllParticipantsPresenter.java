@@ -65,7 +65,7 @@ public class AllParticipantsPresenter implements Presenter {
     private void loadAllParticipants() {
         allParticipantsView.hideEmpty();
         allParticipantsView.showLoading();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 allParticipantsView.hideLoading();
                 allParticipantsView.showAllParticipantsList();
@@ -86,7 +86,7 @@ public class AllParticipantsPresenter implements Presenter {
 
     private void refreshAllParticipants() {
         allParticipantsView.hideEmpty();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> userModels = userModelMapper.transform(users);
                 participants = userModels;
@@ -166,7 +166,7 @@ public class AllParticipantsPresenter implements Presenter {
 
     public void makeNextRemoteSearch(UserModel item) {
         allParticipantsView.showProgressView();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, item.getJoinStreamTimestamp(), new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, item.getJoinStreamTimestamp(), true, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> newParticipants = userModelMapper.transform(users);
                 if (!newParticipants.isEmpty()) {

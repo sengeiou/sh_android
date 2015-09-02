@@ -27,7 +27,7 @@ public class GetAllParticipantsInteractor implements Interactor {
     private String idStream;
     private Long timestamp;
 
-    private Boolean isFirstLoad = true;
+    private Boolean isPaginating;
 
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
@@ -37,9 +37,11 @@ public class GetAllParticipantsInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainAllParticipants(String idStream, Long timestamp, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainAllParticipants(String idStream, Long timestamp, Boolean isPaginating, Callback<List<User>> callback,
+      ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.timestamp = timestamp;
+        this.isPaginating = isPaginating;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -63,9 +65,8 @@ public class GetAllParticipantsInteractor implements Interactor {
         participants.removeAll(followingInStream);
 
         List<User> allParticipants = new ArrayList<>();
-        if (isFirstLoad) {
+        if (!isPaginating) {
             allParticipants.addAll(sortUserListByJoinStreamDate(followingInStream));
-            isFirstLoad = false;
         }
         allParticipants.addAll(sortUserListByJoinStreamDate(participants));
         return allParticipants;
