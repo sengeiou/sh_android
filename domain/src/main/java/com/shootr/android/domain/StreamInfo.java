@@ -11,7 +11,8 @@ public class StreamInfo {
     private Stream stream;
 
     public int getWatchersCount() {
-        return currentUserWatching != null ? watchers.size() + 1 : watchers.size();
+        //TODO: this is a ñapa. El metodo tendra que desaparecer al mergear con participants-info
+        return currentUserWatching != null ? watchers.size() - 1 : watchers.size();
     }
 
     public List<User> getWatchers() {
@@ -56,6 +57,8 @@ public class StreamInfo {
         }
 
         public Builder currentUserWatching(User currentUserWatching) {
+            //TODO: this is a ñapa. Eliminar este hack cuando se mergee con participants-info
+            streamInfo.getWatchers().add(0, currentUserWatching);
             streamInfo.setCurrentUserWatching(currentUserWatching);
             return this;
         }
