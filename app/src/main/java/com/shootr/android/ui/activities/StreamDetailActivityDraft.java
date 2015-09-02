@@ -227,7 +227,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setWatchersCount(int watchersCount) {
-        streamSubtitle.setText("following "+watchersCount); //TODO resources
+        if (watchersCount == 0) {
+            streamSubtitle.setVisibility(View.GONE);
+        } else {
+            streamSubtitle.setVisibility(View.VISIBLE);
+            streamSubtitle.setText(getString(R.string.stream_participants_following_number, watchersCount));
+        }
     }
 
     @Override

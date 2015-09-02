@@ -248,6 +248,7 @@
         </item>
     </plurals>
 
+    <string name="stream_participants_following_number">following %d</string>
     <plurals name="stream_watching_watchers_number">
         <item quantity="one">
             Friends
