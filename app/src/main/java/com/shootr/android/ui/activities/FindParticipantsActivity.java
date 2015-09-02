@@ -176,7 +176,6 @@ public class FindParticipantsActivity extends BaseSignedInActivity implements Fi
     }
 
     @Override public void renderParticipants(List<UserModel> participants) {
-        resultsListView.setVisibility(View.VISIBLE);
         adapter.setItems(participants);
         adapter.notifyDataSetChanged();
     }
@@ -194,6 +193,14 @@ public class FindParticipantsActivity extends BaseSignedInActivity implements Fi
     @Override public void refreshParticipants(List<UserModel> participants) {
         adapter.setItems(participants);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override public void showContent() {
+        resultsListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideContent() {
+        resultsListView.setVisibility(View.GONE);
     }
 
     @OnItemClick(R.id.find_participants_search_results_list)

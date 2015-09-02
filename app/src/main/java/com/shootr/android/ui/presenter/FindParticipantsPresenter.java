@@ -68,8 +68,10 @@ public class FindParticipantsPresenter implements Presenter {
                 findParticipantsView.hideLoading();
                 participants = userModelMapper.transform(users);
                 if (!participants.isEmpty()) {
+                    findParticipantsView.showContent();
                     findParticipantsView.renderParticipants(participants);
                 }else{
+                    findParticipantsView.hideContent();
                     findParticipantsView.showEmpty();
                 }
             }
