@@ -114,7 +114,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mediaViewHolder.number.setText("" + 135); // TODO external stuff
                 break;
             case TYPE_PARTICIPANTS_TITLE:
-                ((SeparatorViewHolder) viewHolder).setTitle("Participants", "3 following"); //TODO res
+                /* no-op */
                 break;
             case TYPE_PARTICIPANT:
                 UserModel user = participants.get(participantPosition(position));
@@ -168,24 +168,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class SeparatorViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.card_title) TextView titleText;
-        @Bind(R.id.card_right_text) TextView rightText;
-
         public SeparatorViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void setTitle(String title) {
-            setTitle(title, null);
-        }
-
-        public void setTitle(String title, String right) {
-            titleText.setVisibility(title != null ? View.VISIBLE : View.GONE);
-            titleText.setText(title);
-
-            rightText.setVisibility(right != null ? View.VISIBLE : View.GONE);
-            rightText.setText(right);
         }
     }
 
