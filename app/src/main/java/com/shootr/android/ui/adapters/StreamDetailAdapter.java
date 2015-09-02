@@ -45,17 +45,23 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
-        authorViewHolder.name.setText(authorName);
+        if (authorViewHolder != null) {
+            authorViewHolder.name.setText(authorName);
+        }
     }
 
     public void setDescription(String description) {
         this.description = description;
-        descriptionViewHolder.setText(description);
+        if (descriptionViewHolder != null) {
+            descriptionViewHolder.setText(description);
+        }
     }
 
     public void setMediaCount(int mediaCount) {
         this.mediaCount = mediaCount;
-        mediaViewHolder.setNumber(mediaCount);
+        if (mediaViewHolder != null) {
+            mediaViewHolder.setNumber(mediaCount);
+        }
     }
 
     public StreamDetailAdapter(OnUserClickListener onUserClickListener, ImageLoader imageLoader) {

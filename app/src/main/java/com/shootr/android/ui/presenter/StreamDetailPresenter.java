@@ -143,7 +143,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     private void showViewDetail() {
-        streamDetailView.showContent();
         streamDetailView.showDetail();
     }
     //endregion
@@ -211,7 +210,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     //region View methods
     private void showViewLoading() {
-        streamDetailView.hideContent();
         streamDetailView.showLoading();
     }
 
@@ -220,7 +218,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     private void showViewEmpty() {
-        streamDetailView.showContent();
         streamDetailView.showEmpty();
     }
 

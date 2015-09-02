@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +50,8 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     @Bind(R.id.subtitle) TextView streamSubtitle;
 
     @Bind(R.id.list) RecyclerView recyclerView;
+    @Bind(R.id.main_content) View contentView;
+    @Bind(R.id.loading_progress) View progressView;
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
@@ -247,18 +250,8 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     }
 
     @Override
-    public void showContent() {
-        //TODO wut??
-    }
-
-    @Override
-    public void hideContent() {
-        //TODO wut??
-    }
-
-    @Override
     public void showDetail() {
-        //TODO wut??
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -312,12 +305,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void showLoading() {
-        //TODO wut??
+        progressView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        //TODO wut??
+        progressView.setVisibility(View.GONE);
     }
 
     @Override

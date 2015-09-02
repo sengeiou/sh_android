@@ -470,17 +470,6 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         startActivity(userProfileIntent);
     }
 
-    @Override public void showContent() {
-        if (scrollChild.getVisibility() != View.VISIBLE) {
-            scrollChild.setVisibility(View.VISIBLE);
-        }
-        recomputePhotoAndScrollingMetrics();
-    }
-
-    @Override public void hideContent() {
-        scrollChild.setVisibility(View.INVISIBLE);
-    }
-
     @Override public void showDetail() {
         contentDetail.setVisibility(View.VISIBLE);
     }

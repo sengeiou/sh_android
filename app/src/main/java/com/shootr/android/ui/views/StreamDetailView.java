@@ -38,10 +38,6 @@ public interface StreamDetailView extends LoadDataView {
 
     void navigateToUser(String userId);
 
-    void showContent();
-
-    void hideContent();
-
     void showDetail();
 
     void showEditStreamButton();

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout android:id="@+id/main_content"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:background="#f0f0f0">
 
     <android.support.design.widget.AppBarLayout android:id="@+id/appbar"
       android:layout_width="match_parent"
@@ -31,7 +32,7 @@
                   android:layout_width="40dp"
                   android:layout_height="40dp"
                   android:layout_gravity="center_vertical"
-                  android:src="@drawable/sample_avatar" />
+                  tools:src="@drawable/sample_avatar" />
 
                 <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -43,16 +44,16 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:fontFamily="sans-serif-medium"
-                      android:text="Title"
                       android:textColor="@android:color/white"
-                      android:textSize="18sp" />
+                      android:textSize="18sp"
+                      tools:text="Title" />
 
                     <TextView android:id="@+id/subtitle"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="following 3"
                       android:textColor="#80ffffff"
-                      android:textSize="15sp" />
+                      android:textSize="15sp"
+                      tools:text="following 3" />
                 </LinearLayout>
             </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>
 
@@ -66,7 +67,13 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@android:color/white"
+      android:visibility="gone"
       app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <ProgressBar android:id="@+id/loading_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center" />
 
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
       android:layout_height="wrap_content"
