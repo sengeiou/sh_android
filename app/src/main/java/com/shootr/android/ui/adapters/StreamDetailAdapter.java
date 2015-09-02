@@ -1,5 +1,7 @@
 package com.shootr.android.ui.adapters;
 
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,25 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private List<UserModel> participants = Collections.emptyList();
     private TextViewHolder descriptionViewHolder;
+
+    private String authorName;
+    private String description;
+    private int mediaCount;
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+        authorViewHolder.name.setText(authorName);
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        descriptionViewHolder.setText(description);
+    }
+
+    public void setMediaCount(int mediaCount) {
+        this.mediaCount = mediaCount;
+        mediaViewHolder.setNumber(mediaCount);
+    }
 
     public StreamDetailAdapter(OnUserClickListener onUserClickListener, ImageLoader imageLoader) {
         this.onUserClickListener = onUserClickListener;
@@ -96,22 +117,22 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_DESCRIPTION:
-                descriptionViewHolder.setText("Cronica del partido en tiempo real cronica del partido en tiempo real");
+                descriptionViewHolder.setText(description);
                 break;
             case TYPE_AUTHOR:
                 checkArgument(viewHolder == authorViewHolder,
                   "Wuut? Tried to bind an authorViewholder different from which we have setted as field");
 
-                authorViewHolder.icon.setImageResource(R.drawable.ic_stream_author_24_gray50);
-                authorViewHolder.name.setText("Goles"); //TODO external stuff
+                authorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
+                authorViewHolder.setName(authorName);
                 break;
             case TYPE_MEDIA:
                 checkArgument(viewHolder == mediaViewHolder,
                   "Wuut? Tried to bind a mediaViewholder different from which we have setted as field");
 
-                mediaViewHolder.icon.setImageResource(R.drawable.ic_action_stream_gallery_gray_24);
-                mediaViewHolder.name.setText("Media"); //TODO res
-                mediaViewHolder.number.setText("" + 135); // TODO external stuff
+                mediaViewHolder.setIcon(R.drawable.ic_action_stream_gallery_gray_24);
+                mediaViewHolder.setName(R.string.stream_detail_media);
+                mediaViewHolder.setNumber(mediaCount);
                 break;
             case TYPE_PARTICIPANTS_TITLE:
                 /* no-op */
@@ -151,6 +172,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public void setText(String text) {
             this.text.setText(text);
+            itemView.setVisibility(text != null ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -158,11 +180,32 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Bind(R.id.action_icon) ImageView icon;
         @Bind(R.id.action_name) TextView name;
-        @Bind(R.id.action_number) TextView number;
+        @Bind(R.id.action_number) TextView optionalNumber;
 
         public ActionViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void setIcon(@DrawableRes int iconRes) {
+            icon.setImageResource(iconRes);
+        }
+
+        public void setName(@StringRes int nameRes) {
+            name.setText(nameRes);
+        }
+
+        public void setName(String actionName) {
+            name.setText(actionName);
+        }
+
+        public void setNumber(int number) {
+            if (number < 1) {
+                optionalNumber.setVisibility(View.GONE);
+            } else {
+                optionalNumber.setVisibility(View.VISIBLE);
+                optionalNumber.setText("" + number);
+            }
         }
     }
 

@@ -134,7 +134,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setStreamAuthor(String author) {
-        //TODO
+        adapter.setAuthorName(author);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setWatchersCount(int watchersCount) {
-        //TODO
+        streamSubtitle.setText("following "+watchersCount); //TODO resources
     }
 
     @Override
@@ -269,7 +269,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setMediaCount(Integer mediaCount) {
-        //TODO
+        adapter.setMediaCount(mediaCount);
     }
 
     @Override
@@ -288,12 +288,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void setStreamDescription(String description) {
-        //TODO
+        adapter.setDescription(description);
     }
 
     @Override
     public void hideStreamDescription() {
-        //TODO
+        adapter.setDescription(null);
     }
 
     @Override
