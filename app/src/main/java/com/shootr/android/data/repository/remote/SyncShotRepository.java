@@ -75,4 +75,8 @@ public class SyncShotRepository implements ShotRepository {
     @Override public void putShots(List<Shot> shotsFromUser) {
         throw new IllegalArgumentException("putShots not implemented in remote");
     }
+
+    @Override public void shareShot(String idShot) {
+        remoteShotDataSource.shareShot(idShot);
+    }
 }

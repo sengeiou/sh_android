@@ -79,4 +79,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate) {
         throw new IllegalArgumentException("getAllShotsFromUserWithMaxDate should have no local implementation");
     }
+
+    @Override public void shareShot(String idShot) {
+        throw new IllegalArgumentException("shareShot should not have local implementation");
+    }
 }
