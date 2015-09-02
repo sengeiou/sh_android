@@ -424,7 +424,7 @@ public class StreamTimelineFragment extends BaseFragment
         new CustomContextMenu.Builder(getActivity())
           .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
               @Override public void run() {
-                  
+                  streamTimelinePresenter.shareShot(shotModel);
               }
           })
           .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
