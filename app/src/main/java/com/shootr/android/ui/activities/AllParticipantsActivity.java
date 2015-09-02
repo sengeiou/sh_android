@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.shootr.android.ui.adapters.ParticipantsListAdapter;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.AllParticipantsPresenter;
 import com.shootr.android.ui.views.AllParticipantsView;
+import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -31,6 +33,10 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     private static final String EXTRA_STREAM = "stream";
 
     private ParticipantsListAdapter adapter;
+    private Boolean isFooterLoading = false;
+
+    View progressViewContent;
+    View progressView;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -56,6 +62,29 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         userlistListView.setAdapter(getParticipantsAdapter());
+
+        progressView = getLoadingView();
+        progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
+
+        new ListViewScrollObserver(userlistListView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                /* no-op */
+            }
+
+            @Override public void onScrollIdle() {
+                int lastVisiblePosition = userlistListView.getLastVisiblePosition();
+                int loadingFooterPosition = userlistListView.getAdapter().getCount() - 1;
+                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                if (shouldStartLoadingMore && !isFooterLoading) {
+                    allParticipantsPresenter.makeNextRemoteSearch(adapter.getItems().get(adapter.getItems().size()-1));
+                }
+            }
+        });
+
+    }
+
+    private View getLoadingView() {
+        return LayoutInflater.from(this).inflate(R.layout.item_list_loading, userlistListView, false);
     }
 
     @Override protected void initializePresenter() {
@@ -138,6 +167,21 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
         startActivity(FindParticipantsActivity.newIntent(this, idStream));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+    }
+
+    @Override public void renderParticipantsBelow(List<UserModel> userModels) {
+        adapter.addItems(userModels);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override public void hideProgressView() {
+        isFooterLoading = false;
+        userlistListView.removeFooterView(progressView);
+    }
+
+    @Override public void showProgressView() {
+        isFooterLoading = true;
+        userlistListView.addFooterView(progressView, null, false);
     }
 
     @Override public void follow(int position) {

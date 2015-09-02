@@ -163,4 +163,23 @@ public class AllParticipantsPresenter implements Presenter {
     public void searchClicked() {
      allParticipantsView.goToSearchParticipants();
     }
+
+    public void makeNextRemoteSearch(UserModel item) {
+        allParticipantsView.showProgressView();
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, item.getJoinStreamTimestamp(), new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> newParticipants = userModelMapper.transform(users);
+                if (!newParticipants.isEmpty()) {
+                    allParticipantsView.renderParticipantsBelow(newParticipants);
+                } else {
+                    allParticipantsView.hideProgressView();
+
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
 }

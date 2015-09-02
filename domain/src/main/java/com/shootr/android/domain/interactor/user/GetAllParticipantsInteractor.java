@@ -27,6 +27,8 @@ public class GetAllParticipantsInteractor implements Interactor {
     private String idStream;
     private Long timestamp;
 
+    private Boolean isFirstLoad = true;
+
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
         this.interactorHandler = interactorHandler;
@@ -61,7 +63,10 @@ public class GetAllParticipantsInteractor implements Interactor {
         participants.removeAll(followingInStream);
 
         List<User> allParticipants = new ArrayList<>();
-        allParticipants.addAll(sortUserListByJoinStreamDate(followingInStream));
+        if (isFirstLoad) {
+            allParticipants.addAll(sortUserListByJoinStreamDate(followingInStream));
+            isFirstLoad = false;
+        }
         allParticipants.addAll(sortUserListByJoinStreamDate(participants));
         return allParticipants;
     }

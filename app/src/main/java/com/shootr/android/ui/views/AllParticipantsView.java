@@ -13,4 +13,10 @@ public interface AllParticipantsView extends LoadDataView {
     void refreshParticipants(List<UserModel> participants);
 
     void goToSearchParticipants();
+
+    void renderParticipantsBelow(List<UserModel> userModels);
+
+    void hideProgressView();
+
+    void showProgressView();
 }
