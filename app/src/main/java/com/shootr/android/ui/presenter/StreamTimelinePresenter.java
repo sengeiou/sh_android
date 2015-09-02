@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import android.util.Log;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.Timeline;
@@ -7,6 +8,7 @@ import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
@@ -28,6 +30,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private final SelectStreamInteractor selectStreamInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    private final ShareShotInteractor shareShotInteractor;
     private final ShotModelMapper shotModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -42,17 +45,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private boolean isEmpty = true;
 
     @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
-      SelectStreamInteractor selectStreamInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      ShotModelMapper shotModelMapper,
-      @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory,
-      Poller poller) {
+      SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper,
+      @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller) {
         this.timelineInteractorWrapper = timelineInteractorWrapper;
         this.selectStreamInteractor = selectStreamInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+        this.shareShotInteractor = shareShotInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -94,8 +94,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     protected void loadTimeline() {
         timelineInteractorWrapper.loadTimeline(streamId, new Interactor.Callback<Timeline>() {
-            @Override
-            public void onLoaded(Timeline timeline) {
+            @Override public void onLoaded(Timeline timeline) {
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
                 streamTimelineView.setShots(shotModels);
                 isEmpty = shotModels.isEmpty();
@@ -109,8 +108,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 loadNewShots();
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
         });
@@ -164,8 +162,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
         timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
-            @Override
-            public void onLoaded(Timeline timeline) {
+            @Override public void onLoaded(Timeline timeline) {
                 isLoadingOlderShots = false;
                 streamTimelineView.hideLoadingOldShots();
                 List<ShotModel> shotModels = shotModelMapper.transform(timeline.getShots());
@@ -176,8 +173,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
                 }
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 streamTimelineView.hideLoadingOldShots();
                 streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
             }
@@ -186,8 +182,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadTimeline();
             }
         });
@@ -195,8 +190,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadTimeline();
             }
         });
@@ -220,5 +214,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     @Subscribe
     @Override public void onShotSent(ShotSent.Event event) {
         refresh();
+    }
+
+    public void shareShot(ShotModel shotModel) {
+        shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                Log.d("SHARED: ", "SHOT");
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                Log.d("SHARED: ", "OH FUCK");
+            }
+        });
     }
 }
