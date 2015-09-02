@@ -136,7 +136,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             streamTimelineView.hideEmpty();
             streamTimelineView.showCheckingForShots();
         }
-        timelineInteractorWrapper.refreshTimeline(new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.refreshTimeline(streamId ,new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 boolean hasNewShots = !timeline.getShots().isEmpty();
@@ -163,7 +163,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     private void loadOlderShots(long lastShotInScreenDate) {
         isLoadingOlderShots = true;
         streamTimelineView.showLoadingOldShots();
-        timelineInteractorWrapper.obtainOlderTimeline(lastShotInScreenDate, new Interactor.Callback<Timeline>() {
+        timelineInteractorWrapper.obtainOlderTimeline(streamId, lastShotInScreenDate, new Interactor.Callback<Timeline>() {
             @Override
             public void onLoaded(Timeline timeline) {
                 isLoadingOlderShots = false;
@@ -208,6 +208,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         startPollingShots();
         if (hasBeenPaused) {
             loadTimeline();
+            selectStream();
         }
     }
 

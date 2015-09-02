@@ -16,6 +16,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
 
     private Callback<Timeline> callback;
     private ErrorCallback errorCallback;
+    private String idStream;
 
     @Inject public RefreshStreamTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ShootrTimelineService shootrTimelineService) {
@@ -24,9 +25,10 @@ public class RefreshStreamTimelineInteractor implements Interactor {
         this.shootrTimelineService = shootrTimelineService;
     }
 
-    public void refreshStreamTimeline(Callback<Timeline> callback, ErrorCallback errorCallback) {
+    public void refreshStreamTimeline(String streamId, Callback<Timeline> callback, ErrorCallback errorCallback) {
         this.callback = callback;
         this.errorCallback = errorCallback;
+        this.idStream = streamId;
         interactorHandler.execute(this);
     }
 
@@ -36,7 +38,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            Timeline timeline = shootrTimelineService.refreshTimelinesForWatchingStream();
+            Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream);
             notifyLoaded(timeline);
         } catch (ShootrException error) {
             notifyError(error);
