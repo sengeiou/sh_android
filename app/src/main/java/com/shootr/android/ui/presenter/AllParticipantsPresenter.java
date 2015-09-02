@@ -63,6 +63,7 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     private void loadAllParticipants() {
+        allParticipantsView.hideEmpty();
         allParticipantsView.showLoading();
         getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
@@ -70,7 +71,11 @@ public class AllParticipantsPresenter implements Presenter {
                 allParticipantsView.showAllParticipantsList();
                 List<UserModel> userModels = userModelMapper.transform(users);
                 participants = userModels;
-                allParticipantsView.renderAllParticipants(userModels);
+                if (!participants.isEmpty()) {
+                    allParticipantsView.renderAllParticipants(userModels);
+                } else {
+                    allParticipantsView.showEmpty();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -80,11 +85,16 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     private void refreshAllParticipants() {
+        allParticipantsView.hideEmpty();
         getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 List<UserModel> userModels = userModelMapper.transform(users);
                 participants = userModels;
-                allParticipantsView.refreshParticipants(userModels);
+                if (!participants.isEmpty()) {
+                    allParticipantsView.refreshParticipants(userModels);
+                } else {
+                    allParticipantsView.showEmpty();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

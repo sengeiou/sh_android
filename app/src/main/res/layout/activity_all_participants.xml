@@ -29,7 +29,7 @@
     android:textColor="@color/gray_50"
     android:textSize="20sp"
     android:visibility="gone"
-    tools:text="@string/following_list_empty"
+    tools:text="@string/participants_list_empty"
     tools:visibility="visible" />
 
 </FrameLayout>

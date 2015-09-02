@@ -59,6 +59,7 @@ public class FindParticipantsPresenter implements Presenter {
 
     public void searchParticipants(String query) {
         this.query = query;
+        findParticipantsView.hideEmpty();
         findParticipantsView.hideKeyboard();
         findParticipantsView.showLoading();
         findParticipantsView.setCurrentQuery(query);
@@ -66,7 +67,11 @@ public class FindParticipantsPresenter implements Presenter {
             @Override public void onLoaded(List<User> users) {
                 findParticipantsView.hideLoading();
                 participants = userModelMapper.transform(users);
-                findParticipantsView.renderParticipants(participants);
+                if (!participants.isEmpty()) {
+                    findParticipantsView.renderParticipants(participants);
+                }else{
+                    findParticipantsView.showEmpty();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -77,10 +82,15 @@ public class FindParticipantsPresenter implements Presenter {
     }
 
     public void refreshParticipants() {
+        findParticipantsView.hideEmpty();
         findParticipantsInteractor.obtainAllParticipants(idStream, query, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 participants = userModelMapper.transform(users);
-                findParticipantsView.refreshParticipants(participants);
+                if (!participants.isEmpty()) {
+                    findParticipantsView.refreshParticipants(participants);
+                }else{
+                    findParticipantsView.showEmpty();
+                }
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
