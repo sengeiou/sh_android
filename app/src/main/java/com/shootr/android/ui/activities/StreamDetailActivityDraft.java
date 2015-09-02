@@ -26,6 +26,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.MenuItemValueHolder;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +52,9 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
+
     private StreamDetailAdapter adapter;
+    private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
 
     @Override
     protected int getLayoutResource() {
@@ -79,6 +82,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.stream, menu);
+        editMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_edit));
         return true;
     }
 
@@ -259,12 +263,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Override
     public void showEditStreamButton() {
-        //TODO
+        editMenuItem.setVisible(true);
     }
 
     @Override
     public void hideEditStreamButton() {
-        // TODO
+        editMenuItem.setVisible(false);
     }
 
     @Override
