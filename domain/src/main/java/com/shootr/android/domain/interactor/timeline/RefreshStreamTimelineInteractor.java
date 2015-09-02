@@ -38,7 +38,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
 
     private synchronized void executeSynchronized() {
         try {
-            Timeline timeline = shootrTimelineService.refreshTimelinesForWatchingStream(idStream);
+            Timeline timeline = shootrTimelineService.refreshTimelinesForStream(idStream);
             notifyLoaded(timeline);
         } catch (ShootrException error) {
             notifyError(error);

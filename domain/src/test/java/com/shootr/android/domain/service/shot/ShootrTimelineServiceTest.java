@@ -77,7 +77,7 @@ public class ShootrTimelineServiceTest {
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(
           streamShotListWithMultipleShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         assertThat(resultTimeline.getShots()).isEqualTo(streamShotListWithMultipleShots());
     }
@@ -87,7 +87,7 @@ public class ShootrTimelineServiceTest {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
-        shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         verify(remoteActivityRepository).getActivityTimeline(anyActivityParameters());
     }
@@ -146,7 +146,7 @@ public class ShootrTimelineServiceTest {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(new ArrayList<Shot>());
 
-        shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         assertThat(captureTimelineParameters()).hasStreamId(ID_STREAM);
     }
@@ -157,7 +157,7 @@ public class ShootrTimelineServiceTest {
         when(timelineSynchronizationRepository.getStreamTimelineRefreshDate(WATCHING_STREAM_ID)).thenReturn(
           WATCHING_STREAM_REFRESH_DATE);
 
-        shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         assertThat(captureTimelineParameters()).hasSinceDate(WATCHING_STREAM_REFRESH_DATE);
     }
@@ -169,7 +169,7 @@ public class ShootrTimelineServiceTest {
           shotWithDate(2L),
           shotWithDate(1L)));
 
-        shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         verify(timelineSynchronizationRepository).setStreamTimelineRefreshDate(WATCHING_STREAM_ID, 2L);
     }
@@ -179,7 +179,7 @@ public class ShootrTimelineServiceTest {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(Collections.<Shot>emptyList());
 
-        shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         verify(timelineSynchronizationRepository, never()).setStreamTimelineRefreshDate(anyString(), anyLong());
     }
@@ -189,7 +189,7 @@ public class ShootrTimelineServiceTest {
         setupWatchingStream();
         when(remoteShotRepository.getShotsForStreamTimeline(anyStreamParameters())).thenReturn(unorderedShots());
 
-        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM);
+        Timeline resultTimeline = shootrTimelineService.refreshTimelinesForStream(ID_STREAM);
 
         assertThat(resultTimeline.getShots()).isSortedAccordingTo(new Shot.NewerAboveComparator());
     }

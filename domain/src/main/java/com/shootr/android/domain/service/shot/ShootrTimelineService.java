@@ -70,7 +70,7 @@ public class ShootrTimelineService {
         return remoteActivityRepository.getActivityTimeline(activityTimelineParameters);
     }
 
-    public Timeline refreshTimelinesForWatchingStream(String idStream) {
+    public Timeline refreshTimelinesForStream(String idStream) {
         List<Shot> shotsForStream = refreshStreamShots(idStream);
 
         refreshActivityShots();

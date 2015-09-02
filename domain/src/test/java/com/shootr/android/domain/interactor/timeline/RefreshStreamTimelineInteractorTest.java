@@ -41,7 +41,7 @@ public class RefreshStreamTimelineInteractorTest {
 
     @Test
     public void shouldCallbackStreamTimelineWhenServiceReturnsTimelineForStream() throws Exception {
-        when(shootrTimelineService.refreshTimelinesForWatchingStream(ID_STREAM)).thenReturn(timelineForStream());
+        when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM)).thenReturn(timelineForStream());
 
         interactor.refreshStreamTimeline(ID_STREAM, spyCallback, errorCallback);
 
