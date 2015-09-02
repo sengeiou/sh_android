@@ -23,6 +23,7 @@ import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -63,13 +64,27 @@ public class AllParticipantsPresenter implements Presenter {
 
     private void loadAllParticipants() {
         allParticipantsView.showLoading();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 allParticipantsView.hideLoading();
                 allParticipantsView.showAllParticipantsList();
                 List<UserModel> userModels = userModelMapper.transform(users);
                 participants = userModels;
                 allParticipantsView.renderAllParticipants(userModels);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    private void refreshAllParticipants() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                List<UserModel> userModels = userModelMapper.transform(users);
+                participants = userModels;
+                allParticipantsView.refreshParticipants(userModels);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -124,6 +139,7 @@ public class AllParticipantsPresenter implements Presenter {
 
     @Override public void resume() {
         if (hasBeenPaused.equals(true)) {
+            refreshAllParticipants();
             selectStream();
         }
         bus.register(this);

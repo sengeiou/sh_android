@@ -35,6 +35,8 @@ public class FindParticipantsPresenter implements Presenter {
     private FindParticipantsView findParticipantsView;
     private String idStream;
     private List<UserModel> participants;
+    private String query;
+    private Boolean hasBeenPaused = false;
 
     @Inject public FindParticipantsPresenter(FindParticipantsInteractor findParticipantsInteractor,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory, JobManager jobManager, @Main Bus bus) {
@@ -56,6 +58,7 @@ public class FindParticipantsPresenter implements Presenter {
     }
 
     public void searchParticipants(String query) {
+        this.query = query;
         findParticipantsView.hideKeyboard();
         findParticipantsView.showLoading();
         findParticipantsView.setCurrentQuery(query);
@@ -64,6 +67,20 @@ public class FindParticipantsPresenter implements Presenter {
                 findParticipantsView.hideLoading();
                 participants = userModelMapper.transform(users);
                 findParticipantsView.renderParticipants(participants);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                findParticipantsView.hideLoading();
+                findParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void refreshParticipants() {
+        findParticipantsInteractor.obtainAllParticipants(idStream, query, new Interactor.Callback<List<User>>() {
+            @Override public void onLoaded(List<User> users) {
+                participants = userModelMapper.transform(users);
+                findParticipantsView.refreshParticipants(participants);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -110,10 +127,14 @@ public class FindParticipantsPresenter implements Presenter {
     }
 
     @Override public void resume() {
+        if (hasBeenPaused) {
+            refreshParticipants();
+        }
         bus.register(this);
     }
 
     @Override public void pause() {
+        hasBeenPaused = true;
         bus.unregister(this);
     }
 }

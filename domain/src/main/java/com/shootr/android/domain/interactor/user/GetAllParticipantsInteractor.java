@@ -12,7 +12,6 @@ import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -26,6 +25,7 @@ public class GetAllParticipantsInteractor implements Interactor {
     private Callback<List<User>> callback;
     private ErrorCallback errorCallback;
     private String idStream;
+    private Long timestamp;
 
     @Inject public GetAllParticipantsInteractor(InteractorHandler interactorHandler,
       @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository, PostExecutionThread postExecutionThread) {
@@ -35,8 +35,9 @@ public class GetAllParticipantsInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void obtainAllParticipants(String idStream, Callback<List<User>> callback, ErrorCallback errorCallback) {
+    public void obtainAllParticipants(String idStream, Long timestamp, Callback<List<User>> callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
+        this.timestamp = timestamp;
         this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
@@ -55,7 +56,7 @@ public class GetAllParticipantsInteractor implements Interactor {
         List<User> following = remoteUserRepository.getPeople();
         List<User> followingInStream = retainFollowingInThisStream(following);
 
-        List<User> participants = remoteUserRepository.getAllParticipants(idStream, new Date().getTime());
+        List<User> participants = remoteUserRepository.getAllParticipants(idStream, timestamp);
 
         participants.removeAll(followingInStream);
 
