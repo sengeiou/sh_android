@@ -518,6 +518,10 @@ public class StreamTimelineFragment extends BaseFragment
         checkingForShotsView.setVisibility(View.GONE);
     }
 
+    @Override public void showShotShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);

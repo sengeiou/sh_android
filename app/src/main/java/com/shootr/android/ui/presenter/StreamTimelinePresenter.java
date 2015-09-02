@@ -219,11 +219,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     public void shareShot(ShotModel shotModel) {
         shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                Log.d("SHARED: ", "SHOT");
+                streamTimelineView.showShotShared();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
-                Log.d("SHARED: ", "OH FUCK");
+                streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
     }
