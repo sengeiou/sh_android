@@ -292,7 +292,16 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     public void unfollow(String idUser) {
-        startfollowUnfollowJob(idUser, true);
+        startfollowUnfollowJob(idUser, false);
+    }
+
+    protected void startfollowUnfollowJob(String idUser, boolean follow) {
+        GetFollowUnFollowUserOfflineJob offlineJob = followOfflineJobProvider.get();
+        offlineJob.init(idUser, follow ? UserDtoFactory.FOLLOW_TYPE : UserDtoFactory.UNFOLLOW_TYPE);
+        jobManager.addJobInBackground(offlineJob);
+
+        GetFollowUnfollowUserOnlineJob onlineJob = followOnlineJobProvider.get();
+        jobManager.addJobInBackground(onlineJob);
     }
 
     @Subscribe
@@ -307,15 +316,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
                 break;
             }
         }
-    }
-
-    protected void startfollowUnfollowJob(String idUser, boolean follow) {
-        GetFollowUnFollowUserOfflineJob offlineJob = followOfflineJobProvider.get();
-        offlineJob.init(idUser, follow ? UserDtoFactory.FOLLOW_TYPE : UserDtoFactory.UNFOLLOW_TYPE);
-        jobManager.addJobInBackground(offlineJob);
-
-        GetFollowUnfollowUserOnlineJob onlineJob = followOnlineJobProvider.get();
-        jobManager.addJobInBackground(onlineJob);
     }
 
     public void shareStreamViaShootr() {
