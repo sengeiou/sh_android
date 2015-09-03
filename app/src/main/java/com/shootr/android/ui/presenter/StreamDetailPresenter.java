@@ -9,8 +9,10 @@ import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -39,6 +41,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private final Bus bus;
     private final GetStreamInfoInteractor streamInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
+    private final ShareStreamInteractor shareStreamInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -61,14 +64,17 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     public StreamDetailPresenter(@Main Bus bus,
       GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
+      ShareStreamInteractor shareStreamInteractor,
       StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory,
       Provider<GetFollowUnfollowUserOnlineJob> followOnlineJobProvider,
-      Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider, JobManager jobManager) {
+      Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider,
+      JobManager jobManager) {
         this.bus = bus;
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
+        this.shareStreamInteractor = shareStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -84,7 +90,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         this.loadStreamInfo();
     }
 
-    protected void setView(StreamDetailView streamDetailView){
+    protected void setView(StreamDetailView streamDetailView) {
         this.streamDetailView = streamDetailView;
     }
     //endregion
@@ -198,13 +204,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         List<User> watchers = streamInfo.getWatchers();
         participantsShown = userModelMapper.transform(watchers);
         streamDetailView.setWatchers(participantsShown);
-        if(streamInfo.hasMoreParticipants()) {
+        if (streamInfo.hasMoreParticipants()) {
             streamDetailView.showAllParticipantsButton();
         }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
-        if(currentUserWatch != null){
+        if (currentUserWatch != null) {
             currentUserWatchingModel = userModelMapper.transform(currentUserWatch);
             streamDetailView.setCurrentUserWatching(currentUserWatchingModel);
         }
@@ -249,12 +255,16 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
     //endregion
 
-    @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
+    @Subscribe
+    @Override
+    public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         streamDetailView.showError(communicationErrorMessage);
     }
 
-    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    @Subscribe
+    @Override
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         streamDetailView.showError(connectionNotAvailableMessage);
     }
@@ -263,11 +273,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
     }
 
-    @Override public void resume() {
+    @Override
+    public void resume() {
         bus.register(this);
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         bus.unregister(this);
     }
 
@@ -295,7 +307,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
                 break;
             }
         }
-
     }
 
     protected void startfollowUnfollowJob(String idUser, boolean follow) {
@@ -305,5 +316,24 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
         GetFollowUnfollowUserOnlineJob onlineJob = followOnlineJobProvider.get();
         jobManager.addJobInBackground(onlineJob);
+    }
+
+    public void shareStreamViaShootr() {
+        shareStreamInteractor.shareStream(streamModel.getIdStream(), new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                streamDetailView.showStreamShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
+    }
+
+    public void shareStreamVia() {
+        streamDetailView.shareStreamVia(streamModel);
     }
 }

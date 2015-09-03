@@ -1,5 +1,6 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.views.base.DataTransferView;
 import java.util.List;
@@ -51,4 +52,8 @@ public interface StreamDetailView extends DataTransferView {
     void showAllParticipantsButton();
 
     void setFollowingNumber(Integer numberOfFollowing);
+
+    void showStreamShared();
+
+    void shareStreamVia(StreamModel stream);
 }

@@ -27,12 +27,15 @@ import com.shootr.android.ui.adapters.StreamDetailAdapter;
 import com.shootr.android.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
@@ -124,8 +127,22 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @OnClick(R.id.stream_share_button)
     public void onShareClick() {
-        //TODO la historia de share stream esta aparte, cuando se mergee habra que meterlo aqui via intentFactory
-        Toast.makeText(this, "Share all the things!", Toast.LENGTH_SHORT).show();
+        openContextualMenuForSharing();
+    }
+
+    private void openContextualMenuForSharing() {
+        new CustomContextMenu.Builder(this)
+          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  streamDetailPresenter.shareStreamViaShootr();
+              }
+          })
+          .addAction(getString(R.string.share_via), new Runnable() {
+              @Override
+              public void run() {
+                  streamDetailPresenter.shareStreamVia();
+              }
+          }).show();
     }
 
     @Override
@@ -398,6 +415,17 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             streamSubtitle.setVisibility(View.VISIBLE);
             streamSubtitle.setText(getString(R.string.stream_participants_following_number, numberOfFollowing));
         }
+    }
+
+    @Override
+    public void showStreamShared() {
+        Toast.makeText(this, R.string.shared_stream_notification, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void shareStreamVia(StreamModel stream) {
+        Intent shareIntent = intentFactory.shareStreamIntent(this, stream);
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     @Override
