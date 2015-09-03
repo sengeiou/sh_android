@@ -98,21 +98,20 @@ public class GetStreamInfoInteractor implements Interactor {
 
         Integer followingsNumber = followingInStream.size();
 
-        List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
-        watchesFromStream.removeAll(followingInStream);
-        watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
-
         List<User> watchers = followingInStream;
 
-        watchers.addAll(watchesFromStream);
-
+        if (stream.getWatchers() != null) {
+            List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
+            watchesFromStream.removeAll(followingInStream);
+            watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
+            watchers.addAll(watchesFromStream);
+        }
         return buildStreamInfo(stream, watchers, currentUser, followingsNumber);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
         Collections.sort(watchesFromPeople, new Comparator<User>() {
-            @Override
-            public int compare(User userModel, User t1) {
+            @Override public int compare(User userModel, User t1) {
                 return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate());
             }
         });
@@ -130,13 +129,15 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     protected List<User> removeCurrentUserFromWatchers(List<User> watchers) {
-        User me = new User();
-        for (User user : watchers) {
-            if (!user.getIdUser().equals(sessionRepository.getCurrentUserId())) {
-                me = user;
+        int meIndex = -1;
+        for (int i=0; i<watchers.size(); i++) {
+            if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
+                meIndex = i;
             }
         }
-        watchers.remove(me);
+        if (meIndex>=0) {
+            watchers.remove(meIndex);
+        }
         return watchers;
     }
 
