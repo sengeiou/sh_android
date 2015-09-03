@@ -258,26 +258,25 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             watchingText.setText(userModel.getJoinStreamDate());
             imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
 
-                if(userModel.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
-                    followButton.setFollowing(true);
-                    followButton.setVisibility(View.VISIBLE);
-                }else if(userModel.getRelationship() == FollowEntity.RELATIONSHIP_OWN){
-                    followButton.setVisibility(View.GONE);
-                }else{
-                    followButton.setFollowing(false);
-                    followButton.setVisibility(View.VISIBLE);
-                }
-                followButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (followButton.isFollowing()) {
-                            onFollowUnfollowListener.onUnfollow(userModel);
-                        } else {
-                            onFollowUnfollowListener.onFollow(userModel);
-                        }
+            if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
+                followButton.setFollowing(true);
+                followButton.setVisibility(View.VISIBLE);
+            } else if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+                followButton.setVisibility(View.GONE);
+            } else {
+                followButton.setFollowing(false);
+                followButton.setVisibility(View.VISIBLE);
+            }
+            followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (followButton.isFollowing()) {
+                        onFollowUnfollowListener.onUnfollow(userModel);
+                    } else {
+                        onFollowUnfollowListener.onFollow(userModel);
                     }
-                });
-
+                }
+            });
         }
 
         @Override
