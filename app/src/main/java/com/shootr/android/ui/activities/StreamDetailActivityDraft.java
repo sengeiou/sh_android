@@ -30,11 +30,14 @@ import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.MenuItemValueHolder;
+import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
+
+import static com.shootr.android.domain.utils.Preconditions.checkArgument;
 
 public class StreamDetailActivityDraft extends BaseActivity implements StreamDetailView {
 
@@ -47,6 +50,9 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
 
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.toolbar_dummy_content) View toolbarDummyContent;
+    @Bind(R.id.collapsing_avatar_toolbar) CollapsingAvatarToolbar collapsingAvatarToolbar;
+    @Bind(R.id.stream_title_container) View streamTitleContainer;
     @Bind(R.id.cat_avatar) View streamPictureContainer;
     @Bind(R.id.stream_avatar) ImageView streamPicture;
     @Bind(R.id.stream_photo_edit_loading) View streamPictureLoading;
@@ -293,6 +299,32 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     @Override
     public void showEditStreamButton() {
         editMenuItem.setVisible(true);
+        collapsingAvatarToolbar.setCollapseChangedListener(new CollapsingAvatarToolbar.CollapseChangedListener() {
+
+            boolean needsToAdjustPadding = true;
+
+            @Override
+            public void onCollapseChanged(float collapseProgress) {
+                if (collapseProgress == 0f) {
+                    setPaddingRight(0);
+                    needsToAdjustPadding = true;
+                } else if (needsToAdjustPadding) {
+                    int paddingRight = getExtraPaddingForMenu();
+                    setPaddingRight(paddingRight);
+                    needsToAdjustPadding = false;
+                }
+            }
+
+            protected int getExtraPaddingForMenu() {
+                int limit = toolbarDummyContent.getRight();
+                int currRight = streamTitleContainer.getRight();
+                return currRight - limit;
+            }
+
+            protected void setPaddingRight(int paddingRight) {
+                streamTitleContainer.setPadding(0, 0, paddingRight, 0);
+            }
+        });
     }
 
     @Override
