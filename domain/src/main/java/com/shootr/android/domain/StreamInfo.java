@@ -12,6 +12,16 @@ public class StreamInfo {
 
     private Integer numberOfFollowing;
 
+    private Boolean hasMoreParticipants;
+
+    public Boolean getHasMoreParticipants() {
+        return hasMoreParticipants;
+    }
+
+    public void setHasMoreParticipants(Boolean hasMoreParticipants) {
+        this.hasMoreParticipants = hasMoreParticipants;
+    }
+
     public Integer getNumberOfFollowing() {
         return numberOfFollowing;
     }
@@ -76,8 +86,14 @@ public class StreamInfo {
             return this;
         }
 
+        public Builder moreParticipants(Boolean hasMoreParticipants) {
+            streamInfo.setHasMoreParticipants(hasMoreParticipants);
+            return this;
+        }
+
         public StreamInfo build() {
             return streamInfo;
         }
+
     }
 }

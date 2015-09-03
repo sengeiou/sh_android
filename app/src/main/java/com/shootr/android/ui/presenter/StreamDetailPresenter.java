@@ -25,7 +25,6 @@ import timber.log.Timber;
 
 public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
 
-    public static final int WATCHERS_LIMIT_TO_SHOW = 50;
     //region Dependencies
     private final Bus bus;
     private final GetStreamInfoInteractor streamInfoInteractor;
@@ -136,7 +135,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
             this.hideViewEmpty();
             this.renderStreamInfo(streamInfo.getStream());
             this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
-            this.renderWatchersList(streamInfo.getWatchers());
+            this.renderWatchersList(streamInfo);
             this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
             this.showViewDetail();
         }
@@ -167,13 +166,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     //region renders
-    private void renderWatchersList(List<User> watchers) {
+    private void renderWatchersList(StreamInfo streamInfo) {
+        List<User> watchers = streamInfo.getWatchers();
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
-        if(watcherModels.size() > WATCHERS_LIMIT_TO_SHOW) {
-            streamDetailView.setWatchers(watcherModels.subList(0, 24));
+        streamDetailView.setWatchers(watcherModels);
+        if(streamInfo.getHasMoreParticipants()) {
             streamDetailView.showAllParticipantsButton();
-        } else {
-            streamDetailView.setWatchers(watcherModels);
         }
     }
 

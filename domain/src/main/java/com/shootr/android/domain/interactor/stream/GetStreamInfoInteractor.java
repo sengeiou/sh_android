@@ -24,6 +24,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class GetStreamInfoInteractor implements Interactor {
 
+    public static final int MAX_WATCHERS_VISIBLE = 50;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
@@ -106,6 +107,11 @@ public class GetStreamInfoInteractor implements Interactor {
             watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
             watchers.addAll(watchesFromStream);
         }
+
+        if (watchers.size() > MAX_WATCHERS_VISIBLE) {
+            watchers = watchers.subList(0, 24);
+        }
+
         return buildStreamInfo(stream, watchers, currentUser, followingsNumber);
     }
 
@@ -147,7 +153,9 @@ public class GetStreamInfoInteractor implements Interactor {
           .stream(stream)
           .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
-          .numberOfFollowing(numberOfFollowing).build();
+          .numberOfFollowing(numberOfFollowing)
+          .moreParticipants(streamWatchers.size() > MAX_WATCHERS_VISIBLE)
+          .build();
     }
 
     private StreamInfo noStream() {
