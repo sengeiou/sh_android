@@ -177,7 +177,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
-        startActivity(StreamDetailActivityDraft.getIntent(this, streamId));
+        startActivity(StreamDetailActivity.getIntent(this, streamId));
     }
 
     @Override public void showStreamRecommended() {

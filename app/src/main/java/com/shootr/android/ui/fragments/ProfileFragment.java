@@ -66,7 +66,7 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.StreamDetailActivityDraft;
+import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
@@ -873,7 +873,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
-        startActivity(StreamDetailActivityDraft.getIntent(getActivity(), streamId));
+        startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
     }
 
     @OnClick(R.id.profile_listing)

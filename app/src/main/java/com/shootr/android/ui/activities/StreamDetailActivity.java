@@ -42,7 +42,7 @@ import timber.log.Timber;
 
 import static com.shootr.android.domain.utils.Preconditions.checkArgument;
 
-public class StreamDetailActivityDraft extends BaseActivity implements StreamDetailView {
+public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
     private static final int REQUEST_EDIT_STREAM = 3;
     private static final int REQUEST_CHOOSE_PHOTO = 4;
@@ -73,14 +73,14 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
 
     public static Intent getIntent(Context context, String streamId) {
-        Intent intent = new Intent(context, StreamDetailActivityDraft.class);
+        Intent intent = new Intent(context, StreamDetailActivity.class);
         intent.putExtra(EXTRA_STREAM_ID, streamId);
         return intent;
     }
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.activity_stream_detail_draft;
+        return R.layout.activity_stream_detail;
     }
 
     @Override

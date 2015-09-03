@@ -83,7 +83,7 @@
                 android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.StreamDetailActivityDraft"
+            android:name=".ui.activities.StreamDetailActivity"
             android:label="Participants"
             >
             <meta-data
