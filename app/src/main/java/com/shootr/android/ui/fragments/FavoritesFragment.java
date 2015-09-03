@@ -48,12 +48,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -64,6 +58,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializePresenter();
+        initializeViews();
     }
 
     @Override

@@ -25,7 +25,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
@@ -40,7 +39,6 @@ import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
-import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.model.ShotModel;
@@ -67,7 +65,6 @@ import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import com.shootr.android.util.MenuItemValueHolder;
-import dagger.ObjectGraph;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
@@ -130,12 +127,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -148,6 +139,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
@@ -235,20 +227,8 @@ public class StreamTimelineFragment extends BaseFragment
     //endregion
 
     private void setStreamTitle(String streamShortTitle) {
-        if (toolbarDecorator == null) {
-            this.getObjectGraph().inject(this);
-        }
         toolbarDecorator.setTitle(streamShortTitle);
 
-    }
-
-    protected ObjectGraph getObjectGraph() {
-        if (getActivity() instanceof BaseActivity) {
-            return ((BaseActivity) getActivity()).getObjectGraph();
-        } else {
-            //TODO delete this case when all activities have been migrated to BaseActivity
-            return ShootrApplication.get(getActivity()).getObjectGraph();
-        }
     }
 
     private void setupNewShotBarDelegate() {
