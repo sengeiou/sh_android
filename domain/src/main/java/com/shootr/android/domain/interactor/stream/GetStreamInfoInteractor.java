@@ -93,16 +93,16 @@ public class GetStreamInfoInteractor implements Interactor {
         });
 
         List<User> people = userRepository.getPeople();
-        List<User> followingsInStream = filterUsersWatchingStream(people, idStreamWanted);
-        followingsInStream = sortWatchersListByJoinStreamDate(followingsInStream);
+        List<User> followingInStream = filterUsersWatchingStream(people, idStreamWanted);
+        followingInStream = sortWatchersListByJoinStreamDate(followingInStream);
 
-        Integer followingsNumber = followingsInStream.size();
+        Integer followingsNumber = followingInStream.size();
 
         List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
-        watchesFromStream.removeAll(followingsInStream);
+        watchesFromStream.removeAll(followingInStream);
         watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
 
-        List<User> watchers = followingsInStream;
+        List<User> watchers = followingInStream;
 
         watchers.addAll(watchesFromStream);
 
