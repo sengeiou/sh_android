@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -70,6 +71,12 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
+
+    public static Intent getIntent(Context context, String streamId) {
+        Intent intent = new Intent(context, StreamDetailActivityDraft.class);
+        intent.putExtra(EXTRA_STREAM_ID, streamId);
+        return intent;
+    }
 
     @Override
     protected int getLayoutResource() {

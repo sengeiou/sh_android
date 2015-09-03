@@ -83,14 +83,6 @@
                 android:value=".ui.activities.MainTabbedActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.StreamDetailActivity"
-            android:label="@string/activity_info_title"
-            android:theme="@style/ShootrTheme.TranslucentToolbar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.MainTabbedActivity" />
-        </activity>
-        <activity
             android:name=".ui.activities.StreamDetailActivityDraft"
             android:label="Participants"
             >

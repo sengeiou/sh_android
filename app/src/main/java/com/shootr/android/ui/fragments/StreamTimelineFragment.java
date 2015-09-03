@@ -1,5 +1,6 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +33,7 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
-import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.StreamDetailActivityDraft;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
@@ -158,8 +159,8 @@ public class StreamTimelineFragment extends BaseFragment
             if (getActivity() != null) {
                 getActivity().finish();
             }
-        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == StreamDetailActivity.RESULT_OK){
-            String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
+        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK){
+            String updatedShortTitle = data.getStringExtra(StreamDetailActivityDraft.EXTRA_STREAM_SHORT_TITLE);
             setStreamTitle(updatedShortTitle);
         } else {
             photoPickerController.onActivityResult(requestCode, resultCode, data);
@@ -499,7 +500,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void navigateToStreamDetail(String idStream) {
-        startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
+        startActivityForResult(StreamDetailActivityDraft.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
     }
 
     @Override public void showCheckingForShots() {

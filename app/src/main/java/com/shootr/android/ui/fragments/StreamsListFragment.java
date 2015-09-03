@@ -22,7 +22,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.FindStreamsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
-import com.shootr.android.ui.activities.StreamDetailActivity;
+import com.shootr.android.ui.activities.StreamDetailActivityDraft;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
@@ -227,7 +227,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
-        startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
+        startActivity(StreamDetailActivityDraft.getIntent(getActivity(), streamId));
     }
 
     @Override
