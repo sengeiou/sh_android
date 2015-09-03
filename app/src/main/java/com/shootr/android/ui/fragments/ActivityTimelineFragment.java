@@ -72,12 +72,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -87,6 +81,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeViews();
         initializePresenter();
     }
 

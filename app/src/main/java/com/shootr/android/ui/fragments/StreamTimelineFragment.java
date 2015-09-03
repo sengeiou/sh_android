@@ -77,7 +77,6 @@ public class StreamTimelineFragment extends BaseFragment
     public static final String EXTRA_STREAM_TITLE = "streamTitle";
     private static final int REQUEST_STREAM_DETAIL = 1;
 
-
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
@@ -128,12 +127,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -146,6 +139,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
         setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
@@ -234,6 +228,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setStreamTitle(String streamShortTitle) {
         toolbarDecorator.setTitle(streamShortTitle);
+
     }
 
     private void setupNewShotBarDelegate() {

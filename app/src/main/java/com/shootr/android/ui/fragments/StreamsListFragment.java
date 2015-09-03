@@ -66,16 +66,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews(savedInstanceState);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         initializePresenter();
+        initializeViews(savedInstanceState);
     }
 
     @Override

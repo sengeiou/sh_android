@@ -1,6 +1,7 @@
 package com.shootr.android.ui.base;
 
-import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import com.shootr.android.ShootrApplication;
 import dagger.ObjectGraph;
@@ -10,8 +11,8 @@ public class BaseFragment extends Fragment {
     private boolean mFistAttach = true;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         injectDependenciesOnFirstAttach();
     }
 
