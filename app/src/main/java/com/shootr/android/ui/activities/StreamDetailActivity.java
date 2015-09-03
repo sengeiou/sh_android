@@ -40,8 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-import static com.shootr.android.domain.utils.Preconditions.checkArgument;
-
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
     private static final int REQUEST_EDIT_STREAM = 3;
@@ -49,7 +47,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     private static final int REQUEST_TAKE_PHOTO = 5;
 
     private static final String EXTRA_STREAM_ID = "streamId";
-    private static final String EXTRA_STREAM_MEDIA_COUNT = "streamMediaCount";
     public static final String EXTRA_STREAM_SHORT_TITLE = "shortTitle";
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -371,10 +368,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void navigateToMedia(String idStream, Integer streamMediaCount) {
-        //TODO getintent
-        Intent intent = new Intent(this, StreamMediaActivity.class);
-        intent.putExtra(EXTRA_STREAM_ID, idStream);
-        intent.putExtra(EXTRA_STREAM_MEDIA_COUNT, streamMediaCount);
+        Intent intent = StreamMediaActivity.newIntent(this, idStream, streamMediaCount);
         this.startActivity(intent);
     }
 
