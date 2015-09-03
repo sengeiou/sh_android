@@ -143,11 +143,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_STREAM && resultCode == RESULT_OK) {
             streamDetailPresenter.resultFromEditStreamInfo();
-        }else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
+        } else if (requestCode == REQUEST_EDIT_STREAM && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
             setResult(NewStreamActivity.RESULT_EXIT_STREAM);
             finish();
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -294,16 +295,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override
-    public void setWatchersCount(int watchersCount) {
-        if (watchersCount == 0) {
-            streamSubtitle.setVisibility(View.GONE);
-        } else {
-            streamSubtitle.setVisibility(View.VISIBLE);
-            streamSubtitle.setText(getString(R.string.stream_participants_following_number, watchersCount));
-        }
-    }
-
-    @Override
     public void setCurrentUserWatching(UserModel userWatchingModel) {
         //TODO
     }
@@ -380,6 +371,21 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public void hideStreamDescription() {
         adapter.setDescription(null);
+    }
+
+    @Override
+    public void showAllParticipantsButton() {
+        // TODO implementation
+    }
+
+    @Override
+    public void setFollowingNumber(Integer numberOfFollowing) {
+        if (numberOfFollowing == 0) {
+            streamSubtitle.setVisibility(View.GONE);
+        } else {
+            streamSubtitle.setVisibility(View.VISIBLE);
+            streamSubtitle.setText(getString(R.string.stream_participants_following_number, numberOfFollowing));
+        }
     }
 
     @Override

@@ -9,7 +9,10 @@ import javax.inject.Inject;
 
 public class StreamEntityMapper {
 
-    @Inject public StreamEntityMapper() {
+    private final UserEntityMapper userEntityMapper;
+
+    @Inject public StreamEntityMapper(UserEntityMapper userEntityMapper) {
+        this.userEntityMapper = userEntityMapper;
     }
 
     public Stream transform(StreamEntity streamEntity) {
@@ -27,6 +30,9 @@ public class StreamEntityMapper {
         stream.setDescription(streamEntity.getDescription());
         stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
         stream.setRemoved(streamEntity.getRemoved() == 1);
+        if (streamEntity.getWatchers() != null) {
+            stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
+        }
         return stream;
     }
 

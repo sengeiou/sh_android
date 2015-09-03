@@ -54,7 +54,7 @@ public class UserEntityMapper {
         userEntity.setUserName(user.getUsername());
         userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
-        userEntity.setEmailConfirmed(user.isEmailConfirmed()? 1 : 0);
+        userEntity.setEmailConfirmed(user.isEmailConfirmed() ? 1 : 0);
         userEntity.setPhoto(user.getPhoto());
         userEntity.setPoints(user.getPoints());
         userEntity.setNumFollowings(user.getNumFollowings());
@@ -82,6 +82,17 @@ public class UserEntityMapper {
             }
         }
         return userEntities;
+    }
+
+    public List<User> transformEntities(List<UserEntity> userEntities) {
+        List<User> users = new ArrayList<>(userEntities.size());
+        for (UserEntity userEntity : userEntities) {
+            User user = transform(userEntity);
+            if (user != null) {
+                users.add(user);
+            }
+        }
+        return users;
     }
 
     public User transform(UserEntity user, String idCurrentUser) {

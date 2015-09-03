@@ -17,6 +17,7 @@ public class Stream {
     private String locale;
     private Integer mediaCount;
     private boolean removed;
+    private List<User> watchers;
 
     public Stream() {
     }
@@ -91,6 +92,14 @@ public class Stream {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    public List<User> getWatchers() {
+        return watchers;
+    }
+
+    public void setWatchers(List<User> watchers) {
+        this.watchers = watchers;
     }
 
     @Override public boolean equals(Object o) {

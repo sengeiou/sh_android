@@ -10,9 +10,24 @@ public class StreamInfo {
 
     private Stream stream;
 
-    public int getWatchersCount() {
-        //TODO: this is a ñapa. El metodo tendra que desaparecer al mergear con participants-info
-        return currentUserWatching != null ? watchers.size() - 1 : watchers.size();
+    private Integer numberOfFollowing;
+
+    private Boolean hasMoreParticipants;
+
+    public Boolean hasMoreParticipants() {
+        return hasMoreParticipants;
+    }
+
+    public void setHasMoreParticipants(Boolean hasMoreParticipants) {
+        this.hasMoreParticipants = hasMoreParticipants;
+    }
+
+    public Integer getNumberOfFollowing() {
+        return numberOfFollowing;
+    }
+
+    public void setNumberOfFollowing(Integer numberOfFollowing) {
+        this.numberOfFollowing = numberOfFollowing;
     }
 
     public List<User> getWatchers() {
@@ -68,8 +83,19 @@ public class StreamInfo {
             return this;
         }
 
+        public Builder numberOfFollowing(Integer numberOfFollowing) {
+            streamInfo.setNumberOfFollowing(numberOfFollowing);
+            return this;
+        }
+
+        public Builder hasMoreParticipants(Boolean hasMoreParticipants) {
+            streamInfo.setHasMoreParticipants(hasMoreParticipants);
+            return this;
+        }
+
         public StreamInfo build() {
             return streamInfo;
         }
+
     }
 }

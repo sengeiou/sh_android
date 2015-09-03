@@ -90,13 +90,15 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(),
           photoFile,
           new ChangeStreamPhotoInteractor.Callback() {
-              @Override public void onLoaded(Stream stream) {
+              @Override
+              public void onLoaded(Stream stream) {
                   renderStreamInfo(stream);
                   streamDetailView.hideLoadingPictureUpload();
               }
           },
           new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
+              @Override
+              public void onError(ShootrException error) {
                   showEditPicturePlaceholderIfEmpty();
                   streamDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
@@ -124,11 +126,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override public void onLoaded(StreamInfo streamInfo) {
+            @Override
+            public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -139,9 +143,9 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         checkNotNull(streamInfo.getStream(),
           "Received null stream from StreamInfoInteractor. That should never happen >_<");
         this.renderStreamInfo(streamInfo.getStream());
-        this.renderWatchersList(streamInfo.getWatchers());
+        this.renderWatchersList(streamInfo);
         this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
-        this.renderWatchersCount(streamInfo.getWatchersCount());
+        this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
         this.showViewDetail();
         this.hideViewLoading();
     }
@@ -169,9 +173,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     //region renders
-    private void renderWatchersList(List<User> watchers) {
+    private void renderWatchersList(StreamInfo streamInfo) {
+        List<User> watchers = streamInfo.getWatchers();
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
         streamDetailView.setWatchers(watcherModels);
+        if(streamInfo.hasMoreParticipants()) {
+            streamDetailView.showAllParticipantsButton();
+        }
     }
 
     private void renderCurrentUserWatching(User currentUserWatch) {
@@ -203,8 +211,10 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         }
     }
 
-    private void renderWatchersCount(int watchersCount) {
-        streamDetailView.setWatchersCount(watchersCount);
+    private void renderFollowingNumber(Integer numberOfFollowing) {
+        if (numberOfFollowing > 0) {
+            streamDetailView.setFollowingNumber(numberOfFollowing);
+        }
     }
     //endregion
 

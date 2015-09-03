@@ -34,7 +34,8 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         if (streamEntity != null) {
             markEntityAsSynchronized(streamEntity);
             localStreamDataSource.putStream(streamEntity);
-            return streamEntityMapper.transform(streamEntity);
+            Stream stream = streamEntityMapper.transform(streamEntity);
+            return stream;
         } else {
             return null;
         }

@@ -1,5 +1,7 @@
 package com.shootr.android.data.entity;
 
+import java.util.List;
+
 public class StreamEntity extends Synchronized implements Comparable<StreamEntity> {
 
     private String idStream;
@@ -13,6 +15,15 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private String locale;
     private Integer mediaCountByRelatedUsers;
     private Integer removed;
+    private List<UserEntity> watchers;
+
+    public List<UserEntity> getWatchers() {
+        return watchers;
+    }
+
+    public void setWatchers(List<UserEntity> watchers) {
+        this.watchers = watchers;
+    }
 
     public Integer getRemoved() {
         return removed;

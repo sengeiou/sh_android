@@ -28,8 +28,6 @@ public interface StreamDetailView extends DataTransferView {
 
     void setWatchers(List<UserModel> watchers);
 
-    void setWatchersCount(int watchersCount);
-
     void setCurrentUserWatching(UserModel userWatchingModel);
 
     void navigateToEditStream(String idStream);
@@ -49,4 +47,8 @@ public interface StreamDetailView extends DataTransferView {
     void setStreamDescription(String description);
 
     void hideStreamDescription();
+
+    void showAllParticipantsButton();
+
+    void setFollowingNumber(Integer numberOfFollowing);
 }

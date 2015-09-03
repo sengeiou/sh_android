@@ -83,7 +83,7 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
         streamSearchEntity.setModified(streamEntity.getModified());
         streamEntity.setRevision(streamEntity.getRevision());
         if(watchers.get(streamEntity.getIdStream()) != null) {
-            streamSearchEntity.setWatchers(watchers.get(streamEntity.getIdStream()));
+            streamSearchEntity.setTotalWatchers(watchers.get(streamEntity.getIdStream()));
         }
         return streamSearchEntity;
     }
