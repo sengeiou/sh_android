@@ -3,15 +3,16 @@ package com.shootr.android.data.mapper;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.Stream;
-import com.shootr.android.domain.User;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 public class StreamEntityMapper {
 
-    @Inject public StreamEntityMapper() {
+    private final UserEntityMapper userEntityMapper;
+
+    @Inject public StreamEntityMapper(UserEntityMapper userEntityMapper) {
+        this.userEntityMapper = userEntityMapper;
     }
 
     public Stream transform(StreamEntity streamEntity) {
@@ -29,7 +30,9 @@ public class StreamEntityMapper {
         stream.setDescription(streamEntity.getDescription());
         stream.setMediaCount(streamEntity.getMediaCountByRelatedUsers());
         stream.setRemoved(streamEntity.getRemoved() == 1);
-        stream.setWatchers(Collections.<User>emptyList());
+        if (streamEntity.getWatchers() != null) {
+            stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
+        }
         return stream;
     }
 
