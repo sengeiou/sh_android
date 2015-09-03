@@ -450,7 +450,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void navigateToEditStream(String idStream) {
-        Intent editIntent = new Intent(this, NewStreamActivity.class).putExtra(NewStreamActivity.KEY_STREAM_ID, idStream);
+        Intent editIntent = NewStreamActivity.newIntent(this, idStream);
         startActivityForResult(editIntent, REQUEST_EDIT_STREAM);
     }
 
