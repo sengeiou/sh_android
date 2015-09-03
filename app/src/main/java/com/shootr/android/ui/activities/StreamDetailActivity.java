@@ -450,12 +450,6 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
         watchersList.setWatchers(watchers);
     }
 
-    @Override public void setWatchersCount(int watchersCount) {
-        watchersNumber.setText(getResources().getQuantityString(R.plurals.stream_watching_watchers_number,
-          watchersCount,
-          watchersCount));
-    }
-
     @Override public void setCurrentUserWatching(UserModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
     }

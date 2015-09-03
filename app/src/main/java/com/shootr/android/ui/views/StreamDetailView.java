@@ -30,8 +30,6 @@ public interface StreamDetailView extends LoadDataView {
 
     void setWatchers(List<UserModel> watchers);
 
-    void setWatchersCount(int watchersCount);
-
     void setCurrentUserWatching(UserModel userWatchingModel);
 
     void navigateToEditStream(String idStream);

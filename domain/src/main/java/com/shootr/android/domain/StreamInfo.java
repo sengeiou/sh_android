@@ -20,10 +20,6 @@ public class StreamInfo {
         this.numberOfFollowing = numberOfFollowing;
     }
 
-    public int getWatchersCount() {
-        return currentUserWatching != null ? watchers.size() + 1 : watchers.size();
-    }
-
     public List<User> getWatchers() {
         return watchers;
     }
