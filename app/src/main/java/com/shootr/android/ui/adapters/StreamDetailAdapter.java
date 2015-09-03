@@ -17,7 +17,6 @@ import com.shootr.android.util.ImageLoader;
 import java.util.Collections;
 import java.util.List;
 
-import static com.shootr.android.domain.utils.Preconditions.checkArgument;
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 import static com.shootr.android.domain.utils.Preconditions.checkPositionIndex;
 
@@ -135,16 +134,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 descriptionViewHolder.setText(description);
                 break;
             case TYPE_AUTHOR:
-                checkArgument(viewHolder == authorViewHolder,
-                  "Wuut? Tried to bind an authorViewholder different from which we have setted as field");
-
                 authorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
                 authorViewHolder.setName(authorName);
                 break;
             case TYPE_MEDIA:
-                checkArgument(viewHolder == mediaViewHolder,
-                  "Wuut? Tried to bind a mediaViewholder different from which we have setted as field");
-
                 mediaViewHolder.setIcon(R.drawable.ic_action_stream_gallery_gray_24);
                 mediaViewHolder.setName(R.string.stream_detail_media);
                 mediaViewHolder.setNumber(mediaCount);
@@ -156,8 +149,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 UserModel user = participants.get(participantPosition(position));
                 ((WatcherViewHolder) viewHolder).bind(user);
                 break;
-            default:
-                throw new IllegalStateException("Wuuut");
         }
     }
 
