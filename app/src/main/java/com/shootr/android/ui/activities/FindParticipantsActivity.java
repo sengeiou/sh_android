@@ -19,25 +19,22 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.FindParticipantsPresenter;
 import com.shootr.android.ui.views.FindParticipantsView;
 import com.shootr.android.util.ImageLoader;
-import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindParticipantsActivity extends BaseSignedInActivity implements FindParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
+public class FindParticipantsActivity extends BaseToolbarDecoratedActivity implements FindParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
 
     private static final String EXTRA_STREAM = "stream";
 
     private SearchView searchView;
     private UserListAdapter adapter;
     private View progressView;
-    private ObjectGraph objectGraph;
 
     @Inject ImageLoader imageLoader;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
@@ -51,17 +48,17 @@ public class FindParticipantsActivity extends BaseSignedInActivity implements Fi
         return intent;
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_find_participants;
+    }
 
-        setContainerContent(R.layout.activity_find_participants);
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-
         setupViews();
         setupActionBar();
+    }
 
-        objectGraph = ShootrApplication.get(getApplicationContext()).getObjectGraph();
-
+    @Override protected void initializePresenter() {
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
         findParticipantsPresenter.initialize(this, idStream);
     }
@@ -207,5 +204,9 @@ public class FindParticipantsActivity extends BaseSignedInActivity implements Fi
     public void openUserProfile(int position) {
         UserModel user = adapter.getItem(position);
         startActivityForResult(ProfileContainerActivity.getIntent(this, user.getIdUser()), 666);
+    }
+
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        /* no-op*/
     }
 }
