@@ -258,14 +258,17 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             watchingText.setText(userModel.getJoinStreamDate());
             imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
 
-            if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
-                followButton.setFollowing(true);
-                followButton.setVisibility(View.VISIBLE);
-            } else if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
-                followButton.setVisibility(View.GONE);
-            } else {
-                followButton.setFollowing(false);
-                followButton.setVisibility(View.VISIBLE);
+            switch (userModel.getRelationship()) {
+                case FollowEntity.RELATIONSHIP_FOLLOWING:
+                    followButton.setFollowing(false);
+                    followButton.setVisibility(View.GONE);
+                    break;
+                case FollowEntity.RELATIONSHIP_OWN:
+                    followButton.setVisibility(View.GONE);
+                    break;
+                default:
+                    followButton.setVisibility(View.VISIBLE);
+                    followButton.setFollowing(false);
             }
             followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
