@@ -52,7 +52,6 @@ public class ShootrTimelineServiceTest {
     @Mock ActivityRepository remoteActivityRepository;
     @Mock ActivityRepository localActivityRepository;
     @Mock TimelineSynchronizationRepository timelineSynchronizationRepository;
-    @Mock ShotRepository localShotRepository;
     @Mock ActivityTimelineParameters activityTimelineParameters;
 
     private ShootrTimelineService shootrTimelineService;
@@ -61,7 +60,9 @@ public class ShootrTimelineServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         shootrTimelineService = new ShootrTimelineService(sessionRepository,
-          remoteShotRepository, localActivityRepository, remoteActivityRepository, localShotRepository,
+          remoteShotRepository,
+          localActivityRepository,
+          remoteActivityRepository,
           timelineSynchronizationRepository);
     }
 
@@ -235,7 +236,7 @@ public class ShootrTimelineServiceTest {
     private void setupWatchingStream() {
         when(sessionRepository.getCurrentUserId()).thenReturn(CURRENT_USER_ID);
     }
-    
+
     private List<Shot> unorderedShots() {
         return Arrays.asList(shotWithDate(DATE_MIDDLE), shotWithDate(DATE_OLDER), shotWithDate(DATE_NEWER));
     }
@@ -249,7 +250,7 @@ public class ShootrTimelineServiceTest {
     private StreamTimelineParameters captureTimelineParameters() {
         ArgumentCaptor<StreamTimelineParameters> parametersCaptor =
           ArgumentCaptor.forClass(StreamTimelineParameters.class);
-        verify(localShotRepository).getShotsForStreamTimeline(parametersCaptor.capture());
+        verify(remoteShotRepository).getShotsForStreamTimeline(parametersCaptor.capture());
         return parametersCaptor.getValue();
     }
 

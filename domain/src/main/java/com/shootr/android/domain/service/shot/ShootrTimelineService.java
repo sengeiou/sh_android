@@ -19,25 +19,20 @@ import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
-    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY = 2;
-    public static final Integer MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY = null;
-
     private final SessionRepository sessionRepository;
     private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
     private final ActivityRepository remoteActivityRepository;
-    private final ShotRepository localShotRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
     public ShootrTimelineService(SessionRepository sessionRepository, @Remote ShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
-      @Local ShotRepository localShotRepository, TimelineSynchronizationRepository timelineSynchronizationRepository) {
+      TimelineSynchronizationRepository timelineSynchronizationRepository) {
         this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
         this.remoteActivityRepository = remoteActivityRepository;
-        this.localShotRepository = localShotRepository;
         this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     }
 
@@ -78,14 +73,9 @@ public class ShootrTimelineService {
 
             StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
               .forStream(idStream) //
-              .niceShots(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_EMPTY) //
               .since(streamRefreshDateSince) //
               .build();
 
-            List<Shot> localShots = localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
-            if (localShots.isEmpty()) {
-                streamTimelineParameters.setMaxNiceShotsIncluded(MAXIMUM_NICE_SHOTS_WHEN_TIMELINE_HAS_SHOTS_ALREADY);
-            }
             newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
             if (!newShots.isEmpty()) {
                 long lastShotDate = newShots.get(0).getPublishDate().getTime();
