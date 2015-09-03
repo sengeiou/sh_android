@@ -25,6 +25,7 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 public class GetStreamInfoInteractor implements Interactor {
 
     public static final int MAX_WATCHERS_VISIBLE = 50;
+    public static final int MAX_WATCHERS_TO_SHOW = 25;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
@@ -110,7 +111,7 @@ public class GetStreamInfoInteractor implements Interactor {
 
         Boolean hasMoreParticipants = false;
         if (watchers.size() > MAX_WATCHERS_VISIBLE) {
-            watchers = watchers.subList(0, MAX_WATCHERS_VISIBLE);
+            watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
             hasMoreParticipants = true;
         }
 
