@@ -31,6 +31,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 4;
 
+    private final View.OnClickListener onAuthorClickListener;
+    private final View.OnClickListener onMediaClickListener;
     private final OnUserClickListener onUserClickListener;
     private final ImageLoader imageLoader;
     private ActionViewHolder authorViewHolder;
@@ -42,6 +44,16 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private String authorName;
     private String description;
     private int mediaCount;
+
+    public StreamDetailAdapter(ImageLoader imageLoader,
+      View.OnClickListener onAuthorClickListener,
+      View.OnClickListener onMediaClickListener,
+      OnUserClickListener onUserClickListener) {
+        this.onAuthorClickListener = onAuthorClickListener;
+        this.onMediaClickListener = onMediaClickListener;
+        this.onUserClickListener = onUserClickListener;
+        this.imageLoader = imageLoader;
+    }
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
@@ -62,11 +74,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (mediaViewHolder != null) {
             mediaViewHolder.setNumber(mediaCount);
         }
-    }
-
-    public StreamDetailAdapter(OnUserClickListener onUserClickListener, ImageLoader imageLoader) {
-        this.onUserClickListener = onUserClickListener;
-        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -99,12 +106,14 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_AUTHOR:
                 if (authorViewHolder == null) {
                     v = inflater.inflate(R.layout.item_menu_action, parent, false);
+                    v.setOnClickListener(onAuthorClickListener);
                     authorViewHolder = new ActionViewHolder(v);
                 }
                 return authorViewHolder;
             case TYPE_MEDIA:
                 if (mediaViewHolder == null) {
                     v = inflater.inflate(R.layout.item_menu_action, parent, false);
+                    v.setOnClickListener(onMediaClickListener);
                     mediaViewHolder = new ActionViewHolder(v);
                 }
                 return mediaViewHolder;

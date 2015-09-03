@@ -23,12 +23,14 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.StreamDetailAdapter;
+import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.MenuItemValueHolder;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
 import java.io.File;
@@ -64,6 +66,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
 
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
+    @Inject IntentFactory intentFactory;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -80,9 +83,33 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
 
-        adapter = new StreamDetailAdapter(null, imageLoader);
+        adapter = new StreamDetailAdapter(imageLoader, //
+          new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  streamDetailPresenter.clickAuthor();
+              }
+          }, // author
+          new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  streamDetailPresenter.clickMedia();
+              }
+          }, // media
+          new OnUserClickListener() {
+              @Override
+              public void onUserClick(String idUser) {
+                  navigateToUser(idUser);
+              }
+          }); // participant
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @OnClick(R.id.stream_share_button)
+    public void onShareClick() {
+        //TODO la historia de share stream esta aparte, cuando se mergee habra que meterlo aqui via intentFactory
+        Toast.makeText(this, "Share all the things!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -250,7 +277,7 @@ public class StreamDetailActivityDraft extends BaseActivity implements StreamDet
     public void zoomPhoto(String picture) {
         Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(streamPictureContainer,
           streamPictureContainer.getLeft(),
-          0,
+          streamPictureContainer.getTop(),
           streamPictureContainer.getWidth(),
           streamPictureContainer.getBottom()).toBundle();
         Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
