@@ -108,11 +108,13 @@ public class GetStreamInfoInteractor implements Interactor {
             watchers.addAll(watchesFromStream);
         }
 
+        Boolean hasMoreParticipants = false;
         if (watchers.size() > MAX_WATCHERS_VISIBLE) {
-            watchers = watchers.subList(0, 24);
+            watchers = watchers.subList(0, MAX_WATCHERS_VISIBLE);
+            hasMoreParticipants = true;
         }
 
-        return buildStreamInfo(stream, watchers, currentUser, followingsNumber);
+        return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
@@ -135,26 +137,30 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     protected List<User> removeCurrentUserFromWatchers(List<User> watchers) {
-        int meIndex = -1;
-        for (int i=0; i<watchers.size(); i++) {
-            if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
-                meIndex = i;
-            }
-        }
+        int meIndex = findMeIn(watchers);
         if (meIndex>=0) {
             watchers.remove(meIndex);
         }
         return watchers;
     }
 
-    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser, Integer numberOfFollowing) {
+    private int findMeIn(List<User> watchers) {
+        int meIndex = -1;
+        for (int i=0; i<watchers.size(); i++) {
+            if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
+                meIndex = i;
+            }
+        }
+        return meIndex;
+    }
+
+    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser,
+      Integer numberOfFollowing, Boolean hasMoreParticipants) {
         boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
-          .stream(stream)
-          .watchers(streamWatchers)
-          .currentUserWatching(isCurrentUserWatching ? currentUser : null)
-          .numberOfFollowing(numberOfFollowing)
-          .hasMoreParticipants(streamWatchers.size() > MAX_WATCHERS_VISIBLE)
+          .stream(stream).watchers(streamWatchers)
+          .currentUserWatching(isCurrentUserWatching ? currentUser : null).numberOfFollowing(numberOfFollowing)
+          .hasMoreParticipants(hasMoreParticipants)
           .build();
     }
 
