@@ -190,6 +190,18 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        streamDetailPresenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        streamDetailPresenter.pause();
+    }
+
     private void setShortTitleResultForPreviousActivity(String shortTitle) {
         setResult(RESULT_OK, new Intent().putExtra(EXTRA_STREAM_SHORT_TITLE, shortTitle));
     }
@@ -321,6 +333,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Override
     public void setWatchers(List<UserModel> watchers) {
         adapter.setParticipants(watchers);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
