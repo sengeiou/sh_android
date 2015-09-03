@@ -210,7 +210,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 optionalNumber.setVisibility(View.GONE);
             } else {
                 optionalNumber.setVisibility(View.VISIBLE);
-                optionalNumber.setText("" + number);
+                optionalNumber.setText(String.valueOf(number));
             }
         }
     }
