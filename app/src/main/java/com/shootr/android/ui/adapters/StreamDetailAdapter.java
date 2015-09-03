@@ -11,8 +11,11 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.ImageLoader;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +36,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final View.OnClickListener onAuthorClickListener;
     private final View.OnClickListener onMediaClickListener;
     private final OnUserClickListener onUserClickListener;
+    private final OnFollowUnfollowListener onFollowUnfollowListener;
     private final ImageLoader imageLoader;
     private ActionViewHolder authorViewHolder;
     private ActionViewHolder mediaViewHolder;
@@ -47,11 +51,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public StreamDetailAdapter(ImageLoader imageLoader,
       View.OnClickListener onAuthorClickListener,
       View.OnClickListener onMediaClickListener,
-      OnUserClickListener onUserClickListener) {
+      OnUserClickListener onUserClickListener, OnFollowUnfollowListener onFollowUnfollowListener) {
         this.onAuthorClickListener = onAuthorClickListener;
         this.onMediaClickListener = onMediaClickListener;
         this.onUserClickListener = onUserClickListener;
         this.imageLoader = imageLoader;
+        this.onFollowUnfollowListener = onFollowUnfollowListener;
     }
 
     public void setAuthorName(String authorName) {
@@ -121,7 +126,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new SeparatorViewHolder(v);
             case TYPE_PARTICIPANT:
                 v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
-                return new WatcherViewHolder(v, onUserClickListener, imageLoader);
+                return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener);
             default:
                 throw new IllegalStateException("No holder declared for view type " + viewType);
         }
@@ -226,26 +231,53 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         private final OnUserClickListener onUserClickListener;
         private final ImageLoader imageLoader;
+        private final OnFollowUnfollowListener onFollowUnfollowListener;
 
         @Bind(R.id.watcher_user_avatar) ImageView avatar;
         @Bind(R.id.watcher_user_name) TextView name;
         @Bind(R.id.watcher_user_watching) TextView watchingText;
+        @Bind(R.id.user_follow_button) FollowButton followButton;
 
         private String userId;
 
-        public WatcherViewHolder(View itemView, OnUserClickListener onUserClickListener, ImageLoader imageLoader) {
+        public WatcherViewHolder(View itemView,
+          OnUserClickListener onUserClickListener,
+          ImageLoader imageLoader,
+          OnFollowUnfollowListener onFollowUnfollowListener) {
             super(itemView);
             this.onUserClickListener = onUserClickListener;
             this.imageLoader = imageLoader;
+            this.onFollowUnfollowListener = onFollowUnfollowListener;
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(UserModel userModel) {
+        public void bind(final UserModel userModel) {
             userId = userModel.getIdUser();
             name.setText(userModel.getUsername());
             watchingText.setText(userModel.getJoinStreamDate());
             imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
+
+                if(userModel.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
+                    followButton.setFollowing(true);
+                    followButton.setVisibility(View.VISIBLE);
+                }else if(userModel.getRelationship() == FollowEntity.RELATIONSHIP_OWN){
+                    followButton.setVisibility(View.GONE);
+                }else{
+                    followButton.setFollowing(false);
+                    followButton.setVisibility(View.VISIBLE);
+                }
+                followButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (followButton.isFollowing()) {
+                            onFollowUnfollowListener.onUnfollow(userModel);
+                        } else {
+                            onFollowUnfollowListener.onFollow(userModel);
+                        }
+                    }
+                });
+
         }
 
         @Override

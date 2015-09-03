@@ -1,6 +1,9 @@
 package com.shootr.android.ui.presenter;
 
+import android.util.Pair;
+import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.bus.Main;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
@@ -8,8 +11,12 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
+import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -21,6 +28,7 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import timber.log.Timber;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
@@ -36,6 +44,10 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
+    private final Provider<GetFollowUnfollowUserOnlineJob> followOnlineJobProvider;
+    private final Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider;
+    private final JobManager jobManager;
+
     private StreamDetailView streamDetailView;
     private String idStream;
 
@@ -43,17 +55,26 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private StreamModel streamModel;
 
     private Integer streamMediaCount;
+    private List<UserModel> participantsShown;
 
     @Inject
-    public StreamDetailPresenter(@Main Bus bus, GetStreamInfoInteractor streamInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, StreamModelMapper streamModelMapper,
-      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+    public StreamDetailPresenter(@Main Bus bus,
+      GetStreamInfoInteractor streamInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
+      StreamModelMapper streamModelMapper,
+      UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory,
+      Provider<GetFollowUnfollowUserOnlineJob> followOnlineJobProvider,
+      Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider, JobManager jobManager) {
         this.bus = bus;
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
+        this.followOnlineJobProvider = followOnlineJobProvider;
+        this.followOfflineJobProvider = followOfflineJobProvider;
+        this.jobManager = jobManager;
     }
     //endregion
 
@@ -175,8 +196,8 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     //region renders
     private void renderWatchersList(StreamInfo streamInfo) {
         List<User> watchers = streamInfo.getWatchers();
-        List<UserModel> watcherModels = userModelMapper.transform(watchers);
-        streamDetailView.setWatchers(watcherModels);
+        participantsShown = userModelMapper.transform(watchers);
+        streamDetailView.setWatchers(participantsShown);
         if(streamInfo.hasMoreParticipants()) {
             streamDetailView.showAllParticipantsButton();
         }
@@ -252,5 +273,37 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     public void clickMedia() {
         streamDetailView.navigateToMedia(idStream, streamMediaCount);
+    }
+
+    public void follow(String idUser) {
+        startfollowUnfollowJob(idUser, true);
+    }
+
+    public void unfollow(String idUser) {
+        startfollowUnfollowJob(idUser, true);
+    }
+
+    @Subscribe
+    public void onFollowUnfollowResultReceived(FollowUnFollowResultEvent event) {
+        Pair<String, Boolean> result = event.getResult();
+        String idUser = result.first;
+        Boolean following = result.second;
+        for (UserModel participant : participantsShown) {
+            if (participant.getIdUser().equals(idUser)) {
+                participant.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                streamDetailView.setWatchers(participantsShown);
+                break;
+            }
+        }
+
+    }
+
+    protected void startfollowUnfollowJob(String idUser, boolean follow) {
+        GetFollowUnFollowUserOfflineJob offlineJob = followOfflineJobProvider.get();
+        offlineJob.init(idUser, follow ? UserDtoFactory.FOLLOW_TYPE : UserDtoFactory.UNFOLLOW_TYPE);
+        jobManager.addJobInBackground(offlineJob);
+
+        GetFollowUnfollowUserOnlineJob onlineJob = followOnlineJobProvider.get();
+        jobManager.addJobInBackground(onlineJob);
     }
 }

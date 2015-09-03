@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.StreamDetailAdapter;
+import com.shootr.android.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -105,7 +106,18 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               public void onUserClick(String idUser) {
                   navigateToUser(idUser);
               }
-          }); // participant
+          }, // participant
+          new OnFollowUnfollowListener() {
+              @Override
+              public void onFollow(UserModel user) {
+                  streamDetailPresenter.follow(user.getIdUser());
+              }
+
+              @Override
+              public void onUnfollow(UserModel user) {
+                  streamDetailPresenter.unfollow(user.getIdUser());
+              }
+          }); //follow
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
