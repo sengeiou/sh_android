@@ -22,8 +22,6 @@ import com.shootr.android.ui.views.AllParticipantsView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -59,13 +57,12 @@ public class AllParticipantsPresenter implements Presenter {
         this.setView(allParticipantsView);
         this.idStream = idStream;
         this.loadAllParticipants();
-        this.participants = new ArrayList<>();
     }
 
     private void loadAllParticipants() {
         allParticipantsView.hideEmpty();
         allParticipantsView.showLoading();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), false, new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, Long.MAX_VALUE, false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 allParticipantsView.hideLoading();
                 allParticipantsView.showAllParticipantsList();
@@ -80,7 +77,7 @@ public class AllParticipantsPresenter implements Presenter {
 
     private void refreshAllParticipants() {
         allParticipantsView.hideEmpty();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), false, new Interactor.Callback<List<User>>() {
+        getAllParticipantsInteractor.obtainAllParticipants(idStream, Long.MAX_VALUE, false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 renderParticipants(users);
             }
@@ -146,7 +143,7 @@ public class AllParticipantsPresenter implements Presenter {
     }
 
     @Override public void resume() {
-        if (hasBeenPaused.equals(true)) {
+        if (hasBeenPaused) {
             refreshAllParticipants();
             selectStream();
         }
