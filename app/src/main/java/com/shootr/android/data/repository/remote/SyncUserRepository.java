@@ -157,20 +157,18 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
         List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
-        List<User> participants = new ArrayList<>();
-        for (UserEntity participantEntity : allParticipants) {
-            User participant = userEntityMapper.transform(participantEntity,
-              sessionRepository.getCurrentUserId(),
-              isFollower(participantEntity.getIdUser()),
-              isFollowing(participantEntity.getIdUser()));
-            participants.add(participant);
-        }
+        List<User> participants = getParticipants(allParticipants);
         return participants;
     }
 
     @Override public List<User> findParticipants(String idStream, String query) {
         List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
-        List<User> participants = new ArrayList<>();
+        List<User> participants = getParticipants(allParticipants);
+        return participants;
+    }
+
+    private List<User> getParticipants(List<UserEntity> allParticipants) {
+        List<User> participants = new ArrayList<>(allParticipants.size());
         for (UserEntity participantEntity : allParticipants) {
             User participant = userEntityMapper.transform(participantEntity,
               sessionRepository.getCurrentUserId(),
