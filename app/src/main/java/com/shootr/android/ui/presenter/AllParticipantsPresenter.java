@@ -69,13 +69,7 @@ public class AllParticipantsPresenter implements Presenter {
             @Override public void onLoaded(List<User> users) {
                 allParticipantsView.hideLoading();
                 allParticipantsView.showAllParticipantsList();
-                List<UserModel> userModels = userModelMapper.transform(users);
-                participants = userModels;
-                if (!participants.isEmpty()) {
-                    allParticipantsView.renderAllParticipants(userModels);
-                } else {
-                    allParticipantsView.showEmpty();
-                }
+                renderParticipants(users);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -88,19 +82,23 @@ public class AllParticipantsPresenter implements Presenter {
         allParticipantsView.hideEmpty();
         getAllParticipantsInteractor.obtainAllParticipants(idStream, new Date().getTime(), false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
-                List<UserModel> userModels = userModelMapper.transform(users);
-                participants = userModels;
-                if (!participants.isEmpty()) {
-                    allParticipantsView.refreshParticipants(userModels);
-                } else {
-                    allParticipantsView.showEmpty();
-                }
+                renderParticipants(users);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
                 allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
+    }
+
+    private void renderParticipants(List<User> users) {
+        List<UserModel> userModels = userModelMapper.transform(users);
+        participants = userModels;
+        if (!participants.isEmpty()) {
+            allParticipantsView.renderAllParticipants(userModels);
+        } else {
+            allParticipantsView.showEmpty();
+        }
     }
 
     public void followUser(UserModel userModel, Context context) {
@@ -133,7 +131,7 @@ public class AllParticipantsPresenter implements Presenter {
             UserModel userModel = participants.get(i);
             if (userModel.getIdUser().equals(idUser)) {
                 userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
-                allParticipantsView.refreshParticipants(participants);
+                allParticipantsView.renderAllParticipants(participants);
                 break;
             }
         }

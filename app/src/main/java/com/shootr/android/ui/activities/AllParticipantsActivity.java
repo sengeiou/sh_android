@@ -158,11 +158,6 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
         userlistListView.setVisibility(View.VISIBLE);
     }
 
-    @Override public void refreshParticipants(List<UserModel> participants) {
-        adapter.setItems(participants);
-        adapter.notifyDataSetChanged();
-    }
-
     @Override public void goToSearchParticipants() {
         String idStream = getIntent().getStringExtra(EXTRA_STREAM);
         startActivity(FindParticipantsActivity.newIntent(this, idStream));
