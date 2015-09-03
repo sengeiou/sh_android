@@ -421,11 +421,17 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
-            @Override public void run() {
-                shareShot(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
             @Override
             public void run() {
                 copyShotCommentToClipboard(shotModel);
@@ -437,7 +443,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    private void shareShot(ShotModel shotModel) {
+    private void shareShotIntent(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
@@ -510,6 +516,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideCheckingForShots() {
         checkingForShotsView.setVisibility(View.GONE);
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -730,7 +730,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  profilePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
@@ -874,6 +879,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
         startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.profile_listing)

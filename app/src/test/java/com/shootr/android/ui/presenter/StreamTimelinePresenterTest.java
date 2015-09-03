@@ -6,6 +6,7 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.bus.ShotSent;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.ui.Poller;
@@ -51,6 +52,7 @@ public class StreamTimelinePresenterTest {
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock ShareShotInteractor shareShotInteractor;
     @Mock Bus bus;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Poller poller;
@@ -63,8 +65,7 @@ public class StreamTimelinePresenterTest {
         ShotModelMapper shotModelMapper = new ShotModelMapper();
         presenter = new StreamTimelinePresenter(timelineInteractorWrapper, selectStreamInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor,
-          shotModelMapper, bus, errorMessageFactory, poller);
+          unmarkNiceShotInteractor, shareShotInteractor, shotModelMapper, bus, errorMessageFactory, poller);
         presenter.setView(streamTimelineView);
         shotSentReceiver = presenter;
     }

@@ -130,4 +130,12 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(error);
         }
     }
+
+    @Override public void shareShot(String idShot) {
+        try {
+            shotApiService.shareShot(idShot);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
 }
