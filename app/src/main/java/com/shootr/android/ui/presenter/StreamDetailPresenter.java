@@ -170,7 +170,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         List<User> watchers = streamInfo.getWatchers();
         List<UserModel> watcherModels = userModelMapper.transform(watchers);
         streamDetailView.setWatchers(watcherModels);
-        if(streamInfo.getHasMoreParticipants()) {
+        if(streamInfo.hasMoreParticipants()) {
             streamDetailView.showAllParticipantsButton();
         }
     }

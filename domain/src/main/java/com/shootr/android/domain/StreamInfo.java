@@ -14,7 +14,7 @@ public class StreamInfo {
 
     private Boolean hasMoreParticipants;
 
-    public Boolean getHasMoreParticipants() {
+    public Boolean hasMoreParticipants() {
         return hasMoreParticipants;
     }
 
@@ -86,7 +86,7 @@ public class StreamInfo {
             return this;
         }
 
-        public Builder moreParticipants(Boolean hasMoreParticipants) {
+        public Builder hasMoreParticipants(Boolean hasMoreParticipants) {
             streamInfo.setHasMoreParticipants(hasMoreParticipants);
             return this;
         }

@@ -154,7 +154,7 @@ public class GetStreamInfoInteractor implements Interactor {
           .watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null)
           .numberOfFollowing(numberOfFollowing)
-          .moreParticipants(streamWatchers.size() > MAX_WATCHERS_VISIBLE)
+          .hasMoreParticipants(streamWatchers.size() > MAX_WATCHERS_VISIBLE)
           .build();
     }
 
