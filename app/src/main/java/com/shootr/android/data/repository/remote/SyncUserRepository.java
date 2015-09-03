@@ -189,10 +189,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
+            String idUser = localUserEntity.getIdUser();
             User user = userEntityMapper.transform(localUserEntity,
               currentUserId,
-              isFollower(currentUserId),
-              isFollowing(currentUserId));
+              isFollower(idUser),
+              isFollowing(idUser));
             userList.add(user);
         }
         return userList;

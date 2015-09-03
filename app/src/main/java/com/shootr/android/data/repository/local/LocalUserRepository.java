@@ -80,7 +80,8 @@ public class LocalUserRepository implements UserRepository {
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
-            User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(currentUserId), isFollowing(currentUserId));
+            String idUser = localUserEntity.getIdUser();
+            User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(idUser), isFollowing(idUser));
             userList.add(user);
         }
         return userList;
