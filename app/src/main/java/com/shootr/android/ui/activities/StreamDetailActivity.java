@@ -170,6 +170,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
 
     @OnClick(R.id.stream_detail_media)
     public void onMediaClick() {
+        //TODO ñapa like a castle. está hecho para comprobar el funcionamiento de la historia all participants. DESHACER.
         Intent intent = AllParticipantsActivity.newIntent(this, getIntent().getStringExtra(EXTRA_STREAM_ID));
         this.startActivity(intent);
     }
