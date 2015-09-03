@@ -78,7 +78,7 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     @Bind(R.id.stream_content_empty) View contentEmpty;
     @Bind(R.id.stream_content_detail) View contentDetail;
 
-    @Bind(R.id.stream_content_detail_watchers_number) TextView watchersNumber;
+    @Bind(R.id.stream_content_detail_following_number) TextView followingNumber;
     @Bind(R.id.stream_content_detail_watchers_list) WatchersView watchersList;
 
     @Bind(R.id.stream_detail_media) TextView streamMedia;
@@ -522,7 +522,9 @@ public class StreamDetailActivity extends BaseNoToolbarActivity
     }
 
     @Override public void setFollowingNumber(Integer numberOfFollowing) {
-        // TODO implementation
+        followingNumber.setText(getResources().getQuantityString(R.plurals.stream_watching_following_number,
+          numberOfFollowing,
+          numberOfFollowing));
     }
 
     @Override public void showEmpty() {

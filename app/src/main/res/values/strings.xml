@@ -248,7 +248,7 @@
         </item>
     </plurals>
 
-    <plurals name="stream_watching_watchers_number">
+    <plurals name="stream_watching_following_number">
         <item quantity="one">
             Friends
         </item>

@@ -139,7 +139,7 @@
                           android:background="?dividerHorizontal" />
 
                         <!-- watchers -->
-                        <TextView android:id="@+id/stream_content_detail_watchers_number"
+                        <TextView android:id="@+id/stream_content_detail_following_number"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="16dp"

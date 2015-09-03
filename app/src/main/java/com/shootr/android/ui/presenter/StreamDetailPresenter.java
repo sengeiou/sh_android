@@ -138,7 +138,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
             this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
             this.renderWatchersList(streamInfo.getWatchers());
             this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
-            this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
             this.showViewDetail();
         }
         this.hideViewLoading();
