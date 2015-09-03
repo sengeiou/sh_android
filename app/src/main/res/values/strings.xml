@@ -248,22 +248,7 @@
         </item>
     </plurals>
 
-    <plurals name="stream_watching_watchers_number">
-        <item quantity="one">
-            Friends
-        </item>
-        <item quantity="other">
-            %d friends
-        </item>
-    </plurals>
-    <plurals name="stream_watchers">
-        <item quantity="one">
-            – %d friend
-        </item>
-        <item quantity="other">
-           – %d friends
-        </item>
-    </plurals>
+    <string name="stream_participants_following_number">following %d</string>
     <string name="title_activity_stream_media">Media</string>
 
     <string name="hello_world">Hello world!</string>

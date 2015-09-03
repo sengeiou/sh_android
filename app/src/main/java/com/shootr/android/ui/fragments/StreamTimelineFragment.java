@@ -1,5 +1,6 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -152,7 +153,7 @@ public class StreamTimelineFragment extends BaseFragment
             if (getActivity() != null) {
                 getActivity().finish();
             }
-        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == StreamDetailActivity.RESULT_OK){
+        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK){
             String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
             setStreamTitle(updatedShortTitle);
         } else {
@@ -500,9 +501,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void navigateToStreamDetail(String idStream) {
-        Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
-        intent.putExtra(EXTRA_STREAM_ID, idStream);
-        startActivityForResult(intent, REQUEST_STREAM_DETAIL);
+        startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
     }
 
     @Override public void showCheckingForShots() {

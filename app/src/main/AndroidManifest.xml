@@ -84,8 +84,8 @@
         </activity>
         <activity
             android:name=".ui.activities.StreamDetailActivity"
-            android:label="@string/activity_info_title"
-            android:theme="@style/ShootrTheme.TranslucentToolbar" >
+            android:label="Participants"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainTabbedActivity" />

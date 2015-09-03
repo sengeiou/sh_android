@@ -23,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
 
     //region Dependencies
@@ -91,17 +93,22 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
               @Override public void onLoaded(Stream stream) {
                   renderStreamInfo(stream);
                   streamDetailView.hideLoadingPictureUpload();
-                  streamDetailView.showEditPicture(stream.getPicture());
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                  streamDetailView.showEditPicture(streamModel.getPicture());
+                  showEditPicturePlaceholderIfEmpty();
                   streamDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
                   Timber.e(error, "Error changing stream photo");
               }
           });
+    }
+
+    private void showEditPicturePlaceholderIfEmpty() {
+        if (streamModel.getPicture() == null) {
+            streamDetailView.showEditPicturePlaceholder();
+        }
     }
     //endregion
 
@@ -129,21 +136,17 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
 
     public void onStreamInfoLoaded(StreamInfo streamInfo) {
-        if (streamInfo.getStream() == null) {
-            this.showViewEmpty();
-        } else {
-            this.hideViewEmpty();
-            this.renderStreamInfo(streamInfo.getStream());
-            this.renderWatchersList(streamInfo.getWatchers());
-            this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
-            this.renderWatchersCount(streamInfo.getWatchersCount());
-            this.showViewDetail();
-        }
+        checkNotNull(streamInfo.getStream(),
+          "Received null stream from StreamInfoInteractor. That should never happen >_<");
+        this.renderStreamInfo(streamInfo.getStream());
+        this.renderWatchersList(streamInfo.getWatchers());
+        this.renderCurrentUserWatching(streamInfo.getCurrentUserWatching());
+        this.renderWatchersCount(streamInfo.getWatchersCount());
+        this.showViewDetail();
         this.hideViewLoading();
     }
 
     private void showViewDetail() {
-        streamDetailView.showContent();
         streamDetailView.showDetail();
     }
     //endregion
@@ -191,16 +194,12 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         }
         if (streamModel.amIAuthor()) {
             streamDetailView.showEditStreamButton();
-            streamDetailView.showEditPicture(streamModel.getPicture());
-        } else {
-            streamDetailView.hideEditStreamButton();
-            streamDetailView.hideEditPicture();
+            showEditPicturePlaceholderIfEmpty();
         }
 
         streamMediaCount = streamModel.getMediaCount();
         if (streamMediaCount > 0) {
             streamDetailView.setMediaCount(streamMediaCount);
-            streamDetailView.showMediaCount();
         }
     }
 
@@ -211,21 +210,11 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     //region View methods
     private void showViewLoading() {
-        streamDetailView.hideContent();
         streamDetailView.showLoading();
     }
 
     private void hideViewLoading() {
         streamDetailView.hideLoading();
-    }
-
-    private void showViewEmpty() {
-        streamDetailView.showContent();
-        streamDetailView.showEmpty();
-    }
-
-    private void hideViewEmpty() {
-        streamDetailView.hideEmpty();
     }
     //endregion
 
