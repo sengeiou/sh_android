@@ -130,13 +130,14 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     protected List<User> removeCurrentUserFromWatchers(List<User> people) {
-        List<User> watchers = new ArrayList<>();
+        User me = new User();
         for (User user : people) {
             if (!user.getIdUser().equals(sessionRepository.getCurrentUserId())) {
-                watchers.add(user);
+                me = user;
             }
         }
-        return watchers;
+        people.remove(me);
+        return people;
     }
 
     private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser, Integer numberOfFollowing) {
