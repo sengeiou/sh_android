@@ -150,6 +150,7 @@ public class GetStreamInfoInteractor implements Interactor {
         for (int i=0; i<watchers.size(); i++) {
             if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
                 meIndex = i;
+                break;
             }
         }
         return meIndex;
