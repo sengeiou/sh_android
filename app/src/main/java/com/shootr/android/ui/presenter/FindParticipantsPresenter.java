@@ -60,6 +60,7 @@ public class FindParticipantsPresenter implements Presenter {
     public void searchParticipants(String query) {
         this.query = query;
         findParticipantsView.hideEmpty();
+        findParticipantsView.hideContent();
         findParticipantsView.hideKeyboard();
         findParticipantsView.showLoading();
         findParticipantsView.setCurrentQuery(query);
@@ -71,7 +72,6 @@ public class FindParticipantsPresenter implements Presenter {
                     findParticipantsView.showContent();
                     findParticipantsView.renderParticipants(participants);
                 }else{
-                    findParticipantsView.hideContent();
                     findParticipantsView.showEmpty();
                 }
             }

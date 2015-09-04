@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -34,13 +34,13 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
 
     private SearchView searchView;
     private UserListAdapter adapter;
-    private View progressView;
 
     @Inject ImageLoader imageLoader;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
 
     @Bind(R.id.find_participants_search_results_list) ListView resultsListView;
     @Bind(R.id.find_participants_search_results_empty) TextView emptyOrErrorView;
+    @Bind(R.id.userlist_progress) ProgressBar progressBar;
 
     public static Intent newIntent(Context context, String idStream) {
         Intent intent = new Intent(context, FindParticipantsActivity.class);
@@ -69,19 +69,12 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
             adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);
-
-        progressView = getLoadingView();
-        resultsListView.addFooterView(progressView, null, false);
     }
 
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-    }
-
-    private View getLoadingView() {
-        return LayoutInflater.from(this).inflate(R.layout.item_list_loading, resultsListView, false);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,11 +154,11 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public void showLoading() {
-        progressView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoading() {
-        progressView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override public void showError(String message) {
