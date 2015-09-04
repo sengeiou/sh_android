@@ -361,4 +361,6 @@
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="menu_share_shot_via_shootr">Share via Shootr</string>
     <string name="shot_shared_message">Shot shared</string>
+    <string name="drafts_action_discard">Discard</string>
+    <string name="drafts_action_shoot">Shoot</string>
 </resources>
