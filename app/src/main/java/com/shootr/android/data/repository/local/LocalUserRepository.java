@@ -76,11 +76,20 @@ public class LocalUserRepository implements UserRepository {
         return suggestedPeopleEntitiesToDomain(suggestedPeople);
     }
 
+    @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
+        throw new IllegalArgumentException("getAllParticipants has no local implementation");
+    }
+
+    @Override public List<User> findParticipants(String idStream, String query) {
+        throw new IllegalArgumentException("Find Participants has no local implementation");
+    }
+
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
         List<User> userList = new ArrayList<>();
         String currentUserId = sessionRepository.getCurrentUserId();
         for (UserEntity localUserEntity : localUserEntities) {
-            User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(currentUserId), isFollowing(currentUserId));
+            String idUser = localUserEntity.getIdUser();
+            User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(idUser), isFollowing(idUser));
             userList.add(user);
         }
         return userList;

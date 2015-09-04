@@ -69,6 +69,8 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
         presenter.initialize();
         suggestedPeoplePresenter.initialize(this);
         userlistListView.setAdapter(getPeopleAdapter());
+        setEmptyMessageForPeople();
+        userlistListView.setAdapter(getPeopleAdapter());
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -78,8 +80,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        userlistListView.setAdapter(getPeopleAdapter());
-        setEmptyMessageForPeople();
     }
 
     @Override

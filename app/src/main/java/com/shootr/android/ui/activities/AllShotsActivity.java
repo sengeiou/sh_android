@@ -198,7 +198,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.menu_share_shot), new Runnable() {
+          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  presenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
@@ -286,6 +291,10 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     @Override public void addOldShots(List<ShotModel> shotModels) {
         adapter.addShotsBelow(shotModels);
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(this, getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {

@@ -24,6 +24,8 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class GetStreamInfoInteractor implements Interactor {
 
+    public static final int MAX_WATCHERS_VISIBLE = 50;
+    public static final int MAX_WATCHERS_TO_SHOW = 25;
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final UserRepository localUserRepository;
@@ -69,12 +71,12 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     protected void obtainLocalStreamInfo() {
-        StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository);
+        StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository, true);
         notifyLoaded(streamInfo);
     }
 
     protected void obtainRemoteStreamInfo() {
-        StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository);
+        StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository, false);
         if (streamInfo != null) {
             notifyLoaded(streamInfo);
         } else {
@@ -82,7 +84,9 @@ public class GetStreamInfoInteractor implements Interactor {
         }
     }
 
-    protected StreamInfo getStreamInfo(UserRepository userRepository, final StreamRepository streamRepository) {
+    protected StreamInfo getStreamInfo(UserRepository userRepository,
+      final StreamRepository streamRepository,
+      boolean localOnly) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
         Stream stream = streamRepository.getStreamById(idStreamWanted);
         checkNotNull(stream, new Preconditions.LazyErrorMessage() {
@@ -93,15 +97,32 @@ public class GetStreamInfoInteractor implements Interactor {
         });
 
         List<User> people = userRepository.getPeople();
-        List<User> watchesFromPeople = filterUsersWatchingStream(people, idStreamWanted);
-        watchesFromPeople = sortWatchersListByJoinStreamDate(watchesFromPeople);
-        return buildStreamInfo(stream, watchesFromPeople, currentUser);
+        List<User> followingInStream = filterUsersWatchingStream(people, idStreamWanted);
+        followingInStream = sortWatchersListByJoinStreamDate(followingInStream);
+
+        Integer followingsNumber = followingInStream.size();
+
+        List<User> watchers = followingInStream;
+
+        if (stream.getWatchers() != null) {
+            List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
+            watchesFromStream.removeAll(followingInStream);
+            watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
+            watchers.addAll(watchesFromStream);
+        }
+
+        Boolean hasMoreParticipants = false;
+        if (watchers.size() > MAX_WATCHERS_VISIBLE) {
+            watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
+            hasMoreParticipants = true;
+        }
+
+        return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants, localOnly);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
         Collections.sort(watchesFromPeople, new Comparator<User>() {
-            @Override
-            public int compare(User userModel, User t1) {
+            @Override public int compare(User userModel, User t1) {
                 return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate());
             }
         });
@@ -118,12 +139,33 @@ public class GetStreamInfoInteractor implements Interactor {
         return watchers;
     }
 
-    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser) {
+    protected List<User> removeCurrentUserFromWatchers(List<User> watchers) {
+        int meIndex = findMeIn(watchers);
+        if (meIndex>=0) {
+            watchers.remove(meIndex);
+        }
+        return watchers;
+    }
+
+    private int findMeIn(List<User> watchers) {
+        int meIndex = -1;
+        for (int i=0; i<watchers.size(); i++) {
+            if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
+                meIndex = i;
+                break;
+            }
+        }
+        return meIndex;
+    }
+
+    private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser,
+      Integer numberOfFollowing, Boolean hasMoreParticipants, boolean localOnly) {
         boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
-          .stream(stream)
-          .watchers(streamWatchers)
-          .currentUserWatching(isCurrentUserWatching ? currentUser : null)
+          .stream(stream).watchers(streamWatchers)
+          .currentUserWatching(isCurrentUserWatching ? currentUser : null).numberOfFollowing(numberOfFollowing)
+          .hasMoreParticipants(hasMoreParticipants)
+          .isDataComplete(!localOnly)
           .build();
     }
 

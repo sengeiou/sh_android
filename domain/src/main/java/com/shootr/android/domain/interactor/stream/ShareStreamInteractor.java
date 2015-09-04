@@ -9,7 +9,7 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.StreamRepository;
 import javax.inject.Inject;
 
-public class RecommendStreamInteractor implements Interactor {
+public class ShareStreamInteractor implements Interactor {
 
     private final StreamRepository remoteStreamRepository;
     private final InteractorHandler interactorHandler;
@@ -18,14 +18,14 @@ public class RecommendStreamInteractor implements Interactor {
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
-    @Inject public RecommendStreamInteractor(@Remote StreamRepository remoteStreamRepository,
+    @Inject public ShareStreamInteractor(@Remote StreamRepository remoteStreamRepository,
       InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
         this.remoteStreamRepository = remoteStreamRepository;
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void recommendStream(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void shareStream(String idStream, CompletedCallback callback, ErrorCallback errorCallback) {
         this.idStream = idStream;
         this.completedCallback = callback;
         this.errorCallback = errorCallback;
@@ -34,7 +34,7 @@ public class RecommendStreamInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try {
-            remoteStreamRepository.recommendStream(idStream);
+            remoteStreamRepository.shareStream(idStream);
             notifyCompleted();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);

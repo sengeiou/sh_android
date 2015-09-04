@@ -26,4 +26,6 @@ public interface AllShotsView {
     void hideLoadingOldShots();
 
     void addOldShots(List<ShotModel> shotModels);
+
+    void showShotShared();
 }

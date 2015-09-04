@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -22,6 +21,8 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Bind(R.id.listing_empty_title) View emptyView;
 
     @Inject ListingListPresenter presenter;
+    @Inject IntentFactory intentFactory;
 
     private ListingStreamsAdapter adapter;
 
@@ -125,12 +127,12 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
                   presenter.addToFavorite(stream);
               }
           })
-          .addAction((getString(R.string.recomment_via_shootr)), new Runnable() {
+          .addAction((getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
-                  presenter.recommendStream(stream);
+                  presenter.shareStream(stream);
               }
           })
-          .addAction((getString(R.string.recommend_via)), new Runnable() {
+          .addAction((getString(R.string.share_via)), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
@@ -138,22 +140,16 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent intent = ShareCompat.IntentBuilder.from(this)
-          .setType("text/plain")
-          .setText(String.format(this.getString(R.string.recommend_stream_message),
-            stream.getStreamModel().getTitle(),
-            stream.getStreamModel().getIdStream()))
-          .setChooserTitle(getString(R.string.recommend_via))
-          .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareStreamIntent(this, stream.getStreamModel());
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     @Override public void renderStreams(List<StreamResultModel> streams) {
         adapter.setStreams(streams);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title) {
-        startActivity(StreamTimelineActivity.newIntent(this, idStream, title));
+    @Override public void navigateToStreamTimeline(String idStream, String tag) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, tag));
     }
 
     @Override public void hideLoading() {
@@ -180,8 +176,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         startActivity(StreamDetailActivity.getIntent(this, streamId));
     }
 
-    @Override public void showStreamRecommended() {
-        Toast.makeText(this, getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
+    @Override public void showStreamShared() {
+        Toast.makeText(this, getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showContent() {

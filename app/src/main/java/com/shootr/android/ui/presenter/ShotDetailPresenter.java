@@ -8,6 +8,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -23,6 +24,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final GetShotDetailInteractor getShotDetailInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    private final ShareShotInteractor shareShotInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -34,12 +36,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject
     public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShotModelMapper shotModelMapper,
-      @Main Bus bus,
+      MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      ShareShotInteractor shareShotInteractor, ShotModelMapper shotModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+        this.shareShotInteractor = shareShotInteractor;
         this.shotModelMapper = shotModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -65,13 +68,11 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void loadShotDetail() {
         shotDetailView.renderShot(shotModel);
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), new Interactor.Callback<ShotDetail>() {
-            @Override
-            public void onLoaded(ShotDetail shotDetail) {
+            @Override public void onLoaded(ShotDetail shotDetail) {
                 onShotDetailLoaded(shotDetail);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 shotDetailView.showError(errorMessageFactory.getMessageForError(error));
             }
         });
@@ -100,8 +101,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void markNiceShot(String idShot) {
         markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadShotDetail();
             }
         });
@@ -109,8 +109,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     public void unmarkNiceShot(String idShot) {
         unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-            @Override
-            public void onCompleted() {
+            @Override public void onCompleted() {
                 loadShotDetail();
             }
         });
@@ -127,6 +126,18 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         justSentReply = true;
         this.loadShotDetail();
+    }
+
+    public void shareShot(ShotModel shotModel) {
+        shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                shotDetailView.showShotShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
     }
 
     @Override public void resume() {

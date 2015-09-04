@@ -6,12 +6,15 @@ import android.net.Uri;
 import android.support.v4.app.ShareCompat;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.StreamModel;
 
 /** Creates {@link Intent}s for launching into external applications. */
 public interface IntentFactory {
   Intent openUrlIntent(String url);
 
   Intent shareShotIntent(Activity launchActivity, ShotModel shotModel);
+
+  Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel);
 
   IntentFactory REAL = new IntentFactory() {
     @Override public Intent openUrlIntent(String url) {
@@ -38,5 +41,23 @@ public interface IntentFactory {
         .setChooserTitle(R.string.share_shot_chooser_title)
         .createChooserIntent();
     }
+
+    @Override
+    public Intent shareStreamIntent(Activity launchActivity, StreamModel streamModel) {
+      String subjectPattern = launchActivity.getString(R.string.share_stream_subject);
+      String messagePattern = launchActivity.getString(R.string.share_stream_message);
+
+      String subject = String.format(subjectPattern, streamModel.getTitle());
+      String sharedText =
+        String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
+
+      return ShareCompat.IntentBuilder.from(launchActivity)
+        .setType("text/plain")
+        .setSubject(subject)
+        .setText(sharedText)
+        .setChooserTitle(R.string.share_via)
+        .createChooserIntent();
+    }
+
   };
 }

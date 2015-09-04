@@ -1,7 +1,9 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -31,6 +33,14 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject StreamMediaPresenter presenter;
     @Inject ImageLoader imageLoader;
+
+    @NonNull
+    protected static Intent newIntent(Context context, String idStream, int predictedMediaCount) {
+        Intent intent = new Intent(context, StreamMediaActivity.class);
+        intent.putExtra(EXTRA_STREAM_ID, idStream);
+        intent.putExtra(EXTRA_STREAM_MEDIA_COUNT, predictedMediaCount);
+        return intent;
+    }
 
     @Override protected int getLayoutResource() {
         return R.layout.activity_stream_media;

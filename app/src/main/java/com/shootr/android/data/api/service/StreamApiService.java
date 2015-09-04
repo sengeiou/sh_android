@@ -13,7 +13,7 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
-    @GET("/streams/{idStream}?includeLinks=false&includeMediaCountByRelatedUsers=true")
+    @GET("/streams/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")
@@ -30,8 +30,8 @@ public interface StreamApiService {
     @GET("/user/{idUser}/listedCount")
     Integer getListingCount(@Path("idUser")String idUser) throws ApiException, IOException;
 
-    @POST("/streams/{idStream}/recommend")
-    Response recommendStream(@Path("idStream") String idStream) throws ApiException, IOException;
+    @POST("/streams/{idStream}/share")
+    Response shareStream(@Path("idStream") String idStream) throws ApiException, IOException;
 
     @GET("/streams/watchers/") List<WatchersApiEntity> getHolderWatchers() throws IOException, ApiException;
 }

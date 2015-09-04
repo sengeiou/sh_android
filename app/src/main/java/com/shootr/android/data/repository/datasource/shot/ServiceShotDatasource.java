@@ -47,9 +47,7 @@ public class ServiceShotDatasource implements ShotDataSource {
             List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
-              parameters.getMaxDate(),
-              parameters.getIncludeNiceShots(),
-              parameters.getMaxNiceShotsIncluded());
+              parameters.getMaxDate());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
@@ -126,6 +124,14 @@ public class ServiceShotDatasource implements ShotDataSource {
             List<ShotApiEntity> allShotsFromUserAndDate = shotApiService.getAllShotsFromUserWithMaxDate(userId,
               currentOldestDate);
             return shotApiEntityMapper.transform(allShotsFromUserAndDate);
+        } catch (ApiException | IOException error) {
+            throw new ServerCommunicationException(error);
+        }
+    }
+
+    @Override public void shareShot(String idShot) {
+        try {
+            shotApiService.shareShot(idShot);
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         }

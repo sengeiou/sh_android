@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -24,6 +25,7 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
 
     private String idUser;
     private Callback<List<StreamSearchResult>> callback;
+    private ErrorCallback errorCallback;
 
     @Inject public GetCurrentUserListingStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamSearchRepository localStreamRepositoty,
@@ -35,23 +37,24 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         this.sessionRepository = sessionRepository;
     }
 
-    public void loadCurrentUserListingStreams(Callback<List<StreamSearchResult>> callback){
+    public void loadCurrentUserListingStreams(Callback<List<StreamSearchResult>> callback, ErrorCallback errorCallback){
         this.callback = callback;
+        this.errorCallback = errorCallback;
         this.idUser = sessionRepository.getCurrentUserId();
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        loadCurrentUserListingStreamsFromLocal();
-        loadCurrentUserListingStreamsFromRemote();
+        try {
+            loadCurrentUserListingStreamsFromLocal();
+            loadCurrentUserListingStreamsFromRemote();
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
+        }
     }
 
     private void loadCurrentUserListingStreamsFromRemote() {
-        try {
-            loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
-        } catch (ShootrException error) {
-            /* swallow error */
-        }
+        loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
     }
 
     private void loadCurrentUserListingStreamsFromLocal() {
@@ -86,6 +89,14 @@ public class GetCurrentUserListingStreamsInteractor implements Interactor {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(listingStreams);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

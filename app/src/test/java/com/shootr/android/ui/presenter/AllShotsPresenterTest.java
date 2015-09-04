@@ -6,6 +6,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.shot.GetAllShotsByUserInteractor;
 import com.shootr.android.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
 import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
+import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.views.AllShotsView;
@@ -38,6 +39,7 @@ public class AllShotsPresenterTest {
     @Mock GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+    @Mock ShareShotInteractor shareShotInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock AllShotsView allShotsView;
 
@@ -50,8 +52,7 @@ public class AllShotsPresenterTest {
         shotModelMapper = new ShotModelMapper();
         allShotsPresenter = new AllShotsPresenter(getAllShotsByUserInteractor, getOlderAllShotsByUserInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor,
-          errorMessageFactory, shotModelMapper);
+          unmarkNiceShotInteractor, shareShotInteractor, errorMessageFactory, shotModelMapper);
         allShotsPresenter.setView(allShotsView);
         allShotsPresenter.setUserId(USER_ID);
     }

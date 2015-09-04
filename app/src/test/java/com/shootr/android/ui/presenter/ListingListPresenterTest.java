@@ -8,8 +8,8 @@ import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
@@ -51,7 +51,7 @@ public class ListingListPresenterTest {
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
     @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamInteractor;
-    @Mock RecommendStreamInteractor recommendStreamInteractor;
+    @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
     @Before
@@ -62,7 +62,7 @@ public class ListingListPresenterTest {
           getCurrentUserListingStreamsInteractor,
           addToFavoritesInteractor,
           removeFromFavoritesInteractor,
-          getFavoriteStreamInteractor, recommendStreamInteractor, streamResultModelMapper,
+          getFavoriteStreamInteractor, shareStreamInteractor, streamResultModelMapper,
           errorMessageFactory);
         listingListPresenter.setView(listingView);
         setupFavoritesInteractorCallbacks();
@@ -116,35 +116,35 @@ public class ListingListPresenterTest {
         verify(listingView).showEmpty();
     }
 
-    @Test public void shouldShowRecommendedStreamWhenRecommendStreamsCompletedCallback() throws Exception {
-        setupRecommendStreamCompletedCallback();
+    @Test public void shouldShowSharedStreamWhenShareStreamsCompletedCallback() throws Exception {
+        setupShareStreamCompletedCallback();
 
-        listingListPresenter.recommendStream(streamModel());
+        listingListPresenter.shareStream(streamModel());
 
-        verify(listingView).showStreamRecommended();
+        verify(listingView).showStreamShared();
     }
 
-    @Test public void shouldShowErrorStreamWhenRecommendStreamsErrorCallback() throws Exception {
-        setupRecommendStreamErrorCallback();
+    @Test public void shouldShowErrorStreamWhenShareStreamsErrorCallback() throws Exception {
+        setupShareStreamErrorCallback();
 
-        listingListPresenter.recommendStream(streamModel());
+        listingListPresenter.shareStream(streamModel());
 
         verify(listingView).showError(anyString());
     }
 
-    private void setupRecommendStreamErrorCallback() {
+    private void setupShareStreamErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[2];
                 errorCallback.onError(new ShootrException() {});
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }
 
-    private void setupRecommendStreamCompletedCallback() {
+    private void setupShareStreamCompletedCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.CompletedCallback completedCallback =
@@ -152,7 +152,7 @@ public class ListingListPresenterTest {
                 completedCallback.onCompleted();
                 return null;
             }
-        }).when(recommendStreamInteractor).recommendStream(anyString(),
+        }).when(shareStreamInteractor).shareStream(anyString(),
           any(Interactor.CompletedCallback.class),
           anyErrorCallback());
     }
@@ -171,7 +171,7 @@ public class ListingListPresenterTest {
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
 
-        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class));
+        verify(getCurrentUserListingStreamsInteractor).loadCurrentUserListingStreams(any(Interactor.Callback.class), anyErrorCallback());
     }
 
     @Test

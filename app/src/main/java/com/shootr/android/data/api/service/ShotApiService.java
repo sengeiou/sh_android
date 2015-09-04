@@ -7,16 +7,16 @@ import java.util.List;
 import retrofit.client.Response;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface ShotApiService {
 
-    @GET("/shots/streamTimeline?includeLinks=false")
+    @GET("/shots/streamTimeline?includeLinks=false&includeAll=true")
     List<ShotApiEntity> getStreamTimeline(@Query("idStream") String stream, @Query("count") Integer count,
-      @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp,
-      @Query("includeNice") Boolean includeNice, @Query("maxNice") Integer maxNice) throws ApiException, IOException;
+      @Query("sinceTimestamp") Long sinceTimestamp, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
     @GET("/shots/{idShot}/?includeLinks=false")
     ShotApiEntity getShot(@Path("idShot") String idShot) throws ApiException, IOException;
@@ -47,4 +47,7 @@ public interface ShotApiService {
 
     @GET("/streams/{idStream}/media?includeLinks=false")
     List<ShotApiEntity> getMediaShots(@Path("idStream") String idStream) throws ApiException, IOException;
+
+    @POST("/shots/{idShot}/share")
+    Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
 }

@@ -1,10 +1,11 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.views.base.LoadDataView;
+import com.shootr.android.ui.views.base.DataTransferView;
 import java.util.List;
 
-public interface StreamDetailView extends LoadDataView {
+public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
 
@@ -18,9 +19,7 @@ public interface StreamDetailView extends LoadDataView {
 
     void showPhotoPicker();
 
-    void showEditPicture(String picture);
-
-    void hideEditPicture();
+    void showEditPicturePlaceholder();
 
     void showLoadingPictureUpload();
 
@@ -30,17 +29,11 @@ public interface StreamDetailView extends LoadDataView {
 
     void setWatchers(List<UserModel> watchers);
 
-    void setWatchersCount(int watchersCount);
-
     void setCurrentUserWatching(UserModel userWatchingModel);
 
     void navigateToEditStream(String idStream);
 
     void navigateToUser(String userId);
-
-    void showContent();
-
-    void hideContent();
 
     void showDetail();
 
@@ -52,9 +45,17 @@ public interface StreamDetailView extends LoadDataView {
 
     void navigateToMedia(String idStream, Integer streamMediaCount);
 
-    void showMediaCount();
-
     void setStreamDescription(String description);
 
     void hideStreamDescription();
+
+    void showAllParticipantsButton();
+
+    void setFollowingNumber(Integer numberOfFollowing);
+
+    void showStreamShared();
+
+    void shareStreamVia(StreamModel stream);
+
+    void goToAllParticipants(String idStream);
 }

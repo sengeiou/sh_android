@@ -58,7 +58,7 @@ public class LocalStreamRepository implements StreamRepository {
         return localStreamDataSource.getListingCount(idUser);
     }
 
-    @Override public void recommendStream(String idStream) {
+    @Override public void shareStream(String idStream) {
         throw new IllegalStateException("Not allowed in local repository.");
     }
 }

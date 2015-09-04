@@ -656,14 +656,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     public void unfollowUser() {
-
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
@@ -730,7 +729,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void openContextualMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  profilePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
               @Override public void run() {
                   shareShot(shotModel);
               }
@@ -874,6 +878,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
         startActivity(StreamDetailActivity.getIntent(getActivity(), streamId));
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.profile_listing)

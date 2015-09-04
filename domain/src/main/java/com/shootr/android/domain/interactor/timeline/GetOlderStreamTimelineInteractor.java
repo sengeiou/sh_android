@@ -45,7 +45,7 @@ public class GetOlderStreamTimelineInteractor implements Interactor {
         this.localUserRepository = localUserRepository;
     }
 
-    public void loadOlderStreamTimeline(Long currentOldestDate, Callback<Timeline> callback,
+    public void loadOlderStreamTimeline(String idStream, Long currentOldestDate, Callback<Timeline> callback,
       ErrorCallback errorCallback) {
         this.currentOldestDate = currentOldestDate;
         this.callback = callback;

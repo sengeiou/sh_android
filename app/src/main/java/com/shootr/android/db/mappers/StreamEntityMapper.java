@@ -98,21 +98,21 @@ public class StreamEntityMapper extends GenericMapper{
     public StreamSearchEntity fromSearchDto(Map<String, Object> dataItem) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(dataItem, streamSearchEntity);
-        streamSearchEntity.setWatchers(((Number) dataItem.get(DatabaseContract.StreamSearchTable.WATCHERS)).intValue());
+        streamSearchEntity.setTotalWatchers(((Number) dataItem.get(DatabaseContract.StreamSearchTable.WATCHERS)).intValue());
         return streamSearchEntity;
     }
 
     public StreamSearchEntity fromSearchCursor(Cursor cursor) {
         StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
         fillStreamEntity(cursor, streamSearchEntity);
-        streamSearchEntity.setWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
+        streamSearchEntity.setTotalWatchers(cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
         return streamSearchEntity;
     }
 
     public ContentValues toSearchContentValues(StreamSearchEntity entity) {
         ContentValues contentValues = new ContentValues();
         fillContentValues(entity, contentValues);
-        contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getWatchers());
+        contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS, entity.getTotalWatchers());
         return contentValues;
     }
 

@@ -15,10 +15,10 @@ import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
-    public static Intent newIntent(Context context, String streamId, String streamTitle) {
+    public static Intent newIntent(Context context, String streamId, String streamTag) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
         intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TAG, streamTag);
         return intent;
     }
 

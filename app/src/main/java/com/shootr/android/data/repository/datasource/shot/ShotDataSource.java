@@ -26,4 +26,6 @@ public interface ShotDataSource {
     List<ShotEntity> getAllShotsFromUser(String userId);
 
     List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
+
+    void shareShot(String idShot);
 }

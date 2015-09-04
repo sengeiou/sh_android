@@ -10,7 +10,7 @@ public interface ListingView extends LoadDataView {
 
     void showContent();
 
-    void navigateToStreamTimeline(String idStream, String title);
+    void navigateToStreamTimeline(String idStream, String tag);
 
 
     void setFavoriteStreams(List<StreamResultModel> transform);
@@ -19,5 +19,5 @@ public interface ListingView extends LoadDataView {
 
     void navigateToCreatedStreamDetail(String streamId);
 
-    void showStreamRecommended();
+    void showStreamShared();
 }

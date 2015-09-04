@@ -64,6 +64,22 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
+    @Override public List<UserEntity> getAllParticipants(String idStream, Long maxJoinDate) {
+        try {
+            return userApiService.getAllParticipants(idStream, maxJoinDate);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public List<UserEntity> findParticipants(String idStream, String query) {
+        try {
+            return userApiService.findParticipants(idStream, query);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }

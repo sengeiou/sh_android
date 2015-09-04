@@ -23,4 +23,6 @@ public interface StreamTimelineView extends LoadDataView{
     void showCheckingForShots();
 
     void hideCheckingForShots();
+
+    void showShotShared();
 }

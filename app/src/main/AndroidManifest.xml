@@ -84,8 +84,8 @@
         </activity>
         <activity
             android:name=".ui.activities.StreamDetailActivity"
-            android:label="@string/activity_info_title"
-            android:theme="@style/ShootrTheme.TranslucentToolbar" >
+            android:label="Participants"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainTabbedActivity" />
@@ -207,7 +207,15 @@
         <activity
             android:name=".ui.activities.IntroActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activities.AllParticipantsActivity"
+            android:label="@string/title_activity_all_participants" >
+        </activity>
+        <activity
+            android:name=".ui.activities.FindParticipantsActivity"
+            android:theme="@style/ShootrTheme.Closable">
         </activity>
     </application>
 

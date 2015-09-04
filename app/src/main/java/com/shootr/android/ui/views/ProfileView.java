@@ -31,4 +31,6 @@ public interface ProfileView {
     void showOpenStream();
 
     void navigateToCreatedStreamDetail(String streamId);
+
+    void showShotShared();
 }

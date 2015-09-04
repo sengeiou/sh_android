@@ -15,5 +15,5 @@ public interface StreamRepository {
 
     Integer getListingCount(String idUser);
 
-    void recommendStream(String idStream);
+    void shareStream(String idStream);
 }

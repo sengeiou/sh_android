@@ -54,7 +54,6 @@ public class ListingStreamsAdapter extends StreamsListAdapter {
             ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
         } else {
             ((StreamResultViewHolder) viewHolder).render(stream, showSeparator);
-            ((StreamResultViewHolder) viewHolder).renderAuthor(stream.getStreamModel().getAuthorUsername());
         }
     }
 

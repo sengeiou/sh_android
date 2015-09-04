@@ -35,6 +35,7 @@ public class UserModelMapper {
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));
+            userModel.setJoinStreamTimestamp(joinStreamDate);
         }
         return userModel;
     }

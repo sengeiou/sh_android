@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +34,8 @@ import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -50,6 +51,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject StreamsListPresenter presenter;
     @Inject ImageLoader imageLoader;
     @Inject ToolbarDecorator toolbarDecorator;
+    @Inject IntentFactory intentFactory;
 
     private StreamsListAdapter adapter;
 
@@ -64,16 +66,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews(savedInstanceState);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         initializePresenter();
+        initializeViews(savedInstanceState);
     }
 
     @Override
@@ -184,12 +181,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
                 presenter.addToFavorites(stream);
             }
         })
-          .addAction((getActivity().getString(R.string.recomment_via_shootr)), new Runnable() {
+          .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
-                  presenter.recommendStream(stream);
+                  presenter.shareStream(stream);
               }
           })
-          .addAction((getActivity().getString(R.string.recommend_via)), new Runnable() {
+          .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
               @Override public void run() {
                   shareStream(stream);
               }
@@ -197,16 +194,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     private void shareStream(StreamResultModel stream) {
-        Intent intent = ShareCompat.IntentBuilder.from(getActivity())
-          .setType("text/plain")
-          .setSubject(String.format(getActivity().getString(R.string.recommend_stream_subject),
-            stream.getStreamModel().getTitle()))
-            .setText(String.format(getActivity().getString(R.string.recommend_stream_message),
-              stream.getStreamModel().getTitle(),
-              stream.getStreamModel().getIdStream()))
-            .setChooserTitle(getString(R.string.recommend_via))
-            .createChooserIntent();
-        startActivity(intent);
+        Intent shareIntent = intentFactory.shareStreamIntent(getActivity(), stream.getStreamModel());
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
     
     //region View methods
@@ -222,8 +211,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         streamsList.setVisibility(View.VISIBLE);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title) {
-        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
+    @Override public void navigateToStreamTimeline(String idStream, String tag) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, tag));
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
@@ -235,8 +224,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void showStreamRecommended() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.stream_recommended_notification), Toast.LENGTH_SHORT).show();
+    @Override public void showStreamShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void showEmpty() {

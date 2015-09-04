@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 public interface UserApiService {
 
@@ -15,4 +16,9 @@ public interface UserApiService {
     @GET("/user/{idUser}/followers")
     List<UserEntity> getFollowers(@Path("idUser") String idUser) throws IOException, ApiException;
 
+    @GET("/streams/{idStream}/participants")
+    List<UserEntity> getAllParticipants(@Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate) throws IOException, ApiException;
+
+    @GET("/streams/{idStream}/participants/search")
+    List<UserEntity> findParticipants(@Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
 }

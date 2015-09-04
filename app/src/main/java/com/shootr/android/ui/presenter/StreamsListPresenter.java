@@ -7,8 +7,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.RecommendStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
@@ -25,7 +25,7 @@ public class StreamsListPresenter implements Presenter {
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final UnwatchStreamInteractor unwatchStreamInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
-    private final RecommendStreamInteractor recommendStreamInteractor;
+    private final ShareStreamInteractor shareStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -36,14 +36,14 @@ public class StreamsListPresenter implements Presenter {
       AddToFavoritesInteractor addToFavoritesInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor,
       SelectStreamInteractor selectStreamInteractor,
-      RecommendStreamInteractor recommendStreamInteractor,
+      ShareStreamInteractor shareStreamInteractor,
       StreamResultModelMapper streamResultModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
-        this.recommendStreamInteractor = recommendStreamInteractor;
+        this.shareStreamInteractor = shareStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -67,8 +67,8 @@ public class StreamsListPresenter implements Presenter {
         selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
     }
 
-    private void selectStream(final String idStream, String streamTitle) {
-        streamsListView.navigateToStreamTimeline(idStream, streamTitle);
+    private void selectStream(final String idStream, String streamTag) {
+        streamsListView.navigateToStreamTimeline(idStream, streamTag);
     }
 
     public void unwatchStream() {
@@ -167,14 +167,12 @@ public class StreamsListPresenter implements Presenter {
         hasBeenPaused = true;
     }
 
-    public void recommendStream(StreamResultModel stream) {
-        recommendStreamInteractor.recommendStream(stream.getStreamModel().getIdStream(),
-          new Interactor.CompletedCallback() {
+    public void shareStream(StreamResultModel stream) {
+        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  streamsListView.showStreamRecommended();
+                  streamsListView.showStreamShared();
               }
-          },
-          new Interactor.ErrorCallback() {
+          }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
                   showViewError(error);
               }

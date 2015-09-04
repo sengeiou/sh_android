@@ -1,5 +1,6 @@
 package com.shootr.android.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -74,9 +75,8 @@ public class StreamTimelineFragment extends BaseFragment
   implements StreamTimelineView, NewShotBarView, WatchNumberView, FavoriteStatusView, ReportShotView {
 
     public static final String EXTRA_STREAM_ID = "streamId";
-    public static final String EXTRA_STREAM_TITLE = "streamTitle";
+    public static final String EXTRA_STREAM_TAG = "streamTag";
     private static final int REQUEST_STREAM_DETAIL = 1;
-
 
     //region Fields
     @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -128,12 +128,6 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -146,9 +140,10 @@ public class StreamTimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initializeViews();
         setHasOptionsMenu(true);
         String idStream = getArguments().getString(EXTRA_STREAM_ID);
-        setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
+        setStreamTitle(getArguments().getString(EXTRA_STREAM_TAG));
         initializePresenters(idStream);
     }
 
@@ -158,7 +153,7 @@ public class StreamTimelineFragment extends BaseFragment
             if (getActivity() != null) {
                 getActivity().finish();
             }
-        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == StreamDetailActivity.RESULT_OK){
+        }else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK){
             String updatedShortTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_SHORT_TITLE);
             setStreamTitle(updatedShortTitle);
         } else {
@@ -234,6 +229,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setStreamTitle(String streamShortTitle) {
         toolbarDecorator.setTitle(streamShortTitle);
+
     }
 
     private void setupNewShotBarDelegate() {
@@ -421,11 +417,17 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity()).addAction(getActivity().getString(R.string.menu_share_shot), new Runnable() {
-            @Override public void run() {
-                shareShot(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
             @Override
             public void run() {
                 copyShotCommentToClipboard(shotModel);
@@ -437,7 +439,7 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
-    private void shareShot(ShotModel shotModel) {
+    private void shareShotIntent(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
     }
@@ -499,9 +501,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void navigateToStreamDetail(String idStream) {
-        Intent intent = new Intent(getActivity(), StreamDetailActivity.class);
-        intent.putExtra(EXTRA_STREAM_ID, idStream);
-        startActivityForResult(intent, REQUEST_STREAM_DETAIL);
+        startActivityForResult(StreamDetailActivity.getIntent(getActivity(), idStream), REQUEST_STREAM_DETAIL);
     }
 
     @Override public void showCheckingForShots() {
@@ -510,6 +510,10 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override public void hideCheckingForShots() {
         checkingForShotsView.setVisibility(View.GONE);
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -34,7 +34,7 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 0
 def versionMinor = 1
-def versionRevision = 21
+def versionRevision = 22
 def databaseVersion = 9
 def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: false
 
@@ -179,6 +179,8 @@ dependencies {
     compile 'cat.ereza:customactivityoncrash:1.3.0'
 
     compile 'com.github.paolorotolo:appintro:3.2.0'
+
+    compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
 
     debugCompile 'com.github.pedrovgs:lynx:1.4'
 

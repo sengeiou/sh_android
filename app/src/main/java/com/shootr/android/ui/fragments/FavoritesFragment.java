@@ -1,5 +1,6 @@
 package com.shootr.android.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,10 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,6 +32,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Inject FavoritesListPresenter favoritesListPresenter;
     @Inject ImageLoader imageLoader;
+    @Inject IntentFactory intentFactory;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -48,12 +53,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeViews();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -64,6 +63,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializePresenter();
+        initializeViews();
     }
 
     @Override
@@ -85,12 +85,37 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
             }
+
+            @Override
+            public boolean onStreamLongClick(StreamResultModel stream) {
+                openContextualMenu(stream);
+                return true;
+            }
         });
         favoritesList.setAdapter(adapter);
     }
 
     private void initializePresenter() {
         favoritesListPresenter.initialize(this);
+    }
+
+    private void openContextualMenu(final StreamResultModel stream) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
+              @Override public void run() {
+                  favoritesListPresenter.shareStream(stream);
+              }
+          })
+          .addAction((getActivity().getString(R.string.share_via)), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          }).show();
+    }
+
+    private void shareStream(StreamResultModel stream) {
+        Intent shareIntent = intentFactory.shareStreamIntent(getActivity(), stream.getStreamModel());
+        Intents.maybeStartActivity(getActivity(), shareIntent);
     }
 
     @Override
@@ -111,6 +136,10 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void navigateToStreamTimeline(String idStream, String title) {
         startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
+    }
+
+    @Override public void showStreamShared() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
     }
 
     @Override

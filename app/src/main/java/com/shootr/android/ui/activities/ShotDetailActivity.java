@@ -29,6 +29,7 @@ import com.shootr.android.ui.views.NewShotBarView;
 import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
+import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -112,12 +113,31 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
             return true;
         }else if (item.getItemId() == R.id.menu_share) {
             ShotModel shotModel = extractShotFromIntent();
-            Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
-            Intents.maybeStartActivity(this, shareIntent);
+            openContextualMenu(shotModel);
         }else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openContextualMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  detailPresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShot(shotModel);
+              }
+          })
+          .show();
+    }
+
+    private void shareShot(ShotModel shotModel) {
+        Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     private void setupAdapter() {
@@ -300,6 +320,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void showShotShared() {
+        Toast.makeText(this, getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void openNewShotView() {
