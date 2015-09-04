@@ -9,7 +9,6 @@ import com.shootr.android.domain.StreamInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
-import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
@@ -118,15 +117,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(),
           photoFile,
           new ChangeStreamPhotoInteractor.Callback() {
-              @Override
-              public void onLoaded(Stream stream) {
+              @Override public void onLoaded(Stream stream) {
                   renderStreamInfo(stream);
                   streamDetailView.hideLoadingPictureUpload();
               }
           },
           new Interactor.ErrorCallback() {
-              @Override
-              public void onError(ShootrException error) {
+              @Override public void onError(ShootrException error) {
                   showEditPicturePlaceholderIfEmpty();
                   streamDetailView.hideLoadingPictureUpload();
                   showImageUploadError();
@@ -176,15 +173,13 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     private void refreshWatchers() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(StreamInfo streamInfo) {
+            @Override public void onLoaded(StreamInfo streamInfo) {
                 if (streamInfo.isDataComplete()) {
                     renderWatchersList(streamInfo);
                 }
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -353,5 +348,9 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     public void shareStreamVia() {
         streamDetailView.shareStreamVia(streamModel);
+    }
+
+    public void clickAllParticipants() {
+        streamDetailView.goToAllParticipants(idStream);
     }
 }

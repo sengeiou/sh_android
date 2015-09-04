@@ -372,4 +372,5 @@
     <string name="unfollow_dialog_message">"Unfollow %s?"</string>
     <string name="unfollow_dialog_yes">Yes</string>
     <string name="unfollow_dialog_no">No</string>
+    <string name="all_participants_button">All participants</string>
 </resources>

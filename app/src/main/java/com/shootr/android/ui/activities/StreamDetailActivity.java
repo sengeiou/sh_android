@@ -93,31 +93,31 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
         adapter = new StreamDetailAdapter(imageLoader, //
           new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
+              @Override public void onClick(View v) {
                   streamDetailPresenter.clickAuthor();
               }
           }, // author
           new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
+              @Override public void onClick(View v) {
                   streamDetailPresenter.clickMedia();
               }
           }, // media
-          new OnUserClickListener() {
-              @Override
-              public void onUserClick(String idUser) {
-                  navigateToUser(idUser);
+          new View.OnClickListener() {
+              @Override public void onClick(View view) {
+                  streamDetailPresenter.clickAllParticipants();
               }
-          }, // participant
+          }, // all participants
+          new OnUserClickListener() {
+            @Override public void onUserClick(String idUser) {
+                navigateToUser(idUser);
+            }
+        }, // participant
           new OnFollowUnfollowListener() {
-              @Override
-              public void onFollow(UserModel user) {
+              @Override public void onFollow(UserModel user) {
                   streamDetailPresenter.follow(user.getIdUser());
               }
 
-              @Override
-              public void onUnfollow(UserModel user) {
+              @Override public void onUnfollow(UserModel user) {
                   streamDetailPresenter.unfollow(user.getIdUser());
               }
           }); //follow
@@ -439,6 +439,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     public void shareStreamVia(StreamModel stream) {
         Intent shareIntent = intentFactory.shareStreamIntent(this, stream);
         Intents.maybeStartActivity(this, shareIntent);
+    }
+
+    @Override public void goToAllParticipants(String idStream) {
+        startActivity(AllParticipantsActivity.newIntent(this, idStream));
     }
 
     @Override

@@ -32,11 +32,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_PARTICIPANTS_TITLE = 3;
     private static final int TYPE_PARTICIPANT = 4;
     private static final int TYPE_DESCRIPTION = 5;
+    private static final int TYPE_ALL_PARTICIPANTS = 6;
 
     private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 4;
 
     private final View.OnClickListener onAuthorClickListener;
     private final View.OnClickListener onMediaClickListener;
+    private final View.OnClickListener onAllParticipantsClickListener;
     private final OnUserClickListener onUserClickListener;
     private final OnFollowUnfollowListener onFollowUnfollowListener;
     private final ImageLoader imageLoader;
@@ -52,13 +54,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private final Set<String> keepFollowButtonIds = new HashSet<>();
 
-    public StreamDetailAdapter(ImageLoader imageLoader,
-      View.OnClickListener onAuthorClickListener,
-      View.OnClickListener onMediaClickListener,
-      OnUserClickListener onUserClickListener,
-      OnFollowUnfollowListener onFollowUnfollowListener) {
+    public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
+      View.OnClickListener onMediaClickListener, View.OnClickListener onAllParticipantsClickListener,
+      OnUserClickListener onUserClickListener, OnFollowUnfollowListener onFollowUnfollowListener) {
         this.onAuthorClickListener = onAuthorClickListener;
         this.onMediaClickListener = onMediaClickListener;
+        this.onAllParticipantsClickListener = onAllParticipantsClickListener;
         this.onUserClickListener = onUserClickListener;
         this.imageLoader = imageLoader;
         this.onFollowUnfollowListener = onFollowUnfollowListener;
@@ -87,6 +88,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
+        if(position == getItemCount() -1) {
+            return TYPE_ALL_PARTICIPANTS;
+        }
         switch (position) {
             case 0:
                 return TYPE_DESCRIPTION;
@@ -132,6 +136,10 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_PARTICIPANT:
                 v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
                 return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener, keepFollowButtonIds);
+            case TYPE_ALL_PARTICIPANTS:
+                v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
+                v.setOnClickListener(onAllParticipantsClickListener);
+                return new AllParticipantsViewHolder(v);
             default:
                 throw new IllegalStateException("No holder declared for view type " + viewType);
         }
@@ -152,9 +160,6 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mediaViewHolder.setName(R.string.stream_detail_media);
                 mediaViewHolder.setNumber(mediaCount);
                 break;
-            case TYPE_PARTICIPANTS_TITLE:
-                /* no-op */
-                break;
             case TYPE_PARTICIPANT:
                 UserModel user = participants.get(participantPosition(position));
                 ((WatcherViewHolder) viewHolder).bind(user);
@@ -164,7 +169,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return EXTRA_ITEMS_ABOVE_PARTICIPANTS + participants.size();
+        return EXTRA_ITEMS_ABOVE_PARTICIPANTS + participants.size() + 1;
     }
 
     private int participantPosition(int adapterPosition) {
@@ -299,6 +304,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (onUserClickListener != null) {
                 onUserClickListener.onUserClick(userId);
             }
+        }
+    }
+
+    public static class AllParticipantsViewHolder extends RecyclerView.ViewHolder {
+
+        public AllParticipantsViewHolder(View itemView) {
+            super(itemView);
         }
     }
 }
