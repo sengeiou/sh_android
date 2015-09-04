@@ -93,6 +93,10 @@ public class ListingListPresenter implements Presenter{
             @Override public void onLoaded(List<StreamSearchResult> streams) {
                 handleStreamsInView(streams);
             }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+            }
         });
     }
 
