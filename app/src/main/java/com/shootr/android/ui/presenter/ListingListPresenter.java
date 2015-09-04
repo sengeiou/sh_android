@@ -8,8 +8,8 @@ import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.GetCurrentUserListingStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -156,11 +156,11 @@ public class ListingListPresenter implements Presenter{
     }
 
     public void selectStream(StreamResultModel stream) {
-        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
+        selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
     }
 
-    private void selectStream(final String idStream, String streamTitle) {
-        listingView.navigateToStreamTimeline(idStream, streamTitle);
+    private void selectStream(final String idStream, String treamTag) {
+        listingView.navigateToStreamTimeline(idStream, treamTag);
     }
 
     public void streamCreated(String streamId) {

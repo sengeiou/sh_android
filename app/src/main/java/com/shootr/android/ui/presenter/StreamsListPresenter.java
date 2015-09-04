@@ -7,8 +7,8 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.domain.service.StreamIsAlreadyInFavoritesException;
@@ -67,8 +67,8 @@ public class StreamsListPresenter implements Presenter {
         selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTag());
     }
 
-    private void selectStream(final String idStream, String streamTitle) {
-        streamsListView.navigateToStreamTimeline(idStream, streamTitle);
+    private void selectStream(final String idStream, String streamTag) {
+        streamsListView.navigateToStreamTimeline(idStream, streamTag);
     }
 
     public void unwatchStream() {
