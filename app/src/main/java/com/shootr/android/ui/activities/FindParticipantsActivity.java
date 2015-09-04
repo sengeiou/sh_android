@@ -141,13 +141,13 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     @Override public void unFollow(int position) {
         final UserModel userModel = adapter.getItem(position);
         final Context context = this;
-        new AlertDialog.Builder(this).setMessage("Unfollow "+userModel.getUsername() + "?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   findParticipantsPresenter.unfollowUser(userModel, context);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }
