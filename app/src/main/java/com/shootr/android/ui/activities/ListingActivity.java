@@ -148,8 +148,8 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         adapter.setStreams(streams);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title) {
-        startActivity(StreamTimelineActivity.newIntent(this, idStream, title));
+    @Override public void navigateToStreamTimeline(String idStream, String tag) {
+        startActivity(StreamTimelineActivity.newIntent(this, idStream, tag));
     }
 
     @Override public void hideLoading() {

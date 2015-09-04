@@ -211,8 +211,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         streamsList.setVisibility(View.VISIBLE);
     }
 
-    @Override public void navigateToStreamTimeline(String idStream, String title) {
-        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, title));
+    @Override public void navigateToStreamTimeline(String idStream, String tag) {
+        startActivity(StreamTimelineActivity.newIntent(getActivity(), idStream, tag));
     }
 
     @Override public void navigateToCreatedStreamDetail(String streamId) {
