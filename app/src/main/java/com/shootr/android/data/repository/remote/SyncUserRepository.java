@@ -155,6 +155,30 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return suggestedPeopleEntitiesToDomain(suggestedPeopleEntities);
     }
 
+    @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
+        List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
+        List<User> participants = transformParticipantsEntities(allParticipants);
+        return participants;
+    }
+
+    @Override public List<User> findParticipants(String idStream, String query) {
+        List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
+        List<User> participants = transformParticipantsEntities(allParticipants);
+        return participants;
+    }
+
+    private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
+        List<User> participants = new ArrayList<>(allParticipants.size());
+        for (UserEntity participantEntity : allParticipants) {
+            User participant = userEntityMapper.transform(participantEntity,
+              sessionRepository.getCurrentUserId(),
+              isFollower(participantEntity.getIdUser()),
+              isFollowing(participantEntity.getIdUser()));
+            participants.add(participant);
+        }
+        return participants;
+    }
+
     //region Synchronization
     private void queueUpload(UserEntity userEntity, ServerCommunicationException reason) {
         Timber.w(reason, "User upload queued: idUser %s", userEntity.getIdUser());
@@ -186,17 +210,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     //endregion
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
-        List<User> userList = new ArrayList<>();
-        String currentUserId = sessionRepository.getCurrentUserId();
-        for (UserEntity localUserEntity : localUserEntities) {
-            String idUser = localUserEntity.getIdUser();
-            User user = userEntityMapper.transform(localUserEntity,
-              currentUserId,
-              isFollower(idUser),
-              isFollowing(idUser));
-            userList.add(user);
-        }
-        return userList;
+        return transformParticipantsEntities(localUserEntities);
     }
 
     private void markSynchronized(List<UserEntity> peopleEntities) {

@@ -341,9 +341,9 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         //TODO
     }
 
-    @Override
-    public void navigateToEditStream(String idStream) {
-        Intent editIntent = NewStreamActivity.newIntent(this, idStream);
+    @Override public void navigateToEditStream(String idStream) {
+        Intent editIntent = new Intent(this, NewStreamActivity.class).putExtra(NewStreamActivity.KEY_STREAM_ID,
+          idStream);
         startActivityForResult(editIntent, REQUEST_EDIT_STREAM);
     }
 

@@ -84,10 +84,11 @@ public class UserEntityMapper {
         return userEntities;
     }
 
-    public List<User> transformEntities(List<UserEntity> userEntities) {
-        List<User> users = new ArrayList<>(userEntities.size());
-        for (UserEntity userEntity : userEntities) {
-            User user = transform(userEntity);
+    public List<User> transformEntities(List<UserEntity> entities) {
+        List<User> users = new ArrayList<>(entities.size());
+        User user;
+        for (UserEntity userEntity : entities) {
+            user = transform(userEntity);
             if (user != null) {
                 users.add(user);
             }
