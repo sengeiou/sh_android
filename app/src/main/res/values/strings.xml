@@ -93,6 +93,7 @@
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
     <string name="activity_find_friends_hint">Find friends</string>
+    <string name="activity_find_participants_hint">Find participants</string>
     <string name="activity_find_friends_empty_message">No Results.</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
@@ -203,7 +204,7 @@
     <string name="entered_hours_ago">Entered %d hours ago</string>
     <string name="entered_a_day_ago">Entered 1 day ago</string>
     <string name="entered_days_ago">Entered %d days ago</string>
-    <string name="entered_long_time_ago">Entered long time ago</string>
+    <string name="entered_long_time_ago">Entered many days ago</string>
 
     <string name="user_not_found">User not found</string>
     <string name="dont_show_again">Ok, don\'t show again</string>
@@ -248,22 +249,7 @@
         </item>
     </plurals>
 
-    <plurals name="stream_watching_watchers_number">
-        <item quantity="one">
-            Friends
-        </item>
-        <item quantity="other">
-            %d friends
-        </item>
-    </plurals>
-    <plurals name="stream_watchers">
-        <item quantity="one">
-            – %d friend
-        </item>
-        <item quantity="other">
-           – %d friends
-        </item>
-    </plurals>
+    <string name="stream_participants_following_number">following %d</string>
     <string name="title_activity_stream_media">Media</string>
 
     <string name="hello_world">Hello world!</string>
@@ -376,4 +362,15 @@
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="menu_share_shot_via_shootr">Share via Shootr</string>
     <string name="shot_shared_message">Shot shared</string>
+    <string name="drafts_action_discard">Discard</string>
+    <string name="drafts_action_shoot">Shoot</string>
+    <string name="title_activity_all_participants">All Participants</string>
+    <string name="menu_search_participants">Find participants</string>
+    <string name="title_activity_find_participants">FindParticipantsActivity</string>
+    <string name="activity_find_participants_empty_message">No results.</string>
+    <string name="participants_list_empty">No participants.</string>
+    <string name="unfollow_dialog_message">"Unfollow %s?"</string>
+    <string name="unfollow_dialog_yes">Yes</string>
+    <string name="unfollow_dialog_no">No</string>
+    <string name="all_participants_button">All participants</string>
 </resources>

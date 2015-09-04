@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,6 +47,11 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
 
+    public static Intent newIntent(Context context, String idStream) {
+        Intent launchIntent = new Intent(context, NewStreamActivity.class);
+        launchIntent.putExtra(NewStreamActivity.KEY_STREAM_ID, idStream);
+        return launchIntent;
+    }
 
     //region Initialization
     @Override protected void onCreate(Bundle savedInstanceState) {

@@ -47,9 +47,7 @@ public class ServiceShotDatasource implements ShotDataSource {
             List<ShotApiEntity> shots = shotApiService.getStreamTimeline(parameters.getStreamId(),
               parameters.getLimit(),
               parameters.getSinceDate(),
-              parameters.getMaxDate(),
-              parameters.getIncludeNiceShots(),
-              parameters.getMaxNiceShotsIncluded());
+              parameters.getMaxDate());
             return shotApiEntityMapper.transform(shots);
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);

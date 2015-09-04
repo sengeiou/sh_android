@@ -1,226 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/main_content"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:background="#f0f0f0">
 
-    <ProgressBar android:id="@+id/stream_loading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:indeterminate="true" />
-
-    <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/stream_swipe_refresh"
+    <android.support.design.widget.AppBarLayout android:id="@+id/appbar"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:visibility="visible">
+      android:layout_height="@dimen/stream_detail_expanded_toolbar_height"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <com.shootr.android.ui.widgets.ObservableScrollView android:id="@+id/scroll"
+        <android.support.design.widget.CollapsingToolbarLayout android:id="@+id/collapsing_toolbar"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:fillViewport="true"
-          android:overScrollMode="never">
+          app:contentScrim="?attr/colorPrimary"
+          app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <FrameLayout android:id="@+id/scroll_child"
+            <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-                <!-- Photo -->
-                <FrameLayout android:id="@+id/stream_photo_container"
+              android:layout_height="?attr/actionBarSize"
+              app:layout_collapseMode="pin"
+              app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <View android:id="@+id/toolbar_dummy_content"
                   android:layout_width="match_parent"
+                  android:layout_height="0dp" />
+            </android.support.v7.widget.Toolbar>
+
+            <com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar android:id="@+id/collapsing_avatar_toolbar"
+              android:layout_width="match_parent"
+              android:layout_height="?attr/actionBarSize"
+              android:layout_marginRight="16dp"
+              app:collapsedTextSize="18sp"
+              app:expandedTextSize="18sp">
+
+                <FrameLayout android:id="@id/cat_avatar"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:foreground="?selectableItemBackground">
-
-                    <ImageView android:id="@+id/stream_photo"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:background="@color/primary_dark"
-                      android:clickable="false"
-                      android:scaleType="centerCrop"
-                      tools:layout_height="200dp" />
-
-                    <ImageView android:id="@+id/stream_photo_edit_indicator"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center"
-                      android:src="@drawable/ic_camera_white_48"
-                      android:visibility="gone"
-                      tools:visibility="visible" />
+                  android:layout_gravity="center_vertical">
 
                     <ProgressBar android:id="@+id/stream_photo_edit_loading"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_gravity="center"
-                      android:visibility="gone"
-                      tools:visibility="visible" />
-                </FrameLayout>
+                      android:visibility="gone" />
 
-                <FrameLayout android:id="@+id/stream_content_container"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
-
-                    <!-- emtpy -->
-                    <TextView android:id="@+id/stream_content_empty"
-                      android:layout_width="wrap_content"
-                      android:layout_height="match_parent"
-                      android:layout_gravity="center"
-                      android:gravity="center"
-                      android:padding="16dp"
-                      android:text="@string/single_stream_empty"
-                      android:textColor="@color/gray_50"
-                      android:textSize="20sp"
-                      android:visibility="gone"
-                      tools:visibility="visible" />
-
-                    <!-- content -->
-                    <LinearLayout android:id="@+id/stream_content_detail"
+                    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/stream_avatar"
                       android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:animateLayoutChanges="true"
-                      android:orientation="vertical"
-                      android:visibility="invisible"
-                      tools:visibility="visible">
-
-                        <FrameLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                            <ImageView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:layout_gravity="center_vertical"
-                              android:layout_marginLeft="16dp"
-                              android:src="@drawable/ic_stream_author_24_gray50" />
-
-                            <TextView android:id="@+id/stream_author"
-                              android:layout_width="match_parent"
-                              android:layout_height="56dp"
-                              android:background="?selectableItemBackground"
-                              android:clickable="true"
-                              android:gravity="center_vertical"
-                              android:paddingLeft="@dimen/keyline_2"
-                              android:textAppearance="@style/TextAppearance.Switch"
-                              android:textColor="?android:attr/textColorPrimary"
-                              tools:text="rafa" />
-                        </FrameLayout>
-
-                        <FrameLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                          <TextView android:id="@+id/stream_detail_media_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="56dp"
-                            android:gravity="center_vertical"
-                            android:paddingRight="16dp"
-                            android:layout_gravity="end|center_vertical"
-                            android:textAppearance="@style/TextAppearance.Switch"
-                            android:textColor="@color/gray_60"
-                            android:visibility="visible"
-                            tools:text="7" />
-                          <ImageView android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="16dp"
-                            android:src="@drawable/ic_action_stream_gallery_gray_24" />
-                          <TextView android:id="@+id/stream_detail_media"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:background="?selectableItemBackground"
-                            android:clickable="true"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/keyline_2"
-                            android:textAppearance="@style/TextAppearance.Switch"
-                            android:textColor="?android:attr/textColorPrimary"
-                            android:text="@string/stream_detail_media"
-                            tools:text="Media" />
-
-                        </FrameLayout>
-
-                        <View android:layout_width="match_parent"
-                          android:layout_height="1dp"
-                          android:layout_gravity="bottom"
-                          android:background="?dividerHorizontal" />
-
-                        <!-- watchers -->
-                        <TextView android:id="@+id/stream_content_detail_watchers_number"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_marginLeft="16dp"
-                          android:paddingBottom="9dp"
-                          android:paddingTop="15dp"
-                          android:textAppearance="@style/SectionTitleAppearance"
-                          tools:text="3 watchers" />
-
-                        <com.shootr.android.ui.widgets.WatchersView android:id="@+id/stream_content_detail_watchers_list"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          />
-
-                      <View android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_gravity="bottom"
-                        android:background="?dividerHorizontal" />
-
-                      <FrameLayout android:layout_width="match_parent"
-                        android:layout_marginBottom="56dp"
-                        android:layout_height="wrap_content">
-
-                        <ImageView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_gravity="center_vertical"
-                          android:layout_marginLeft="16dp"
-                          android:src="@drawable/ic_checkin_24_gray50" />
-
-                        <TextView android:id="@+id/stream_checkin"
-                          android:layout_width="match_parent"
-                          android:layout_height="56dp"
-                          android:background="?selectableItemBackground"
-                          android:clickable="true"
-                          android:gravity="center_vertical"
-                          android:paddingLeft="@dimen/keyline_2"
-                          android:textAppearance="@style/TextAppearance.Switch"
-                          android:textColor="?android:attr/textColorPrimary"
-                          android:text="@string/check_in_action" />
-                      </FrameLayout>
-                    </LinearLayout>
-
+                      android:layout_height="match_parent"
+                      tools:src="@drawable/sample_avatar" />
                 </FrameLayout>
 
-                <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
                 <LinearLayout android:id="@+id/stream_title_container"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:background="@color/primary"
-                  android:clickable="true"
-                  android:orientation="vertical"
-                  android:paddingBottom="16dp">
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="16dp"
+                  android:orientation="vertical">
 
-                    <include layout="@layout/toolbar_actionbar" />
-
-                    <TextView android:id="@+id/stream_title"
-                      android:layout_width="wrap_content"
+                    <TextView android:id="@id/cat_title"
+                      android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginLeft="@dimen/keyline_2"
-                      android:layout_marginRight="@dimen/keyline_1"
-                      android:text="@string/stream_title_default"
-                      android:textColor="@color/white"
+                      android:fontFamily="sans-serif-medium"
+                      android:singleLine="true"
+                      android:textColor="@android:color/white"
                       android:textSize="18sp"
-                      android:textStyle="bold"
-                      tools:text="Sevilla-Betis 18:30 - Sánchez Pizjuán, Nervión" />
+                      tools:text="Title" />
 
-                    <TextView android:id="@+id/stream_description"
-                      android:layout_width="wrap_content"
+                    <TextView android:id="@+id/subtitle"
+                      android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginLeft="@dimen/keyline_2"
-                      android:layout_marginRight="@dimen/keyline_1"
-                      android:text="@string/stream_title_default"
-                      android:textColor="@color/white"
-                      android:textSize="16sp"
-                      android:visibility="gone"
-                      tools:visibility="visible"
-                      tools:text="Juega el orgullo de nuestra ciudad" />
-
+                      android:textColor="#80ffffff"
+                      android:textSize="15sp"
+                      tools:text="following 3" />
                 </LinearLayout>
-            </FrameLayout>
+            </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>
 
-        </com.shootr.android.ui.widgets.ObservableScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-</FrameLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView android:id="@+id/list"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/white"
+      android:clipToPadding="false"
+      android:paddingBottom="8dp"
+      android:visibility="gone"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <ProgressBar android:id="@+id/loading_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center" />
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/stream_share_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:clickable="true"
+      android:src="@drawable/ic_action_share_gray45"
+      app:backgroundTint="@color/white"
+      app:borderWidth="0dp"
+      app:layout_anchor="@id/appbar"
+      app:layout_anchorGravity="bottom|right|end" />
+
+</android.support.design.widget.CoordinatorLayout>

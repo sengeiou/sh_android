@@ -77,14 +77,14 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:clickable="true"
-                      android:text="Shoot" />
+                      android:text="@string/drafts_action_shoot" />
 
                     <Button android:id="@+id/shot_draft_delete"
                       style="@style/BorderlessButton.Secondary"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:clickable="true"
-                      android:text="Delete" />
+                      android:text="@string/drafts_action_discard" />
                 </LinearLayout>
             </FrameLayout>
 

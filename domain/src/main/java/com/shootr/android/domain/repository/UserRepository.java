@@ -19,4 +19,8 @@ public interface UserRepository {
     User putUser(User user);
 
     List<SuggestedPeople> getSuggestedPeople();
+
+    List<User> getAllParticipants(String idStream, Long maxJoinDate);
+
+    List<User> findParticipants(String idStream, String query);
 }

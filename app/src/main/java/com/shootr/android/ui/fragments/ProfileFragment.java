@@ -656,14 +656,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     public void unfollowUser() {
-
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+          .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
               }
           })
-          .setNegativeButton("No", null)
+          .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
           .create()
           .show();
     }

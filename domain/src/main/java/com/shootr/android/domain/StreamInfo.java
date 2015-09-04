@@ -10,8 +10,26 @@ public class StreamInfo {
 
     private Stream stream;
 
-    public int getWatchersCount() {
-        return currentUserWatching != null ? watchers.size() + 1 : watchers.size();
+    private Integer numberOfFollowing;
+
+    private Boolean hasMoreParticipants;
+
+    private Boolean isDataComplete;
+
+    public Boolean hasMoreParticipants() {
+        return hasMoreParticipants;
+    }
+
+    public void setHasMoreParticipants(Boolean hasMoreParticipants) {
+        this.hasMoreParticipants = hasMoreParticipants;
+    }
+
+    public Integer getNumberOfFollowing() {
+        return numberOfFollowing;
+    }
+
+    public void setNumberOfFollowing(Integer numberOfFollowing) {
+        this.numberOfFollowing = numberOfFollowing;
     }
 
     public List<User> getWatchers() {
@@ -42,6 +60,14 @@ public class StreamInfo {
         this.currentUserWatching = currentUserWatching;
     }
 
+    public Boolean isDataComplete() {
+        return isDataComplete;
+    }
+
+    public void setIsDataComplete(Boolean isDataComplete) {
+        this.isDataComplete = isDataComplete;
+    }
+
     public static class Builder {
 
         private StreamInfo streamInfo;
@@ -56,6 +82,8 @@ public class StreamInfo {
         }
 
         public Builder currentUserWatching(User currentUserWatching) {
+            //TODO: this is a ñapa. Eliminar este hack cuando se mergee con participants-info
+            streamInfo.getWatchers().add(0, currentUserWatching);
             streamInfo.setCurrentUserWatching(currentUserWatching);
             return this;
         }
@@ -65,8 +93,24 @@ public class StreamInfo {
             return this;
         }
 
+        public Builder numberOfFollowing(Integer numberOfFollowing) {
+            streamInfo.setNumberOfFollowing(numberOfFollowing);
+            return this;
+        }
+
+        public Builder hasMoreParticipants(Boolean hasMoreParticipants) {
+            streamInfo.setHasMoreParticipants(hasMoreParticipants);
+            return this;
+        }
+
+        public Builder isDataComplete(boolean complete) {
+            streamInfo.setIsDataComplete(complete);
+            return this;
+        }
+
         public StreamInfo build() {
             return streamInfo;
         }
+
     }
 }
