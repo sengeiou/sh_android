@@ -12,8 +12,6 @@ public interface FindParticipantsView extends LoadDataView {
 
     void hideKeyboard();
 
-    void refreshParticipants(List<UserModel> participants);
-
     void showContent();
 
     void hideContent();

@@ -180,11 +180,6 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
-    @Override public void refreshParticipants(List<UserModel> participants) {
-        adapter.setItems(participants);
-        adapter.notifyDataSetChanged();
-    }
-
     @Override public void showContent() {
         resultsListView.setVisibility(View.VISIBLE);
     }

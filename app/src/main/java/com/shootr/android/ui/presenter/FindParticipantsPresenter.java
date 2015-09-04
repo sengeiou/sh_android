@@ -89,7 +89,7 @@ public class FindParticipantsPresenter implements Presenter {
             @Override public void onLoaded(List<User> users) {
                 participants = userModelMapper.transform(users);
                 if (!participants.isEmpty()) {
-                    findParticipantsView.refreshParticipants(participants);
+                    findParticipantsView.renderParticipants(participants);
                 }else{
                     findParticipantsView.showEmpty();
                 }
@@ -132,7 +132,7 @@ public class FindParticipantsPresenter implements Presenter {
             UserModel userModel = participants.get(i);
             if (userModel.getIdUser().equals(idUser)) {
                 userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
-                findParticipantsView.refreshParticipants(participants);
+                findParticipantsView.renderParticipants(participants);
                 break;
             }
         }
