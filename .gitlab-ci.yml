@@ -10,3 +10,11 @@ integration:
     only:
         - develop
         - /^bugfix\/.*$/
+
+sonar:
+    script: ./gradlew sonarRunner
+    stage: deploy
+    only:
+        - develop
+        - feature/sonar #TODO for testing purposes, delete before merging
+    allow_failure: true
