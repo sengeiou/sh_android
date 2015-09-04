@@ -12,7 +12,6 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.StreamSearchRepository;
 import com.shootr.android.domain.utils.LocaleProvider;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -70,25 +69,10 @@ public class StreamSearchInteractor implements Interactor {
 
     private void performSearch() {
         List<StreamSearchResult> streams = streamSearchRepository.getStreams(query, localeProvider.getLocale());
-        streams = filterStreamsNotMatchingQuery(streams);
 
         StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
 
         notifySearchResultsSuccessful(streamSearchResultList);
-    }
-
-    private List<StreamSearchResult> filterStreamsNotMatchingQuery(List<StreamSearchResult> streams) {
-        List<StreamSearchResult> filteredResults = new ArrayList<>(streams.size());
-        for (StreamSearchResult stream : streams) {
-            if (matchesQuery(stream)) {
-                filteredResults.add(stream);
-            }
-        }
-        return filteredResults;
-    }
-
-    private boolean matchesQuery(StreamSearchResult stream) {
-        return stream.getStream().getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
     private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
