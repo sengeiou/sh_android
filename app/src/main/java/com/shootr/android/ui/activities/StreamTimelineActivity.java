@@ -18,7 +18,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     public static Intent newIntent(Context context, String streamId, String streamTag) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
         intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTag);
+        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TAG, streamTag);
         return intent;
     }
 
