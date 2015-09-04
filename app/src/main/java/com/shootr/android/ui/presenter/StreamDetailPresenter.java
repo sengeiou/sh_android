@@ -59,6 +59,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     private Integer streamMediaCount;
     private List<UserModel> participantsShown;
+    private boolean hasBeenPaused = false;
 
     @Inject
     public StreamDetailPresenter(@Main Bus bus,
@@ -275,11 +276,15 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     @Override
     public void resume() {
+        if (hasBeenPaused) {
+            getStreamInfo();
+        }
         bus.register(this);
     }
 
     @Override
     public void pause() {
+        hasBeenPaused = true;
         bus.unregister(this);
     }
 
