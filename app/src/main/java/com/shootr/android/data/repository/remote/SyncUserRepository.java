@@ -157,17 +157,17 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
         List<UserEntity> allParticipants = remoteUserDataSource.getAllParticipants(idStream, maxJoinDate);
-        List<User> participants = getParticipants(allParticipants);
+        List<User> participants = transformParticipantsEntities(allParticipants);
         return participants;
     }
 
     @Override public List<User> findParticipants(String idStream, String query) {
         List<UserEntity> allParticipants = remoteUserDataSource.findParticipants(idStream, query);
-        List<User> participants = getParticipants(allParticipants);
+        List<User> participants = transformParticipantsEntities(allParticipants);
         return participants;
     }
 
-    private List<User> getParticipants(List<UserEntity> allParticipants) {
+    private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
         List<User> participants = new ArrayList<>(allParticipants.size());
         for (UserEntity participantEntity : allParticipants) {
             User participant = userEntityMapper.transform(participantEntity,
@@ -210,7 +210,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     //endregion
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
-        return getParticipants(localUserEntities);
+        return transformParticipantsEntities(localUserEntities);
     }
 
     private void markSynchronized(List<UserEntity> peopleEntities) {
