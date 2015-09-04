@@ -44,6 +44,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final ImageLoader imageLoader;
     private ActionViewHolder authorViewHolder;
     private ActionViewHolder mediaViewHolder;
+    private AllParticipantsViewHolder allParticipantsViewHolder;
 
     private List<UserModel> participants = Collections.emptyList();
     private TextViewHolder descriptionViewHolder;
@@ -53,6 +54,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private int mediaCount;
 
     private final Set<String> keepFollowButtonIds = new HashSet<>();
+    private boolean isAllParticipantsVisible = false;
 
     public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
       View.OnClickListener onMediaClickListener, View.OnClickListener onAllParticipantsClickListener,
@@ -83,6 +85,13 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mediaCount = mediaCount;
         if (mediaViewHolder != null) {
             mediaViewHolder.setNumber(mediaCount);
+        }
+    }
+
+    public void showAllParticipants() {
+        isAllParticipantsVisible = true;
+        if (allParticipantsViewHolder != null) {
+            allParticipantsViewHolder.setVisible(true);
         }
     }
 
@@ -137,9 +146,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 v = inflater.inflate(R.layout.item_list_stream_watcher, parent, false);
                 return new WatcherViewHolder(v, onUserClickListener, imageLoader, onFollowUnfollowListener, keepFollowButtonIds);
             case TYPE_ALL_PARTICIPANTS:
-                v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
-                v.setOnClickListener(onAllParticipantsClickListener);
-                return new AllParticipantsViewHolder(v);
+                if (allParticipantsViewHolder == null) {
+                    v = inflater.inflate(R.layout.include_all_participants_button, parent, false);
+                    allParticipantsViewHolder = new AllParticipantsViewHolder(v);
+                    v.setOnClickListener(onAllParticipantsClickListener);
+                }
+                return allParticipantsViewHolder;
             default:
                 throw new IllegalStateException("No holder declared for view type " + viewType);
         }
@@ -164,6 +176,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 UserModel user = participants.get(participantPosition(position));
                 ((WatcherViewHolder) viewHolder).bind(user);
                 break;
+            case TYPE_ALL_PARTICIPANTS:
+                allParticipantsViewHolder.setVisible(isAllParticipantsVisible);
         }
     }
 
@@ -309,8 +323,16 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class AllParticipantsViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.all_participants_button) TextView button;
+
         public AllParticipantsViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
+
+        public void setVisible(boolean visible) {
+            button.setVisibility(visible? View.VISIBLE : View.GONE);
+        }
+
     }
 }

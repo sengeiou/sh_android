@@ -417,7 +417,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void showAllParticipantsButton() {
-        // TODO implementation
+        adapter.showAllParticipants();
     }
 
     @Override
