@@ -2,6 +2,7 @@ package com.shootr.android.ui.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
+import com.shootr.android.util.Truss;
 
 public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
@@ -78,7 +80,17 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private void renderAuthor(StreamModel stream) {
         if (author != null) {
-            author.setText(stream.getAuthorUsername());
+            if (stream.getDescription() != null) {
+                CharSequence authorText = new Truss().append(stream.getAuthorUsername())
+                  .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
+                  .append(" · ")
+                  .append(stream.getDescription())
+                  .popSpan()
+                  .build();
+                author.setText(authorText);
+            } else {
+                author.setText(stream.getAuthorUsername());
+            }
         }
     }
 
