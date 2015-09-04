@@ -32,7 +32,7 @@
     <LinearLayout android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
-      android:layout_toLeftOf="@+id/stream_watchers"
+      android:layout_toLeftOf="@+id/stream_right_items"
       android:layout_toRightOf="@+id/stream_picture"
       android:orientation="vertical">
 
@@ -57,39 +57,40 @@
         tools:text="Romanesco" />
     </LinearLayout>
 
-    <TextView android:id="@+id/stream_watchers"
+    <LinearLayout android:id="@+id/stream_right_items"
+      android:layout_alignParentRight="true"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_marginLeft="6dp"
-      tools:text="2"
-      style="@style/WatchersIndicator" />
+      android:orientation="vertical"
+      android:layout_height="wrap_content">
 
-    <ImageView android:id="@+id/stream_remove"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:background="?selectableItemBackgroundBorderless"
-      android:src="@drawable/ic_action_close_gray60_24_nopadding"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
-      android:layout_alignLeft="@+id/stream_watchers"
-      android:layout_alignStart="@+id/stream_watchers"
-      android:layout_marginRight="-4dp"
-      android:visibility="gone"
-      tools:visibility="visible"/>
+      <TextView android:id="@+id/stream_watchers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        tools:text="2"
+        style="@style/WatchersIndicator" />
 
-    <ImageView android:id="@+id/favorite_stream_indicator"
-      android:layout_width="26dp"
-      android:layout_height="26dp"
-      android:background="?selectableItemBackgroundBorderless"
-      android:src="@drawable/ic_favorite_not_added_28_gray50"
-      android:scaleType="centerCrop"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentBottom="true"
-      android:visibility="gone"
-      tools:visibility="visible"
-      />
+      <ImageView android:id="@+id/stream_remove"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_action_close_gray60_24_nopadding"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="-4dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+      <ImageView android:id="@+id/favorite_stream_indicator"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_favorite_not_added_28_gray50"
+        android:scaleType="centerCrop"
+        android:layout_gravity="right|bottom"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+    </LinearLayout>
+
   </RelativeLayout>
 </FrameLayout>
