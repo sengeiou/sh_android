@@ -203,7 +203,7 @@
     <string name="entered_hours_ago">Entered %d hours ago</string>
     <string name="entered_a_day_ago">Entered 1 day ago</string>
     <string name="entered_days_ago">Entered %d days ago</string>
-    <string name="entered_long_time_ago">Entered long time ago</string>
+    <string name="entered_long_time_ago">Entered many days ago</string>
 
     <string name="user_not_found">User not found</string>
     <string name="dont_show_again">Ok, don\'t show again</string>
