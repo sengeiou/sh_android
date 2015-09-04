@@ -14,6 +14,8 @@ public class StreamInfo {
 
     private Boolean hasMoreParticipants;
 
+    private Boolean isDataComplete;
+
     public Boolean hasMoreParticipants() {
         return hasMoreParticipants;
     }
@@ -58,6 +60,14 @@ public class StreamInfo {
         this.currentUserWatching = currentUserWatching;
     }
 
+    public Boolean isDataComplete() {
+        return isDataComplete;
+    }
+
+    public void setIsDataComplete(Boolean isDataComplete) {
+        this.isDataComplete = isDataComplete;
+    }
+
     public static class Builder {
 
         private StreamInfo streamInfo;
@@ -90,6 +100,11 @@ public class StreamInfo {
 
         public Builder hasMoreParticipants(Boolean hasMoreParticipants) {
             streamInfo.setHasMoreParticipants(hasMoreParticipants);
+            return this;
+        }
+
+        public Builder isDataComplete(boolean complete) {
+            streamInfo.setIsDataComplete(complete);
             return this;
         }
 

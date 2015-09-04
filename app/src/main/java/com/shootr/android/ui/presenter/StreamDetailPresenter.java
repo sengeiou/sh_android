@@ -143,10 +143,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     //endregion
 
     //region Stream info
-    public void refreshInfo() {
-        this.getStreamInfo();
-    }
-
     public void loadStreamInfo() {
         this.showViewLoading();
         this.getStreamInfo();
@@ -176,6 +172,23 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
         this.showViewDetail();
         this.hideViewLoading();
+    }
+
+    private void refreshWatchers() {
+        streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
+            @Override
+            public void onLoaded(StreamInfo streamInfo) {
+                if (streamInfo.isDataComplete()) {
+                    renderWatchersList(streamInfo);
+                }
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override
+            public void onError(ShootrException error) {
+                String errorMessage = errorMessageFactory.getMessageForError(error);
+                streamDetailView.showError(errorMessage);
+            }
+        });
     }
 
     private void showViewDetail() {
@@ -277,7 +290,7 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     @Override
     public void resume() {
         if (hasBeenPaused) {
-            getStreamInfo();
+            refreshWatchers();
         }
         bus.register(this);
     }

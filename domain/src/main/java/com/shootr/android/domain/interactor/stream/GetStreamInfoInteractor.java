@@ -71,12 +71,12 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     protected void obtainLocalStreamInfo() {
-        StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository);
+        StreamInfo streamInfo = getStreamInfo(localUserRepository, localStreamRepository, true);
         notifyLoaded(streamInfo);
     }
 
     protected void obtainRemoteStreamInfo() {
-        StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository);
+        StreamInfo streamInfo = getStreamInfo(remoteUserRepository, remoteStreamRepository, false);
         if (streamInfo != null) {
             notifyLoaded(streamInfo);
         } else {
@@ -84,7 +84,9 @@ public class GetStreamInfoInteractor implements Interactor {
         }
     }
 
-    protected StreamInfo getStreamInfo(UserRepository userRepository, final StreamRepository streamRepository) {
+    protected StreamInfo getStreamInfo(UserRepository userRepository,
+      final StreamRepository streamRepository,
+      boolean localOnly) {
         User currentUser = userRepository.getUserById(sessionRepository.getCurrentUserId());
         Stream stream = streamRepository.getStreamById(idStreamWanted);
         checkNotNull(stream, new Preconditions.LazyErrorMessage() {
@@ -115,7 +117,7 @@ public class GetStreamInfoInteractor implements Interactor {
             hasMoreParticipants = true;
         }
 
-        return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants);
+        return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants, localOnly);
     }
 
     private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
@@ -157,12 +159,13 @@ public class GetStreamInfoInteractor implements Interactor {
     }
 
     private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser,
-      Integer numberOfFollowing, Boolean hasMoreParticipants) {
+      Integer numberOfFollowing, Boolean hasMoreParticipants, boolean localOnly) {
         boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
         return StreamInfo.builder()
           .stream(stream).watchers(streamWatchers)
           .currentUserWatching(isCurrentUserWatching ? currentUser : null).numberOfFollowing(numberOfFollowing)
           .hasMoreParticipants(hasMoreParticipants)
+          .isDataComplete(!localOnly)
           .build();
     }
 
