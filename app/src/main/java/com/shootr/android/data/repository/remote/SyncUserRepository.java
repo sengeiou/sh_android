@@ -210,16 +210,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
     //endregion
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {
-        List<User> userList = new ArrayList<>();
-        String currentUserId = sessionRepository.getCurrentUserId();
-        for (UserEntity localUserEntity : localUserEntities) {
-            User user = userEntityMapper.transform(localUserEntity,
-              currentUserId,
-              isFollower(localUserEntity.getIdUser()),
-              isFollowing(localUserEntity.getIdUser()));
-            userList.add(user);
-        }
-        return userList;
+        return getParticipants(localUserEntities);
     }
 
     private void markSynchronized(List<UserEntity> peopleEntities) {
