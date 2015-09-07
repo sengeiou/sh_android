@@ -26,6 +26,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.android.R;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
@@ -89,6 +90,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
+    @Inject @TemporaryFilesDir File tmpFiles;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -284,6 +286,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupPhotoPicker() {
         photoPickerController = new PhotoPickerController.Builder().onActivity(getActivity())
+          .withTemporaryDir(tmpFiles)
           .withHandler(new PhotoPickerController.Handler() {
               @Override
               public void onSelected(File imageFile) {

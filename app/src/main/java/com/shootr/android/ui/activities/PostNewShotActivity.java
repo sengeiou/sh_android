@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.component.PhotoPickerController;
@@ -53,6 +54,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
     @Inject PostNewShotPresenter presenter;
+    @Inject @TemporaryFilesDir File tmpFiles;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -97,20 +99,25 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
 
-        photoPickerController =
-          new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+        photoPickerController = new PhotoPickerController.Builder().onActivity(this)
+          .withTemporaryDir(tmpFiles)
+          .withHandler(new PhotoPickerController.Handler() {
+              @Override
+              public void onSelected(File imageFile) {
                   presenter.selectImage(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
-          }).build();
+          })
+          .build();
     }
 
     private void setTextReceivedFromIntentIfAny() {

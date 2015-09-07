@@ -15,6 +15,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.ShotDetailWithRepliesAdapter;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
@@ -54,6 +55,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject IntentFactory intentFactory;
+    @Inject @TemporaryFilesDir File tmpFiles;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -189,21 +191,26 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupPhotoPicker() {
-        photoPickerController =
-          new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+        photoPickerController = new PhotoPickerController.Builder().onActivity(this)
+          .withTemporaryDir(tmpFiles)
+          .withHandler(new PhotoPickerController.Handler() {
+              @Override
+              public void onSelected(File imageFile) {
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   //TODO mostrar algo
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
-          }).build();
+          })
+          .build();
     }
 
     private void setupNewShotBarDelegate(final ShotModel shotModel) {
