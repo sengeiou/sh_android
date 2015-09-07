@@ -280,7 +280,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata
 
 def publishAllTask = project.tasks.create("publishAllApksToS3")
 android.applicationVariants.all { variant ->
-    def task = project.tasks.create("publish${variant.name}ApkToS3") << {
+    def task = project.tasks.create("publish${variant.name.capitalize()}ApkToS3") << {
 
         def keyId = System.getenv('AWS_S3_KEY_ID')
         def keySecret = System.getenv('AWS_S3_KEY_SECRET')

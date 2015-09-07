@@ -15,7 +15,7 @@ integration:
         - /^bugfix\/.*$/
 
 distribution:
-    script: ./gradlew assembleRelease -PdisablePreDex publishreleaseApkToS3
+    script: ./gradlew assembleRelease -PdisablePreDex publishReleaseApkToS3
     stage: deploy
     only:
         - master
