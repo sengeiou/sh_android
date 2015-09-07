@@ -2,14 +2,23 @@ before_script:
 
 features:
     script: ./gradlew test
+    stage: test
     only:
         - /^feature\/.*$/
 
 integration:
     script: ./gradlew build -PdisablePreDex
+    stage: test
     only:
+        - master
         - develop
         - /^bugfix\/.*$/
+
+distribution:
+    script: ./gradlew assembleRelease -PdisablePreDex publishReleaseApkToS3
+    stage: deploy
+    only:
+        - master
 
 sonar:
     script: ./gradlew sonarRunner

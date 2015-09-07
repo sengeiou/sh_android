@@ -9,6 +9,7 @@ buildscript {
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.14.7'
+        classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
     }
 }
 
@@ -269,4 +270,47 @@ uploadArchives {
             uniqueVersion = false
         }
     }
+}
+
+
+//TODO Wrap this thing into an indepentent plugin
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.PutObjectRequest
+import com.amazonaws.services.s3.model.ObjectMetadata
+
+def publishAllTask = project.tasks.create("publishAllApksToS3")
+android.applicationVariants.all { variant ->
+    def task = project.tasks.create("publish${variant.name.capitalize()}ApkToS3") << {
+
+        def keyId = System.getenv('AWS_S3_KEY_ID')
+        def keySecret = System.getenv('AWS_S3_KEY_SECRET')
+
+        if (!keyId || !keySecret) {
+            throw new GradleException("Please set AWS_S3_KEY_ID and AWS_S3_KEY_SECRET properties.")
+        }
+        def bucket = "shootr-android-distribution"
+        def File apkFile = variant.outputs[0].outputFile
+        println 'apkFile: ' + apkFile
+
+        def contentType = "application/vnd.android.package-archive"
+
+        AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials(keyId, keySecret));
+
+        def request = new PutObjectRequest(bucket, apkFile.getName(), apkFile)
+
+        def metadata = new ObjectMetadata()
+        metadata.setContentType(contentType)
+        request.setMetadata(metadata)
+
+        s3client.putObject(request)
+
+        // Optional
+        def requestLatest = new PutObjectRequest(bucket, "Shootr-latest.apk", apkFile)
+        s3client.putObject(requestLatest)
+    }
+
+    task.dependsOn variant.assemble
+    publishAllTask.dependsOn task
 }
