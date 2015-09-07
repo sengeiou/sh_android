@@ -15,6 +15,6 @@ sonar:
     script: ./gradlew sonarRunner
     stage: deploy
     only:
-        - develop
-        - feature/sonar #TODO for testing purposes, delete before merging
+        - master
+        - sonar
     allow_failure: true
