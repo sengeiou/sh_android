@@ -10,3 +10,11 @@ integration:
     only:
         - develop
         - /^bugfix\/.*$/
+
+sonar:
+    script: ./gradlew sonarRunner
+    stage: deploy
+    only:
+        - master
+        - sonar
+    allow_failure: true

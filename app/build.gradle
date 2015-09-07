@@ -242,6 +242,7 @@ def signingConfigFromFile() {
 
 sonarRunner {
     sonarProperties {
+        property "sonar.projectKey", "Android_build:app"
         property "sonar.host.url", "http://sonar.fav24.net"
         property "sonar.jdbc.url",
           "jdbc:mysql://gm-ci-environment.cttjtyko7rpp.eu-west-1.rds.amazonaws.com:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
