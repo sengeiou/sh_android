@@ -38,6 +38,6 @@ public class ShotQueueSendingNotification extends CommonNotification {
 
     @Override
     protected CharSequence getTickerText() {
-        return null;
+        return titleText;
     }
 }
