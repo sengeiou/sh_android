@@ -27,7 +27,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -95,6 +94,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
@@ -155,6 +155,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackLoader feedbackLoader;
 
     @Inject
     GetUserByUsernameInteractor getUserByUsernameInteractor;
@@ -259,7 +260,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void userNotFoundNotification(){
-        Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), getString(R.string.user_not_found));
     }
 
     private void openShotImage(String imageUrl) {
@@ -477,7 +478,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), getString(R.string.connection_lost));
         hideLoadingPhoto();
     }
 
@@ -501,7 +502,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         } else {
             messageForError = errorMessageFactory.getCommunicationErrorMessage();
         }
-        Toast.makeText(getActivity(), messageForError, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), messageForError);
         hideLoadingPhoto();
     }
 
@@ -828,7 +829,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.communication_error), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), getActivity().getString(R.string.communication_error));
     }
 
     @Override public void hideLogoutInProgress() {
@@ -881,7 +882,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showShotShared() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), getActivity().getString(R.string.shot_shared_message));
     }
 
     @OnClick(R.id.profile_listing)
@@ -908,7 +909,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError(String messageForError) {
-        Toast.makeText(getActivity(), messageForError, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), messageForError);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

@@ -8,8 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -21,6 +21,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import java.util.List;
@@ -35,9 +36,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     @Bind(R.id.listing_list) RecyclerView listingList;
     @Bind(R.id.listing_loading) View loadingView;
     @Bind(R.id.listing_empty_title) View emptyView;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
 
     @Inject ListingListPresenter presenter;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackLoader feedbackLoader;
 
     private ListingStreamsAdapter adapter;
 
@@ -157,7 +160,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, errorMessage);
     }
 
     @Override public void showLoading() {
@@ -177,7 +180,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showStreamShared() {
-        Toast.makeText(this, getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, sharedStream);
     }
 
     @Override public void showContent() {

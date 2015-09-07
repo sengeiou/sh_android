@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
@@ -39,6 +39,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -60,12 +61,14 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
+    @Inject FeedbackLoader feedbackLoader;
     @Inject @Main Bus bus;
 
     private SearchView searchView;
 
     @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
+    @BindString(R.string.connection_lost) String connectionLost;
     View progressViewContent;
     View progressView;
 
@@ -257,7 +260,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, connectionLost);
         setLoading(false);
         isLoadingRemoteData = false;
         if (adapter.getCount() == 0) {

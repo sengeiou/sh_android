@@ -9,8 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
@@ -22,6 +22,7 @@ import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -33,10 +34,12 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject FavoritesListPresenter favoritesListPresenter;
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackLoader feedbackLoader;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
     @Bind(R.id.favorites_loading) View loading;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
 
     private StreamsListAdapter adapter;
 
@@ -139,7 +142,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override public void showStreamShared() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), sharedStream);
     }
 
     @Override
@@ -164,6 +167,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), message);
     }
 }

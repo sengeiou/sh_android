@@ -3,8 +3,8 @@ package com.shootr.android.ui.activities.registro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.facebook.AccessToken;
@@ -23,6 +23,7 @@ import com.shootr.android.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.android.ui.activities.IntroActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.util.FeedbackLoader;
 import java.util.Arrays;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -33,8 +34,10 @@ public class LoginSelectionActivity extends BaseActivity {
 
     @Bind(R.id.login_progress) View loading;
     @Bind(R.id.login_buttons) View buttonsContainer;
+    @BindString(R.string.error_facebook_login) String facebookError;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
+    @Inject FeedbackLoader feedbackLoader;
     @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
 
     private CallbackManager callbackManager;
@@ -140,6 +143,6 @@ public class LoginSelectionActivity extends BaseActivity {
     }
 
     private void showFacebookError() {
-        Toast.makeText(LoginSelectionActivity.this, R.string.error_facebook_login, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, facebookError);
     }
 }

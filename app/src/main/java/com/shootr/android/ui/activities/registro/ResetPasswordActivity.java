@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,6 +20,7 @@ import com.shootr.android.ui.presenter.ResetPasswordConfirmationPresenter;
 import com.shootr.android.ui.presenter.ResetPasswordRequestPresenter;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
 import com.shootr.android.ui.views.ResetPasswordRequestView;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import javax.inject.Inject;
 
@@ -32,6 +32,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     @Inject ImageLoader imageLoader;
     @Inject ResetPasswordRequestPresenter resetPasswordRequestPresenter;
     @Inject ResetPasswordConfirmationPresenter resetPasswordConfirmationPresenter;
+    @Inject FeedbackLoader feedbackLoader;
 
     private ResetPasswordRequestView resetPasswordRequestView;
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
@@ -165,7 +166,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            Toast.makeText(ResetPasswordActivity.this, message, Toast.LENGTH_SHORT).show();
+            feedbackLoader.showShortFeedback(ResetPasswordActivity.this, message);
         }
     }
 
@@ -226,7 +227,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            Toast.makeText(ResetPasswordActivity.this, message, Toast.LENGTH_SHORT).show();
+            feedbackLoader.showShortFeedback(ResetPasswordActivity.this, message);
         }
     }
 }

@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,6 +25,7 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import java.io.File;
 import javax.inject.Inject;
@@ -53,6 +53,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
     @Inject PostNewShotPresenter presenter;
+    @Inject FeedbackLoader feedbackLoader;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -285,7 +286,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, message);
     }
 
     public static class IntentBuilder {

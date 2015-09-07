@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -33,6 +32,7 @@ import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
+import com.shootr.android.util.FeedbackLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -53,6 +53,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Inject EmailRegistrationPresenter presenter;
     @Inject LocaleProvider localeProvider;
+    @Inject FeedbackLoader feedbackLoader;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -196,7 +197,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        feedbackLoader.showShortFeedback(this, message);
     }
 
     @Override public void showCreateButton() {

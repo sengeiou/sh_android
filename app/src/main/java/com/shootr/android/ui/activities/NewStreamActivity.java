@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
@@ -21,6 +20,7 @@ import com.shootr.android.ui.base.BaseToolbarActivity;
 import com.shootr.android.ui.presenter.NewStreamPresenter;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.MenuItemValueHolder;
 import javax.inject.Inject;
 
@@ -35,6 +35,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewStreamPresenter presenter;
+    @Inject FeedbackLoader feedbackLoader;
 
     @Bind(R.id.new_stream_title) EditText titleView;
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
@@ -254,7 +255,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, message);
     }
 
     private void resetTitleError() {

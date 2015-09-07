@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -62,6 +61,7 @@ import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -89,6 +89,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackLoader feedbackLoader;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -98,6 +99,8 @@ public class StreamTimelineFragment extends BaseFragment
     @Bind(R.id.shot_bar_drafts) View draftsButton;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
+    @BindString(R.string.added_to_favorites) String addToFavorites;
+    @BindString(R.string.shot_shared_message) String shotShared;
 
     private TimelineAdapter adapter;
 
@@ -233,7 +236,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void setupNewShotBarDelegate() {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton,
+          feedbackLoader) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
@@ -513,7 +517,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showShotShared() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), shotShared);
     }
 
     @Override
@@ -538,7 +542,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        feedbackLoader.showLongFeedback(getActivity(), message);
     }
 
     @Override
@@ -600,7 +604,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showAddedToFavorites() {
-        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), addToFavorites);
     }
 
     @Override

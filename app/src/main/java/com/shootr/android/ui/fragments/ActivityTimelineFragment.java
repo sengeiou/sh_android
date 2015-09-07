@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
@@ -33,6 +32,7 @@ import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.android.util.AndroidTimeUtils;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import dagger.ObjectGraph;
 import java.util.List;
@@ -53,6 +53,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private FeedbackLoader feedbackLoader;
     //endregion
 
     public static ActivityTimelineFragment newInstance() {
@@ -243,7 +244,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(getActivity(), message);
     }
 
     @Override

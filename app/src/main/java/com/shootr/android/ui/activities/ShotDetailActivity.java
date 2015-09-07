@@ -10,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -30,6 +30,7 @@ import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -47,6 +48,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.detail_new_shot_bar) View newShotBar;
     @Bind(R.id.shot_bar_text) TextView replyPlaceholder;
     @Bind(R.id.shot_bar_drafts) View replyDraftsButton;
+    @BindString(R.string.shot_shared_message) String shotShared;
+    @BindString(R.string.user_not_found_message) String userNotFoundMessage;
 
     @Inject ImageLoader imageLoader;
     @Inject TimeFormatter timeFormatter;
@@ -54,6 +57,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackLoader feedbackLoader;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -207,7 +211,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     private void setupNewShotBarDelegate(final ShotModel shotModel) {
-        newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton) {
+        newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton,
+          feedbackLoader) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
@@ -308,7 +313,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showUserNotFoundNotification() {
-        Toast.makeText(this,"User not found",Toast.LENGTH_LONG).show();
+        feedbackLoader.showShortFeedback(this, userNotFoundMessage);
     }
 
     @Override
@@ -319,11 +324,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, errorMessage);
     }
 
     @Override public void showShotShared() {
-        Toast.makeText(this, getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
+        feedbackLoader.showShortFeedback(this, shotShared);
     }
 
     @Override public void openNewShotView() {
