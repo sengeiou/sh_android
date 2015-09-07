@@ -33,4 +33,10 @@ public class ShotQueueNotificationManager {
     public void hideSendingShotNotification(QueuedShot shot) {
         androidNotificationManager.removeNotification(NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
+
+    public void showShotFailedNotification(QueuedShot shot) {
+        ShotQueueFailedNotification notification =
+          new ShotQueueFailedNotification(context, notificationBuilderFactory, shot);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
+    }
 }

@@ -26,7 +26,7 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
     }
 
     @Override public void onShotFailed(QueuedShot shot, Exception e) {
-        shotQueueNotificationManager.hideSendingShotNotification(shot);
+        shotQueueNotificationManager.showShotFailedNotification(shot);
         Timber.e(e, "Shot failed");
     }
 
