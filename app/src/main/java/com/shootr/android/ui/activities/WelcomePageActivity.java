@@ -6,8 +6,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.presenter.WelcomePagePresenter;
+import javax.inject.Inject;
 
 public class WelcomePageActivity extends BaseActivity {
+
+    @Inject WelcomePagePresenter presenter;
 
     @Bind(R.id.button_get_started) View getStartedButton;
     @Bind(R.id.get_started_progress) View loading;
@@ -21,6 +25,6 @@ public class WelcomePageActivity extends BaseActivity {
     }
 
     @Override protected void initializePresenter() {
-
+        presenter.initialize(this);
     }
 }
