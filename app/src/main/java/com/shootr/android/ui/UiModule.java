@@ -25,6 +25,7 @@ import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.activities.SupportActivity;
 import com.shootr.android.ui.activities.UpdateWarningActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.activities.WelcomePageActivity;
 import com.shootr.android.ui.activities.WhaleActivity;
 import com.shootr.android.ui.activities.registro.EmailLoginActivity;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
@@ -78,7 +79,8 @@ import javax.inject.Singleton;
     SupportActivity.class,
     ChangePasswordActivity.class,
     AllParticipantsActivity.class,
-    FindParticipantsActivity.class
+    FindParticipantsActivity.class,
+    WelcomePageActivity.class
   },
   complete = false) public class UiModule {
 

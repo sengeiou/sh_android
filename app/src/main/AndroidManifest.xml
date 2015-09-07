@@ -217,6 +217,11 @@
             android:name=".ui.activities.FindParticipantsActivity"
             android:theme="@style/ShootrTheme.Closable">
         </activity>
+        <activity
+          android:name=".ui.activities.WelcomePageActivity"
+          android:configChanges="orientation"
+          android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
