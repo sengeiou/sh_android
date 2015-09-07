@@ -22,7 +22,7 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
     }
 
     @Override public void onShotSent(QueuedShot shot) {
-        shotQueueNotificationManager.hideSendingShotNotification(shot);
+        shotQueueNotificationManager.showShotSentNotification(shot);
     }
 
     @Override public void onShotFailed(QueuedShot shot, Exception e) {

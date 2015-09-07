@@ -169,6 +169,7 @@
     <string name="menu_stream_edit_info">Stream info</string>
     <string name="menu_stream_edit_photo">Photo</string>
     <string name="notification_shot_sending">Shooting…</string>
+    <string name="notification_shot_sent">Shot sent</string>
     <string name="notification_shot_failed">Shot failed</string>
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
     <string name="shoot_photo">Shoot photo</string>
