@@ -272,6 +272,7 @@ uploadArchives {
 }
 
 
+//TODO Wrap this thing into an indepentent plugin
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3Client
@@ -303,6 +304,10 @@ android.applicationVariants.all { variant ->
         request.setMetadata(metadata)
 
         s3client.putObject(request)
+
+        // Optional
+        def requestLatest = new PutObjectRequest(bucket, "Shootr-latest.apk", apkFile)
+        s3client.putObject(requestLatest)
     }
 
     task.dependsOn variant.assemble
