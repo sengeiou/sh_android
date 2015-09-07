@@ -22,6 +22,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.android.ui.activities.IntroActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.android.ui.activities.WelcomePageActivity;
 import com.shootr.android.ui.base.BaseActivity;
 import java.util.Arrays;
 import javax.inject.Inject;
@@ -76,13 +77,18 @@ public class LoginSelectionActivity extends BaseActivity {
             public void onSuccess(LoginResult loginResult) {
                 final AccessToken accessToken = loginResult.getAccessToken();
                 Timber.d("FB Token: %s", accessToken.getToken());
-                performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.CompletedCallback() {
-                    @Override
-                    public void onCompleted() {
+                performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.Callback<Boolean>() {
+                    @Override public void onLoaded(Boolean isNewUser) {
                         finish();
-                        Intent i = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        if (isNewUser) {
+                            Intent i = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override
