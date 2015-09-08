@@ -23,7 +23,7 @@ public class AndroidNotificationManager {
             Notification androidNotification = notification.build();
             notificationManager.notify(tag, id, androidNotification);
         } else {
-            Timber.d("Notification not shown. They are disabled.");
+            Timber.w("Notification not shown. They are disabled.");
         }
     }
 
