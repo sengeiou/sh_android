@@ -125,6 +125,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
 
     private void loadNewShots() {
+        streamTimelineView.hideCheckingForShots();
         if (isRefreshing) {
             return;
         }
