@@ -34,6 +34,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     private VersionOutdatedError.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
+    private View activityView;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +109,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void setContent(@LayoutRes int layoutResource) {
-        getLayoutInflater().inflate(layoutResource, getContentViewRoot());
+        activityView = getLayoutInflater().inflate(layoutResource, getContentViewRoot());
     }
 
     protected ViewGroup getContentViewRoot() {
@@ -159,7 +160,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     public View getView() {
-        return this.getCurrentFocus();
+        return activityView;
     }
-
 }
