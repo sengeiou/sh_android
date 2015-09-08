@@ -120,6 +120,7 @@
         </activity>
         <activity
             android:name=".ui.activities.DraftsActivity"
+            android:launchMode="singleTop"
             android:label="@string/activity_drafts_title"
             android:theme="@style/ShootrTheme.DarkToolbar" >
         </activity>

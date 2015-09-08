@@ -30,7 +30,19 @@ public class ShotQueueNotificationManager {
         androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
 
-    public void hideSendingShotNotification(QueuedShot shot) {
+    public void hideShotNotification(QueuedShot shot) {
         androidNotificationManager.removeNotification(NOTIFICATION_TAG, shot.getIdQueue().intValue());
+    }
+
+    public void showShotFailedNotification(QueuedShot shot) {
+        ShotQueueFailedNotification notification =
+          new ShotQueueFailedNotification(context, notificationBuilderFactory, shot);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
+    }
+
+    public void showShotSentNotification(QueuedShot shot) {
+        ShotQueueSentNotification notification =
+          new ShotQueueSentNotification(context, notificationBuilderFactory, shot);
+        androidNotificationManager.notify(notification, NOTIFICATION_TAG, shot.getIdQueue().intValue());
     }
 }
