@@ -50,7 +50,7 @@ public class LoginResult {
           '}';
     }
 
-    public Boolean getIsNewUser() {
+    public Boolean isNewUser() {
         return isNewUser;
     }
 

@@ -78,7 +78,7 @@ public class ShootrUserService {
     public Boolean performFacebookLogin(String facebookToken) throws InvalidLoginException{
         LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken);
         retrievePostLoginInformation(loginResult);
-        return loginResult.getIsNewUser();
+        return loginResult.isNewUser();
     }
 
     private void retrievePostLoginInformation(LoginResult loginResult) {
