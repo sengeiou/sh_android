@@ -25,11 +25,13 @@ public class SpecialserviceShotGateway implements ShotGateway {
     }
 
     private Shot overwriteVideoValues(Shot originalShot, VideoEmbedEntity videoEmbedEntity) {
-        originalShot.setImage(videoEmbedEntity.getImage());
-        originalShot.setComment(videoEmbedEntity.getComment());
-        originalShot.setVideoUrl(videoEmbedEntity.getVideoUrl());
-        originalShot.setVideoTitle(videoEmbedEntity.getVideoTitle());
-        originalShot.setVideoDuration(videoEmbedEntity.getVideoDuration());
+        if (videoEmbedEntity.getVideoUrl() != null) {
+            originalShot.setImage(videoEmbedEntity.getImage());
+            originalShot.setComment(videoEmbedEntity.getComment());
+            originalShot.setVideoUrl(videoEmbedEntity.getVideoUrl());
+            originalShot.setVideoTitle(videoEmbedEntity.getVideoTitle());
+            originalShot.setVideoDuration(videoEmbedEntity.getVideoDuration());
+        }
         return originalShot;
     }
 }
