@@ -80,15 +80,14 @@ public class LoginSelectionActivity extends BaseActivity {
                 performFacebookLoginInteractor.attempLogin(accessToken.getToken(), new Interactor.Callback<Boolean>() {
                     @Override public void onLoaded(Boolean isNewUser) {
                         finish();
+                        Intent intent;
                         if (isNewUser) {
-                            Intent i = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
+                            intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
                         } else {
-                            Intent i = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
+                            intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
                         }
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
                 }, new Interactor.ErrorCallback() {
                     @Override
