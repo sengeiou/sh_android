@@ -56,7 +56,7 @@ public class DataserviceLoginGateway implements LoginGateway {
             User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
             String sessionToken = loggedInUserEntity.getSessionToken();
             LoginResult loginResult = new LoginResult(loggedInUser, sessionToken);
-            if (loggedInUserEntity.isNewUser() != null) {
+            if (loggedInUserEntity.isNewUser() != null && loggedInUserEntity.isNewUser() == 1) {
                 loginResult.setIsNewUser(true);
             } else {
                 loginResult.setIsNewUser(false);
