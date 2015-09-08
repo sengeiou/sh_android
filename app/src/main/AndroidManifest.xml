@@ -217,6 +217,9 @@
             android:name=".ui.activities.FindParticipantsActivity"
             android:theme="@style/ShootrTheme.Closable">
         </activity>
+
+        <meta-data android:name="com.shootr.android.util.GlideConfiguration"
+          android:value="GlideModule"/>
     </application>
 
 </manifest>

@@ -183,6 +183,8 @@ dependencies {
 
     compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
 
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+
     debugCompile 'com.github.pedrovgs:lynx:1.4'
 
     testCompile 'junit:junit:4.12'
