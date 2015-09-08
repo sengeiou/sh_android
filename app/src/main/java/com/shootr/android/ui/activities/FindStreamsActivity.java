@@ -22,7 +22,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @BindString(R.string.added_to_favorites) String addedToFavorites;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -218,7 +218,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.show(getView(), errorMessage);
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String streamTitle) {
@@ -227,7 +227,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.show(getView(), addedToFavorites);
+        feedbackMessage.show(getView(), addedToFavorites);
     }
 
     //endregion

@@ -4,9 +4,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import javax.inject.Inject;
 
-public class SnackbarFeedbackLoader implements FeedbackLoader {
+public class SnackbarFeedbackMessage implements FeedbackMessage {
 
-    @Inject public SnackbarFeedbackLoader() {
+    @Inject public SnackbarFeedbackMessage() {
     }
 
     @Override public void show(View view, String text) {

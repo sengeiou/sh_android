@@ -23,7 +23,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.AllParticipantsPresenter;
 import com.shootr.android.ui.views.AllParticipantsView;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -43,7 +43,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     @Bind(R.id.userlist_empty) TextView emptyTextView;
 
     @Inject ImageLoader imageLoader;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject AllParticipantsPresenter allParticipantsPresenter;
 
     public static Intent newIntent(Context context, String idStream) {
@@ -147,7 +147,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     @Override public void renderAllParticipants(List<UserModel> users) {

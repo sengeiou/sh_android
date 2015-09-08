@@ -94,7 +94,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
@@ -155,7 +155,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Inject
     GetUserByUsernameInteractor getUserByUsernameInteractor;
@@ -260,7 +260,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void userNotFoundNotification(){
-        feedbackLoader.show(getView(), getString(R.string.user_not_found));
+        feedbackMessage.show(getView(), getString(R.string.user_not_found));
     }
 
     private void openShotImage(String imageUrl) {
@@ -478,7 +478,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.show(getView(), getString(R.string.connection_lost));
+        feedbackMessage.show(getView(), getString(R.string.connection_lost));
         hideLoadingPhoto();
     }
 
@@ -502,7 +502,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         } else {
             messageForError = errorMessageFactory.getCommunicationErrorMessage();
         }
-        feedbackLoader.show(getView(), messageForError);
+        feedbackMessage.show(getView(), messageForError);
         hideLoadingPhoto();
     }
 
@@ -829,7 +829,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError() {
-        feedbackLoader.show(getView(), getActivity().getString(R.string.communication_error));
+        feedbackMessage.show(getView(), getActivity().getString(R.string.communication_error));
     }
 
     @Override public void hideLogoutInProgress() {
@@ -882,7 +882,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.show(getView(), getActivity().getString(R.string.shot_shared_message));
+        feedbackMessage.show(getView(), getActivity().getString(R.string.shot_shared_message));
     }
 
     @OnClick(R.id.profile_listing)
@@ -909,7 +909,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError(String messageForError) {
-        feedbackLoader.show(getView(), messageForError);
+        feedbackMessage.show(getView(), messageForError);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

@@ -23,7 +23,7 @@ import com.shootr.android.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.android.ui.activities.IntroActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.base.BaseActivity;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import java.util.Arrays;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -37,7 +37,7 @@ public class LoginSelectionActivity extends BaseActivity {
     @BindString(R.string.error_facebook_login) String facebookError;
 
     @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
 
     private CallbackManager callbackManager;
@@ -143,6 +143,6 @@ public class LoginSelectionActivity extends BaseActivity {
     }
 
     private void showFacebookError() {
-        feedbackLoader.show(getView(), facebookError);
+        feedbackMessage.show(getView(), facebookError);
     }
 }

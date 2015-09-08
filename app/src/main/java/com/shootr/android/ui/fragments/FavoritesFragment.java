@@ -22,7 +22,7 @@ import com.shootr.android.ui.presenter.FavoritesListPresenter;
 import com.shootr.android.ui.views.FavoritesListView;
 import com.shootr.android.ui.views.nullview.NullFavoritesListView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -34,7 +34,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Inject FavoritesListPresenter favoritesListPresenter;
     @Inject ImageLoader imageLoader;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.favorites_list) RecyclerView favoritesList;
     @Bind(R.id.favorites_empty) View empty;
@@ -142,7 +142,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.show(getView(), sharedStream);
+        feedbackMessage.show(getView(), sharedStream);
     }
 
     @Override
@@ -167,6 +167,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Override
     public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 }

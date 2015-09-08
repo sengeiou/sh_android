@@ -30,7 +30,7 @@ import com.shootr.android.ui.views.ShotDetailView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -57,7 +57,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     @Inject ShotDetailPresenter detailPresenter;
     @Inject NewShotBarPresenter newShotBarPresenter;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private PhotoPickerController photoPickerController;
     private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -215,7 +215,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     private void setupNewShotBarDelegate(final ShotModel shotModel) {
         newShotBarViewDelegate = new NewShotBarViewDelegate(this, photoPickerController, replyDraftsButton,
-          feedbackLoader) {
+          feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(ShotDetailActivity.this) //
@@ -316,7 +316,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showUserNotFoundNotification() {
-        feedbackLoader.show(getView(), userNotFoundMessage);
+        feedbackMessage.show(getView(), userNotFoundMessage);
     }
 
     @Override
@@ -327,11 +327,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showError(String errorMessage) {
-        feedbackLoader.show(getView(), errorMessage);
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.show(getView(), shotShared);
+        feedbackMessage.show(getView(), shotShared);
     }
 
     @Override public void openNewShotView() {

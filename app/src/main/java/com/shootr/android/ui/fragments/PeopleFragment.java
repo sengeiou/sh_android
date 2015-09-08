@@ -31,7 +31,7 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Inject ImageLoader imageLoader;
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -199,7 +199,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

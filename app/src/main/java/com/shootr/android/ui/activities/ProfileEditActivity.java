@@ -25,7 +25,7 @@ import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements ProfileEditView {
@@ -35,7 +35,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     public static final String EXTRA_USER_EMAIL = "user_email";
 
     @Inject ProfileEditPresenter presenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.scroll) ScrollView scroll;
     @Bind(R.id.profile_edit_name) TextView name;
@@ -120,7 +120,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showUpdatedSuccessfulAlert() {
-        feedbackLoader.show(getView(), profileUpdated);
+        feedbackMessage.show(getView(), profileUpdated);
     }
 
     @Override public void closeScreen() {
@@ -180,11 +180,11 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void alertComunicationError() {
-        feedbackLoader.show(getView(), communicationError);
+        feedbackMessage.show(getView(), communicationError);
     }
 
     @Override public void alertConnectionNotAvailable() {
-        feedbackLoader.show(getView(), connectionLost);
+        feedbackMessage.show(getView(), connectionLost);
     }
 
     @Override public void showEmailNotConfirmedError() {
@@ -197,7 +197,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.show(getView(), errorMessage);
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override

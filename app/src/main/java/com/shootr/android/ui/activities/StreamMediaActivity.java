@@ -15,7 +15,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.StreamMediaPresenter;
 import com.shootr.android.ui.views.StreamMediaView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject StreamMediaPresenter presenter;
     @Inject ImageLoader imageLoader;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @NonNull
     protected static Intent newIntent(Context context, String idStream, int predictedMediaCount) {
@@ -86,7 +86,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.show(getView(), errorMessage);
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override

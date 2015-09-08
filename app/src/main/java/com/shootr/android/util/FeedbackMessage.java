@@ -3,7 +3,7 @@ package com.shootr.android.util;
 import android.support.annotation.UiThread;
 import android.view.View;
 
-public interface FeedbackLoader {
+public interface FeedbackMessage {
 
     @UiThread
     void show(View view, String feedback);

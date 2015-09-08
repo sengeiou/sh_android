@@ -59,7 +59,7 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.BitmapImageResizer;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
@@ -67,7 +67,7 @@ import com.shootr.android.util.PicassoImageLoader;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.util.SnackbarFeedbackLoader;
+import com.shootr.android.util.SnackbarFeedbackMessage;
 import com.shootr.android.util.Version;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
@@ -177,7 +177,8 @@ public class DataModule {
         return picassoImageLoader;
     }
 
-    @Provides FeedbackLoader provideFeedbackLoader(SnackbarFeedbackLoader snackbarFeedbackLoader) {
+    @Provides
+    FeedbackMessage provideFeedbackLoader(SnackbarFeedbackMessage snackbarFeedbackLoader) {
         return snackbarFeedbackLoader;
     }
 

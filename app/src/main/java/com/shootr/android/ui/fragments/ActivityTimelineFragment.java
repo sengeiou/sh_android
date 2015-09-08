@@ -32,7 +32,7 @@ import com.shootr.android.ui.presenter.ActivityTimelinePresenter;
 import com.shootr.android.ui.views.ActivityTimelineView;
 import com.shootr.android.ui.views.nullview.NullActivityTimelineView;
 import com.shootr.android.util.AndroidTimeUtils;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import dagger.ObjectGraph;
 import java.util.List;
@@ -53,7 +53,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
     //endregion
 
     public static ActivityTimelineFragment newInstance() {
@@ -244,7 +244,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override
     public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     @Override

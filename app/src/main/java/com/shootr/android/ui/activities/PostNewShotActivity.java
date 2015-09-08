@@ -25,7 +25,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.io.File;
 import javax.inject.Inject;
@@ -53,7 +53,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
     @Inject PostNewShotPresenter presenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -292,7 +292,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     public static class IntentBuilder {

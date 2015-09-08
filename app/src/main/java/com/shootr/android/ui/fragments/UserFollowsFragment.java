@@ -38,7 +38,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -60,7 +60,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject JobManager jobManager;
     @Inject NetworkUtil networkUtil;
     @Inject SessionRepository sessionRepository;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -164,12 +164,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
-        feedbackLoader.show(getView(), communicationError);
+        feedbackMessage.show(getView(), communicationError);
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.show(getView(), connetionLost);
+        feedbackMessage.show(getView(), connetionLost);
         setLoadingView(false);
     }
 

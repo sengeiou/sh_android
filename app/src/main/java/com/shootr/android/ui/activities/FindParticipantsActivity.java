@@ -23,7 +23,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.FindParticipantsPresenter;
 import com.shootr.android.ui.views.FindParticipantsView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     private UserListAdapter adapter;
 
     @Inject ImageLoader imageLoader;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
 
     @Bind(R.id.find_participants_search_results_list) ListView resultsListView;
@@ -163,7 +163,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     @Override public void renderParticipants(List<UserModel> participants) {

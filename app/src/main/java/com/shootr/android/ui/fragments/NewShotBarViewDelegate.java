@@ -14,21 +14,21 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.views.NewShotBarView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 
 public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
     private final Context context;
     private final PhotoPickerController photoPickerController;
     private final View draftsButton;
-    private final FeedbackLoader feedbackLoader;
+    private final FeedbackMessage feedbackMessage;
 
     public NewShotBarViewDelegate(Context context, PhotoPickerController photoPickerController, View draftsButton,
-      FeedbackLoader feedbackLoader) {
+      FeedbackMessage feedbackMessage) {
         this.context = context;
         this.photoPickerController = photoPickerController;
         this.draftsButton = draftsButton;
-        this.feedbackLoader = feedbackLoader;
+        this.feedbackMessage = feedbackMessage;
         this.setupDraftButtonTransition();
     }
 
@@ -101,6 +101,6 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
     @Override
     public void showError(String errorMessage) {
-        feedbackLoader.show(draftsButton, errorMessage);
+        feedbackMessage.show(draftsButton, errorMessage);
     }
 }

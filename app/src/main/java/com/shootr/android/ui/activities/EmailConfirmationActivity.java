@@ -16,7 +16,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.EmailConfirmationPresenter;
 import com.shootr.android.ui.views.EmailConfirmationView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
@@ -25,7 +25,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
 
     @Inject EmailConfirmationPresenter presenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     public static Intent newIntent(Context context, String email) {
         Intent intent = new Intent(context, EmailConfirmationActivity.class);
@@ -92,7 +92,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showLong(getView(), errorMessage);
+        feedbackMessage.showLong(getView(), errorMessage);
     }
 
     @Override public void showEmailError(String errorMessage) {

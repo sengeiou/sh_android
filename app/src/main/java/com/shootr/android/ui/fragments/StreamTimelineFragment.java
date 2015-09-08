@@ -61,7 +61,7 @@ import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -89,7 +89,7 @@ public class StreamTimelineFragment extends BaseFragment
     @Inject AndroidTimeUtils timeUtils;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.timeline_shot_list) ListView listView;
     @Bind(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -237,7 +237,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupNewShotBarDelegate() {
         newShotBarViewDelegate = new NewShotBarViewDelegate(getActivity(), photoPickerController, draftsButton,
-          feedbackLoader) {
+          feedbackMessage) {
             @Override public void openNewShotView() {
                 Intent newShotIntent = PostNewShotActivity.IntentBuilder //
                   .from(getActivity()) //
@@ -517,7 +517,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.show(getView(), shotShared);
+        feedbackMessage.show(getView(), shotShared);
     }
 
     @Override
@@ -542,7 +542,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showLong(getView(), message);
+        feedbackMessage.showLong(getView(), message);
     }
 
     @Override
@@ -604,7 +604,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.show(getView(), addToFavorites);
+        feedbackMessage.show(getView(), addToFavorites);
     }
 
     @Override

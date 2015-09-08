@@ -21,7 +21,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.ListingListPresenter;
 import com.shootr.android.ui.views.ListingView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
     @Inject ListingListPresenter presenter;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private ListingStreamsAdapter adapter;
 
@@ -160,7 +160,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.show(getView(), errorMessage);
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override public void showLoading() {
@@ -180,7 +180,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.show(getView(), sharedStream);
+        feedbackMessage.show(getView(), sharedStream);
     }
 
     @Override public void showContent() {

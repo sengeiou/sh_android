@@ -20,7 +20,7 @@ import com.shootr.android.ui.presenter.ResetPasswordConfirmationPresenter;
 import com.shootr.android.ui.presenter.ResetPasswordRequestPresenter;
 import com.shootr.android.ui.views.ResetPasswordConfirmationView;
 import com.shootr.android.ui.views.ResetPasswordRequestView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import javax.inject.Inject;
 
@@ -32,7 +32,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
     @Inject ImageLoader imageLoader;
     @Inject ResetPasswordRequestPresenter resetPasswordRequestPresenter;
     @Inject ResetPasswordConfirmationPresenter resetPasswordConfirmationPresenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private ResetPasswordRequestView resetPasswordRequestView;
     private ResetPasswordConfirmationView resetPasswordConfirmationView;
@@ -166,7 +166,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            feedbackLoader.show(getView(), message);
+            feedbackMessage.show(getView(), message);
         }
     }
 
@@ -227,7 +227,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            feedbackLoader.show(getView(), message);
+            feedbackMessage.show(getView(), message);
         }
     }
 }

@@ -15,7 +15,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.presenter.ChangePasswordPresenter;
 import com.shootr.android.ui.views.ChangePasswordView;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class ChangePasswordActivity extends BaseToolbarDecoratedActivity implements ChangePasswordView {
@@ -30,7 +30,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     @Bind(R.id.change_password_button) View changePasswordButton;
 
     @Inject ChangePasswordPresenter changePasswordPresenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
@@ -77,7 +77,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showLong(getView(), errorMessage);
+        feedbackMessage.showLong(getView(), errorMessage);
     }
 
     @Override public void navigateToWelcomeScreen() {

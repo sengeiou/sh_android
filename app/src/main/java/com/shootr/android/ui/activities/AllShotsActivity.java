@@ -31,7 +31,7 @@ import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import java.util.List;
@@ -49,7 +49,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
@@ -252,7 +252,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showError(String messageForError) {
-        feedbackLoader.show(getView(), messageForError);
+        feedbackMessage.show(getView(), messageForError);
     }
 
     @Override public void hideLoading() {
@@ -296,7 +296,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.show(getView(), shotShared);
+        feedbackMessage.show(getView(), shotShared);
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {

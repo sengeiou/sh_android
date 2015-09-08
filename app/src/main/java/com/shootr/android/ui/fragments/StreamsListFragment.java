@@ -33,7 +33,7 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -55,7 +55,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Inject ImageLoader imageLoader;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     private StreamsListAdapter adapter;
 
@@ -225,11 +225,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.show(getView(), addedToFavorites);
+        feedbackMessage.show(getView(), addedToFavorites);
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.show(getView(), sharedStream);
+        feedbackMessage.show(getView(), sharedStream);
     }
 
     @Override public void showEmpty() {
@@ -250,7 +250,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     //endregion

@@ -20,7 +20,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.NewStreamPresenter;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.MenuItemValueHolder;
 import javax.inject.Inject;
 
@@ -35,7 +35,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     private  static final String EXTRA_EDITED_SHORT_TITLE = "short_title";
 
     @Inject NewStreamPresenter presenter;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.new_stream_title) EditText titleView;
     @Bind(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
@@ -264,7 +264,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.show(getView(), message);
+        feedbackMessage.show(getView(), message);
     }
 
     private void resetTitleError() {

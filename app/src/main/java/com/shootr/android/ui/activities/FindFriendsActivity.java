@@ -39,7 +39,7 @@ import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
-import com.shootr.android.util.FeedbackLoader;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -61,7 +61,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
-    @Inject FeedbackLoader feedbackLoader;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject @Main Bus bus;
 
     private SearchView searchView;
@@ -264,7 +264,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.show(getView(), connectionLost);
+        feedbackMessage.show(getView(), connectionLost);
         setLoading(false);
         isLoadingRemoteData = false;
         if (adapter.getCount() == 0) {
