@@ -237,6 +237,11 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Subscribe
     @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
-        forceUpdatePeopleAndMe();
+        try {
+            forceUpdatePeopleAndMe();
+        } catch (ServerCommunicationException networkError) {
+            Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
+            /* swallow silently */
+        }
     }
 }

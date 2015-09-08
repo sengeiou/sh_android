@@ -1,10 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shootr.android">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.shootr.android">
 
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application android:vmSafeMode="true">
+    <application
+      tools:replace="android:name"
+      android:name=".ShootrDebugApplication"
+      android:vmSafeMode="true">
 
         <activity android:name="com.github.pedrovgs.lynx.LynxActivity"/>
 
