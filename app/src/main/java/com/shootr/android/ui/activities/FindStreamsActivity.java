@@ -10,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -22,6 +22,7 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackMessage;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
@@ -38,8 +39,10 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.find_streams_list) RecyclerView streamsList;
     @Bind(R.id.find_streams_empty) View emptyView;
     @Bind(R.id.find_streams_loading) View loadingView;
+    @BindString(R.string.added_to_favorites) String addedToFavorites;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -215,7 +218,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String streamTitle) {
@@ -224,7 +227,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override
     public void showAddedToFavorites() {
-        Toast.makeText(this, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), addedToFavorites);
     }
 
     //endregion

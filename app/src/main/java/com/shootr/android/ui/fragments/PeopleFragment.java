@@ -14,12 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.shootr.android.R;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -33,6 +31,7 @@ import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.ui.views.SuggestedPeopleView;
 import com.shootr.android.ui.views.nullview.NullPeopleView;
 import com.shootr.android.ui.views.nullview.NullSuggestedPeopleView;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -43,7 +42,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     @Inject ImageLoader imageLoader;
     @Inject PeoplePresenter presenter;
     @Inject SuggestedPeoplePresenter suggestedPeoplePresenter;
-    @Inject SessionRepository sessionRepository;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
@@ -200,7 +199,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), message);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

@@ -15,23 +15,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
+public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
 
@@ -53,22 +53,26 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @Inject ImageLoader imageLoader;
     @Inject SessionRepository sessionRepository;
     @Inject PostNewShotPresenter presenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) {
-            return;
-        }
-        // Bypass custom layout inyection, translucent activity doesn't get along with Navigation Drawers
-        setContentView(R.layout.activity_new_shot);
-        ButterKnife.bind(this);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        toolbarDecorator.getToolbar().setVisibility(View.GONE);
+    }
 
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_new_shot;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         initializeViews();
+    }
+
+    @Override protected void initializePresenter() {
         initializePresenterWithIntentExtras(getIntent().getExtras());
         setupPhotoIfAny();
         setTextReceivedFromIntentIfAny();
@@ -99,15 +103,18 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
         photoPickerController =
           new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+              @Override
+              public void onSelected(File imageFile) {
                   presenter.selectImage(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           }).build();
@@ -285,7 +292,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), message);
     }
 
     public static class IntentBuilder {

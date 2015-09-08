@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
@@ -35,10 +35,11 @@ import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -49,7 +50,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class FindFriendsActivity extends BaseSignedInActivity implements UserListAdapter.FollowUnfollowAdapterCallback {
+public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements UserListAdapter.FollowUnfollowAdapterCallback {
 
     public static final int NO_OFFSET = 0;
     private static final String EXTRA_RESULTS = "results";
@@ -60,12 +61,14 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject @Main Bus bus;
 
     private SearchView searchView;
 
     @Bind(R.id.find_friends_search_results_list) ListView resultsListView;
     @Bind(R.id.find_friends_search_results_empty) TextView emptyOrErrorView;
+    @BindString(R.string.connection_lost) String connectionLost;
     View progressViewContent;
     View progressView;
 
@@ -77,19 +80,23 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     private boolean hasMoreItemsToLoad;
     private boolean isLoadingRemoteData;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()){
-            return;
-        }
-        setContainerContent(R.layout.activity_find_friends);
-        ButterKnife.bind(this);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        /* no-op */
+    }
 
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_find_friends;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
+        objectGraph = ShootrApplication.get(getApplicationContext()).getObjectGraph();
+        ButterKnife.bind(this);
         setupViews();
         setupActionBar();
+    }
 
-        objectGraph = ShootrApplication.get(getApplicationContext()).getObjectGraph();
+    @Override protected void initializePresenter() {
+        /* no-op */
     }
 
     private void setupViews() {
@@ -257,7 +264,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), connectionLost);
         setLoading(false);
         isLoadingRemoteData = false;
         if (adapter.getCount() == 0) {
@@ -387,5 +394,4 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
             }
         }
     }
-
- }
+}

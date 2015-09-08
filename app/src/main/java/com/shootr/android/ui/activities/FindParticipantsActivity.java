@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -24,6 +23,7 @@ import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.FindParticipantsPresenter;
 import com.shootr.android.ui.views.FindParticipantsView;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.util.List;
 import javax.inject.Inject;
@@ -36,6 +36,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     private UserListAdapter adapter;
 
     @Inject ImageLoader imageLoader;
+    @Inject FeedbackMessage feedbackMessage;
     @Inject FindParticipantsPresenter findParticipantsPresenter;
 
     @Bind(R.id.find_participants_search_results_list) ListView resultsListView;
@@ -162,7 +163,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), message);
     }
 
     @Override public void renderParticipants(List<UserModel> participants) {

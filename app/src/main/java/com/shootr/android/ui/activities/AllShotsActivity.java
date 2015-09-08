@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -32,6 +31,7 @@ import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.Clipboard;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
 import java.util.List;
@@ -49,10 +49,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Inject ReportShotPresenter reportShotPresenter;
     @Inject AndroidTimeUtils timeUtils;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.all_shots_list) ListView listView;
     @Bind(R.id.timeline_empty) View emptyView;
     @Bind(R.id.all_shots_loading) View loadingView;
+    @BindString(R.string.shot_shared_message) String shotShared;
 
     @BindString(R.string.report_base_url) String reportBaseUrl;
 
@@ -250,7 +252,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showError(String messageForError) {
-        Toast.makeText(this, messageForError, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), messageForError);
     }
 
     @Override public void hideLoading() {
@@ -294,7 +296,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showShotShared() {
-        Toast.makeText(this, getString(R.string.shot_shared_message), Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), shotShared);
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {

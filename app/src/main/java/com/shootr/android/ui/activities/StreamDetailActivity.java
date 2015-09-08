@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
@@ -32,6 +32,7 @@ import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.StreamDetailPresenter;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
@@ -66,9 +67,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     @Bind(R.id.list) RecyclerView recyclerView;
     @Bind(R.id.loading_progress) View progressView;
 
+    @BindString(R.string.shared_stream_notification) String streamNotification;
+
     @Inject ImageLoader imageLoader;
     @Inject StreamDetailPresenter streamDetailPresenter;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackMessage feedbackMessage;
 
     private StreamDetailAdapter adapter;
     private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -432,7 +436,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void showStreamShared() {
-        Toast.makeText(this, R.string.shared_stream_notification, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), streamNotification);
     }
 
     @Override
@@ -457,7 +461,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), message);
     }
     //endregion
 }

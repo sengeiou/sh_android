@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,6 +16,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.EmailConfirmationPresenter;
 import com.shootr.android.ui.views.EmailConfirmationView;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity implements EmailConfirmationView {
@@ -25,6 +25,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     @Bind(R.id.email_confirmation_confirm_button) View confirmButton;
 
     @Inject EmailConfirmationPresenter presenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     public static Intent newIntent(Context context, String email) {
         Intent intent = new Intent(context, EmailConfirmationActivity.class);
@@ -91,7 +92,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        feedbackMessage.showLong(getView(), errorMessage);
     }
 
     @Override public void showEmailError(String errorMessage) {

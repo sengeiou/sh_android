@@ -14,26 +14,28 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
 import com.shootr.android.ui.widgets.MaxLinesInputFilter;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
-public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
+public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements ProfileEditView {
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
     public static final String EXTRA_USER_EMAIL = "user_email";
 
     @Inject ProfileEditPresenter presenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.scroll) ScrollView scroll;
     @Bind(R.id.profile_edit_name) TextView name;
@@ -42,21 +44,25 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Bind(R.id.profile_edit_bio) TextView bio;
     @Bind(R.id.profile_edit_email) TextView email;
     @Bind(R.id.profile_edit_email_layout) FloatLabelLayout emailLayout;
+    @BindString(R.string.profile_updated) String profileUpdated;
+    @BindString(R.string.communication_error) String communicationError;
+    @BindString(R.string.connection_lost) String connectionLost;
+
     private MenuItem menuItemDone;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) {
-            return;
-        }
-        setContainerContent(R.layout.activity_profile_edit);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        setupActionBar();
+    }
 
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_profile_edit;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
         scrollViewFocusHack();
         limitBioFilters();
-        initializePresenter();
-        setupActionBar();
     }
 
     private void limitBioFilters() {
@@ -84,7 +90,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         });
     }
 
-    private void initializePresenter() {
+    @Override
+    public void initializePresenter() {
         presenter.initialize(this, getObjectGraph());
     }
 
@@ -113,7 +120,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showUpdatedSuccessfulAlert() {
-        Toast.makeText(this, R.string.profile_updated, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), profileUpdated);
     }
 
     @Override public void closeScreen() {
@@ -173,11 +180,11 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void alertComunicationError() {
-        Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), communicationError);
     }
 
     @Override public void alertConnectionNotAvailable() {
-        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), connectionLost);
     }
 
     @Override public void showEmailNotConfirmedError() {
@@ -190,7 +197,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override

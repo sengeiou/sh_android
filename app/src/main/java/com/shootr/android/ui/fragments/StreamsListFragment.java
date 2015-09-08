@@ -13,8 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
@@ -33,6 +33,7 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.ui.views.nullview.NullStreamListView;
 import com.shootr.android.util.CustomContextMenu;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.IntentFactory;
 import com.shootr.android.util.Intents;
@@ -47,11 +48,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     @Bind(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.streams_empty) View emptyView;
     @Bind(R.id.streams_loading) View loadingView;
+    @BindString(R.string.added_to_favorites) String addedToFavorites;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
 
     @Inject StreamsListPresenter presenter;
     @Inject ImageLoader imageLoader;
     @Inject ToolbarDecorator toolbarDecorator;
     @Inject IntentFactory intentFactory;
+    @Inject FeedbackMessage feedbackMessage;
 
     private StreamsListAdapter adapter;
 
@@ -221,11 +225,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override
     public void showAddedToFavorites() {
-        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), addedToFavorites);
     }
 
     @Override public void showStreamShared() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.shared_stream_notification), Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), sharedStream);
     }
 
     @Override public void showEmpty() {
@@ -246,7 +250,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), message);
     }
 
     //endregion

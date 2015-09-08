@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
@@ -38,6 +38,7 @@ import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -59,10 +60,13 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject JobManager jobManager;
     @Inject NetworkUtil networkUtil;
     @Inject SessionRepository sessionRepository;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.userlist_list) ListView userlistListView;
     @Bind(R.id.userlist_progress) ProgressBar progressBar;
     @Bind(R.id.userlist_empty) TextView emptyTextView;
+    @BindString(R.string.communication_error) String communicationError;
+    @BindString(R.string.connection_lost) String connetionLost;
 
     // Args
     String userId;
@@ -160,12 +164,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
-        Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), communicationError);
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), connetionLost);
         setLoadingView(false);
     }
 
