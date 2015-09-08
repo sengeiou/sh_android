@@ -436,7 +436,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void showStreamShared() {
-        feedbackLoader.showShortFeedback(getView(), streamNotification);
+        feedbackLoader.show(getView(), streamNotification);
     }
 
     @Override
@@ -461,7 +461,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
     //endregion
 }

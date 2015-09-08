@@ -86,7 +86,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(getView(), errorMessage);
+        feedbackLoader.show(getView(), errorMessage);
     }
 
     @Override

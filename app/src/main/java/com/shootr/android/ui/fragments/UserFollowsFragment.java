@@ -164,12 +164,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
-        feedbackLoader.showShortFeedback(getView(), communicationError);
+        feedbackLoader.show(getView(), communicationError);
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.showShortFeedback(getView(), connetionLost);
+        feedbackLoader.show(getView(), connetionLost);
         setLoadingView(false);
     }
 

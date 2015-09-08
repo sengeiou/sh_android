@@ -163,7 +163,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity imple
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     @Override public void renderParticipants(List<UserModel> participants) {

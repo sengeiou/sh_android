@@ -143,6 +143,6 @@ public class LoginSelectionActivity extends BaseActivity {
     }
 
     private void showFacebookError() {
-        feedbackLoader.showShortFeedback(getView(), facebookError);
+        feedbackLoader.show(getView(), facebookError);
     }
 }

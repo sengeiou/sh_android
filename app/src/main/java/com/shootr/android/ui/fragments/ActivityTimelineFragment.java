@@ -244,7 +244,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     @Override

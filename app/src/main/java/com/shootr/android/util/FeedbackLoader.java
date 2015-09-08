@@ -6,9 +6,9 @@ import android.view.View;
 public interface FeedbackLoader {
 
     @UiThread
-    void showShortFeedback(View view, String feedback);
+    void show(View view, String feedback);
 
     @UiThread
-    void showLongFeedback(View view, String feedback);
+    void showLong(View view, String feedback);
 
 }

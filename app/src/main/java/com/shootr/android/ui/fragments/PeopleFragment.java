@@ -199,7 +199,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

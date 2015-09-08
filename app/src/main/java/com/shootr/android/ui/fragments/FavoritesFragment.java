@@ -142,7 +142,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.showShortFeedback(getView(), sharedStream);
+        feedbackLoader.show(getView(), sharedStream);
     }
 
     @Override
@@ -167,6 +167,6 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 }

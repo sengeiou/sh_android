@@ -147,7 +147,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity implem
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     @Override public void renderAllParticipants(List<UserModel> users) {

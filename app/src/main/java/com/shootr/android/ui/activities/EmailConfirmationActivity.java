@@ -92,7 +92,7 @@ public class EmailConfirmationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showLongFeedback(getView(), errorMessage);
+        feedbackLoader.showLong(getView(), errorMessage);
     }
 
     @Override public void showEmailError(String errorMessage) {

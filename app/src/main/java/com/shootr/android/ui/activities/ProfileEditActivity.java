@@ -120,7 +120,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showUpdatedSuccessfulAlert() {
-        feedbackLoader.showShortFeedback(getView(), profileUpdated);
+        feedbackLoader.show(getView(), profileUpdated);
     }
 
     @Override public void closeScreen() {
@@ -180,11 +180,11 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void alertComunicationError() {
-        feedbackLoader.showShortFeedback(getView(), communicationError);
+        feedbackLoader.show(getView(), communicationError);
     }
 
     @Override public void alertConnectionNotAvailable() {
-        feedbackLoader.showShortFeedback(getView(), connectionLost);
+        feedbackLoader.show(getView(), connectionLost);
     }
 
     @Override public void showEmailNotConfirmedError() {
@@ -197,7 +197,7 @@ public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(getView(), errorMessage);
+        feedbackLoader.show(getView(), errorMessage);
     }
 
     @Override

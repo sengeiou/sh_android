@@ -195,16 +195,19 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     private void setupPhotoPicker() {
         photoPickerController =
           new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+              @Override
+              public void onSelected(File imageFile) {
                   newShotBarPresenter.newShotImagePicked(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   //TODO mostrar algo
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           }).build();
@@ -313,7 +316,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showUserNotFoundNotification() {
-        feedbackLoader.showShortFeedback(getView(), userNotFoundMessage);
+        feedbackLoader.show(getView(), userNotFoundMessage);
     }
 
     @Override
@@ -324,11 +327,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(getView(), errorMessage);
+        feedbackLoader.show(getView(), errorMessage);
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.showShortFeedback(getView(), shotShared);
+        feedbackLoader.show(getView(), shotShared);
     }
 
     @Override public void openNewShotView() {

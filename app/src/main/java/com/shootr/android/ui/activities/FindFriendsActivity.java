@@ -264,7 +264,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.showShortFeedback(getView(), connectionLost);
+        feedbackLoader.show(getView(), connectionLost);
         setLoading(false);
         isLoadingRemoteData = false;
         if (adapter.getCount() == 0) {

@@ -101,6 +101,6 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
 
     @Override
     public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(draftsButton, errorMessage);
+        feedbackLoader.show(draftsButton, errorMessage);
     }
 }

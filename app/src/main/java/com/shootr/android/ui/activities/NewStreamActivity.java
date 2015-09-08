@@ -264,7 +264,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     private void resetTitleError() {

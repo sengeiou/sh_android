@@ -218,7 +218,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(getView(), errorMessage);
+        feedbackLoader.show(getView(), errorMessage);
     }
 
     @Override public void navigateToStreamTimeline(String idStream, String streamTitle) {
@@ -227,7 +227,7 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.showShortFeedback(getView(), addedToFavorites);
+        feedbackLoader.show(getView(), addedToFavorites);
     }
 
     //endregion

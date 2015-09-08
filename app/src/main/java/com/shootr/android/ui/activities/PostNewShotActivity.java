@@ -103,15 +103,18 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
         photoPickerController =
           new PhotoPickerController.Builder().onActivity(this).withHandler(new PhotoPickerController.Handler() {
-              @Override public void onSelected(File imageFile) {
+              @Override
+              public void onSelected(File imageFile) {
                   presenter.selectImage(imageFile);
               }
 
-              @Override public void onError(Exception e) {
+              @Override
+              public void onError(Exception e) {
                   Timber.e(e, "Error selecting image");
               }
 
-              @Override public void startPickerActivityForResult(Intent intent, int requestCode) {
+              @Override
+              public void startPickerActivityForResult(Intent intent, int requestCode) {
                   startActivityForResult(intent, requestCode);
               }
           }).build();
@@ -289,7 +292,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getView(), message);
+        feedbackLoader.show(getView(), message);
     }
 
     public static class IntentBuilder {

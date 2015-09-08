@@ -252,7 +252,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showError(String messageForError) {
-        feedbackLoader.showShortFeedback(getView(), messageForError);
+        feedbackLoader.show(getView(), messageForError);
     }
 
     @Override public void hideLoading() {
@@ -296,7 +296,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.showShortFeedback(getView(), shotShared);
+        feedbackLoader.show(getView(), shotShared);
     }
 
     @Override public void goToReport(String sessionToken, ShotModel shotModel) {

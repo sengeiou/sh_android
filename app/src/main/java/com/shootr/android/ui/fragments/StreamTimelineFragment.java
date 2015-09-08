@@ -517,7 +517,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.showShortFeedback(getView(), shotShared);
+        feedbackLoader.show(getView(), shotShared);
     }
 
     @Override
@@ -542,7 +542,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showLongFeedback(getView(), message);
+        feedbackLoader.showLong(getView(), message);
     }
 
     @Override
@@ -604,7 +604,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.showShortFeedback(getView(), addToFavorites);
+        feedbackLoader.show(getView(), addToFavorites);
     }
 
     @Override

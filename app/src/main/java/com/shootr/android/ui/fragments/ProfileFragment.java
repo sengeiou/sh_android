@@ -260,7 +260,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void userNotFoundNotification(){
-        feedbackLoader.showShortFeedback(getView(), getString(R.string.user_not_found));
+        feedbackLoader.show(getView(), getString(R.string.user_not_found));
     }
 
     private void openShotImage(String imageUrl) {
@@ -478,7 +478,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.showShortFeedback(getView(), getString(R.string.connection_lost));
+        feedbackLoader.show(getView(), getString(R.string.connection_lost));
         hideLoadingPhoto();
     }
 
@@ -502,7 +502,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         } else {
             messageForError = errorMessageFactory.getCommunicationErrorMessage();
         }
-        feedbackLoader.showShortFeedback(getView(), messageForError);
+        feedbackLoader.show(getView(), messageForError);
         hideLoadingPhoto();
     }
 
@@ -829,7 +829,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError() {
-        feedbackLoader.showShortFeedback(getView(), getActivity().getString(R.string.communication_error));
+        feedbackLoader.show(getView(), getActivity().getString(R.string.communication_error));
     }
 
     @Override public void hideLogoutInProgress() {
@@ -882,7 +882,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.showShortFeedback(getView(), getActivity().getString(R.string.shot_shared_message));
+        feedbackLoader.show(getView(), getActivity().getString(R.string.shot_shared_message));
     }
 
     @OnClick(R.id.profile_listing)
@@ -909,7 +909,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void showError(String messageForError) {
-        feedbackLoader.showShortFeedback(getView(), messageForError);
+        feedbackLoader.show(getView(), messageForError);
     }
 
     @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
