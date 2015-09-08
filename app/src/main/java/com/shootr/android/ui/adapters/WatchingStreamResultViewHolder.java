@@ -44,17 +44,13 @@ public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
 
     private void renderAuthor(StreamModel stream) {
         if (author != null) {
-            if (stream.getDescription() != null) {
-                CharSequence authorText = new Truss().append(stream.getAuthorUsername())
-                  .append(" · ")
-                  .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
-                  .append(connected)
-                  .popSpan()
-                  .build();
-                author.setText(authorText);
-            } else {
-                author.setText(stream.getAuthorUsername());
-            }
+            CharSequence authorText = new Truss().append(stream.getAuthorUsername())
+              .append(" · ")
+              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
+              .append(connected)
+              .popSpan()
+              .build();
+            author.setText(authorText);
         }
     }
 }
