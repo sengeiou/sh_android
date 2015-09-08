@@ -21,7 +21,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.component.PhotoPickerController;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -31,7 +31,7 @@ import java.io.File;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
+public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
 
@@ -59,17 +59,20 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private int charCounterColorNormal;
     private PhotoPickerController photoPickerController;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) {
-            return;
-        }
-        // Bypass custom layout inyection, translucent activity doesn't get along with Navigation Drawers
-        setContentView(R.layout.activity_new_shot);
-        ButterKnife.bind(this);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        toolbarDecorator.getToolbar().setVisibility(View.GONE);
+    }
 
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_new_shot;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
         initializeViews();
+    }
+
+    @Override protected void initializePresenter() {
         initializePresenterWithIntentExtras(getIntent().getExtras());
         setupPhotoIfAny();
         setTextReceivedFromIntentIfAny();
@@ -286,8 +289,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showError(String message) {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, message);
+        feedbackLoader.showShortFeedback(getView(), message);
     }
 
     public static class IntentBuilder {

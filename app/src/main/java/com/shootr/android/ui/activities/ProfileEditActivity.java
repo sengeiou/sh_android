@@ -19,7 +19,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
@@ -28,7 +28,7 @@ import com.shootr.android.ui.widgets.MaxLinesInputFilter;
 import com.shootr.android.util.FeedbackLoader;
 import javax.inject.Inject;
 
-public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
+public class ProfileEditActivity extends BaseToolbarDecoratedActivity implements ProfileEditView {
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
@@ -50,19 +50,19 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private MenuItem menuItemDone;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) {
-            return;
-        }
-        setContainerContent(R.layout.activity_profile_edit);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        setupActionBar();
+    }
 
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_profile_edit;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
 
         scrollViewFocusHack();
         limitBioFilters();
-        initializePresenter();
-        setupActionBar();
     }
 
     private void limitBioFilters() {
@@ -90,7 +90,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         });
     }
 
-    private void initializePresenter() {
+    @Override
+    public void initializePresenter() {
         presenter.initialize(this, getObjectGraph());
     }
 
@@ -119,8 +120,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showUpdatedSuccessfulAlert() {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, profileUpdated);
+        feedbackLoader.showShortFeedback(getView(), profileUpdated);
     }
 
     @Override public void closeScreen() {
@@ -180,13 +180,11 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void alertComunicationError() {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, communicationError);
+        feedbackLoader.showShortFeedback(getView(), communicationError);
     }
 
     @Override public void alertConnectionNotAvailable() {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, connectionLost);
+        feedbackLoader.showShortFeedback(getView(), connectionLost);
     }
 
     @Override public void showEmailNotConfirmedError() {
@@ -199,8 +197,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showError(String errorMessage) {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, errorMessage);
+        feedbackLoader.showShortFeedback(getView(), errorMessage);
     }
 
     @Override

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.presenter.NewStreamPresenter;
 import com.shootr.android.ui.views.NewStreamView;
 import com.shootr.android.ui.widgets.FloatLabelLayout;
@@ -24,7 +24,7 @@ import com.shootr.android.util.FeedbackLoader;
 import com.shootr.android.util.MenuItemValueHolder;
 import javax.inject.Inject;
 
-public class NewStreamActivity extends BaseToolbarActivity implements NewStreamView {
+public class NewStreamActivity extends BaseToolbarDecoratedActivity implements NewStreamView {
 
     public static final int RESULT_EXIT_STREAM = 3;
     public static final String KEY_STREAM_ID = "stream_id";
@@ -55,15 +55,19 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     }
 
     //region Initialization
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContainerContent(R.layout.activity_new_stream);
+    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+        /* no-op */
+    }
+
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_new_stream;
+    }
+
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
-        initializeViews(idStreamToEdit);
+        initializeViews();
         setupActionbar(idStreamToEdit);
-
-        initializePresenter(idStreamToEdit);
 
         if (savedInstanceState != null) {
             String editedTitle = savedInstanceState.getString(EXTRA_EDITED_TITLE);
@@ -74,6 +78,11 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         }
     }
 
+    @Override protected void initializePresenter() {
+        String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
+        initializePresenter(idStreamToEdit);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -81,7 +90,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
         outState.putString(EXTRA_EDITED_SHORT_TITLE, shortTitleView.getText().toString());
     }
 
-    private void initializeViews(String idStreamToEdit) {
+    private void initializeViews() {
         ButterKnife.bind(this);
         titleView.addTextChangedListener(new TextWatcher() {
             @Override public void afterTextChanged(Editable s) {
@@ -255,8 +264,7 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     }
 
     @Override public void showError(String message) {
-        //TODO Migrate
-        //feedbackLoader.showShortFeedback(this, message);
+        feedbackLoader.showShortFeedback(getView(), message);
     }
 
     private void resetTitleError() {
