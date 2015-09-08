@@ -67,7 +67,7 @@ import com.shootr.android.util.PicassoImageLoader;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.TimeFormatter;
-import com.shootr.android.util.ToastFeedbackLoader;
+import com.shootr.android.util.SnackbarFeedbackLoader;
 import com.shootr.android.util.Version;
 import com.shootr.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
@@ -177,8 +177,8 @@ public class DataModule {
         return picassoImageLoader;
     }
 
-    @Provides FeedbackLoader provideFeedbackLoader(ToastFeedbackLoader toastFeedbackLoader) {
-        return toastFeedbackLoader;
+    @Provides FeedbackLoader provideFeedbackLoader(SnackbarFeedbackLoader snackbarFeedbackLoader) {
+        return snackbarFeedbackLoader;
     }
 
     @Provides
