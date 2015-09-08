@@ -39,12 +39,8 @@ public interface ImageLoader {
     @WorkerThread
     Bitmap load(String url) throws IOException;
 
-    abstract class Callback {
+    interface Callback {
 
-        public abstract void onLoaded(Bitmap bitmap);
-
-        public void onError() {
-            /* default: no-op */
-        }
+        void onLoaded();
     }
 }
