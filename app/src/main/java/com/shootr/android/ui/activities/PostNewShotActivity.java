@@ -286,7 +286,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(this, message);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, message);
     }
 
     public static class IntentBuilder {

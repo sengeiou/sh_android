@@ -225,11 +225,11 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     @Override
     public void showAddedToFavorites() {
-        feedbackLoader.showShortFeedback(getActivity(), addedToFavorites);
+        feedbackLoader.showShortFeedback(getView(), addedToFavorites);
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.showShortFeedback(getActivity(), sharedStream);
+        feedbackLoader.showShortFeedback(getView(), sharedStream);
     }
 
     @Override public void showEmpty() {
@@ -250,7 +250,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(getActivity(), message);
+        feedbackLoader.showShortFeedback(getView(), message);
     }
 
     //endregion

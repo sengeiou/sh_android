@@ -1,14 +1,14 @@
 package com.shootr.android.util;
 
-import android.content.Context;
 import android.support.annotation.UiThread;
+import android.view.View;
 
 public interface FeedbackLoader {
 
     @UiThread
-    void showShortFeedback(Context context, String feedback);
+    void showShortFeedback(View view, String feedback);
 
     @UiThread
-    void showLongFeedback(Context context, String feedback);
+    void showLongFeedback(View view, String feedback);
 
 }

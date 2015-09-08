@@ -166,7 +166,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            feedbackLoader.showShortFeedback(ResetPasswordActivity.this, message);
+            feedbackLoader.showShortFeedback(getView(), message);
         }
     }
 
@@ -227,7 +227,7 @@ public class ResetPasswordActivity extends BaseToolbarDecoratedActivity {
 
         @Override
         public void showError(String message) {
-            feedbackLoader.showShortFeedback(ResetPasswordActivity.this, message);
+            feedbackLoader.showShortFeedback(getView(), message);
         }
     }
 }

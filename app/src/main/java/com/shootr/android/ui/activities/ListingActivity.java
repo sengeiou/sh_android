@@ -160,7 +160,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(this, errorMessage);
+        feedbackLoader.showShortFeedback(getView(), errorMessage);
     }
 
     @Override public void showLoading() {
@@ -180,7 +180,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }
 
     @Override public void showStreamShared() {
-        feedbackLoader.showShortFeedback(this, sharedStream);
+        feedbackLoader.showShortFeedback(getView(), sharedStream);
     }
 
     @Override public void showContent() {

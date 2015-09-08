@@ -255,7 +255,8 @@ public class NewStreamActivity extends BaseToolbarActivity implements NewStreamV
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(this, message);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, message);
     }
 
     private void resetTitleError() {

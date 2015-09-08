@@ -77,7 +77,7 @@ public class ChangePasswordActivity extends BaseToolbarDecoratedActivity impleme
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showLongFeedback(this, errorMessage);
+        feedbackLoader.showLongFeedback(getView(), errorMessage);
     }
 
     @Override public void navigateToWelcomeScreen() {

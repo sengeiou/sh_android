@@ -260,7 +260,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        feedbackLoader.showShortFeedback(this, connectionLost);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, connectionLost);
         setLoading(false);
         isLoadingRemoteData = false;
         if (adapter.getCount() == 0) {

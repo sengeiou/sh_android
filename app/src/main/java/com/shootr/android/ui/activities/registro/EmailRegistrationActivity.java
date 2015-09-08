@@ -197,7 +197,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showError(String message) {
-        feedbackLoader.showShortFeedback(this, message);
+        feedbackLoader.showShortFeedback(getView(), message);
     }
 
     @Override public void showCreateButton() {

@@ -53,7 +53,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private FeedbackLoader feedbackLoader;
+    @Inject FeedbackLoader feedbackLoader;
     //endregion
 
     public static ActivityTimelineFragment newInstance() {
@@ -244,7 +244,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
     @Override
     public void showError(String message) {
-        feedbackLoader.showShortFeedback(getActivity(), message);
+        feedbackLoader.showShortFeedback(getView(), message);
     }
 
     @Override

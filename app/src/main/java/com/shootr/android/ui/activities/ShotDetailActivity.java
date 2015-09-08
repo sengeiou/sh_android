@@ -313,7 +313,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showUserNotFoundNotification() {
-        feedbackLoader.showShortFeedback(this, userNotFoundMessage);
+        feedbackLoader.showShortFeedback(getView(), userNotFoundMessage);
     }
 
     @Override
@@ -324,11 +324,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override
     public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(this, errorMessage);
+        feedbackLoader.showShortFeedback(getView(), errorMessage);
     }
 
     @Override public void showShotShared() {
-        feedbackLoader.showShortFeedback(this, shotShared);
+        feedbackLoader.showShortFeedback(getView(), shotShared);
     }
 
     @Override public void openNewShotView() {

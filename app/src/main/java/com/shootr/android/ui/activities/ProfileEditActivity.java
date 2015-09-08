@@ -119,7 +119,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showUpdatedSuccessfulAlert() {
-        feedbackLoader.showShortFeedback(this, profileUpdated);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, profileUpdated);
     }
 
     @Override public void closeScreen() {
@@ -179,11 +180,13 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void alertComunicationError() {
-        feedbackLoader.showShortFeedback(this, communicationError);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, communicationError);
     }
 
     @Override public void alertConnectionNotAvailable() {
-        feedbackLoader.showShortFeedback(this, connectionLost);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, connectionLost);
     }
 
     @Override public void showEmailNotConfirmedError() {
@@ -196,7 +199,8 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     @Override public void showError(String errorMessage) {
-        feedbackLoader.showShortFeedback(this, errorMessage);
+        //TODO Migrate
+        //feedbackLoader.showShortFeedback(this, errorMessage);
     }
 
     @Override
