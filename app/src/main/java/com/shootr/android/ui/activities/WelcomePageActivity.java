@@ -29,7 +29,7 @@ public class WelcomePageActivity extends BaseActivity implements WelcomePageView
     }
 
     @Override protected void initializePresenter() {
-        //presenter.initialize(this);
+        presenter.initialize(this);
     }
 
     @Override
