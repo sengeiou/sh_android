@@ -8,6 +8,7 @@ import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
 import com.shootr.android.domain.utils.DateRangeTextProvider;
 import com.shootr.android.domain.utils.StreamJoinDateFormatter;
 import com.shootr.android.domain.utils.TimeUtils;
+import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.AllParticipantsView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.verify;
 public class AllParticipantsPresenterTest {
 
     public static final String STRING_ID = "stringId";
+    public static final String ID_USER = "idUser";
     @Mock GetAllParticipantsInteractor getAllParticipantsInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
     @Mock FollowFaketeractor followFaketeractor;
@@ -135,7 +137,27 @@ public class AllParticipantsPresenterTest {
         presenter.pause();
         presenter.resume();
 
-        verify(selectStreamInteractor).selectStream(anyString(),any(Interactor.Callback.class));
+        verify(selectStreamInteractor).selectStream(anyString(), any(Interactor.Callback.class));
+    }
+
+    @Test
+    public void shouldRenderParticipantsWhenFollowAParticipant() throws Exception {
+        setupAllParticipantsCallback();
+
+        presenter.initialize(allParticipantsView, STRING_ID);
+        presenter.followUser(userModel());
+
+        verify(allParticipantsView).renderAllParticipants(anyList());
+    }
+
+    @Test
+    public void shouldRenderParticipantsWhenUnfollowAParticipant() throws Exception {
+        setupAllParticipantsCallback();
+
+        presenter.initialize(allParticipantsView, STRING_ID);
+        presenter.unfollowUser(userModel());
+
+        verify(allParticipantsView).renderAllParticipants(anyList());
     }
 
     private void setupAllParticipantsEmptyCallback() {
@@ -172,7 +194,8 @@ public class AllParticipantsPresenterTest {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
                 Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[4];
-                errorCallback.onError(new ShootrException() {});
+                errorCallback.onError(new ShootrException() {
+                });
                 return null;
             }
         }).when(getAllParticipantsInteractor).obtainAllParticipants(anyString(),
@@ -183,13 +206,27 @@ public class AllParticipantsPresenterTest {
     }
 
     private List<User> participants() {
-        List<User> participants = new ArrayList<User>();
-        participants.add(new User());
+        List<User> participants = new ArrayList<>();
+        participants.add(user());
         participants.add(new User());
         return participants;
+    }
+
+    private User user() {
+        User user = new User();
+        user.setIdUser(ID_USER);
+        return user;
     }
 
     private List<User> noParticipants() {
         return Collections.EMPTY_LIST;
     }
+
+    private UserModel userModel() {
+        UserModel userModel = new UserModel();
+        userModel.setIdUser(ID_USER);
+        return userModel;
+    }
+
+
 }
