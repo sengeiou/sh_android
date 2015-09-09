@@ -1,10 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import android.content.Context;
-import android.util.Pair;
-import com.path.android.jobqueue.JobManager;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.User;
@@ -12,16 +7,10 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.android.domain.interactor.user.GetAllParticipantsInteractor;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.AllParticipantsView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,10 +18,10 @@ public class AllParticipantsPresenter implements Presenter {
 
     private final GetAllParticipantsInteractor getAllParticipantsInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
+    private final FollowFaketeractor followFaketeractor;
+    private final UnfollowFaketeractor unfollowFaketeractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
-    private final JobManager jobManager;
-    private final Bus bus;
 
     private AllParticipantsView allParticipantsView;
     private List<UserModel> participants;
@@ -40,13 +29,14 @@ public class AllParticipantsPresenter implements Presenter {
     private String idStream;
 
     @Inject public AllParticipantsPresenter(GetAllParticipantsInteractor getAllParticipantsInteractor,
-      SelectStreamInteractor selectStreamInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper, JobManager jobManager, @Main Bus bus) {
+      SelectStreamInteractor selectStreamInteractor, FollowFaketeractor followFaketeractor,
+      UnfollowFaketeractor unfollowFaketeractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
         this.getAllParticipantsInteractor = getAllParticipantsInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
+        this.followFaketeractor = followFaketeractor;
+        this.unfollowFaketeractor = unfollowFaketeractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
-        this.jobManager = jobManager;
-        this.bus = bus;
     }
 
     protected void setView(AllParticipantsView allParticipantsView) {
@@ -62,17 +52,21 @@ public class AllParticipantsPresenter implements Presenter {
     private void loadAllParticipants() {
         allParticipantsView.hideEmpty();
         allParticipantsView.showLoading();
-        getAllParticipantsInteractor.obtainAllParticipants(idStream, Long.MAX_VALUE, false, new Interactor.Callback<List<User>>() {
-            @Override public void onLoaded(List<User> users) {
-                allParticipantsView.hideLoading();
-                allParticipantsView.showAllParticipantsList();
-                renderParticipants(users);
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
+        getAllParticipantsInteractor.obtainAllParticipants(idStream,
+          Long.MAX_VALUE,
+          false,
+          new Interactor.Callback<List<User>>() {
+              @Override public void onLoaded(List<User> users) {
+                  allParticipantsView.hideLoading();
+                  allParticipantsView.showAllParticipantsList();
+                  renderParticipants(users);
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  allParticipantsView.showError(errorMessageFactory.getMessageForError(error));
+              }
+          });
     }
 
     private void refreshAllParticipants() {
@@ -98,36 +92,26 @@ public class AllParticipantsPresenter implements Presenter {
         }
     }
 
-    public void followUser(UserModel userModel, Context context) {
-        startFollowUnfollowUserJob(userModel, context, UserDtoFactory.FOLLOW_TYPE);
+    public void followUser(final UserModel userModel) {
+        followFaketeractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
+            }
+        });
     }
 
-    public void unfollowUser(UserModel userModel, Context context) {
-        startFollowUnfollowUserJob(userModel, context, UserDtoFactory.UNFOLLOW_TYPE);
+    public void unfollowUser(final UserModel userModel) {
+        unfollowFaketeractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
+            }
+        });
     }
 
-    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        //Proceso de insercción en base de datos
-        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
-          GetFollowUnFollowUserOfflineJob.class);
-        job2.init(userVO.getIdUser(),followType);
-        jobManager.addJobInBackground(job2);
-
-        //Al instante
-        GetFollowUnfollowUserOnlineJob
-          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-        for (int i = 0; i < participants.size(); i++) {
-            UserModel userModel = participants.get(i);
-            if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+    private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
+        for (UserModel participant : participants) {
+            if (participant.getIdUser().equals(idUser)) {
+                participant.setRelationship(relationshipFollowing);
                 allParticipantsView.renderAllParticipants(participants);
                 break;
             }
@@ -147,12 +131,10 @@ public class AllParticipantsPresenter implements Presenter {
             refreshAllParticipants();
             selectStream();
         }
-        bus.register(this);
     }
 
     @Override public void pause() {
         this.hasBeenPaused = true;
-        bus.unregister(this);
     }
 
     public void searchClicked() {
