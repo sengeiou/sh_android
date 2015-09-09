@@ -1,6 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import android.content.Context;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
@@ -93,7 +92,7 @@ public class FindParticipantsPresenter implements Presenter {
         });
     }
 
-    public void followUser(final UserModel userModel, Context context) {
+    public void followUser(final UserModel userModel) {
         followFaketeractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
@@ -101,7 +100,7 @@ public class FindParticipantsPresenter implements Presenter {
         });
     }
 
-    public void unfollowUser(final UserModel userModel, Context context) {
+    public void unfollowUser(final UserModel userModel) {
         unfollowFaketeractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
