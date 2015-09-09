@@ -2,20 +2,20 @@ buildscript {
 
     repositories {
         mavenCentral()
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.14.7'
         classpath 'com.amazonaws:aws-android-sdk-s3:2.2.3'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 apply plugin: 'hugo'
 apply plugin: "sonar-runner"
 apply plugin: 'maven'
@@ -26,8 +26,8 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven { url 'http://mente.github.io/facebook-api-android-aar' }
-    maven { url 'http://download.crashlytics.com/maven' }
     jcenter()
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -175,8 +175,6 @@ dependencies {
     compile 'com.facebook.stetho:stetho:1.1.0'
     compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
 
-    compile 'com.crashlytics.android:crashlytics:1.1.13'
-
     compile 'cat.ereza:customactivityoncrash:1.3.0'
 
     compile 'com.github.paolorotolo:appintro:3.2.0'
@@ -192,6 +190,10 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.7.0'
     androidTestCompile('com.squareup.assertj:assertj-android:1.0.0') {
         exclude group: 'com.android.support'
+    }
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+        transitive = true;
     }
 }
 
