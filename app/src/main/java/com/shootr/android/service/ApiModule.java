@@ -1,7 +1,5 @@
 package com.shootr.android.service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
@@ -16,14 +14,13 @@ import com.shootr.android.service.dataservice.DataServiceModule;
 import com.shootr.android.service.dataservice.ShootrDataService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
-import com.sloydev.jsonadapters.jackson.JacksonAdapter;
+import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
-import retrofit.converter.JacksonConverter;
 
 @Module(
         injects = {
@@ -100,9 +97,7 @@ public final class ApiModule {
     }
 
     @Provides @Singleton JsonAdapter provideJsonAdapter() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return new JacksonAdapter(objectMapper);
+        return new GsonAdapter();
     }
 
     @Provides @Singleton Endpoint provideEndpoint() {

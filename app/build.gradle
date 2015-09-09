@@ -136,9 +136,7 @@ dependencies {
     compile 'com.android.support:support-annotations:22.2.0'
 
     compile 'com.sloydev:jsonadapters-core:0.1.0'
-    compile 'com.sloydev:jsonadapters-jackson:0.1.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.2.4'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.2.4'
+    compile 'com.sloydev:jsonadapters-gson:0.1.1'
 
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
@@ -155,7 +153,6 @@ dependencies {
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
 
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.retrofit:converter-jackson:1.9.0'
     debugCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
 
     compile 'joda-time:joda-time:2.3'

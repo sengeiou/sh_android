@@ -1,8 +1,5 @@
 package com.shootr.android.service.dataservice.generic;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.shootr.android.exception.ServerException;
 import java.io.Serializable;
 import java.util.Map;
@@ -13,13 +10,6 @@ import java.util.TreeMap;
  *  
  * @author Fav24
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonAutoDetect(
-		creatorVisibility = JsonAutoDetect.Visibility.ANY,
-		fieldVisibility = JsonAutoDetect.Visibility.ANY, 
-		getterVisibility = JsonAutoDetect.Visibility.NONE, 
-		isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-		setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
@@ -35,7 +25,6 @@ public class BaseDto implements Serializable {
 
 	private String alias;
 	private Map<String, String> status;
-	@JsonUnwrapped(enabled=true)
 	private RequestorDto requestor;
 
 	/**
