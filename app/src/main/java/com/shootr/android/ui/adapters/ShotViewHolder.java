@@ -13,7 +13,6 @@ import butterknife.BindColor;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -27,7 +26,6 @@ import com.shootr.android.util.ShotTextSpannableBuilder;
 public class ShotViewHolder {
 
     private final OnAvatarClickListener avatarClickListener;
-    private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -49,16 +47,13 @@ public class ShotViewHolder {
     private View view;
 
     public ShotViewHolder(View view,
-      OnAvatarClickListener avatarClickListener,
-      OnImageClickListener imageClickListener,
-      OnVideoClickListener videoClickListener,
+      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
       OnNiceShotListener onNiceShotListener,
       OnUsernameClickListener onUsernameClickListener,
       AndroidTimeUtils timeUtils,
       ImageLoader imageLoader,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
         this.avatarClickListener = avatarClickListener;
-        this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -160,12 +155,6 @@ public class ShotViewHolder {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             image.setVisibility(View.VISIBLE);
             imageLoader.loadTimelineImage(imageUrl, image);
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageClickListener.onImageClick(shot.getImage());
-                }
-            });
         } else {
             image.setVisibility(View.GONE);
         }

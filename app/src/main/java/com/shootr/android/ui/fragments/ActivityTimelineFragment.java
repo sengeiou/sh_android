@@ -14,13 +14,11 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
@@ -136,12 +134,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
                   openStream(streamId, streamTitle);
               }
           }, //
-          new OnImageClickListener() {
-              @Override
-              public void onImageClick(String url) {
-                  openImage(url);
-              }
-          }, //
           new OnVideoClickListener() {
               @Override
               public void onVideoClick(String url) {
@@ -204,11 +196,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    }
-
-    private void openImage(String url) {
-        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url);
-        startActivity(imageIntent);
     }
 
     private void openProfileFromUsername(String username) {

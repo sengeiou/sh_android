@@ -72,7 +72,6 @@ import com.shootr.android.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
@@ -174,7 +173,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     UserModel user;
     private OnAvatarClickListener avatarClickListener;
-    private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
     private OnNiceShotListener onNiceShotListener;
@@ -212,12 +210,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             @Override
             public void onAvatarClick(String userId, View avatarView) {
                 onShotAvatarClick(avatarView);
-            }
-        };
-        imageClickListener = new OnImageClickListener() {
-            @Override
-            public void onImageClick(String url) {
-                openShotImage(url);
             }
         };
 
@@ -261,11 +253,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     private void userNotFoundNotification(){
         feedbackMessage.show(getView(), getString(R.string.user_not_found));
-    }
-
-    private void openShotImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
-        startActivity(intentForImage);
     }
 
     private void injectArguments() {
@@ -692,7 +679,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             latestsShotsAdapter =
               new TimelineAdapter(getActivity(),
                 imageLoader, timeUtils, avatarClickListener,
-                imageClickListener,
                 videoClickListener, onNiceShotListener, onUsernameClickListener){
                   @Override protected boolean shouldShowTag() {
                       return true;

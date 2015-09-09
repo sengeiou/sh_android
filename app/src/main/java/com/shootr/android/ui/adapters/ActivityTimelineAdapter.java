@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.domain.ActivityType;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
@@ -36,7 +35,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnAvatarClickListener avatarClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final OnStreamTitleClickListener streamTitleClickListener;
-    private final OnImageClickListener onImageClickListener;
     private final OnVideoClickListener onVideoClickListener;
     private final OnShotClick onShotClick;
 
@@ -49,15 +47,12 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
       AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener,
       OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener streamTitleClickListener,
-      OnImageClickListener onImageClickListener,
-      OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
+      OnStreamTitleClickListener streamTitleClickListener, OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.streamTitleClickListener = streamTitleClickListener;
-        this.onImageClickListener = onImageClickListener;
         this.onVideoClickListener = onVideoClickListener;
         this.onShotClick = onShotClick;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -166,9 +161,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener,
-          onImageClickListener,
-          onVideoClickListener,
+          avatarClickListener, onUsernameClickListener, onVideoClickListener,
           onShotClick);
     }
 
@@ -178,9 +171,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener,
-          onImageClickListener,
-          onVideoClickListener,
+          avatarClickListener, onUsernameClickListener, onVideoClickListener,
           onShotClick);
     }
 

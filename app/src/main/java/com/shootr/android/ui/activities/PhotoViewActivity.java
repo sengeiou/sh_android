@@ -59,12 +59,12 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         setupActionBar();
 
         attacher = new PhotoViewAttacher(image);
+        attacher.setZoomable(false);
         attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override public void onViewTap(View view, float v, float v2) {
                 onPhotoClick();
             }
         });
-
         loadImages();
     }
 

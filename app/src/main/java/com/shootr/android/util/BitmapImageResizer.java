@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 public class BitmapImageResizer implements ImageResizer {
 
-    private static final int MAX_SIZE = 960;
+    private static final int MAX_SIZE = 640;
     private static final long MAX_WEIGHT_KB = 300;
 
     public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";

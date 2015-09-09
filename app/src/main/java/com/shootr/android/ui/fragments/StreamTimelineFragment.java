@@ -29,14 +29,12 @@ import com.shootr.android.domain.dagger.TemporaryFilesDir;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.DraftsActivity;
 import com.shootr.android.ui.activities.NewStreamActivity;
-import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.StreamDetailActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -329,12 +327,6 @@ public class StreamTimelineFragment extends BaseFragment
                   openProfile(userId);
               }
           }, //
-          new OnImageClickListener() {
-              @Override
-              public void onImageClick(String url) {
-                  openImage(url);
-              }
-          }, //
           new OnVideoClickListener() {
               @Override
               public void onVideoClick(String url) {
@@ -410,11 +402,6 @@ public class StreamTimelineFragment extends BaseFragment
     private void openProfileFromUsername(String username) {
         Intent intentForUser = ProfileContainerActivity.getIntentWithUsername(getActivity(), username);
         startActivity(intentForUser);
-    }
-
-    private void openImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
-        startActivity(intentForImage);
     }
 
     private void openVideo(String url) {

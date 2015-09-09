@@ -76,12 +76,12 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp">
 
-      <ImageView android:id="@+id/shot_detail_image"
+      <com.shootr.android.ui.widgets.ImageView169 android:id="@+id/shot_detail_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         tools:src="@drawable/sample_avatar" />
 
       <FrameLayout android:id="@+id/shot_video_frame"
