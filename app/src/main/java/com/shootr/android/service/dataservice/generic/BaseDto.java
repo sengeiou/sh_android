@@ -18,57 +18,24 @@ public class BaseDto implements Serializable {
 	private static final String STATUS_MESSAGE = "message";
 	private static final String STATUS_SUBCODE = "subcode";
 
-	public static final String ERROR_REQUESTOR_CHECK_FAILED = "R000";
-	public static final String ERROR_REQUESTOR_CHECK_FAILED_MESSAGE = "No se ha indicado información del solicitante.";
-	public static final String ERROR_REQUESTOR_CHECK_INFORMATION_FAILED = "R001";
-	public static final String ERROR_REQUESTOR_CHECK_INFORMATION_FAILED_MESSAGE = "La información del solicitante es incorrecta.";
+
+	public static final int POSITION_ID_DEVICE = 0;
+	public static final int POSITION_ID_USER = 1;
+	public static final int POSITION_ID_PLATFORM = 2;
+	public static final int POSITION_APP_VERSION = 3;
+	public static final int POSITION_SYSTEM_TIME = 4;
 
 	private String alias;
 	private Map<String, String> status;
-	private RequestorDto requestor;
+	private Object[] req;
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public BaseDto() {
-
 		this.alias = null;
-		this.status = new TreeMap<String, String>();
-		this.requestor = null;
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param requestor Quién realiza la petición.
-	 */
-	public BaseDto(RequestorDto requestor) {
-
-		this.alias = null;
-		this.status = new TreeMap<String, String>();
-		this.requestor = requestor;
-	}
-
-	/**
-	 * Constructor por defecto.
-	 */
-	public BaseDto(ServerException e) {
-		this(e.getErrorCode(), e.getMessage(), null);
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param statusCode Código de estado a asignar a la respuesta.
-	 * @param statusMessage Mensaje a asignar a la respuesta.
-	 */
-	public BaseDto(String statusCode, String statusMessage, String statusSubcode) {
-
-		this.status = new TreeMap<String, String>();
-
-		this.status.put(STATUS_CODE, statusCode);
-		this.status.put(STATUS_MESSAGE, statusMessage);
-		this.status.put(STATUS_SUBCODE, statusSubcode);
+		this.status = new TreeMap<>();
+		this.req = null;
 	}
 
 	/**
@@ -103,17 +70,26 @@ public class BaseDto implements Serializable {
 	 *  
 	 * @return quién realiza la petición.
 	 */
-	public RequestorDto getRequestor() {
-		return requestor;
+	public Object[] getReq() {
+		return req;
 	}
 
 	/**
 	 * Asigna quien realiza la petición.
 	 * 
-	 * @param requestor El solicitante.
+	 * @param req El solicitante.
 	 */
-	public void setRequestor(RequestorDto requestor) {
-		this.requestor = requestor;
+	public void setReq(Object[] req) {
+		this.req = req;
+	}
+
+	public void setReq(Long idDevice, Long idUser, Long idPlatform, Long appVersion, Long systemTime) {
+		req = new Object[5];
+		req[POSITION_ID_DEVICE] = null;
+		req[POSITION_ID_USER] = null;
+		req[POSITION_ID_PLATFORM] = idPlatform;
+		req[POSITION_APP_VERSION] = appVersion;
+		req[POSITION_SYSTEM_TIME] = systemTime;
 	}
 
 	/**
@@ -159,20 +135,4 @@ public class BaseDto implements Serializable {
     public void setStatusSubcode(String statusSubcode) {
         this.status.put(STATUS_SUBCODE, statusSubcode);
     }
-
-    /**
-	 * Lanza una excepción en caso de que la información base del DTO
-	 * se considere inválida.
-	 */
-	public void checkHeader() throws ServerException {
-
-		//Comprobación de la información del solicitante.
-		if (requestor == null || requestor.getReq() == null) {
-			throw new ServerException(ERROR_REQUESTOR_CHECK_FAILED, ERROR_REQUESTOR_CHECK_FAILED_MESSAGE);
-		}
-
-		if (requestor.getReq().length != RequestorDto.REQUESTOR_ARRAY_LENGTH) {
-			throw new ServerException(ERROR_REQUESTOR_CHECK_INFORMATION_FAILED, ERROR_REQUESTOR_CHECK_INFORMATION_FAILED_MESSAGE);
-		}
-	}
 }

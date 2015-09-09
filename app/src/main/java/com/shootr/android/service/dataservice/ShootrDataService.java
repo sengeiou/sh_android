@@ -1,6 +1,5 @@
 package com.shootr.android.service.dataservice;
 
-import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
@@ -25,10 +24,10 @@ import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.service.dataservice.generic.BaseDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
-import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.VersionUpdater;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.MediaType;
@@ -377,9 +376,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     private void updateTimeFromServer(GenericDto dto) {
-        Long serverTime = (Long) dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
-        if (serverTime != null) {
-            timeUtils.setCurrentTime(serverTime);
-        }
+        //TODO what to do, what to do. This was a fix, but the real problem is in server ¬¬
+        // They are going a minute ahead
     }
 }

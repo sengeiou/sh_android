@@ -47,7 +47,8 @@ public abstract class GenericMapper {
         date = (Number) dto.get(DatabaseContract.SyncColumns.MODIFIED);
         s.setModified(date != null ? new Date(date.longValue()) : null);
 
-        s.setRevision((Integer) dto.get(DatabaseContract.SyncColumns.REVISION));
+        Number revision = (Number) dto.get(DatabaseContract.SyncColumns.REVISION);
+        s.setRevision(revision.intValue());
     }
 
     protected void setSynchronizedtoDto(Synchronized s, Map<String, Object> dto) {
