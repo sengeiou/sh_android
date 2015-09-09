@@ -3,7 +3,6 @@ package com.shootr.android.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -11,11 +10,13 @@ import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.presenter.WelcomePagePresenter;
 import com.shootr.android.ui.views.WelcomePageView;
+import com.shootr.android.util.FeedbackMessage;
 import javax.inject.Inject;
 
 public class WelcomePageActivity extends BaseActivity implements WelcomePageView{
 
     @Inject WelcomePagePresenter presenter;
+    @Inject FeedbackMessage feedbackMessage;
 
     @Bind(R.id.button_get_started) View getStartedButton;
     @Bind(R.id.get_started_progress) View loading;
@@ -38,7 +39,7 @@ public class WelcomePageActivity extends BaseActivity implements WelcomePageView
     }
 
     @Override public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        feedbackMessage.show(getView(), errorMessage);
     }
 
     @Override public void goToStreamList() {
