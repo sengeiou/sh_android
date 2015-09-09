@@ -71,7 +71,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
             success(idUserToFollow, FOLLOWING);
         } else {
             Timber.w("Can't follow, already following");
-            //TODO notify somehow, or the UI won't update
+            success(idUserToFollow, FOLLOWING);
         }
     }
 
@@ -83,7 +83,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
             success(idUserToUnfollow, NOT_FOLLOWING);
         } else {
             Timber.w("Can't unfollow, not following already");
-            //TODO notify somehow, or the UI won't update
+            success(idUserToUnfollow, NOT_FOLLOWING);
         }
     }
 

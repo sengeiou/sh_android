@@ -1,8 +1,5 @@
 package com.shootr.android.ui.presenter;
 
-import android.util.Pair;
-import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamInfo;
@@ -12,43 +9,31 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import timber.log.Timber;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class StreamDetailPresenter implements Presenter, CommunicationPresenter {
+public class StreamDetailPresenter implements Presenter {
 
     //region Dependencies
-    private final Bus bus;
     private final GetStreamInfoInteractor streamInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
+    private final FollowFaketeractor followFaketeractor;
+    private final UnfollowFaketeractor unfollowFaketeractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
-
-    private final Provider<GetFollowUnfollowUserOnlineJob> followOnlineJobProvider;
-    private final Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider;
-    private final JobManager jobManager;
 
     private StreamDetailView streamDetailView;
     private String idStream;
@@ -61,26 +46,18 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     private boolean hasBeenPaused = false;
 
     @Inject
-    public StreamDetailPresenter(@Main Bus bus,
-      GetStreamInfoInteractor streamInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
-      ShareStreamInteractor shareStreamInteractor,
-      StreamModelMapper streamModelMapper,
-      UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory,
-      Provider<GetFollowUnfollowUserOnlineJob> followOnlineJobProvider,
-      Provider<GetFollowUnFollowUserOfflineJob> followOfflineJobProvider,
-      JobManager jobManager) {
-        this.bus = bus;
+    public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
+      ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
+      FollowFaketeractor followFaketeractor, UnfollowFaketeractor unfollowFaketeractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
+        this.followFaketeractor = followFaketeractor;
+        this.unfollowFaketeractor = unfollowFaketeractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
-        this.followOnlineJobProvider = followOnlineJobProvider;
-        this.followOfflineJobProvider = followOfflineJobProvider;
-        this.jobManager = jobManager;
     }
     //endregion
 
@@ -147,13 +124,11 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
 
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override
-            public void onLoaded(StreamInfo streamInfo) {
+            @Override public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -264,20 +239,6 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
     }
     //endregion
 
-    @Subscribe
-    @Override
-    public void onCommunicationError(CommunicationErrorEvent event) {
-        String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
-        streamDetailView.showError(communicationErrorMessage);
-    }
-
-    @Subscribe
-    @Override
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
-        streamDetailView.showError(connectionNotAvailableMessage);
-    }
-
     private void showImageUploadError() {
         streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
     }
@@ -287,44 +248,37 @@ public class StreamDetailPresenter implements Presenter, CommunicationPresenter 
         if (hasBeenPaused) {
             refreshWatchers();
         }
-        bus.register(this);
     }
 
     @Override
     public void pause() {
         hasBeenPaused = true;
-        bus.unregister(this);
     }
 
     public void clickMedia() {
         streamDetailView.navigateToMedia(idStream, streamMediaCount);
     }
 
-    public void follow(String idUser) {
-        startfollowUnfollowJob(idUser, true);
+    public void follow(final String idUser) {
+        followFaketeractor.follow(idUser, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_FOLLOWING);
+            }
+        });
     }
 
-    public void unfollow(String idUser) {
-        startfollowUnfollowJob(idUser, false);
+    public void unfollow(final String idUser) {
+        unfollowFaketeractor.unfollow(idUser, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_NONE);
+            }
+        });
     }
 
-    protected void startfollowUnfollowJob(String idUser, boolean follow) {
-        GetFollowUnFollowUserOfflineJob offlineJob = followOfflineJobProvider.get();
-        offlineJob.init(idUser, follow ? UserDtoFactory.FOLLOW_TYPE : UserDtoFactory.UNFOLLOW_TYPE);
-        jobManager.addJobInBackground(offlineJob);
-
-        GetFollowUnfollowUserOnlineJob onlineJob = followOnlineJobProvider.get();
-        jobManager.addJobInBackground(onlineJob);
-    }
-
-    @Subscribe
-    public void onFollowUnfollowResultReceived(FollowUnFollowResultEvent event) {
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
+    private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
         for (UserModel participant : participantsShown) {
             if (participant.getIdUser().equals(idUser)) {
-                participant.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                participant.setRelationship(relationshipFollowing);
                 streamDetailView.setWatchers(participantsShown);
                 break;
             }
