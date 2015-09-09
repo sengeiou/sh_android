@@ -28,7 +28,6 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pedrovgs.lynx.LynxActivity;
 import com.shootr.android.BuildConfig;
 import com.shootr.android.R;
@@ -59,6 +58,7 @@ import com.shootr.android.ui.debug.debugactions.FakeUsernameInUseDebugAction;
 import com.shootr.android.ui.debug.debugactions.LoginDebugAction;
 import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
 import com.shootr.okresponsefaker.ResponseFaker;
+import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -95,7 +95,7 @@ public class DebugAppContainer implements AppContainer {
 
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
-    private final ObjectMapper objectMapper;
+    private final JsonAdapter jsonAdapter;
     private final OkHttpClient client;
     private final Picasso picasso;
     private final StringPreference networkEndpoint;
@@ -120,7 +120,7 @@ public class DebugAppContainer implements AppContainer {
     ContextualDebugActions contextualDebugActions;
 
     @Inject
-    public DebugAppContainer(ObjectMapper objectMapper,
+    public DebugAppContainer(JsonAdapter jsonAdapter,
       OkHttpClient client,
       Picasso picasso,
       @ApiEndpoint StringPreference networkEndpoint,
@@ -138,7 +138,7 @@ public class DebugAppContainer implements AppContainer {
       DebugServiceAdapter debugServiceAdapter,
       MockRestAdapter mockRestAdapter,
       Application app) {
-        this.objectMapper = objectMapper;
+        this.jsonAdapter = jsonAdapter;
         this.client = client;
         this.picasso = picasso;
         this.debugMode = debugMode;
@@ -257,8 +257,8 @@ public class DebugAppContainer implements AppContainer {
 
     private Collection<ContextualDebugActions.DebugAction<? extends Activity>> debugActions() {
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
-        debugActions.add(new FakeEmailInUseDebugAction(objectMapper));
-        debugActions.add(new FakeUsernameInUseDebugAction(objectMapper));
+        debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
+        debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
         debugActions.add(new LoginDebugAction("rafa", "123456"));
         debugActions.add(new LoginDebugAction("artjimlop", "papafrita"));
         debugActions.add(new LoginDebugAction("heisenberg", "123456"));

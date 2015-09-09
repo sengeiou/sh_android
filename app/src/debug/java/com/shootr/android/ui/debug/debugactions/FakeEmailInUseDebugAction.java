@@ -1,20 +1,20 @@
 package com.shootr.android.ui.debug.debugactions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.exception.ErrorResource;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.debug.ContextualDebugActions;
-import com.shootr.okresponsefaker.JacksonFakeResponse;
+import com.shootr.okresponsefaker.JsonFakeResponse;
 import com.shootr.okresponsefaker.ResponseFaker;
+import com.sloydev.jsonadapters.JsonAdapter;
 
 public class FakeEmailInUseDebugAction extends ContextualDebugActions.DebugAction<EmailRegistrationActivity> {
 
-    private ObjectMapper objectMapper;
+    private JsonAdapter jsonAdapter;
 
-    public FakeEmailInUseDebugAction(ObjectMapper objectMapper) {
+    public FakeEmailInUseDebugAction(JsonAdapter jsonAdapter) {
         super(EmailRegistrationActivity.class);
-        this.objectMapper = objectMapper;
+        this.jsonAdapter = jsonAdapter;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class FakeEmailInUseDebugAction extends ContextualDebugActions.DebugActio
         errorResource.setCode(ErrorInfo.EmailAlreadyExistsException.code());
         errorResource.setStatus(ErrorInfo.EmailAlreadyExistsException.httpCode());
 
-        ResponseFaker.setNextFakeResponse(new JacksonFakeResponse(objectMapper,
+        ResponseFaker.setNextFakeResponse(new JsonFakeResponse(jsonAdapter,
           errorResource,
           ErrorInfo.EmailAlreadyExistsException.httpCode()));
     }

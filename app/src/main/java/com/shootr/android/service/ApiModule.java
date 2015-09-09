@@ -15,6 +15,8 @@ import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.service.dataservice.DataServiceModule;
 import com.shootr.android.service.dataservice.ShootrDataService;
 import com.shootr.android.service.dataservice.ShootrPhotoService;
+import com.sloydev.jsonadapters.JsonAdapter;
+import com.sloydev.jsonadapters.jackson.JacksonAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import dagger.Module;
 import dagger.Provides;
@@ -48,11 +50,10 @@ public final class ApiModule {
         return RestAdapter.LogLevel.NONE;
     }
 
-    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, ObjectMapper objectMapper, OkHttpClient okHttpClient,
+    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, OkHttpClient okHttpClient,
       RetrofitErrorHandler errorHandler, RestAdapter.LogLevel logLevel) {
         return new RestAdapter.Builder() //
           .setEndpoint(endpoint.getUrl()) //
-          .setConverter(new JacksonConverter(objectMapper)) //
           .setClient(new OkClient(okHttpClient)) //
           .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
@@ -98,10 +99,10 @@ public final class ApiModule {
         return restAdapter.create(ChangePasswordApiService.class);
     }
 
-    @Provides @Singleton ObjectMapper provideObjectMapper() {
+    @Provides @Singleton JsonAdapter provideJsonAdapter() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return objectMapper;
+        return new JacksonAdapter(objectMapper);
     }
 
     @Provides @Singleton Endpoint provideEndpoint() {
