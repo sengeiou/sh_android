@@ -82,13 +82,13 @@ public class PhotoViewActivity extends BaseToolbarActivity {
 
         if (previewUrl != null) {
             imageLoader.loadWithPreview(imageUrl, previewUrl, image, new ImageLoader.Callback() {
-                @Override public void onLoaded(Bitmap bitmap) {
+                @Override public void onLoaded() {
                     attacher.update();
                 }
             });
         } else {
             imageLoader.load(imageUrl, image, new ImageLoader.Callback() {
-                @Override public void onLoaded(Bitmap bitmap) {
+                @Override public void onLoaded() {
                     attacher.update();
                 }
             });

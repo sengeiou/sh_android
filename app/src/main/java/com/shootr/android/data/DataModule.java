@@ -60,10 +60,10 @@ import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.FeedbackMessage;
+import com.shootr.android.util.GlideImageLoader;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.LogTreeFactory;
 import com.shootr.android.util.LogTreeFactoryImpl;
-import com.shootr.android.util.PicassoImageLoader;
 import com.shootr.android.util.ResourcesLocaleProvider;
 import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.TimeFormatter;
@@ -173,8 +173,8 @@ public class DataModule {
           .build();
     }
 
-    @Provides ImageLoader provideImageLoader(PicassoImageLoader picassoImageLoader) {
-        return picassoImageLoader;
+    @Provides ImageLoader provideImageLoader(GlideImageLoader imageLoader) {
+        return imageLoader;
     }
 
     @Provides

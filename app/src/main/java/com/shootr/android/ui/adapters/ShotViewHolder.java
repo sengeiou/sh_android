@@ -147,8 +147,6 @@ public class ShotViewHolder {
 
     private void bindUserPhoto(final ShotModel shot) {
         imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
-        avatar.setTag(this);
-        image.setTag(this);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

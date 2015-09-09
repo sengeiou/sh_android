@@ -12,13 +12,17 @@ import java.io.File;
 import java.io.IOException;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class PhotoPickerController {
 
     private static final int REQUEST_TAKE_PHOTO = 993;
     private static final int REQUEST_CHOOSE_PHOTO = 994;
+    private static final String CAMERA_PHOTO_TMP_FILE = "cameraPhoto.jpg";
 
-    private Activity activity;
-    private Handler handler;
+    private final Activity activity;
+    private final Handler handler;
+    private final File temporaryFiles;
     private String pickerTitle;
 
     public static class Builder {
@@ -26,6 +30,7 @@ public class PhotoPickerController {
         private Activity activity;
         private Handler handler;
         private String title;
+        private File temporaryFiles;
 
         public Builder onActivity(Activity activity) {
             this.activity = activity;
@@ -42,22 +47,26 @@ public class PhotoPickerController {
             return this;
         }
 
+        public Builder withTemporaryDir(File temporaryDir) {
+            this.temporaryFiles = temporaryDir;
+            return this;
+        }
+
         public PhotoPickerController build() {
-            if (activity == null) {
-                throw new IllegalStateException("Picker must have a source activity");
-            }
-            if (handler == null) {
-                throw new IllegalStateException("Picker must have a callback");
-            }
-            PhotoPickerController pickerController = new PhotoPickerController(activity, handler);
+            checkNotNull(activity, "Picker must have a source activity");
+            checkNotNull(handler, "Picker must have a callback");
+            checkNotNull(temporaryFiles, "Picker mus have a temporary files directory.");
+
+            PhotoPickerController pickerController = new PhotoPickerController(activity, handler, temporaryFiles);
             pickerController.setTitle(title);
             return pickerController;
         }
     }
 
-    private PhotoPickerController(Activity activity, Handler handler) {
+    private PhotoPickerController(Activity activity, Handler handler, File temporaryFiles) {
         this.activity = activity;
         this.handler = handler;
+        this.temporaryFiles = temporaryFiles;
     }
 
     private void setTitle(String title) {
@@ -105,7 +114,7 @@ public class PhotoPickerController {
     }
 
     private File getCameraPhotoFile() {
-        return new File(activity.getExternalFilesDir("tmp"), "cameraPhoto.jpg");
+        return new File(temporaryFiles, CAMERA_PHOTO_TMP_FILE);
     }
 
     public void pickPhotoFromGallery() {

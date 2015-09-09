@@ -134,7 +134,7 @@ public class PicassoImageLoader implements ImageLoader {
                     loadedFinalImage = true;
                     imageView.setImageBitmap(bitmap);
                     cancelPreview();
-                    callback.onLoaded(bitmap);
+                    callback.onLoaded();
                 }
 
                 @Override public void onBitmapFailed(Drawable errorDrawable) {
@@ -156,7 +156,7 @@ public class PicassoImageLoader implements ImageLoader {
                     loadedFinalImage = true;
                     imageView.setImageBitmap(bitmap);
                     cancelPreview();
-                    callback.onLoaded(bitmap);
+                    callback.onLoaded();
                 }
 
                 @Override public void onBitmapFailed(Drawable errorDrawable) {
