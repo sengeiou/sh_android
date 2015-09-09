@@ -42,7 +42,8 @@ public class WatchingStreamResultViewHolder extends StreamResultViewHolder {
         });
     }
 
-    private void renderAuthor(StreamModel stream) {
+    @Override
+    protected void renderAuthor(StreamModel stream) {
         if (author != null) {
             CharSequence authorText = new Truss().append(stream.getAuthorUsername())
               .append(" · ")
