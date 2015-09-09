@@ -69,7 +69,7 @@ public class AllParticipantsPresenter implements Presenter {
           });
     }
 
-    private void refreshAllParticipants() {
+    protected void refreshAllParticipants() {
         allParticipantsView.hideEmpty();
         getAllParticipantsInteractor.obtainAllParticipants(idStream, Long.MAX_VALUE, false, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
