@@ -1,5 +1,15 @@
 package com.shootr.android.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
@@ -18,9 +28,12 @@ import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import dagger.Module;
 import dagger.Provides;
+import java.lang.reflect.Type;
+import java.util.Date;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 
 @Module(
         injects = {
@@ -47,11 +60,12 @@ public final class ApiModule {
         return RestAdapter.LogLevel.NONE;
     }
 
-    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, OkHttpClient okHttpClient,
+    @Provides RestAdapter provideRestAdapter(Endpoint endpoint, OkHttpClient okHttpClient, Gson gson,
       RetrofitErrorHandler errorHandler, RestAdapter.LogLevel logLevel) {
         return new RestAdapter.Builder() //
           .setEndpoint(endpoint.getUrl()) //
           .setClient(new OkClient(okHttpClient)) //
+          .setConverter(new GsonConverter(gson))
           .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
           .build();
@@ -96,8 +110,27 @@ public final class ApiModule {
         return restAdapter.create(ChangePasswordApiService.class);
     }
 
-    @Provides @Singleton JsonAdapter provideJsonAdapter() {
-        return new GsonAdapter();
+    @Provides @Singleton Gson provideGson() {
+        return new GsonBuilder() //
+          .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+              @Override
+              public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+                  return new Date(json.getAsJsonPrimitive().getAsLong());
+              }
+          })
+          .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+              @Override
+              public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+                  return new JsonPrimitive(src.getTime());
+              }
+          })
+          .serializeNulls() // TODO remove when dataservice is GONE
+          .create();
+    }
+
+    @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {
+        return new GsonAdapter(gson);
     }
 
     @Provides @Singleton Endpoint provideEndpoint() {
