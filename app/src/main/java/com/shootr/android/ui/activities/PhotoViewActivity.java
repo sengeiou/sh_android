@@ -3,7 +3,6 @@ package com.shootr.android.ui.activities;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -61,7 +60,8 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         attacher = new PhotoViewAttacher(image);
         attacher.setZoomable(false);
         attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-            @Override public void onViewTap(View view, float v, float v2) {
+            @Override
+            public void onViewTap(View view, float v, float v2) {
                 onPhotoClick();
             }
         });
