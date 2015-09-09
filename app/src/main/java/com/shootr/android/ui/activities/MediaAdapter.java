@@ -106,8 +106,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
 
         @Override public void onClick(View view) {
-            Intent intentForImage = PhotoViewActivity.getIntentForActivity(view.getContext(), shotModel.getImage(),
-              false);
+            Intent intentForImage = PhotoViewActivity.getIntentForActivity(view.getContext(), shotModel.getImage());
             view.getContext().startActivity(intentForImage);
         }
     }

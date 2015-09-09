@@ -289,7 +289,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     @Override public void openImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl, false);
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
         startActivity(intentForImage);
     }
 
