@@ -7,6 +7,7 @@ import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.shot.ShootrTimelineService;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class RefreshActivityTimelineInteractorTest {
     @Spy SpyCallback spyCallback = new SpyCallback();
     @Mock Interactor.ErrorCallback errorCallback;
     @Mock ShootrTimelineService shootrTimelineService;
+    @Mock SessionRepository sessionRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -35,7 +37,7 @@ public class RefreshActivityTimelineInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         this.interactor = new RefreshActivityTimelineInteractor(interactorHandler, postExecutionThread,
-                shootrTimelineService);
+                shootrTimelineService, sessionRepository);
     }
 
     @Test

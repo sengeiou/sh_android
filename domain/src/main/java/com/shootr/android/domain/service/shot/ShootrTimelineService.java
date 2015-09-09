@@ -9,7 +9,6 @@ import com.shootr.android.domain.Timeline;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
-import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
 import java.util.ArrayList;
@@ -19,17 +18,15 @@ import javax.inject.Inject;
 
 public class ShootrTimelineService {
 
-    private final SessionRepository sessionRepository;
     private final ShotRepository remoteShotRepository;
     private final ActivityRepository localActivityRepository;
     private final ActivityRepository remoteActivityRepository;
     private final TimelineSynchronizationRepository timelineSynchronizationRepository;
 
     @Inject
-    public ShootrTimelineService(SessionRepository sessionRepository, @Remote ShotRepository remoteShotRepository,
+    public ShootrTimelineService(@Remote ShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository, @Remote ActivityRepository remoteActivityRepository,
       TimelineSynchronizationRepository timelineSynchronizationRepository) {
-        this.sessionRepository = sessionRepository;
         this.remoteShotRepository = remoteShotRepository;
         this.localActivityRepository = localActivityRepository;
         this.remoteActivityRepository = remoteActivityRepository;
@@ -38,9 +35,6 @@ public class ShootrTimelineService {
 
     public ActivityTimeline refreshTimelinesForActivity() {
         List<Activity> activities = refreshActivityShots();
-
-        refreshStreamShots(sessionRepository.getCurrentUser().getIdWatchingStream());
-
         return buildSortedActivityTimeline(activities);
     }
 
@@ -60,9 +54,6 @@ public class ShootrTimelineService {
 
     public Timeline refreshTimelinesForStream(String idStream) {
         List<Shot> shotsForStream = refreshStreamShots(idStream);
-
-        refreshActivityShots();
-
         return buildSortedTimeline(shotsForStream);
     }
 
