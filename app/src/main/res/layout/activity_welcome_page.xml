@@ -2,55 +2,41 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_weight="10"
-  android:background="@color/primary"
   android:orientation="vertical">
+
+    <ImageView android:layout_width="@dimen/logo_size_104"
+      android:layout_height="@dimen/logo_size_104"
+      android:layout_marginTop="160dp"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_welcome_page"/>
 
     <TextView android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="3"
       android:gravity="center"
-      android:paddingLeft="32dp"
-      android:paddingRight="32dp"
-      android:paddingTop="40dp"
+      android:paddingTop="88dp"
       android:text="@string/welcome_shootr_title"
-      android:textColor="@color/white"
-      android:textSize="28sp" />
+      android:textColor="@color/black"
+      android:textSize="22sp" />
 
-    <LinearLayout android:layout_width="match_parent"
+    <TextView android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:orientation="vertical">
-
-        <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:fontFamily="sans-serif-light"
-          android:gravity="center"
-          android:text="@string/welcome_message_text"
-          android:textColor="@color/white"
-          android:textSize="16sp" />
-
-        <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:fontFamily="sans-serif-light"
-          android:gravity="center"
-          android:paddingTop="8dp"
-          android:text="@string/welcome_friends_text"
-          android:textColor="@color/white"
-          android:textSize="16sp" />
-    </LinearLayout>
+      android:layout_gravity="center"
+      android:paddingTop="16dp"
+      android:gravity="center"
+      android:textColor="@color/gray_50"
+      android:text="@string/welcome_friends_text"
+      android:textSize="14sp" />
 
   <FrameLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:layout_weight="2">
+    android:paddingTop="40dp"
+    android:animateLayoutChanges="true" >
 
-    <TextView android:id="@+id/button_get_started"
-      style="@style/LoginFacebookButton"
-      android:layout_width="match_parent"
-      android:layout_height="44dp"
+    <Button android:id="@+id/button_get_started"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textColor="@color/black"
       android:layout_marginLeft="@dimen/keyline_2"
       android:layout_marginRight="@dimen/keyline_2"
       android:text="@string/welcome_get_started_button"
