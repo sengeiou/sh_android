@@ -19,7 +19,7 @@ public class PerformFacebookLoginInteractor implements Interactor {
 
     private String facebookToken;
     private ErrorCallback errorCallback;
-    private CompletedCallback completedCallback;
+    private Callback<Boolean> callback;
 
 
     @Inject public PerformFacebookLoginInteractor(InteractorHandler interactorHandler,
@@ -30,17 +30,16 @@ public class PerformFacebookLoginInteractor implements Interactor {
         this.shootrUserService = shootrUserService;
     }
 
-    public void attempLogin(String facebookToken, CompletedCallback completedCallback, ErrorCallback errorCallback) {
+    public void attempLogin(String facebookToken, Callback<Boolean> callback, ErrorCallback errorCallback) {
         this.facebookToken = checkNotNull(facebookToken);
-        this.completedCallback = completedCallback;
+        this.callback = callback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
         try {
-            shootrUserService.performFacebookLogin(facebookToken);
-            notifyLoaded();
+            notifyLoaded(shootrUserService.performFacebookLogin(facebookToken));
         } catch (InvalidLoginException loginError){
             notifyError(new LoginException(loginError));
         } catch (ShootrException unknownException){
@@ -48,10 +47,10 @@ public class PerformFacebookLoginInteractor implements Interactor {
         }
     }
 
-    private void notifyLoaded() {
+    private void notifyLoaded(final Boolean isNewUser) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                completedCallback.onCompleted();
+                callback.onLoaded(isNewUser);
             }
         });
     }

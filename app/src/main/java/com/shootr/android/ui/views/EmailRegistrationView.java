@@ -28,5 +28,5 @@ public interface EmailRegistrationView extends DataTransferView{
 
     void focusOnUsernameField();
 
-    void navigateToMainScreen();
+    void navigateToWelcomePage();
 }

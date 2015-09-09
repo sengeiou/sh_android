@@ -4,6 +4,7 @@ public class LoginResult {
 
     private User user;
     private String sessionToken;
+    private Boolean isNewUser;
 
     public LoginResult(User user, String sessionToken) {
         this.user = user;
@@ -47,5 +48,13 @@ public class LoginResult {
           "user=" + user +
           ", sessionToken='" + sessionToken + '\'' +
           '}';
+    }
+
+    public Boolean isNewUser() {
+        return isNewUser;
+    }
+
+    public void setIsNewUser(Boolean isNewUser) {
+        this.isNewUser = isNewUser;
     }
 }

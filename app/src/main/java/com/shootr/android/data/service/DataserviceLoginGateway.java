@@ -5,6 +5,7 @@ import com.shootr.android.data.api.entity.LoginApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.data.entity.FacebookUserEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.DeviceManager;
@@ -50,11 +51,17 @@ public class DataserviceLoginGateway implements LoginGateway {
     @Override
     public LoginResult performFacebookLogin(String facebookToken) throws InvalidLoginException {
         try {
-            UserEntity loggedInUserEntity =
+            FacebookUserEntity loggedInUserEntity =
               authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken));
             User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
             String sessionToken = loggedInUserEntity.getSessionToken();
-            return new LoginResult(loggedInUser, sessionToken);
+            LoginResult loginResult = new LoginResult(loggedInUser, sessionToken);
+            if (loggedInUserEntity.isNewUser() != null && loggedInUserEntity.isNewUser() == 1) {
+                loginResult.setIsNewUser(true);
+            } else {
+                loginResult.setIsNewUser(false);
+            }
+            return loginResult;
         } catch (ApiException apiError) {
             throw new InvalidLoginException();
         } catch (IOException networkError) {

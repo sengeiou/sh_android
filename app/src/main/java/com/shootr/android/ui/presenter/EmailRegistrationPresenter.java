@@ -69,7 +69,7 @@ public class EmailRegistrationPresenter implements Presenter {
         createAccountInteractor.createAccount(email, username, password, //
           new Interactor.CompletedCallback() {
               @Override public void onCompleted() {
-                  emailRegistrationView.navigateToMainScreen();
+                  emailRegistrationView.navigateToWelcomePage();
               }
           }, //
           new Interactor.ErrorCallback() {

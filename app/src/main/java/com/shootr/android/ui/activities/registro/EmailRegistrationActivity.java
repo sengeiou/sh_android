@@ -29,7 +29,7 @@ import com.shootr.android.R;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.android.ui.activities.MainTabbedActivity;
+import com.shootr.android.ui.activities.WelcomePageActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
 import com.shootr.android.util.FeedbackMessage;
@@ -263,11 +263,11 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         usernameInput.requestFocus();
     }
 
-    @Override public void navigateToMainScreen() {
+    @Override public void navigateToWelcomePage() {
         finish();
-        Intent navigateToMainScreenIntent = new Intent(this, MainTabbedActivity.class);
-        navigateToMainScreenIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(navigateToMainScreenIntent);
+        Intent navigateToWelcomePageIntent = new Intent(this, WelcomePageActivity.class);
+        navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(navigateToWelcomePageIntent);
     }
     //endregion
 }
