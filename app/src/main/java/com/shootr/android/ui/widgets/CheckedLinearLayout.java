@@ -67,7 +67,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     }
 
     /**
-     * Este método es el que cambia el estado de nuestro widget
+     * Este method es el que cambia el estado de nuestro widget
      * @param checked true para activarlo y false para desactivarlo
      */
     @Override
@@ -84,7 +84,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     }
 
     /**
-     * Este método devuelve el estado de nuestro widget <img src="http://androcode.es/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley">
+     * Este method devuelve el estado de nuestro widget <img src="http://androcode.es/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley">
      * @return true o false, no?
      */
     @Override
@@ -93,7 +93,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     }
 
     /**
-     * Este método cambia el estado de nuestro widget
+     * Este method cambia el estado de nuestro widget
      * Si estaba activo se desactiva y viceversa
      */
     @Override
@@ -102,7 +102,7 @@ public class CheckedLinearLayout extends LinearLayout implements Checkable {
     }
 
     /**
-     * Este método es un poco más complejo
+     * Este method es un poco más complejo
      * Se encarga de combinar los diferentes "estados" de un widget
      * para informar a los drawables.
      *
