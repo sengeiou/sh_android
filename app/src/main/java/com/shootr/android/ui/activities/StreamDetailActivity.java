@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -95,6 +96,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
 
+        final Context context = this;
+
         adapter = new StreamDetailAdapter(imageLoader, //
           new View.OnClickListener() {
               @Override public void onClick(View v) {
@@ -121,8 +124,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                   streamDetailPresenter.follow(user.getIdUser());
               }
 
-              @Override public void onUnfollow(UserModel user) {
-                  streamDetailPresenter.unfollow(user.getIdUser());
+              @Override public void onUnfollow(final UserModel user) {
+                  new AlertDialog.Builder(context).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+                    .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) {
+                            streamDetailPresenter.unfollow(user.getIdUser());
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+                    .create()
+                    .show();
               }
           }); //follow
         recyclerView.setAdapter(adapter);
