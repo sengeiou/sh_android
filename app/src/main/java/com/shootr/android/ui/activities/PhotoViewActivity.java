@@ -26,6 +26,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
     private static final String EXTRA_IMAGE_URL = "image";
+    private static final String EXTRA_CAN_ZOOM = "zoom";
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
@@ -37,14 +38,19 @@ public class PhotoViewActivity extends BaseToolbarActivity {
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
 
-    public static Intent getIntentForActivity(Context context, String imageUrl) {
-        return getIntentForActivity(context, imageUrl, null);
+    public static Intent getIntentForActivity(Context context, String imageUrl, boolean canZoom) {
+        return getIntentForActivity(context, imageUrl, null, canZoom);
     }
 
     public static Intent getIntentForActivity(Context context, String imageUrl, String previewUrl) {
+        return getIntentForActivity(context, imageUrl, previewUrl, true);
+    }
+
+    public static Intent getIntentForActivity(Context context, String imageUrl, String previewUrl, boolean canZoom) {
         Intent intent = new Intent(context, PhotoViewActivity.class);
         intent.putExtra(EXTRA_IMAGE_URL, checkNotNull(imageUrl));
         intent.putExtra(EXTRA_IMAGE_PREVIEW_URL, previewUrl);
+        intent.putExtra(EXTRA_CAN_ZOOM, canZoom);
         return intent;
     }
 
@@ -64,7 +70,7 @@ public class PhotoViewActivity extends BaseToolbarActivity {
                 onPhotoClick();
             }
         });
-
+        attacher.setZoomable(getIntent().getBooleanExtra(EXTRA_CAN_ZOOM, false));
         loadImages();
     }
 

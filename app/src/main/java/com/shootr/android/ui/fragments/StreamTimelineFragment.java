@@ -410,7 +410,7 @@ public class StreamTimelineFragment extends BaseFragment
     }
 
     private void openImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl, false);
         startActivity(intentForImage);
     }
 

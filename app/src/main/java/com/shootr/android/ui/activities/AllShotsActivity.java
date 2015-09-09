@@ -232,7 +232,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     }
 
     protected void openImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl, false);
         startActivity(intentForImage);
     }
 

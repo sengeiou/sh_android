@@ -330,7 +330,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           streamPictureContainer.getTop(),
           streamPictureContainer.getWidth(),
           streamPictureContainer.getBottom()).toBundle();
-        Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
+        Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture, false);
         ActivityCompat.startActivity(this, photoIntent, animationBundle);
     }
 

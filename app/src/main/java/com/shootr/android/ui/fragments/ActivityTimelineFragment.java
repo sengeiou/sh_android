@@ -207,7 +207,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     }
 
     private void openImage(String url) {
-        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url);
+        Intent imageIntent = PhotoViewActivity.getIntentForActivity(getActivity(), url, false);
         startActivity(imageIntent);
     }
 

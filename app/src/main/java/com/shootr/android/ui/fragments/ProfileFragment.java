@@ -264,7 +264,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     private void openShotImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl, false);
         startActivity(intentForImage);
     }
 
