@@ -4,7 +4,6 @@ import android.view.View;
 import butterknife.BindString;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -30,17 +29,13 @@ public class NiceShotViewHolder extends ActivityViewHolder {
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      OnImageClickListener onImageClickListener,
-      OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
+      OnUsernameClickListener onUsernameClickListener, OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
         super(view, imageLoader, androidTimeUtils, shotTextSpannableBuilder, onAvatarClickListener, onUsernameClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
         shotViewHolder = new ShotViewHolder(view,
-          onAvatarClickListener,
-          onImageClickListener,
-          onVideoClickListener,
+          onAvatarClickListener, onVideoClickListener,
           null, onUsernameClickListener,
           androidTimeUtils,
           imageLoader,

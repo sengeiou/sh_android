@@ -18,7 +18,6 @@ import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -61,7 +60,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @Deprecated private TimelineAdapter adapter;
 
     private OnAvatarClickListener avatarClickListener;
-    private OnImageClickListener imageClickListener;
     private OnVideoClickListener videoClickListener;
     private OnUsernameClickListener onUsernameClickListener;
     private OnNiceShotListener onNiceShotListener;
@@ -149,13 +147,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
             }
         };
 
-        imageClickListener = new OnImageClickListener() {
-            @Override
-            public void onImageClick(String url) {
-                openImage(url);
-            }
-        };
-
         onUsernameClickListener = new OnUsernameClickListener() {
             @Override
             public void onUsernameClick(String username) {
@@ -190,7 +181,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener,
-          imageClickListener, videoClickListener, onNiceShotListener, onUsernameClickListener){
+          videoClickListener, onNiceShotListener, onUsernameClickListener){
             @Override protected boolean shouldShowTag() {
                 return true;
             }
@@ -229,11 +220,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     protected void openProfile(String idUser) {
         Intent profileIntent = ProfileContainerActivity.getIntent(this, idUser);
         startActivity(profileIntent);
-    }
-
-    protected void openImage(String imageUrl) {
-        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl, false);
-        startActivity(intentForImage);
     }
 
     private void startProfileContainerActivity(String username) {

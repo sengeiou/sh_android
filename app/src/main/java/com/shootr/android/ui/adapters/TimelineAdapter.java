@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
@@ -21,7 +20,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private final ImageLoader imageLoader;
     private final OnAvatarClickListener avatarClickListener;
-    private final OnImageClickListener imageClickListener;
     private final OnVideoClickListener videoClickListener;
     private final OnNiceShotListener onNiceShotListener;
     private final OnUsernameClickListener onUsernameClickListener;
@@ -30,13 +28,16 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     private List<ShotModel> shots;
 
-    public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils, OnAvatarClickListener avatarClickListener,
-      OnImageClickListener imageClickListener, OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+    public TimelineAdapter(Context context,
+      ImageLoader imageLoader,
+      AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener,
+      OnVideoClickListener videoClickListener,
+      OnNiceShotListener onNiceShotListener,
       OnUsernameClickListener onUsernameClickListener) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
-        this.imageClickListener = imageClickListener;
         this.videoClickListener = videoClickListener;
         this.onNiceShotListener = onNiceShotListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -90,7 +91,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         switch (getItemViewType(position)) {
             case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
-                view.setTag(new ShotViewHolder(view, avatarClickListener, imageClickListener, videoClickListener,
+                view.setTag(new ShotViewHolder(view, avatarClickListener, videoClickListener,
                   onNiceShotListener,
                   onUsernameClickListener,
                   timeUtils,
