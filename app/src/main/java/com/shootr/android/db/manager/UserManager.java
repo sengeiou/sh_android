@@ -10,7 +10,6 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.squareup.phrase.Phrase;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -193,11 +192,12 @@ public class UserManager extends AbstractManager {
     }
 
     public List<UserEntity> getUsersNotSynchronized() {
-        String whereClause = Phrase.from("{field} = '{n}' or {field} = '{u}'")
-          .put("field", UserTable.SYNCHRONIZED)
-          .put("n", LocalSynchronized.SYNC_NEW)
-          .put("u", LocalSynchronized.SYNC_UPDATED)
-          .format().toString();
+        String whereFormat = "%s = '%s' or %s = '%s'";
+        String whereClause = String.format(whereFormat,
+          UserTable.SYNCHRONIZED,
+          LocalSynchronized.SYNC_NEW,
+          LocalSynchronized.SYNC_UPDATED);
+
         Cursor queryResult =
           getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);
 

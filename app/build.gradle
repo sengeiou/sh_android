@@ -164,8 +164,6 @@ dependencies {
 
     compile 'com.melnykov:floatingactionbutton:1.1.0'
 
-    compile 'com.squareup.phrase:phrase:1.0.3'
-
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
 
     compile 'com.facebook.stetho:stetho:1.1.0'
