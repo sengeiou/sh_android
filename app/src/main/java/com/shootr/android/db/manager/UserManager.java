@@ -196,6 +196,7 @@ public class UserManager extends AbstractManager {
         String whereClause = String.format(whereFormat,
           UserTable.SYNCHRONIZED,
           LocalSynchronized.SYNC_NEW,
+          UserTable.SYNCHRONIZED,
           LocalSynchronized.SYNC_UPDATED);
 
         Cursor queryResult =
