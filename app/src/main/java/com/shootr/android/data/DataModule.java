@@ -59,6 +59,8 @@ import com.shootr.android.ui.presenter.StreamsListPresenter;
 import com.shootr.android.ui.presenter.WatchNumberPresenter;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.BitmapImageResizer;
+import com.shootr.android.util.CrashReportTool;
+import com.shootr.android.util.CrashReportToolFactoryImpl;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.GlideImageLoader;
 import com.shootr.android.util.ImageLoader;
@@ -230,6 +232,14 @@ public class DataModule {
 
     @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
         return GoogleCloudMessaging.getInstance(application);
+    }
+
+    @Provides CrashReportTool.Factory provideCrashReportToolFactory() {
+        return new CrashReportToolFactoryImpl();
+    }
+
+    @Provides CrashReportTool provideCrashReportTool(CrashReportTool.Factory factory) {
+        return factory.create();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
