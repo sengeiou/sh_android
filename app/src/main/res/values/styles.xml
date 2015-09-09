@@ -330,4 +330,8 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
 </resources>

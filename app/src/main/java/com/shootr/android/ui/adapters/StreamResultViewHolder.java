@@ -78,7 +78,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void renderAuthor(StreamModel stream) {
+    protected void renderAuthor(StreamModel stream) {
         if (author != null) {
             if (stream.getDescription() != null) {
                 CharSequence authorText = new Truss().append(stream.getAuthorUsername())

@@ -377,4 +377,5 @@
     <string name="unfollow_dialog_no">No</string>
     <string name="all_participants_button">All participants</string>
     <string name="user_not_found_message">User not found</string>
+    <string name="watching_stream_connected">connected</string>
 </resources>
