@@ -75,11 +75,11 @@ public class FindParticipantsTest {
     public void shouldSetCurrentQueryWhenSearchParticipants() throws Exception {
         presenter.searchParticipants(QUERY);
 
-        verify(findParticipantsView).hideKeyboard();
+        verify(findParticipantsView).setCurrentQuery(QUERY);
     }
 
     @Test
-    public void shouldShowContentWhenSearchParticipants() throws Exception {
+    public void shouldRenderParticipantsWhenSearchParticipants() throws Exception {
         setupFindParticipantsCallback();
 
         presenter.searchParticipants(QUERY);
