@@ -2,7 +2,7 @@ package com.shootr.android;
 
 import android.app.Application;
 import android.content.Context;
-import com.crashlytics.android.Crashlytics;
+import com.shootr.android.util.CrashReportTool;
 import com.shootr.android.util.DatabaseVersionUtils;
 import com.shootr.android.util.LogTreeFactory;
 import dagger.ObjectGraph;
@@ -13,16 +13,14 @@ public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
     @Inject DatabaseVersionUtils databaseVersionUtils;
+    @Inject CrashReportTool crashReportTool;
 
     @Override
     public void onCreate() {
         super.onCreate();
         buildObjectGraphAndInject();
         plantLoggerTrees();
-        if (!BuildConfig.DEBUG) {
-            Crashlytics.start(this);
-        }
-
+        crashReportTool.init(this);
         databaseVersionUtils.clearDataOnNewerVersion();
     }
 

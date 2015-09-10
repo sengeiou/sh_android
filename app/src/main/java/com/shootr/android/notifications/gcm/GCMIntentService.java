@@ -3,7 +3,6 @@ package com.shootr.android.notifications.gcm;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.prefs.ActivityBadgeCount;
 import com.shootr.android.data.prefs.IntPreference;
@@ -17,6 +16,7 @@ import com.shootr.android.notifications.activity.ActivityNotificationManager;
 import com.shootr.android.notifications.shot.ShotNotificationManager;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.sloydev.jsonadapters.JsonAdapter;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
@@ -36,7 +36,7 @@ public class GCMIntentService extends IntentService {
     @Inject ActivityNotificationManager activityNotificationManager;
     @Inject @Remote ShotRepository remoteShotRepository;
     @Inject ShotModelMapper shotModelMapper;
-    @Inject ObjectMapper objectMapper;
+    @Inject JsonAdapter jsonAdapter;
     @Inject @ActivityBadgeCount IntPreference badgeCount;
     @Inject BusPublisher busPublisher;
 
@@ -92,11 +92,11 @@ public class GCMIntentService extends IntentService {
         String silentText = checkNotNull(extras.getString(EXTRA_SILENT));
         Boolean silent = Boolean.valueOf(silentText);
 
-        PushNotification.Parameters parameters = objectMapper.readValue(serializedParameters,
+        PushNotification.Parameters parameters = jsonAdapter.fromJson(serializedParameters,
           PushNotification.Parameters.class);
         PushNotification.NotificationValues values = null;
         if (serializedValues != null) {
-            values = objectMapper.readValue(serializedValues, PushNotification.NotificationValues.class);
+            values = jsonAdapter.fromJson(serializedValues, PushNotification.NotificationValues.class);
         }
 
         return new PushNotification(values, parameters, silent, badge);

@@ -1,7 +1,5 @@
 package com.shootr.android.service.dataservice.generic;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,13 +10,6 @@ import java.util.Map;
 /**
  * Estructura de una acción sobre una entidad.
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonAutoDetect(
-creatorVisibility = JsonAutoDetect.Visibility.ANY,
-fieldVisibility = JsonAutoDetect.Visibility.ANY, 
-getterVisibility = JsonAutoDetect.Visibility.NONE, 
-isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class OperationDto {
 
     public static class Builder {

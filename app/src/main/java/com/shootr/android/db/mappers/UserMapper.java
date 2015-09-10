@@ -65,12 +65,13 @@ public class UserMapper extends GenericMapper {
 
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
-        user.setIdUser(dto.containsKey(UserTable.ID) ?  (String)dto.get(UserTable.ID) : null);
+        user.setIdUser(dto.containsKey(UserTable.ID) ? (String) dto.get(UserTable.ID) : null);
         user.setSessionToken(
-                dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
+          dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String) dto.get(UserTable.USER_NAME) : null);
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
-        user.setEmailConfirmed(dto.containsKey(UserTable.EMAIL_CONFIRMED) ? (Integer) dto.get(UserTable.EMAIL_CONFIRMED) : null);
+        user.setEmailConfirmed(dto.containsKey(UserTable.EMAIL_CONFIRMED) ? ((Number) dto.get(UserTable.EMAIL_CONFIRMED)).intValue()
+          : null);
         user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
         user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
         user.setNumFollowers(

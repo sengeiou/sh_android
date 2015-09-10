@@ -381,4 +381,5 @@
     <string name="welcome_shootr_title">Enter a stream to connect</string>
     <string name="welcome_friends_text">Leave to disconnect</string>
     <string name="welcome_get_started_button">Got it</string>
+    <string name="done_label">Done</string>
 </resources>

@@ -1,11 +1,11 @@
 package com.shootr.android.data.repository;
 
-import com.crashlytics.android.Crashlytics;
 import com.shootr.android.data.prefs.CurrentUserId;
 import com.shootr.android.data.prefs.SessionToken;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.util.CrashReportTool;
 import javax.inject.Inject;
 
 public class SessionRepositoryImpl implements SessionRepository {
@@ -16,10 +16,13 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     private StringPreference currentUserIdPreference;
 
+    private CrashReportTool crashReportTool;
+
     @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
-      @CurrentUserId StringPreference currentUserIdPreference) {
+      @CurrentUserId StringPreference currentUserIdPreference, CrashReportTool crashReportTool) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
+        this.crashReportTool = crashReportTool;
     }
 
     @Override
@@ -57,10 +60,9 @@ public class SessionRepositoryImpl implements SessionRepository {
         setCurrentUserId(userId);
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);
-        //TODO use some pattern or abstraction, setting these values here directly is quite ugly
-        Crashlytics.setUserIdentifier(userId);
-        Crashlytics.setUserName(loggedInUser.getUsername());
-        Crashlytics.setUserEmail(loggedInUser.getEmail());
+        crashReportTool.setUserId(userId);
+        crashReportTool.setUserName(loggedInUser.getUsername());
+        crashReportTool.setUserEmail(loggedInUser.getEmail());
     }
 
     @Override

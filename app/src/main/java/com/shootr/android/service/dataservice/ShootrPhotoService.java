@@ -1,12 +1,12 @@
 package com.shootr.android.service.dataservice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.ShootrPhotoUploadError;
+import com.sloydev.jsonadapters.JsonAdapter;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
@@ -29,12 +29,12 @@ public class ShootrPhotoService implements PhotoService {
 
     private OkHttpClient client;
     private SessionRepository sessionRepository;
-    private ObjectMapper objectMapper;
+    private JsonAdapter jsonAdapter;
 
-    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, ObjectMapper objectMapper, Endpoint endpoint) {
+    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, JsonAdapter jsonAdapter, Endpoint endpoint) {
         this.client = client;
         this.sessionRepository = sessionRepository;
-        this.objectMapper = objectMapper;
+        this.jsonAdapter = jsonAdapter;
         uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/upload/img/profile";
         uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/shot";
         uploadStreamPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/stream";
@@ -182,7 +182,7 @@ public class ShootrPhotoService implements PhotoService {
 
     private String throwParsedError(JSONObject jsonObject) throws IOException, JSONException {
         ShootrPhotoUploadError
-        shootrError = objectMapper.readValue(jsonObject.getString("status"), ShootrPhotoUploadError.class);
+        shootrError = jsonAdapter.fromJson(jsonObject.getString("status"), ShootrPhotoUploadError.class);
         ShootrServerException shootrServerException = new ShootrServerException(shootrError);
         Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.getErrorCode(),
           shootrError.getMessage());

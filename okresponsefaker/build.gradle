@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+repositories {
+    jcenter()
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -23,7 +27,5 @@ android {
 
 dependencies {
     provided 'com.squareup.okhttp:okhttp:2.2.0'
-
-    provided 'com.fasterxml.jackson.core:jackson-databind:2.2.4'
-    provided 'com.fasterxml.jackson.core:jackson-core:2.2.4'
+    provided 'com.sloydev:jsonadapters-core:0.1.0'
 }

@@ -54,7 +54,7 @@ public class StreamEntityMapper extends GenericMapper{
         streamEntity.setLocale(dto.get(DatabaseContract.StreamTable.LOCALE) == null ? null
                 : (String) dto.get(DatabaseContract.StreamTable.LOCALE));
         streamEntity.setRemoved(dto.get(DatabaseContract.StreamTable.REMOVED) == null ? 0
-                : (Integer) dto.get(DatabaseContract.StreamTable.REMOVED));
+                : ((Number) dto.get(DatabaseContract.StreamTable.REMOVED)).intValue());
         setSynchronizedfromDto(dto, streamEntity);
     }
 
