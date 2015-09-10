@@ -77,15 +77,6 @@ public class AllParticipantsPresenterTest {
     }
 
     @Test
-    public void shouldShowAllParticipantsListWhenAllParticipantsLoaded() throws Exception {
-        setupAllParticipantsEmptyCallback();
-
-        presenter.initialize(allParticipantsView, STRING_ID);
-
-        verify(allParticipantsView).showAllParticipantsList();
-    }
-
-    @Test
     public void shouldShowEmptyWhenAllParticipantsReceivesEmptyList() throws Exception {
         setupAllParticipantsEmptyCallback();
 
