@@ -24,7 +24,6 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
@@ -74,9 +73,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     UserModel user;
 
-    //CurrentUser
-    User currentUser;
-
     private UserListAdapter userListAdapter;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
@@ -97,7 +93,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         super.onCreate(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
-        currentUser = sessionRepository.getCurrentUser();
     }
 
     public void injectArguments() {
@@ -118,7 +113,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        userlistListView.setAdapter(getAdapter());
     }
 
 
@@ -126,6 +120,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         super.onActivityCreated(savedInstanceState);
         setEmptyMessage();
         retrieveUsers();
+        userlistListView.setAdapter(getAdapter());
     }
 
     private void retrieveUsers() {
