@@ -305,6 +305,7 @@ android.applicationVariants.all { variant ->
 
         // Optional
         def requestLatest = new PutObjectRequest(bucket, "Shootr-latest.apk", apkFile)
+        requestLatest.setMetadata(metadata)
         s3client.putObject(requestLatest)
     }
 
