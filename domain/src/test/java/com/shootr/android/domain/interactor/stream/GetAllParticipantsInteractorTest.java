@@ -63,6 +63,16 @@ public class GetAllParticipantsInteractorTest {
         verify(callback).onLoaded(participantsAndMyFollowingsInStream());
     }
 
+    @Test
+    public void shouldHaveUsersOrderedByJoinStreamDateWhenAllParticipantsLoaded() {
+        when(remoteUserRepository.getPeople()).thenReturn(myFollowings());
+        when(remoteUserRepository.getAllParticipants(ID_STREAM, MAX_JOIN_DATE)).thenReturn(allParticipantsInStream());
+
+        interactor.obtainAllParticipants(ID_STREAM, MAX_JOIN_DATE, NOT_PAGINATING, callback, errorCallback);
+
+        verify(callback).onLoaded(participantsAndMyFollowingsInStream());
+    }
+
     private List<User> participantsAndMyFollowingsInStream() {
         List<User> people = new ArrayList<>();
         people.add(anotherUser());
