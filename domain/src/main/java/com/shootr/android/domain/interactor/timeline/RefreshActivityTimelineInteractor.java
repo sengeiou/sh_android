@@ -41,7 +41,9 @@ public class RefreshActivityTimelineInteractor implements Interactor {
         try {
             ActivityTimeline activityTimeline = shootrTimelineService.refreshTimelinesForActivity();
             notifyLoaded(activityTimeline);
-            shootrTimelineService.refreshTimelinesForStream(sessionRepository.getCurrentUser().getIdWatchingStream());
+            if (sessionRepository.getCurrentUser().getIdWatchingStream() != null) {
+                shootrTimelineService.refreshTimelinesForStream(sessionRepository.getCurrentUser().getIdWatchingStream());
+            }
         } catch (ShootrException error) {
             notifyError(error);
         }

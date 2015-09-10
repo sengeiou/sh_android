@@ -11,7 +11,6 @@ import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.domain.repository.TimelineSynchronizationRepository;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -58,20 +57,17 @@ public class ShootrTimelineService {
     }
 
     private List<Shot> refreshStreamShots(String idStream) {
-        List<Shot> newShots = new ArrayList<>();
-        if (idStream != null) {
-            Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(idStream);
+        Long streamRefreshDateSince = timelineSynchronizationRepository.getStreamTimelineRefreshDate(idStream);
 
-            StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
-              .forStream(idStream) //
-              .since(streamRefreshDateSince) //
-              .build();
+        StreamTimelineParameters streamTimelineParameters = StreamTimelineParameters.builder() //
+          .forStream(idStream) //
+          .since(streamRefreshDateSince) //
+          .build();
 
-            newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
-            if (!newShots.isEmpty()) {
-                long lastShotDate = newShots.get(0).getPublishDate().getTime();
-                timelineSynchronizationRepository.setStreamTimelineRefreshDate(idStream, lastShotDate);
-            }
+        List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
+        if (!newShots.isEmpty()) {
+            long lastShotDate = newShots.get(0).getPublishDate().getTime();
+            timelineSynchronizationRepository.setStreamTimelineRefreshDate(idStream, lastShotDate);
         }
         return newShots;
     }

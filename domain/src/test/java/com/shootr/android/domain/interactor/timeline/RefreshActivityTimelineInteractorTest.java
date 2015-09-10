@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.timeline;
 
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimeline;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 public class RefreshActivityTimelineInteractorTest {
 
+    public static final String ID_WATCHING_STREAM = "idWatchingStream";
     private RefreshActivityTimelineInteractor interactor;
 
     @Spy SpyCallback spyCallback = new SpyCallback();
@@ -43,10 +45,16 @@ public class RefreshActivityTimelineInteractorTest {
     @Test
     public void shouldCallbackActivityTimelineWhenServiceReturnsTimelineForActivity() throws Exception {
         when(shootrTimelineService.refreshTimelinesForActivity()).thenReturn(timelineForActivity());
-
+        when(sessionRepository.getCurrentUser()).thenReturn(user());
         interactor.refreshActivityTimeline(spyCallback, errorCallback);
 
         verify(spyCallback).onLoaded(timelineForActivity());
+    }
+
+    private User user() {
+        User user = new User();
+        user.setIdWatchingStream(ID_WATCHING_STREAM);
+        return user;
     }
 
     private ActivityTimeline timelineForActivity() {
