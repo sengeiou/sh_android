@@ -1,6 +1,5 @@
 package com.shootr.android.service.dataservice.generic;
 
-import com.shootr.android.exception.ServerException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;

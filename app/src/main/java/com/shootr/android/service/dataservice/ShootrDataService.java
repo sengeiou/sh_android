@@ -24,7 +24,6 @@ import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
-import com.shootr.android.service.dataservice.generic.BaseDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
