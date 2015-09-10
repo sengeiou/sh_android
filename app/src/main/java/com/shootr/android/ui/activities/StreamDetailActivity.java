@@ -96,8 +96,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
 
-        final Context context = this;
-
         adapter = new StreamDetailAdapter(imageLoader, //
           new View.OnClickListener() {
               @Override public void onClick(View v) {
@@ -125,7 +123,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
               }
 
               @Override public void onUnfollow(final UserModel user) {
-                  new AlertDialog.Builder(context).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
+                  new AlertDialog.Builder(StreamDetailActivity.this).setMessage(String.format(getString(R.string.unfollow_dialog_message), user.getUsername()))
                     .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
                             streamDetailPresenter.unfollow(user.getIdUser());
