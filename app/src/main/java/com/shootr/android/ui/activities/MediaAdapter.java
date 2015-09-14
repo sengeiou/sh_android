@@ -58,6 +58,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         context.startActivity(intent);
     }
 
+    public ShotModel getItem(int position) {
+        return shotsWithMedia.get(position);
+    }
+
+    public Integer getCount() {
+        return shotsWithMedia.size();
+    }
+
     @Override
     public int getItemCount() {
         return shotsWithMedia.size();
@@ -65,6 +73,15 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     public void setShotsWithMedia(List<ShotModel> shotsWithMedia) {
         this.shotsWithMedia = shotsWithMedia;
+        notifyDataSetChanged();
+    }
+
+    public ShotModel getLastMedia() {
+        return shotsWithMedia.get(getCount() - 1);
+    }
+
+    public void addShotsWithMedia(List<ShotModel> shotWithMedia) {
+        this.shotsWithMedia.addAll(shotWithMedia);
         notifyDataSetChanged();
     }
 

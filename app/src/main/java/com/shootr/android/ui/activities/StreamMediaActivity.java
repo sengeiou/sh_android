@@ -26,6 +26,7 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_STREAM_MEDIA_COUNT = "streamMediaCount";
 
     private MediaAdapter mediaAdapter;
+    private GridLayoutManager layoutManager;
 
     @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
     @Bind(R.id.media_empty) View emptyView;
@@ -49,9 +50,11 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        mediaView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns)));
+        layoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.media_adapter_number_of_columns));
+        mediaView.setLayoutManager(layoutManager);
         mediaAdapter = new MediaAdapter(this, imageLoader);
         mediaView.setAdapter(mediaAdapter);
+        setupListScrollListeners();
     }
 
     @Override protected void initializePresenter() {
@@ -63,6 +66,27 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
+    }
+
+    private void setupListScrollListeners() {
+        mediaView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                checkIfEndOfListVisible();
+            }
+        });
+    }
+
+    private void checkIfEndOfListVisible() {
+        int lastItemPosition = mediaAdapter.getCount() - 1;
+        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+        if (lastItemPosition == lastVisiblePosition) {
+            presenter.showingLastMedia(mediaAdapter.getLastMedia());
+        }
     }
 
     @Override public void setMedia(List<ShotModel> shotsWithMedia) {
@@ -87,6 +111,10 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void showError(String errorMessage) {
         feedbackMessage.show(getView(), errorMessage);
+    }
+
+    @Override public void addOldMedia(List<ShotModel> shotWithMedia) {
+        mediaAdapter.addShotsWithMedia(shotWithMedia);
     }
 
     @Override
