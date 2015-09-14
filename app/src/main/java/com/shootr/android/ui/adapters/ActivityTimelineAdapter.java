@@ -211,7 +211,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         notifyDataSetChanged();
     }
 
-    public void setFooterVisible(boolean visible) {
+    public void setFooterVisible(Boolean visible) {
         showFooter = visible;
         notifyDataSetChanged();
     }

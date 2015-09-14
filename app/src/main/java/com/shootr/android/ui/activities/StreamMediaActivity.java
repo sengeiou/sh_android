@@ -32,8 +32,6 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
     @Bind(R.id.media_empty) View emptyView;
     @Bind(R.id.stream_media_loading) View loadingView;
-    @Bind(R.id.loading_progress_container) View progressViewContainer;
-    @Bind(R.id.loading_progress) View progressView;
     @BindString(R.string.stream_media_no_more_media) String noMoreMedia;
 
     @Inject StreamMediaPresenter presenter;
@@ -122,13 +120,11 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public void showLoadingOldMedia() {
-        progressViewContainer.setVisibility(View.VISIBLE);
-        progressView.setVisibility(View.VISIBLE);
+        mediaAdapter.setFooterVisible(true);
     }
 
     @Override public void hideLoadingOldMedia() {
-        progressViewContainer.setVisibility(View.GONE);
-        progressView.setVisibility(View.GONE);
+        mediaAdapter.setFooterVisible(false);
     }
 
     @Override public void showNoMoreMedia() {
