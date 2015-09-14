@@ -65,19 +65,19 @@ public class GetStreamMediaInteractor implements Interactor {
     private void getMediaFromLocal() {
         List<User> people = localUserRepository.getPeople();
         List<String> peopleIds = getPeopleInStream(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository);
+        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository, Long.MAX_VALUE);
         notifyLoaded(shots);
     }
 
     private void getMediaFromRemote() {
         List<User> people = remoteUserRepository.getPeople();
         List<String> peopleIds = getPeopleInStream(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository);
+        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository, Long.MAX_VALUE);
         notifyLoaded(shots);
     }
 
-    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository) {
-        return shotRepository.getMediaByIdStream(idStream, peopleIds);
+    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository, Long maxTimestamp) {
+        return shotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
     }
 
     private List<String> getPeopleInStream(List<User> people) {
