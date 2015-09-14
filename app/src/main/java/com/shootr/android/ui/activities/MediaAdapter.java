@@ -37,7 +37,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         return new ViewHolder(layoutView, new OnVideoClickListener() {
             @Override
             public void onVideoClick(String url) {
-                onVideoClick(url);
+                videoClicked(url);
             }
         });
     }
@@ -51,7 +51,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         mediaItemHolder.bindMedia(shotModel);
     }
 
-    private void onVideoClick(String url) {
+    private void videoClicked(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
