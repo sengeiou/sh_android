@@ -18,4 +18,10 @@ public interface StreamMediaView {
     void showError(String errorMessage);
 
     void addOldMedia(List<ShotModel> shotModels);
+
+    void showLoadingOldMedia();
+
+    void hideLoadingOldMedia();
+
+    void showNoMoreMedia();
 }

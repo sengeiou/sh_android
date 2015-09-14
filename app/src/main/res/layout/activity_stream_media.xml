@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -8,7 +8,8 @@
     <ProgressBar android:id="@+id/stream_media_loading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true"
       android:indeterminate="true"
       android:visibility="gone"
       tools:visibility="visible" />
@@ -16,6 +17,8 @@
     <android.support.v7.widget.RecyclerView android:id="@+id/stream_media_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:overScrollMode="never"
+      android:layout_above="@+id/loading_progress_container"
       android:clipToPadding="false"
       android:paddingBottom="2dp"
       android:paddingLeft="2dp"
@@ -23,6 +26,45 @@
       android:paddingTop="2dp"
       android:scrollbars="vertical" />
 
-    <include layout="@layout/include_media_empty" />
+    <include layout="@layout/include_media_empty"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true" />
 
-</FrameLayout>
+    <RelativeLayout android:id="@+id/loading_progress_container"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_gravity="bottom"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      tools:visibility="visible">
+
+        <ProgressBar android:id="@+id/loading_progress"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:indeterminate="true"
+          android:visibility="gone"
+          tools:visibility="visible"
+          android:padding="8dp" />
+
+      <TextView
+        android:id="@+id/media_no_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/stream_media_no_more_media"
+        android:textColor="@color/gray_50"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textSize="20sp"
+        android:padding="8dp"/>
+    </RelativeLayout>
+</RelativeLayout>

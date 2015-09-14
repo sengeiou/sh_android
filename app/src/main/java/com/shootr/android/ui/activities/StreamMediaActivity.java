@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -31,6 +32,9 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.stream_media_recycler_view) RecyclerView mediaView;
     @Bind(R.id.media_empty) View emptyView;
     @Bind(R.id.stream_media_loading) View loadingView;
+    @Bind(R.id.loading_progress_container) View progressViewContainer;
+    @Bind(R.id.loading_progress) View progressView;
+    @BindString(R.string.stream_media_no_more_media) String noMoreMedia;
 
     @Inject StreamMediaPresenter presenter;
     @Inject ImageLoader imageLoader;
@@ -115,6 +119,20 @@ public class StreamMediaActivity extends BaseToolbarDecoratedActivity implements
 
     @Override public void addOldMedia(List<ShotModel> shotWithMedia) {
         mediaAdapter.addShotsWithMedia(shotWithMedia);
+    }
+
+    @Override public void showLoadingOldMedia() {
+        progressViewContainer.setVisibility(View.VISIBLE);
+        progressView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoadingOldMedia() {
+        progressViewContainer.setVisibility(View.GONE);
+        progressView.setVisibility(View.GONE);
+    }
+
+    @Override public void showNoMoreMedia() {
+        feedbackMessage.show(getView(), noMoreMedia);
     }
 
     @Override

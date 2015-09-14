@@ -78,24 +78,27 @@ public class StreamMediaPresenter implements Presenter {
 
     private void loadOlderMedia(long lastMediaInScreenDate) {
         isLoadingOlderMedia = true;
-        // TODO streamMediaView.showLoadingOldShots();
+        streamMediaView.showLoadingOldMedia();
         getOlderStreamMediaInteractor.getOlderStreamMedia(idStream,
           lastMediaInScreenDate,
           new Interactor.Callback<List<Shot>>() {
               @Override public void onLoaded(List<Shot> shotsWithMedia) {
                   isLoadingOlderMedia = false;
+                  streamMediaView.hideLoadingOldMedia();
                   if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
                       List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
                       streamMediaView.addOldMedia(shotModels);
                   } else {
+                      streamMediaView.showNoMoreMedia();
                       mightHaveMoreMedia = false;
                   }
               }
           },
           new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamMediaView.showError(errorMessage);
+                  streamMediaView.hideLoadingOldMedia();
+                  String errorMessage = errorMessageFactory.getMessageForError(error);
+                  streamMediaView.showError(errorMessage);
             }
         });
     }
