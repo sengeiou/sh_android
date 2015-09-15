@@ -32,7 +32,7 @@
       android:textColor="@color/gray_60"
       tools:text="22m" />
 
-    <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/shot_text"
+    <TextView android:id="@+id/shot_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_user_name"
@@ -43,7 +43,9 @@
       android:textColor="@color/material_black"
       android:textColorLink="@color/links"
       android:textSize="16sp"
-      tools:text="Who's the referee?" />
+      android:ellipsize="end"
+      android:maxLines="2"
+      tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" />
 
   <FrameLayout android:id="@+id/shot_media_content"
     android:layout_width="wrap_content"
