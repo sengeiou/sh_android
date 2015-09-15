@@ -45,6 +45,10 @@ public class ReportShotPresenter implements Presenter {
 
     }
 
+    public void deleteShot(ShotModel shotModel) {
+
+    }
+
     @Override public void resume() {
         /* no-op */
     }

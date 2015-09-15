@@ -633,7 +633,7 @@ public class StreamTimelineFragment extends BaseFragment
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                //TODO reportShotPresenter.report(shotModel);
+                reportShotPresenter.deleteShot(shotModel);
             }
         }).show();
     }

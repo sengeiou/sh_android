@@ -28,4 +28,6 @@ public interface ShotRepository {
     void putShots(List<Shot> shotsFromUser);
 
     void shareShot(String idShot);
+
+    void deleteShot(String idShot);
 }
