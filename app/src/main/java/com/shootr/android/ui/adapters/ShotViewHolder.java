@@ -18,7 +18,6 @@ import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
-import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -38,9 +37,6 @@ public class ShotViewHolder {
     @Bind(R.id.shot_timestamp) TextView timestamp;
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_image)  ImageView image;
-    @Bind(R.id.shot_video_frame) View videoFrame;
-    @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
     @BindColor(R.color.tag_color) int tagColor;
     public int position;
@@ -70,8 +66,6 @@ public class ShotViewHolder {
         bindElapsedTime(shot);
         bindUserPhoto(shot);
         bindImageInfo(shot);
-        bindVideoInfo(shot);
-        bindNiceInfo(shot);
     }
 
     protected void bindComment(ShotModel item, boolean shouldShowTag) {
@@ -158,35 +152,5 @@ public class ShotViewHolder {
         } else {
             image.setVisibility(View.GONE);
         }
-    }
-
-    private void bindVideoInfo(final ShotModel shot) {
-        if (shot.hasVideo()) {
-            videoFrame.setVisibility(View.VISIBLE);
-            videoDuration.setText(shot.getVideoDuration());
-            videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    videoClickListener.onVideoClick(shot.getVideoUrl());
-                }
-            });
-        } else {
-            videoFrame.setVisibility(View.GONE);
-            videoFrame.setOnClickListener(null);
-        }
-    }
-
-    private void bindNiceInfo(final ShotModel shot) {
-        niceButton.setChecked(shot.isMarkedAsNice());
-        niceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (shot.isMarkedAsNice()) {
-                    onNiceShotListener.unmarkNice(shot.getIdShot());
-                } else {
-                    onNiceShotListener.markNice(shot.getIdShot());
-                }
-            }
-        });
     }
 }

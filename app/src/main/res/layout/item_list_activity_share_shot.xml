@@ -29,7 +29,7 @@
       tools:text="Shared by @Me" />
 
     <include android:id="@+id/activity_shot"
-      layout="@layout/item_list_shot_inner"
+      layout="@layout/item_activity_shot_inner"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 

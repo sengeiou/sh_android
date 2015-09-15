@@ -45,7 +45,6 @@ public class ShareShotViewHolder extends ActivityViewHolder {
     @Override
     public void render(ActivityModel activityModel, String currentUserId) {
         ShotModel shotModel = checkNotNull(activityModel.getShot());
-        shotViewHolder.niceButton.setVisibility(View.GONE);
         shotViewHolder.render(shotModel, false);
         setShotClickListener(shotModel);
         renderShareShot(activityModel);
