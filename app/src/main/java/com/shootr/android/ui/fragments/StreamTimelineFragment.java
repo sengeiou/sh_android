@@ -410,29 +410,6 @@ public class StreamTimelineFragment extends BaseFragment
         startActivity(intent);
     }
 
-    private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
-              @Override public void run() {
-                  streamTimelinePresenter.shareShot(shotModel);
-              }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShotIntent(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
-            @Override
-            public void run() {
-                copyShotCommentToClipboard(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
-    }
-
     private void shareShotIntent(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(getActivity(), shotModel);
         Intents.maybeStartActivity(getActivity(), shareIntent);
@@ -615,6 +592,52 @@ public class StreamTimelineFragment extends BaseFragment
         builder.create().show();
     }
 
+    @Override public void showContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+            @Override
+            public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+            @Override
+            public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
+            @Override public void run() {
+                //TODO reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
     @OnItemClick(R.id.timeline_shot_list)
     public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
@@ -625,7 +648,7 @@ public class StreamTimelineFragment extends BaseFragment
     @OnItemLongClick(R.id.timeline_shot_list)
     public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
-        openContextualMenu(shot);
+        reportShotPresenter.onShotLongPressed(shot);
         return true;
     }
 

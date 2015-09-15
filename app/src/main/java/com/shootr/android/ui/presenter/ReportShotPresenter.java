@@ -36,6 +36,15 @@ public class ReportShotPresenter implements Presenter {
         }
     }
 
+    public void onShotLongPressed(ShotModel shotModel) {
+        if (sessionRepository.getCurrentUserId().equals(shotModel.getIdUser())) {
+            reportShotView.showHolderContextMenu(shotModel);
+        } else {
+            reportShotView.showContextMenu(shotModel);
+        }
+
+    }
+
     @Override public void resume() {
         /* no-op */
     }

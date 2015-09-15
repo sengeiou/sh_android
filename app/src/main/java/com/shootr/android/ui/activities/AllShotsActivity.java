@@ -189,29 +189,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
         listView.setAdapter(adapter);
     }
 
-    private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(this)
-          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
-              @Override public void run() {
-                  presenter.shareShot(shotModel);
-              }
-          })
-          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShot(shotModel);
-              }
-          })
-          .addAction(getString(R.string.menu_copy_text), new Runnable() {
-                @Override public void run() {
-                    Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
-                }
-            }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
-    }
-
     private void shareShot(ShotModel shotModel) {
         Intent shareIntent = intentFactory.shareShotIntent(this, shotModel);
         Intents.maybeStartActivity(this, shareIntent);
@@ -302,7 +279,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
     @OnItemLongClick(R.id.all_shots_list)
     public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
-        openContextualMenu(shot);
+        reportShotPresenter.onShotLongPressed(shot);
         return true;
     }
 
@@ -315,5 +292,51 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
           .setPositiveButton(getString(R.string.alert_report_confirmed_email_ok), null);
 
         builder.create().show();
+    }
+
+    @Override public void showContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  presenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_copy_text), new Runnable() {
+              @Override public void run() {
+                  Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
+              }
+          }).addAction(this.getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(this)
+          .addAction(getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  presenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShot(shotModel);
+              }
+          })
+          .addAction(getString(R.string.menu_copy_text), new Runnable() {
+              @Override public void run() {
+                  Clipboard.copyShotComment(AllShotsActivity.this, shotModel);
+              }
+          }).addAction(this.getString(R.string.report_context_menu_delete), new Runnable() {
+            @Override public void run() {
+                //TODO
+            }
+        }).show();
     }
 }
