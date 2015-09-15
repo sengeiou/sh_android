@@ -90,7 +90,7 @@ public class ActivityShotViewHolder {
         if (comment == null) {
             String resultComment;
             if (isNice) {
-                resultComment = String.format(nicedShot, item.getUsername());
+                resultComment = nicedShot;
             } else {
                 resultComment = String.format(sharedShot, item.getUsername());
             }
@@ -98,7 +98,7 @@ public class ActivityShotViewHolder {
         } else {
             String resultComment;
             if (isNice) {
-                resultComment = String.format(nicedShotWithComment, item.getUsername(), comment);
+                resultComment = String.format(nicedShotWithComment, comment);
             } else {
                 resultComment = String.format(sharedShotWithComment, item.getUsername(), comment);
             }
