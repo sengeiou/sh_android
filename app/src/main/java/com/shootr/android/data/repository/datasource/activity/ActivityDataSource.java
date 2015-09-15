@@ -11,4 +11,6 @@ public interface ActivityDataSource {
     ActivityEntity getActivity(String activityId);
 
     void putActivities(List<ActivityEntity> activityEntities);
+
+    void deleteActivitiesWithShot(String idShot);
 }

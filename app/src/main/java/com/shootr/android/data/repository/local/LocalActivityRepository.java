@@ -40,6 +40,10 @@ public class LocalActivityRepository implements ActivityRepository{
         return activityEntityMapper.transform(activity);
     }
 
+    @Override public void deleteActivitiesWithShot(String idShot) {
+        localActivityDataSource.deleteActivitiesWithShot(idShot);
+    }
+
     private void bindActivityShots(List<ActivityEntity> activities) {
         for (ActivityEntity activity : activities) {
             bindActivityShot(activity);

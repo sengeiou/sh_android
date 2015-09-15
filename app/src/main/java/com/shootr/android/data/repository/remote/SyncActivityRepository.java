@@ -49,6 +49,10 @@ public class SyncActivityRepository implements ActivityRepository {
         return activityEntityMapper.transform(activity);
     }
 
+    @Override public void deleteActivitiesWithShot(String idShot) {
+        throw new IllegalArgumentException("not implemented");
+    }
+
     private void bindActivityShots(List<ActivityEntity> activityEntities) {
         for (ActivityEntity entity : activityEntities) {
             bindActivityShot(entity);

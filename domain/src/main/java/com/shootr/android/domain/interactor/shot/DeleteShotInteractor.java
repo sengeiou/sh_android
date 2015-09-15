@@ -5,6 +5,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -14,6 +15,7 @@ public class DeleteShotInteractor implements Interactor {
 
     private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
+    private final ActivityRepository localActivityRepository;
     private final PostExecutionThread postExecutionThread;
     private final InteractorHandler interactorHandler;
     private String idShot;
@@ -21,9 +23,10 @@ public class DeleteShotInteractor implements Interactor {
     private ErrorCallback errorCallback;
 
     @Inject public DeleteShotInteractor(@Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
-      PostExecutionThread postExecutionThread, InteractorHandler interactorHandler) {
+      @Local ActivityRepository localActivityRepository, PostExecutionThread postExecutionThread, InteractorHandler interactorHandler) {
         this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
+        this.localActivityRepository = localActivityRepository;
         this.postExecutionThread = postExecutionThread;
         this.interactorHandler = interactorHandler;
     }
@@ -39,6 +42,7 @@ public class DeleteShotInteractor implements Interactor {
         try {
             localShotRepository.deleteShot(idShot);
             remoteShotRepository.deleteShot(idShot);
+            localActivityRepository.deleteActivitiesWithShot(idShot);
             notifyLoaded();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);

@@ -10,4 +10,5 @@ public interface ActivityRepository {
 
     Activity getActivity(String activityId);
 
+    void deleteActivitiesWithShot(String idShot);
 }
