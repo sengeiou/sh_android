@@ -77,4 +77,8 @@ public class LocalShotRepository implements ShotRepository {
     @Override public void shareShot(String idShot) {
         throw new IllegalArgumentException("No local implementation");
     }
+
+    @Override public void deleteShot(String idShot) {
+        localShotDataSource.deleteShot(idShot);
+    }
 }

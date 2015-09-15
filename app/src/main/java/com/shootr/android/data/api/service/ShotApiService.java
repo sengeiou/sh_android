@@ -50,4 +50,7 @@ public interface ShotApiService {
 
     @POST("/shots/{idShot}/share")
     Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shots/{idShot}")
+    Response deleteShot(@Path("idShot") String idShot) throws ApiException, IOException;
 }

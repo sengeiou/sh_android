@@ -28,4 +28,6 @@ public interface ShotDataSource {
     List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate);
 
     void shareShot(String idShot);
+
+    void deleteShot(String idShot);
 }

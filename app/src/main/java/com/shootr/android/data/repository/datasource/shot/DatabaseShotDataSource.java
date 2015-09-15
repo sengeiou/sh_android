@@ -83,4 +83,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     @Override public void shareShot(String idShot) {
         throw new IllegalArgumentException("shareShot should not have local implementation");
     }
+
+    @Override public void deleteShot(String idShot) {
+        shotManager.deleteShot(idShot);
+    }
 }

@@ -136,4 +136,12 @@ public class ServiceShotDatasource implements ShotDataSource {
             throw new ServerCommunicationException(error);
         }
     }
+
+    @Override public void deleteShot(String idShot) {
+        try {
+            shotApiService.deleteShot(idShot);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
 }
