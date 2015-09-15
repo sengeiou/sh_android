@@ -8,6 +8,7 @@ import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,8 +30,8 @@ public class LocalActivityRepository implements ActivityRepository{
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         List<ActivityEntity> activityTimeline =
           localActivityDataSource.getActivityTimeline(parameters);
-        bindActivityShots(activityTimeline);
-        return activityEntityMapper.transform(activityTimeline);
+        List<ActivityEntity> activityEntities = bindActivityShots(activityTimeline);
+        return activityEntityMapper.transform(activityEntities);
     }
 
     @Override
@@ -44,10 +45,15 @@ public class LocalActivityRepository implements ActivityRepository{
         localActivityDataSource.deleteActivitiesWithShot(idShot);
     }
 
-    private void bindActivityShots(List<ActivityEntity> activities) {
+    private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activities) {
+        List<ActivityEntity> activityEntities = new ArrayList<>();
         for (ActivityEntity activity : activities) {
             bindActivityShot(activity);
+            if(activity.getShotForMapping() != null) {
+                activityEntities.add(activity);
+            }
         }
+        return activityEntities;
     }
 
     private void bindActivityShot(ActivityEntity activity) {
@@ -58,8 +64,6 @@ public class LocalActivityRepository implements ActivityRepository{
 
     private Shot getShotForActivity(ActivityEntity activity) {
         String idShot = checkNotNull(activity.getIdShot());
-        Shot shot = localShotRepository.getShot(idShot);
-        checkNotNull(shot, "Shot with id %s not found in local repository", idShot);
-        return shot;
+        return localShotRepository.getShot(idShot);
     }
 }

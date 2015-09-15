@@ -6,10 +6,12 @@ import com.shootr.android.data.repository.datasource.activity.ActivityDataSource
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -37,9 +39,9 @@ public class SyncActivityRepository implements ActivityRepository {
 
     @Override public List<Activity> getActivityTimeline(ActivityTimelineParameters parameters) {
         List<ActivityEntity> activityEntities = remoteActivityDataSource.getActivityTimeline(parameters);
-        bindActivityShots(activityEntities);
-        localActivityDataSource.putActivities(activityEntities);
-        return activityEntityMapper.transform(activityEntities);
+        List<ActivityEntity> activities = bindActivityShots(activityEntities);
+        localActivityDataSource.putActivities(activities);
+        return activityEntityMapper.transform(activities);
     }
 
     @Override
@@ -53,10 +55,17 @@ public class SyncActivityRepository implements ActivityRepository {
         throw new IllegalArgumentException("not implemented");
     }
 
-    private void bindActivityShots(List<ActivityEntity> activityEntities) {
+    private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activityEntities) {
+        List<ActivityEntity> activities = new ArrayList<>();
         for (ActivityEntity entity : activityEntities) {
-            bindActivityShot(entity);
+            try {
+                bindActivityShot(entity);
+                activities.add(entity);
+            } catch (ServerCommunicationException error) {
+                // TODO YO K SE ALGO
+            }
         }
+        return activities;
     }
 
     private void bindActivityShot(ActivityEntity entity) {
