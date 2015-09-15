@@ -13,4 +13,6 @@ public interface ReportShotView {
     void showHolderContextMenu(ShotModel shotModel);
 
     void notifyDeletedShot(ShotModel shotModel);
+
+    void showError(String errorMessage);
 }
