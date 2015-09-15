@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
@@ -17,7 +18,6 @@ import com.shootr.android.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
@@ -35,10 +35,15 @@ public class ActivityShotViewHolder {
     @Bind(R.id.shot_avatar) ImageView avatar;
     @Bind(R.id.shot_user_name) TextView name;
     @Bind(R.id.shot_timestamp) TextView timestamp;
-    @Bind(R.id.shot_text) ClickableTextView text;
+    @Bind(R.id.shot_text) TextView text;
     @Bind(R.id.shot_image)  ImageView image;
 
     @BindColor(R.color.tag_color) int tagColor;
+    @BindString(R.string.niced_shot_activity) String nicedShot;
+    @BindString(R.string.shared_shot_activity) String sharedShot;
+    @BindString(R.string.niced_shot_activity_with_comment) String nicedShotWithComment;
+    @BindString(R.string.shared_shot_activity_with_comment) String sharedShotWithComment;
+
     public int position;
     private View view;
 
@@ -71,30 +76,35 @@ public class ActivityShotViewHolder {
         if (shouldShowTag && item.getStreamTag() != null) {
             tag = item.getStreamTag();
         }
-        SpannableStringBuilder commentWithTag;
-        if (comment == null) {
-            String resultComment;
-            if (isNice) {
-                resultComment = "Niced "+ item.getUsername()+"'s shot";
-            } else {
-                resultComment = "Shared "+ item.getUsername()+"'s shot";
-            }
-            commentWithTag = buildCommentTextWithTag(resultComment, tag);
-        } else {
-            String resultComment;
-            if (isNice) {
-                resultComment = "Niced "+ item.getUsername()+"'s shot: " + comment;
-            } else {
-                resultComment = "Shared "+ item.getUsername()+"'s shot: " + comment;
-            }
-            commentWithTag = buildCommentTextWithTag(resultComment, tag);
-        }
+        SpannableStringBuilder commentWithTag = createComment(item, isNice, comment, tag);
         if (commentWithTag != null) {
             addShotComment(this, commentWithTag);
             text.setVisibility(View.VISIBLE);
         } else {
             text.setVisibility(View.GONE);
         }
+    }
+
+    private SpannableStringBuilder createComment(ShotModel item, boolean isNice, String comment, String tag) {
+        SpannableStringBuilder commentWithTag;
+        if (comment == null) {
+            String resultComment;
+            if (isNice) {
+                resultComment = String.format(nicedShot, item.getUsername());
+            } else {
+                resultComment = String.format(sharedShot, item.getUsername());
+            }
+            commentWithTag = buildCommentTextWithTag(resultComment, tag);
+        } else {
+            String resultComment;
+            if (isNice) {
+                resultComment = String.format(nicedShotWithComment, item.getUsername(), comment);
+            } else {
+                resultComment = String.format(sharedShotWithComment, item.getUsername(), comment);
+            }
+            commentWithTag = buildCommentTextWithTag(resultComment, tag);
+        }
+        return commentWithTag;
     }
 
     private @Nullable
@@ -126,15 +136,10 @@ public class ActivityShotViewHolder {
     private void addShotComment(ActivityShotViewHolder vh, CharSequence comment) {
         CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         vh.text.setText(spannedComment);
-        vh.text.addLinks();
     }
 
     private void bindUsername(String username) {
         name.setText(username);
-    }
-
-    private String getReplyName(ShotModel shot) {
-        return view.getContext().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
     }
 
     private void bindElapsedTime(ShotModel shot) {

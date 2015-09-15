@@ -382,4 +382,8 @@
     <string name="welcome_friends_text">Leave to disconnect</string>
     <string name="welcome_get_started_button">Got it</string>
     <string name="done_label">Done</string>
+    <string name="niced_shot_activity">Niced %s\'s shot</string>
+    <string name="niced_shot_activity_with_comment">Niced %1$s\'s shot: %2$s</string>
+    <string name="shared_shot_activity">Shared %s\'s shot</string>
+    <string name="shared_shot_activity_with_comment">Shared %1$s\'s shot: %2$s</string>
 </resources>
