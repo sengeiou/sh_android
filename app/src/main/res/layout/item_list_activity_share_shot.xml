@@ -21,13 +21,6 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp">
 
-    <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/activity_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/activity_shot"
-      android:layout_marginLeft="60dp"
-      tools:text="Shared by @Me" />
-
     <include android:id="@+id/activity_shot"
       layout="@layout/item_activity_shot_inner"
       android:layout_width="match_parent"

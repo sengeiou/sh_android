@@ -18,12 +18,11 @@ import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
-import com.shootr.android.ui.widgets.NiceButtonView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
-public class ShotViewHolder {
+public class ActivityShotViewHolder {
 
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
@@ -38,20 +37,14 @@ public class ShotViewHolder {
     @Bind(R.id.shot_timestamp) TextView timestamp;
     @Bind(R.id.shot_text) ClickableTextView text;
     @Bind(R.id.shot_image)  ImageView image;
-    @Bind(R.id.shot_video_frame) View videoFrame;
-    @Bind(R.id.shot_video_duration) TextView videoDuration;
-    @Bind(R.id.shot_nice_button) NiceButtonView niceButton;
 
     @BindColor(R.color.tag_color) int tagColor;
     public int position;
     private View view;
 
-    public ShotViewHolder(View view,
-      OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
-      OnNiceShotListener onNiceShotListener,
-      OnUsernameClickListener onUsernameClickListener,
-      AndroidTimeUtils timeUtils,
-      ImageLoader imageLoader,
+    public ActivityShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
+      OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils, ImageLoader imageLoader,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
         this.avatarClickListener = avatarClickListener;
         this.videoClickListener = videoClickListener;
@@ -64,24 +57,38 @@ public class ShotViewHolder {
         this.view = view;
     }
 
-    protected void render(ShotModel shot, boolean shouldShowTag) {
-        bindUsername(shot);
-        bindComment(shot, shouldShowTag);
+    protected void render(ShotModel shot, String username, String photo, String idUser, boolean shouldShowTag, boolean isNice) {
+        bindUsername(username);
         bindElapsedTime(shot);
-        bindUserPhoto(shot);
+        bindComment(shot,shouldShowTag,isNice);
+        bindUserPhoto(photo, idUser);
         bindImageInfo(shot);
-        bindVideoInfo(shot);
-        bindNiceInfo(shot);
     }
 
-    protected void bindComment(ShotModel item, boolean shouldShowTag) {
+    protected void bindComment(ShotModel item, boolean shouldShowTag, boolean isNice) {
         String comment = item.getComment();
         String tag = null;
         if (shouldShowTag && item.getStreamTag() != null) {
             tag = item.getStreamTag();
         }
-
-        SpannableStringBuilder commentWithTag = buildCommentTextWithTag(comment, tag);
+        SpannableStringBuilder commentWithTag;
+        if (comment == null) {
+            String resultComment;
+            if (isNice) {
+                resultComment = "Niced "+ item.getUsername()+"'s shot";
+            } else {
+                resultComment = "Shared "+ item.getUsername()+"'s shot";
+            }
+            commentWithTag = buildCommentTextWithTag(resultComment, tag);
+        } else {
+            String resultComment;
+            if (isNice) {
+                resultComment = "Niced "+ item.getUsername()+"'s shot: " + comment;
+            } else {
+                resultComment = "Shared "+ item.getUsername()+"'s shot: " + comment;
+            }
+            commentWithTag = buildCommentTextWithTag(resultComment, tag);
+        }
         if (commentWithTag != null) {
             addShotComment(this, commentWithTag);
             text.setVisibility(View.VISIBLE);
@@ -116,19 +123,14 @@ public class ShotViewHolder {
         return tagSpan;
     }
 
-    private void addShotComment(ShotViewHolder vh, CharSequence comment) {
+    private void addShotComment(ActivityShotViewHolder vh, CharSequence comment) {
         CharSequence spannedComment = shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         vh.text.setText(spannedComment);
         vh.text.addLinks();
     }
 
-    private void bindUsername(ShotModel shot) {
-        String usernameTitle = shot.getUsername();
-        if (shot.isReply()) {
-            name.setText(getReplyName(shot));
-        } else {
-            name.setText(usernameTitle);
-        }
+    private void bindUsername(String username) {
+        name.setText(username);
     }
 
     private String getReplyName(ShotModel shot) {
@@ -140,12 +142,12 @@ public class ShotViewHolder {
         this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), timestamp));
     }
 
-    private void bindUserPhoto(final ShotModel shot) {
-        imageLoader.loadProfilePhoto(shot.getPhoto(), avatar);
+    private void bindUserPhoto(String url, final String idUser) {
+        imageLoader.loadProfilePhoto(url, avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                avatarClickListener.onAvatarClick(shot.getIdUser(), v);
+                avatarClickListener.onAvatarClick(idUser, v);
             }
         });
     }
@@ -160,33 +162,4 @@ public class ShotViewHolder {
         }
     }
 
-    private void bindVideoInfo(final ShotModel shot) {
-        if (shot.hasVideo()) {
-            videoFrame.setVisibility(View.VISIBLE);
-            videoDuration.setText(shot.getVideoDuration());
-            videoFrame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    videoClickListener.onVideoClick(shot.getVideoUrl());
-                }
-            });
-        } else {
-            videoFrame.setVisibility(View.GONE);
-            videoFrame.setOnClickListener(null);
-        }
-    }
-
-    private void bindNiceInfo(final ShotModel shot) {
-        niceButton.setChecked(shot.isMarkedAsNice());
-        niceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (shot.isMarkedAsNice()) {
-                    onNiceShotListener.unmarkNice(shot.getIdShot());
-                } else {
-                    onNiceShotListener.markNice(shot.getIdShot());
-                }
-            }
-        });
-    }
 }

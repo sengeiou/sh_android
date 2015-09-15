@@ -22,7 +22,7 @@ public class ShareShotViewHolder extends ActivityViewHolder {
     private final OnShotClick onShotClick;
 
     @BindString(R.string.activity_share_shot_text_base) String shareShotTextBase;
-    private ShotViewHolder shotViewHolder;
+    private ActivityShotViewHolder shotViewHolder;
 
     public ShareShotViewHolder(View view,
       ImageLoader imageLoader,
@@ -34,7 +34,7 @@ public class ShareShotViewHolder extends ActivityViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
-        shotViewHolder = new ShotViewHolder(view,
+        shotViewHolder = new ActivityShotViewHolder(view,
           onAvatarClickListener, onVideoClickListener,
           null, onUsernameClickListener,
           androidTimeUtils,
@@ -45,9 +45,8 @@ public class ShareShotViewHolder extends ActivityViewHolder {
     @Override
     public void render(ActivityModel activityModel, String currentUserId) {
         ShotModel shotModel = checkNotNull(activityModel.getShot());
-        shotViewHolder.render(shotModel, false);
+        shotViewHolder.render(shotModel, activityModel.getUsername(), activityModel.getUserPhoto(), activityModel.getIdUser(), false, false);
         setShotClickListener(shotModel);
-        renderShareShot(activityModel);
     }
 
     private void setShotClickListener(final ShotModel shotModel) {
@@ -58,12 +57,4 @@ public class ShareShotViewHolder extends ActivityViewHolder {
             }
         });
     }
-
-    private void renderShareShot(ActivityModel activity) {
-        String shareShotText = String.format(shareShotTextBase, activity.getUsername());
-        CharSequence shareShotTextFormatted =
-          shotTextSpannableBuilder.formatWithUsernameSpans(shareShotText, onUsernameClickListener);
-        text.setText(shareShotTextFormatted);
-    }
-
 }
