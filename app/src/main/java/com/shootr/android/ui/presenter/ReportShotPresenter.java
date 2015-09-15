@@ -1,5 +1,8 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -9,12 +12,15 @@ import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
 
+    private final DeleteShotInteractor deleteShotInteractor;
     private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
 
     private ReportShotView reportShotView;
 
-    @Inject public ReportShotPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper) {
+    @Inject public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor, SessionRepository sessionRepository,
+      UserModelMapper userModelMapper) {
+        this.deleteShotInteractor = deleteShotInteractor;
         this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
     }
@@ -46,7 +52,15 @@ public class ReportShotPresenter implements Presenter {
     }
 
     public void deleteShot(ShotModel shotModel) {
-
+        deleteShotInteractor.deleteShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                // TODO mostrar feedback?
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                // TODO mostrar error
+            }
+        });
     }
 
     @Override public void resume() {
