@@ -38,7 +38,7 @@ public class ActivityShotViewHolder {
     @Bind(R.id.shot_text) TextView text;
     @Bind(R.id.shot_image)  ImageView image;
 
-    @BindColor(R.color.tag_color) int tagColor;
+    @BindColor(R.color.gray_60) int tagColor;
     @BindString(R.string.niced_shot_activity) String nicedShot;
     @BindString(R.string.shared_shot_activity) String sharedShot;
     @BindString(R.string.niced_shot_activity_with_comment) String nicedShotWithComment;
@@ -98,11 +98,11 @@ public class ActivityShotViewHolder {
         } else {
             String resultComment;
             if (isNice) {
-                resultComment = String.format(nicedShotWithComment, comment);
+                resultComment = nicedShotWithComment;
             } else {
-                resultComment = String.format(sharedShotWithComment, item.getUsername(), comment);
+                resultComment = String.format(sharedShotWithComment, item.getUsername());
             }
-            commentWithTag = buildCommentTextWithTag(resultComment, tag);
+            commentWithTag = buildCommentTextWithTag(resultComment, comment);
         }
         return commentWithTag;
     }
