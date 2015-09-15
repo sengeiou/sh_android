@@ -638,6 +638,10 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
+    @Override public void notifyDeletedShot(ShotModel shotModel) {
+        adapter.removeShot(shotModel);
+    }
+
     @OnItemClick(R.id.timeline_shot_list)
     public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);

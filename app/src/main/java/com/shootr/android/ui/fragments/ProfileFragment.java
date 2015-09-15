@@ -184,6 +184,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
     private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
     private UserListAdapter suggestedPeopleAdapter;
+    private View shotView;
 
     public static ProfileFragment newInstance(String idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -686,7 +687,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
               };
             latestsShotsAdapter.setShots(shots);
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
-                View shotView = latestsShotsAdapter.getView(i, null, shotsList);
+                shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 setShotItemBackgroundRetainPaddings(shotView);
                 final int finalI = i;
                 shotView.setOnClickListener(new View.OnClickListener() {
@@ -972,8 +973,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                // TODO
+                reportShotPresenter.deleteShot(shotModel);
             }
         }).show();
+    }
+
+    @Override public void notifyDeletedShot(ShotModel shotModel) {
+        shotsList.removeView(shotView);
+        loadLatestShots();
     }
 }

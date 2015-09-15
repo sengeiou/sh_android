@@ -335,8 +335,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
               }
           }).addAction(this.getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                //TODO
+                reportShotPresenter.deleteShot(shotModel);
             }
         }).show();
+    }
+
+    @Override public void notifyDeletedShot(ShotModel shotModel) {
+        adapter.removeShot(shotModel);
     }
 }

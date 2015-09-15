@@ -11,4 +11,6 @@ public interface ReportShotView {
     void showContextMenu(ShotModel shotModel);
 
     void showHolderContextMenu(ShotModel shotModel);
+
+    void notifyDeletedShot(ShotModel shotModel);
 }

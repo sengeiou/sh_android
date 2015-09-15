@@ -51,10 +51,10 @@ public class ReportShotPresenter implements Presenter {
 
     }
 
-    public void deleteShot(ShotModel shotModel) {
+    public void deleteShot(final ShotModel shotModel) {
         deleteShotInteractor.deleteShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                // TODO mostrar feedback?
+                reportShotView.notifyDeletedShot(shotModel);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

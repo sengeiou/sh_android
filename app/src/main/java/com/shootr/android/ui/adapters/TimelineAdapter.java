@@ -120,6 +120,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         notifyDataSetChanged();
     }
 
+    public void removeShot(ShotModel shotModel) {
+        this.shots.remove(shotModel);
+        notifyDataSetChanged();
+    }
+
     public void setShots(List<ShotModel> shots) {
         this.shots = shots;
         notifyDataSetChanged();
