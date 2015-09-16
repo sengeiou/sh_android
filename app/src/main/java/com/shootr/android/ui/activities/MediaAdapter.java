@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,14 @@ import com.shootr.android.util.ImageLoader;
 import java.util.Collections;
 import java.util.List;
 
-public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
+public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    public static final int TYPE_FOOTER = -1;
+    public static final int TYPE_GENERIC_MEDIA = 0;
     private Context context;
     private List<ShotModel> shotsWithMedia = Collections.emptyList();
     private final ImageLoader imageLoader;
+    private boolean showFooter = false;
 
     public MediaAdapter(Context context, ImageLoader imageLoader) {
         this.context = context;
@@ -30,41 +34,92 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View layoutView = LayoutInflater
-          .from(viewGroup.getContext())
-          .inflate(R.layout.stream_media_layout, viewGroup, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        switch (viewType) {
+            case TYPE_FOOTER:
+                return onCreateFooterViewHolder(viewGroup);
+            case TYPE_GENERIC_MEDIA:
+                return onCreateMediaViewHolder(viewGroup);
+        }
+        throw new IllegalStateException("View type %d not handled");
+    }
+
+    @NonNull private RecyclerView.ViewHolder onCreateMediaViewHolder(ViewGroup viewGroup) {
+        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.stream_media_layout, viewGroup, false);
         return new ViewHolder(layoutView, new OnVideoClickListener() {
             @Override
             public void onVideoClick(String url) {
-                onVideoClick(url);
+                videoClicked(url);
             }
         });
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ShotModel shotModel = shotsWithMedia.get(position);
-        ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
-        mediaItemHolder.shotModel = shotModel;
-        imageLoader.load(shotModel.getImage(), mediaItemHolder.mediaImage);
-        mediaItemHolder.bindMedia(shotModel);
+    private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
+        View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
+        return new RecyclerView.ViewHolder(footer) {
+            /* no-op */
+        };
     }
 
-    private void onVideoClick(String url) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        if (!isFooter(position)) {
+            final ShotModel shotModel = shotsWithMedia.get(position);
+            ViewHolder mediaItemHolder = (ViewHolder) viewHolder;
+            mediaItemHolder.shotModel = shotModel;
+            imageLoader.load(shotModel.getImage(), mediaItemHolder.mediaImage);
+            mediaItemHolder.bindMedia(shotModel);
+        }
+    }
+
+    private void videoClicked(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
+    public ShotModel getItem(int position) {
+        return shotsWithMedia.get(position);
+    }
+
+    public Integer getCount() {
+        return shotsWithMedia.size();
+    }
+
     @Override
     public int getItemCount() {
-        return shotsWithMedia.size();
+        return showFooter ? shotsWithMedia.size() + 1 : shotsWithMedia.size();
     }
 
     public void setShotsWithMedia(List<ShotModel> shotsWithMedia) {
         this.shotsWithMedia = shotsWithMedia;
+        notifyDataSetChanged();
+    }
+
+    public ShotModel getLastMedia() {
+        return shotsWithMedia.get(getCount() - 1);
+    }
+
+    public void addShotsWithMedia(List<ShotModel> shotWithMedia) {
+        this.shotsWithMedia.addAll(shotWithMedia);
+        notifyDataSetChanged();
+    }
+
+    @Override public int getItemViewType(int position) {
+        if (isFooter(position)) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_GENERIC_MEDIA;
+        }
+    }
+
+    private boolean isFooter(int position) {
+        return position >= shotsWithMedia.size();
+    }
+
+    public void setFooterVisible(Boolean visible) {
+        showFooter = visible;
         notifyDataSetChanged();
     }
 

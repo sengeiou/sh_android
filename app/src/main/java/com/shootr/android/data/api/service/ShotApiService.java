@@ -46,7 +46,7 @@ public interface ShotApiService {
     Response unmarkNice(@Path("idShot") String idShot) throws ApiException, IOException;
 
     @GET("/streams/{idStream}/media?includeLinks=false")
-    List<ShotApiEntity> getMediaShots(@Path("idStream") String idStream) throws ApiException, IOException;
+    List<ShotApiEntity> getMediaShots(@Path("idStream") String idStream, @Query("maxTimestamp") Long maxTimestamp) throws ApiException, IOException;
 
     @POST("/shots/{idShot}/share")
     Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
