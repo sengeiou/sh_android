@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.shot;
 import com.shootr.android.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.android.domain.exception.NiceNotMarkedException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -48,7 +49,11 @@ public class UnmarkNiceShotInteractor implements Interactor {
     }
 
     private void unmarkNiceInLocal() throws NiceNotMarkedException {
-        localNiceShotRepository.unmark(idShot);
+        try {
+            localNiceShotRepository.unmark(idShot);
+        } catch (ShotRemovedException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void sendUndoNiceToRemote() throws NiceAlreadyMarkedException {
@@ -56,11 +61,17 @@ public class UnmarkNiceShotInteractor implements Interactor {
             remoteNiceShotRepository.unmark(idShot);
         } catch (ServerCommunicationException | NiceNotMarkedException e) {
             redoNiceInLocal();
+        } catch (ShotRemovedException e) {
+            /* Swallow */
         }
     }
 
-    private void redoNiceInLocal() throws NiceAlreadyMarkedException {
-        localNiceShotRepository.mark(idShot);
+    private void redoNiceInLocal() {
+        try {
+            localNiceShotRepository.mark(idShot);
+        } catch (NiceAlreadyMarkedException | ShotRemovedException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void notifyCompleted() {

@@ -7,6 +7,7 @@ import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
@@ -47,7 +48,11 @@ public class SyncActivityRepository implements ActivityRepository {
     @Override
     public Activity getActivity(String activityId) {
         ActivityEntity activity = remoteActivityDataSource.getActivity(activityId);
-        bindActivityShot(activity);
+        try {
+            bindActivityShot(activity);
+        } catch (ShotRemovedException e) {
+            throw new IllegalArgumentException(e);
+        }
         return activityEntityMapper.transform(activity);
     }
 
@@ -61,21 +66,21 @@ public class SyncActivityRepository implements ActivityRepository {
             try {
                 bindActivityShot(entity);
                 activities.add(entity);
-            } catch (ServerCommunicationException error) {
-                // TODO YO K SE ALGO
+            } catch (ShotRemovedException | ServerCommunicationException error) {
+                /* swallow it */
             }
         }
         return activities;
     }
 
-    private void bindActivityShot(ActivityEntity entity) {
+    private void bindActivityShot(ActivityEntity entity) throws ShotRemovedException {
         if (entity.getIdShot() != null) {
             Shot shot = ensureShotExistInLocal(entity);
             entity.setShotForMapping(shot);
         }
     }
 
-    private Shot ensureShotExistInLocal(ActivityEntity activity) {
+    private Shot ensureShotExistInLocal(ActivityEntity activity) throws ShotRemovedException {
         String idShot = checkNotNull(activity.getIdShot());
         Shot localShot = localShotRepository.getShot(idShot);
         if (localShot != null) {

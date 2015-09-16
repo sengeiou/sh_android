@@ -5,12 +5,14 @@ import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
 import com.shootr.android.domain.service.dagger.Background;
+import com.shootr.android.domain.service.shot.DeletedShotException;
 import java.io.File;
 import java.util.Date;
 
@@ -47,12 +49,14 @@ public abstract class PostNewShotInteractor implements Interactor {
             Shot shotToPublish = createShotFromParameters();
             notifyReadyToSend();
             sendShotToServer(shotToPublish);
+        } catch (ShotRemovedException error) {
+            notifyError(new DeletedShotException(error));
         } catch (ShootrException error) {
             notifyError(error);
         }
     }
 
-    private void sendShotToServer(Shot shot) throws ServerCommunicationException {
+    private void sendShotToServer(Shot shot) throws ServerCommunicationException, ShotRemovedException {
         shotSender.sendShot(shot, imageFile);
     }
 

@@ -35,7 +35,7 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public void putShots(List<ShotEntity> shotEntities) {
+    @Override public void putShots(List<ShotEntity> shotEntities) throws ShotRemovedException {
         for (ShotEntity shotEntity : shotEntities) {
             putShot(shotEntity);
         }
@@ -91,7 +91,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     @Override
-    public ShotDetailEntity getShotDetail(String idShot) {
+    public ShotDetailEntity getShotDetail(String idShot) throws ShotRemovedException {
         try {
             ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
 
@@ -104,8 +104,10 @@ public class ServiceShotDatasource implements ShotDataSource {
             shotDetailEntity.setReplies(repliesEntities);
             shotDetailEntity.setParentShot(parentEntity);
             return shotDetailEntity;
-        } catch (ApiException | IOException e) {
+        } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            throw new ShotRemovedException();
         }
     }
 
@@ -128,11 +130,13 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public void shareShot(String idShot) {
+    @Override public void shareShot(String idShot) throws ShotRemovedException {
         try {
             shotApiService.shareShot(idShot);
-        } catch (ApiException | IOException error) {
+        } catch (IOException error) {
             throw new ServerCommunicationException(error);
+        } catch (ApiException error) {
+            throw new ShotRemovedException();
         }
     }
 
