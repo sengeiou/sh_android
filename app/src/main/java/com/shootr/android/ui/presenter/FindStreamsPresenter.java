@@ -6,6 +6,7 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamSearchInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -18,6 +19,7 @@ public class FindStreamsPresenter implements Presenter {
 
     private final StreamSearchInteractor streamSearchInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
+    private final ShareStreamInteractor shareStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
 
@@ -26,11 +28,11 @@ public class FindStreamsPresenter implements Presenter {
     private boolean hasBeenPaused = false;
 
     @Inject public FindStreamsPresenter(StreamSearchInteractor streamSearchInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
-      StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      AddToFavoritesInteractor addToFavoritesInteractor, ShareStreamInteractor shareStreamInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.streamSearchInteractor = streamSearchInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
+        this.shareStreamInteractor = shareStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -49,13 +51,11 @@ public class FindStreamsPresenter implements Presenter {
         findStreamsView.hideKeyboard();
         findStreamsView.showLoading();
         streamSearchInteractor.searchStreams(queryText, new StreamSearchInteractor.Callback() {
-            @Override
-            public void onLoaded(StreamSearchResultList results) {
+            @Override public void onLoaded(StreamSearchResultList results) {
                 onSearchResults(results);
             }
         }, new Interactor.ErrorCallback() {
-            @Override
-            public void onError(ShootrException error) {
+            @Override public void onError(ShootrException error) {
                 findStreamsView.hideLoading();
                 showViewError(error);
             }
@@ -128,6 +128,18 @@ public class FindStreamsPresenter implements Presenter {
           }, new Interactor.ErrorCallback() {
             @Override
             public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
+    }
+
+    public void shareStream(StreamResultModel stream) {
+        shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                findStreamsView.showStreamShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
                 showViewError(error);
             }
         });
