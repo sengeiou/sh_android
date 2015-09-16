@@ -68,6 +68,22 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         });
     }
 
+    protected void reloadFavorites() {
+        getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
+                if (streams.isEmpty()) {
+                    favoritesListView.showEmpty();
+                    favoritesListView.hideContent();
+                } else {
+                    List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
+                    favoritesListView.renderFavorites(streamModels);
+                    favoritesListView.showContent();
+                    favoritesListView.hideEmpty();
+                }
+            }
+        });
+    }
+
     public void selectStream(StreamResultModel stream) {
         selectStream(stream.getStreamModel().getIdStream(),
           stream.getStreamModel().getTitle(),
@@ -123,7 +139,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     public void removeFromFavorites(StreamResultModel stream) {
         removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadFavorites();
+                reloadFavorites();
             }
         });
     }

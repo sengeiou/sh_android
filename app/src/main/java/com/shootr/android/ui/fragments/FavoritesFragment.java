@@ -129,6 +129,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void renderFavorites(List<StreamResultModel> streamModels) {
         adapter.setStreams(streamModels);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
