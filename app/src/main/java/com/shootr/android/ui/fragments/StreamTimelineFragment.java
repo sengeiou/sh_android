@@ -3,6 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -369,8 +370,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -378,8 +378,7 @@ public class StreamTimelineFragment extends BaseFragment
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -615,6 +614,20 @@ public class StreamTimelineFragment extends BaseFragment
         }).show();
     }
 
+    private void openDeleteConfirmation(final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                reportShotPresenter.deleteShot(shotModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     @Override public void showHolderContextMenu(final ShotModel shotModel) {
         new CustomContextMenu.Builder(getActivity())
           .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
@@ -633,7 +646,7 @@ public class StreamTimelineFragment extends BaseFragment
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                reportShotPresenter.deleteShot(shotModel);
+                openDeleteConfirmation(shotModel);
             }
         }).show();
     }

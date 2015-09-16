@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -115,8 +116,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -124,8 +124,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -335,9 +334,23 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity implements Al
               }
           }).addAction(this.getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                reportShotPresenter.deleteShot(shotModel);
+                openDeleteConfirmation(shotModel);
             }
         }).show();
+    }
+
+    private void openDeleteConfirmation(final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                reportShotPresenter.deleteShot(shotModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {

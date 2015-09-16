@@ -973,9 +973,23 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
             }
         }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
             @Override public void run() {
-                reportShotPresenter.deleteShot(shotModel);
+                openDeleteConfirmation(shotModel);
             }
         }).show();
+    }
+
+    private void openDeleteConfirmation(final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                reportShotPresenter.deleteShot(shotModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override public void notifyDeletedShot(ShotModel shotModel) {
