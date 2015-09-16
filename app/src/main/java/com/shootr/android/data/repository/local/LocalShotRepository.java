@@ -37,7 +37,12 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Shot getShot(String shotId) {
-        ShotEntity shot = localShotDataSource.getShot(shotId);
+        ShotEntity shot = null;
+        try {
+            shot = localShotDataSource.getShot(shotId);
+        } catch (ShotRemovedException e) {
+            /* nothing */
+        }
         if (shot != null) {
             return shotEntityMapper.transform(shot);
         } else {

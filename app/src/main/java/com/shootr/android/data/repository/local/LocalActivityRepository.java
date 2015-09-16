@@ -49,7 +49,9 @@ public class LocalActivityRepository implements ActivityRepository{
         List<ActivityEntity> activityEntities = new ArrayList<>();
         for (ActivityEntity activity : activities) {
             bindActivityShot(activity);
-            if(activity.getShotForMapping() != null) {
+            if(activity.getIdShot()!=null && activity.getShotForMapping() != null) {
+                activityEntities.add(activity);
+            } else if (activity.getIdShot() == null) {
                 activityEntities.add(activity);
             }
         }

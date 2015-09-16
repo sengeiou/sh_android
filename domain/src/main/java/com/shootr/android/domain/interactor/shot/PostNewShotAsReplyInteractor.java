@@ -37,7 +37,11 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
 
     @Override protected void fillShotContextualInfo(Shot shot) {
         super.fillShotContextualInfo(shot);
-        fillReplyInfo(shot);
+        try {
+            fillReplyInfo(shot);
+        } catch (NullPointerException error) {
+            // Swallow
+        }
     }
 
     @Override protected void fillShotStreamInfo(Shot shot) {
@@ -54,10 +58,15 @@ public class PostNewShotAsReplyInteractor extends PostNewShotInteractor {
     }
 
     private Shot getParentShot() {
-        parentShot = localShotRepository.getShot(replyParentId);
-        if (parentShot == null) {
-            parentShot = remoteShotRepository.getShot(replyParentId);
+        try {
+            parentShot = localShotRepository.getShot(replyParentId);
+            if (parentShot == null) {
+                parentShot = remoteShotRepository.getShot(replyParentId);
+            }
+            return parentShot;
+        } catch (ShotRemovedException error) {
+            /* nothing */
         }
-        return parentShot;
+        return null;
     }
 }

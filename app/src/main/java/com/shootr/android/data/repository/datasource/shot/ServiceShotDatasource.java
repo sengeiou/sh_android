@@ -53,11 +53,13 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public ShotEntity getShot(String shotId) {
+    @Override public ShotEntity getShot(String shotId) throws ShotRemovedException {
         try {
             return shotApiEntityMapper.transform(shotApiService.getShot(shotId));
-        } catch (IOException | ApiException error) {
+        } catch (IOException error) {
             throw new ServerCommunicationException(error);
+        } catch (ApiException error) {
+            throw new ShotRemovedException();
         }
     }
 

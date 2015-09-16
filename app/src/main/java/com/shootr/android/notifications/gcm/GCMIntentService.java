@@ -10,6 +10,7 @@ import com.shootr.android.domain.ActivityType;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BadgeChanged;
 import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
 import com.shootr.android.notifications.activity.ActivityNotificationManager;
@@ -104,7 +105,12 @@ public class GCMIntentService extends IntentService {
 
     private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {
         String idShot = pushNotification.getParameters().getIdShot();
-        Shot shot = remoteShotRepository.getShot(idShot);
+        Shot shot = null;
+        try {
+            shot = remoteShotRepository.getShot(idShot);
+        } catch (ShotRemovedException e) {
+            Timber.e("Shot or User null received, can't show notifications :(");
+        }
         if (shot != null) {
             ShotModel shotModel = shotModelMapper.transform(shot);
             shotNotificationManager.sendNewShotNotification(shotModel);

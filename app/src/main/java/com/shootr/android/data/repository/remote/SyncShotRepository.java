@@ -42,7 +42,7 @@ public class SyncShotRepository implements ShotRepository {
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }
 
-    @Override public Shot getShot(String shotId) {
+    @Override public Shot getShot(String shotId) throws ShotRemovedException {
         ShotEntity shot = localShotDataSource.getShot(shotId);
         if (shot == null) {
             shot = remoteShotDataSource.getShot(shotId);

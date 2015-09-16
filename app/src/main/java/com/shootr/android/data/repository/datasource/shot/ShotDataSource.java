@@ -14,7 +14,7 @@ public interface ShotDataSource {
 
     List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
-    ShotEntity getShot(String shotId);
+    ShotEntity getShot(String shotId) throws ShotRemovedException;
 
     List<ShotEntity> getReplies(String shotId);
 

@@ -6,7 +6,6 @@ import com.shootr.android.data.repository.datasource.activity.ActivityDataSource
 import com.shootr.android.domain.Activity;
 import com.shootr.android.domain.ActivityTimelineParameters;
 import com.shootr.android.domain.Shot;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.ActivityRepository;
 import com.shootr.android.domain.repository.Local;
@@ -66,7 +65,7 @@ public class SyncActivityRepository implements ActivityRepository {
             try {
                 bindActivityShot(entity);
                 activities.add(entity);
-            } catch (ShotRemovedException | ServerCommunicationException error) {
+            } catch (ShotRemovedException error) {
                 /* swallow it */
             }
         }

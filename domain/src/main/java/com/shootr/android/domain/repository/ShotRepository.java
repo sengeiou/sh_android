@@ -12,7 +12,7 @@ public interface ShotRepository {
 
     List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters);
 
-    Shot getShot(String shotId);
+    Shot getShot(String shotId) throws ShotRemovedException;
 
     List<Shot> getReplies(String shot);
 

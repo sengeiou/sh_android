@@ -78,7 +78,11 @@ public abstract class PostNewShotInteractor implements Interactor {
 
     protected void fillShotContextualInfo(Shot shot) {
         fillShotUserInfo(shot);
-        fillShotStreamInfo(shot);
+        try {
+            fillShotStreamInfo(shot);
+        } catch (NullPointerException error) {
+            notifyError(new DeletedShotException(error));
+        }
     }
 
     private void fillShotUserInfo(Shot shot) {
