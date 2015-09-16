@@ -163,7 +163,7 @@ public class ActivityTimelinePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        loadNewActivities();
+        loadTimeline();
         bus.register(this);
         startPollingActivities();
     }
