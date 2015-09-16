@@ -2,7 +2,6 @@ package com.shootr.android.service.dataservice;
 
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -21,7 +20,6 @@ import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
-import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -52,7 +50,6 @@ public class ShootrDataService implements ShootrService {
     private final JsonAdapter jsonAdapter;
 
     private final UserDtoFactory userDtoFactory;
-    private final ShotDtoFactory shotDtoFactory;
     private final StreamDtoFactory streamDtoFactory;
     private final DeviceDtoFactory deviceDtoFactory;
 
@@ -69,7 +66,7 @@ public class ShootrDataService implements ShootrService {
 
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, JsonAdapter jsonAdapter, UserDtoFactory userDtoFactory,
-      ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory, UserMapper userMapper,
+      DeviceDtoFactory deviceDtoFactory, UserMapper userMapper,
       SuggestedPeopleMapper suggestedPeopleMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
       StreamDtoFactory streamDtoFactory, DeviceMapper deviceMapper, StreamEntityMapper streamEntityMapper,
       TimeUtils timeUtils, VersionUpdater versionUpdater) {
@@ -79,7 +76,6 @@ public class ShootrDataService implements ShootrService {
         this.suggestedPeopleMapper = suggestedPeopleMapper;
         this.streamDtoFactory = streamDtoFactory;
         this.userDtoFactory = userDtoFactory;
-        this.shotDtoFactory = shotDtoFactory;
         this.deviceDtoFactory = deviceDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
@@ -88,19 +84,6 @@ public class ShootrDataService implements ShootrService {
         this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
-    }
-
-    @Override public ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException {
-        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(shotTemplate);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata() != null) {
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            return shotEntityMapper.fromDto(dataItem);
-        }
-        return null;
     }
 
     @Override

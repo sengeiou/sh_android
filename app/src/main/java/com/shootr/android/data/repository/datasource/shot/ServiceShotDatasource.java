@@ -9,30 +9,29 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {
 
-    private final ShootrService shootrService;
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
 
-    @Inject public ServiceShotDatasource(ShootrService shootrService,
-      ShotApiService shotApiService,
+    @Inject public ServiceShotDatasource(ShotApiService shotApiService,
       ShotApiEntityMapper shotApiEntityMapper) {
-        this.shootrService = shootrService;
         this.shotApiService = shotApiService;
         this.shotApiEntityMapper = shotApiEntityMapper;
     }
 
-    @Override public ShotEntity putShot(ShotEntity shotEntity) {
+    @Override public ShotEntity putShot(ShotEntity shotEntity) throws ShotRemovedException {
         try {
-            return shootrService.postNewShotWithImage(shotEntity);
+            return shotApiService.postNewShot(shotEntity);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            throw new ShotRemovedException();
         }
     }
 
