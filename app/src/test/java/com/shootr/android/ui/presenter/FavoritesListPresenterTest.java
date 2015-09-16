@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -29,6 +30,7 @@ public class FavoritesListPresenterTest {
     @Mock FavoritesListView favoritesListView;
     @Mock GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     @Mock StreamResultModelMapper streamResultModelMapper;
+    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -40,6 +42,7 @@ public class FavoritesListPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, shareStreamInteractor,
+          removeFromFavoritesInteractor,
           streamResultModelMapper, errorMessageFactory, bus);
         presenter.setView(favoritesListView);
     }
