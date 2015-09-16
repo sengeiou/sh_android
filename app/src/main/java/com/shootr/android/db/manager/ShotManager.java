@@ -231,7 +231,7 @@ public class ShotManager extends  AbstractManager{
         String[] stringArgs = new String[]{idShot};
         Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(SHOT_TABLE, DatabaseContract.ShotTable.ID_SHOT, new String[]{});
+            res = getWritableDatabase().delete(SHOT_TABLE, args, new String[]{idShot});
         }
         c.close();
         return res;
