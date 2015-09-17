@@ -128,6 +128,8 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.menu_download_photo) {
+            //TODO download photo
         }
         return super.onOptionsItemSelected(item);
     }
