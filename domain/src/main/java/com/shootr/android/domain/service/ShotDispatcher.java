@@ -155,7 +155,7 @@ public class ShotDispatcher implements ShotSender {
             persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
         } catch (ShotRemovedException e) {
-            /* do nothing */
+            notifyShotSendingFailed(queuedShot, e);
         }
     }
 
