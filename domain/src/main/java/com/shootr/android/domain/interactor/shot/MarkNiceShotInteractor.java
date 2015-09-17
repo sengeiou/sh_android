@@ -54,8 +54,8 @@ public class MarkNiceShotInteractor implements Interactor {
         } catch (ServerCommunicationException | NiceAlreadyMarkedException | ShotRemovedException e) {
             try {
                 undoNiceInLocal();
-            } catch (ShotRemovedException e1) {
-                e1.printStackTrace();
+            } catch (ShotRemovedException error) {
+                throw new IllegalArgumentException("ShotRemovedException should not be thrown here");
             }
         }
     }
