@@ -6,6 +6,7 @@ import com.shootr.android.domain.StreamSearchResultList;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.domain.interactor.stream.StreamSearchInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -36,6 +37,7 @@ public class FindStreamsPresenterTest {
 
     @Mock StreamSearchInteractor streamSearchInteractor;
     @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+    @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock FindStreamsView findStreamsView;
@@ -48,8 +50,7 @@ public class FindStreamsPresenterTest {
         StreamResultModelMapper streamResultModelMapper =
           new StreamResultModelMapper(streamModelMapper);
         findStreamsPresenter = new FindStreamsPresenter(streamSearchInteractor,
-          addToFavoritesInteractor,
-          streamResultModelMapper, errorMessageFactory);
+          addToFavoritesInteractor, shareStreamInteractor, streamResultModelMapper, errorMessageFactory);
         findStreamsPresenter.setView(findStreamsView);
     }
 
