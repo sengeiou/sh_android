@@ -104,6 +104,11 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void openContextualMenu(final StreamResultModel stream) {
         new CustomContextMenu.Builder(getActivity())
+          .addAction((getActivity().getString(R.string.menu_remove_favorite)), new Runnable() {
+            @Override public void run() {
+                favoritesListPresenter.removeFromFavorites(stream);
+            }
+          })
           .addAction((getActivity().getString(R.string.share_via_shootr)), new Runnable() {
               @Override public void run() {
                   favoritesListPresenter.shareStream(stream);
@@ -124,6 +129,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Override
     public void renderFavorites(List<StreamResultModel> streamModels) {
         adapter.setStreams(streamModels);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
