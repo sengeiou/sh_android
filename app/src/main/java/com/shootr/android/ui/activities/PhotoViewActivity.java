@@ -3,7 +3,11 @@ package com.shootr.android.ui.activities;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,14 +18,20 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.ui.base.BaseToolbarActivity;
+import com.shootr.android.domain.utils.TimeUtils;
+import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.inject.Inject;
+import timber.log.Timber;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class PhotoViewActivity extends BaseToolbarActivity {
+public class PhotoViewActivity extends BaseActivity {
 
     private static final String EXTRA_IMAGE_PREVIEW_URL = "preview";
     private static final String EXTRA_IMAGE_URL = "image";
@@ -32,6 +42,8 @@ public class PhotoViewActivity extends BaseToolbarActivity {
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject ImageLoader imageLoader;
+    @Inject FeedbackMessage feedbackMessage;
+    @Inject TimeUtils timeUtils;
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
@@ -47,26 +59,28 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         return intent;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Avoid using DrawerLayout for now, it doesn't work with PhotoView version 1.2.3: https://github.com/chrisbanes/PhotoView/issues/72
-        setContentView(R.layout.activity_photo_view);
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_photo_view;
+    }
 
+    @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-
         setupActionBar();
 
         attacher = new PhotoViewAttacher(image);
         attacher.setZoomable(false);
         attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-            @Override
-            public void onViewTap(View view, float v, float v2) {
+            @Override public void onViewTap(View view, float v, float v2) {
                 onPhotoClick();
             }
         });
         loadImages();
     }
+
+    @Override protected void initializePresenter() {
+        /* no presenter, so no-op */
+    }
+
 
     private void setupActionBar() {
         setSupportActionBar(toolbar);
@@ -129,8 +143,57 @@ public class PhotoViewActivity extends BaseToolbarActivity {
         if (id == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.menu_download_photo) {
-            //TODO download photo
+            saveImage(image.getDrawingCache());
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void saveImage(Bitmap image){
+        String folder = getString(R.string.downloading_image_folder);
+        String storageDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + folder;
+        File downloadDirectory = new File(storageDirectory);
+
+        if (!downloadDirectory.exists()) {
+            downloadDirectory.mkdirs();
+        }
+
+        String filename = String.format(getString(R.string.downloading_image_basic_filename), getDateInString(), ".jpg");
+        File file = new File(downloadDirectory, filename);
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            scanForFile(file);
+            showImageSavedSuccessfully();
+        } catch (IOException e) {
+            showErrorSavingImage();
+        }
+    }
+
+    private void scanForFile(File file) {
+        MediaScannerConnection.scanFile(PhotoViewActivity.this,
+          new String[] { file.toString() },
+          null,
+          new MediaScannerConnection.OnScanCompletedListener() {
+              public void onScanCompleted(String path, Uri uri) {
+                  Timber.d("ExternalStorage", "Scanned " + path + ":");
+                  Timber.d("ExternalStorage", "-> uri=" + uri);
+              }
+          });
+    }
+
+    private String getDateInString() {
+        return String.valueOf(timeUtils.getCurrentDate());
+    }
+
+    private void showErrorSavingImage() {
+        feedbackMessage.show(getView(), getString(R.string.downloading_image_error));
+    }
+
+    private void showImageSavedSuccessfully() {
+        feedbackMessage.show(getView(), getString(R.string.downloading_image_success));
+    }
+
 }
