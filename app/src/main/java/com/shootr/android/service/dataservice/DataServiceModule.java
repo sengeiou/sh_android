@@ -2,9 +2,7 @@ package com.shootr.android.service.dataservice;
 
 import android.app.Application;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.dto.UtilityDtoFactory;
 import dagger.Module;
@@ -26,9 +24,5 @@ public class DataServiceModule {
 
     @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
         return new UserDtoFactory(utilityDtoFactory, userMapper, followMapper);
-    }
-
-    @Provides @Singleton ShotDtoFactory provideShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotEntityMapper shotEntityMapper) {
-        return new ShotDtoFactory(utilityDtoFactory, shotEntityMapper);
     }
 }

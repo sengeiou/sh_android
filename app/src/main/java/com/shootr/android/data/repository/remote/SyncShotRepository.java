@@ -6,6 +6,7 @@ import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.StreamTimelineParameters;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -25,7 +26,7 @@ public class SyncShotRepository implements ShotRepository {
         this.shotEntityMapper = shotEntityMapper;
     }
 
-    @Override public Shot putShot(Shot shot) {
+    @Override public Shot putShot(Shot shot) throws ShotRemovedException {
         ShotEntity shotEntity = shotEntityMapper.transform(shot);
         ShotEntity responseShotEntity = remoteShotDataSource.putShot(shotEntity);
         return shotEntityMapper.transform(responseShotEntity);
@@ -33,11 +34,15 @@ public class SyncShotRepository implements ShotRepository {
 
     @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
         List<ShotEntity> shotEntitiesFromTimeline = remoteShotDataSource.getShotsForStreamTimeline(parameters);
-        localShotDataSource.putShots(shotEntitiesFromTimeline);
+        try {
+            localShotDataSource.putShots(shotEntitiesFromTimeline);
+        } catch (ShotRemovedException e) {
+            throw new IllegalArgumentException(e);
+        }
         return shotEntityMapper.transform(shotEntitiesFromTimeline);
     }
 
-    @Override public Shot getShot(String shotId) {
+    @Override public Shot getShot(String shotId) throws ShotRemovedException {
         ShotEntity shot = localShotDataSource.getShot(shotId);
         if (shot == null) {
             shot = remoteShotDataSource.getShot(shotId);
@@ -60,7 +65,7 @@ public class SyncShotRepository implements ShotRepository {
     }
 
     @Override
-    public ShotDetail getShotDetail(String idShot) {
+    public ShotDetail getShotDetail(String idShot) throws ShotRemovedException {
         return shotEntityMapper.transform(remoteShotDataSource.getShotDetail(idShot));
     }
 
@@ -76,7 +81,11 @@ public class SyncShotRepository implements ShotRepository {
         throw new IllegalArgumentException("putShots not implemented in remote");
     }
 
-    @Override public void shareShot(String idShot) {
+    @Override public void shareShot(String idShot) throws ShotRemovedException {
         remoteShotDataSource.shareShot(idShot);
+    }
+
+    @Override public void deleteShot(String idShot) {
+        remoteShotDataSource.deleteShot(idShot);
     }
 }

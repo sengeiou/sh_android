@@ -3,6 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -369,8 +370,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     private void setupListScrollListeners() {
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 if (delta < -10) {
                     // going down
                 } else if (delta > 10) {
@@ -378,8 +378,7 @@ public class StreamTimelineFragment extends BaseFragment
                 }
             }
 
-            @Override
-            public void onScrollIdle() {
+            @Override public void onScrollIdle() {
                 checkIfEndOfListVisible();
             }
         });
@@ -408,29 +407,6 @@ public class StreamTimelineFragment extends BaseFragment
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    }
-
-    private void openContextualMenu(final ShotModel shotModel) {
-        new CustomContextMenu.Builder(getActivity())
-          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
-              @Override public void run() {
-                  streamTimelinePresenter.shareShot(shotModel);
-              }
-          })
-          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
-              @Override public void run() {
-                  shareShotIntent(shotModel);
-              }
-          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
-            @Override
-            public void run() {
-                copyShotCommentToClipboard(shotModel);
-            }
-        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
-            @Override public void run() {
-                reportShotPresenter.report(shotModel);
-            }
-        }).show();
     }
 
     private void shareShotIntent(ShotModel shotModel) {
@@ -615,6 +591,70 @@ public class StreamTimelineFragment extends BaseFragment
         builder.create().show();
     }
 
+    @Override public void showContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+            @Override
+            public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_report), new Runnable() {
+            @Override public void run() {
+                reportShotPresenter.report(shotModel);
+            }
+        }).show();
+    }
+
+    private void openDeleteConfirmation(final ShotModel shotModel) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        alertDialogBuilder.setMessage(R.string.delete_shot_confirmation_message);
+        alertDialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                reportShotPresenter.deleteShot(shotModel);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    @Override public void showHolderContextMenu(final ShotModel shotModel) {
+        new CustomContextMenu.Builder(getActivity())
+          .addAction(getActivity().getString(R.string.menu_share_shot_via_shootr), new Runnable() {
+              @Override public void run() {
+                  streamTimelinePresenter.shareShot(shotModel);
+              }
+          })
+          .addAction(getActivity().getString(R.string.menu_share_shot_via), new Runnable() {
+              @Override public void run() {
+                  shareShotIntent(shotModel);
+              }
+          }).addAction(getActivity().getString(R.string.menu_copy_text), new Runnable() {
+            @Override
+            public void run() {
+                copyShotCommentToClipboard(shotModel);
+            }
+        }).addAction(getActivity().getString(R.string.report_context_menu_delete), new Runnable() {
+            @Override public void run() {
+                openDeleteConfirmation(shotModel);
+            }
+        }).show();
+    }
+
+    @Override public void notifyDeletedShot(ShotModel shotModel) {
+        adapter.removeShot(shotModel);
+    }
+
     @OnItemClick(R.id.timeline_shot_list)
     public void openShot(int position) {
         ShotModel shot = adapter.getItem(position);
@@ -625,7 +665,7 @@ public class StreamTimelineFragment extends BaseFragment
     @OnItemLongClick(R.id.timeline_shot_list)
     public boolean openContextMenu(int position) {
         ShotModel shot = adapter.getItem(position);
-        openContextualMenu(shot);
+        reportShotPresenter.onShotLongPressed(shot);
         return true;
     }
 

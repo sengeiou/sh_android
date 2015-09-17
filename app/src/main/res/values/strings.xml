@@ -387,4 +387,7 @@
     <string name="niced_shot_activity_with_comment">Niced your shot: </string>
     <string name="shared_shot_activity">Shared %s\'s shot</string>
     <string name="shared_shot_activity_with_comment">Shared %s\'s shot: </string>
+    <string name="report_context_menu_delete">Delete</string>
+    <string name="error_deleted_shot">This shot has been deleted</string>
+    <string name="delete_shot_confirmation_message">Delete shot?</string>
 </resources>

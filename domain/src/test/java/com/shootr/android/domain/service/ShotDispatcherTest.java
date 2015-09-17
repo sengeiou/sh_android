@@ -4,7 +4,7 @@ import com.shootr.android.domain.QueuedShot;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.bus.ShotSent;
-import com.shootr.android.domain.exception.RepositoryException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class ShotDispatcherTest {
 
     @Test
     public void shouldPutInQueueWithFailedFlagWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException());
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
@@ -108,7 +108,7 @@ public class ShotDispatcherTest {
 
     @Test
     public void shouldNotifyListenerWhenSendingShotFailed() throws Exception {
-        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(new RepositoryException());
+        when(shootrShotService.sendShot(any(Shot.class))).thenThrow(serverCommunicationException());
 
         shotDispatcher.sendShot(shot(), IMAGE_FILE_NULL);
 
@@ -123,6 +123,10 @@ public class ShotDispatcherTest {
         verify(shotQueueRepository, atLeastOnce()).put(captor.capture());
         QueuedShot persistedQueuedShot = captor.getAllValues().get(0);
         assertThat(persistedQueuedShot).hasIdQueue(QUEUED_ID);
+    }
+
+    private ServerCommunicationException serverCommunicationException() {
+        return new ServerCommunicationException(new Throwable());
     }
 
     private Shot shot() {

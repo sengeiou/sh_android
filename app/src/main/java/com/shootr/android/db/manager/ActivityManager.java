@@ -104,4 +104,19 @@ public class ActivityManager extends AbstractManager {
             return 0L;
         }
     }
+
+    public void deleteActivitiesWithShot(String idShot) {
+        String args = DatabaseContract.ActivityTable.ID_SHOT + "=?";
+        String[] stringArgs = new String[]{idShot};
+        Cursor c = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE, DatabaseContract.ActivityTable.PROJECTION, args, stringArgs, null, null, null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            do {
+                getWritableDatabase().delete(DatabaseContract.ActivityTable.TABLE,
+                  DatabaseContract.ActivityTable.ID_SHOT,
+                  new String[] {});
+            } while (c.moveToNext());
+        }
+        c.close();
+    }
 }

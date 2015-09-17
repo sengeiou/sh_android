@@ -2,9 +2,11 @@ package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.entity.ShotApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.entity.ShotEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -50,4 +52,10 @@ public interface ShotApiService {
 
     @POST("/shots/{idShot}/share")
     Response shareShot(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @DELETE("/shots/{idShot}")
+    Response deleteShot(@Path("idShot") String idShot) throws ApiException, IOException;
+
+    @POST("/shots")
+    ShotEntity postNewShot(@Body ShotEntity shotEntity) throws ApiException, IOException;
 }

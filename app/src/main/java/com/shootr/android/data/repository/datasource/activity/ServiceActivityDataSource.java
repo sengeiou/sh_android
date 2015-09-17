@@ -66,6 +66,10 @@ public class ServiceActivityDataSource implements ActivityDataSource{
         throw new IllegalArgumentException("method not implemented");
     }
 
+    @Override public void deleteActivitiesWithShot(String idShot) {
+        throw new IllegalArgumentException("No remote implementation");
+    }
+
     private void storeEmbedStreams(List<ActivityApiEntity> activities) {
         for (ActivityApiEntity activity : activities) {
             StreamEntity stream = activity.getStream();

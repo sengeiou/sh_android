@@ -9,34 +9,33 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.domain.ShotType;
 import com.shootr.android.domain.StreamTimelineParameters;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceShotDatasource implements ShotDataSource {
 
-    private final ShootrService shootrService;
     private final ShotApiService shotApiService;
     private final ShotApiEntityMapper shotApiEntityMapper;
 
-    @Inject public ServiceShotDatasource(ShootrService shootrService,
-      ShotApiService shotApiService,
+    @Inject public ServiceShotDatasource(ShotApiService shotApiService,
       ShotApiEntityMapper shotApiEntityMapper) {
-        this.shootrService = shootrService;
         this.shotApiService = shotApiService;
         this.shotApiEntityMapper = shotApiEntityMapper;
     }
 
-    @Override public ShotEntity putShot(ShotEntity shotEntity) {
+    @Override public ShotEntity putShot(ShotEntity shotEntity) throws ShotRemovedException {
         try {
-            return shootrService.postNewShotWithImage(shotEntity);
+            return shotApiService.postNewShot(shotEntity);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            throw new ShotRemovedException();
         }
     }
 
-    @Override public void putShots(List<ShotEntity> shotEntities) {
+    @Override public void putShots(List<ShotEntity> shotEntities) throws ShotRemovedException {
         for (ShotEntity shotEntity : shotEntities) {
             putShot(shotEntity);
         }
@@ -54,11 +53,13 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public ShotEntity getShot(String shotId) {
+    @Override public ShotEntity getShot(String shotId) throws ShotRemovedException {
         try {
             return shotApiEntityMapper.transform(shotApiService.getShot(shotId));
-        } catch (IOException | ApiException error) {
+        } catch (IOException error) {
             throw new ServerCommunicationException(error);
+        } catch (ApiException error) {
+            throw new ShotRemovedException();
         }
     }
 
@@ -92,7 +93,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
 
     @Override
-    public ShotDetailEntity getShotDetail(String idShot) {
+    public ShotDetailEntity getShotDetail(String idShot) throws ShotRemovedException {
         try {
             ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot);
 
@@ -105,8 +106,10 @@ public class ServiceShotDatasource implements ShotDataSource {
             shotDetailEntity.setReplies(repliesEntities);
             shotDetailEntity.setParentShot(parentEntity);
             return shotDetailEntity;
-        } catch (ApiException | IOException e) {
+        } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            throw new ShotRemovedException();
         }
     }
 
@@ -129,11 +132,21 @@ public class ServiceShotDatasource implements ShotDataSource {
         }
     }
 
-    @Override public void shareShot(String idShot) {
+    @Override public void shareShot(String idShot) throws ShotRemovedException {
         try {
             shotApiService.shareShot(idShot);
-        } catch (ApiException | IOException error) {
+        } catch (IOException error) {
             throw new ServerCommunicationException(error);
+        } catch (ApiException error) {
+            throw new ShotRemovedException();
+        }
+    }
+
+    @Override public void deleteShot(String idShot) {
+        try {
+            shotApiService.deleteShot(idShot);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
         }
     }
 }
