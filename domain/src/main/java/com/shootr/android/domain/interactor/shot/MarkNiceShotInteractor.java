@@ -56,6 +56,8 @@ public class MarkNiceShotInteractor implements Interactor {
                 undoNiceInLocal();
             } catch (ShotRemovedException error) {
                 throw new IllegalArgumentException("ShotRemovedException should not be thrown here");
+            } catch (NiceNotMarkedException error) {
+                /* swallow */
             }
         }
     }

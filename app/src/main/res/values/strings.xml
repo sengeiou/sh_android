@@ -172,6 +172,7 @@
     <string name="notification_shot_sent">Shot sent</string>
     <string name="notification_shot_failed">Shot failed</string>
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
+    <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
     <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
     <string name="draft_label">Draft</string>
