@@ -40,6 +40,11 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
         Timber.e(e, "Shot failed");
     }
 
+    @Override public void onShotHasParentDeleted(QueuedShot shot, Exception e) {
+        shotQueueNotificationManager.showShotHasParentDeletedNotification(shot);
+        Timber.e(e, "Shot has parent removed");
+    }
+
     @Override public void onQueueShot(QueuedShot queuedShot) {
         shotQueueNotificationManager.showSendingShotNotification(queuedShot);
     }

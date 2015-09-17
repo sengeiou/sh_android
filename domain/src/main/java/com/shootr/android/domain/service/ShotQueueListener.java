@@ -10,6 +10,8 @@ public interface ShotQueueListener {
 
     void onShotFailed(QueuedShot shot, Exception e);
 
+    void onShotHasParentDeleted(QueuedShot shot, Exception e);
+
     void onQueueShot(QueuedShot queuedShot);
 
     void resetQueue();

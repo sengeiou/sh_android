@@ -155,7 +155,8 @@ public class ShotDispatcher implements ShotSender {
             persistShotFailed(queuedShot);
             notifyShotSendingFailed(queuedShot, e);
         } catch (ShotRemovedException e) {
-            notifyShotSendingFailed(queuedShot, e);
+            clearShotFromQueue(queuedShot);
+            notifyShotSendingHasDeletedParent(queuedShot, e);
         }
     }
 
@@ -202,6 +203,11 @@ public class ShotDispatcher implements ShotSender {
 
     private void notifyShotSendingFailed(QueuedShot queuedShot, Exception e) {
         shotQueueListener.onShotFailed(queuedShot, e);
+        busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
+    }
+
+    private void notifyShotSendingHasDeletedParent(QueuedShot queuedShot, Exception e) {
+        shotQueueListener.onShotHasParentDeleted(queuedShot, e);
         busPublisher.post(new ShotFailed.Event(queuedShot.getShot()));
     }
 
