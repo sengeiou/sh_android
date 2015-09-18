@@ -1,3 +1,5 @@
+image: sloydev/android-env
+
 before_script:
 
 features:
