@@ -2,7 +2,6 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -12,8 +11,6 @@ import java.util.List;
 public interface ShootrService {
 
     UserEntity getUserByIdUser(String idUser) throws IOException;
-
-    ShotEntity postNewShotWithImage(ShotEntity shotTemplate) throws IOException;
 
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;

@@ -46,7 +46,9 @@ public class ActivityApiEntityMapper {
     public List<ActivityEntity> transform(List<ActivityApiEntity> activities) {
         List<ActivityEntity> entities = new ArrayList<>(activities.size());
         for (ActivityApiEntity activity : activities) {
-            entities.add(transform(activity));
+            if(activity.getUser() != null) {
+                entities.add(transform(activity));
+            }
         }
         return entities;
     }

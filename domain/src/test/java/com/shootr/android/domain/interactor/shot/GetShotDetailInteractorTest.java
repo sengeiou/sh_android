@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.SpyCallback;
@@ -82,7 +83,7 @@ public class GetShotDetailInteractorTest {
         return shotDetail;
     }
 
-    private void setupDefaultEmptyShotDetail() {
+    private void setupDefaultEmptyShotDetail() throws ShotRemovedException {
         when(localShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(emptyShotDetail());
         when(remoteShotRepository.getShotDetail(ANY_SHOT_ID)).thenReturn(emptyShotDetail());
     }

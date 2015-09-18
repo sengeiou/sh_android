@@ -4,6 +4,7 @@ import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.service.ShotSender;
@@ -32,7 +33,7 @@ public abstract class PostNewShotInteractorTestBase {
     @Mock SessionRepository sessionRepository;
     @Mock ShotSender shotSender;
 
-    protected abstract PostNewShotInteractor getInteractorForCommonTests();
+    protected abstract PostNewShotInteractor getInteractorForCommonTests() throws ShotRemovedException;
 
     @Test
     public void shouldSendShotWithCurrentUserInfo() throws Exception {

@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.stream.GetOlderStreamMediaInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamMediaInteractor;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
@@ -14,15 +15,19 @@ import javax.inject.Inject;
 public class StreamMediaPresenter implements Presenter {
 
     private final GetStreamMediaInteractor getStreamMediaInteractor;
+    private final GetOlderStreamMediaInteractor getOlderStreamMediaInteractor;
     private final ShotModelMapper shotModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private StreamMediaView streamMediaView;
     private String idStream;
     private Integer streamMediaCount;
+    private boolean isLoadingOlderMedia;
+    private boolean mightHaveMoreMedia = true;
 
     @Inject public StreamMediaPresenter(GetStreamMediaInteractor getStreamMediaInteractor,
-      ShotModelMapper shotModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetOlderStreamMediaInteractor getOlderStreamMediaInteractor, ShotModelMapper shotModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.getStreamMediaInteractor = getStreamMediaInteractor;
+        this.getOlderStreamMediaInteractor = getOlderStreamMediaInteractor;
         this.shotModelMapper = shotModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -61,6 +66,39 @@ public class StreamMediaPresenter implements Presenter {
             @Override public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamMediaView.showError(errorMessage);
+            }
+        });
+    }
+
+    public void showingLastMedia(ShotModel lastMedia) {
+        if (!isLoadingOlderMedia && mightHaveMoreMedia) {
+            this.loadOlderMedia(lastMedia.getBirth().getTime());
+        }
+    }
+
+    private void loadOlderMedia(long lastMediaInScreenDate) {
+        isLoadingOlderMedia = true;
+        streamMediaView.showLoadingOldMedia();
+        getOlderStreamMediaInteractor.getOlderStreamMedia(idStream,
+          lastMediaInScreenDate,
+          new Interactor.Callback<List<Shot>>() {
+              @Override public void onLoaded(List<Shot> shotsWithMedia) {
+                  isLoadingOlderMedia = false;
+                  streamMediaView.hideLoadingOldMedia();
+                  if (shotsWithMedia != null && !shotsWithMedia.isEmpty()) {
+                      List<ShotModel> shotModels = shotModelMapper.transform(shotsWithMedia);
+                      streamMediaView.addOldMedia(shotModels);
+                  } else {
+                      streamMediaView.showNoMoreMedia();
+                      mightHaveMoreMedia = false;
+                  }
+              }
+          },
+          new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                  streamMediaView.hideLoadingOldMedia();
+                  String errorMessage = errorMessageFactory.getMessageForError(error);
+                  streamMediaView.showError(errorMessage);
             }
         });
     }

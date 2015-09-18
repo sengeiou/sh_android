@@ -26,4 +26,8 @@ public class DatabaseActivityDataSource implements ActivityDataSource {
     @Override public void putActivities(List<ActivityEntity> activityEntities) {
         activityManager.saveActivities(activityEntities);
     }
+
+    @Override public void deleteActivitiesWithShot(String idShot) {
+        activityManager.deleteActivitiesWithShot(idShot);
+    }
 }

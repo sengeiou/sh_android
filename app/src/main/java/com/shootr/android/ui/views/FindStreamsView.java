@@ -26,4 +26,6 @@ public interface FindStreamsView {
     void navigateToStreamTimeline(String idStream, String streamTitle);
 
     void showAddedToFavorites();
+
+    void showStreamShared();
 }

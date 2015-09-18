@@ -7,7 +7,6 @@ import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -16,37 +15,36 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetStreamMediaInteractor implements Interactor {
+public class GetOlderStreamMediaInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
     private final ShotRepository remoteShotRepository;
-    private final ShotRepository localShotRepository;
     private final UserRepository remoteUserRepository;
-    private final UserRepository localUserRepository;
     private final SessionRepository sessionRepository;
-    private ErrorCallback errorCallback;
+    private Interactor.ErrorCallback errorCallback;
 
     private String idStream;
-    private Callback<List<Shot>> callback;
+    private Interactor.Callback<List<Shot>> callback;
     private String currentidUser;
+    private Long maxTimestamp;
 
     @Inject
-    public GetStreamMediaInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote ShotRepository remoteShotRepository, @Local ShotRepository localShotRepository,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
+    public GetOlderStreamMediaInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      @Remote ShotRepository remoteShotRepository,
+      @Remote UserRepository remoteUserRepository,
       SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.remoteShotRepository = remoteShotRepository;
-        this.localShotRepository = localShotRepository;
         this.remoteUserRepository = remoteUserRepository;
-        this.localUserRepository = localUserRepository;
         this.sessionRepository = sessionRepository;
     }
 
-    public void getStreamMedia(String idStream, Callback<List<Shot>> callback, ErrorCallback errorCallback) {
+    public void getOlderStreamMedia(String idStream, Long maxTimestamp, Interactor.Callback<List<Shot>> callback, Interactor.ErrorCallback errorCallback) {
         this.idStream = idStream;
+        this.maxTimestamp = maxTimestamp;
         this.callback = callback;
         this.errorCallback = errorCallback;
         this.currentidUser = sessionRepository.getCurrentUserId();
@@ -55,29 +53,17 @@ public class GetStreamMediaInteractor implements Interactor {
 
     @Override public void execute() throws Exception {
         try{
-            getMediaFromLocal();
             getMediaFromRemote();
         } catch (ServerCommunicationException error) {
             notifyError(error);
         }
     }
 
-    private void getMediaFromLocal() {
-        List<User> people = localUserRepository.getPeople();
-        List<String> peopleIds = getPeopleInStream(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository, Long.MAX_VALUE);
-        notifyLoaded(shots);
-    }
-
     private void getMediaFromRemote() {
         List<User> people = remoteUserRepository.getPeople();
         List<String> peopleIds = getPeopleInStream(people);
-        List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository, Long.MAX_VALUE);
+        List<Shot> shots = remoteShotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
         notifyLoaded(shots);
-    }
-
-    private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository, Long maxTimestamp) {
-        return shotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp);
     }
 
     private List<String> getPeopleInStream(List<User> people) {
@@ -105,5 +91,4 @@ public class GetStreamMediaInteractor implements Interactor {
             }
         });
     }
-
 }

@@ -7,6 +7,7 @@ import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -21,6 +22,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
+    private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
     private final Bus bus;
@@ -29,10 +31,11 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
     private boolean hasBeenPaused = false;
 
     @Inject public FavoritesListPresenter(GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
-      ShareStreamInteractor shareStreamInteractor, StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+      ShareStreamInteractor shareStreamInteractor, RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
         this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
+        this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
         this.bus = bus;
@@ -52,6 +55,22 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
             @Override public void onLoaded(List<StreamSearchResult> streams) {
                 favoritesListView.hideLoading();
+                if (streams.isEmpty()) {
+                    favoritesListView.showEmpty();
+                    favoritesListView.hideContent();
+                } else {
+                    List<StreamResultModel> streamModels = streamResultModelMapper.transform(streams);
+                    favoritesListView.renderFavorites(streamModels);
+                    favoritesListView.showContent();
+                    favoritesListView.hideEmpty();
+                }
+            }
+        });
+    }
+
+    protected void reloadFavorites() {
+        getFavoriteStreamsInteractor.loadFavoriteStreams(new Interactor.Callback<List<StreamSearchResult>>() {
+            @Override public void onLoaded(List<StreamSearchResult> streams) {
                 if (streams.isEmpty()) {
                     favoritesListView.showEmpty();
                     favoritesListView.hideContent();
@@ -97,14 +116,14 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
 
     public void shareStream(StreamResultModel stream) {
         shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  favoritesListView.showStreamShared();
-              }
-          }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showViewError(error);
-              }
-          });
+            @Override public void onCompleted() {
+                favoritesListView.showStreamShared();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
+        });
     }
 
     private void showViewError(ShootrException error) {
@@ -115,5 +134,13 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
             errorMessage = errorMessageFactory.getUnknownErrorMessage();
         }
         favoritesListView.showError(errorMessage);
+    }
+
+    public void removeFromFavorites(StreamResultModel stream) {
+        removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                reloadFavorites();
+            }
+        });
     }
 }

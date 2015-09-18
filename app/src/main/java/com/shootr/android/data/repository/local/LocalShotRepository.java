@@ -6,6 +6,7 @@ import com.shootr.android.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.ShotDetail;
 import com.shootr.android.domain.StreamTimelineParameters;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.ShotRepository;
 import java.util.List;
@@ -22,7 +23,11 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Shot putShot(Shot shot) {
-        localShotDataSource.putShot(shotEntityMapper.transform(shot));
+        try {
+            localShotDataSource.putShot(shotEntityMapper.transform(shot));
+        } catch (ShotRemovedException e) {
+            throw new IllegalArgumentException(e);
+        }
         return shot;
     }
 
@@ -32,7 +37,12 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override public Shot getShot(String shotId) {
-        ShotEntity shot = localShotDataSource.getShot(shotId);
+        ShotEntity shot = null;
+        try {
+            shot = localShotDataSource.getShot(shotId);
+        } catch (ShotRemovedException e) {
+            /* nothing */
+        }
         if (shot != null) {
             return shotEntityMapper.transform(shot);
         } else {
@@ -44,8 +54,8 @@ public class LocalShotRepository implements ShotRepository {
         return shotEntityMapper.transform(localShotDataSource.getReplies(shot));
     }
 
-    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds) {
-        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getStreamMediaShots(idEvent, userIds);
+    @Override public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds, Long maxTimestamp) {
+        List<ShotEntity> shotEntitiesWithMedia = localShotDataSource.getStreamMediaShots(idEvent, userIds, maxTimestamp);
         List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
         return shotsWithMedia;
     }
@@ -56,7 +66,7 @@ public class LocalShotRepository implements ShotRepository {
     }
 
     @Override
-    public ShotDetail getShotDetail(String idShot) {
+    public ShotDetail getShotDetail(String idShot) throws ShotRemovedException {
         return shotEntityMapper.transform(localShotDataSource.getShotDetail(idShot));
     }
 
@@ -76,5 +86,9 @@ public class LocalShotRepository implements ShotRepository {
 
     @Override public void shareShot(String idShot) {
         throw new IllegalArgumentException("No local implementation");
+    }
+
+    @Override public void deleteShot(String idShot) {
+        localShotDataSource.deleteShot(idShot);
     }
 }

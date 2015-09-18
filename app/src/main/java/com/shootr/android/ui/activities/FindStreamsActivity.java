@@ -1,6 +1,7 @@
 package com.shootr.android.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,8 @@ import com.shootr.android.ui.presenter.FindStreamsPresenter;
 import com.shootr.android.ui.views.FindStreamsView;
 import com.shootr.android.util.CustomContextMenu;
 import com.shootr.android.util.FeedbackMessage;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
@@ -40,9 +43,11 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Bind(R.id.find_streams_empty) View emptyView;
     @Bind(R.id.find_streams_loading) View loadingView;
     @BindString(R.string.added_to_favorites) String addedToFavorites;
+    @BindString(R.string.shared_stream_notification) String sharedStream;
 
     @Inject FindStreamsPresenter findStreamsPresenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject IntentFactory intentFactory;
 
     private void setupQuery() {
         if (currentSearchQuery != null) {
@@ -99,7 +104,21 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
             public void run() {
                 findStreamsPresenter.addToFavorites(stream);
             }
-        }).show();
+        }).addAction((getString(R.string.share_via_shootr)), new Runnable() {
+            @Override public void run() {
+                findStreamsPresenter.shareStream(stream);
+            }
+        })
+          .addAction((getString(R.string.share_via)), new Runnable() {
+              @Override public void run() {
+                  shareStream(stream);
+              }
+          }).show();
+    }
+
+    private void shareStream(StreamResultModel stream) {
+        Intent shareIntent = intentFactory.shareStreamIntent(this, stream.getStreamModel());
+        Intents.maybeStartActivity(this, shareIntent);
     }
 
     private void searchStreams() {
@@ -228,6 +247,10 @@ public class FindStreamsActivity extends BaseToolbarDecoratedActivity implements
     @Override
     public void showAddedToFavorites() {
         feedbackMessage.show(getView(), addedToFavorites);
+    }
+
+    @Override public void showStreamShared() {
+        feedbackMessage.show(getView(), sharedStream);
     }
 
     //endregion

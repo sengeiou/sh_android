@@ -22,7 +22,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
     private final OnShotClick onShotClick;
 
     @BindString(R.string.activity_nice_shot_text_base) String niceShotTextBase;
-    private ShotViewHolder shotViewHolder;
+    private ActivityShotViewHolder shotViewHolder;
 
     public NiceShotViewHolder(View view,
       ImageLoader imageLoader,
@@ -34,7 +34,7 @@ public class NiceShotViewHolder extends ActivityViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
-        shotViewHolder = new ShotViewHolder(view,
+        shotViewHolder = new ActivityShotViewHolder(view,
           onAvatarClickListener, onVideoClickListener,
           null, onUsernameClickListener,
           androidTimeUtils,
@@ -45,10 +45,8 @@ public class NiceShotViewHolder extends ActivityViewHolder {
     @Override
     public void render(ActivityModel activityModel, String currentUserId) {
         ShotModel shotModel = checkNotNull(activityModel.getShot());
-        shotViewHolder.niceButton.setVisibility(View.GONE);
-        shotViewHolder.render(shotModel, false);
+        shotViewHolder.render(shotModel, activityModel.getUsername(), activityModel.getUserPhoto(), activityModel.getIdUser(), false, true);
         setShotClickListener(shotModel);
-        renderNiceShot(activityModel);
     }
 
     private void setShotClickListener(final ShotModel shotModel) {
@@ -58,12 +56,5 @@ public class NiceShotViewHolder extends ActivityViewHolder {
                 onShotClick.onShotClick(shotModel);
             }
         });
-    }
-
-    private void renderNiceShot(ActivityModel activity) {
-        String niceShotText = String.format(niceShotTextBase, activity.getUsername());
-        CharSequence niceShotTextFormatted =
-          shotTextSpannableBuilder.formatWithUsernameSpans(niceShotText, onUsernameClickListener);
-        text.setText(niceShotTextFormatted);
     }
 }

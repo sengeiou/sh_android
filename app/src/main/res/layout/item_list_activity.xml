@@ -15,14 +15,14 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
-    android:paddingBottom="24dp"
+    android:paddingBottom="8dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/activity_avatar"
-      android:layout_width="@dimen/shot_avatar_size"
-      android:layout_height="@dimen/shot_avatar_size"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:layout_marginRight="8dp"
       android:focusable="false"
       android:focusableInTouchMode="false"
@@ -31,19 +31,21 @@
     <TextView android:id="@+id/ativity_user_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_toLeftOf="@+id/activity_timestamp"
       android:layout_toRightOf="@id/activity_avatar"
       android:textColor="@color/gray_10"
       android:textSize="16sp"
+      android:paddingLeft="8dp"
       android:textStyle="bold"
       tools:text="Ignasi" />
 
     <TextView android:id="@+id/activity_timestamp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
       android:textColor="@color/gray_60"
-      tools:text="22m" />
+      android:paddingLeft="8dp"
+      tools:text="22m"
+      android:paddingTop="2dp"
+      android:layout_toRightOf="@+id/ativity_user_name" />
 
     <com.shootr.android.ui.widgets.ClickableTextView android:id="@+id/activity_text"
       android:layout_width="wrap_content"
@@ -53,6 +55,7 @@
       android:textColor="@color/material_black"
       android:textColorLink="@color/links"
       android:textSize="16sp"
+      android:paddingLeft="8dp"
       tools:text="Who's the referee?" />
 
   </RelativeLayout>

@@ -43,7 +43,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
         return shotManager.getRepliesTo(shotId);
     }
 
-    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds) {
+    @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds, Long maxTimestamp) {
         return shotManager.getStreamMediaShots(idStream, userIds);
     }
 
@@ -82,5 +82,9 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
     @Override public void shareShot(String idShot) {
         throw new IllegalArgumentException("shareShot should not have local implementation");
+    }
+
+    @Override public void deleteShot(String idShot) {
+        shotManager.deleteShot(idShot);
     }
 }

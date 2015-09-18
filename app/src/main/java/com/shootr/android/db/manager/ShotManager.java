@@ -111,15 +111,7 @@ public class ShotManager extends  AbstractManager{
      * Delete a shot
      */
     public long deleteShot(ShotEntity shot) {
-        long res = 0;
-        String args = DatabaseContract.ShotTable.ID_SHOT + "=?";
-        String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
-        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
-        if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(SHOT_TABLE, DatabaseContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
-        }
-        c.close();
-        return res;
+        return deleteShot(shot.getIdShot());
     }
 
     public void insertInSync(){
@@ -231,5 +223,17 @@ public class ShotManager extends  AbstractManager{
         queryResult.close();
 
         return resultShots;
+    }
+
+    public Long deleteShot(String idShot) {
+        long res = 0;
+        String args = DatabaseContract.ShotTable.ID_SHOT + "=?";
+        String[] stringArgs = new String[]{idShot};
+        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
+        if (c.getCount() > 0) {
+            res = getWritableDatabase().delete(SHOT_TABLE, args, new String[]{idShot});
+        }
+        c.close();
+        return res;
     }
 }

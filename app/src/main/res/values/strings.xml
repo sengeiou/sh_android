@@ -172,6 +172,7 @@
     <string name="notification_shot_sent">Shot sent</string>
     <string name="notification_shot_failed">Shot failed</string>
     <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
+    <string name="notification_shot_has_parent_deleted_subtitle">Shot you tried to reply has been deleted</string>
     <string name="shoot_photo">Shoot photo</string>
     <string name="activity_drafts_title">Drafts</string>
     <string name="draft_label">Draft</string>
@@ -382,4 +383,17 @@
     <string name="welcome_friends_text">Leave to disconnect</string>
     <string name="welcome_get_started_button">Got it</string>
     <string name="done_label">Done</string>
+    <string name="stream_media_no_more_media">No more media</string>
+    <string name="niced_shot_activity">Niced your shot</string>
+    <string name="niced_shot_activity_with_comment">Niced your shot: </string>
+    <string name="shared_shot_activity">Shared %s\'s shot</string>
+    <string name="shared_shot_activity_with_comment">Shared %s\'s shot: </string>
+    <string name="report_context_menu_delete">Delete</string>
+    <string name="error_deleted_shot">This shot has been deleted</string>
+    <string name="delete_shot_confirmation_message">Delete shot?</string>
+    <string name="menu_save_photo">Save image</string>
+    <string name="downloading_image_error">There was an error saving image</string>
+    <string name="downloading_image_success">Image saved successfully</string>
+    <string name="downloading_image_folder">/Shootr</string>
+    <string name="downloading_image_basic_filename">shootr%1$s%2$s</string>
 </resources>

@@ -30,7 +30,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     @Nullable @Bind(R.id.activity_avatar) ImageView avatar;
     @Nullable @Bind(R.id.ativity_user_name) TextView name;
     @Nullable @Bind(R.id.activity_timestamp) TextView elapsedTime;
-    @Bind(R.id.activity_text) ClickableTextView text;
+    @Nullable @Bind(R.id.activity_text) ClickableTextView text;
 
     public ActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,

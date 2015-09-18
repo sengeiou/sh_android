@@ -2,50 +2,54 @@ package com.shootr.android.domain.interactor.shot;
 
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
-import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
+import com.shootr.android.domain.repository.ActivityRepository;
+import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
-import com.shootr.android.domain.service.shot.DeletedShotException;
 import javax.inject.Inject;
 
-public class ShareShotInteractor implements Interactor {
+public class DeleteShotInteractor implements Interactor {
 
+    private final ShotRepository localShotRepository;
     private final ShotRepository remoteShotRepository;
-    private final InteractorHandler interactorHandler;
+    private final ActivityRepository localActivityRepository;
     private final PostExecutionThread postExecutionThread;
+    private final InteractorHandler interactorHandler;
     private String idShot;
     private CompletedCallback completedCallback;
     private ErrorCallback errorCallback;
 
-    @Inject public ShareShotInteractor(@Remote ShotRepository remoteShotRepository, InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread) {
+    @Inject public DeleteShotInteractor(@Local ShotRepository localShotRepository, @Remote ShotRepository remoteShotRepository,
+      @Local ActivityRepository localActivityRepository, PostExecutionThread postExecutionThread, InteractorHandler interactorHandler) {
+        this.localShotRepository = localShotRepository;
         this.remoteShotRepository = remoteShotRepository;
-        this.interactorHandler = interactorHandler;
+        this.localActivityRepository = localActivityRepository;
         this.postExecutionThread = postExecutionThread;
+        this.interactorHandler = interactorHandler;
     }
 
-    public void shareShot(String idShot, CompletedCallback callback, ErrorCallback errorCallback) {
+    public void deleteShot(String idShot, CompletedCallback completedCallback, ErrorCallback errorCallback) {
         this.idShot = idShot;
-        this.completedCallback = callback;
+        this.completedCallback = completedCallback;
         this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
         try {
-            remoteShotRepository.shareShot(idShot);
-            notifyCompleted();
+            localShotRepository.deleteShot(idShot);
+            remoteShotRepository.deleteShot(idShot);
+            localActivityRepository.deleteActivitiesWithShot(idShot);
+            notifyLoaded();
         } catch (ServerCommunicationException networkError) {
             notifyError(networkError);
-        } catch (ShotRemovedException error) {
-            notifyError(new DeletedShotException(error));
         }
     }
 
-    protected void notifyCompleted() {
+    private void notifyLoaded() {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 completedCallback.onCompleted();
@@ -55,8 +59,7 @@ public class ShareShotInteractor implements Interactor {
 
     private void notifyError(final ShootrException error) {
         postExecutionThread.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 errorCallback.onError(error);
             }
         });

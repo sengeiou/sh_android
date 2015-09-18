@@ -2,6 +2,7 @@ package com.shootr.android.domain.service.shot;
 
 import com.shootr.android.domain.Shot;
 import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.exception.ShotRemovedException;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.ShotRepository;
@@ -43,7 +44,7 @@ public class ShootrShotService {
         }
     }
 
-    public Shot sendShot(Shot shot) {
+    public Shot sendShot(Shot shot) throws ShotRemovedException {
         return remoteShotRepository.putShot(shot);
     }
 
