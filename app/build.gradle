@@ -1,7 +1,7 @@
 buildscript {
 
     repositories {
-        mavenCentral()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
 
@@ -22,10 +22,6 @@ apply plugin: 'maven'
 
 
 repositories {
-    maven { url 'https://github.com/Goddchen/mvn-repo/raw/master/' }
-    mavenCentral()
-    mavenLocal()
-    maven { url 'http://mente.github.io/facebook-api-android-aar' }
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -122,8 +118,7 @@ android {
 }
 
 dependencies {
-    def domainLayer = project(':domain')
-    compile domainLayer
+    compile project(':domain')
 
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
