@@ -125,8 +125,6 @@ dependencies {
     def domainLayer = project(':domain')
     compile domainLayer
 
-    compile project(':okresponsefaker')
-
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile 'com.android.support:appcompat-v7:22.2.0'
@@ -177,6 +175,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
 
     debugCompile 'com.github.pedrovgs:lynx:1.4'
+    compile 'com.sloydev:okresponsefaker:1.0.0'
+    compile 'com.sloydev:okresponsefaker-json:1.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"

@@ -4,9 +4,9 @@ import com.shootr.android.data.api.exception.ErrorInfo;
 import com.shootr.android.data.api.exception.ErrorResource;
 import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.android.ui.debug.ContextualDebugActions;
-import com.shootr.okresponsefaker.JsonFakeResponse;
-import com.shootr.okresponsefaker.ResponseFaker;
 import com.sloydev.jsonadapters.JsonAdapter;
+import com.sloydev.okresponsefaker.JsonFakeResponse;
+import com.sloydev.okresponsefaker.ResponseFaker;
 
 public class FakeUsernameInUseDebugAction extends ContextualDebugActions.DebugAction<EmailRegistrationActivity> {
 
