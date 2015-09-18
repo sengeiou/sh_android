@@ -408,11 +408,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
 
     @Override
-    public void setMediaCount(Integer mediaCount) {
-        adapter.setMediaCount(mediaCount);
-    }
-
-    @Override
     public void navigateToMedia(String idStream, Integer streamMediaCount) {
         Intent intent = StreamMediaActivity.newIntent(this, idStream, streamMediaCount);
         this.startActivity(intent);

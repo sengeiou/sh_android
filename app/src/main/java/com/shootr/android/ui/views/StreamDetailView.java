@@ -41,8 +41,6 @@ public interface StreamDetailView extends DataTransferView {
 
     void hideEditStreamButton();
 
-    void setMediaCount(Integer mediaCount);
-
     void navigateToMedia(String idStream, Integer streamMediaCount);
 
     void setStreamDescription(String description);

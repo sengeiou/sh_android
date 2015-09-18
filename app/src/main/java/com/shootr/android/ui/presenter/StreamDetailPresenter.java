@@ -217,9 +217,6 @@ public class StreamDetailPresenter implements Presenter {
         }
 
         streamMediaCount = streamModel.getMediaCount();
-        if (streamMediaCount > 0) {
-            streamDetailView.setMediaCount(streamMediaCount);
-        }
     }
 
     private void renderFollowingNumber(Integer numberOfFollowing) {
