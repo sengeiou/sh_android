@@ -29,6 +29,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_NICE_SHOT = 4;
     public static final int TYPE_SHARE_STREAM = 5;
     public static final int TYPE_SHARE_SHOT = 6;
+    public static final int TYPE_STREAM_FAVORITED = 7;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -77,6 +78,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_SHARE_STREAM;
                 case ActivityType.SHARE_SHOT:
                     return TYPE_SHARE_SHOT;
+                case ActivityType.STREAM_FAVORITED:
+                    return TYPE_STREAM_FAVORITED;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -105,6 +108,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateStartedShootingViewHolder(parent, viewType);
             case TYPE_NICE_SHOT:
                 return onCreateNiceShotViewHolder(parent, viewType);
+            case TYPE_STREAM_FAVORITED:
+                return onCreateStreamFavoritedViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
@@ -131,6 +136,15 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
         return new OpenedViewHolder(view,
+          imageLoader,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+    }
+
+    private StreamFavoritedViewHolder onCreateStreamFavoritedViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        return new StreamFavoritedViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
