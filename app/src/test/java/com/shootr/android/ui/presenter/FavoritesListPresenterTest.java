@@ -64,8 +64,8 @@ public class FavoritesListPresenterTest {
     }
 
     @Test
-    public void shouldShowLoadingWhenLoadFavorites() throws Exception {
-        presenter.loadFavorites();
+    public void shouldShowLoadingWhenInitialized() throws Exception {
+        presenter.initialize(favoritesListView);
 
         verify(favoritesListView).showLoading();
     }
