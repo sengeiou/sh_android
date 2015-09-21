@@ -128,6 +128,7 @@ public class GCMIntentService extends IntentService {
             case ActivityType.SHARE_SHOT:
             case ActivityType.OPENED_STREAM:
             case ActivityType.NICE_SHOT:
+            case ActivityType.STREAM_FAVORITED:
                 activityNotificationManager.sendGenericActivityNotification(push.getNotificationValues());
                 break;
             case ActivityType.START_FOLLOW:
