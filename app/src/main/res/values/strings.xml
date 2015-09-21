@@ -88,7 +88,7 @@
 
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-    <string name="notification_follow_title">%s is now following you!</string>
+    <string name="notification_follow_title">%s is now following you</string>
 
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
