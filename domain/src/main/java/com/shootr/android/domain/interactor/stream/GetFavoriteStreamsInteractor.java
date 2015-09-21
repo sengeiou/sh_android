@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
 import com.shootr.android.domain.repository.Local;
 import com.shootr.android.domain.repository.Remote;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     private final FavoriteRepository remoteFavoriteRepository;
     private final StreamRepository localStreamRepository;
     private final WatchersRepository watchersRepository;
+    private final SessionRepository sessionRepository;
 
     private Callback<List<StreamSearchResult>> callback;
     private boolean loadLocalOnly = false;
@@ -33,13 +35,14 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     @Inject public GetFavoriteStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local FavoriteRepository localFavoriteRepository,
       @Remote FavoriteRepository remoteFavoriteRepository, @Local StreamRepository localStreamRepository,
-      @Local WatchersRepository watchersRepository) {
+      @Local WatchersRepository watchersRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFavoriteRepository = localFavoriteRepository;
         this.remoteFavoriteRepository = remoteFavoriteRepository;
         this.localStreamRepository = localStreamRepository;
         this.watchersRepository = watchersRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public void loadFavoriteStreams(Interactor.Callback<List<StreamSearchResult>> callback) {
@@ -76,7 +79,20 @@ public class GetFavoriteStreamsInteractor implements Interactor {
         List<Stream> favoriteStreams = streamsFromFavorites(favorites);
         favoriteStreams = sortStreamsByName(favoriteStreams);
         List<StreamSearchResult> favoriteStreamsWithWatchers = addWatchersToStreams(favoriteStreams);
+        markWatchingStream(favoriteStreamsWithWatchers);
         notifyLoaded(favoriteStreamsWithWatchers);
+    }
+
+    private void markWatchingStream(List<StreamSearchResult> streams) {
+        String watchingId = sessionRepository.getCurrentUser().getIdWatchingStream();
+        if (watchingId == null) {
+            return;
+        }
+        for (StreamSearchResult stream : streams) {
+            if (stream.getStream().getId().equals(watchingId)) {
+                stream.setIsWatching(true);
+            }
+        }
     }
 
     private List<Stream> sortStreamsByName(List<Stream> streams) {

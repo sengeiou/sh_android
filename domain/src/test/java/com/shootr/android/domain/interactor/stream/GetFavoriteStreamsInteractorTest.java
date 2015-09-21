@@ -10,6 +10,7 @@ import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.SpyCallback;
 import com.shootr.android.domain.interactor.TestInteractorHandler;
 import com.shootr.android.domain.repository.FavoriteRepository;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.StreamRepository;
 import com.shootr.android.domain.repository.WatchersRepository;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GetFavoriteStreamsInteractorTest {
     @Mock FavoriteRepository remoteFavoriteRepository;
     @Mock StreamRepository localStreamRepository;
     @Mock WatchersRepository watchersRepository;
+    @Mock SessionRepository sessionRepository;
     @Spy SpyCallback<List<StreamSearchResult>> spyCallback = new SpyCallback<>();
 
     private GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
@@ -53,7 +55,7 @@ public class GetFavoriteStreamsInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         getFavoriteStreamsInteractor = new GetFavoriteStreamsInteractor(interactorHandler, postExecutionThread,
           localFavoriteRepository,
-          remoteFavoriteRepository, localStreamRepository, watchersRepository);
+          remoteFavoriteRepository, localStreamRepository, watchersRepository, sessionRepository);
     }
 
     @Test
