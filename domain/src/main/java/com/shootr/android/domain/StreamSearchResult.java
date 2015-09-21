@@ -4,6 +4,7 @@ public class StreamSearchResult {
 
     private Stream stream;
     private int watchersNumber;
+    private boolean isWatching;
 
     public StreamSearchResult() {
     }
@@ -55,5 +56,13 @@ public class StreamSearchResult {
           "stream=" + stream +
           ", watchersNumber=" + watchersNumber +
           '}';
+    }
+
+    public boolean isWatching() {
+        return isWatching;
+    }
+
+    public void setIsWatching(boolean isWatching) {
+        this.isWatching = isWatching;
     }
 }

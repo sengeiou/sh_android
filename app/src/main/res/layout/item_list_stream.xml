@@ -58,7 +58,8 @@
         tools:text="Romanesco" />
     </LinearLayout>
 
-    <FrameLayout android:layout_width="wrap_content"
+    <FrameLayout android:id="@+id/stream_actions_container"
+      android:layout_width="wrap_content"
       android:layout_height="match_parent">
       <TextView android:id="@+id/stream_watchers"
         android:layout_width="wrap_content"

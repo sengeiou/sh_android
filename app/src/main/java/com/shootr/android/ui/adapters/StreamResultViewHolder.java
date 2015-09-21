@@ -7,32 +7,58 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.Truss;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     private final OnStreamClickListener onStreamClickListener;
     private final ImageLoader imageLoader;
+    private OnUnwatchClickListener unwatchClickListener;
 
     private boolean showsWatchersText = false;
+    private boolean isWatchingStateEnabled = false;
 
     @Bind(R.id.stream_picture) ImageView picture;
     @Bind(R.id.stream_title) TextView title;
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
+    @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_author) TextView author;
+    @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
+
+    @BindString(R.string.watching_stream_connected) String connected;
 
     public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener, ImageLoader imageLoader) {
         super(itemView);
         this.onStreamClickListener = onStreamClickListener;
         this.imageLoader = imageLoader;
         ButterKnife.bind(this, itemView);
+    }
+
+    public void enableWatchingState(OnUnwatchClickListener unwatchClickListener) {
+        checkNotNull(removeButton, "The view used in this ViewHolder doesn't contain the unwatch button.");
+        checkNotNull(unwatchClickListener);
+        this.isWatchingStateEnabled = true;
+        this.unwatchClickListener = unwatchClickListener;
+        this.removeButton.setVisibility(View.VISIBLE);
+        this.setUnwatchClickListener();
+    }
+
+    public void disableWatchingState() {
+        checkNotNull(removeButton, "The view used in this ViewHolder doesn't contain the unwatch button.");
+        unwatchClickListener = null;
+        isWatchingStateEnabled = false;
+        removeButton.setVisibility(View.GONE);
     }
 
     public void render(StreamResultModel streamResultModel, boolean showSeparator) {
@@ -68,6 +94,16 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
+    private void setUnwatchClickListener() {
+        checkNotNull(actionsContainer, "The view used in this ViewHolder doesn't contain the unwatch button.");
+        actionsContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                unwatchClickListener.onUnwatchClick();
+            }
+        });
+    }
+
     private String getWatchersText(int watchers) {
         if (showsWatchersText) {
             return itemView.getContext()
@@ -80,17 +116,33 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     protected void renderAuthor(StreamModel stream) {
         if (author != null) {
-            if (stream.getDescription() != null) {
-                CharSequence authorText = new Truss().append(stream.getAuthorUsername())
-                  .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
-                  .append(" · ")
-                  .append(stream.getDescription())
-                  .popSpan()
-                  .build();
-                author.setText(authorText);
+            if (isWatchingStateEnabled) {
+                author.setText(getAuthorWithConnected(stream));
             } else {
-                author.setText(stream.getAuthorUsername());
+                author.setText(getAuthorWithDescription(stream));
             }
+        }
+    }
+
+    private CharSequence getAuthorWithConnected(StreamModel stream) {
+        return new Truss().append(stream.getAuthorUsername())
+          .append(" · ")
+          .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
+          .append(connected)
+          .popSpan()
+          .build();
+    }
+
+    private CharSequence getAuthorWithDescription(StreamModel stream) {
+        if (stream.getDescription() == null) {
+            return stream.getAuthorUsername();
+        } else {
+            return new Truss().append(stream.getAuthorUsername())
+              .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
+              .append(" · ")
+              .append(stream.getDescription())
+              .popSpan()
+              .build();
         }
     }
 
