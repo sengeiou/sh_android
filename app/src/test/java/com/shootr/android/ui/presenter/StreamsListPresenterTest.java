@@ -66,7 +66,7 @@ public class StreamsListPresenterTest {
           unwatchStreamInteractor,
           selectStreamInteractor, shareStreamInteractor,
           streamResultModelMapper,
-          errorMessageFactory);
+          errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
 

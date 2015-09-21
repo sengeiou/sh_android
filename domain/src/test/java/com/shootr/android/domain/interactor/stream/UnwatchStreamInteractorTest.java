@@ -1,6 +1,7 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.bus.BusPublisher;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -29,6 +30,7 @@ public class UnwatchStreamInteractorTest {
     @Mock UserRepository localUserRepository;
     @Mock UserRepository remoteUserRepository;
     @Mock CompletedCallback completedCallback;
+    @Mock BusPublisher busPublisher;
 
     private UnwatchStreamInteractor unwatchStreamInteractor;
 
@@ -40,7 +42,7 @@ public class UnwatchStreamInteractorTest {
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
         this.unwatchStreamInteractor = new UnwatchStreamInteractor(interactorHandler, postExecutionThread,
-          sessionRepository, localUserRepository, remoteUserRepository);
+          sessionRepository, localUserRepository, remoteUserRepository, busPublisher);
     }
 
     //region tests

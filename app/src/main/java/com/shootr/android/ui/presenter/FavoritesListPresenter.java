@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.bus.FavoriteAdded;
+import com.shootr.android.domain.bus.UnwatchDone;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.interactor.Interactor;
@@ -19,7 +20,7 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver{
+public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver, UnwatchDone.Receiver{
 
     private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
@@ -107,6 +108,7 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
         loadFavorites();
     }
 
+
     public void shareStream(StreamResultModel stream) {
         shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
@@ -146,5 +148,11 @@ public class FavoritesListPresenter implements Presenter, FavoriteAdded.Receiver
                 loadFavorites();
             }
         });
+    }
+
+    @Override
+    @Subscribe
+    public void onUnwatchDone(UnwatchDone.Event event) {
+        loadFavorites();
     }
 }
