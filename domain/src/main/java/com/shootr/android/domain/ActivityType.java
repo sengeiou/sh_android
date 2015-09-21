@@ -13,7 +13,7 @@ public interface ActivityType {
     String NICE_SHOT = "NICESHOT";
     String SHARE_STREAM = "SHAREDSTREAM";
     String SHARE_SHOT = "SHAREDSHOT";
-    String STREAM_FAVORITED = "STREAMFAVORITED";
+    String STREAM_FAVORITED = "FAVORITESTREAM";
 
     String[] TYPES_ACTIVITY = { CHECKIN,
       NICE_SHOT,
