@@ -110,7 +110,11 @@ public class CreateStreamInteractor implements Interactor {
     }
 
     private String removeDescriptionLineBreaks(String description) {
-        return description.replace("\n", "").replace("\r", "");
+        if (description == null || description.isEmpty()) {
+            return null;
+        } else {
+            return description.replace("\n", "").replace("\r", "");
+        }
     }
 
     private void handleServerError(ShootrException e) {
