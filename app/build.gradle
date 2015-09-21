@@ -1,7 +1,7 @@
 buildscript {
 
     repositories {
-        mavenCentral()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
 
@@ -22,10 +22,6 @@ apply plugin: 'maven'
 
 
 repositories {
-    maven { url 'https://github.com/Goddchen/mvn-repo/raw/master/' }
-    mavenCentral()
-    mavenLocal()
-    maven { url 'http://mente.github.io/facebook-api-android-aar' }
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -36,8 +32,8 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 def versionMajor = 0
 def versionMinor = 1
 def versionRevision = 27
+def isSnapshot = true
 def databaseVersion = 9
-def isSnapshot = System.getenv("SNAPSHOT") as Boolean ?: true
 
 android {
     compileSdkVersion 22
@@ -48,7 +44,6 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
 
-
         versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
         versionName versionMajor + "." + versionMinor + "." + versionRevision
         versionName isSnapshot ? versionName + "-SNAPSHOT" : versionName
@@ -57,22 +52,9 @@ android {
         resConfigs "es", "en"
         resConfigs "hdpi", "xhdpi", "xxhdpi"
 
+        buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "GIT_BRANCH", "\"${gitBranch}\""
-
-        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'LICENSE.txt'
     }
 
     signingConfigs {
@@ -89,21 +71,15 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-        disable 'InvalidPackage'
-    }
-
     buildTypes {
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
-            signingConfig signingConfigs.debug
 
             buildConfigField "String", "API_ENDPOINT_BASE", "\"http://tst.api.shootr.com/v1\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.tst.shootr.com/\""
-            buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
+
         }
         release {
             minifyEnabled false //TODO configurarlo y activarlo
@@ -112,22 +88,34 @@ android {
 
             buildConfigField "String", "API_ENDPOINT_BASE", "\"http://api.shootr.com/v1\""
             buildConfigField "String", "RESOURCES_ENDPOINT_BASE", "\"http://resources.pro.shootr.com/\""
-            buildConfigField "Integer", "DATABASE_VERSION", databaseVersion.toString()
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'LICENSE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
-    def domainLayer = project(':domain')
-    compile domainLayer
-
-    compile project(':okresponsefaker')
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':domain')
 
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
@@ -177,6 +165,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
 
     debugCompile 'com.github.pedrovgs:lynx:1.4'
+    compile 'com.sloydev:okresponsefaker:1.0.0'
+    compile 'com.sloydev:okresponsefaker-json:1.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"
