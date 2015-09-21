@@ -278,6 +278,7 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <string name="share_stream_activity_text_pattern">Shared (stream)</string>
     <string name="opened_activity_text_pattern">Opened (stream)</string>
+    <string name="stream_favorited_activity_text_pattern">Favorited (stream)</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
     <string name="title_activity_stream_search">StreamSearchActivity</string>
     <string name="activity_find_streams_hint">Find streams</string>
