@@ -17,6 +17,7 @@ import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
@@ -94,6 +95,12 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             public boolean onStreamLongClick(StreamResultModel stream) {
                 openContextualMenu(stream);
                 return true;
+            }
+        });
+        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+            @Override
+            public void onUnwatchClick() {
+                favoritesListPresenter.unwatchStream();
             }
         });
         favoritesList.setAdapter(adapter);

@@ -5,6 +5,7 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.GetFavoriteStreamsInteractor;
 import com.shootr.android.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.android.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
@@ -35,6 +36,7 @@ public class FavoritesListPresenterTest {
     @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Bus bus;
+    @Mock UnwatchStreamInteractor unwatchStreamInteractor;
 
     private FavoritesListPresenter presenter;
 
@@ -42,8 +44,7 @@ public class FavoritesListPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new FavoritesListPresenter(getFavoriteStreamsInteractor, shareStreamInteractor,
-          removeFromFavoritesInteractor,
-          streamResultModelMapper, errorMessageFactory, bus);
+          removeFromFavoritesInteractor, unwatchStreamInteractor, streamResultModelMapper, errorMessageFactory, bus);
         presenter.setView(favoritesListView);
     }
 

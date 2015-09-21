@@ -46,6 +46,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
     public void enableWatchingState(OnUnwatchClickListener unwatchClickListener) {
         checkNotNull(removeButton, "The view used in this ViewHolder doesn't contain the unwatch button.");
+        checkNotNull(unwatchClickListener);
         this.isWatchingStateEnabled = true;
         this.unwatchClickListener = unwatchClickListener;
         this.removeButton.setVisibility(View.VISIBLE);
