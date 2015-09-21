@@ -22,7 +22,7 @@ import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 import com.shootr.android.util.ShotTextSpannableBuilder;
 
-public class ActivityShotViewHolder {
+public abstract class ActivityShotViewHolder {
 
     private final OnAvatarClickListener avatarClickListener;
     private final OnVideoClickListener videoClickListener;
@@ -41,7 +41,9 @@ public class ActivityShotViewHolder {
     @BindColor(R.color.gray_60) int tagColor;
     @BindString(R.string.niced_shot_activity) String nicedShot;
     @BindString(R.string.shared_shot_activity) String sharedShot;
+    @BindString(R.string.mentioned_shot_activity) String mentionedShot;
     @BindString(R.string.niced_shot_activity_with_comment) String nicedShotWithComment;
+    @BindString(R.string.mentioned_shot_activity_with_comment) String mentionedShotWithComment;
     @BindString(R.string.shared_shot_activity_with_comment) String sharedShotWithComment;
 
     public int position;
@@ -62,21 +64,21 @@ public class ActivityShotViewHolder {
         this.view = view;
     }
 
-    protected void render(ShotModel shot, String username, String photo, String idUser, boolean shouldShowTag, boolean isNice) {
+    protected void render(ShotModel shot, String username, String photo, String idUser, boolean shouldShowTag) {
         bindUsername(username);
         bindElapsedTime(shot);
-        bindComment(shot,shouldShowTag,isNice);
+        bindComment(shot,shouldShowTag);
         bindUserPhoto(photo, idUser);
         bindImageInfo(shot);
     }
 
-    protected void bindComment(ShotModel item, boolean shouldShowTag, boolean isNice) {
+    protected void bindComment(ShotModel item, boolean shouldShowTag) {
         String comment = item.getComment();
         String tag = null;
         if (shouldShowTag && item.getStreamTag() != null) {
             tag = item.getStreamTag();
         }
-        SpannableStringBuilder commentWithTag = createComment(item, isNice, comment, tag);
+        SpannableStringBuilder commentWithTag = createComment(item, comment, tag);
         if (commentWithTag != null) {
             addShotComment(this, commentWithTag);
             text.setVisibility(View.VISIBLE);
@@ -85,29 +87,9 @@ public class ActivityShotViewHolder {
         }
     }
 
-    private SpannableStringBuilder createComment(ShotModel item, boolean isNice, String comment, String tag) {
-        SpannableStringBuilder commentWithTag;
-        if (comment == null) {
-            String resultComment;
-            if (isNice) {
-                resultComment = nicedShot;
-            } else {
-                resultComment = String.format(sharedShot, item.getUsername());
-            }
-            commentWithTag = buildCommentTextWithTag(resultComment, tag);
-        } else {
-            String resultComment;
-            if (isNice) {
-                resultComment = nicedShotWithComment;
-            } else {
-                resultComment = String.format(sharedShotWithComment, item.getUsername());
-            }
-            commentWithTag = buildCommentTextWithTag(resultComment, comment);
-        }
-        return commentWithTag;
-    }
+    public abstract SpannableStringBuilder createComment(ShotModel item, String comment, String tag);
 
-    private @Nullable
+    public  @Nullable
     SpannableStringBuilder buildCommentTextWithTag(@Nullable String comment, @Nullable String tag) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         if (comment == null && tag == null) {

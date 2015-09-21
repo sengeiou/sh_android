@@ -34,7 +34,7 @@ public class ShareShotViewHolder extends ActivityViewHolder {
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClick = onShotClick;
-        shotViewHolder = new ActivityShotViewHolder(view,
+        shotViewHolder = new ActivityShareShotViewHolder(view,
           onAvatarClickListener, onVideoClickListener,
           null, onUsernameClickListener,
           androidTimeUtils,
@@ -45,7 +45,7 @@ public class ShareShotViewHolder extends ActivityViewHolder {
     @Override
     public void render(ActivityModel activityModel, String currentUserId) {
         ShotModel shotModel = checkNotNull(activityModel.getShot());
-        shotViewHolder.render(shotModel, activityModel.getUsername(), activityModel.getUserPhoto(), activityModel.getIdUser(), false, false);
+        shotViewHolder.render(shotModel, activityModel.getUsername(), activityModel.getUserPhoto(), activityModel.getIdUser(), false);
         setShotClickListener(shotModel);
     }
 

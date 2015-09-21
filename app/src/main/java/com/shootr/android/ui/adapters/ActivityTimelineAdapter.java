@@ -29,6 +29,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_NICE_SHOT = 4;
     public static final int TYPE_SHARE_STREAM = 5;
     public static final int TYPE_SHARE_SHOT = 6;
+    public static final int TYPE_MENTION = 8;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -43,11 +44,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private String currentUserId;
     private boolean showFooter = false;
 
-    public ActivityTimelineAdapter(ImageLoader imageLoader,
-      AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener streamTitleClickListener, OnVideoClickListener onVideoClickListener, OnShotClick onShotClick) {
+    public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
+      OnStreamTitleClickListener streamTitleClickListener, OnVideoClickListener onVideoClickListener,
+      OnShotClick onShotClick) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -77,6 +77,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_SHARE_STREAM;
                 case ActivityType.SHARE_SHOT:
                     return TYPE_SHARE_SHOT;
+                case ActivityType.MENTION:
+                    return TYPE_MENTION;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -99,6 +101,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateSharedStreamViewHolder(parent, viewType);
             case TYPE_SHARE_SHOT:
                 return onCreateShareShotViewHolder(parent, viewType);
+            case TYPE_MENTION:
+                return onCreateMentionViewHolder(parent, viewType);
             case TYPE_OPENED:
                 return onCreateOpenedViewHolder(parent, viewType);
             case TYPE_STARTED_SHOOTING:
@@ -168,6 +172,16 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_share_shot, parent, false);
         return new ShareShotViewHolder(view,
+          imageLoader,
+          timeUtils,
+          shotTextSpannableBuilder,
+          avatarClickListener, onUsernameClickListener, onVideoClickListener,
+          onShotClick);
+    }
+
+    private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_share_shot, parent, false);
+        return new MentionViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
