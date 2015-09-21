@@ -34,6 +34,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
     @Nullable @Bind(R.id.stream_author) TextView author;
+    @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;
 
@@ -94,8 +95,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setUnwatchClickListener() {
-        checkNotNull(removeButton, "The view used in this ViewHolder doesn't contain the unwatch button.");
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        checkNotNull(actionsContainer, "The view used in this ViewHolder doesn't contain the unwatch button.");
+        actionsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 unwatchClickListener.onUnwatchClick();
