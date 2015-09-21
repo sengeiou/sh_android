@@ -3,6 +3,7 @@ package com.shootr.android.domain.interactor.stream;
 import com.shootr.android.domain.Favorite;
 import com.shootr.android.domain.Stream;
 import com.shootr.android.domain.StreamSearchResult;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
@@ -51,6 +52,7 @@ public class GetFavoriteStreamsInteractorTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        setupCurrentUserWatching();
         InteractorHandler interactorHandler = new TestInteractorHandler();
         PostExecutionThread postExecutionThread = new TestPostExecutionThread();
         getFavoriteStreamsInteractor = new GetFavoriteStreamsInteractor(interactorHandler, postExecutionThread,
@@ -161,6 +163,16 @@ public class GetFavoriteStreamsInteractorTest {
         stream.setId(STREAM_ID);
         streams.add(stream);
         return streams;
+    }
+
+    private User userWatching() {
+        User user = new User();
+        user.setIdWatchingStream("stream");
+        return user;
+    }
+
+    private void setupCurrentUserWatching() {
+        when(sessionRepository.getCurrentUser()).thenReturn(userWatching());
     }
 
     protected void setupStreamRepositoryReturnsStreamsWithInputIds() {
