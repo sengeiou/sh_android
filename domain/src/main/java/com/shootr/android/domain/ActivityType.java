@@ -13,6 +13,7 @@ public interface ActivityType {
     String NICE_SHOT = "NICESHOT";
     String SHARE_STREAM = "SHAREDSTREAM";
     String SHARE_SHOT = "SHAREDSHOT";
+    String MENTION = "MENTION";
 
     String[] TYPES_ACTIVITY = { CHECKIN,
       NICE_SHOT,
@@ -23,7 +24,8 @@ public interface ActivityType {
       UPDATE_STREAM,
       STARTED_SHOOTING,
       SHARE_STREAM,
-      SHARE_SHOT
+      SHARE_SHOT,
+      MENTION
     };
 
     String[] TYPES_ACTIVITY_SHOWN = { CHECKIN,
@@ -32,7 +34,8 @@ public interface ActivityType {
       START_FOLLOW,
       STARTED_SHOOTING,
       SHARE_STREAM,
-      SHARE_SHOT
+      SHARE_SHOT,
+      MENTION
     };
 
     String[] TYPES_SYNC_TRIGGER = { PROFILE_UPDATED,
