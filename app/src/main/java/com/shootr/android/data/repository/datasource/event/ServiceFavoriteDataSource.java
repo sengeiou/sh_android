@@ -71,6 +71,11 @@ public class ServiceFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
+    public void clear() {
+        throw new IllegalStateException("Method not available in Service");
+    }
+
+    @Override
     public List<FavoriteEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not available in Service");
     }

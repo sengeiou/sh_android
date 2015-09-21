@@ -14,4 +14,6 @@ public interface FavoriteDataSource extends SyncableDataSource<FavoriteEntity> {
     List<FavoriteEntity> getFavorites();
 
     void removeFavoriteByIdStream(String streamId);
+
+    void clear();
 }
