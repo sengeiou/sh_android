@@ -185,7 +185,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener, onVideoClickListener,
+          avatarClickListener,
+          onUsernameClickListener,
           onShotClick);
     }
 
