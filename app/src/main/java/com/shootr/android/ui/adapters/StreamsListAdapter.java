@@ -17,6 +17,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     private final ImageLoader imageLoader;
 
     private OnStreamClickListener onStreamClickListener;
+
     private OnUnwatchClickListener onUnwatchClickListener;
 
     public StreamsListAdapter(ImageLoader imageLoader, OnStreamClickListener onStreamClickListener) {
@@ -81,5 +82,9 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
 
     public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
         this.onUnwatchClickListener = onUnwatchClickListener;
+    }
+
+    public OnUnwatchClickListener getOnUnwatchClickListener() {
+        return onUnwatchClickListener;
     }
 }
