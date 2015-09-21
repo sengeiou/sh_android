@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.StreamDetailView;
 import com.shootr.android.util.ErrorMessageFactory;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -42,7 +43,7 @@ public class StreamDetailPresenter implements Presenter {
     private StreamModel streamModel;
 
     private Integer streamMediaCount;
-    private List<UserModel> participantsShown;
+    private List<UserModel> participantsShown = Collections.emptyList();
     private boolean hasBeenPaused = false;
 
     @Inject
@@ -124,11 +125,13 @@ public class StreamDetailPresenter implements Presenter {
 
     public void getStreamInfo() {
         streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override public void onLoaded(StreamInfo streamInfo) {
+            @Override
+            public void onLoaded(StreamInfo streamInfo) {
                 onStreamInfoLoaded(streamInfo);
             }
         }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
+            @Override
+            public void onError(ShootrException error) {
                 String errorMessage = errorMessageFactory.getMessageForError(error);
                 streamDetailView.showError(errorMessage);
             }
@@ -144,21 +147,6 @@ public class StreamDetailPresenter implements Presenter {
         this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
         this.showViewDetail();
         this.hideViewLoading();
-    }
-
-    private void refreshWatchers() {
-        streamInfoInteractor.obtainStreamInfo(idStream, new GetStreamInfoInteractor.Callback() {
-            @Override public void onLoaded(StreamInfo streamInfo) {
-                if (streamInfo.isDataComplete()) {
-                    renderWatchersList(streamInfo);
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                String errorMessage = errorMessageFactory.getMessageForError(error);
-                streamDetailView.showError(errorMessage);
-            }
-        });
     }
 
     private void showViewDetail() {
@@ -185,11 +173,13 @@ public class StreamDetailPresenter implements Presenter {
 
     //region renders
     private void renderWatchersList(StreamInfo streamInfo) {
-        List<User> watchers = streamInfo.getWatchers();
-        participantsShown = userModelMapper.transform(watchers);
-        streamDetailView.setWatchers(participantsShown);
-        if (streamInfo.hasMoreParticipants()) {
-            streamDetailView.showAllParticipantsButton();
+        if (participantsShown.isEmpty() || streamInfo.isDataComplete()) {
+            List<User> watchers = streamInfo.getWatchers();
+            participantsShown = userModelMapper.transform(watchers);
+            streamDetailView.setWatchers(participantsShown);
+            if (streamInfo.hasMoreParticipants()) {
+                streamDetailView.showAllParticipantsButton();
+            }
         }
     }
 
@@ -243,7 +233,7 @@ public class StreamDetailPresenter implements Presenter {
     @Override
     public void resume() {
         if (hasBeenPaused) {
-            refreshWatchers();
+            getStreamInfo();
         }
     }
 
