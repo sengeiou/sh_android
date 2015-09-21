@@ -362,7 +362,7 @@
     <string name="shared_stream_notification">Stream shared</string>
     <string name="new_activity_notification">New activity</string>
     <string name="no_intent_handler">There are no applications available to handle this action.</string>
-    <string name="activity_started_following_you">Started following you!</string>
+    <string name="activity_started_following_you">Started following you</string>
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="menu_share_shot_via_shootr">Share via Shootr</string>
     <string name="shot_shared_message">Shot shared</string>
