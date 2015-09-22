@@ -1,7 +1,12 @@
 package com.shootr.android.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
@@ -16,16 +21,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class GlideImageLoader implements ImageLoader {
 
     private static final int DEFAULT_STREAM_PICTURE_RES = R.drawable.ic_stream_picture_default;
     private static final int DEFAULT_PROFILE_PHOTO_RES = R.drawable.ic_contact_picture_default;
 
+    private final Resources resources;
     private final RequestManager glide;
 
     @Inject
-    public GlideImageLoader(@ApplicationContext Context context) {
+    public GlideImageLoader(@ApplicationContext Context context, Resources resources) {
+        this.resources = resources;
         glide = Glide.with(context);
     }
 
@@ -96,10 +104,13 @@ public class GlideImageLoader implements ImageLoader {
             if (isValidPhoto) {
                 return glide.load(url).asBitmap().into(-1, -1).get();
             } else {
-                return glide.load(DEFAULT_PROFILE_PHOTO_RES).asBitmap().into(-1, -1).get();
+                // Workaround: Android doesn't decode layer drawable from resources, it fails silently
+                Drawable defaultPhotoDrawable = resources.getDrawable(DEFAULT_PROFILE_PHOTO_RES);
+                return drawableToBitmap(defaultPhotoDrawable);
             }
         } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalStateException(e);
+            Timber.w(e, "Bitmap loading for profile (%s) failed, probably interrupted by another call?", url);
+            return null;
         }
     }
 
@@ -113,13 +124,36 @@ public class GlideImageLoader implements ImageLoader {
                 return null;
             }
         } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalStateException(e);
+            Timber.w(e, "Bitmap loading (%s) failed, probably interrupted by another call?", url);
+            return null;
         }
     }
 
     @NonNull
     protected StringSignature getSignature(File file) {
         return new StringSignature(String.valueOf(file.lastModified()));
+    }
+
+    private static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     //TODO use or delete
