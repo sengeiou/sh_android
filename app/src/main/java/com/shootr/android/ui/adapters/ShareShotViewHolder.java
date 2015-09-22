@@ -4,6 +4,7 @@ import android.view.View;
 import butterknife.BindString;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
@@ -20,13 +21,15 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
       AndroidTimeUtils androidTimeUtils,
       ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener) {
+      OnUsernameClickListener onUsernameClickListener,
+      OnShotClick onShotClickListener) {
         super(view,
           imageLoader,
           androidTimeUtils,
           shotTextSpannableBuilder,
           onAvatarClickListener,
-          onUsernameClickListener);
+          onUsernameClickListener,
+          onShotClickListener);
     }
 
     @Override

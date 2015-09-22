@@ -164,17 +164,17 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new NiceShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
+        return new NiceShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener, onShotClick);
     }
 
     private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new ShareShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
+        return new ShareShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener, onShotClick);
     }
 
     private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new MentionViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
+        return new MentionViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener, onShotClick);
     }
 
     private RecyclerView.ViewHolder onCreateFollowViewHolder(ViewGroup parent, int viewType) {
