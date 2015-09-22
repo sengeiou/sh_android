@@ -83,6 +83,9 @@ public abstract class CommonNotification {
      * WARNING: This method doesn't recycle the input, in case it needs reusing
      */
     private Bitmap transformCircularBitmap(Bitmap input) {
+        if (input == null) {
+            return null;
+        }
         Bitmap output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
