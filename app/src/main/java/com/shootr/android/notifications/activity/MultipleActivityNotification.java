@@ -91,11 +91,6 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         }
     }
 
-    @Override @Nullable
-    public Bitmap getWearBackground() {
-        return getLargeIcon();
-    }
-
     @Nullable
     private Bitmap getBitmapForIcon(String iconUrl) {
         try {

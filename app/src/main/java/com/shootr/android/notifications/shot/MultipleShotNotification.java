@@ -43,10 +43,6 @@ public class MultipleShotNotification extends AbstractShotNotification {
         return null;
     }
 
-    @Override public Bitmap getWearBackground() {
-        return BitmapFactory.decodeResource(getResources(), R.drawable.drawer_background);
-    }
-
     public String getTitle() {
         return getResources().getString(R.string.notification_shot_multiple_title, shots.size());
     }

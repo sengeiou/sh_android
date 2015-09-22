@@ -59,10 +59,6 @@ public class SingleActivityNotification extends AbstractActivityNotification {
         }
     }
 
-    @Override
-    public Bitmap getWearBackground() {
-        return BitmapFactory.decodeResource(getResources(), R.drawable.drawer_background);
-    }
 
     public PushNotification.NotificationValues getNotificationValues() {
         return values;
