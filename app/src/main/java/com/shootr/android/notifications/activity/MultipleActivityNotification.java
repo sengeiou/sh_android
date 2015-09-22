@@ -81,31 +81,17 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
 
     @Override @Nullable
     public Bitmap getLargeIcon() {
+        if (hasMoreThanOneIcon()) {
+            return MULTIPLE_ICONS_BITMAP;
+        } else {
+            return individualNotifications.get(0).getLargeIcon();
+        }
+    }
+
+    private boolean hasMoreThanOneIcon() {
         Iterator<SingleActivityNotification> notificationsIterator = individualNotifications.iterator();
         String firstIcon = notificationsIterator.next().getNotificationValues().getIcon();
 
-        if (hasMoreThanOneIcon(notificationsIterator, firstIcon)) {
-            return MULTIPLE_ICONS_BITMAP;
-        } else {
-            return getBitmapForIcon(firstIcon);
-        }
-    }
-
-    @Override @Nullable
-    public Bitmap getWearBackground() {
-        return getLargeIcon();
-    }
-
-    @Nullable
-    private Bitmap getBitmapForIcon(String iconUrl) {
-        try {
-            return imageLoader.loadProfilePhoto(iconUrl);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    private boolean hasMoreThanOneIcon(Iterator<SingleActivityNotification> notificationsIterator, String firstIcon) {
         boolean hasMoreThanOneIcon = false;
         while (notificationsIterator.hasNext()) {
             String nextIcon = notificationsIterator.next().getNotificationValues().getIcon();

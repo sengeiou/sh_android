@@ -66,11 +66,6 @@ public class SingleShotNotification extends AbstractShotNotification {
         return getUserPhoto(shot.getPhoto());
     }
 
-    @Override
-    public Bitmap getWearBackground() {
-        return getUserPhoto(shot.getPhoto());
-    }
-
     protected Bitmap getUserPhoto(String url) {
         if (largeIcon == null) {
             try {
