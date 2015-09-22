@@ -17,7 +17,8 @@ public class SingleActivityNotification extends AbstractActivityNotification {
 
     public SingleActivityNotification(Context context,
       NotificationBuilderFactory builderFactory,
-      ImageLoader imageLoader, PushNotification.NotificationValues values) {
+      ImageLoader imageLoader,
+      PushNotification.NotificationValues values) {
         super(context, builderFactory);
         this.imageLoader = imageLoader;
         this.values = values;
@@ -28,6 +29,11 @@ public class SingleActivityNotification extends AbstractActivityNotification {
         super.setNotificationValues(builder);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContentText());
+        if (values.getOptionalLongText() != null) {
+            builder.setStyle(new NotificationCompat.BigTextStyle() //
+              .bigText(values.getOptionalLongText()) //
+              .setSummaryText(getContentText()));
+        }
     }
 
     public String getTitle() {
