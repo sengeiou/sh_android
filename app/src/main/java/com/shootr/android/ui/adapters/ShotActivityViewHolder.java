@@ -58,7 +58,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     }
 
     private CharSequence getActivityText(ActivityModel activity) {
-        boolean hasCommentInShot = activity.getShot().getComment() == null;
+        boolean hasCommentInShot = activity.getShot().getComment() != null;
         if (hasCommentInShot) {
             return buildActivityCommentWithShot(activity);
         } else {
