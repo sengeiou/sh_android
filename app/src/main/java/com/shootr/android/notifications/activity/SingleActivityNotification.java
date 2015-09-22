@@ -13,6 +13,7 @@ import java.io.IOException;
 public class SingleActivityNotification extends AbstractActivityNotification {
 
     private final ImageLoader imageLoader;
+
     private final PushNotification.NotificationValues values;
 
     public SingleActivityNotification(Context context,
@@ -61,5 +62,9 @@ public class SingleActivityNotification extends AbstractActivityNotification {
     @Override
     public Bitmap getWearBackground() {
         return BitmapFactory.decodeResource(getResources(), R.drawable.drawer_background);
+    }
+
+    public PushNotification.NotificationValues getNotificationValues() {
+        return values;
     }
 }
