@@ -11,7 +11,6 @@ import com.shootr.android.util.ImageLoader;
 
 public class MentionViewHolder extends ShotActivityViewHolder {
 
-    @BindString(R.string.mentioned_shot_activity) String mentionedText;
     @BindString(R.string.mentioned_shot_activity_with_comment) String mentionedPrefixText;
 
     public MentionViewHolder(View view,
@@ -24,7 +23,7 @@ public class MentionViewHolder extends ShotActivityViewHolder {
 
     @Override
     protected String getActivitySimpleComment(ActivityModel activity) {
-        return mentionedText;
+        throw new IllegalStateException("Can't receive a mention without comment!! You mad bro?");
     }
 
     @Override
