@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:background="?selectableItemBackground">
 
   <View android:layout_width="match_parent"
     android:layout_height="0.5dp"
@@ -59,7 +60,7 @@
       android:ellipsize="end"
       android:maxLines="2"
       android:paddingLeft="8dp"
-      tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" /> />
+      tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" />
 
     <FrameLayout android:id="@+id/shot_media_content"
       android:layout_width="wrap_content"
