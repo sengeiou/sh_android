@@ -51,12 +51,34 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/ativity_user_name"
+      android:layout_toLeftOf="@+id/shot_media_content"
       android:layout_below="@id/ativity_user_name"
       android:textColor="@color/material_black"
       android:textColorLink="@color/links"
       android:textSize="16sp"
+      android:ellipsize="end"
+      android:maxLines="2"
       android:paddingLeft="8dp"
-      tools:text="Who's the referee?" />
+      tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" /> />
+
+    <FrameLayout android:id="@+id/shot_media_content"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="8dp"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentRight="true"
+      android:focusable="false"
+      android:focusableInTouchMode="false">
+
+      <ImageView android:id="@+id/shot_image"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        tools:src="@drawable/sample_avatar"
+        tools:visibility="visible"
+        android:layout_gravity="center" />
+    </FrameLayout>
 
   </RelativeLayout>
 </FrameLayout>
