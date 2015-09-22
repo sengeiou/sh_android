@@ -21,13 +21,11 @@ public class CheckinViewHolder extends ClickableStreamActivityViewHolder {
       OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           imageLoader,
-          androidTimeUtils,
-          shotTextSpannableBuilder,
-          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
+          androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
     }
 
     @NonNull
-    protected String getPatternText() {
+    protected String getCommentPattern() {
         return getContext().getString(R.string.checkin_activity_text_pattern);
     }
 }

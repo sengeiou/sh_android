@@ -22,7 +22,6 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.model.ShotModel;
@@ -132,12 +131,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
               @Override
               public void onStreamTitleClick(String streamId, String streamTitle) {
                   openStream(streamId, streamTitle);
-              }
-          }, //
-          new OnVideoClickListener() {
-              @Override
-              public void onVideoClick(String url) {
-                  openVideo(url);
               }
           }, //
           new OnShotClick() {
