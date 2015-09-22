@@ -2,9 +2,7 @@ package com.shootr.android.notifications.activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.notifications.gcm.PushNotification;
 import com.shootr.android.util.ImageLoader;
@@ -53,12 +51,11 @@ public class SingleActivityNotification extends AbstractActivityNotification {
     @Override
     public Bitmap getLargeIcon() {
         try {
-            return imageLoader.loadProfilePhoto(values.getIcon());
+            return imageLoader.load(values.getIcon());
         } catch (IOException e) {
             return null;
         }
     }
-
 
     public PushNotification.NotificationValues getNotificationValues() {
         return values;
