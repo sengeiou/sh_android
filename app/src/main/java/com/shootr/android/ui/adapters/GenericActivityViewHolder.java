@@ -9,14 +9,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.ShotTextSpannableBuilder;
-
-import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
@@ -32,7 +28,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     public GenericActivityViewHolder(View view,
       ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
+      AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener) {
         super(view);
         this.imageLoader = imageLoader;
         this.androidTimeUtils = androidTimeUtils;

@@ -5,11 +5,9 @@ import butterknife.BindString;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.ShotTextSpannableBuilder;
 
 public class MentionViewHolder extends ShotActivityViewHolder {
 
@@ -19,17 +17,9 @@ public class MentionViewHolder extends ShotActivityViewHolder {
     public MentionViewHolder(View view,
       ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
       OnShotClick onShotClickListener) {
-        super(view,
-          imageLoader,
-          androidTimeUtils,
-          shotTextSpannableBuilder,
-          onAvatarClickListener,
-          onUsernameClickListener,
-          onShotClickListener);
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClickListener);
     }
 
     @Override

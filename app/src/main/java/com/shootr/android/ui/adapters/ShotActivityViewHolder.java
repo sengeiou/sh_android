@@ -16,22 +16,15 @@ import com.shootr.android.util.Truss;
 public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
     private final ImageLoader imageLoader;
-    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-    private final OnUsernameClickListener onUsernameClickListener;
     private final OnShotClick onShotClickListener;
 
     @BindColor(R.color.gray_60) int shotCommentColor;
 
     public ShotActivityViewHolder(View view,
       ImageLoader imageLoader,
-      AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener, OnShotClick onShotClickListener) {
+      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
         this.imageLoader = imageLoader;
-        this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-        this.onUsernameClickListener = onUsernameClickListener;
         this.onShotClickListener = onShotClickListener;
     }
 
@@ -53,7 +46,6 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     @Override
     protected void renderText(ActivityModel activity) {
         CharSequence activityText = getActivityText(activity);
-        shotTextSpannableBuilder.formatWithUsernameSpans(activityText, onUsernameClickListener);
         text.setText(activityText);
     }
 
