@@ -10,7 +10,6 @@ import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnShotClick;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
-import com.shootr.android.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
@@ -37,7 +36,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final OnAvatarClickListener avatarClickListener;
     private final OnUsernameClickListener onUsernameClickListener;
     private final OnStreamTitleClickListener streamTitleClickListener;
-    private final OnVideoClickListener onVideoClickListener;
     private final OnShotClick onShotClick;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -45,16 +43,17 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private String currentUserId;
     private boolean showFooter = false;
 
-    public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
-      OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
-      OnStreamTitleClickListener streamTitleClickListener, OnVideoClickListener onVideoClickListener,
+    public ActivityTimelineAdapter(ImageLoader imageLoader,
+      AndroidTimeUtils timeUtils,
+      OnAvatarClickListener avatarClickListener,
+      OnUsernameClickListener onUsernameClickListener,
+      OnStreamTitleClickListener streamTitleClickListener,
       OnShotClick onShotClick) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.timeUtils = timeUtils;
         this.streamTitleClickListener = streamTitleClickListener;
-        this.onVideoClickListener = onVideoClickListener;
         this.onShotClick = onShotClick;
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     }
@@ -97,91 +96,104 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_GENERIC_ACTIVITY:
-                return onCreateActivityViewHolder(parent, viewType);
+                return onCreateActivityViewHolder(parent);
             case TYPE_CHECKIN:
-                return onCreateCheckinViewHolder(parent, viewType);
+                return onCreateCheckinViewHolder(parent);
             case TYPE_SHARE_STREAM:
-                return onCreateSharedStreamViewHolder(parent, viewType);
+                return onCreateSharedStreamViewHolder(parent);
             case TYPE_SHARE_SHOT:
-                return onCreateShareShotViewHolder(parent, viewType);
+                return onCreateShareShotViewHolder(parent);
             case TYPE_MENTION:
-                return onCreateMentionViewHolder(parent, viewType);
+                return onCreateMentionViewHolder(parent);
             case TYPE_OPENED:
-                return onCreateOpenedViewHolder(parent, viewType);
+                return onCreateOpenedViewHolder(parent);
             case TYPE_STARTED_SHOOTING:
-                return onCreateStartedShootingViewHolder(parent, viewType);
+                return onCreateStartedShootingViewHolder(parent);
             case TYPE_NICE_SHOT:
-                return onCreateNiceShotViewHolder(parent, viewType);
+                return onCreateNiceShotViewHolder(parent);
             case TYPE_FOLLOW:
-                return onCreateFollowViewHolder(parent, viewType);
+                return onCreateFollowViewHolder(parent);
             case TYPE_FOOTER:
-                return onCreateFooterViewHolder(parent, viewType);
+                return onCreateFooterViewHolder(parent);
         }
         throw new IllegalStateException("View type %d not handled");
     }
 
-    private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new GenericActivityViewHolder(view,
-          imageLoader, timeUtils, avatarClickListener);
+    private View createActivityView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
     }
 
-    private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new CheckinViewHolder(view,
+    private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
+        return new GenericActivityViewHolder(view, imageLoader, timeUtils, avatarClickListener);
+    }
+
+    private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent) {
+        return new CheckinViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+          avatarClickListener,
+          onUsernameClickListener,
+          streamTitleClickListener);
     }
 
-    private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new OpenedViewHolder(view,
+    private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent) {
+        return new OpenedViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+          avatarClickListener,
+          onUsernameClickListener,
+          streamTitleClickListener);
     }
 
-    private SharedStreamViewHolder onCreateSharedStreamViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new SharedStreamViewHolder(view,
+    private SharedStreamViewHolder onCreateSharedStreamViewHolder(ViewGroup parent) {
+        return new SharedStreamViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+          avatarClickListener,
+          onUsernameClickListener,
+          streamTitleClickListener);
     }
 
-    private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new StartedShootingViewHolder(view,
+    private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
+        return new StartedShootingViewHolder(createActivityView(parent),
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener, streamTitleClickListener);
+          avatarClickListener,
+          onUsernameClickListener,
+          streamTitleClickListener);
     }
 
-    private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new NiceShotViewHolder(view, imageLoader, timeUtils,
-          avatarClickListener, onShotClick);
+    private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
+        return new NiceShotViewHolder(createActivityView(parent),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          onShotClick);
     }
 
-    private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new ShareShotViewHolder(view, imageLoader, timeUtils,
-          avatarClickListener, onShotClick);
+    private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent) {
+        return new ShareShotViewHolder(createActivityView(parent),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          onShotClick);
     }
 
-    private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new MentionViewHolder(view, imageLoader, timeUtils,
-          avatarClickListener, onShotClick);
+    private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent) {
+        return new MentionViewHolder(createActivityView(parent),
+          imageLoader,
+          timeUtils,
+          avatarClickListener,
+          onShotClick);
     }
 
-    private RecyclerView.ViewHolder onCreateFollowViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+    private RecyclerView.ViewHolder onCreateFollowViewHolder(ViewGroup parent) {
+        View view = createActivityView(parent);
         FollowActivityViewHolder viewHolder = new FollowActivityViewHolder(view,
           imageLoader,
           timeUtils,
@@ -192,10 +204,10 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         return viewHolder;
     }
 
-    private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
+    private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {
         View footer = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_loading, parent, false);
         return new RecyclerView.ViewHolder(footer) {
-            /* no-op */
+            /* empty implementation */
         };
     }
 
