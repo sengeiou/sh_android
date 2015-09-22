@@ -1,12 +1,8 @@
 package com.shootr.android.ui.activities.registro;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import butterknife.Bind;
@@ -20,9 +16,6 @@ import com.shootr.android.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.presenter.EmailLoginPresenter;
 import com.shootr.android.ui.views.EmailLoginView;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements EmailLoginView {
@@ -31,7 +24,7 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     private static final int BUTTON_NORMAL = 0;
     private static final int BUTTON_LOADING = 1;
 
-    @Bind(R.id.email_login_username_email) public AutoCompleteTextView emailUsername;
+    @Bind(R.id.email_login_username_email) public EditText emailUsername;
     @Bind(R.id.email_login_password) public EditText password;
     @Bind(R.id.email_login_button) CircularProgressButton loginButton;
 
@@ -45,7 +38,6 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     @Override protected  void initializeViews(Bundle savedInstanceState){
         ButterKnife.bind(this);
-        setupSuggestedEmails();
     }
 
     @Override protected int getLayoutResource() {
@@ -127,22 +119,4 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     @Override protected boolean requiresUserLogin() {
         return false;
     }
-
-    private void setupSuggestedEmails() {
-        ArrayAdapter<String> emailSuggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getEmailAccounts());
-        emailUsername.setAdapter(emailSuggestionAdapter);
-    }
-
-    public List<String> getEmailAccounts() {
-        List<String> emailAccounts = new ArrayList<String>();
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
-        for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
-            if (emailPattern.matcher(account.name).matches()) {
-                emailAccounts.add(account.name);
-            }
-        }
-        return emailAccounts;
-    }
-
-
 }
