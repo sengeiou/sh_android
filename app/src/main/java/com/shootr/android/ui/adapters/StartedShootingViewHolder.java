@@ -17,12 +17,10 @@ public class StartedShootingViewHolder extends ClickableStreamActivityViewHolder
       OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           imageLoader,
-          androidTimeUtils,
-          shotTextSpannableBuilder,
-          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
+          androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
     }
 
-    @NonNull protected String getPatternText() {
+    @NonNull protected String getCommentPattern() {
         return getContext().getString(R.string.started_shooting_activity_text_pattern);
     }
 }

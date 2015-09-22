@@ -1,7 +1,6 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,39 +18,49 @@ import com.shootr.android.util.ShotTextSpannableBuilder;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class ActivityViewHolder extends RecyclerView.ViewHolder {
+public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils androidTimeUtils;
-    private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnAvatarClickListener onAvatarClickListener;
-    private final OnUsernameClickListener onUsernameClickListener;
 
-    @Nullable @Bind(R.id.activity_avatar) ImageView avatar;
-    @Nullable @Bind(R.id.ativity_user_name) TextView name;
-    @Nullable @Bind(R.id.activity_timestamp) TextView elapsedTime;
-    @Nullable @Bind(R.id.activity_text) ClickableTextView text;
+    @Bind(R.id.activity_avatar) ImageView avatar;
+    @Bind(R.id.ativity_user_name) TextView name;
+    @Bind(R.id.activity_timestamp) TextView elapsedTime;
+    @Bind(R.id.activity_text) ClickableTextView text;
+    @Bind(R.id.shot_image) ImageView image;
 
-    public ActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener) {
+    public GenericActivityViewHolder(View view,
+      ImageLoader imageLoader,
+      AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
         super(view);
         this.imageLoader = imageLoader;
         this.androidTimeUtils = androidTimeUtils;
         this.onAvatarClickListener = onAvatarClickListener;
-        this.shotTextSpannableBuilder = shotTextSpannableBuilder;
-        this.onUsernameClickListener = onUsernameClickListener;
         ButterKnife.bind(this, view);
     }
 
-    public void render(final ActivityModel activity, String currentUserId) {
-        checkNotNull(name);
-        checkNotNull(avatar);
-        checkNotNull(elapsedTime);
+    public void render(final ActivityModel activity) {
+        renderText(activity);
+        renderName(activity);
+        renderElapsedTime(activity);
+        renderAvatar(activity);
+        renderImage(activity);
+    }
 
+    protected void renderText(ActivityModel activity) {
+        text.setText(activity.getComment());
+    }
+
+    protected void renderName(ActivityModel activity) {
         name.setText(activity.getUsername());
-        text.setText(formatActivityComment(activity, currentUserId));
+    }
+
+    protected void renderElapsedTime(ActivityModel activity) {
         elapsedTime.setText(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()));
+    }
+
+    protected void renderAvatar(final ActivityModel activity) {
         imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
 
         avatar.setOnClickListener(new View.OnClickListener() {
@@ -62,15 +71,11 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {
-        if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-            activity.setComment(itemView.getContext().getString(R.string.activity_started_following_you));
-        }
-        return shotTextSpannableBuilder.formatWithUsernameSpans(activity.getComment(), onUsernameClickListener);
+    protected void renderImage(ActivityModel activity) {
+        image.setVisibility(View.GONE);
     }
 
-
-    private Context getContext() {
+    protected Context getContext() {
         return itemView.getContext();
     }
 }

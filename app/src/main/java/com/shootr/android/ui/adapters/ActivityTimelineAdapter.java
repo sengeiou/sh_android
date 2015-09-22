@@ -30,6 +30,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int TYPE_SHARE_STREAM = 5;
     public static final int TYPE_SHARE_SHOT = 6;
     public static final int TYPE_MENTION = 8;
+    public static final int TYPE_FOLLOW = 9;
 
     private final ImageLoader imageLoader;
     private final AndroidTimeUtils timeUtils;
@@ -79,6 +80,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_SHARE_SHOT;
                 case ActivityType.MENTION:
                     return TYPE_MENTION;
+                case ActivityType.START_FOLLOW:
+                    return TYPE_FOLLOW;
                 default:
                     return TYPE_GENERIC_ACTIVITY;
             }
@@ -109,18 +112,18 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return onCreateStartedShootingViewHolder(parent, viewType);
             case TYPE_NICE_SHOT:
                 return onCreateNiceShotViewHolder(parent, viewType);
+            case TYPE_FOLLOW:
+                return onCreateFollowViewHolder(parent, viewType);
             case TYPE_FOOTER:
                 return onCreateFooterViewHolder(parent, viewType);
         }
         throw new IllegalStateException("View type %d not handled");
     }
 
-    private ActivityViewHolder onCreateActivityViewHolder(ViewGroup parent, int viewType) {
+    private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
-        return new ActivityViewHolder(view,
-          imageLoader, timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener);
+        return new GenericActivityViewHolder(view,
+          imageLoader, timeUtils, avatarClickListener);
     }
 
     private CheckinViewHolder onCreateCheckinViewHolder(ViewGroup parent, int viewType) {
@@ -161,33 +164,29 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_nice_shot, parent, false);
-        return new NiceShotViewHolder(view,
-          imageLoader,
-          timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener,
-          onShotClick);
+        return new NiceShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
     }
 
     private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_share_shot, parent, false);
-        return new ShareShotViewHolder(view,
-          imageLoader,
-          timeUtils,
-          shotTextSpannableBuilder,
-          avatarClickListener, onUsernameClickListener,
-          onShotClick);
+        return new ShareShotViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
     }
 
     private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity_share_shot, parent, false);
-        return new MentionViewHolder(view,
+        return new MentionViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder, avatarClickListener, onUsernameClickListener);
+    }
+
+    private RecyclerView.ViewHolder onCreateFollowViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_activity, parent, false);
+        FollowActivityViewHolder viewHolder = new FollowActivityViewHolder(view,
           imageLoader,
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          onUsernameClickListener,
-          onShotClick);
+          onUsernameClickListener);
+        viewHolder.setCurrentUserId(currentUserId);
+        return viewHolder;
     }
 
     private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
@@ -200,7 +199,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!isFooter(position)) {
-            ((ActivityViewHolder) holder).render(activities.get(position), currentUserId);
+            ((GenericActivityViewHolder) holder).render(activities.get(position));
         }
     }
 
