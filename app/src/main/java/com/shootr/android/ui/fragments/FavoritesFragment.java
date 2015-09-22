@@ -14,8 +14,10 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
+import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
 import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
+import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.presenter.FavoritesListPresenter;
@@ -41,7 +43,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
     @Bind(R.id.favorites_loading) View loading;
     @BindString(R.string.shared_stream_notification) String sharedStream;
 
-    private StreamsListAdapter adapter;
+    private FavoriteStreamsAdapter adapter;
 
     public static Fragment newInstance() {
         return new FavoritesFragment();
@@ -83,7 +85,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
     private void initializeViews() {
         favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new StreamsListAdapter(imageLoader, new OnStreamClickListener() {
+        adapter = new FavoriteStreamsAdapter(imageLoader, new OnStreamClickListener() {
             @Override
             public void onStreamClick(StreamResultModel stream) {
                 favoritesListPresenter.selectStream(stream);
@@ -93,6 +95,12 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
             public boolean onStreamLongClick(StreamResultModel stream) {
                 openContextualMenu(stream);
                 return true;
+            }
+        });
+        adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
+            @Override
+            public void onUnwatchClick() {
+                favoritesListPresenter.unwatchStream();
             }
         });
         favoritesList.setAdapter(adapter);

@@ -35,10 +35,6 @@ public class ShotQueueSentNotification extends CommonNotification {
         return null;
     }
 
-    @Override public Bitmap getWearBackground() {
-        return null;
-    }
-
     @Override
     protected CharSequence getTickerText() {
         return titleText;

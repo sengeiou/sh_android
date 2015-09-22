@@ -17,6 +17,7 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     private final ImageLoader imageLoader;
 
     private OnStreamClickListener onStreamClickListener;
+
     private OnUnwatchClickListener onUnwatchClickListener;
 
     public StreamsListAdapter(ImageLoader imageLoader, OnStreamClickListener onStreamClickListener) {
@@ -37,7 +38,10 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new WatchingStreamResultViewHolder(view, onStreamClickListener, imageLoader, onUnwatchClickListener);
+        StreamResultViewHolder watchingViewHolder =
+          new StreamResultViewHolder(view, onStreamClickListener, imageLoader);
+        watchingViewHolder.enableWatchingState(onUnwatchClickListener);
+        return watchingViewHolder;
     }
 
     @Override
@@ -78,5 +82,9 @@ public class StreamsListAdapter extends SubheaderRecyclerViewAdapter<RecyclerVie
 
     public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
         this.onUnwatchClickListener = onUnwatchClickListener;
+    }
+
+    public OnUnwatchClickListener getOnUnwatchClickListener() {
+        return onUnwatchClickListener;
     }
 }

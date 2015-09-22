@@ -35,6 +35,11 @@ public class DatabaseFavoriteDataSource implements FavoriteDataSource {
     }
 
     @Override
+    public void clear() {
+        favoriteManager.deleteAll();
+    }
+
+    @Override
     public List<FavoriteEntity> getEntitiesNotSynchronized() {
         return favoriteManager.getFavoritesNotSynchronized();
     }

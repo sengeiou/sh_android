@@ -1,1 +1,1 @@
-include ':app', ':domain', ':okresponsefaker'
+include ':app', ':domain'

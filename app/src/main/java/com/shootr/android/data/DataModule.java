@@ -71,7 +71,7 @@ import com.shootr.android.util.ResourcesStreamDateTimeTextProvider;
 import com.shootr.android.util.SnackbarFeedbackMessage;
 import com.shootr.android.util.TimeFormatter;
 import com.shootr.android.util.Version;
-import com.shootr.okresponsefaker.ResponseFaker;
+import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;

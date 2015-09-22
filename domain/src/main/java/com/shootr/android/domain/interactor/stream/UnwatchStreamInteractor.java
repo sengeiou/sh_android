@@ -1,6 +1,8 @@
 package com.shootr.android.domain.interactor.stream;
 
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.bus.BusPublisher;
+import com.shootr.android.domain.bus.UnwatchDone;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
@@ -17,17 +19,19 @@ public class UnwatchStreamInteractor implements Interactor {
     private final SessionRepository sessionRepository;
     private final UserRepository localUserRepository;
     private final UserRepository remoteUserRepository;
+    private final BusPublisher busPublisher;
 
     private CompletedCallback completedCallback;
 
     @Inject public UnwatchStreamInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository) {
+      @Remote UserRepository remoteUserRepository, BusPublisher busPublisher) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.sessionRepository = sessionRepository;
         this.localUserRepository = localUserRepository;
         this.remoteUserRepository = remoteUserRepository;
+        this.busPublisher = busPublisher;
     }
 
     public void unwatchStream(CompletedCallback completedCallback) {
@@ -64,6 +68,7 @@ public class UnwatchStreamInteractor implements Interactor {
     }
 
     private void notifyCompleted() {
+        busPublisher.post(new UnwatchDone.Event());
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 completedCallback.onCompleted();

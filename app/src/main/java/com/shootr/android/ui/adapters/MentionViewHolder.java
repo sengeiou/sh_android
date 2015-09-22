@@ -9,12 +9,11 @@ import com.shootr.android.ui.model.ActivityModel;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
 
-public class ShareShotViewHolder extends ShotActivityViewHolder {
+public class MentionViewHolder extends ShotActivityViewHolder {
 
-    @BindString(R.string.shared_shot_activity) String sharedShotPattern;
-    @BindString(R.string.shared_shot_activity_with_comment) String sharedShotPrefixPattern;
+    @BindString(R.string.mentioned_shot_activity_with_comment) String mentionedPrefixText;
 
-    public ShareShotViewHolder(View view,
+    public MentionViewHolder(View view,
       ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener,
@@ -24,11 +23,11 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
 
     @Override
     protected String getActivitySimpleComment(ActivityModel activity) {
-        return String.format(sharedShotPattern, activity.getShot().getUsername());
+        throw new IllegalStateException("Can't receive a mention without comment!! You mad bro?");
     }
 
     @Override
     protected String getActivityCommentPrefix(ActivityModel activity) {
-        return String.format(sharedShotPrefixPattern, activity.getShot().getUsername());
+        return mentionedPrefixText;
     }
 }

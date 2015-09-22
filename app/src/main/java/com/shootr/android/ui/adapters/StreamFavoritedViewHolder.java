@@ -5,27 +5,22 @@ import android.view.View;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.android.ui.adapters.listeners.OnStreamTitleClickListener;
-import com.shootr.android.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.ImageLoader;
-import com.shootr.android.util.ShotTextSpannableBuilder;
 
-public class CheckinViewHolder extends ClickableStreamActivityViewHolder {
+public class StreamFavoritedViewHolder extends ClickableStreamActivityViewHolder {
 
-    public CheckinViewHolder(View view,
+    public StreamFavoritedViewHolder(View view,
       ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder,
       OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener,
       OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view,
-          imageLoader,
-          androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
     }
 
     @NonNull
+    @Override
     protected String getCommentPattern() {
-        return getContext().getString(R.string.checkin_activity_text_pattern);
+        return getContext().getString(R.string.stream_favorited_activity_text_pattern);
     }
 }

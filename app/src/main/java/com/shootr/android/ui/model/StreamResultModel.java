@@ -6,6 +6,7 @@ public class StreamResultModel implements Serializable {
 
     private StreamModel streamModel;
     private int watchers;
+    private boolean isWatching;
 
     public StreamModel getStreamModel() {
         return streamModel;
@@ -21,5 +22,13 @@ public class StreamResultModel implements Serializable {
 
     public void setWatchers(int watchers) {
         this.watchers = watchers;
+    }
+
+    public boolean isWatching() {
+        return isWatching;
+    }
+
+    public void setIsWatching(boolean isWatching) {
+        this.isWatching = isWatching;
     }
 }

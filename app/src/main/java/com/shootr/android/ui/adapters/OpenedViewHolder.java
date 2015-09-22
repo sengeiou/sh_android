@@ -17,13 +17,11 @@ public class OpenedViewHolder extends ClickableStreamActivityViewHolder {
       OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           imageLoader,
-          androidTimeUtils,
-          shotTextSpannableBuilder,
-          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
+          androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
     }
 
     @NonNull
-    protected String getPatternText() {
+    protected String getCommentPattern() {
         return getContext().getString(R.string.opened_activity_text_pattern);
     }
 }

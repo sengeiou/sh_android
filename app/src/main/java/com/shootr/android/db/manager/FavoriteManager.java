@@ -103,4 +103,8 @@ public class FavoriteManager extends AbstractManager {
     private String whereNotSynchronized() {
         return FavoriteTable.SYNCHRONIZED + " <> '" + LocalSynchronized.SYNC_SYNCHRONIZED + "'";
     }
+
+    public void deleteAll() {
+        getWritableDatabase().delete(FavoriteTable.TABLE, null, null);
+    }
 }

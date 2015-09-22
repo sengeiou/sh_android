@@ -1,13 +1,15 @@
+image: sloydev/android-env
+
 before_script:
 
 features:
-    script: ./gradlew test
+    script: gradle test
     stage: test
     only:
         - /^feature\/.*$/
 
 integration:
-    script: ./gradlew build -PdisablePreDex
+    script: gradle build -PdisablePreDex
     stage: test
     only:
         - master
@@ -15,13 +17,13 @@ integration:
         - /^bugfix\/.*$/
 
 distribution:
-    script: ./gradlew assembleRelease -PdisablePreDex publishReleaseApkToS3
+    script: gradle assembleRelease -PdisablePreDex publishReleaseApkToS3
     stage: deploy
     only:
         - master
 
 sonar:
-    script: ./gradlew sonarRunner
+    script: gradle sonarRunner
     stage: deploy
     only:
         - master

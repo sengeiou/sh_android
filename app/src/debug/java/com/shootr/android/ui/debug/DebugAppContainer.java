@@ -56,9 +56,9 @@ import com.shootr.android.ui.activities.MainTabbedActivity;
 import com.shootr.android.ui.debug.debugactions.FakeEmailInUseDebugAction;
 import com.shootr.android.ui.debug.debugactions.FakeUsernameInUseDebugAction;
 import com.shootr.android.ui.debug.debugactions.LoginDebugAction;
-import com.shootr.okresponsefaker.EmptyBodyFakeResponse;
-import com.shootr.okresponsefaker.ResponseFaker;
 import com.sloydev.jsonadapters.JsonAdapter;
+import com.sloydev.okresponsefaker.EmptyBodyFakeResponse;
+import com.sloydev.okresponsefaker.ResponseFaker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -450,7 +450,6 @@ public class DebugAppContainer implements AppContainer {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ResponseFaker.setTriggerOnce(isChecked);
-                ResponseFaker.clearNextFakeResponse();
             }
         });
     }

@@ -55,6 +55,7 @@ public class SyncFavoriteRepository implements FavoriteRepository, SyncableRepos
     public List<Favorite> getFavorites() {
         syncTrigger.triggerSync();
         List<FavoriteEntity> remoteFavorites = remoteFavoriteDataSource.getFavorites();
+        localFavoriteDataSource.clear();
         // TODO Use method for putting the entire collection at once
         for (FavoriteEntity remoteFavorite : remoteFavorites) {
             try {

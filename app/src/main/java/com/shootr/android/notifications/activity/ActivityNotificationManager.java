@@ -39,7 +39,8 @@ public class ActivityNotificationManager {
         activeNotifications.add(singleActivityNotification);
         CommonNotification finalNotification;
         if (activeNotifications.size() > 1) {
-            finalNotification = new MultipleActivityNotification(context, notificationBuilderFactory, activeNotifications);
+            finalNotification =
+              new MultipleActivityNotification(context, imageLoader, notificationBuilderFactory, activeNotifications);
         } else {
             finalNotification = singleActivityNotification;
         }

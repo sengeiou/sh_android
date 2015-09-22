@@ -88,7 +88,7 @@
 
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-    <string name="notification_follow_title">%s is now following you!</string>
+    <string name="notification_follow_title">%s is now following you</string>
 
     <!-- Find Friends -->
     <string name="activity_find_friends_title">Find friends</string>
@@ -278,6 +278,7 @@
     <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
     <string name="share_stream_activity_text_pattern">Shared (stream)</string>
     <string name="opened_activity_text_pattern">Opened (stream)</string>
+    <string name="stream_favorited_activity_text_pattern">Favorited (stream)</string>
     <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
     <string name="title_activity_stream_search">StreamSearchActivity</string>
     <string name="activity_find_streams_hint">Find streams</string>
@@ -362,7 +363,7 @@
     <string name="shared_stream_notification">Stream shared</string>
     <string name="new_activity_notification">New activity</string>
     <string name="no_intent_handler">There are no applications available to handle this action.</string>
-    <string name="activity_started_following_you">Started following you!</string>
+    <string name="activity_started_following_you">Started following you</string>
     <string name="intro_start_shooting_button">Start shooting</string>
     <string name="menu_share_shot_via_shootr">Share via Shootr</string>
     <string name="shot_shared_message">Shot shared</string>
@@ -385,9 +386,10 @@
     <string name="done_label">Done</string>
     <string name="stream_media_no_more_media">No more media</string>
     <string name="niced_shot_activity">Niced your shot</string>
-    <string name="niced_shot_activity_with_comment">Niced your shot: </string>
+    <string name="niced_shot_activity_with_comment">Niced your shot:&#160;</string>
     <string name="shared_shot_activity">Shared %s\'s shot</string>
-    <string name="shared_shot_activity_with_comment">Shared %s\'s shot: </string>
+    <string name="shared_shot_activity_with_comment">Shared %s\'s shot:&#160;</string>
+    <string name="mentioned_shot_activity_with_comment">Mentioned you:&#160;</string>
     <string name="report_context_menu_delete">Delete</string>
     <string name="error_deleted_shot">This shot was deleted</string>
     <string name="delete_shot_confirmation_message">Delete shot?</string>

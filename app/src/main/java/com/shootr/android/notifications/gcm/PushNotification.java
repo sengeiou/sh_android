@@ -57,6 +57,7 @@ public class PushNotification {
         private String contentText;
         private String icon;
         private String tickerText;
+        private String optionalLongText;
 
         @Override
         public String toString() {
@@ -98,6 +99,14 @@ public class PushNotification {
 
         public void setTickerText(String tickerText) {
             this.tickerText = tickerText;
+        }
+
+        public String getOptionalLongText() {
+            return optionalLongText;
+        }
+
+        public void setOptionalLongText(String optionalLongText) {
+            this.optionalLongText = optionalLongText;
         }
     }
 

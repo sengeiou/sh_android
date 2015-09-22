@@ -1,7 +1,9 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.bus.Main;
 import com.shootr.android.domain.StreamSearchResult;
 import com.shootr.android.domain.StreamSearchResultList;
+import com.shootr.android.domain.bus.UnwatchDone;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.exception.ShootrValidationException;
@@ -16,10 +18,12 @@ import com.shootr.android.ui.model.StreamResultModel;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.views.StreamsListView;
 import com.shootr.android.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamsListPresenter implements Presenter {
+public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver{
 
     private final StreamsListInteractor streamsListInteractor;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -28,6 +32,7 @@ public class StreamsListPresenter implements Presenter {
     private final ShareStreamInteractor shareStreamInteractor;
     private final StreamResultModelMapper streamResultModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
+    private final Bus bus;
 
     private StreamsListView streamsListView;
     private boolean hasBeenPaused;
@@ -38,7 +43,8 @@ public class StreamsListPresenter implements Presenter {
       SelectStreamInteractor selectStreamInteractor,
       ShareStreamInteractor shareStreamInteractor,
       StreamResultModelMapper streamResultModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      ErrorMessageFactory errorMessageFactory,
+      @Main Bus bus) {
         this.streamsListInteractor = streamsListInteractor;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.unwatchStreamInteractor = unwatchStreamInteractor;
@@ -46,6 +52,7 @@ public class StreamsListPresenter implements Presenter {
         this.shareStreamInteractor = shareStreamInteractor;
         this.streamResultModelMapper = streamResultModelMapper;
         this.errorMessageFactory = errorMessageFactory;
+        this.bus = bus;
     }
     //endregion
 
@@ -158,12 +165,14 @@ public class StreamsListPresenter implements Presenter {
 
     //region Lifecycle
     @Override public void resume() {
+        bus.register(this);
         if (hasBeenPaused) {
             this.loadDefaultStreamList();
         }
     }
 
     @Override public void pause() {
+        bus.unregister(this);
         hasBeenPaused = true;
     }
 
@@ -177,6 +186,12 @@ public class StreamsListPresenter implements Presenter {
                   showViewError(error);
               }
           });
+    }
+
+    @Subscribe
+    @Override
+    public void onUnwatchDone(UnwatchDone.Event event) {
+        this.loadDefaultStreamList();
     }
 
     //endregion

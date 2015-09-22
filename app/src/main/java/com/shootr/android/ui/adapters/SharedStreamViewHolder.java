@@ -17,13 +17,11 @@ public class SharedStreamViewHolder extends ClickableStreamActivityViewHolder {
       OnUsernameClickListener onUsernameClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
         super(view,
           imageLoader,
-          androidTimeUtils,
-          shotTextSpannableBuilder,
-          onAvatarClickListener, onUsernameClickListener, onStreamTitleClickListener);
+          androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
     }
 
     @NonNull
-    protected String getPatternText() {
+    protected String getCommentPattern() {
         return getContext().getString(R.string.share_stream_activity_text_pattern);
     }
 

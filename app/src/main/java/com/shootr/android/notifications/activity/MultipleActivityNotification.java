@@ -3,6 +3,7 @@ package com.shootr.android.notifications.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -10,18 +11,24 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
+import com.shootr.android.util.ImageLoader;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class MultipleActivityNotification extends AbstractActivityNotification {
 
-    private final List<SingleActivityNotification> individualNotifications;
+    public static final Bitmap MULTIPLE_ICONS_BITMAP = null;
 
-    public MultipleActivityNotification(Context context,
-      NotificationBuilderFactory builderFactory,
+    private final List<SingleActivityNotification> individualNotifications;
+    private final ImageLoader imageLoader;
+
+    public MultipleActivityNotification(Context context, ImageLoader imageLoader, NotificationBuilderFactory builderFactory,
       List<SingleActivityNotification> individualNotifications) {
         super(context, builderFactory);
+        this.imageLoader = imageLoader;
         this.individualNotifications = individualNotifications;
     }
 
@@ -72,13 +79,28 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         return getTitle();
     }
 
-    @Override
+    @Override @Nullable
     public Bitmap getLargeIcon() {
-        return null;
+        if (hasMoreThanOneIcon()) {
+            return MULTIPLE_ICONS_BITMAP;
+        } else {
+            return individualNotifications.get(0).getLargeIcon();
+        }
     }
 
-    @Override
-    public Bitmap getWearBackground() {
-        return null;
+    private boolean hasMoreThanOneIcon() {
+        Iterator<SingleActivityNotification> notificationsIterator = individualNotifications.iterator();
+        String firstIcon = notificationsIterator.next().getNotificationValues().getIcon();
+
+        boolean hasMoreThanOneIcon = false;
+        while (notificationsIterator.hasNext()) {
+            String nextIcon = notificationsIterator.next().getNotificationValues().getIcon();
+            boolean areIconsDifferent =
+              (firstIcon != null && !firstIcon.equals(nextIcon)) || firstIcon == null && nextIcon != null;
+            if (areIconsDifferent) {
+                hasMoreThanOneIcon = true;
+            }
+        }
+        return hasMoreThanOneIcon;
     }
 }

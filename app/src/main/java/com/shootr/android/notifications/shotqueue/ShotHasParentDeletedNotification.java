@@ -42,11 +42,6 @@ public class ShotHasParentDeletedNotification extends CommonNotification {
     }
 
     @Override
-    public Bitmap getWearBackground() {
-        return null;
-    }
-
-    @Override
     protected CharSequence getTickerText() {
         return titleText;
     }

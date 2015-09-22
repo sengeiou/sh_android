@@ -29,6 +29,7 @@ public class StreamResultModelMapper {
         StreamResultModel resultModel = new StreamResultModel();
         resultModel.setStreamModel(streamModel);
         resultModel.setWatchers(streamSearchResult.getWatchersNumber());
+        resultModel.setIsWatching(streamSearchResult.isWatching());
         return resultModel;
     }
 
