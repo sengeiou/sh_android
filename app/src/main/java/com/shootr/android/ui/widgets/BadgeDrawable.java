@@ -1,6 +1,7 @@
 package com.shootr.android.ui.widgets;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -12,9 +13,6 @@ import com.shootr.android.R;
 
 public class BadgeDrawable extends Drawable {
 
-    public static final float STROKE_WIDTH = 6f;
-
-    private float mTextSize;
     private Paint mBadgePaint;
     private Paint mBadgePaintBorder;
     private Paint mTextPaint;
@@ -24,23 +22,24 @@ public class BadgeDrawable extends Drawable {
     private boolean mWillDraw = false;
 
     public BadgeDrawable(Context context){
-        mTextSize = context.getResources().getDimension(R.dimen.badge_text_size);
+        final Resources res = context.getResources();
 
         mBadgePaint = new Paint();
-        mBadgePaint.setColor(context.getResources().getColor(R.color.white));
+        mBadgePaint.setColor(res.getColor(R.color.white));
         mBadgePaint.setAntiAlias(true);
         mBadgePaint.setStyle(Paint.Style.FILL);
 
         mBadgePaintBorder = new Paint();
-        mBadgePaintBorder.setColor(context.getResources().getColor(R.color.primary));
+        mBadgePaintBorder.setColor(res.getColor(R.color.primary));
         mBadgePaintBorder.setStyle(Paint.Style.STROKE);
         mBadgePaintBorder.setAntiAlias(true);
-        mBadgePaintBorder.setStrokeWidth(STROKE_WIDTH);
+
+        mBadgePaintBorder.setStrokeWidth(res.getDimension(R.dimen.badge_stroke_width));
 
         mTextPaint = new Paint();
-        mTextPaint.setColor(context.getResources().getColor(R.color.primary));
+        mTextPaint.setColor(res.getColor(R.color.primary));
         mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        mTextPaint.setTextSize(mTextSize);
+        mTextPaint.setTextSize(res.getDimension(R.dimen.badge_text_size));
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
     }
