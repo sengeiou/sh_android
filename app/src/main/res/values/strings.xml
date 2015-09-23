@@ -394,8 +394,5 @@
     <string name="error_deleted_shot">This shot was deleted</string>
     <string name="delete_shot_confirmation_message">Delete shot?</string>
     <string name="menu_save_photo">Save image</string>
-    <string name="downloading_image_error">There was an error saving image</string>
-    <string name="downloading_image_success">Image saved</string>
-    <string name="downloading_image_folder">/Shootr</string>
-    <string name="downloading_image_basic_filename">shootr%1$s%2$s</string>
+    <string name="downloaded_pictures_subfolder">Shootr/</string>
 </resources>
