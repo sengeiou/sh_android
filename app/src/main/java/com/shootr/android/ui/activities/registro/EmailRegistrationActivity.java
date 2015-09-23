@@ -28,6 +28,8 @@ import com.shootr.android.ui.activities.WelcomePageActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
 import com.shootr.android.util.FeedbackMessage;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -47,6 +49,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Inject EmailRegistrationPresenter presenter;
     @Inject LocaleProvider localeProvider;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject IntentFactory intentFactory;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -70,8 +73,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
         final View.OnClickListener termsClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
-                startActivity(browserIntent);
+                String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+                Intent termsIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, termsUrl);
+                Intents.maybeStartActivity(EmailRegistrationActivity.this, termsIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
@@ -80,9 +84,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
         final View.OnClickListener privacyClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl
-                  + localeProvider.getLanguage()));
-                startActivity(browserIntent);
+                String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+                Intent privacyIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, privacyUrl);
+                Intents.maybeStartActivity(EmailRegistrationActivity.this, privacyIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
