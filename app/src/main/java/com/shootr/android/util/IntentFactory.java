@@ -2,7 +2,9 @@ package com.shootr.android.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -11,6 +13,8 @@ import com.shootr.android.ui.model.StreamModel;
 /** Creates {@link Intent}s for launching into external applications. */
 public interface IntentFactory {
   Intent openUrlIntent(String url);
+
+  Intent openEmbededUrlIntent(Activity launchActivity, String url);
 
   Intent shareShotIntent(Activity launchActivity, ShotModel shotModel);
 
@@ -23,6 +27,16 @@ public interface IntentFactory {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
       return intent;
+    }
+
+    @Override
+    public Intent openEmbededUrlIntent(Activity launchActivity, String url) {
+      CustomTabsIntent customTabIntent = new CustomTabsIntent.Builder()
+        .setToolbarColor(launchActivity.getResources().getColor(R.color.primary))
+        .setShowTitle(true)
+        .build();
+      customTabIntent.intent.setData(Uri.parse(url));
+      return customTabIntent.intent;
     }
 
     @Override

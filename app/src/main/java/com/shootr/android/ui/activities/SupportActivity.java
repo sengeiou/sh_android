@@ -56,14 +56,14 @@ public class SupportActivity extends BaseToolbarDecoratedActivity {
     @OnClick(R.id.support_terms_service_text)
     public void onTermsAndServiceClick() {
         String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-        Intent termsIntent = intentFactory.openUrlIntent(termsUrl);
+        Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
         Intents.maybeStartActivity(this, termsIntent);
     }
 
     @OnClick(R.id.privacy_policy_text)
     public void onPrivacyPolicyClick() {
         String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-        Intent privacyIntent = intentFactory.openUrlIntent(privacyUrl);
+        Intent privacyIntent = intentFactory.openEmbededUrlIntent(this, privacyUrl);
         Intents.maybeStartActivity(this, privacyIntent);
     }
 

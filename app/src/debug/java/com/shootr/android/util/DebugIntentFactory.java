@@ -28,6 +28,12 @@ public final class DebugIntentFactory implements IntentFactory {
     }
 
     @Override
+    public Intent openEmbededUrlIntent(Activity launchActivity, String url) {
+        Intent baseIntent = realIntentFactory.openEmbededUrlIntent(launchActivity, url);
+        return createCaptureIntent(baseIntent);
+    }
+
+    @Override
     public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel) {
         Intent baseIntent = realIntentFactory.shareShotIntent(launchActivity, shotModel);
         return createCaptureIntent(baseIntent);
