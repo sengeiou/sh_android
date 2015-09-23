@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
+import java.io.File;
 import javax.inject.Inject;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -145,15 +147,26 @@ public class PhotoViewActivity extends BaseActivity {
     private void saveImage() {
         Uri imageUri = Uri.parse(imageUrl);
         String fileName = imageUri.getLastPathSegment();
+        String downloadSubpath = getString(R.string.downloaded_pictures_subfolder) + fileName;
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(imageUri);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDescription(imageUrl);
         request.allowScanningByMediaScanner();
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, getString(R.string.downloaded_pictures_subfolder) + fileName);
+        // Equivalent to request.setDestinationInExternalPublicDir(), but makes sure the Shootr subfolder exists
+        request.setDestinationUri(getDownloadDestination(downloadSubpath));
+
         request.setMimeType("image/jpeg"); //TODO servidor debe mandarlo correctamente
 
         downloadManager.enqueue(request);
+    }
+
+    @NonNull
+    private Uri getDownloadDestination(String downloadSubpath) {
+        File picturesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File destinationFile = new File(picturesFolder, downloadSubpath);
+        destinationFile.mkdirs();
+        return Uri.fromFile(destinationFile);
     }
 }
