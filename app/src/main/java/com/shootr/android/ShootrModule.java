@@ -47,6 +47,6 @@ public final class ShootrModule {
     }
 
     @Provides @TemporaryFilesDir File provideTemporaryFilesDir(Application application) {
-        return application.getExternalFilesDir("tmp");
+        return application.getExternalCacheDir();
     }
 }
