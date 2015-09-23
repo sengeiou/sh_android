@@ -395,4 +395,6 @@
     <string name="delete_shot_confirmation_message">Delete shot?</string>
     <string name="menu_save_photo">Save image</string>
     <string name="downloaded_pictures_subfolder">Shootr/</string>
+    <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
+    <string name="download_photo_permission_explaination">You must allow Shootr write access to your external storage to save images</string>
 </resources>
