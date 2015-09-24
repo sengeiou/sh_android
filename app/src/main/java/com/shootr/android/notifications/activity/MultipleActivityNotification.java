@@ -12,7 +12,6 @@ import android.text.style.StyleSpan;
 import com.shootr.android.R;
 import com.shootr.android.notifications.NotificationBuilderFactory;
 import com.shootr.android.util.ImageLoader;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
