@@ -3,7 +3,6 @@ package com.shootr.android.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -154,53 +153,5 @@ public class GlideImageLoader implements ImageLoader {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
-    }
-
-    //TODO use or delete
-    public static class GlidePreviewHelper {
-
-        private final String previewUrl;
-        private final String finalUrl;
-        private final ImageView imageView;
-        private final RequestManager glide;
-        private boolean loadedFinalImage = false;
-        private ImageViewTarget<GlideDrawable> previewTarget;
-        private ImageViewTarget<GlideDrawable> finalTarget;
-
-        public GlidePreviewHelper(String previewUrl, String finalUrl, ImageView imageView, RequestManager glide) {
-            this.previewUrl = previewUrl;
-            this.finalUrl = finalUrl;
-            this.imageView = imageView;
-            this.glide = glide;
-        }
-
-        public void loadImageWithPreview(final Callback callback) {
-            previewTarget = new ImageViewTarget<GlideDrawable>(imageView) {
-                @Override
-                protected void setResource(GlideDrawable resource) {
-                    if (!loadedFinalImage) {
-                        imageView.setImageDrawable(resource);
-                    }
-                }
-            };
-
-            finalTarget = new ImageViewTarget<GlideDrawable>(imageView) {
-
-                @Override
-                protected void setResource(GlideDrawable resource) {
-                    loadedFinalImage = true;
-                    imageView.setImageDrawable(resource);
-                    cancelPreview();
-                    callback.onLoaded();
-                }
-            };
-
-            glide.load(previewUrl).into(previewTarget);
-            glide.load(finalUrl).into(finalTarget);
-        }
-
-        private void cancelPreview() {
-            previewTarget.getRequest().clear();
-        }
     }
 }
