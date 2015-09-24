@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import com.shootr.android.R;
 import com.shootr.android.ui.activities.StreamTimelineActivity;
 import com.shootr.android.ui.adapters.FavoriteStreamsAdapter;
-import com.shootr.android.ui.adapters.StreamsListAdapter;
 import com.shootr.android.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.android.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.android.ui.base.BaseFragment;
