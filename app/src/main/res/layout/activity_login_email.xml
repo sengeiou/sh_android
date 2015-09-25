@@ -25,7 +25,7 @@
             app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel"
             >
 
-            <AutoCompleteTextView
+            <EditText
                 android:id="@+id/email_login_username_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 >
 
                 <requestFocus/>
-            </AutoCompleteTextView>
+            </EditText>
 
         </com.shootr.android.ui.widgets.FloatLabelLayout>
 

@@ -1,14 +1,20 @@
 package com.shootr.android.ui.activities;
 
+import android.Manifest;
 import android.animation.TimeInterpolator;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.MediaScannerConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,15 +24,11 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.shootr.android.R;
-import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.util.FeedbackMessage;
 import com.shootr.android.util.ImageLoader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import javax.inject.Inject;
-import timber.log.Timber;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
@@ -37,16 +39,18 @@ public class PhotoViewActivity extends BaseActivity {
     private static final String EXTRA_IMAGE_URL = "image";
     public static final int UI_ANIMATION_DURATION = 300;
     public static final TimeInterpolator UI_ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
+    public static final int WRITE_PERMISSION_REQUEST = 1;
 
-    @Bind(R.id.photo) ImageView image;
+    @Bind(R.id.photo) ImageView imageView;
     @Bind(R.id.toolbar_actionbar) Toolbar toolbar;
 
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
-    @Inject TimeUtils timeUtils;
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
+    private String previewUrl;
+    private String imageUrl;
 
     public static Intent getIntentForActivity(Context context, String imageUrl) {
         return getIntentForActivity(context, imageUrl, null);
@@ -67,18 +71,19 @@ public class PhotoViewActivity extends BaseActivity {
         ButterKnife.bind(this);
         setupActionBar();
 
-        attacher = new PhotoViewAttacher(image);
+        attacher = new PhotoViewAttacher(imageView);
         attacher.setZoomable(false);
         attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override public void onViewTap(View view, float v, float v2) {
                 onPhotoClick();
             }
         });
-        loadImages();
     }
 
     @Override protected void initializePresenter() {
-        /* no presenter, so no-op */
+        previewUrl = getIntent().getStringExtra(EXTRA_IMAGE_PREVIEW_URL);
+        imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+        loadImages();
     }
 
 
@@ -91,17 +96,14 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     private void loadImages() {
-        String previewUrl = getIntent().getStringExtra(EXTRA_IMAGE_PREVIEW_URL);
-        String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
-
         if (previewUrl != null) {
-            imageLoader.loadWithPreview(imageUrl, previewUrl, image, new ImageLoader.Callback() {
+            imageLoader.loadWithPreview(imageUrl, previewUrl, imageView, new ImageLoader.Callback() {
                 @Override public void onLoaded() {
                     attacher.update();
                 }
             });
         } else {
-            imageLoader.load(imageUrl, image, new ImageLoader.Callback() {
+            imageLoader.load(imageUrl, imageView, new ImageLoader.Callback() {
                 @Override public void onLoaded() {
                     attacher.update();
                 }
@@ -143,57 +145,81 @@ public class PhotoViewActivity extends BaseActivity {
         if (id == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.menu_download_photo) {
-            saveImage(image.getDrawingCache());
+            saveImage();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveImage(Bitmap image){
-        String folder = getString(R.string.downloading_image_folder);
-        String storageDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + folder;
-        File downloadDirectory = new File(storageDirectory);
-
-        if (!downloadDirectory.exists()) {
-            downloadDirectory.mkdirs();
-        }
-
-        String filename = String.format(getString(R.string.downloading_image_basic_filename), getDateInString(), ".jpg");
-        File file = new File(downloadDirectory, filename);
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            scanForFile(file);
-            showImageSavedSuccessfully();
-        } catch (IOException e) {
-            showErrorSavingImage();
+    private void saveImage() {
+        if (hasWritePermission()) {
+            performImageDownload();
+        } else {
+            requestWritePermissionToUser();
         }
     }
 
-    private void scanForFile(File file) {
-        MediaScannerConnection.scanFile(PhotoViewActivity.this,
-          new String[] { file.toString() },
-          null,
-          new MediaScannerConnection.OnScanCompletedListener() {
-              public void onScanCompleted(String path, Uri uri) {
-                  Timber.d("ExternalStorage", "Scanned " + path + ":");
-                  Timber.d("ExternalStorage", "-> uri=" + uri);
-              }
-          });
+    private void performImageDownload() {
+        Uri imageUri = Uri.parse(imageUrl);
+        String fileName = imageUri.getLastPathSegment();
+        String downloadSubpath = getString(R.string.downloaded_pictures_subfolder) + fileName;
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(imageUri);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDescription(imageUrl);
+        request.allowScanningByMediaScanner();
+        // Equivalent to request.setDestinationInExternalPublicDir(), but makes sure the Shootr subfolder exists
+        request.setDestinationUri(getDownloadDestination(downloadSubpath));
+
+        request.setMimeType("image/jpeg"); //TODO servidor debe mandarlo correctamente
+
+        downloadManager.enqueue(request);
     }
 
-    private String getDateInString() {
-        return String.valueOf(timeUtils.getCurrentDate());
+    private boolean hasWritePermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void showErrorSavingImage() {
-        feedbackMessage.show(getView(), getString(R.string.downloading_image_error));
+    private void requestWritePermissionToUser() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            new AlertDialog.Builder(this).setMessage(R.string.download_photo_permission_explaination)
+              .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      requestWritePermission();
+                  }
+              })
+              .setNegativeButton(R.string.cancel, null)
+              .show();
+        } else {
+            requestWritePermission();
+        }
     }
 
-    private void showImageSavedSuccessfully() {
-        feedbackMessage.show(getView(), getString(R.string.downloading_image_success));
+    protected void requestWritePermission() {
+        ActivityCompat.requestPermissions(this,
+          new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+          WRITE_PERMISSION_REQUEST);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+      @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+        if (requestCode == WRITE_PERMISSION_REQUEST) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                performImageDownload();
+            } else {
+                feedbackMessage.showLong(getView(), R.string.download_photo_permission_denied);
+            }
+        }
+    }
+
+    @NonNull
+    private Uri getDownloadDestination(String downloadSubpath) {
+        File picturesFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File destinationFile = new File(picturesFolder, downloadSubpath);
+        destinationFile.mkdirs();
+        return Uri.fromFile(destinationFile);
+    }
 }

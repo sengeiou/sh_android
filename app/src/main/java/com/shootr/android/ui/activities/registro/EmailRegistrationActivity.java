@@ -1,7 +1,5 @@
 package com.shootr.android.ui.activities.registro;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,11 +11,8 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -33,15 +28,15 @@ import com.shootr.android.ui.activities.WelcomePageActivity;
 import com.shootr.android.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.android.ui.views.EmailRegistrationView;
 import com.shootr.android.util.FeedbackMessage;
-import java.util.ArrayList;
-import java.util.List;
+import com.shootr.android.util.IntentFactory;
+import com.shootr.android.util.Intents;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    @Bind(R.id.registration_email) AutoCompleteTextView emailInput;
+    @Bind(R.id.registration_email) EditText emailInput;
     @Bind(R.id.registration_username) EditText usernameInput;
     @Bind(R.id.registration_password) EditText passwordInput;
     @Bind(R.id.registration_create_button) View createButton;
@@ -54,6 +49,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Inject EmailRegistrationPresenter presenter;
     @Inject LocaleProvider localeProvider;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject IntentFactory intentFactory;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -67,25 +63,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         setupDisclaimerLinks();
-        setupSuggestedEmails();
     }
-
-    private void setupSuggestedEmails() {
-        ArrayAdapter<String> emailSuggestionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getEmailAccounts());
-        emailInput.setAdapter(emailSuggestionAdapter);
-    }
-
-    public List<String> getEmailAccounts() {
-        List<String> emailAccounts = new ArrayList<String>();
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
-        for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
-            if (emailPattern.matcher(account.name).matches()) {
-                emailAccounts.add(account.name);
-            }
-        }
-        return emailAccounts;
-    }
-
 
     private void setupDisclaimerLinks() {
         String originalDisclaimerText = getString(R.string.activity_registration_legal_disclaimer);
@@ -95,8 +73,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
         final View.OnClickListener termsClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(termsOfServiceBaseUrl + localeProvider.getLanguage()));
-                startActivity(browserIntent);
+                String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+                Intent termsIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, termsUrl);
+                Intents.maybeStartActivity(EmailRegistrationActivity.this, termsIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText, termsClickListener);
@@ -105,9 +84,9 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
         final View.OnClickListener privacyClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyServiceBaseUrl
-                  + localeProvider.getLanguage()));
-                startActivity(browserIntent);
+                String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+                Intent privacyIntent = intentFactory.openEmbededUrlIntent(EmailRegistrationActivity.this, privacyUrl);
+                Intents.maybeStartActivity(EmailRegistrationActivity.this, privacyIntent);
             }
         };
         replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText, privacyClickListener);
