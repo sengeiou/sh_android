@@ -73,7 +73,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             watchers.setVisibility(View.GONE);
         }
 
-        //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         imageLoader.loadStreamPicture(pictureUrl, picture);
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
