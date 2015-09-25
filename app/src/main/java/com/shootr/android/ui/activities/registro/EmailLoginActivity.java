@@ -3,7 +3,6 @@ package com.shootr.android.ui.activities.registro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
