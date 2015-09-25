@@ -125,8 +125,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     private CharSequence getAuthorWithConnected(StreamModel stream) {
-        return new Truss().append(stream.getAuthorUsername())
-          .append(" · ")
+        return new Truss()
           .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
           .append(connected)
           .popSpan()
