@@ -33,7 +33,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.stream_watchers) TextView watchers;
     @Bind(R.id.separator) View separator;
     @Nullable @Bind(R.id.stream_remove) ImageView removeButton;
-    @Nullable @Bind(R.id.stream_author) TextView author;
+    @Nullable @Bind(R.id.stream_subtitle) TextView subtitle;
     @Nullable @Bind(R.id.stream_actions_container) View actionsContainer;
 
     @BindString(R.string.watching_stream_connected) String connected;
@@ -64,7 +64,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     public void render(StreamResultModel streamResultModel, boolean showSeparator) {
         this.setClickListener(streamResultModel);
         title.setText(streamResultModel.getStreamModel().getTitle());
-        renderAuthor(streamResultModel.getStreamModel());
+        renderSubttile(streamResultModel.getStreamModel());
         int watchersCount = streamResultModel.getWatchers();
         if (watchersCount > 0 || showsWatchersText) {
             watchers.setVisibility(View.VISIBLE);
@@ -73,7 +73,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
             watchers.setVisibility(View.GONE);
         }
 
-        //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = streamResultModel.getStreamModel().getPicture();
         imageLoader.loadStreamPicture(pictureUrl, picture);
         separator.setVisibility(showSeparator ? View.VISIBLE : View.GONE);
@@ -114,32 +113,31 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    protected void renderAuthor(StreamModel stream) {
-        if (author != null) {
+    protected void renderSubttile(StreamModel stream) {
+        if (subtitle != null) {
             if (isWatchingStateEnabled) {
-                author.setText(getAuthorWithConnected(stream));
+                subtitle.setText(getConnectedSubtitle(stream));
             } else {
-                author.setText(getAuthorWithDescription(stream));
+                subtitle.setText(getAuthorSubtitleWithDescription(stream));
             }
         }
     }
 
-    private CharSequence getAuthorWithConnected(StreamModel stream) {
-        return new Truss().append(stream.getAuthorUsername())
-          .append(" · ")
+    private CharSequence getConnectedSubtitle(StreamModel stream) {
+        return new Truss()
           .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
           .append(connected)
           .popSpan()
           .build();
     }
 
-    private CharSequence getAuthorWithDescription(StreamModel stream) {
+    private CharSequence getAuthorSubtitleWithDescription(StreamModel stream) {
         if (stream.getDescription() == null) {
             return stream.getAuthorUsername();
         } else {
             return new Truss().append(stream.getAuthorUsername())
               .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
-              .append(" · ")
+              .append(" ")
               .append(stream.getDescription())
               .popSpan()
               .build();
