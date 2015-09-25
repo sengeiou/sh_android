@@ -138,7 +138,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         } else {
             return new Truss().append(stream.getAuthorUsername())
               .pushSpan(new TextAppearanceSpan(itemView.getContext(), R.style.InlineDescriptionAppearance))
-              .append(" · ")
+              .append(" ")
               .append(stream.getDescription())
               .popSpan()
               .build();

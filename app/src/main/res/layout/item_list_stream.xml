@@ -52,7 +52,7 @@
       <TextView android:id="@+id/stream_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray_45"
+        android:textColor="@color/black"
         android:singleLine="true"
         android:textSize="15sp"
         tools:text="Romanesco" />
