@@ -14,7 +14,7 @@
           android:layout_marginTop="16dp"
           app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
-            <AutoCompleteTextView android:id="@+id/registration_email"
+            <EditText android:id="@+id/registration_email"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:hint="@string/activity_registration_email_hint"

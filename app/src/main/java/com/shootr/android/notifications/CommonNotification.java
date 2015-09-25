@@ -31,12 +31,15 @@ public abstract class CommonNotification {
     }
 
     private void setCommonNotificationValues(NotificationCompat.Builder builder) {
+        int primaryColor = resources.getColor(R.color.primary);
         builder.setSound(getRingtone());
         builder.setPriority(getPriority());
         builder.setSmallIcon(getSmallIcon());
         builder.setAutoCancel(true);
         builder.setTicker(getTickerText());
-        builder.setColor(resources.getColor(R.color.primary));
+        builder.setColor(primaryColor);
+        builder.setCategory(NotificationCompat.CATEGORY_SOCIAL);
+        builder.setLights(primaryColor, 1000, 3000);
         Bitmap largeIcon = getLargeIcon();
         builder.setLargeIcon(shouldRoundIcon() ? transformCircularBitmap(largeIcon) : largeIcon);
         builder.extend(new NotificationCompat.WearableExtender().setBackground(largeIcon));

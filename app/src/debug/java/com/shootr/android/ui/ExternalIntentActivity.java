@@ -86,6 +86,9 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
             Truss truss = new Truss();
             for (String key : extras.keySet()) {
                 Object value = extras.get(key);
+                if (value == null) {
+                    continue;
+                }
 
                 String valueString;
                 if (value.getClass().isArray()) {
