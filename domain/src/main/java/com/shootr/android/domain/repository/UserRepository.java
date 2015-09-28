@@ -23,4 +23,6 @@ public interface UserRepository {
     List<User> getAllParticipants(String idStream, Long maxJoinDate);
 
     List<User> findParticipants(String idStream, String query);
+
+    void updateWatch(User user);
 }
