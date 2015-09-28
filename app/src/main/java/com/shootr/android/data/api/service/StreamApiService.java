@@ -24,6 +24,9 @@ public interface StreamApiService {
     @GET("/streams/{idStream}?watchersCount=51&includeWatchers=true&includeLinks=false&includeMediaCountByRelatedUsers=true")
     StreamEntity getStream(@Path("idStream") String idStream) throws IOException, ApiException;
 
+    @GET("/streams?includeLinks=false")
+    List<StreamEntity> getStreams(@Query("idStreams") List<String> idStreams) throws IOException, ApiException;
+
     @GET("/streams/popular?includeLinks=false&includeEmbed=false")
     List<StreamEntity> getStreamList(@Query("locale") String locale) throws ApiException, IOException;
 

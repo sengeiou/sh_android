@@ -33,8 +33,8 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
         try {
-            return service.getStreamsByIds(streamIds);
-        } catch (IOException e) {
+            return streamApiService.getStreams(streamIds);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
