@@ -108,14 +108,10 @@ public class ShootrUserService {
     }
 
     public void performLogout() {
-        try {
-            User currentUser = sessionRepository.getCurrentUser();
-            loginGateway.performLogout(currentUser.getIdUser());
-            removeSession();
-            databaseUtils.clearDataOnLogout();
-        } catch (IOException e) {
-            throw new ServerCommunicationException(e);
-        }
+        User currentUser = sessionRepository.getCurrentUser();
+        loginGateway.performLogout(currentUser.getIdUser());
+        removeSession();
+        databaseUtils.clearDataOnLogout();
     }
 
     private void removeSession() {

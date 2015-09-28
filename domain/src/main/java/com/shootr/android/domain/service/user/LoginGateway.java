@@ -10,5 +10,5 @@ public interface LoginGateway {
 
     LoginResult performFacebookLogin(String facebookToken) throws InvalidLoginException;
 
-    void performLogout(String idUser) throws IOException;
+    void performLogout(String idUser);
 }

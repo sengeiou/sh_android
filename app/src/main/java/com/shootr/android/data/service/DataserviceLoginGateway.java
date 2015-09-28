@@ -2,6 +2,7 @@ package com.shootr.android.data.service;
 
 import com.shootr.android.data.api.entity.FacebookLoginApiEntity;
 import com.shootr.android.data.api.entity.LoginApiEntity;
+import com.shootr.android.data.api.entity.LogoutApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.entity.DeviceEntity;
@@ -83,10 +84,14 @@ public class DataserviceLoginGateway implements LoginGateway {
         return authApiService.authenticate(loginApiEntity);
     }
 
-    @Override public void performLogout(String idUser) throws IOException {
-        DeviceEntity deviceByIdUser = deviceManager.getDeviceByIdUser(idUser);
-        if(deviceByIdUser != null) {
-            shootrService.logout(idUser, deviceByIdUser.getIdDevice());
+    @Override public void performLogout(String idUser) {
+        try {
+            DeviceEntity deviceByIdUser = deviceManager.getDeviceByIdUser(idUser);
+            if(deviceByIdUser != null) {
+                authApiService.logout(new LogoutApiEntity(deviceByIdUser.getIdDevice()));
+            }
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
         }
     }
 }

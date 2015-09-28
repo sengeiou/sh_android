@@ -4,6 +4,7 @@ import com.shootr.android.data.api.entity.ChangeEmailApiEntity;
 import com.shootr.android.data.api.entity.CreateAccountApiEntity;
 import com.shootr.android.data.api.entity.FacebookLoginApiEntity;
 import com.shootr.android.data.api.entity.LoginApiEntity;
+import com.shootr.android.data.api.entity.LogoutApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.FacebookUserEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -26,4 +27,7 @@ public interface AuthApiService {
     @POST("/auth/sendConfirmationEmail") Response confirmEmail() throws ApiException, IOException;
 
     @POST("/auth/changeEmail") Response changeEmail(@Body ChangeEmailApiEntity changeEmailApiEntity) throws ApiException, IOException;
+
+    @POST("/auth/logout")
+    Void logout(@Body LogoutApiEntity logoutEntity) throws ApiException, IOException;
 }
