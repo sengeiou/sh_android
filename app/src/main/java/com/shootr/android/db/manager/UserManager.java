@@ -192,12 +192,10 @@ public class UserManager extends AbstractManager {
     }
 
     public List<UserEntity> getUsersNotSynchronized() {
-        String whereFormat = "%s = '%s' or %s = '%s'";
-        String whereClause = String.format(whereFormat,
-          UserTable.SYNCHRONIZED,
-          LocalSynchronized.SYNC_NEW,
-          UserTable.SYNCHRONIZED,
-          LocalSynchronized.SYNC_UPDATED);
+        String whereClause = UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
+          + "or "+UserTable.SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' "
+          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_NEW+"' "
+          + "or "+UserTable.WATCHING_SYNCHRONIZED+" = '"+LocalSynchronized.SYNC_UPDATED+"' ";
 
         Cursor queryResult =
           getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, whereClause, null, null, null, null);
