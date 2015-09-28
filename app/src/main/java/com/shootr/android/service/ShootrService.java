@@ -37,7 +37,5 @@ public interface ShootrService {
 
     UserEntity getUserByUsername(String username) throws IOException;
 
-    void logout(String idUser, String sessionToken) throws IOException;
-
     List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException;
 }

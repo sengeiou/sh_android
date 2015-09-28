@@ -275,11 +275,6 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public void logout(String idUser, String idDevice) throws IOException {
-        GenericDto logoutOperationDto = userDtoFactory.getLogoutOperationDto(idUser, idDevice);
-        postRequest(logoutOperationDto);
-    }
-
     @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException {
         List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getSuggestedPeople(currentUserId);
