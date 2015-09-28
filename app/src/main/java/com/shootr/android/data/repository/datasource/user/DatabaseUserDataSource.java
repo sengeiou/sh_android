@@ -66,6 +66,12 @@ public class DatabaseUserDataSource implements UserDataSource {
         throw new IllegalStateException("Find Participants has no local implementation");
     }
 
+    @Override
+    public void updateWatch(UserEntity userEntity) {
+        //TODO save only watching fields?
+        userManager.saveUser(userEntity);
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }
