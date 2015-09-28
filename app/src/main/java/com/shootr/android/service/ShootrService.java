@@ -25,8 +25,6 @@ public interface ShootrService {
 
     FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    StreamEntity saveStream(StreamEntity streamEntity) throws IOException;
-
     List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException;
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;

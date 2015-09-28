@@ -20,7 +20,6 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsN
 public class StreamDtoFactory {
 
     private static final String ALIAS_GET_STREAMS_FROM_WATCH_FOLLOWING = "GET_STREAMS_FROM_WATCH_FOLLOWING";
-    private static final String ALIAS_CREATE_STREAM = "CREATE_STREAM";
 
     private UtilityDtoFactory utilityDtoFactory;
     private StreamEntityMapper streamEntityMapper;
@@ -44,16 +43,5 @@ public class StreamDtoFactory {
         OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_STREAMS_FROM_WATCH_FOLLOWING, op);
-    }
-
-    public GenericDto saveStream(StreamEntity streamEntity) {
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_UPDATE_CREATE)
-          .putKey(DatabaseContract.StreamTable.ID_STREAM, streamEntity.getIdStream())
-          .entity(DatabaseContract.StreamTable.TABLE)
-          .build();
-
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(streamEntity)).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_STREAM, op);
     }
 }
