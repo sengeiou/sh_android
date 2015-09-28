@@ -20,10 +20,7 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsN
 public class StreamDtoFactory {
 
     private static final String ALIAS_GET_STREAMS_FROM_WATCH_FOLLOWING = "GET_STREAMS_FROM_WATCH_FOLLOWING";
-    private static final String ALIAS_GET_STREAM_BY_ID_STREAM = "GET_STREAM_BY_ID_STREAM";
-    private static final String ALIAS_SEARCH_STREAM = "SEARCH_STREAM";
     private static final String ALIAS_CREATE_STREAM = "CREATE_STREAM";
-    public static final String ALIAS_LISTING_STREAMS = "GET_ALL_STREAMS_CREATED_BYUSER";
 
     private UtilityDtoFactory utilityDtoFactory;
     private StreamEntityMapper streamEntityMapper;
@@ -59,35 +56,4 @@ public class StreamDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_STREAM, op);
     }
-
-    public GenericDto getStreamById(String idStream) {
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.StreamTable.TABLE)
-          .putKey(DatabaseContract.StreamTable.ID_STREAM, idStream)
-          .items(1)
-          .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_STREAM_BY_ID_STREAM, op);
-    }
-
-    public GenericDto getSearchStreamDto(String query, Map<String, Integer> streamsWatchesCounts, String locale) {
-        MetadataDto md = new MetadataDto.Builder().items(50)
-          .operation(Constants.OPERATION_RETRIEVE)
-          .entity("SearchStreamMongo")
-                .putKey("pattern", query)
-                .putKey("locale", locale)
-          .build();
-
-        OperationDto.Builder operationBuilder = new OperationDto.Builder();
-        for (String idStream : streamsWatchesCounts.keySet()) {
-            Integer watchers = streamsWatchesCounts.get(idStream);
-            Map<String, Object> dataItem = new HashMap<>(2);
-            dataItem.put("idStream", idStream);
-            dataItem.put("watchers", watchers);
-            operationBuilder.putData(dataItem);
-        }
-        OperationDto op = operationBuilder.metadata(md).build();
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_STREAM, op);
-    }
-
 }

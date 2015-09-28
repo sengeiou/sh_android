@@ -224,22 +224,6 @@ public class ShootrDataService implements ShootrService {
         return streamsReceived;
     }
 
-    @Override public StreamEntity getStreamById(String idStream) throws IOException {
-        GenericDto requestDto = streamDtoFactory.getStreamById(idStream);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        StreamEntity streamsReceived = null;
-        if(ops.length>0){
-            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
-        }
-        return streamsReceived;
-
-    }
-
     @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
         GenericDto requestDto = userDtoFactory.saveUserDto(userEntity);
         GenericDto responseDto = postRequest(requestDto);

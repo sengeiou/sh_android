@@ -29,8 +29,6 @@ public interface ShootrService {
 
     List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException;
 
-    StreamEntity getStreamById(String idStream) throws IOException;
-
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
     void performCheckin(String idUser, String idStream) throws IOException;
