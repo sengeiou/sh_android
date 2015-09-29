@@ -868,7 +868,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
     }
 
     @Override public void follow(int position) {
-        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position), getActivity());
+        suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
     }
 
     @Override public void unFollow(final int position) {
@@ -876,7 +876,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
         new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+userModel.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  suggestedPeoplePresenter.unfollowUser(userModel, getActivity());
+                  suggestedPeoplePresenter.unfollowUser(userModel);
               }
           })
           .setNegativeButton("No", null)
