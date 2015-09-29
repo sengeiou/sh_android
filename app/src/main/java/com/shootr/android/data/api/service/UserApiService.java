@@ -13,6 +13,9 @@ public interface UserApiService {
     @GET("/user/id/{idUser}")
     UserEntity getUser(@Path("idUser") String idUser) throws IOException, ApiException;
 
+    @GET("/user/{username}")
+    UserEntity getUserByUsername(@Path("username") String username) throws IOException, ApiException;
+
     @GET("/user/{idUser}/following")
     List<UserEntity> getFollowing(@Path("idUser") String idUser) throws IOException, ApiException;
 
