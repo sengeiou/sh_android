@@ -15,8 +15,6 @@ public interface ShootrService {
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
 
-    FollowEntity getFollowByIdUserFollowed(String currentUserId, String idUser) throws  IOException;
-
     DeviceEntity updateDevice(DeviceEntity device) throws IOException;
 
     DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException;

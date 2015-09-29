@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice;
 
 import com.shootr.android.data.entity.DeviceEntity;
-import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -127,24 +126,6 @@ public class ShootrDataService implements ShootrService {
         }
         return null;
     }
-
-    @Override public FollowEntity getFollowByIdUserFollowed(String idCurrentUser,String idUser) throws IOException {
-        GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        if(ops[0] != null && ops[0].getData() != null && ops[0].getData().length > 0){
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            FollowEntity followReceived = followMapper.fromDto(dataItem);
-            return followReceived;
-
-        }
-        return null;
-    }
-
 
     @Override
     public DeviceEntity updateDevice(DeviceEntity device) throws IOException {

@@ -34,7 +34,6 @@ public class UserDtoFactory {
     private static final String ENTITY_SUGGESTED_PEOPLE = "SuggestedPeopleMongo";
     private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
-    private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
@@ -63,27 +62,6 @@ public class UserDtoFactory {
         OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).setData(null).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CHECKIN, operationDto);
-    }
-
-    public GenericDto getFollowUserDtoByIdUser(String idFromUser, String idToUser){
-        if(idFromUser == null){
-            throw new IllegalArgumentException("IdUser who follow to, can't be null");
-        }
-        if(idToUser == null){
-            throw new IllegalArgumentException("IdUser who is followed by, can't be null");
-        }
-        Map<String, Object> keys = new ArrayMap<>(2);
-        keys.put(FollowTable.ID_USER, idFromUser);
-        keys.put(FollowTable.ID_FOLLOWED_USER, idToUser);
-
-        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_RETRIEVE, FollowTable.TABLE,true,1L,0L,1L,keys);
-        OperationDto op = new OperationDto();
-        op.setMetadata(md);
-
-        Map<String, Object>[] data = new HashMap[1];
-        data[0] = followMapper.toDto(null);
-        op.setData(data);
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
     }
 
     public GenericDto getUserByUsername(String username){
