@@ -9,6 +9,8 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.android.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.android.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.model.StreamModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.StreamModelMapper;
@@ -29,8 +31,8 @@ public class StreamDetailPresenter implements Presenter {
     private final GetStreamInfoInteractor streamInfoInteractor;
     private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
     private final ShareStreamInteractor shareStreamInteractor;
-    private final FollowFaketeractor followFaketeractor;
-    private final UnfollowFaketeractor unfollowFaketeractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
 
     private final StreamModelMapper streamModelMapper;
     private final UserModelMapper userModelMapper;
@@ -49,13 +51,13 @@ public class StreamDetailPresenter implements Presenter {
     @Inject
     public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor, ShareStreamInteractor shareStreamInteractor,
-      FollowFaketeractor followFaketeractor, UnfollowFaketeractor unfollowFaketeractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
+      FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.streamInfoInteractor = streamInfoInteractor;
         this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.shareStreamInteractor = shareStreamInteractor;
-        this.followFaketeractor = followFaketeractor;
-        this.unfollowFaketeractor = unfollowFaketeractor;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
         this.streamModelMapper = streamModelMapper;
         this.userModelMapper = userModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -247,7 +249,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void follow(final String idUser) {
-        followFaketeractor.follow(idUser, new Interactor.CompletedCallback() {
+        followInteractor.follow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_FOLLOWING);
             }
@@ -255,7 +257,7 @@ public class StreamDetailPresenter implements Presenter {
     }
 
     public void unfollow(final String idUser) {
-        unfollowFaketeractor.unfollow(idUser, new Interactor.CompletedCallback() {
+        unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_NONE);
             }
