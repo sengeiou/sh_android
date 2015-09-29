@@ -76,7 +76,7 @@ public class FollowManager extends AbstractManager{
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
-        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ DatabaseContract.SyncColumns.DELETED+" IS NULL";
+        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND ("+ DatabaseContract.SyncColumns.DELETED+" IS NULL OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+" = 'D')";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
         Cursor  c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
