@@ -6,7 +6,9 @@ import com.shootr.android.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.android.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.android.domain.interactor.stream.GetListingCountInteractor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.LogoutInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.ui.views.ProfileView;
 import com.shootr.android.util.ErrorMessageFactory;
 import org.junit.Before;
@@ -34,6 +36,8 @@ public class ProfilePresenterTest {
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
     @Mock ShareShotInteractor shareShotInteractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
 
     private ProfilePresenter profilePresenter;
@@ -41,9 +45,14 @@ public class ProfilePresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        profilePresenter = new ProfilePresenter(getListingCountInteractor, logoutInteractor,
+        profilePresenter = new ProfilePresenter(getListingCountInteractor,
+          logoutInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor, shareShotInteractor, errorMessageFactory);
+          unmarkNiceShotInteractor,
+          shareShotInteractor,
+          followInteractor,
+          unfollowInteractor,
+          errorMessageFactory);
         profilePresenter.setView(profileView);
         profilePresenter.setCurrentUser(true);
     }
