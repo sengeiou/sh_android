@@ -165,32 +165,6 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public FollowEntity followUser(FollowEntity follow) throws IOException {
-        GenericDto requestDto = userDtoFactory.followUserDto(follow);
-        GenericDto reponseDto = postRequest(requestDto);
-        OperationDto[] ops = reponseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        Map<String, Object> dataItem = ops[0].getData()[0];
-        FollowEntity followReceived = followMapper.fromDto(dataItem);
-        return followReceived;
-    }
-
-    @Override public FollowEntity unfollowUser(FollowEntity follow) throws IOException {
-        GenericDto requestDto = userDtoFactory.unfollowUserDto(follow);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        Map<String, Object> dataItem = ops[0].getData()[0];
-        FollowEntity followReceived = followMapper.fromDto(dataItem);
-        return followReceived;
-    }
-
     @Override public StreamEntity saveStream(StreamEntity streamEntity) throws IOException {
         GenericDto requestDto = streamDtoFactory.saveStream(streamEntity);
         GenericDto responseDto = postRequest(requestDto);

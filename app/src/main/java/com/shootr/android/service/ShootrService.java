@@ -21,10 +21,6 @@ public interface ShootrService {
 
     DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException;
 
-    FollowEntity followUser(FollowEntity follow) throws IOException;
-
-    FollowEntity unfollowUser(FollowEntity follow) throws IOException;
-
     StreamEntity saveStream(StreamEntity streamEntity) throws IOException;
 
     List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException;
