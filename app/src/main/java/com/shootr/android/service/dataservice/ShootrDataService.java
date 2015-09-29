@@ -87,20 +87,6 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public UserEntity getUserByIdUser(String idUser) throws IOException {
-        GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else if (ops[0].getMetadata()!=null) {
-            Map<String, Object> dataItem = ops[0].getData()[0];
-            return userMapper.fromDto(dataItem);
-        }
-        return null;
-    }
-
-    @Override
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
       int pageOffset) throws IOException{
         List<UserEntity> users = new ArrayList<>();

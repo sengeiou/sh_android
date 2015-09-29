@@ -41,8 +41,8 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity getUser(String id) {
         try {
-            return service.getUserByIdUser(id);
-        } catch (IOException e) {
+            return userApiService.getUser(id);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }

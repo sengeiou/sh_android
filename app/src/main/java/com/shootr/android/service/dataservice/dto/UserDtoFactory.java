@@ -35,7 +35,6 @@ public class UserDtoFactory {
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
-    private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
@@ -128,18 +127,6 @@ public class UserDtoFactory {
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYUSERNAME, operation);
-    }
-
-    public GenericDto getUserByUserId(String userId){
-        OperationDto od  = new OperationDto();
-        Map<String, Object> key = new HashMap<>();
-        key.put(UserTable.ID,userId);
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE,true,null,0L,1L,key);
-        od.setMetadata(md);
-        Map<String, Object>[] array = new HashMap[1];
-        array[0] = userMapper.reqRestUsersToDto(null);
-        od.setData(array);
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
     }
 
     public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {

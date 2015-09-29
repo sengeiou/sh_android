@@ -3,6 +3,8 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -34,6 +36,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private String userId;
     private UserEntityModelMapper userVOMapper;
     private final UserEntityMapper userEntityMapper;
+    private final UserApiService userApiService;
 
     @Inject public GetUserInfoJob(Application application,
       @Main Bus bus,
@@ -43,7 +46,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
       FollowManager followManager,
       SessionRepository sessionRepository,
       UserEntityModelMapper userVOMapper,
-      UserEntityMapper userEntityMapper) {
+      UserEntityMapper userEntityMapper, UserApiService userApiService) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
@@ -51,6 +54,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
         this.sessionRepository = sessionRepository;
         this.userVOMapper = userVOMapper;
         this.userEntityMapper = userEntityMapper;
+        this.userApiService = userApiService;
     }
 
     public void init(String userId) {
@@ -101,7 +105,11 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     }
 
     private UserEntity getUserFromService() throws IOException {
-        return service.getUserByIdUser(userId);
+        try {
+            return userApiService.getUser(userId);
+        } catch (ApiException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override protected boolean isNetworkRequired() {

@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface ShootrService {
 
-    UserEntity getUserByIdUser(String idUser) throws IOException;
-
     PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
 
