@@ -1,8 +1,8 @@
 package com.shootr.android.domain.service.user;
 
-import java.io.IOException;
+import com.shootr.android.domain.exception.InvalidCheckinException;
 
 public interface CheckinGateway {
 
-    void performCheckin(String idUser, String idEvent) throws IOException;
+    void performCheckin(String idUser, String idEvent) throws InvalidCheckinException;
 }
