@@ -31,7 +31,5 @@ public interface ShootrService {
 
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
-    UserEntity getUserByUsername(String username) throws IOException;
-
     List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException;
 }

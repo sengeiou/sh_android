@@ -35,7 +35,6 @@ public class UserDtoFactory {
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
-    private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
     public static final String SUGGESTED_PEOPLE_ID_USER = "idUser";
@@ -107,26 +106,6 @@ public class UserDtoFactory {
         data[0] = followMapper.toDto(null);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
-    }
-
-    public GenericDto getUserByUsername(String username){
-        FilterDto filter = and(UserTable.USER_NAME).completlyContains(username) //
-                .and(UserTable.DELETED).isEqualTo(null) //
-                .build();
-
-        MetadataDto metadata = new MetadataDto.Builder() //
-                .operation(Constants.OPERATION_RETRIEVE) //
-                .entity(UserTable.TABLE) //
-                .includeDeleted(false) //
-                .filter(filter) //
-                .build();
-
-        OperationDto operation = new OperationDto.Builder() //
-                .metadata(metadata) //
-                .putData(userMapper.toDto(null)) //
-                .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYUSERNAME, operation);
     }
 
     public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {

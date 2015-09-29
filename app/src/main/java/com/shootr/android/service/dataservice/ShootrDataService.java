@@ -239,23 +239,6 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override
-    public UserEntity getUserByUsername(String username) throws IOException {
-        GenericDto requestDto = userDtoFactory.getUserByUsername(username);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else {
-            Map<String, Object>[] data = ops[0].getData();
-            if (data.length > 0) {
-                Map<String, Object> dataItem = data[0];
-                return userMapper.fromDto(dataItem);
-            }
-        }
-        return null;
-    }
-
     @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException {
         List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getSuggestedPeople(currentUserId);
