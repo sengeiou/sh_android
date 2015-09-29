@@ -253,11 +253,6 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public void performCheckin(String idUser, String idStream) throws IOException {
-        GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idStream);
-        postRequest(checkinDto);
-    }
-
     @Override
     public UserEntity getUserByUsername(String username) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUsername(username);

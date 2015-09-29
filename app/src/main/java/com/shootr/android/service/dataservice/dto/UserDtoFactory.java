@@ -31,9 +31,7 @@ public class UserDtoFactory {
     public static final int FOLLOW_TYPE = 0;
     public static final int UNFOLLOW_TYPE = 1;
 
-    private static final String ENTITY_CHECKIN = "CheckInMongo";
     private static final String ENTITY_SUGGESTED_PEOPLE = "SuggestedPeopleMongo";
-    private static final String ALIAS_CHECKIN = "CHECKIN";
     private static final String ALIAS_SUGGESTED_PEOPLE = "SUGGESTED_PEOPLE";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
@@ -41,9 +39,7 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERBYUSERNAME = "GET_USERBYUSERNAME";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
     private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
-    public static final String CHECK_IN_ID_USER = "idUser";
     public static final String SUGGESTED_PEOPLE_ID_USER = "idUser";
-    public static final String CHECK_IN_ID_STREAM_CHECKED = "idStream";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -53,18 +49,6 @@ public class UserDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
-    }
-
-    public GenericDto getCheckinOperationDto(String idUser, String idStream) {
-        MetadataDto metadataDto = new MetadataDto.Builder().entity(ENTITY_CHECKIN)
-          .putKey(CHECK_IN_ID_USER, idUser)
-          .putKey(CHECK_IN_ID_STREAM_CHECKED, idStream)
-          .operation(ServiceConstants.OPERATION_RETRIEVE)
-          .build();
-
-        OperationDto operationDto = new OperationDto.Builder().metadata(metadataDto).setData(null).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CHECKIN, operationDto);
     }
 
     public GenericDto followUserDto(FollowEntity follow){
