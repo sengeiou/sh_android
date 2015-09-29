@@ -17,4 +17,10 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.saveFollowsFromServer(followEntities);
         return followEntities;
     }
+
+    @Override
+    public FollowEntity putFollow(FollowEntity followEntity) {
+        followManager.saveFollow(followEntity);
+        return followEntity;
+    }
 }
