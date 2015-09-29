@@ -15,7 +15,7 @@ public class DataserviceCheckinGateway implements CheckinGateway {
         this.streamApiService = streamApiService;
     }
 
-    @Override public void performCheckin(String idUser, String idEvent){
+    @Override public void performCheckin(String idEvent){
         try {
             streamApiService.checkIn(idEvent);
         } catch (IOException | ApiException e) {

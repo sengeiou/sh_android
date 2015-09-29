@@ -54,8 +54,7 @@ public class ShootrUserService {
     }
 
     public void checkInStream(String idEvent) {
-        User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-        checkinGateway.performCheckin(currentUser.getIdUser(), idEvent);
+        checkinGateway.performCheckin(idEvent);
     }
 
     public void createAccount(String username, String email, String password)
