@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,15 +23,14 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.user.FollowInteractor;
+import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.service.PaginatedResult;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.ui.ToolbarDecorator;
@@ -63,6 +61,8 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     @Inject JobManager jobManager;
     @Inject FeedbackMessage feedbackMessage;
     @Inject @Main Bus bus;
+    @Inject FollowInteractor followInteractor;
+    @Inject UnfollowInteractor unfollowInteractor;
 
     private SearchView searchView;
 
@@ -352,25 +352,25 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         unfollowUser(user);
     }
 
-    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob jobOffline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        jobOffline.init(userVO.getIdUser(), followType);
-        jobManager.addJobInBackground(jobOffline);
-
-        GetFollowUnfollowUserOnlineJob
-          jobOnline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
-        jobManager.addJobInBackground(jobOnline);
-    }
-
-    public void followUser(UserModel user){
-        startFollowUnfollowUserJob(user, this, UserDtoFactory.FOLLOW_TYPE);
+    public void followUser(final UserModel user){
+        followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
+            @Override
+            public void onCompleted() {
+                onUserFollowUpdated(user.getIdUser(), true);
+            }
+        });
     }
 
     public void unfollowUser(final UserModel user){
         new AlertDialog.Builder(this).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);
+                  unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
+                      @Override
+                      public void onCompleted() {
+                          onUserFollowUpdated(user.getIdUser(), false);
+                      }
+                  });
               }
           })
           .setNegativeButton("No", null)
@@ -378,12 +378,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
           .show();
     }
 
-    @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        Pair<String, Boolean> result = event.getResult();
-        String idUser = result.first;
-        Boolean following = result.second;
-
+    protected void onUserFollowUpdated(String idUser, Boolean following) {
         List<UserModel> usersInList = adapter.getItems();
         for (int i = 0; i < usersInList.size(); i++) {
             UserModel userModel = usersInList.get(i);
