@@ -23,4 +23,9 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.saveFollow(followEntity);
         return followEntity;
     }
+
+    @Override
+    public List<FollowEntity> getEntitiesNotSynchronized() {
+        return followManager.getFollowsNotSynchronized();
+    }
 }

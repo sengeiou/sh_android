@@ -4,7 +4,10 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
+import retrofit.client.Response;
 import retrofit.http.GET;
+import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -21,4 +24,7 @@ public interface UserApiService {
 
     @GET("/streams/{idStream}/participants/search")
     List<UserEntity> findParticipants(@Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
+
+    @POST("/user/{idUser}/follow")
+    Response follow(@Path("idUser") String idUser) throws IOException, ApiException;
 }

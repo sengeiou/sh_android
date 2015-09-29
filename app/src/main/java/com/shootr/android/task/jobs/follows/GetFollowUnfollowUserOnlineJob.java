@@ -40,7 +40,7 @@ public class GetFollowUnfollowUserOnlineJob extends ShootrBaseJob<FollowUnFollow
     }
 
     public void checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
-        List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
+        List<FollowEntity> followsToUpdate = followManager.getFollowsNotSynchronized();
         for (FollowEntity f : followsToUpdate) {
             if ("D".equals(f.getSynchronizedStatus())) {
                 unfollowUserAndRecordInDatabase(f);

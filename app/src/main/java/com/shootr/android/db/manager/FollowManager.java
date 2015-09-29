@@ -213,11 +213,7 @@ public class FollowManager extends AbstractManager{
     }
 
 
-    /**
-    * Check if it exists any data for send to server. This method It is called before request datas
-     *
-    * **/
-    public List<FollowEntity> getDatasForSendToServerInCase(){
+    public List<FollowEntity> getFollowsNotSynchronized(){
         List<FollowEntity> followsToUpdate = new ArrayList<>();
         String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
         Cursor c = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
