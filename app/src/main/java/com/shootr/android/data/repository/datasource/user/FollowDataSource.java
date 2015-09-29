@@ -9,4 +9,6 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     List<FollowEntity> putFollows(List<FollowEntity> followEntities);
 
     FollowEntity putFollow(FollowEntity followEntity);
+
+    void removeFollow(String idUser);
 }

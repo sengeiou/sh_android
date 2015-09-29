@@ -195,17 +195,13 @@ public class FollowManager extends AbstractManager{
      * Delete one Follow
      */
     public long deleteFollow(FollowEntity follow) {
-        long res = 0;
-        String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
+        return deleteFollow(follow.getFollowedUser(), follow.getIdUser());
+    }
 
-        Cursor c = getReadableDatabase().query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
-        if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
-                    new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});
-        }
-        c.close();
-        return res;
+    public long deleteFollow(String followedUser, String idUser) {
+        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{followedUser, idUser};
+        return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
     public void insertInSync(){

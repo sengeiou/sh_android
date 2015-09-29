@@ -5,6 +5,7 @@ import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
@@ -27,4 +28,7 @@ public interface UserApiService {
 
     @POST("/user/{idUser}/follow")
     Response follow(@Path("idUser") String idUser) throws IOException, ApiException;
+
+    @DELETE("/user/{idUser}/follow")
+    Response unfollow(@Path("idUser") String idUser) throws IOException, ApiException;
 }

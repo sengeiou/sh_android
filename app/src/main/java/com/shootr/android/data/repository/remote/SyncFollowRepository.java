@@ -49,11 +49,25 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     }
 
     @Override
+    public void unfollow(String idUser) {
+        try {
+            remoteFollowDataSource.removeFollow(idUser);
+            localFollowDataSource.removeFollow(idUser);
+        } catch (ServerCommunicationException e) {
+            FollowEntity deletedFollow = createFollow(idUser);
+            deletedFollow.setSynchronizedStatus(Synchronized.SYNC_DELETED);
+            localFollowDataSource.putFollow(deletedFollow);
+            syncTrigger.notifyNeedsSync(this);
+        }
+    }
+
+    @Override
     public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
             if (Synchronized.SYNC_DELETED.equals(entity.getSynchronizedStatus())) {
-                //TODO unfollow
+                remoteFollowDataSource.removeFollow(entity.getFollowedUser());
+                localFollowDataSource.removeFollow(entity.getFollowedUser());
             } else {
                 remoteFollowDataSource.putFollow(entity);
                 entity.setSynchronizedStatus(Synchronized.SYNC_SYNCHRONIZED);

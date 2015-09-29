@@ -25,6 +25,11 @@ public class LocalFollowRepository implements FollowRepository {
         followDataSource.putFollow(followEntity);
     }
 
+    @Override
+    public void unfollow(String idUser) {
+        followDataSource.removeFollow(idUser);
+    }
+
     @NonNull
     protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();

@@ -41,6 +41,15 @@ public class ServiceFollowDataSource implements FollowDataSource {
     }
 
     @Override
+    public void removeFollow(String idUser) {
+        try {
+            userApiService.unfollow(idUser);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
     public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException("Method not valid for service");
     }
