@@ -17,8 +17,8 @@ import dagger.Provides;
 )
 public class ServiceModule {
 
-    @Provides CheckinGateway provideCheckinGateway(DataserviceCheckinGateway dataserviceCheckinGateway) {
-        return dataserviceCheckinGateway;
+    @Provides CheckinGateway provideCheckinGateway(ServiceCheckinGateway serviceCheckinGateway) {
+        return serviceCheckinGateway;
     }
 
     @Provides ChangePasswordGateway provideChangePasswordGateway(DataserviceChangePasswordGateway dataserviceChangePasswordGateway) {

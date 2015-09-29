@@ -7,11 +7,11 @@ import com.shootr.android.domain.service.user.CheckinGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceCheckinGateway implements CheckinGateway {
+public class ServiceCheckinGateway implements CheckinGateway {
 
     private final StreamApiService streamApiService;
 
-    @Inject public DataserviceCheckinGateway(StreamApiService streamApiService) {
+    @Inject public ServiceCheckinGateway(StreamApiService streamApiService) {
         this.streamApiService = streamApiService;
     }
 
