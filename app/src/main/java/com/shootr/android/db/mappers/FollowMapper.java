@@ -27,22 +27,4 @@ public class FollowMapper extends GenericMapper {
         setSynchronizedtoContentValues(f,cv);
         return cv;
     }
-
-
-    public FollowEntity fromDto(Map<String, Object> dto) {
-        FollowEntity follow = new FollowEntity();
-        follow.setIdUser((String) dto.get(ID_USER));
-        follow.setFollowedUser((dto.get(ID_FOLLOWED_USER)) == null ? null: (String)dto.get(ID_FOLLOWED_USER));
-        setSynchronizedfromDto(dto,follow);
-        return follow;
-    }
-
-    public Map<String, Object> toDto(FollowEntity follow) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(ID_USER, follow == null ? null : follow.getIdUser());
-        dto.put(ID_FOLLOWED_USER, follow == null ? null : follow.getFollowedUser());
-        setSynchronizedtoDto(follow,dto);
-        return dto;
-    }
-
 }
