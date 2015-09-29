@@ -2,9 +2,8 @@ package com.shootr.android.data.service;
 
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
-import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.CheckinGateway;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import javax.inject.Inject;
 
@@ -16,11 +15,11 @@ public class DataserviceCheckinGateway implements CheckinGateway {
         this.streamApiService = streamApiService;
     }
 
-    @Override public void performCheckin(String idUser, String idEvent) throws InvalidCheckinException{
+    @Override public void performCheckin(String idUser, String idEvent){
         try {
             streamApiService.checkIn(idEvent);
         } catch (IOException | ApiException e) {
-            throw new InvalidCheckinException(e);
+            throw new ServerCommunicationException(e);
         }
     }
 }
