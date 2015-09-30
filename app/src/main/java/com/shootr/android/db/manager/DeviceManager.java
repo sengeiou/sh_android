@@ -20,7 +20,7 @@ public class DeviceManager extends AbstractManager {
         this.deviceMapper = deviceMapper;
     }
 
-    public DeviceEntity getDeviceByIdUser(String idUser) {
+    public DeviceEntity getDevice() {
         Cursor queryResult =
           getReadableDatabase().query(DeviceTable.TABLE, DeviceTable.PROJECTION, null, null, null,
             null, null);
