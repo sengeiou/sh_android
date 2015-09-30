@@ -24,6 +24,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.DeviceFactory;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.StreamDateTimeTextProvider;
@@ -147,6 +148,10 @@ public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT_SECONDS = 30;
     private static final long TIMEOUT_CONNECT_SECONDS = 15;
+
+    @Provides @Singleton DeviceFactory provideDeviceFactory(AndroidDeviceFactory androidDeviceFactory) {
+        return androidDeviceFactory;
+    }
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;
