@@ -31,8 +31,6 @@ public interface ShootrService {
 
     StreamEntity getStreamById(String idStream) throws IOException;
 
-    UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
-
     void performCheckin(String idUser, String idStream) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;
