@@ -57,6 +57,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     private static final String EXTRA_SEARCH_OFFSET = "offset";
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
+    private static final String EXTRA_SEARCH_PAGE = "currentPage";
 
     @Inject ImageLoader imageLoader;
     @Inject JobManager jobManager;
@@ -321,6 +322,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         outState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
         outState.putString(EXTRA_SEARCH_TEXT, currentSearchQuery);
         outState.putInt(EXTRA_SEARCH_OFFSET, currentResultOffset);
+        outState.putInt(EXTRA_SEARCH_PAGE, currentPage);
         outState.putBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, hasMoreItemsToLoad);
         outState.putBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, isLoadingRemoteData);
     }
@@ -330,6 +332,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         super.onRestoreInstanceState(savedInstanceState);
         currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
         currentResultOffset = savedInstanceState.getInt(EXTRA_SEARCH_OFFSET, 0);
+        currentPage = savedInstanceState.getInt(EXTRA_SEARCH_PAGE, 0);
         hasMoreItemsToLoad = savedInstanceState.getBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, false);
         isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
         List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
