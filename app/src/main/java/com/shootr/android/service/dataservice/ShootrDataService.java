@@ -16,7 +16,6 @@ import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.exception.ServerException;
 import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
-import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
@@ -83,34 +82,6 @@ public class ShootrDataService implements ShootrService {
         this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
-    }
-
-    @Override
-    public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
-      int pageOffset) throws IOException{
-        List<UserEntity> users = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.searchUserOperation(searchQuery, SEARCH_PAGE_LIMIT, pageOffset);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        }else{
-            MetadataDto metadata = ops[0].getMetadata();
-            if(metadata!=null){
-                Long items = metadata.getItems();
-                for (int i = 0; i < items; i++) {
-                    Map<String, Object> dataItem = ops[0].getData()[i];
-                    users.add(userMapper.fromDto(dataItem));
-                }
-                if(metadata.getTotalItems()!=null){
-                    int totalItems = metadata.getTotalItems().intValue();
-                    return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT)
-                            .setPageOffset(pageOffset)
-                            .setTotalItems(totalItems);
-                }
-            }
-        }
-        return null;
     }
 
     @Override public FollowEntity getFollowByIdUserFollowed(String idCurrentUser,String idUser) throws IOException {

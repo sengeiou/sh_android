@@ -9,9 +9,6 @@ import java.util.List;
 
 public interface ShootrService {
 
-    PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
-      throws IOException;
-
     FollowEntity getFollowByIdUserFollowed(String currentUserId, String idUser) throws  IOException;
 
     DeviceEntity updateDevice(DeviceEntity device) throws IOException;

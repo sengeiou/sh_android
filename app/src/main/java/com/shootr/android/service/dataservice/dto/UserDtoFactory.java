@@ -1,7 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
 import android.support.v4.util.ArrayMap;
-import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -9,17 +8,12 @@ import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
-
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
-import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
 
@@ -103,25 +97,6 @@ public class UserDtoFactory {
         data[0] = followMapper.toDto(null);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
-    }
-
-    public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {
-        FilterDto filter = and(
-          orModifiedOrDeletedAfter(0L),
-          or(UserTable.NAME).contains(searchString)
-          .or(UserTable.USER_NAME)
-          .contains(searchString)).build();
-
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(UserTable.TABLE)
-          .items(pageLimit)
-          .offset(pageOffset)
-          .filter(filter)
-          .build();
-
-        OperationDto od = new OperationDto.Builder().metadata(md).putData(userMapper.reqRestUsersToDto(null)).build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_USERS, od);
     }
 
     public GenericDto saveUserDto(UserEntity userEntity) {
