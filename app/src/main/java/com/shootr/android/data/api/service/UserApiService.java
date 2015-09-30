@@ -1,10 +1,12 @@
 package com.shootr.android.data.api.service;
 
+import com.shootr.android.data.api.entity.UserApiEntity;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.PUT;
 import retrofit.http.Path;
@@ -29,4 +31,7 @@ public interface UserApiService {
 
     @PUT("/user/unwatch")
     Response unwatch() throws IOException, ApiException;
+
+    @PUT("/user/")
+    UserEntity putUser(@Body UserApiEntity userApiEntity) throws IOException, ApiException;
 }
