@@ -33,16 +33,20 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
     @Override public List<StreamEntity> getStreamByIds(List<String> streamIds) {
         try {
-            return service.getStreamsByIds(streamIds);
-        } catch (IOException e) {
+            return streamApiService.getStreams(streamIds);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
 
     @Override public StreamEntity putStream(StreamEntity streamEntity) {
         try {
-            return service.saveStream(streamEntity);
-        } catch (IOException e) {
+            if (streamEntity.getIdStream() == null) {
+                return streamApiService.createStream(streamEntity);
+            } else {
+                return streamApiService.updateStream(streamEntity);
+            }
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
