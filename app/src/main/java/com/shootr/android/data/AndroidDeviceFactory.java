@@ -56,6 +56,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
         if (needsNewGcmToken(device)) {
             device.setToken(getNewGcmToken());
         }
+        device.setUniqueDevideID(generateUniqueDeviceId());
         device.setPlatform(Constants.ANDROID_PLATFORM.intValue());
         device.setOsVer(Build.VERSION.RELEASE);
         device.setModel(Build.MODEL);
@@ -74,6 +75,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
         try {
             return gcm.register(GCMConstants.GCM_SENDER_ID);
         } catch (IOException e) {
+            Timber.e(e, "Error registering GCM");
             throw new GCMNotAvailableException(e);
         }
     }

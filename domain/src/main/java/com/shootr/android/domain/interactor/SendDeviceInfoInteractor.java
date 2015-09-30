@@ -8,8 +8,6 @@ import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.utils.DeviceFactory;
 import javax.inject.Inject;
 
-import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
-
 public class SendDeviceInfoInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
@@ -37,7 +35,6 @@ public class SendDeviceInfoInteractor implements Interactor {
         try {
             Device device = obtainCurrentDevice();
             Device remoteDevice = remoteDeviceRepository.putDevice(device);
-            checkNotNull(remoteDevice.getIdDevice());
             localDeviceRepository.putDevice(remoteDevice);
         } catch (ShootrException e) {
             /* fail silently */

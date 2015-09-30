@@ -7,6 +7,8 @@ import com.shootr.android.domain.Device;
 import com.shootr.android.domain.repository.DeviceRepository;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class LocalDeviceRepository implements DeviceRepository {
 
     private final DeviceManager deviceManager;
@@ -26,6 +28,7 @@ public class LocalDeviceRepository implements DeviceRepository {
 
     @Override
     public Device putDevice(Device device) {
+        checkNotNull(device.getIdDevice());
         deviceManager.saveDevice(mapper.transform(device));
         return device;
     }
