@@ -30,6 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkArgument;
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
@@ -171,10 +172,6 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
 
     @Override
     public void updateWatch(User user) {
-        checkNotNull(user.getWatchingStreamTitle());
-        checkNotNull(user.getIdWatchingStream());
-        checkNotNull(user.getJoinStreamDate());
-
         //HEY: Esta entity no tiene por que estar bien actualizada ni nada. No se usa syncableEntityFactory porque modifica el synchronized normal, y no queremos eso. De todos modos solo se usaran los 3 campos del watch. Si se guarda el user entero puede dejar de funcionar bien.
         UserEntity entityWithWatchValues = userEntityMapper.transform(user);
         try {
@@ -239,13 +236,9 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
                 Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
             }
             if (isWatchReadyForSync(userEntity)) {
-                if (userEntity.getWatchSynchronizedStatus().equals(LocalSynchronized.SYNC_DELETED)) {
-                    //TODO unwatch
-                } else {
-                    remoteUserDataSource.updateWatch(userEntity);
-                    userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-                    localUserDataSource.updateWatch(userEntity);
-                }
+                remoteUserDataSource.updateWatch(userEntity);
+                userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+                localUserDataSource.updateWatch(userEntity);
             }
         }
     }

@@ -26,4 +26,7 @@ public interface UserApiService {
 
     @PUT("/streams/{idStream}/watch")
     Response watch(@Path("idStream") String idStream) throws IOException, ApiException;
+
+    @PUT("/user/unwatch")
+    Response unwatch() throws IOException, ApiException;
 }

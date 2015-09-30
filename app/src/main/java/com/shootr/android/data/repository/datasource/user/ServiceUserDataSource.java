@@ -83,7 +83,11 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override
     public void updateWatch(UserEntity userEntity) {
         try {
-            userApiService.watch(userEntity.getIdWatchingStream());
+            if (userEntity.getIdWatchingStream() != null) {
+                userApiService.watch(userEntity.getIdWatchingStream());
+            } else {
+                userApiService. unwatch();
+            }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
