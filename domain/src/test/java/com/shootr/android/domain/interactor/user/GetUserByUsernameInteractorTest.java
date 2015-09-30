@@ -78,14 +78,6 @@ public class GetUserByUsernameInteractorTest {
         verify(localUserRepository, never()).putUser(any(User.class));
     }
 
-    @Test public void shouldCallbackErrorIfRemoteRepositoryDoesntReturnAUser() throws Exception {
-        when(remoteUserRepository.getUserByUsername(USERNAME_STUB)).thenReturn(null);
-
-        interactor.searchUserByUsername(USERNAME_STUB, callback, errorCallback);
-
-        verify(errorCallback).onError(new UserNotFoundException(USERNAME_STUB));
-    }
-
     @Test public void shouldCallbackErrorIfRemoteRepositoryFails() throws Exception {
         when(remoteUserRepository.getUserByUsername(anyString())).thenThrow(new ShootrException() {});
 
