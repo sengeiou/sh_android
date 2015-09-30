@@ -5,7 +5,7 @@ public class DeviceEntity {
     private String idDevice;
     private Integer platform;
     private String token;
-    private String uniqueDevideID;
+    private String uniqueDeviceID;
     private String model;
     private String osVer;
     private String appVer;
@@ -27,12 +27,12 @@ public class DeviceEntity {
         this.token = token;
     }
 
-    public String getUniqueDevideID() {
-        return uniqueDevideID;
+    public String getUniqueDeviceID() {
+        return uniqueDeviceID;
     }
 
-    public void setUniqueDevideID(String uniqueDevideID) {
-        this.uniqueDevideID = uniqueDevideID;
+    public void setUniqueDeviceID(String uniqueDeviceID) {
+        this.uniqueDeviceID = uniqueDeviceID;
     }
 
     public String getModel() {

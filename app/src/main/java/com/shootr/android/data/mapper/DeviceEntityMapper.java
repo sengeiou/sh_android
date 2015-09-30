@@ -16,7 +16,7 @@ public class DeviceEntityMapper {
         Device device = new Device();
         device.setIdDevice(entity.getIdDevice());
         device.setToken(entity.getToken());
-        device.setUniqueDevideID(entity.getUniqueDevideID());
+        device.setUniqueDevideID(entity.getUniqueDeviceID());
         device.setPlatform(entity.getPlatform());
         device.setModel(entity.getModel());
         device.setOsVer(entity.getOsVer());
@@ -29,7 +29,7 @@ public class DeviceEntityMapper {
         DeviceEntity entity = new DeviceEntity();
         entity.setIdDevice(device.getIdDevice());
         entity.setToken(device.getToken());
-        entity.setUniqueDevideID(device.getUniqueDevideID());
+        entity.setUniqueDeviceID(device.getUniqueDevideID());
         entity.setPlatform(device.getPlatform());
         entity.setModel(device.getModel());
         entity.setOsVer(device.getOsVer());
