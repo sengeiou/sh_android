@@ -60,16 +60,6 @@ public class StreamDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_CREATE_STREAM, op);
     }
 
-    public GenericDto getStreamById(String idStream) {
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(DatabaseContract.StreamTable.TABLE)
-          .putKey(DatabaseContract.StreamTable.ID_STREAM, idStream)
-          .items(1)
-          .build();
-        OperationDto op = new OperationDto.Builder().metadata(md).putData(streamEntityMapper.toDto(null)).build();
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_STREAM_BY_ID_STREAM, op);
-    }
-
     public GenericDto getSearchStreamDto(String query, Map<String, Integer> streamsWatchesCounts, String locale) {
         MetadataDto md = new MetadataDto.Builder().items(50)
           .operation(Constants.OPERATION_RETRIEVE)

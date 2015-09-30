@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface SuggestedPeopleDataSource {
 
-    List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId);
+    List<SuggestedPeopleEntity> getSuggestedPeople();
 
     void putSuggestedPeople(List<SuggestedPeopleEntity> suggestedPeople);
 }

@@ -21,10 +21,10 @@ public class CachedSuggestedPeopleDataSource implements SuggestedPeopleDataSourc
         this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
     }
 
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) {
+    @Override public List<SuggestedPeopleEntity> getSuggestedPeople() {
         List<SuggestedPeopleEntity> suggestedPeople = new ArrayList<>();
         if (isValid()) {
-            suggestedPeople = localSuggestedPeopleDataSource.getSuggestedPeople(currentUserId);
+            suggestedPeople = localSuggestedPeopleDataSource.getSuggestedPeople();
         }
         return suggestedPeople;
     }

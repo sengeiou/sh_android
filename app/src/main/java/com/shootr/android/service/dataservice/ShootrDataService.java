@@ -3,7 +3,6 @@ package com.shootr.android.service.dataservice;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
@@ -210,22 +209,6 @@ public class ShootrDataService implements ShootrService {
         return streamsReceived;
     }
 
-    @Override public StreamEntity getStreamById(String idStream) throws IOException {
-        GenericDto requestDto = streamDtoFactory.getStreamById(idStream);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        StreamEntity streamsReceived = null;
-        if(ops.length>0){
-            streamsReceived = streamEntityMapper.fromDto(ops[0].getData()[0]);
-        }
-        return streamsReceived;
-
-    }
-
     @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
         GenericDto requestDto = userDtoFactory.saveUserDto(userEntity);
         GenericDto responseDto = postRequest(requestDto);
@@ -237,24 +220,6 @@ public class ShootrDataService implements ShootrService {
             return userMapper.fromDto(resultDto);
         }
         return null;
-    }
-
-    @Override public List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException {
-        List<SuggestedPeopleEntity> suggestedPeopleEntities = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.getSuggestedPeople(currentUserId);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else {
-            MetadataDto md = ops[0].getMetadata();
-            Long items = md.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                suggestedPeopleEntities.add(suggestedPeopleMapper.fromDto(dataItem));
-            }
-        }
-        return suggestedPeopleEntities;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

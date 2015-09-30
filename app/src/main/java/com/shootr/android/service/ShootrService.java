@@ -3,7 +3,6 @@ package com.shootr.android.service;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.StreamEntity;
-import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
@@ -27,9 +26,5 @@ public interface ShootrService {
 
     List<StreamEntity> getStreamsByIds(List<String> streamIds) throws IOException;
 
-    StreamEntity getStreamById(String idStream) throws IOException;
-
     UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
-
-    List<SuggestedPeopleEntity> getSuggestedPeople(String currentUserId) throws IOException;
 }

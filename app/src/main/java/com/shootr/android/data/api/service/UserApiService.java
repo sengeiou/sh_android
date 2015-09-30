@@ -1,6 +1,7 @@
 package com.shootr.android.data.api.service;
 
 import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
 import java.io.IOException;
 import java.util.List;
@@ -27,4 +28,7 @@ public interface UserApiService {
 
     @GET("/streams/{idStream}/participants/search")
     List<UserEntity> findParticipants(@Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
+
+    @GET("/user/suggested")
+    List<SuggestedPeopleEntity> getSuggestedPeople() throws IOException, ApiException;
 }
