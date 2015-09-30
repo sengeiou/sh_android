@@ -40,7 +40,6 @@ import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
@@ -106,8 +105,6 @@ import static android.content.Context.MODE_PRIVATE;
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
-
-    GCMRegistrationJob.class,
 
     ProfileFragment.class,
 

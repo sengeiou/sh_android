@@ -21,9 +21,6 @@ public class DeviceManager extends AbstractManager {
     }
 
     public DeviceEntity getDeviceByIdUser(String idUser) {
-        //String whereSelection = DatabaseContract.DeviceTable.ID_USER + " = ?";
-        //String[] whereArguments = new String[] { String.valueOf(idUser) };
-
         Cursor queryResult =
           getReadableDatabase().query(DeviceTable.TABLE, DeviceTable.PROJECTION, null, null, null,
             null, null);
@@ -39,20 +36,9 @@ public class DeviceManager extends AbstractManager {
 
     public void saveDevice(DeviceEntity device) {
         ContentValues contentValues = deviceMapper.toContentValues(device);
-        getWritableDatabase().insertWithOnConflict(DeviceTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-    }
-
-    private void deleteDevice(DeviceEntity device) {
-        String args = DeviceTable.ID_DEVICE + "=?";
-        String[] stringArgs = new String[]{String.valueOf(device.getIdDevice())};
-        getWritableDatabase().delete(DatabaseContract.StreamTable.TABLE, args, stringArgs);
-    }
-
-    public DeviceEntity getDeviceByUniqueId(String uniqueId) {
-        return null;
-    }
-
-    public void insertInSync() {
-        insertInTableSync(DeviceTable.TABLE, 4, 0, 0);
+        getWritableDatabase().insertWithOnConflict(DeviceTable.TABLE,
+          null,
+          contentValues,
+          SQLiteDatabase.CONFLICT_REPLACE);
     }
 }

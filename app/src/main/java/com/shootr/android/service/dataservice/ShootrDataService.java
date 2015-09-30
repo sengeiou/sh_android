@@ -1,11 +1,9 @@
 package com.shootr.android.service.dataservice;
 
-import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.data.entity.UserEntity;
-import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.ShotEntityMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
@@ -19,7 +17,6 @@ import com.shootr.android.exception.ShootrDataServiceError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.StreamDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -51,36 +48,38 @@ public class ShootrDataService implements ShootrService {
 
     private final UserDtoFactory userDtoFactory;
     private final StreamDtoFactory streamDtoFactory;
-    private final DeviceDtoFactory deviceDtoFactory;
 
     private final UserMapper userMapper;
     private final SuggestedPeopleMapper suggestedPeopleMapper;
     private final FollowMapper followMapper;
     private final ShotEntityMapper shotEntityMapper;
     private final StreamEntityMapper streamEntityMapper;
-    private final DeviceMapper deviceMapper;
 
     private final TimeUtils timeUtils;
 
     private final VersionUpdater versionUpdater;
 
     @Inject
-    public ShootrDataService(OkHttpClient client, Endpoint endpoint, JsonAdapter jsonAdapter, UserDtoFactory userDtoFactory,
-      DeviceDtoFactory deviceDtoFactory, UserMapper userMapper,
-      SuggestedPeopleMapper suggestedPeopleMapper, FollowMapper followMapper, ShotEntityMapper shotEntityMapper,
-      StreamDtoFactory streamDtoFactory, DeviceMapper deviceMapper, StreamEntityMapper streamEntityMapper,
-      TimeUtils timeUtils, VersionUpdater versionUpdater) {
+    public ShootrDataService(OkHttpClient client,
+      Endpoint endpoint,
+      JsonAdapter jsonAdapter,
+      UserDtoFactory userDtoFactory,
+      UserMapper userMapper,
+      SuggestedPeopleMapper suggestedPeopleMapper,
+      FollowMapper followMapper,
+      ShotEntityMapper shotEntityMapper,
+      StreamDtoFactory streamDtoFactory, StreamEntityMapper streamEntityMapper,
+      TimeUtils timeUtils,
+      VersionUpdater versionUpdater) {
         this.client = client;
         this.endpoint = endpoint;
         this.jsonAdapter = jsonAdapter;
         this.suggestedPeopleMapper = suggestedPeopleMapper;
         this.streamDtoFactory = streamDtoFactory;
         this.userDtoFactory = userDtoFactory;
-        this.deviceDtoFactory = deviceDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
         this.shotEntityMapper = shotEntityMapper;
-        this.deviceMapper = deviceMapper;
         this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;
         this.versionUpdater = versionUpdater;
@@ -142,26 +141,6 @@ public class ShootrDataService implements ShootrService {
             return followReceived;
 
         }
-        return null;
-    }
-
-
-    @Override
-    public DeviceEntity updateDevice(DeviceEntity device) throws IOException {
-        GenericDto requestDto = deviceDtoFactory.getUpdateDeviceOperationDto(device);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        Map<String, Object> dataItem = ops[0].getData()[0];
-        DeviceEntity deviceReceived = deviceMapper.fromDto(dataItem);
-        return deviceReceived;
-    }
-
-    @Override public DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
-
         return null;
     }
 

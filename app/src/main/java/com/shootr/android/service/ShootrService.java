@@ -1,6 +1,5 @@
 package com.shootr.android.service;
 
-import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.SuggestedPeopleEntity;
@@ -16,10 +15,6 @@ public interface ShootrService {
       throws IOException;
 
     FollowEntity getFollowByIdUserFollowed(String currentUserId, String idUser) throws  IOException;
-
-    DeviceEntity updateDevice(DeviceEntity device) throws IOException;
-
-    DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException;
 
     FollowEntity followUser(FollowEntity follow) throws IOException;
 
