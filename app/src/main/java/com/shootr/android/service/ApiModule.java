@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializer;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
+import com.shootr.android.data.api.service.DeviceApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -107,6 +108,10 @@ public final class ApiModule {
 
     @Provides ChangePasswordApiService provideChangePasswordApiService(RestAdapter restAdapter) {
         return restAdapter.create(ChangePasswordApiService.class);
+    }
+
+    @Provides DeviceApiService provideDeviceApiService(RestAdapter restAdapter) {
+        return restAdapter.create(DeviceApiService.class);
     }
 
     @Provides @Singleton Gson provideGson() {

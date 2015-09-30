@@ -6,6 +6,7 @@ import com.shootr.android.data.DebugMode;
 import com.shootr.android.data.api.service.ActivityApiService;
 import com.shootr.android.data.api.service.AuthApiService;
 import com.shootr.android.data.api.service.ChangePasswordApiService;
+import com.shootr.android.data.api.service.DeviceApiService;
 import com.shootr.android.data.api.service.FavoriteApiService;
 import com.shootr.android.data.api.service.ResetPasswordApiService;
 import com.shootr.android.data.api.service.ShotApiService;
@@ -105,6 +106,11 @@ public class DebugApiModule {
     @Provides ChangePasswordApiService provideChangePasswordApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
     BooleanPreference debugMode) {
         return mockOrRealService(ChangePasswordApiService.class, restAdapter, mockRestAdapter, debugMode.get());
+    }
+
+    @Provides DeviceApiService provideDeviceApiService(RestAdapter restAdapter, MockRestAdapter mockRestAdapter, @DebugMode
+    BooleanPreference debugMode) {
+        return mockOrRealService(DeviceApiService.class, restAdapter, mockRestAdapter, debugMode.get());
     }
 
     private <T> T mockOrRealService(Class<T> serviceClass,
