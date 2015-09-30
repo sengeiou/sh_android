@@ -41,7 +41,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
     public Device createDevice() {
         Device device = new Device();
         device.setUniqueDevideID(generateUniqueDeviceId());
-        device.setToken(getGcmToken());
+        device.setToken(getNewGcmToken());
         device.setPlatform(Constants.ANDROID_PLATFORM.intValue());
         device.setOsVer(Build.VERSION.RELEASE);
         device.setModel(Build.MODEL);
@@ -52,7 +52,9 @@ public class AndroidDeviceFactory implements DeviceFactory {
 
     @Override
     public Device updateDevice(Device device) {
-        device.setToken(getGcmToken()); //TODO refresh only when needed
+        if (needsNewGcmToken(device)) {
+            device.setToken(getNewGcmToken());
+        }
         device.setPlatform(Constants.ANDROID_PLATFORM.intValue());
         device.setOsVer(Build.VERSION.RELEASE);
         device.setModel(Build.MODEL);
@@ -61,7 +63,13 @@ public class AndroidDeviceFactory implements DeviceFactory {
         return device;
     }
 
-    private String getGcmToken() {
+    private boolean needsNewGcmToken(Device device) {
+        String registeredVersion = device.getAppVer();
+        String currentVersion = version.getVersionName();
+        return !currentVersion.equals(registeredVersion);
+    }
+
+    private String getNewGcmToken() {
         try {
             return gcm.register(GCMConstants.GCM_SENDER_ID);
         } catch (IOException e) {
