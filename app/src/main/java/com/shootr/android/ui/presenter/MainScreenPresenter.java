@@ -6,6 +6,7 @@ import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.bus.BadgeChanged;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.domain.interactor.SendDeviceInfoInteractor;
 import com.shootr.android.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
 
     private final GetCurrentUserInteractor getCurrentUserInteractor;
+    private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
     private final UserModelMapper userModelMapper;
     private final IntPreference badgeCount;
     private final Bus bus;
@@ -25,8 +27,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     private boolean hasBeenPaused = false;
 
     @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
-      UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount, @Main Bus bus) {
+      SendDeviceInfoInteractor sendDeviceInfoInteractor,
+      UserModelMapper userModelMapper,
+      @ActivityBadgeCount IntPreference badgeCount,
+      @Main Bus bus) {
         this.getCurrentUserInteractor = getCurrentUserInteractor;
+        this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
         this.userModelMapper = userModelMapper;
         this.badgeCount = badgeCount;
         this.bus = bus;
@@ -35,6 +41,11 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver {
     public void initialize(MainScreenView mainScreenView) {
         this.mainScreenView = mainScreenView;
         this.loadCurrentUser();
+        this.sendDeviceInfo();
+    }
+
+    private void sendDeviceInfo() {
+        sendDeviceInfoInteractor.sendDeviceInfo();
     }
 
     private void loadCurrentUser() {
