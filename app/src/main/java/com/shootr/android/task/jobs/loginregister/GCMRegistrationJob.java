@@ -84,20 +84,19 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
 
         if (existingDevice == null) {
             existingDevice = new DeviceEntity();
-            existingDevice.setIdUser(sessionRepository.getCurrentUserId());
             existingDevice.setPlatform(Constants.ANDROID_PLATFORM.intValue());
             existingDevice.setOsVer("Android");
             existingDevice.setModel("Mío");
             existingDevice.setUniqueDevideID(uniqueDeviceId);
             existingDevice.setToken(regId);
-            existingDevice.setBirth(new Date());
-            existingDevice.setRevision(0);
+            //existingDevice.setBirth(new Date());
+            //existingDevice.setRevision(0);
         } else {
-            existingDevice.setRevision(existingDevice.getRevision() + 1);
+            //existingDevice.setRevision(existingDevice.getRevision() + 1);
         }
 
         existingDevice.setToken(regId);
-        existingDevice.setModified(new Date());
+        //existingDevice.setModified(new Date());
 
         DeviceEntity deviceEntity = service.updateDevice(existingDevice);
         deviceManager.saveDevice(deviceEntity);

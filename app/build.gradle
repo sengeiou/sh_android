@@ -33,7 +33,7 @@ def versionMajor = 0
 def versionMinor = 1
 def versionRevision = 30
 def isSnapshot = true
-def databaseVersion = 9
+def databaseVersion = 10
 
 android {
     compileSdkVersion 23

@@ -114,17 +114,13 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
             + DeviceTable.ID_DEVICE+" TEXT NULL,"
-            + DeviceTable.ID_USER+" TEXT NOT NULL PRIMARY KEY,"
             + DeviceTable.PLATFORM +" TEXT NOT NULL,"
             + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
             + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
             + DeviceTable.MODEL+" VARCHAR(255) NULL,"
             + DeviceTable.OS_VERSION+" VARCHAR(255),"
-            + SyncColumns.BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.DELETED + " DATETIME NULL,"
-            + SyncColumns.REVISION + " INT NOT NULL,"
-            + SyncColumns.SYNCHRONIZED + " CHAR(1) NULL)";
+            + DeviceTable.APP_VERSION+" VARCHAR(255),"
+            + DeviceTable.LOCALE+" VARCHAR(255))";
 
     public static final String CREATE_TABLE_STREAM = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.StreamTable.TABLE+" ("
             + DatabaseContract.StreamTable.ID_STREAM +" TEXT NOT NULL PRIMARY KEY,"

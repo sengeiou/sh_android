@@ -1,14 +1,15 @@
 package com.shootr.android.data.entity;
 
-public class DeviceEntity extends Synchronized {
+public class DeviceEntity {
 
     private String idDevice;
-    private String idUser;
     private Integer platform;
     private String token;
     private String uniqueDevideID;
     private String model;
     private String osVer;
+    private String appVer;
+    private String locale;
 
     public String getIdDevice() {
         return idDevice;
@@ -16,14 +17,6 @@ public class DeviceEntity extends Synchronized {
 
     public void setIdDevice(String idDevice) {
         this.idDevice = idDevice;
-    }
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
     }
 
     public String getToken() {
@@ -64,5 +57,21 @@ public class DeviceEntity extends Synchronized {
 
     public void setPlatform(Integer platform) {
         this.platform = platform;
+    }
+
+    public String getAppVer() {
+        return appVer;
+    }
+
+    public void setAppVer(String appVer) {
+        this.appVer = appVer;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

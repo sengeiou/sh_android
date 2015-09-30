@@ -3,12 +3,13 @@ package com.shootr.android.domain;
 public class Device {
 
     private String idDevice;
-    private String idUser;
     private String token;
     private String uniqueDevideID;
     private String model;
     private String osVer;
     private Integer platform;
+    private String appVer;
+    private String locale;
 
     public String getIdDevice() {
         return idDevice;
@@ -16,14 +17,6 @@ public class Device {
 
     public void setIdDevice(String idDevice) {
         this.idDevice = idDevice;
-    }
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
     }
 
     public String getToken() {
@@ -66,33 +59,19 @@ public class Device {
         this.platform = platform;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Device)) return false;
-
-        Device device = (Device) o;
-
-        if (idDevice != null ? !idDevice.equals(device.idDevice) : device.idDevice != null) return false;
-        if (idUser != null ? !idUser.equals(device.idUser) : device.idUser != null) return false;
-        if (token != null ? !token.equals(device.token) : device.token != null) return false;
-        if (uniqueDevideID != null ? !uniqueDevideID.equals(device.uniqueDevideID) : device.uniqueDevideID != null) {
-            return false;
-        }
-        if (model != null ? !model.equals(device.model) : device.model != null) return false;
-        if (osVer != null ? !osVer.equals(device.osVer) : device.osVer != null) return false;
-        return !(platform != null ? !platform.equals(device.platform) : device.platform != null);
+    public String getAppVer() {
+        return appVer;
     }
 
-    @Override
-    public int hashCode() {
-        int result = idDevice != null ? idDevice.hashCode() : 0;
-        result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
-        result = 31 * result + (token != null ? token.hashCode() : 0);
-        result = 31 * result + (uniqueDevideID != null ? uniqueDevideID.hashCode() : 0);
-        result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + (osVer != null ? osVer.hashCode() : 0);
-        result = 31 * result + (platform != null ? platform.hashCode() : 0);
-        return result;
+    public void setAppVer(String appVer) {
+        this.appVer = appVer;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

@@ -203,7 +203,7 @@ public class UserDtoFactory {
             throw new IllegalArgumentException("IdDevice must not be null");
         }
         Map<String, Object> keys = new ArrayMap<>(2);
-        keys.put(DatabaseContract.DeviceTable.ID_USER, idUser);
+        //deprecated keys.put(DatabaseContract.DeviceTable.ID_USER, idUser);
         keys.put(DatabaseContract.DeviceTable.ID_DEVICE, idDevice);
 
         MetadataDto metadata = new MetadataDto.Builder() //
