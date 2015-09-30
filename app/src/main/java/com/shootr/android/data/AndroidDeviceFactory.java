@@ -9,6 +9,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.data.dagger.ApplicationContext;
 import com.shootr.android.domain.Device;
+import com.shootr.android.domain.exception.GCMNotAvailableException;
 import com.shootr.android.domain.utils.DeviceFactory;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.notifications.gcm.GCMConstants;
@@ -73,8 +74,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
         try {
             return gcm.register(GCMConstants.GCM_SENDER_ID);
         } catch (IOException e) {
-            //TODO raise proper exception
-            throw new RuntimeException(e);
+            throw new GCMNotAvailableException(e);
         }
     }
 
