@@ -116,7 +116,7 @@ public class SQLiteUtils {
             + DeviceTable.ID_DEVICE+" TEXT NULL,"
             + DeviceTable.PLATFORM +" TEXT NOT NULL,"
             + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
-            + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
+            + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NOT NULL PRIMARY KEY,,"
             + DeviceTable.MODEL+" VARCHAR(255) NULL,"
             + DeviceTable.OS_VERSION+" VARCHAR(255),"
             + DeviceTable.APP_VERSION+" VARCHAR(255),"
