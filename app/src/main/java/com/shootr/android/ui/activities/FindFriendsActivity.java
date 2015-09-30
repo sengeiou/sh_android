@@ -24,7 +24,6 @@ import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -77,6 +76,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
 
     private String currentSearchQuery;
     private int currentResultOffset;
+    private int currentPage;
     private boolean hasMoreItemsToLoad;
     private boolean isLoadingRemoteData;
 
@@ -100,6 +100,7 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     }
 
     private void setupViews() {
+        currentPage = 0;
         if (adapter == null) {
             adapter = new UserListAdapter(this, imageLoader);
             adapter.setCallback(this);
@@ -219,12 +220,13 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
         currentResultOffset = 0;
         hasMoreItemsToLoad = true;
         makeNextRemoteSearch();
+        currentPage++;
     }
 
     public void makeNextRemoteSearch() {
         if (!isLoadingRemoteData) {
             SearchPeopleRemoteJob remoteSearchJob = objectGraph.get(SearchPeopleRemoteJob.class);
-            remoteSearchJob.init(currentSearchQuery, currentResultOffset);
+            remoteSearchJob.init(currentSearchQuery, currentPage);
             jobManager.addJobInBackground(remoteSearchJob);
             isLoadingRemoteData = true;
         }
@@ -233,22 +235,19 @@ public class FindFriendsActivity extends BaseToolbarDecoratedActivity implements
     @Subscribe
     public void receivedRemoteResult(SearchPeopleRemoteResultEvent event) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<UserModel>> results = event.getResult();
-        List<UserModel> users = results.getResult();
+        List<UserModel> users = event.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
             Timber.d("Received %d remote results", usersReturned);
             setListContent(users, currentResultOffset);
             setEmpty(false);
             incrementOffset(usersReturned);
-            hasMoreItemsToLoad = currentResultOffset < results.getTotalItems();
-            if (!hasMoreItemsToLoad) {
-                setLoading(false);
-            }
         } else {
-            if (currentResultOffset == 0) {
+            if (adapter.getCount() == 0) {
                 Timber.d("No remote results found.");
                 setEmpty(true);
+            } else {
+                resultsListView.removeFooterView(progressView);
             }
         }
     }

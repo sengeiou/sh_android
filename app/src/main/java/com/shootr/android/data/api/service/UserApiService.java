@@ -31,4 +31,7 @@ public interface UserApiService {
 
     @GET("/user/suggested")
     List<SuggestedPeopleEntity> getSuggestedPeople() throws IOException, ApiException;
+
+    @GET("/user/search/{query}?includeLinks=false&includeEmbed=false")
+    List<UserEntity> searchUsersByNameOrNickNamePaginated(@Path("query") String query, @Query("page") int pageOffset) throws IOException, ApiException;
 }
