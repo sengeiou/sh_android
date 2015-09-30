@@ -3,10 +3,14 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.ImageResizer;
@@ -33,12 +37,15 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final UserEntityModelMapper userModelMapper;
     private final TimeUtils timeUtils;
     private final UserEntityMapper userEntityMapper;
+    private final UserApiService userApiService;
+    private final UserApiEntityMapper userApiEntityMapper;
 
     private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
-                                         UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
-                                         TimeUtils timeUtils, UserEntityMapper userEntityMapper) {
+      UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
+      TimeUtils timeUtils, UserEntityMapper userEntityMapper, UserApiService userApiService,
+      UserApiEntityMapper userApiEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.photoService = photoService;
@@ -48,6 +55,8 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         this.userModelMapper = userModelMapper;
         this.timeUtils = timeUtils;
         this.userEntityMapper = userEntityMapper;
+        this.userApiService = userApiService;
+        this.userApiEntityMapper = userApiEntityMapper;
     }
 
     public void init(File photoFile) {
@@ -68,9 +77,13 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         currentUserEntity.setModified(timeUtils.getCurrentDate());
         currentUserEntity.setRevision(currentUserEntity.getRevision() + 1);
         userManager.saveUser(currentUserEntity);
-        currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
-        userManager.saveUser(currentUserEntity);
-        sessionRepository.setCurrentUser(userEntityMapper.transform(currentUserEntity, currentUserEntity.getIdUser()));
+        try {
+            currentUserEntity = userApiService.putUser(userApiEntityMapper.transform(currentUserEntity));
+            userManager.saveUser(currentUserEntity);
+            sessionRepository.setCurrentUser(userEntityMapper.transform(currentUserEntity, currentUserEntity.getIdUser()));
+        } catch (ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
         return currentUserEntity;
     }
 

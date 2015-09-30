@@ -3,10 +3,14 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
+import com.shootr.android.data.api.exception.ApiException;
+import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -39,20 +43,24 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private UserManager userManager;
     private TimeUtils timeUtils;
     private UserEntityMapper userEntityMapper;
+    private UserApiService userApiService;
+    private UserApiEntityMapper userApiEntityMapper;
 
     private UserModel updatedUserModel;
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public UpdateUserProfileJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
       ShootrService service, SessionRepository sessionRepository, UserManager userManager, TimeUtils timeUtils,
-      UserEntityMapper userEntityMapper) {
+      UserEntityMapper userEntityMapper, UserApiService userApiService, UserApiEntityMapper userApiEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
+        this.userApiService = userApiService;
         this.sessionRepository = sessionRepository;
         this.userManager = userManager;
         this.timeUtils = timeUtils;
         this.userEntityMapper = userEntityMapper;
         this.fieldValidationErrors = new ArrayList<>();
+        this.userApiEntityMapper = userApiEntityMapper;
     }
 
     //TODO domain logic should not know about view models
@@ -159,10 +167,13 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         updatedUserEntity.setModified(timeUtils.getCurrentDate());
         updatedUserEntity.setRevision(updatedUserEntity.getRevision() + 1);
 
-        updatedUserEntity = service.saveUserProfile(updatedUserEntity);
-        userManager.saveUser(updatedUserEntity);
-
-        sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
+        try {
+            updatedUserEntity = userApiService.putUser(userApiEntityMapper.transform(updatedUserEntity));
+            userManager.saveUser(updatedUserEntity);
+            sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
+        } catch (ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
     }
 
     private void localValidation() {
