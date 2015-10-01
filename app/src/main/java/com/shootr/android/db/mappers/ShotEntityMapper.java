@@ -3,17 +3,13 @@ package com.shootr.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.android.data.entity.ShotEntity;
-import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.DatabaseContract;
 import javax.inject.Inject;
 
 public class ShotEntityMapper extends GenericMapper {
 
-    private  final UserAvatarUrlProvider avatarProvider;
-
     @Inject
-    public ShotEntityMapper(UserAvatarUrlProvider avatarProvider) {
-        this.avatarProvider = avatarProvider;
+    public ShotEntityMapper() {
     }
 
     public ShotEntity fromCursor(Cursor c) {
