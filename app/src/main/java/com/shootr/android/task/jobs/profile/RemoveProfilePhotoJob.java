@@ -12,7 +12,6 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.repository.sync.SyncableUserEntityFactory;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.User;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.service.ShootrService;
@@ -70,7 +69,7 @@ public class RemoveProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
             UserEntity remoteUpdatedUserEntity = userApiService.putUser(userApiEntityMapper.transform(currentUserEntity));
             storeUpdatedUser(remoteUpdatedUserEntity);
         } catch (ApiException e) {
-            throw new ServerCommunicationException(e);
+            throw new IOException(e);
         }
         return currentUserEntity;
     }

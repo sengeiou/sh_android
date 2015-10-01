@@ -10,7 +10,6 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
@@ -172,7 +171,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
             userManager.saveUser(updatedUserEntity);
             sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
         } catch (ApiException e) {
-            throw new ServerCommunicationException(e);
+            throw new IOException(e);
         }
     }
 

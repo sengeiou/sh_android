@@ -10,7 +10,6 @@ import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.ImageResizer;
@@ -82,7 +81,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
             userManager.saveUser(currentUserEntity);
             sessionRepository.setCurrentUser(userEntityMapper.transform(currentUserEntity, currentUserEntity.getIdUser()));
         } catch (ApiException e) {
-            throw new ServerCommunicationException(e);
+            throw new IOException(e);
         }
         return currentUserEntity;
     }
