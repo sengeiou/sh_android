@@ -51,7 +51,7 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
         baseIntent = getIntent().getParcelableExtra(EXTRA_BASE_INTENT);
         fillAction();
         fillData();
-        fillExtras();
+        fillExtras(baseIntent.getExtras());
         fillFlags();
     }
 
@@ -78,33 +78,38 @@ public final class ExternalIntentActivity extends Activity implements Toolbar.On
         dataView.setText(data == null ? "None!" : data.toString());
     }
 
-    private void fillExtras() {
-        Bundle extras = baseIntent.getExtras();
+    private void fillExtras(Bundle extras) {
         if (extras == null) {
             extrasView.setText("None!");
         } else {
-            Truss truss = new Truss();
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                if (value == null) {
-                    continue;
-                }
+            extrasView.setText(parseBundle(extras));
+        }
+    }
 
-                String valueString;
-                if (value.getClass().isArray()) {
-                    valueString = Arrays.toString((Object[]) value);
-                } else {
-                    valueString = value.toString();
-                }
-
-                truss.pushSpan(new StyleSpan(Typeface.BOLD));
-                truss.append(key).append(":\n");
-                truss.popSpan();
-                truss.append(valueString).append("\n\n");
+    private CharSequence parseBundle(Bundle extras) {
+        Truss truss = new Truss();
+        for (String key : extras.keySet()) {
+            Object value = extras.get(key);
+            if (value == null) {
+                continue;
             }
 
-            extrasView.setText(truss.build());
+            CharSequence valueString;
+            if (value.getClass().isArray()) {
+                valueString = Arrays.toString((Object[]) value);
+            }else if(value instanceof Intent) {
+                valueString = parseBundle(((Intent) value).getExtras());
+            } else {
+                valueString = value.toString();
+            }
+
+            truss.pushSpan(new StyleSpan(Typeface.BOLD));
+            truss.append(key).append(":\n");
+            truss.popSpan();
+            truss.append(valueString).append("\n\n");
         }
+
+        return truss.build();
     }
 
     private void fillFlags() {
