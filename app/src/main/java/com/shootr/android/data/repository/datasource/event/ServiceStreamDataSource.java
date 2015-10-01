@@ -5,7 +5,6 @@ import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +14,9 @@ import javax.inject.Inject;
 public class ServiceStreamDataSource implements StreamDataSource {
 
     public static final int MAX_NUMBER_OF_LISTING_STREAMS = 100;
-    private final ShootrService service;
     private final StreamApiService streamApiService;
 
-    @Inject public ServiceStreamDataSource(ShootrService service, StreamApiService streamApiService) {
-        this.service = service;
+    @Inject public ServiceStreamDataSource(StreamApiService streamApiService) {
         this.streamApiService = streamApiService;
     }
 

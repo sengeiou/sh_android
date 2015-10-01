@@ -12,7 +12,6 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
@@ -27,8 +26,6 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     private static final int PRIORITY = 7; //TODO definir valores estáticos para determinados casos
 
-    ShootrService service;
-
     UserManager userManager;
     FollowManager followManager;
     private SessionRepository sessionRepository;
@@ -39,16 +36,13 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private final UserApiService userApiService;
 
     @Inject public GetUserInfoJob(Application application,
-      @Main Bus bus,
-      ShootrService service,
-      NetworkUtil networkUtil1,
+      @Main Bus bus, NetworkUtil networkUtil1,
       UserManager userManager,
       FollowManager followManager,
       SessionRepository sessionRepository,
       UserEntityModelMapper userVOMapper,
       UserEntityMapper userEntityMapper, UserApiService userApiService) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
-        this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.sessionRepository = sessionRepository;

@@ -5,8 +5,6 @@ import android.database.Cursor;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.DatabaseContract;
-import java.util.HashMap;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class ShotEntityMapper extends GenericMapper {
@@ -63,55 +61,5 @@ public class ShotEntityMapper extends GenericMapper {
         setSynchronizedtoContentValues(shot,cv);
         return cv;
     }
-
-    public ShotEntity fromDto(Map<String, Object> dto) {
-        ShotEntity shot = new ShotEntity();
-        shot.setIdShot((String) dto.get(DatabaseContract.ShotTable.ID_SHOT));
-        shot.setIdUser((String) dto.get(DatabaseContract.ShotTable.ID_USER));
-        shot.setUsername((String) dto.get(DatabaseContract.ShotTable.USERNAME));
-        // no user photo from dataservice
-        shot.setUserPhoto(avatarProvider.thumbnail(shot.getIdUser()));
-        shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
-        shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
-        shot.setStreamTag((String) dto.get(DatabaseContract.ShotTable.STREAM_TAG));
-        shot.setStreamTitle((String) dto.get(DatabaseContract.ShotTable.STREAM_TITLE));
-        shot.setIdStream((String) dto.get(DatabaseContract.ShotTable.ID_STREAM));
-        shot.setType((String) dto.get(DatabaseContract.ShotTable.TYPE));
-        shot.setIdShotParent((String) dto.get(DatabaseContract.ShotTable.ID_SHOT_PARENT));
-        shot.setIdUserParent((String) dto.get(DatabaseContract.ShotTable.ID_USER_PARENT));
-        shot.setUserNameParent((String) dto.get(DatabaseContract.ShotTable.USERNAME_PARENT));
-
-        shot.setVideoUrl((String) dto.get(DatabaseContract.ShotTable.VIDEO_URL));
-        shot.setVideoTitle((String) dto.get(DatabaseContract.ShotTable.VIDEO_TITLE));
-        Number videoDuration = (Number) dto.get(DatabaseContract.ShotTable.VIDEO_DURATION);
-        if (videoDuration != null) {
-            shot.setVideoDuration(videoDuration.longValue());
-        }
-        setSynchronizedfromDto(dto, shot);
-        return shot;
-    }
-
-    public Map<String, Object> toDto(ShotEntity shot) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(DatabaseContract.ShotTable.ID_SHOT, shot == null ? null : shot.getIdShot());
-        dto.put(DatabaseContract.ShotTable.ID_USER, shot == null ? null : shot.getIdUser());
-        dto.put(DatabaseContract.ShotTable.USERNAME, shot == null ? null : shot.getUsername());
-        /* no user photo to dataservice */
-        dto.put(DatabaseContract.ShotTable.COMMENT, shot == null ? null : shot.getComment());
-        dto.put(DatabaseContract.ShotTable.IMAGE, shot == null ? null : shot.getImage());
-        dto.put(DatabaseContract.ShotTable.STREAM_TAG, shot == null ? null : shot.getStreamTag());
-        dto.put(DatabaseContract.ShotTable.STREAM_TITLE, shot == null ? null : shot.getStreamTitle());
-        dto.put(DatabaseContract.ShotTable.ID_STREAM, shot == null ? null : shot.getIdStream());
-        dto.put(DatabaseContract.ShotTable.TYPE, shot == null ? null : shot.getType());
-        dto.put(DatabaseContract.ShotTable.ID_SHOT_PARENT, shot == null ? null : shot.getIdShotParent());
-        dto.put(DatabaseContract.ShotTable.ID_USER_PARENT, shot == null ? null : shot.getIdUserParent());
-        dto.put(DatabaseContract.ShotTable.USERNAME_PARENT, shot == null ? null : shot.getUserNameParent());
-        dto.put(DatabaseContract.ShotTable.VIDEO_URL, shot == null ? null : shot.getVideoUrl());
-        dto.put(DatabaseContract.ShotTable.VIDEO_TITLE, shot == null ? null : shot.getVideoTitle());
-        dto.put(DatabaseContract.ShotTable.VIDEO_DURATION, shot == null ? null : shot.getVideoDuration());
-        setSynchronizedtoDto(shot,dto);
-        return dto;
-    }
-
 }
 

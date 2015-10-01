@@ -14,7 +14,6 @@ import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.TimeUtils;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationError;
@@ -37,7 +36,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private static final int PRIORITY = 8;
 
-    private ShootrService service;
     private SessionRepository sessionRepository;
     private UserManager userManager;
     private TimeUtils timeUtils;
@@ -48,11 +46,16 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private UserModel updatedUserModel;
     private final List<FieldValidationError> fieldValidationErrors;
 
-    @Inject public UpdateUserProfileJob(Application application, @Main Bus bus, NetworkUtil networkUtil,
-      ShootrService service, SessionRepository sessionRepository, UserManager userManager, TimeUtils timeUtils,
-      UserEntityMapper userEntityMapper, UserApiService userApiService, UserApiEntityMapper userApiEntityMapper) {
+    @Inject public UpdateUserProfileJob(Application application,
+      @Main Bus bus,
+      NetworkUtil networkUtil,
+      SessionRepository sessionRepository,
+      UserManager userManager,
+      TimeUtils timeUtils,
+      UserEntityMapper userEntityMapper,
+      UserApiService userApiService,
+      UserApiEntityMapper userApiEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
-        this.service = service;
         this.userApiService = userApiService;
         this.sessionRepository = sessionRepository;
         this.userManager = userManager;

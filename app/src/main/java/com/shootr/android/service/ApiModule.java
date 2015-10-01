@@ -20,9 +20,6 @@ import com.shootr.android.data.api.service.StreamApiService;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.domain.repository.PhotoService;
-import com.shootr.android.service.dataservice.DataServiceModule;
-import com.shootr.android.service.dataservice.ShootrDataService;
-import com.shootr.android.service.dataservice.ShootrPhotoService;
 import com.sloydev.jsonadapters.JsonAdapter;
 import com.sloydev.jsonadapters.gson.GsonAdapter;
 import com.squareup.okhttp.OkHttpClient;
@@ -41,17 +38,12 @@ import timber.log.Timber;
                 ShootrPhotoService.class,
                 PhotoService.class,
         },
-        includes = DataServiceModule.class,
         complete = false,
   library = true
 )
 public final class ApiModule {
 
     public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
-
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
-        return dataService;
-    }
 
     @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
         return photoService;

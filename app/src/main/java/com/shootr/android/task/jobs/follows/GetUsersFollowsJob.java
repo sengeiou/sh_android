@@ -10,7 +10,6 @@ import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
@@ -25,6 +24,8 @@ import javax.inject.Inject;
 public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 5;
+    public static final int FOLLOWING = 1;
+    public static final int FOLLOWERS = 0;
 
     private final UserApiService userApiService;
     private String idUserToRetrieveFollowsFrom;
@@ -53,7 +54,7 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     @Override
     protected void run() throws IOException, SQLException {
-        List<UserEntity> users = (followType.equals(UserDtoFactory.GET_FOLLOWERS)) ? getFollowerUsersFromService() : getFollowingUsersFromService();
+        List<UserEntity> users = (followType.equals(FOLLOWERS)) ? getFollowerUsersFromService() : getFollowingUsersFromService();
         postSuccessfulEvent(new FollowsResultEvent(getUserVOs(users)));
     }
 

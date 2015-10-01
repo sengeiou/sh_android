@@ -26,7 +26,6 @@ import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.user.FollowInteractor;
 import com.shootr.android.domain.interactor.user.UnfollowInteractor;
 import com.shootr.android.domain.repository.SessionRepository;
-import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
@@ -46,8 +45,6 @@ import timber.log.Timber;
 public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback{
 
     public static final String TAG = "follows";
-    public static final int FOLLOWING = UserDtoFactory.GET_FOLLOWING;
-    public static final int FOLLOWERS = UserDtoFactory.GET_FOLLOWERS;
 
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
@@ -136,7 +133,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     private void setEmptyMessage() {
-        emptyTextView.setText(followType.equals(UserDtoFactory.GET_FOLLOWERS) ? R.string.follower_list_empty
+        emptyTextView.setText(followType.equals(GetUsersFollowsJob.FOLLOWERS) ? R.string.follower_list_empty
           : R.string.following_list_empty);
     }
 

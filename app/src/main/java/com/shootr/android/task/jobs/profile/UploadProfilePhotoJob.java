@@ -14,7 +14,6 @@ import com.shootr.android.domain.repository.PhotoService;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.TimeUtils;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -28,7 +27,6 @@ import org.json.JSONException;
 public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent> {
 
     private static final int PRIORITY = 5;
-    private final ShootrService shootrService;
     private final PhotoService photoService;
     private final UserManager userManager;
     private final SessionRepository sessionRepository;
@@ -41,12 +39,11 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
 
     private File photoFile;
 
-    @Inject public UploadProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
+    @Inject public UploadProfilePhotoJob(Application application, @Main Bus bus, NetworkUtil networkUtil, PhotoService photoService,
       UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
       TimeUtils timeUtils, UserEntityMapper userEntityMapper, UserApiService userApiService,
       UserApiEntityMapper userApiEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
-        this.shootrService = shootrService;
         this.photoService = photoService;
         this.userManager = userManager;
         this.sessionRepository = sessionRepository;

@@ -48,6 +48,7 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
@@ -595,12 +596,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Sugges
 
     @OnClick(R.id.profile_marks_following)
     public void openFollowingList() {
-        openUserFollowsList(UserFollowsFragment.FOLLOWING);
+        openUserFollowsList(GetUsersFollowsJob.FOLLOWING);
     }
 
     @OnClick(R.id.profile_marks_followers)
     public void openFollowersList() {
-        openUserFollowsList(UserFollowsFragment.FOLLOWERS);
+        openUserFollowsList(GetUsersFollowsJob.FOLLOWERS);
     }
 
     @OnClick(R.id.profile_follow_button)

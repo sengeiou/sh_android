@@ -1,4 +1,4 @@
-package com.shootr.android.service.dataservice;
+package com.shootr.android.service;
 
 import com.shootr.android.domain.exception.ShootrError;
 import com.shootr.android.domain.exception.ShootrServerException;

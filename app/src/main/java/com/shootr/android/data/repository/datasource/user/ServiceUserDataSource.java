@@ -6,20 +6,16 @@ import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UserNotFoundException;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceUserDataSource implements UserDataSource {
 
-    private final ShootrService service;
     private final UserApiService userApiService;
     private final UserApiEntityMapper userApiEntityMapper;
 
-    @Inject public ServiceUserDataSource(ShootrService service, UserApiService userApiService,
-      UserApiEntityMapper userApiEntityMapper) {
-        this.service = service;
+    @Inject public ServiceUserDataSource(UserApiService userApiService, UserApiEntityMapper userApiEntityMapper) {
         this.userApiService = userApiService;
         this.userApiEntityMapper = userApiEntityMapper;
     }

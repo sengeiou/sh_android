@@ -15,7 +15,6 @@ import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.api.service.VideoApiService;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.StringPreference;
-import com.shootr.android.service.dataservice.ShootrDataService;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -37,23 +36,10 @@ public class DebugApiModule {
         return Endpoints.newFixedEndpoint(apiEndpoint.get());
     }
 
-    @Provides @Singleton DebugServiceAdapter provideMockServiceAdapter() {
-        return new DebugServiceAdapter();
-    }
-
     @Provides @Singleton MockRestAdapter provideMockRestAdapter(RestAdapter restAdapter, SharedPreferences preferences) {
         MockRestAdapter mockRestAdapter = MockRestAdapter.from(restAdapter);
         AndroidMockValuePersistence.install(mockRestAdapter, preferences);
         return mockRestAdapter;
-    }
-
-    @Provides @Singleton ShootrService provideShootrService(ShootrDataService shootrDataService, DebugServiceAdapter debugServiceAdapter, @DebugMode
-    BooleanPreference debugMode) {
-        if (debugMode.get()) {
-            return debugServiceAdapter.create(shootrDataService);
-        } else {
-            return shootrDataService;
-        }
     }
 
     @Provides

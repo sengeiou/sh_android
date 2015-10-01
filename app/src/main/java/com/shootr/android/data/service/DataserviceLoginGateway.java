@@ -15,22 +15,18 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.exception.InvalidLoginException;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.service.user.LoginGateway;
-import com.shootr.android.service.ShootrService;
 import java.io.IOException;
 import javax.inject.Inject;
 
 public class DataserviceLoginGateway implements LoginGateway {
 
-    private final ShootrService shootrService;
     private final AuthApiService authApiService;
     private final UserEntityMapper userEntityMapper;
     private final DeviceManager deviceManager;
 
-    @Inject public DataserviceLoginGateway(ShootrService shootrService,
-      AuthApiService authApiService,
+    @Inject public DataserviceLoginGateway(AuthApiService authApiService,
       UserEntityMapper userEntityMapper,
       DeviceManager deviceManager) {
-        this.shootrService = shootrService;
         this.authApiService = authApiService;
         this.userEntityMapper = userEntityMapper;
         this.deviceManager = deviceManager;
