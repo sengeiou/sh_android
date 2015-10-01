@@ -3,14 +3,15 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.api.exception.ApiException;
-import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.bus.Main;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.data.repository.datasource.user.UserDataSource;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.domain.exception.ServerCommunicationException;
+import com.shootr.android.domain.repository.Remote;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -33,7 +34,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private String userId;
     private UserEntityModelMapper userVOMapper;
     private final UserEntityMapper userEntityMapper;
-    private final UserApiService userApiService;
+    private final UserDataSource remoteUserDataSource;
 
     @Inject public GetUserInfoJob(Application application,
       @Main Bus bus, NetworkUtil networkUtil1,
@@ -41,14 +42,15 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
       FollowManager followManager,
       SessionRepository sessionRepository,
       UserEntityModelMapper userVOMapper,
-      UserEntityMapper userEntityMapper, UserApiService userApiService) {
+      UserEntityMapper userEntityMapper,
+      @Remote UserDataSource remoteUserDataSource) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.userManager = userManager;
         this.followManager = followManager;
         this.sessionRepository = sessionRepository;
         this.userVOMapper = userVOMapper;
         this.userEntityMapper = userEntityMapper;
-        this.userApiService = userApiService;
+        this.remoteUserDataSource = remoteUserDataSource;
     }
 
     public void init(String userId) {
@@ -90,8 +92,8 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     private UserEntity getUserFromService() throws IOException {
         try {
-            return userApiService.getUser(userId);
-        } catch (ApiException e) {
+            return remoteUserDataSource.getUser(userId);
+        } catch (ServerCommunicationException e) {
             throw new IOException(e);
         }
     }
