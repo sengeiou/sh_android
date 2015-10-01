@@ -4,6 +4,7 @@ import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.android.domain.User;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class UserCache {
 
@@ -17,7 +18,9 @@ public class UserCache {
     }
 
     public List<User> getPeople() {
-        return userCache.get(GET_PEOPLE);
+        List<User> people = userCache.get(GET_PEOPLE);
+        Timber.d("getPeople cache %s", people != null ? "valid" : "invalid");
+        return people;
     }
 
     public void invalidatePeople() {
