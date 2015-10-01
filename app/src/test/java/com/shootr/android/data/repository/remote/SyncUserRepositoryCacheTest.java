@@ -20,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -85,6 +87,24 @@ public class SyncUserRepositoryCacheTest {
         List<User> people = syncUserRepository.getPeople();
 
         assertThat(people).isEqualTo(cachedUserList());
+    }
+
+    @Test
+    public void shouldPutPeopleIntoCacheWhenCacheReturnsNull() throws Exception {
+        when(userCache.getPeople()).thenReturn(null);
+
+        syncUserRepository.getPeople();
+
+        verify(userCache).putPeople(anyListOf(User.class));
+    }
+
+    @Test
+    public void shouldNotPutPeopleIntoCacheWhenCacheReturnsData() throws Exception {
+        when(userCache.getPeople()).thenReturn(cachedUserList());
+
+        syncUserRepository.getPeople();
+
+        verify(userCache, never()).putPeople(anyListOf(User.class));
     }
 
     private List<User> cachedUserList() {

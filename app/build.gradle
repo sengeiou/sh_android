@@ -179,6 +179,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
+
+    compile 'com.fewlaps.quitnowcache:quitnow-cache:1.2'
+
 }
 
 /**

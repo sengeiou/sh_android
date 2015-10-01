@@ -79,6 +79,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
             markSynchronized(remotePeopleEntities);
             localFollowDataSource.putFollows(createFollowsFromUsers(remotePeopleEntities));
             people = transformUserEntitiesForPeople(remotePeopleEntities);
+            userCache.putPeople(people);
         }
         return people;
     }
