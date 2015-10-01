@@ -41,7 +41,7 @@ public class PostNewShotPresenter implements Presenter {
         this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
     }
 
-    public void setView(PostNewShotView postNewShotView) {
+    protected void setView(PostNewShotView postNewShotView) {
         this.postNewShotView = postNewShotView;
     }
 
