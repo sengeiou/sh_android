@@ -12,12 +12,12 @@ import com.shootr.android.domain.service.user.ResetPasswordGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceResetPasswordGateway implements ResetPasswordGateway {
+public class ServiceResetPasswordGateway implements ResetPasswordGateway {
 
     private final ResetPasswordApiService resetPasswordApiService;
     private final ForgotPasswordResultEntityMapper forgotPasswordResultEntityMapper;
 
-    @Inject public DataserviceResetPasswordGateway(ResetPasswordApiService resetPasswordApiService,
+    @Inject public ServiceResetPasswordGateway(ResetPasswordApiService resetPasswordApiService,
       ForgotPasswordResultEntityMapper forgotPasswordResultEntityMapper) {
         this.resetPasswordApiService = resetPasswordApiService;
         this.forgotPasswordResultEntityMapper = forgotPasswordResultEntityMapper;

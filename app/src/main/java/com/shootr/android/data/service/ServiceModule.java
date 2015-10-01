@@ -21,32 +21,32 @@ public class ServiceModule {
         return serviceCheckinGateway;
     }
 
-    @Provides ChangePasswordGateway provideChangePasswordGateway(DataserviceChangePasswordGateway dataserviceChangePasswordGateway) {
-        return dataserviceChangePasswordGateway;
+    @Provides ChangePasswordGateway provideChangePasswordGateway(ServiceChangePasswordGateway serviceChangePasswordGateway) {
+        return serviceChangePasswordGateway;
     }
 
-    @Provides CreateAccountGateway provideCreateAccountGateway(DataserviceCreateAccountGateway dataserviceCreateAccountGateway) {
-        return dataserviceCreateAccountGateway;
+    @Provides CreateAccountGateway provideCreateAccountGateway(ServiceCreateAccountGateway serviceCreateAccountGateway) {
+        return serviceCreateAccountGateway;
     }
 
-    @Provides LoginGateway provideCheckinGateway(DataserviceLoginGateway dataserviceLoginGateway) {
-        return dataserviceLoginGateway;
+    @Provides LoginGateway provideCheckinGateway(ServiceLoginGateway serviceLoginGateway) {
+        return serviceLoginGateway;
     }
 
     @Provides ShotGateway provideShotGateway(SpecialserviceShotGateway specialserviceShotGateway) {
         return specialserviceShotGateway;
     }
 
-    @Provides ConfirmEmailGateway provideConfirmEmailGateway(DataserviceConfirmEmailGateway dataserviceConfirmEmailGateway) {
-        return dataserviceConfirmEmailGateway;
+    @Provides ConfirmEmailGateway provideConfirmEmailGateway(ServiceConfirmEmailGateway serviceConfirmEmailGateway) {
+        return serviceConfirmEmailGateway;
     }
 
     @Provides
-    ResetPasswordGateway provideForgotPasswordGateway(DataserviceResetPasswordGateway dataserviceForgotPasswordGateway){
-        return dataserviceForgotPasswordGateway;
+    ResetPasswordGateway provideForgotPasswordGateway(ServiceResetPasswordGateway serviceForgotPasswordGateway){
+        return serviceForgotPasswordGateway;
     }
 
-    @Provides ResetPasswordEmailGateway provideResetPasswordEmailGateway(DataserviceResetPasswordEmailGateway dataserviceForgotPasswordEmailGateway){
-        return dataserviceForgotPasswordEmailGateway;
+    @Provides ResetPasswordEmailGateway provideResetPasswordEmailGateway(ServiceResetPasswordEmailGateway serviceForgotPasswordEmailGateway){
+        return serviceForgotPasswordEmailGateway;
     }
 }

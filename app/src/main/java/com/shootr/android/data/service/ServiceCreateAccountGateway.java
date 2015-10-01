@@ -18,13 +18,13 @@ import javax.inject.Inject;
 
 import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
 
-public class DataserviceCreateAccountGateway implements CreateAccountGateway {
+public class ServiceCreateAccountGateway implements CreateAccountGateway {
 
     private final AuthApiService authApiService;
     private final UserEntityMapper userEntityMapper;
 
     @Inject
-    public DataserviceCreateAccountGateway(AuthApiService authApiService, UserEntityMapper userEntityMapper) {
+    public ServiceCreateAccountGateway(AuthApiService authApiService, UserEntityMapper userEntityMapper) {
         this.authApiService = authApiService;
         this.userEntityMapper = userEntityMapper;
     }

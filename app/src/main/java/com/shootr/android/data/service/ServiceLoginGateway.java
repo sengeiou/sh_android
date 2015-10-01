@@ -18,13 +18,13 @@ import com.shootr.android.domain.service.user.LoginGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceLoginGateway implements LoginGateway {
+public class ServiceLoginGateway implements LoginGateway {
 
     private final AuthApiService authApiService;
     private final UserEntityMapper userEntityMapper;
     private final DeviceManager deviceManager;
 
-    @Inject public DataserviceLoginGateway(AuthApiService authApiService,
+    @Inject public ServiceLoginGateway(AuthApiService authApiService,
       UserEntityMapper userEntityMapper,
       DeviceManager deviceManager) {
         this.authApiService = authApiService;

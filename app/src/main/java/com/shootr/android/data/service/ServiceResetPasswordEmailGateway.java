@@ -8,11 +8,11 @@ import com.shootr.android.domain.service.user.ResetPasswordEmailGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceResetPasswordEmailGateway implements ResetPasswordEmailGateway {
+public class ServiceResetPasswordEmailGateway implements ResetPasswordEmailGateway {
 
     private final ResetPasswordApiService resetPasswordApiService;
 
-    @Inject public DataserviceResetPasswordEmailGateway(ResetPasswordApiService resetPasswordApiService) {
+    @Inject public ServiceResetPasswordEmailGateway(ResetPasswordApiService resetPasswordApiService) {
         this.resetPasswordApiService = resetPasswordApiService;
     }
 

@@ -9,11 +9,11 @@ import com.shootr.android.domain.service.user.ChangePasswordGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceChangePasswordGateway implements ChangePasswordGateway {
+public class ServiceChangePasswordGateway implements ChangePasswordGateway {
 
     private final ChangePasswordApiService changePasswordApiService;
 
-    @Inject public DataserviceChangePasswordGateway(ChangePasswordApiService changePasswordApiService) {
+    @Inject public ServiceChangePasswordGateway(ChangePasswordApiService changePasswordApiService) {
         this.changePasswordApiService = changePasswordApiService;
     }
 

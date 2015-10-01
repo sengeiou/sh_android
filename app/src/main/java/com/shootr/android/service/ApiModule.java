@@ -129,7 +129,6 @@ public final class ApiModule {
                   return new JsonPrimitive(src.getTime());
               }
           })
-          .serializeNulls() // TODO remove when dataservice is GONE
           .create();
     }
 

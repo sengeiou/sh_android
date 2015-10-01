@@ -13,11 +13,11 @@ import com.shootr.android.domain.service.user.ConfirmEmailGateway;
 import java.io.IOException;
 import javax.inject.Inject;
 
-public class DataserviceConfirmEmailGateway implements ConfirmEmailGateway {
+public class ServiceConfirmEmailGateway implements ConfirmEmailGateway {
 
     private final AuthApiService authApiService;
 
-    @Inject public DataserviceConfirmEmailGateway(AuthApiService authApiService) {
+    @Inject public ServiceConfirmEmailGateway(AuthApiService authApiService) {
         this.authApiService = authApiService;
     }
 
