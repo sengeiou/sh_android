@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="terms_of_service_base_url">http://docs.shootr.com/#/terms/%s</string>
+    <string name="privay_policy_service_base_url">http://docs.shootr.com/#/privacy/%s</string>
+    <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
+    <string name="share_shot_base_url">http://shootr.com/#/s/%s</string>
+</resources>

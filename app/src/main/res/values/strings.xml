@@ -326,8 +326,6 @@
     <string name="support_terms_service">Terms of Service</string>
     <string name="support_privacy_policy">Privacy Policy</string>
     <string name="support_faq">FAQ</string>
-    <string name="terms_of_service_base_url">http://docs.shootr.com/#/terms/%s</string>
-    <string name="privay_policy_service_base_url">http://docs.shootr.com/#/privacy/%s</string>
     <string name="menu_profile_chage_password">Change password</string>
     <string name="title_activity_change_password">Change Password</string>
     <string name="current_password_hint">Current password</string>
@@ -345,9 +343,7 @@
     <string name="alert_report_confirmed_email_ok">OK</string>
     <string name="menu_copy_text">Copy text</string>
     <string name="report_context_menu_report">Report</string>
-    <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
-    <string name="share_shot_base_url">http://shootr.com/#/s/%s</string>
     <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="notification_nice_content_text">Niced your shot</string>
