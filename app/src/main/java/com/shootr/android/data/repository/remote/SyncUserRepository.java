@@ -71,7 +71,7 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         this.bus.register(this);
     }
 
-    @Override public List<User> getPeople() {
+    @Override public synchronized List<User> getPeople() {
         List<User> people = userCache.getPeople();
         if (people == null) {
             List<UserEntity> remotePeopleEntities =
