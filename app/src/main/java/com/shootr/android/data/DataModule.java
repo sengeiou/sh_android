@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.fewlaps.quitnowcache.QNCache;
+import com.fewlaps.quitnowcache.QNCacheBuilder;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
@@ -252,6 +254,11 @@ public class DataModule {
 
     @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {
         return imageResizer;
+    }
+
+    @Provides @Singleton
+    QNCache provideQNCache() {
+        return new QNCacheBuilder().createQNCache();
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {

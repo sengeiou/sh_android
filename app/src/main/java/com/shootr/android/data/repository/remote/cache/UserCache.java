@@ -4,26 +4,27 @@ import com.fewlaps.quitnowcache.QNCache;
 import com.shootr.android.domain.User;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class UserCache {
 
-    private QNCache peopleCache;
+    public static final String GET_PEOPLE = "getPeople";
+    public static final int GET_PEOPLE_KEEP_ALIVE_SECONDS = 20 * 1000;
+    private final QNCache userCache;
 
     @Inject
-    public UserCache() {
+    public UserCache(QNCache userCache) {
+        this.userCache = userCache;
     }
 
     public List<User> getPeople() {
-        //TODO
-        return null;
+        return userCache.get(GET_PEOPLE);
     }
 
     public void invalidatePeople() {
-        //TODO
+        userCache.remove(GET_PEOPLE);
     }
 
     public void putPeople(List<User> people) {
-        //TODO
+        userCache.set(GET_PEOPLE, people, GET_PEOPLE_KEEP_ALIVE_SECONDS);
     }
 }
