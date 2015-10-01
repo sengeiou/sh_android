@@ -74,7 +74,7 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
 
     private List<UserModel> getSearchFromServer() throws IOException {
         try {
-            return getUserVOs(userApiService.searchUsersByNameOrNickNamePaginated(searchString, pageOffset));
+            return getUserVOs(userApiService.search(searchString, pageOffset));
         } catch (ApiException e) {
             throw new ServerCommunicationException(e);
         }
