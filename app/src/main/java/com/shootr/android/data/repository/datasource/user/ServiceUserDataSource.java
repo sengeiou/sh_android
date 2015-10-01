@@ -6,6 +6,7 @@ import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.UserNotFoundException;
+import com.shootr.android.domain.repository.SessionRepository;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,10 +15,14 @@ public class ServiceUserDataSource implements UserDataSource {
 
     private final UserApiService userApiService;
     private final UserApiEntityMapper userApiEntityMapper;
+    private final SessionRepository sessionRepository;
 
-    @Inject public ServiceUserDataSource(UserApiService userApiService, UserApiEntityMapper userApiEntityMapper) {
+    @Inject public ServiceUserDataSource(UserApiService userApiService,
+      UserApiEntityMapper userApiEntityMapper,
+      SessionRepository sessionRepository) {
         this.userApiService = userApiService;
         this.userApiEntityMapper = userApiEntityMapper;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
@@ -42,7 +47,11 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity getUser(String id) {
         try {
-            return userApiService.getUser(id);
+            if (id.equals(sessionRepository.getCurrentUserId())) {
+                return userApiService.getUser();
+            } else {
+                return userApiService.getUser(id);
+            }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
