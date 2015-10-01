@@ -162,19 +162,6 @@ public class ShootrDataService implements ShootrService {
         return followReceived;
     }
 
-    @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
-        GenericDto requestDto = userDtoFactory.saveUserDto(userEntity);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-        } else {
-            Map<String, Object> resultDto = ops[0].getData()[0];
-            return userMapper.fromDto(resultDto);
-        }
-        return null;
-    }
-
     @Override public void performCheckin(String idUser, String idStream) throws IOException {
         GenericDto checkinDto = userDtoFactory.getCheckinOperationDto(idUser, idStream);
         postRequest(checkinDto);

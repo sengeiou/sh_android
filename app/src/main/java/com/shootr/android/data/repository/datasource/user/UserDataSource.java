@@ -23,4 +23,6 @@ public interface UserDataSource  extends SyncableDataSource<UserEntity>{
     List<UserEntity> getAllParticipants(String idStream, Long maxJoinDate);
 
     List<UserEntity> findParticipants(String idStream, String query);
+
+    void updateWatch(UserEntity userEntity);
 }

@@ -48,12 +48,12 @@ public class UnwatchStreamInteractor implements Interactor {
     }
 
     private void putInRemote(User updatedUser) {
-        remoteUserRepository.putUser(updatedUser);
+        remoteUserRepository.updateWatch(updatedUser);
     }
 
     private void putInLocal(User updatedUser) {
         sessionRepository.setCurrentUser(updatedUser);
-        localUserRepository.putUser(updatedUser);
+        localUserRepository.updateWatch(updatedUser);
     }
 
     private User getCurrentUser() {

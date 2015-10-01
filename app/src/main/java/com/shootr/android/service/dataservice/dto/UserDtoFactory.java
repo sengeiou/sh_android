@@ -4,7 +4,6 @@ import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
@@ -178,21 +177,6 @@ public class UserDtoFactory {
         OperationDto od = new OperationDto.Builder().metadata(md).putData(userMapper.reqRestUsersToDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_USERS, od);
-    }
-
-    public GenericDto saveUserDto(UserEntity userEntity) {
-        MetadataDto md = new MetadataDto.Builder()
-          .operation(ServiceConstants.OPERATION_UPDATE)
-          .entity(UserTable.TABLE)
-          .putKey(UserTable.ID, userEntity.getIdUser())
-          .build();
-
-        OperationDto op = new OperationDto.Builder()
-          .metadata(md)
-          .putData(userMapper.reqRestUsersToDto(userEntity))
-          .build();
-
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
     }
 
     public GenericDto getLogoutOperationDto(String idUser, String idDevice) {

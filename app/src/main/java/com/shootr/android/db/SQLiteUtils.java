@@ -34,6 +34,7 @@ public class SQLiteUtils {
             + UserTable.ID_WATCHING_STREAM +" TEXT NULL,"
             + UserTable.WATCHING_STREAM_TITLE +" TEXT NULL,"
             + UserTable.JOIN_STREAM_DATE +" INTEGER NULL,"
+            + UserTable.WATCHING_SYNCHRONIZED +" TEXT NULL,"
             + SyncColumns.BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.DELETED + " DATETIME,"

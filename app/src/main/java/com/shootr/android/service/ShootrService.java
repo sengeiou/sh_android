@@ -19,8 +19,6 @@ public interface ShootrService {
 
     FollowEntity unfollowUser(FollowEntity follow) throws IOException;
 
-    UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
-
     void performCheckin(String idUser, String idStream) throws IOException;
 
     UserEntity getUserByUsername(String username) throws IOException;

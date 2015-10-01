@@ -34,6 +34,7 @@ import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+import timber.log.Timber;
 
 @Module(
         injects = {
@@ -68,6 +69,13 @@ public final class ApiModule {
           .setConverter(new GsonConverter(gson))
           .setErrorHandler(errorHandler) //
           .setLogLevel(logLevel)
+          .setLog(new RestAdapter.Log() {
+              @Override
+              public void log(String message) {
+                  Timber.tag("Retrofit");
+                  Timber.d(message);
+              }
+          })
           .build();
     }
 

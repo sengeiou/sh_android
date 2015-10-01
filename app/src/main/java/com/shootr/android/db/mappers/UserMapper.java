@@ -58,6 +58,7 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.ID_WATCHING_STREAM, u.getIdWatchingStream());
             cv.put(UserTable.WATCHING_STREAM_TITLE, u.getWatchingStreamTitle());
             cv.put(UserTable.JOIN_STREAM_DATE, u.getJoinStreamDate());
+            cv.put(UserTable.WATCHING_SYNCHRONIZED, u.getWatchSynchronizedStatus());
             setSynchronizedtoContentValues(u, cv);
         }
         return cv;
@@ -154,6 +155,7 @@ public class UserMapper extends GenericMapper {
         user.setIdWatchingStream(c.getString(c.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
         user.setWatchingStreamTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_STREAM_TITLE)));
         user.setJoinStreamDate(c.getLong(c.getColumnIndex(UserTable.JOIN_STREAM_DATE)));
+        user.setWatchSynchronizedStatus(c.getString(c.getColumnIndex(UserTable.WATCHING_SYNCHRONIZED)));
         return user;
     }
 

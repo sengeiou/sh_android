@@ -1,5 +1,6 @@
 package com.shootr.android.data.repository.datasource.user;
 
+import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
@@ -13,10 +14,13 @@ public class ServiceUserDataSource implements UserDataSource {
 
     private final ShootrService service;
     private final UserApiService userApiService;
+    private final UserApiEntityMapper userApiEntityMapper;
 
-    @Inject public ServiceUserDataSource(ShootrService service, UserApiService userApiService) {
+    @Inject public ServiceUserDataSource(ShootrService service, UserApiService userApiService,
+      UserApiEntityMapper userApiEntityMapper) {
         this.service = service;
         this.userApiService = userApiService;
+        this.userApiEntityMapper = userApiEntityMapper;
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
@@ -29,8 +33,8 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity putUser(UserEntity userEntity) {
         try {
-            return service.saveUserProfile(userEntity);
-        } catch (IOException e) {
+            return userApiService.putUser(userApiEntityMapper.transform(userEntity));
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -75,6 +79,19 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override public List<UserEntity> findParticipants(String idStream, String query) {
         try {
             return userApiService.findParticipants(idStream, query);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public void updateWatch(UserEntity userEntity) {
+        try {
+            if (userEntity.getIdWatchingStream() != null) {
+                userApiService.watch(userEntity.getIdWatchingStream());
+            } else {
+                userApiService. unwatch();
+            }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

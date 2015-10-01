@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class LocalUserRepository implements UserRepository {
 
     private final SessionRepository sessionRepository;
@@ -82,6 +84,12 @@ public class LocalUserRepository implements UserRepository {
 
     @Override public List<User> findParticipants(String idStream, String query) {
         throw new IllegalArgumentException("Find Participants has no local implementation");
+    }
+
+    @Override
+    public void updateWatch(User user) {
+        UserEntity entity = userEntityMapper.transform(user);
+        localUserDataSource.updateWatch(entity);
     }
 
     private List<User> transformUserEntitiesForPeople(List<UserEntity> localUserEntities) {

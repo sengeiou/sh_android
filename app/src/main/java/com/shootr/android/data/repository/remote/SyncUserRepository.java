@@ -30,6 +30,9 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static com.shootr.android.domain.utils.Preconditions.checkArgument;
+import static com.shootr.android.domain.utils.Preconditions.checkNotNull;
+
 public class SyncUserRepository implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
     private final SessionRepository sessionRepository;
@@ -167,6 +170,19 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         return participants;
     }
 
+    @Override
+    public void updateWatch(User user) {
+        //HEY: Esta entity no tiene por que estar bien actualizada ni nada. No se usa syncableEntityFactory porque modifica el synchronized normal, y no queremos eso. De todos modos solo se usaran los 3 campos del watch. Si se guarda el user entero puede dejar de funcionar bien.
+        UserEntity entityWithWatchValues = userEntityMapper.transform(user);
+        try {
+            remoteUserDataSource.updateWatch(entityWithWatchValues);
+            entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+            localUserDataSource.updateWatch(entityWithWatchValues);
+        } catch (ServerCommunicationException e) {
+            queueWatchUpload(entityWithWatchValues, e);
+        }
+    }
+
     private List<User> transformParticipantsEntities(List<UserEntity> allParticipants) {
         List<User> participants = new ArrayList<>(allParticipants.size());
         for (UserEntity participantEntity : allParticipants) {
@@ -186,25 +202,44 @@ public class SyncUserRepository implements UserRepository, SyncableRepository, W
         syncTrigger.notifyNeedsSync(this);
     }
 
+    private void queueWatchUpload(UserEntity entity, ServerCommunicationException reason) {
+        Timber.w(reason, "Watch upload queued: idUser %s", entity.getIdUser());
+        entity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
+        localUserDataSource.updateWatch(entity);
+        syncTrigger.notifyNeedsSync(this);
+    }
+
     private void prepareEntityForSynchronization(UserEntity userEntity) {
-        if (!isReadyForSync(userEntity)) {
+        if (!isEntityReadyForSync(userEntity)) {
             userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_UPDATED);
         }
         localUserDataSource.putUser(userEntity);
     }
 
-    private boolean isReadyForSync(UserEntity userEntity) {
+    private boolean isEntityReadyForSync(UserEntity userEntity) {
         return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_NEW.equals(
           userEntity.getSynchronizedStatus()) || LocalSynchronized.SYNC_DELETED.equals(userEntity.getSynchronizedStatus());
+    }
+
+    private boolean isWatchReadyForSync(UserEntity userEntity) {
+        return LocalSynchronized.SYNC_UPDATED.equals(userEntity.getWatchSynchronizedStatus()) || LocalSynchronized.SYNC_NEW.equals(
+          userEntity.getWatchSynchronizedStatus()) || LocalSynchronized.SYNC_DELETED.equals(userEntity.getWatchSynchronizedStatus());
     }
 
     @Override public void dispatchSync() {
         List<UserEntity> notSynchronized = localUserDataSource.getEntitiesNotSynchronized();
         for (UserEntity userEntity : notSynchronized) {
-            UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
-            synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-            localUserDataSource.putUser(synchedEntity);
-            Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
+            if (isEntityReadyForSync(userEntity)) {
+                UserEntity synchedEntity = remoteUserDataSource.putUser(userEntity);
+                synchedEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+                localUserDataSource.putUser(synchedEntity);
+                Timber.d("Synchronized User entity: idUser=%s", userEntity.getIdUser());
+            }
+            if (isWatchReadyForSync(userEntity)) {
+                remoteUserDataSource.updateWatch(userEntity);
+                userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
+                localUserDataSource.updateWatch(userEntity);
+            }
         }
     }
     //endregion
