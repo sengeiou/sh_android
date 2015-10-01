@@ -47,7 +47,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "UserMongo";
+        public static final String TABLE = "User";
 
         public static final String ID = "idUser";
         public static final String SESSION_TOKEN = "sessionToken";
@@ -85,7 +85,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "ShotMongo";
+        public static final String TABLE = "Shot";
 
         public static final String ID_SHOT = "idShot";
         public static final String ID_USER = "idUser";
@@ -121,7 +121,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "FollowMongo";
+        public static final String TABLE = "Follow";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
 
@@ -136,7 +136,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "DeviceMongo";
+        public static final String TABLE = "Device";
         public static final String ID_DEVICE = "idDevice";
         public static final String TOKEN = "token";
         public static final String UNIQUE_DEVICE_ID = "uniqueDeviceID";
@@ -158,7 +158,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "StreamMongo";
+        public static final String TABLE = "Stream";
         public static final String ID_STREAM = "idStream";
         public static final String ID_USER = "idUser";
         public static final String ID_USER_STREAM = "idUserStream";
@@ -167,10 +167,9 @@ public class DatabaseContract {
         public static final String PHOTO = "photo";
         public static final String TAG = "tag";
         public static final String DESCRIPTION = "description";
-        public static final String NOTIFY_CREATION = "notifyCreation";
         public static final String LAST_UPDATED_USER = "lastUpdatedUser";
         public static final String LOCALE = "locale";
-        public static final String MEDIA_COUNT = "mediaCount"; // local field
+        public static final String MEDIA_COUNT = "mediaCount";
         public static final String REMOVED = "removed";
 
         public static final String[] PROJECTION = {
@@ -181,7 +180,7 @@ public class DatabaseContract {
 
     public static class StreamSearchTable extends StreamTable {
 
-        public static final String TABLE = "SearchStreamMongo";
+        public static final String TABLE = "SearchStream";
 
         public static final String WATCHERS = "watchers";
 
@@ -251,7 +250,7 @@ public class DatabaseContract {
 
         }
 
-        public static final String TABLE = "ActivityMongo";
+        public static final String TABLE = "Activity";
 
         public static final String ID_ACTIVITY = "idActivity";
         public static final String ID_USER = "idUser";
@@ -282,7 +281,6 @@ public class DatabaseContract {
         public static final String ID = "idUser";
         public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
-        public static final String PASSWORD = "password"; // Only used for Login request, never in Database
         public static final String EMAIL = "email";
         public static final String NAME = "name";
         public static final String PHOTO = "photo";
