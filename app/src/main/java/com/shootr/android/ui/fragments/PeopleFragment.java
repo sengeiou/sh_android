@@ -165,7 +165,6 @@ public class PeopleFragment extends BaseFragment implements PeopleView, Suggeste
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        presenter.refresh();
     }
 
     @Override public void renderUserList(List<UserModel> people) {

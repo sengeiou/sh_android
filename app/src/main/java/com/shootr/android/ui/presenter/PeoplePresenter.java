@@ -23,6 +23,7 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
     private final UserModelMapper userModelMapper;
 
     private PeopleView peopleView;
+    private Boolean hasBeenPaused = false;
 
     @Inject public PeoplePresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       GetPeopleInteractor getPeopleInteractor, UserModelMapper userModelMapper) {
@@ -106,9 +107,13 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
 
     @Override public void resume() {
         bus.register(this);
+        if (hasBeenPaused) {
+            getPeopleList();
+        }
     }
 
     @Override public void pause() {
         bus.unregister(this);
+        hasBeenPaused = true;
     }
 }
