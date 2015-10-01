@@ -6,9 +6,9 @@ import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.db.DatabaseContract;
 import javax.inject.Inject;
 
-public class ShotQueueCursorMapper extends GenericMapper{
+public class ShotQueueDBMapper extends GenericDBMapper {
 
-    @Inject public ShotQueueCursorMapper() {
+    @Inject public ShotQueueDBMapper() {
     }
 
     public ShotQueueEntity fromCursor(Cursor cursor) {

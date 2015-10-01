@@ -7,9 +7,9 @@ import com.shootr.android.db.DatabaseContract.FavoriteTable;
 import java.util.Date;
 import javax.inject.Inject;
 
-public class FavoriteEntityCursorMapper {
+public class FavoriteEntityDBMapper {
 
-    @Inject public FavoriteEntityCursorMapper() {
+    @Inject public FavoriteEntityDBMapper() {
     }
 
     public FavoriteEntity fromCursor(Cursor cursor) {

@@ -5,7 +5,7 @@ import android.database.Cursor;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.db.DatabaseContract;
 
-public class DeviceMapper extends GenericMapper {
+public class DeviceEntityDBMapper extends GenericDBMapper {
 
     public DeviceEntity fromCursor(Cursor c) {
         DeviceEntity device = new DeviceEntity();

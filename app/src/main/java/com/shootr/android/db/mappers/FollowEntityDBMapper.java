@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
-import java.util.HashMap;
-import java.util.Map;
 
-public class FollowMapper extends GenericMapper {
+public class FollowEntityDBMapper extends GenericDBMapper {
 
     public static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
     public static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;

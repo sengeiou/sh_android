@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
-import com.shootr.android.db.mappers.ShotEntityMapper;
+import com.shootr.android.db.mappers.ShotEntityDBMapper;
 import com.shootr.android.domain.StreamTimelineParameters;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,12 +16,12 @@ import javax.inject.Inject;
 
 public class ShotManager extends  AbstractManager{
 
-    @Inject ShotEntityMapper shotEntityMapper;
+    @Inject ShotEntityDBMapper shotEntityMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
 
     @Inject
-    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityMapper shotEntityMapper){
+    public ShotManager(SQLiteOpenHelper openHelper, ShotEntityDBMapper shotEntityMapper){
         super(openHelper);
         this.shotEntityMapper = shotEntityMapper;
     }

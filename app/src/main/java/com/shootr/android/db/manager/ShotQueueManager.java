@@ -6,22 +6,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.ShotQueueEntity;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.mappers.ShotQueueCursorMapper;
+import com.shootr.android.db.mappers.ShotQueueDBMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ShotQueueManager extends AbstractManager {
 
-    private final ShotQueueCursorMapper shotQueueCursorMapper;
+    private final ShotQueueDBMapper shotQueueDBMapper;
 
-    @Inject public ShotQueueManager(SQLiteOpenHelper dbHelper, ShotQueueCursorMapper shotQueueCursorMapper) {
+    @Inject public ShotQueueManager(SQLiteOpenHelper dbHelper, ShotQueueDBMapper shotQueueDBMapper) {
         super(dbHelper);
-        this.shotQueueCursorMapper = shotQueueCursorMapper;
+        this.shotQueueDBMapper = shotQueueDBMapper;
     }
 
     public ShotQueueEntity saveShotQueue(ShotQueueEntity shotQueueEntity) {
-        ContentValues contentValues = shotQueueCursorMapper.toContentValues(shotQueueEntity);
+        ContentValues contentValues = shotQueueDBMapper.toContentValues(shotQueueEntity);
         Long id = getWritableDatabase().insertWithOnConflict(DatabaseContract.ShotQueueTable.TABLE,
                 null,
                 contentValues,
@@ -55,7 +55,7 @@ public class ShotQueueManager extends AbstractManager {
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             do {
-                ShotQueueEntity shotEntity = shotQueueCursorMapper.fromCursor(queryResult);
+                ShotQueueEntity shotEntity = shotQueueDBMapper.fromCursor(queryResult);
                 results.add(shotEntity);
             } while (queryResult.moveToNext());
         }
@@ -80,7 +80,7 @@ public class ShotQueueManager extends AbstractManager {
         ShotQueueEntity shotQueueEntity = null;
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
-            shotQueueEntity = shotQueueCursorMapper.fromCursor(queryResult);
+            shotQueueEntity = shotQueueDBMapper.fromCursor(queryResult);
         }
         queryResult.close();
         return shotQueueEntity;
@@ -103,7 +103,7 @@ public class ShotQueueManager extends AbstractManager {
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             do {
-                ShotQueueEntity shotEntity = shotQueueCursorMapper.fromCursor(queryResult);
+                ShotQueueEntity shotEntity = shotQueueDBMapper.fromCursor(queryResult);
                 results.add(shotEntity);
             } while (queryResult.moveToNext());
         }
@@ -128,7 +128,7 @@ public class ShotQueueManager extends AbstractManager {
         ShotQueueEntity shotQueueEntity = null;
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
-            shotQueueEntity = shotQueueCursorMapper.fromCursor(queryResult);
+            shotQueueEntity = shotQueueDBMapper.fromCursor(queryResult);
         }
         queryResult.close();
         return shotQueueEntity;

@@ -5,10 +5,10 @@ import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.ShotEntityMapper;
-import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.mappers.DeviceEntityDBMapper;
+import com.shootr.android.db.mappers.FollowEntityDBMapper;
+import com.shootr.android.db.mappers.ShotEntityDBMapper;
+import com.shootr.android.db.mappers.UserEntityDBMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import dagger.Module;
 import dagger.Provides;
@@ -19,21 +19,21 @@ import javax.inject.Singleton;
   library = true)
 public class ManagerModule {
 
-    @Provides @Singleton UserManager provideUserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionRepository sessionRepository) {
+    @Provides @Singleton UserManager provideUserManager(SQLiteOpenHelper openHelper, UserEntityDBMapper userMapper, SessionRepository sessionRepository) {
         return new UserManager(openHelper, userMapper, sessionRepository);
     }
 
-    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowMapper followMapper) {
+    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper) {
         return new FollowManager(openHelper, followMapper);
     }
 
     @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper,
-      ShotEntityMapper shotEntityMapper,
-      UserMapper userMapper) {
+      ShotEntityDBMapper shotEntityMapper,
+      UserEntityDBMapper userMapper) {
         return new ShotManager(openHelper, shotEntityMapper);
     }
 
-    @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
+    @Provides @Singleton DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceEntityDBMapper deviceMapper) {
         return new DeviceManager(openHelper, deviceMapper);
     }
 }

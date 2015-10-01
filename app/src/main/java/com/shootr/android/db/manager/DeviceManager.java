@@ -5,17 +5,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.DeviceEntity;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
-import com.shootr.android.db.mappers.DeviceMapper;
+import com.shootr.android.db.mappers.DeviceEntityDBMapper;
 import javax.inject.Inject;
 
 public class DeviceManager extends AbstractManager {
 
-    @Inject DeviceMapper deviceMapper;
+    @Inject DeviceEntityDBMapper deviceMapper;
 
     @Inject
-    public DeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
+    public DeviceManager(SQLiteOpenHelper openHelper, DeviceEntityDBMapper deviceMapper) {
         super(openHelper);
         this.deviceMapper = deviceMapper;
     }

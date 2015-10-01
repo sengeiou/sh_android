@@ -1,10 +1,10 @@
 package com.shootr.android.db;
 
-import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.StreamEntityMapper;
-import com.shootr.android.db.mappers.SuggestedPeopleMapper;
-import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.mappers.DeviceEntityDBMapper;
+import com.shootr.android.db.mappers.FollowEntityDBMapper;
+import com.shootr.android.db.mappers.StreamEntityDBMapper;
+import com.shootr.android.db.mappers.SuggestedPeopleDBMapper;
+import com.shootr.android.db.mappers.UserEntityDBMapper;
 import com.shootr.android.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import dagger.Module;
@@ -19,28 +19,33 @@ import dagger.Provides;
 )
 public class MapperModule {
 
-    @Provides FollowMapper provideFollowMapper() {
-        return new FollowMapper();
+    @Provides
+    FollowEntityDBMapper provideFollowMapper() {
+        return new FollowEntityDBMapper();
     }
 
-    @Provides DeviceMapper provideDeviceMapper() {
-        return new DeviceMapper();
+    @Provides
+    DeviceEntityDBMapper provideDeviceMapper() {
+        return new DeviceEntityDBMapper();
     }
 
     @Provides UserEntityModelMapper provideUserVOMapper() {
         return new UserEntityModelMapper();
     }
 
-    @Provides UserMapper provideUserMapper() {
-        return new UserMapper();
+    @Provides
+    UserEntityDBMapper provideUserMapper() {
+        return new UserEntityDBMapper();
     }
 
-    @Provides SuggestedPeopleMapper provideSuggestedPeopleMapper() {
-        return new SuggestedPeopleMapper();
+    @Provides
+    SuggestedPeopleDBMapper provideSuggestedPeopleMapper() {
+        return new SuggestedPeopleDBMapper();
     }
 
-    @Provides StreamEntityMapper provideEntityMapper() {
-        return new StreamEntityMapper();
+    @Provides
+    StreamEntityDBMapper provideEntityMapper() {
+        return new StreamEntityDBMapper();
     }
 
 }

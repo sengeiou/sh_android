@@ -6,10 +6,10 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.db.DatabaseContract;
 import javax.inject.Inject;
 
-public class ShotEntityMapper extends GenericMapper {
+public class ShotEntityDBMapper extends GenericDBMapper {
 
     @Inject
-    public ShotEntityMapper() {
+    public ShotEntityDBMapper() {
     }
 
     public ShotEntity fromCursor(Cursor c) {

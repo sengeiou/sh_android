@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
-import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.FollowEntityDBMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,14 @@ import timber.log.Timber;
 public class FollowManager extends AbstractManager{
 
 
-    FollowMapper followMapper;
+    FollowEntityDBMapper followMapper;
     private static final String FOLLOW_TABLE = FollowTable.TABLE;
     private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
     private static final String ID_USER = FollowTable.ID_USER;
 
 
     @Inject
-    public FollowManager(SQLiteOpenHelper openHelper, FollowMapper followMapper){
+    public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper){
         super(openHelper);
         this.followMapper = followMapper;
     }

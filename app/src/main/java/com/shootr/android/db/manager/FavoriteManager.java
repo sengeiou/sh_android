@@ -6,17 +6,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.entity.FavoriteEntity;
 import com.shootr.android.data.entity.LocalSynchronized;
 import com.shootr.android.db.DatabaseContract.FavoriteTable;
-import com.shootr.android.db.mappers.FavoriteEntityCursorMapper;
+import com.shootr.android.db.mappers.FavoriteEntityDBMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class FavoriteManager extends AbstractManager {
 
-    private final FavoriteEntityCursorMapper favoriteEntityCursorMapper;
+    private final FavoriteEntityDBMapper favoriteEntityCursorMapper;
 
     @Inject
-    public FavoriteManager(SQLiteOpenHelper dbHelper, FavoriteEntityCursorMapper favoriteEntityCursorMapper) {
+    public FavoriteManager(SQLiteOpenHelper dbHelper, FavoriteEntityDBMapper favoriteEntityCursorMapper) {
         super(dbHelper);
         this.favoriteEntityCursorMapper = favoriteEntityCursorMapper;
     }
