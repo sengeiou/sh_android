@@ -116,7 +116,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setEmptyMessage();
-        retrieveUsers();
         userlistListView.setAdapter(getAdapter());
     }
 
@@ -192,6 +191,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override public void onResume() {
         super.onResume();
         bus.register(this);
+        retrieveUsers();
     }
 
     @Override public void onPause() {
