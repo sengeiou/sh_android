@@ -346,7 +346,8 @@
     <string name="menu_copy_text">Copy text</string>
     <string name="report_context_menu_report">Report</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
-    <string name="share_shot_message">Shot by %1$s on %2$s: https://shootr.com/s/%3$s</string>
+    <string name="share_shot_message">Shot by %1$s on %2$s: %3$s</string>
+    <string name="share_shot_base_url">http://shootr.com/#/s/%s</string>
     <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
     <string name="copied_to_clipboard">Text copied to clipboard.</string>
     <string name="notification_nice_content_text">Niced your shot</string>
