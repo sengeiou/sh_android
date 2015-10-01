@@ -60,9 +60,9 @@ public class SelectStreamInteractor implements Interactor {
             User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
 
             sessionRepository.setCurrentUser(updatedUser);
-            localUserRepository.putUser(updatedUser);
+            localUserRepository.updateWatch(updatedUser);
             notifyLoaded(selectedStream);
-            remoteUserRepository.putUser(updatedUser);
+            remoteUserRepository.updateWatch(updatedUser);
         }
     }
 

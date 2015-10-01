@@ -24,6 +24,7 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.DeviceFactory;
 import com.shootr.android.domain.utils.ImageResizer;
 import com.shootr.android.domain.utils.LocaleProvider;
 import com.shootr.android.domain.utils.StreamDateTimeTextProvider;
@@ -34,12 +35,9 @@ import com.shootr.android.service.ApiModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
-import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
@@ -98,15 +96,13 @@ import static android.content.Context.MODE_PRIVATE;
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
     GetUserInfoJob.class, GetUsersFollowsJob.class,
-    GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLatestShotsJob.class,
+    GetLatestShotsJob.class,
 
     ProfileFragment.class,
     UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
-
-    GCMRegistrationJob.class,
 
     ProfileFragment.class,
 
@@ -147,6 +143,10 @@ public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT_SECONDS = 30;
     private static final long TIMEOUT_CONNECT_SECONDS = 15;
+
+    @Provides @Singleton DeviceFactory provideDeviceFactory(AndroidDeviceFactory androidDeviceFactory) {
+        return androidDeviceFactory;
+    }
 
     @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
         return androidTimeUtils;

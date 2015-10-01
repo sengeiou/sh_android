@@ -1,22 +1,23 @@
 package com.shootr.android.data.repository.datasource.user;
 
+import com.shootr.android.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.android.data.api.exception.ApiException;
 import com.shootr.android.data.api.service.UserApiService;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.exception.ServerCommunicationException;
-import com.shootr.android.service.ShootrService;
+import com.shootr.android.domain.exception.UserNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ServiceUserDataSource implements UserDataSource {
 
-    private final ShootrService service;
     private final UserApiService userApiService;
+    private final UserApiEntityMapper userApiEntityMapper;
 
-    @Inject public ServiceUserDataSource(ShootrService service, UserApiService userApiService) {
-        this.service = service;
+    @Inject public ServiceUserDataSource(UserApiService userApiService, UserApiEntityMapper userApiEntityMapper) {
         this.userApiService = userApiService;
+        this.userApiEntityMapper = userApiEntityMapper;
     }
 
     @Override public List<UserEntity> getFollowing(String userId) {
@@ -29,8 +30,8 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity putUser(UserEntity userEntity) {
         try {
-            return service.saveUserProfile(userEntity);
-        } catch (IOException e) {
+            return userApiService.putUser(userApiEntityMapper.transform(userEntity));
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -41,8 +42,8 @@ public class ServiceUserDataSource implements UserDataSource {
 
     @Override public UserEntity getUser(String id) {
         try {
-            return service.getUserByIdUser(id);
-        } catch (IOException e) {
+            return userApiService.getUser(id);
+        } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
     }
@@ -58,9 +59,15 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override
     public UserEntity getUserByUsername(String username) {
         try {
-            return service.getUserByUsername(username);
+            return userApiService.getUserByUsername(username);
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
+        } catch (ApiException e) {
+            if (e.getErrorInfo().httpCode() == 404) {
+                throw new UserNotFoundException(username);
+            } else {
+                throw new ServerCommunicationException(e);
+            }
         }
     }
 
@@ -75,6 +82,19 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override public List<UserEntity> findParticipants(String idStream, String query) {
         try {
             return userApiService.findParticipants(idStream, query);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public void updateWatch(UserEntity userEntity) {
+        try {
+            if (userEntity.getIdWatchingStream() != null) {
+                userApiService.watch(userEntity.getIdWatchingStream());
+            } else {
+                userApiService. unwatch();
+            }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

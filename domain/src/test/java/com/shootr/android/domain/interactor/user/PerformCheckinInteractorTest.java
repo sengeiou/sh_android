@@ -1,6 +1,6 @@
 package com.shootr.android.domain.interactor.user;
 
-import com.shootr.android.domain.exception.InvalidCheckinException;
+import com.shootr.android.domain.exception.ServerCommunicationException;
 import com.shootr.android.domain.exception.ShootrException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.executor.TestPostExecutionThread;
@@ -45,16 +45,16 @@ public class PerformCheckinInteractorTest {
         verify(completedCallback).onCompleted();
     }
 
-    @Test public void shouldCallbackErrorIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
+    @Test public void shouldCallbackErrorIfServiceFailsWithServerCommunicationException() throws Exception {
+        doThrow(new ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 
         verify(errorCallback).onError(any(ShootrException.class));
     }
 
-    @Test public void shouldNotCallbackCompletedIfServiceFailsWithInvalidCheckinException() throws Exception {
-        doThrow(new InvalidCheckinException("test")).when(shootrUserService).checkInStream(anyString());
+    @Test public void shouldNotCallbackCompletedIfServiceFailsWithServerCommunicationException() throws Exception {
+        doThrow(new ServerCommunicationException(null)).when(shootrUserService).checkInStream(anyString());
 
         interactor.performCheckin(ANY_STREAM_ID, completedCallback, errorCallback);
 

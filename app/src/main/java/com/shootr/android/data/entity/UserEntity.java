@@ -21,6 +21,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String watchingStreamTitle;
     private String idWatchingStream;
     private Long joinStreamDate;
+    private String watchSynchronizedStatus;
 
     public UserEntity(){
     }
@@ -187,5 +188,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setJoinStreamDate(Long joinStreamDate) {
         this.joinStreamDate = joinStreamDate;
+    }
+
+    public String getWatchSynchronizedStatus() {
+        return watchSynchronizedStatus;
+    }
+
+    public void setWatchSynchronizedStatus(String watchSynchronizedStatus) {
+        this.watchSynchronizedStatus = watchSynchronizedStatus;
     }
 }

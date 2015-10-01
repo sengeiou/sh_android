@@ -5,8 +5,6 @@ import android.database.Cursor;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import java.text.Normalizer;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UserMapper extends GenericMapper {
 
@@ -58,83 +56,10 @@ public class UserMapper extends GenericMapper {
             cv.put(UserTable.ID_WATCHING_STREAM, u.getIdWatchingStream());
             cv.put(UserTable.WATCHING_STREAM_TITLE, u.getWatchingStreamTitle());
             cv.put(UserTable.JOIN_STREAM_DATE, u.getJoinStreamDate());
+            cv.put(UserTable.WATCHING_SYNCHRONIZED, u.getWatchSynchronizedStatus());
             setSynchronizedtoContentValues(u, cv);
         }
         return cv;
-    }
-
-    public UserEntity fromDto(Map<String, Object> dto) {
-        UserEntity user = new UserEntity();
-        user.setIdUser(dto.containsKey(UserTable.ID) ? (String) dto.get(UserTable.ID) : null);
-        user.setSessionToken(
-          dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
-        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? (String) dto.get(UserTable.USER_NAME) : null);
-        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
-        user.setEmailConfirmed(dto.containsKey(UserTable.EMAIL_CONFIRMED) ? ((Number) dto.get(UserTable.EMAIL_CONFIRMED)).intValue()
-          : null);
-        user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
-        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
-        user.setNumFollowers(
-                dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
-        user.setNumFollowings(
-                dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
-        if(dto.get(UserTable.POINTS)!= null){
-            user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
-        }
-        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? (String) dto.get(UserTable.WEBSITE) : null);
-        user.setBio(dto.containsKey(UserTable.BIO) ? (String) dto.get(UserTable.BIO) : null);
-        if(dto.get(UserTable.RANK) != null){
-            user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
-        }
-        String eventId = (String) dto.get(UserTable.ID_WATCHING_STREAM);
-        if (eventId != null) {
-            user.setIdWatchingStream(eventId);
-        }
-
-        user.setWatchingStreamTitle(
-          dto.containsKey(UserTable.WATCHING_STREAM_TITLE) ? (String) dto.get(UserTable.WATCHING_STREAM_TITLE) : null);
-        if(dto.get(UserTable.JOIN_STREAM_DATE)!=null) {
-            user.setJoinStreamDate(
-              dto.containsKey(UserTable.JOIN_STREAM_DATE) ? ((Number) dto.get(UserTable.JOIN_STREAM_DATE)).longValue()
-                : null);
-        }
-        setSynchronizedfromDto(dto,user);
-        return user;
-    }
-
-    //TODO bad smell: nombre de método ofuscado
-    public Map<String, Object> reqRestUsersToDto(UserEntity user) {
-        Map<String, Object> dto = new HashMap<>();
-        return fillDtoWithCommonFields(dto, user);
-    }
-
-
-    public Map<String, Object> toDto(UserEntity user) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
-        dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
-        dto = fillDtoWithCommonFields(dto, user);
-        return dto;
-    }
-
-    public Map<String, Object> fillDtoWithCommonFields(Map<String, Object> dto, UserEntity user){
-        dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
-        dto.put(UserTable.NAME, user == null ? null : user.getName());
-        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
-        dto.put(UserTable.EMAIL_CONFIRMED, user == null ? null : user.getEmailConfirmed());
-        dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
-        dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
-        dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
-        dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
-        dto.put(UserTable.BIO, user == null ? null : user.getBio());
-        dto.put(UserTable.RANK, user == null ? null : user.getRank());
-        dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        dto.put(UserTable.ID_WATCHING_STREAM, user == null ? null : user.getIdWatchingStream());
-        dto.put(UserTable.WATCHING_STREAM_TITLE, user == null ? null : user.getWatchingStreamTitle());
-        dto.put(UserTable.JOIN_STREAM_DATE, user == null ? null : user.getJoinStreamDate());
-        setSynchronizedtoDto(user, dto);
-        return dto;
     }
 
     public UserEntity userEntityWithCommonFieldsFromCursor(Cursor c){
@@ -154,6 +79,7 @@ public class UserMapper extends GenericMapper {
         user.setIdWatchingStream(c.getString(c.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
         user.setWatchingStreamTitle(c.getString(c.getColumnIndex(UserTable.WATCHING_STREAM_TITLE)));
         user.setJoinStreamDate(c.getLong(c.getColumnIndex(UserTable.JOIN_STREAM_DATE)));
+        user.setWatchSynchronizedStatus(c.getString(c.getColumnIndex(UserTable.WATCHING_SYNCHRONIZED)));
         return user;
     }
 

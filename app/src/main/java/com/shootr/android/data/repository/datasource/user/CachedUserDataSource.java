@@ -131,4 +131,9 @@ public class CachedUserDataSource implements UserDataSource, CachedDataSource {
     @Override public List<UserEntity> findParticipants(String idStream, String query) {
         throw new IllegalStateException("Find Participants is not cached");
     }
+
+    @Override
+    public void updateWatch(UserEntity userEntity) {
+        throw new IllegalStateException("updateWatch is not cached");
+    }
 }

@@ -61,7 +61,7 @@ public class UnwatchStreamInteractorTest {
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        verify(localUserRepository).putUser(user());
+        verify(localUserRepository).updateWatch(user());
     }
 
     @Test
@@ -70,11 +70,11 @@ public class UnwatchStreamInteractorTest {
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
-        verify(remoteUserRepository).putUser(user());
+        verify(remoteUserRepository).updateWatch(user());
     }
 
     @Test
-    public void shouldPutUserWithNoWatchingStreamInSessionRepositoryWhenUnwatch() {
+    public void shouldupdateWatchWithNoWatchingStreamInSessionRepositoryWhenUnwatch() {
         setupUserWithWatchingStream();
 
         unwatchStreamInteractor.unwatchStream(completedCallback);
@@ -91,7 +91,7 @@ public class UnwatchStreamInteractorTest {
         unwatchStreamInteractor.unwatchStream(completedCallback);
 
         InOrder inOrder = inOrder(localUserRepository, completedCallback);
-        inOrder.verify(localUserRepository).putUser(user());
+        inOrder.verify(localUserRepository).updateWatch(user());
         inOrder.verify(completedCallback).onCompleted();
     }
 
@@ -103,7 +103,7 @@ public class UnwatchStreamInteractorTest {
 
         InOrder inOrder = inOrder(completedCallback, remoteUserRepository);
         inOrder.verify(completedCallback).onCompleted();
-        inOrder.verify(remoteUserRepository).putUser(user());
+        inOrder.verify(remoteUserRepository).updateWatch(user());
     }
     //endregion
 

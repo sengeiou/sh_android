@@ -76,7 +76,7 @@ public class FollowManager extends AbstractManager{
     }
 
     public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed){
-        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ DatabaseContract.SyncColumns.DELETED+" IS NULL";
+        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND ("+ DatabaseContract.SyncColumns.DELETED+" IS NULL OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+" = 'D')";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
         Cursor  c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
@@ -195,17 +195,13 @@ public class FollowManager extends AbstractManager{
      * Delete one Follow
      */
     public long deleteFollow(FollowEntity follow) {
-        long res = 0;
-        String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
+        return deleteFollow(follow.getFollowedUser(), follow.getIdUser());
+    }
 
-        Cursor c = getReadableDatabase().query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
-        if (c.getCount() > 0) {
-            res = getWritableDatabase().delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
-                    new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});
-        }
-        c.close();
-        return res;
+    public long deleteFollow(String followedUser, String idUser) {
+        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
+        String[] whereArgs = new String[]{followedUser, idUser};
+        return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 
     public void insertInSync(){
@@ -213,11 +209,7 @@ public class FollowManager extends AbstractManager{
     }
 
 
-    /**
-    * Check if it exists any data for send to server. This method It is called before request datas
-     *
-    * **/
-    public List<FollowEntity> getDatasForSendToServerInCase(){
+    public List<FollowEntity> getFollowsNotSynchronized(){
         List<FollowEntity> followsToUpdate = new ArrayList<>();
         String args = DatabaseContract.SyncColumns.SYNCHRONIZED+"='N' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"= 'D' OR "+DatabaseContract.SyncColumns.SYNCHRONIZED+"='U'";
         Cursor c = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);

@@ -1,7 +1,5 @@
 package com.shootr.android.db;
 
-import com.shootr.android.data.mapper.DatabaseUserAvatarUrlProvider;
-import com.shootr.android.data.mapper.UserAvatarUrlProvider;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.StreamEntityMapper;
@@ -43,10 +41,6 @@ public class MapperModule {
 
     @Provides StreamEntityMapper provideEntityMapper() {
         return new StreamEntityMapper();
-    }
-
-    @Provides UserAvatarUrlProvider provideUserAvatarUrlProvider(DatabaseUserAvatarUrlProvider userAvatarUrlProvider) {
-        return userAvatarUrlProvider;
     }
 
 }

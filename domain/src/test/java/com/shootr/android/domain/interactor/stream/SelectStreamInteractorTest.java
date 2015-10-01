@@ -78,7 +78,7 @@ public class SelectStreamInteractorTest {
 
         interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        verify(localUserRepository).putUser(currentUserWatchingNewStream());
+        verify(localUserRepository).updateWatch(currentUserWatchingNewStream());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SelectStreamInteractorTest {
 
         interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
-        verify(remoteUserRepository).putUser(currentUserWatchingNewStream());
+        verify(remoteUserRepository).updateWatch(currentUserWatchingNewStream());
     }
 
     @Test @Ignore
@@ -106,30 +106,30 @@ public class SelectStreamInteractorTest {
         verify(dummyCallback).onLoaded(anyStream());
     }
 
-    @Test public void shouldNotPutUserInLocalOrRemoteRepositoryWhenSelectingCurrentStream() throws Exception {
+    @Test public void shouldNotUpdateWatchInLocalOrRemoteRepositoryWhenSelectingCurrentStream() throws Exception {
         setupOldWatchingStream();
         when(localStreamRepository.getStreamById(OLD_STREAM_ID)).thenReturn(oldStream());
 
         interactor.selectStream(OLD_STREAM_ID, dummyCallback);
 
-        verify(localUserRepository, never()).putUser(any(User.class));
-        verify(remoteUserRepository, never()).putUser(any(User.class));
+        verify(localUserRepository, never()).updateWatch(any(User.class));
+        verify(remoteUserRepository, never()).updateWatch(any(User.class));
 
     }
 
     @Test
-    public void shouldNotifyCallbackBeforeSettingUserInRemoteRepository() throws Exception {
+    public void shouldNotifyCallbackBeforeSettingWatchInRemoteRepository() throws Exception {
         when(localStreamRepository.getStreamById(NEW_STREAM_ID)).thenReturn(newStream());
         InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
 
         interactor.selectStream(NEW_STREAM_ID, dummyCallback);
 
         inOrder.verify(dummyCallback).onLoaded(anyStream());
-        inOrder.verify(remoteUserRepository).putUser(any(User.class));
+        inOrder.verify(remoteUserRepository).updateWatch(any(User.class));
     }
 
     @Test
-    public void shouldSetStreamIdWhenUpdateUserWithStreamInfo() throws Exception {
+    public void shouldSetStreamIdWhenUpdateWatchWithStreamInfo() throws Exception {
         User userWithOldStream = currentUserWatchingOldStream();
         Stream selectedStream = newStream();
 
@@ -139,7 +139,7 @@ public class SelectStreamInteractorTest {
     }
 
     @Test
-    public void should_setStreamTitle_when_updateUserWithStreamInfo() throws Exception {
+    public void should_setStreamTitle_when_updateWatchWithStreamInfo() throws Exception {
         User userWithOldStream = currentUserWatchingOldStream();
         Stream selectedStream = newStream();
 
