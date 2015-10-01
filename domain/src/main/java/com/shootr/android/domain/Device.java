@@ -1,13 +1,13 @@
-package com.shootr.android.data.entity;
+package com.shootr.android.domain;
 
-public class DeviceEntity {
+public class Device {
 
     private String idDevice;
-    private Integer platform;
     private String token;
-    private String uniqueDeviceID;
+    private String uniqueDevideID;
     private String model;
     private String osVer;
+    private Integer platform;
     private String appVer;
     private String locale;
 
@@ -27,12 +27,12 @@ public class DeviceEntity {
         this.token = token;
     }
 
-    public String getUniqueDeviceID() {
-        return uniqueDeviceID;
+    public String getUniqueDevideID() {
+        return uniqueDevideID;
     }
 
-    public void setUniqueDeviceID(String uniqueDeviceID) {
-        this.uniqueDeviceID = uniqueDeviceID;
+    public void setUniqueDevideID(String uniqueDevideID) {
+        this.uniqueDevideID = uniqueDevideID;
     }
 
     public String getModel() {

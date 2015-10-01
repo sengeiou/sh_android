@@ -14,11 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
-import com.shootr.android.data.bus.Main;
-import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.ToolbarDecorator;
 import com.shootr.android.ui.fragments.FavoritesFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
@@ -28,7 +24,6 @@ import com.shootr.android.ui.presenter.MainScreenPresenter;
 import com.shootr.android.ui.views.MainScreenView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.util.MenuItemValueHolder;
-import com.squareup.otto.Bus;
 import java.util.Locale;
 import javax.inject.Inject;
 
@@ -39,8 +34,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Bind(R.id.pager) ViewPager viewPager;
     @Bind(R.id.tab_layout) TabLayout tabLayout;
     @Inject MainScreenPresenter mainScreenPresenter;
-    @Inject JobManager jobManager;
-    @Inject @Main Bus bus;
 
     private ToolbarDecorator toolbarDecorator;
     private BadgeDrawable activityBadgeIcon;
@@ -68,7 +61,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     @Override
     protected void initializePresenter() {
         mainScreenPresenter.initialize(this);
-        startGCMRegistration();
     }
 
     @Override
@@ -82,14 +74,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     protected void onResume() {
         super.onResume();
         mainScreenPresenter.resume();
-        bus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mainScreenPresenter.pause();
-        bus.unregister(this);
     }
 
     @Override
@@ -138,12 +128,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
     private void navigateToActivity() {
         startActivity(new Intent(this, ActivityTimelineContainerActivity.class));
-    }
-
-    @Deprecated
-    private void startGCMRegistration() {
-        GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
-        jobManager.addJobInBackground(job);
     }
 
     @Override

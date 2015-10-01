@@ -14,23 +14,15 @@ public class DeviceManager extends AbstractManager {
 
     @Inject DeviceMapper deviceMapper;
 
-    public static final String[] PROJECTION = {
-      "idDevice", "idUser", "platform", "token", "uniqueDeviceID", "model", "osVer", "birth", "modified", "deleted",
-      "revision", "synchronizedStatus"
-    };
-
     @Inject
     public DeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
         super(openHelper);
         this.deviceMapper = deviceMapper;
     }
 
-    public DeviceEntity getDeviceByIdUser(String idUser) {
-        String whereSelection = DatabaseContract.DeviceTable.ID_USER + " = ?";
-        String[] whereArguments = new String[] { String.valueOf(idUser) };
-
+    public DeviceEntity getDevice() {
         Cursor queryResult =
-          getReadableDatabase().query(DeviceTable.TABLE, PROJECTION, whereSelection, whereArguments, null,
+          getReadableDatabase().query(DeviceTable.TABLE, DeviceTable.PROJECTION, null, null, null,
             null, null);
 
         DeviceEntity deviceEntity = null;
@@ -44,35 +36,9 @@ public class DeviceManager extends AbstractManager {
 
     public void saveDevice(DeviceEntity device) {
         ContentValues contentValues = deviceMapper.toContentValues(device);
-        if (contentValues.getAsLong(DatabaseContract.DeviceTable.DELETED) != null) {
-            deleteDevice(device);
-        } else {
-            getWritableDatabase().insertWithOnConflict(DeviceTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        }
-        insertInSync();
-    }
-
-    private void deleteDevice(DeviceEntity device) {
-        String args = DeviceTable.ID_DEVICE + "=?";
-        String[] stringArgs = new String[]{String.valueOf(device.getIdDevice())};
-        Cursor c = getReadableDatabase().query(DatabaseContract.DeviceTable.TABLE,
-          PROJECTION,
-          args,
-          stringArgs,
+        getWritableDatabase().insertWithOnConflict(DeviceTable.TABLE,
           null,
-          null,
-          null);
-        if (c.getCount() > 0) {
-            getWritableDatabase().delete(DatabaseContract.StreamTable.TABLE, args, stringArgs);
-        }
-        c.close();
-    }
-
-    public DeviceEntity getDeviceByUniqueId(String uniqueId) {
-        return null;
-    }
-
-    public void insertInSync() {
-        insertInTableSync(DeviceTable.TABLE, 4, 0, 0);
+          contentValues,
+          SQLiteDatabase.CONFLICT_REPLACE);
     }
 }

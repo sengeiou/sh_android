@@ -128,7 +128,7 @@ public class DatabaseContract {
         };
     }
 
-    public static final class DeviceTable implements SyncColumns {
+    public static final class DeviceTable {
 
         private DeviceTable() {
 
@@ -136,11 +136,8 @@ public class DatabaseContract {
 
         public static final String TABLE = "DeviceMongo";
         public static final String ID_DEVICE = "idDevice";
-        public static final String ID_USER = "idUser";
         public static final String TOKEN = "token";
-        public static final String ID_PUSH_ENGINE = "idPushEngine";
         public static final String UNIQUE_DEVICE_ID = "uniqueDeviceID";
-        public static final String STATUS = "status";
         public static final String MODEL = "model";
         public static final String OS_VERSION = "osVer";
         public static final String PLATFORM = "platform";
@@ -148,8 +145,8 @@ public class DatabaseContract {
         public static final String LOCALE = "locale";
 
         public static final String[] PROJECTION = {
-          ID_DEVICE, ID_USER, PLATFORM, TOKEN, ID_PUSH_ENGINE, UNIQUE_DEVICE_ID, STATUS, MODEL, PLATFORM, OS_VERSION,
-          APP_VERSION, LOCALE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+          ID_DEVICE, PLATFORM, TOKEN, UNIQUE_DEVICE_ID, MODEL, PLATFORM, OS_VERSION,
+          APP_VERSION, LOCALE,
         };
     }
 
