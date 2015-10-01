@@ -20,7 +20,7 @@ Para las releases se usa **git-flow**. A continuación se describe el proceso a 
   - Se quita el flag de snapshot.
   - Si la nueva release sólo debe incrementar el número de revisión, éste no se cambia y sólo se quita el flag de snapshot.
   - Si la nueva release incrementa el major o minor, se settea el nuevo número completo.
-  - Si la release incluye cambios en **base de datos**, incrementar la versión de base de datos. Este número no se refleja en la versión pública. Se puede decidir cambiar la política y hacer el incremento durante el desarrollo. De momento se hace en el proceso de release.
+  - La versión de BDD se debe haber cambiado durante el desarrollo si se modifica el contrato de la BDD, pero antes de publicar la release conviene asegurarse de que se ha incrementado si era necesario.
   - Todo esto en un commit tipo `Bump version for vX.Y.z final release` o parecido.
 4. TODO: Añadir los cambios al changelog.
 5. Finalizar la release con `git flow release finish`. Se realizará un merge con master, se creará un tag, y se realizará un merge del tag con develop.
