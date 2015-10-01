@@ -6,7 +6,7 @@ import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 
-public class StreamEntityMapper extends GenericMapper{
+public class StreamEntityDBMapper extends GenericDBMapper {
 
     public ContentValues toContentValues(StreamEntity streamEntity){
         ContentValues contentValues = new ContentValues();

@@ -6,10 +6,10 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import java.text.Normalizer;
 
-public class UserMapper extends GenericMapper {
+public class UserEntityDBMapper extends GenericDBMapper {
 
 
-    public UserMapper(){
+    public UserEntityDBMapper(){
 
     }
 

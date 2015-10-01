@@ -8,7 +8,7 @@ import com.shootr.android.data.entity.StreamEntity;
 import com.shootr.android.data.entity.StreamSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.TimelineSyncTable;
-import com.shootr.android.db.mappers.StreamEntityMapper;
+import com.shootr.android.db.mappers.StreamEntityDBMapper;
 import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import javax.inject.Inject;
 
 public class StreamManager extends AbstractManager{
 
-    private final StreamEntityMapper streamEntityMapper;
+    private final StreamEntityDBMapper streamEntityMapper;
     private final TimeUtils timeUtils;
 
-    @Inject public StreamManager(SQLiteOpenHelper openHelper, StreamEntityMapper streamEntityMapper, TimeUtils timeUtils){
+    @Inject public StreamManager(SQLiteOpenHelper openHelper, StreamEntityDBMapper streamEntityMapper, TimeUtils timeUtils){
         super(openHelper);
         this.streamEntityMapper = streamEntityMapper;
         this.timeUtils = timeUtils;

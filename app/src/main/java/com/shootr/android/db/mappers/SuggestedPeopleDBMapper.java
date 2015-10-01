@@ -6,9 +6,9 @@ import com.shootr.android.data.entity.SuggestedPeopleEntity;
 import com.shootr.android.db.DatabaseContract;
 import java.text.Normalizer;
 
-public class SuggestedPeopleMapper extends GenericMapper {
+public class SuggestedPeopleDBMapper extends GenericDBMapper {
 
-    public SuggestedPeopleMapper() {
+    public SuggestedPeopleDBMapper() {
     }
 
     public SuggestedPeopleEntity fromCursor(Cursor c) {
